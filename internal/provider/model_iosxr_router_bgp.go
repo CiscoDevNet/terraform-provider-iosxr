@@ -983,11 +983,11 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 				}
 			}
 			if !item.Password.IsNull() && !item.Password.IsUnknown() {
-				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"", item.Password.ValueString())
+				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"password.encrypted", item.Password.ValueString())
 			}
 			if !item.PasswordInheritanceDisable.IsNull() && !item.PasswordInheritanceDisable.IsUnknown() {
 				if item.PasswordInheritanceDisable.ValueBool() {
-					body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"", []interface{}{nil})
+					body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"password.inheritance-disable", []interface{}{nil})
 				}
 			}
 			if !item.ReceiveBufferSize.IsNull() && !item.ReceiveBufferSize.IsUnknown() {
@@ -1808,34 +1808,33 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 				data.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable = types.BoolValue(false)
 			}
 		}
-		for ci := range data.Neighbors[i].BmpActivateServers {
-			keys := [...]string{"server-number"}
-			keyValues := [...]string{strconv.FormatInt(data.Neighbors[i].BmpActivateServers[ci].ServerNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("bmp-activate.servers.server"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Neighbors[i].BmpActivateServers
+			data.Neighbors[i].BmpActivateServers = make([]RouterBGPNeighborsBmpActivateServers, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterBGPNeighborsBmpActivateServers{}
+				if cValue := cr.Get("server-number"); cValue.Exists() {
+					citem.ServerNumber = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("bmp-activate.servers.server").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.ServerNumber.Equal(citem.ServerNumber) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("server-number"); value.Exists() {
-				data.Neighbors[i].BmpActivateServers[ci].ServerNumber = types.Int64Value(value.Int())
-			} else if data.Neighbors[i].BmpActivateServers[ci].ServerNumber.IsNull() {
-				data.Neighbors[i].BmpActivateServers[ci].ServerNumber = types.Int64Null()
-			}
+				}
+
+				data.Neighbors[i].BmpActivateServers = append(data.Neighbors[i].BmpActivateServers, citem)
+				return true
+			})
 		}
 		if value := r.Get("bfd.minimum-interval"); value.Exists() && !data.Neighbors[i].BfdMinimumInterval.IsNull() {
 			data.Neighbors[i].BfdMinimumInterval = types.Int64Value(value.Int())
@@ -2037,7 +2036,7 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 				data.Neighbors[i].LocalAsNoPrependReplaceAsDualAs = types.BoolValue(false)
 			}
 		}
-		if value := r.Get(""); value.Exists() {
+		if value := r.Get("password.inheritance-disable"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
 			// Otherwise set to true since element exists on device
 			if !data.Neighbors[i].PasswordInheritanceDisable.IsNull() && !data.Neighbors[i].PasswordInheritanceDisable.ValueBool() {
@@ -2859,34 +2858,33 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 				data.Neighbors[i].EgressEngineeringInheritanceDisable = types.BoolValue(false)
 			}
 		}
-		for ci := range data.Neighbors[i].PeerSets {
-			keys := [...]string{"peer"}
-			keyValues := [...]string{strconv.FormatInt(data.Neighbors[i].PeerSets[ci].Peer.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("peer-set.peer-sets"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Neighbors[i].PeerSets
+			data.Neighbors[i].PeerSets = make([]RouterBGPNeighborsPeerSets, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterBGPNeighborsPeerSets{}
+				if cValue := cr.Get("peer"); cValue.Exists() {
+					citem.Peer = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("peer-set.peer-sets").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Peer.Equal(citem.Peer) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("peer"); value.Exists() {
-				data.Neighbors[i].PeerSets[ci].Peer = types.Int64Value(value.Int())
-			} else if data.Neighbors[i].PeerSets[ci].Peer.IsNull() {
-				data.Neighbors[i].PeerSets[ci].Peer = types.Int64Null()
-			}
+				}
+
+				data.Neighbors[i].PeerSets = append(data.Neighbors[i].PeerSets, citem)
+				return true
+			})
 		}
 		if value := r.Get("peer-node-sid.index"); value.Exists() && !data.Neighbors[i].PeerNodeSidIndex.IsNull() {
 			data.Neighbors[i].PeerNodeSidIndex = types.Int64Value(value.Int())
@@ -3395,69 +3393,55 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.AttributeFilterGroups[i].GroupName = types.StringNull()
 		}
-		for ci := range data.AttributeFilterGroups[i].AttributeCodeRanges {
-			keys := [...]string{"start", "end"}
-			keyValues := [...]string{strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start.ValueInt64(), 10), strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("attributes.attribute-code-ranges.attribute-code-range"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.AttributeFilterGroups[i].AttributeCodeRanges
+			data.AttributeFilterGroups[i].AttributeCodeRanges = make([]RouterBGPAttributeFilterGroupsAttributeCodeRanges, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterBGPAttributeFilterGroupsAttributeCodeRanges{}
+				if cValue := cr.Get("start"); cValue.Exists() {
+					citem.Start = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("end"); cValue.Exists() {
+					citem.End = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("discard"); cValue.Exists() {
+					citem.Discard = types.BoolValue(true)
+				} else {
+					citem.Discard = types.BoolValue(false)
+				}
+				if cValue := cr.Get("treat-as-withdraw"); cValue.Exists() {
+					citem.TreatAsWithdraw = types.BoolValue(true)
+				} else {
+					citem.TreatAsWithdraw = types.BoolValue(false)
+				}
 
-			var cr gjson.Result
-			r.Get("attributes.attribute-code-ranges.attribute-code-range").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Start.Equal(citem.Start) {
+						match = false
+					}
+					if !existingItem.End.Equal(citem.End) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.Discard.ValueBool() && existingItem.Discard.ValueBool() == false {
+							citem.Discard = existingItem.Discard
 						}
-						found = false
+						if !citem.TreatAsWithdraw.ValueBool() && existingItem.TreatAsWithdraw.ValueBool() == false {
+							citem.TreatAsWithdraw = existingItem.TreatAsWithdraw
+						}
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("start"); value.Exists() {
-				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start = types.Int64Value(value.Int())
-			} else if data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start.IsNull() {
-				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start = types.Int64Null()
-			}
-			if value := cr.Get("end"); value.Exists() {
-				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End = types.Int64Value(value.Int())
-			} else if data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.IsNull() {
-				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End = types.Int64Null()
-			}
-			if value := cr.Get("discard"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.IsNull() && !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.ValueBool() {
-					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard = types.BoolValue(false)
-				} else if !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.IsNull() {
-					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.IsNull() {
-					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard = types.BoolNull()
-				} else {
-					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("treat-as-withdraw"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() && !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.ValueBool() {
-					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw = types.BoolValue(false)
-				} else if !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() {
-					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() {
-					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw = types.BoolNull()
-				} else {
-					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw = types.BoolValue(false)
-				}
-			}
+
+				data.AttributeFilterGroups[i].AttributeCodeRanges = append(data.AttributeFilterGroups[i].AttributeCodeRanges, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.AsLists {
@@ -3488,34 +3472,33 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.AsLists[i].ListName = types.StringNull()
 		}
-		for ci := range data.AsLists[i].AsNumbers {
-			keys := [...]string{"as-list-value"}
-			keyValues := [...]string{data.AsLists[i].AsNumbers[ci].AsValue.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("as-list-numbers.as-list-number"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.AsLists[i].AsNumbers
+			data.AsLists[i].AsNumbers = make([]RouterBGPAsListsAsNumbers, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterBGPAsListsAsNumbers{}
+				if cValue := cr.Get("as-list-value"); cValue.Exists() {
+					citem.AsValue = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("as-list-numbers.as-list-number").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AsValue.ValueString() != citem.AsValue.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("as-list-value"); value.Exists() && !data.AsLists[i].AsNumbers[ci].AsValue.IsNull() {
-				data.AsLists[i].AsNumbers[ci].AsValue = types.StringValue(value.String())
-			} else {
-				data.AsLists[i].AsNumbers[ci].AsValue = types.StringNull()
-			}
+				}
+
+				data.AsLists[i].AsNumbers = append(data.AsLists[i].AsNumbers, citem)
+				return true
+			})
 		}
 	}
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
@@ -4433,12 +4416,12 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ignore-connected-check"); cValue.Exists() {
 				item.IgnoreConnectedCheck = types.BoolValue(true)
 			} else {
-				item.IgnoreConnectedCheck = types.BoolValue(false)
+				item.IgnoreConnectedCheck = types.BoolNull()
 			}
 			if cValue := v.Get("ignore-connected-check.inheritance-disable"); cValue.Exists() {
 				item.IgnoreConnectedCheckInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.IgnoreConnectedCheckInheritanceDisable = types.BoolValue(false)
+				item.IgnoreConnectedCheckInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("ebgp-multihop.maximum-hop-count"); cValue.Exists() {
 				item.EbgpMultihopMaximumHopCount = types.Int64Value(cValue.Int())
@@ -4446,7 +4429,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ebgp-multihop.mpls"); cValue.Exists() {
 				item.EbgpMultihopMpls = types.BoolValue(true)
 			} else {
-				item.EbgpMultihopMpls = types.BoolValue(false)
+				item.EbgpMultihopMpls = types.BoolNull()
 			}
 			if cValue := v.Get("tcp.mss.tcp-initial-maximum-segment-size"); cValue.Exists() {
 				item.TcpMssValue = types.Int64Value(cValue.Int())
@@ -4454,27 +4437,27 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("tcp.mss.inheritance-disable"); cValue.Exists() {
 				item.TcpMssInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.TcpMssInheritanceDisable = types.BoolValue(false)
+				item.TcpMssInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("tcp.mtu-discovery"); cValue.Exists() {
 				item.TcpMtuDiscovery = types.BoolValue(true)
 			} else {
-				item.TcpMtuDiscovery = types.BoolValue(false)
+				item.TcpMtuDiscovery = types.BoolNull()
 			}
 			if cValue := v.Get("tcp.mtu-discovery.inheritance-disable"); cValue.Exists() {
 				item.TcpMtuDiscoveryInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.TcpMtuDiscoveryInheritanceDisable = types.BoolValue(false)
+				item.TcpMtuDiscoveryInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("tcp.ip-only-preferred"); cValue.Exists() {
 				item.TcpIpOnlyPreferred = types.BoolValue(true)
 			} else {
-				item.TcpIpOnlyPreferred = types.BoolValue(false)
+				item.TcpIpOnlyPreferred = types.BoolNull()
 			}
 			if cValue := v.Get("tcp.ip-only-preferred.inheritance-disable"); cValue.Exists() {
 				item.TcpIpOnlyPreferredInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.TcpIpOnlyPreferredInheritanceDisable = types.BoolValue(false)
+				item.TcpIpOnlyPreferredInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("bmp-activate.servers.server"); cValue.Exists() {
 				item.BmpActivateServers = make([]RouterBGPNeighborsBmpActivateServers, 0)
@@ -4496,27 +4479,27 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("bfd.fast-detect"); cValue.Exists() {
 				item.BfdFastDetect = types.BoolValue(true)
 			} else {
-				item.BfdFastDetect = types.BoolValue(false)
+				item.BfdFastDetect = types.BoolNull()
 			}
 			if cValue := v.Get("bfd.fast-detect.strict-mode"); cValue.Exists() {
 				item.BfdFastDetectStrictMode = types.BoolValue(true)
 			} else {
-				item.BfdFastDetectStrictMode = types.BoolValue(false)
+				item.BfdFastDetectStrictMode = types.BoolNull()
 			}
 			if cValue := v.Get("bfd.fast-detect.disable"); cValue.Exists() {
 				item.BfdFastDetectDisable = types.BoolValue(true)
 			} else {
-				item.BfdFastDetectDisable = types.BoolValue(false)
+				item.BfdFastDetectDisable = types.BoolNull()
 			}
 			if cValue := v.Get("bfd.fast-detect.strict-mode-negotiate"); cValue.Exists() {
 				item.BfdFastDetectStrictModeNegotiate = types.BoolValue(true)
 			} else {
-				item.BfdFastDetectStrictModeNegotiate = types.BoolValue(false)
+				item.BfdFastDetectStrictModeNegotiate = types.BoolNull()
 			}
 			if cValue := v.Get("bfd.fast-detect.strict-mode-negotiate.override"); cValue.Exists() {
 				item.BfdFastDetectStrictModeNegotiateOverride = types.BoolValue(true)
 			} else {
-				item.BfdFastDetectStrictModeNegotiateOverride = types.BoolValue(false)
+				item.BfdFastDetectStrictModeNegotiateOverride = types.BoolNull()
 			}
 			if cValue := v.Get("keychain.keychain-name"); cValue.Exists() {
 				item.KeychainName = types.StringValue(cValue.String())
@@ -4524,12 +4507,12 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("keychain.inheritance-disable"); cValue.Exists() {
 				item.KeychainInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.KeychainInheritanceDisable = types.BoolValue(false)
+				item.KeychainInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("local-as.inheritance-disable"); cValue.Exists() {
 				item.LocalAsInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.LocalAsInheritanceDisable = types.BoolValue(false)
+				item.LocalAsInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("local-as.as.as-number"); cValue.Exists() {
 				item.LocalAs = types.StringValue(cValue.String())
@@ -4537,22 +4520,22 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("local-as.as.no-prepend"); cValue.Exists() {
 				item.LocalAsNoPrepend = types.BoolValue(true)
 			} else {
-				item.LocalAsNoPrepend = types.BoolValue(false)
+				item.LocalAsNoPrepend = types.BoolNull()
 			}
 			if cValue := v.Get("local-as.as.no-prepend.replace-as"); cValue.Exists() {
 				item.LocalAsNoPrependReplaceAs = types.BoolValue(true)
 			} else {
-				item.LocalAsNoPrependReplaceAs = types.BoolValue(false)
+				item.LocalAsNoPrependReplaceAs = types.BoolNull()
 			}
 			if cValue := v.Get("local-as.as.no-prepend.replace-as.dual-as"); cValue.Exists() {
 				item.LocalAsNoPrependReplaceAsDualAs = types.BoolValue(true)
 			} else {
-				item.LocalAsNoPrependReplaceAsDualAs = types.BoolValue(false)
+				item.LocalAsNoPrependReplaceAsDualAs = types.BoolNull()
 			}
-			if cValue := v.Get(""); cValue.Exists() {
+			if cValue := v.Get("password.inheritance-disable"); cValue.Exists() {
 				item.PasswordInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.PasswordInheritanceDisable = types.BoolValue(false)
+				item.PasswordInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("receive-buffer-size.receive-buffer-size-number"); cValue.Exists() {
 				item.ReceiveBufferSize = types.Int64Value(cValue.Int())
@@ -4569,17 +4552,17 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-fallover"); cValue.Exists() {
 				item.FastFallover = types.BoolValue(true)
 			} else {
-				item.FastFallover = types.BoolValue(false)
+				item.FastFallover = types.BoolNull()
 			}
 			if cValue := v.Get("fast-fallover.inheritance-disable"); cValue.Exists() {
 				item.FastFalloverInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.FastFalloverInheritanceDisable = types.BoolValue(false)
+				item.FastFalloverInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
 			} else {
-				item.Shutdown = types.BoolValue(false)
+				item.Shutdown = types.BoolNull()
 			}
 			if cValue := v.Get("timers.keepalive-interval"); cValue.Exists() {
 				item.TimersKeepaliveInterval = types.Int64Value(cValue.Int())
@@ -4587,12 +4570,12 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("timers.zero"); cValue.Exists() {
 				item.TimersHolddownZero = types.BoolValue(true)
 			} else {
-				item.TimersHolddownZero = types.BoolValue(false)
+				item.TimersHolddownZero = types.BoolNull()
 			}
 			if cValue := v.Get("timers.zero.zero"); cValue.Exists() {
 				item.TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
 			} else {
-				item.TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(false)
+				item.TimersHolddownZeroMinimumAcceptableZero = types.BoolNull()
 			}
 			if cValue := v.Get("timers.zero.minimum-acceptable-holdtime"); cValue.Exists() {
 				item.TimersHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(cValue.Int())
@@ -4609,22 +4592,22 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("local.address.inheritance-disable"); cValue.Exists() {
 				item.LocalAddressInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.LocalAddressInheritanceDisable = types.BoolValue(false)
+				item.LocalAddressInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("log.neighbor.changes.detail"); cValue.Exists() {
 				item.LogNeighborChangesDetail = types.BoolValue(true)
 			} else {
-				item.LogNeighborChangesDetail = types.BoolValue(false)
+				item.LogNeighborChangesDetail = types.BoolNull()
 			}
 			if cValue := v.Get("log.neighbor.changes.disable"); cValue.Exists() {
 				item.LogNeighborChangesDisable = types.BoolValue(true)
 			} else {
-				item.LogNeighborChangesDisable = types.BoolValue(false)
+				item.LogNeighborChangesDisable = types.BoolNull()
 			}
 			if cValue := v.Get("log.neighbor.changes.inheritance-disable"); cValue.Exists() {
 				item.LogNeighborChangesInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.LogNeighborChangesInheritanceDisable = types.BoolValue(false)
+				item.LogNeighborChangesInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("log.message.in.log-buffer-size"); cValue.Exists() {
 				item.LogMessageInSize = types.Int64Value(cValue.Int())
@@ -4632,12 +4615,12 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("log.message.in.disable"); cValue.Exists() {
 				item.LogMessageInDisable = types.BoolValue(true)
 			} else {
-				item.LogMessageInDisable = types.BoolValue(false)
+				item.LogMessageInDisable = types.BoolNull()
 			}
 			if cValue := v.Get("log.message.in.inheritance-disable"); cValue.Exists() {
 				item.LogMessageInInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.LogMessageInInheritanceDisable = types.BoolValue(false)
+				item.LogMessageInInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("log.message.out.log-buffer-size"); cValue.Exists() {
 				item.LogMessageOutSize = types.Int64Value(cValue.Int())
@@ -4645,12 +4628,12 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("log.message.out.disable"); cValue.Exists() {
 				item.LogMessageOutDisable = types.BoolValue(true)
 			} else {
-				item.LogMessageOutDisable = types.BoolValue(false)
+				item.LogMessageOutDisable = types.BoolNull()
 			}
 			if cValue := v.Get("log.message.out.inheritance-disable"); cValue.Exists() {
 				item.LogMessageOutInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.LogMessageOutInheritanceDisable = types.BoolValue(false)
+				item.LogMessageOutInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("update-source"); cValue.Exists() {
 				item.UpdateSource = types.StringValue(cValue.String())
@@ -4664,47 +4647,47 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("dmz-link-bandwidth"); cValue.Exists() {
 				item.DmzLinkBandwidth = types.BoolValue(true)
 			} else {
-				item.DmzLinkBandwidth = types.BoolValue(false)
+				item.DmzLinkBandwidth = types.BoolNull()
 			}
 			if cValue := v.Get("dmz-link-bandwidth.inheritance-disable"); cValue.Exists() {
 				item.DmzLinkBandwidthInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.DmzLinkBandwidthInheritanceDisable = types.BoolValue(false)
+				item.DmzLinkBandwidthInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("ebgp-recv-extcommunity-dmz"); cValue.Exists() {
 				item.EbgpRecvExtcommunityDmz = types.BoolValue(true)
 			} else {
-				item.EbgpRecvExtcommunityDmz = types.BoolValue(false)
+				item.EbgpRecvExtcommunityDmz = types.BoolNull()
 			}
 			if cValue := v.Get("ebgp-recv-extcommunity-dmz.inheritance-disable"); cValue.Exists() {
 				item.EbgpRecvExtcommunityDmzInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.EbgpRecvExtcommunityDmzInheritanceDisable = types.BoolValue(false)
+				item.EbgpRecvExtcommunityDmzInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("ebgp-send-extcommunity-dmz"); cValue.Exists() {
 				item.EbgpSendExtcommunityDmz = types.BoolValue(true)
 			} else {
-				item.EbgpSendExtcommunityDmz = types.BoolValue(false)
+				item.EbgpSendExtcommunityDmz = types.BoolNull()
 			}
 			if cValue := v.Get("ebgp-send-extcommunity-dmz.cumulative"); cValue.Exists() {
 				item.EbgpSendExtcommunityDmzCumulative = types.BoolValue(true)
 			} else {
-				item.EbgpSendExtcommunityDmzCumulative = types.BoolValue(false)
+				item.EbgpSendExtcommunityDmzCumulative = types.BoolNull()
 			}
 			if cValue := v.Get("ebgp-send-extcommunity-dmz.inheritance-disable"); cValue.Exists() {
 				item.EbgpSendExtcommunityDmzInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.EbgpSendExtcommunityDmzInheritanceDisable = types.BoolValue(false)
+				item.EbgpSendExtcommunityDmzInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("ttl-security"); cValue.Exists() {
 				item.TtlSecurity = types.BoolValue(true)
 			} else {
-				item.TtlSecurity = types.BoolValue(false)
+				item.TtlSecurity = types.BoolNull()
 			}
 			if cValue := v.Get("ttl-security.inheritance-disable"); cValue.Exists() {
 				item.TtlSecurityInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.TtlSecurityInheritanceDisable = types.BoolValue(false)
+				item.TtlSecurityInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("session-open-mode"); cValue.Exists() {
 				item.SessionOpenMode = types.StringValue(cValue.String())
@@ -4718,72 +4701,72 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("capability.additional-paths.send"); cValue.Exists() {
 				item.CapabilityAdditionalPathsSend = types.BoolValue(true)
 			} else {
-				item.CapabilityAdditionalPathsSend = types.BoolValue(false)
+				item.CapabilityAdditionalPathsSend = types.BoolNull()
 			}
 			if cValue := v.Get("capability.additional-paths.send.disable"); cValue.Exists() {
 				item.CapabilityAdditionalPathsSendDisable = types.BoolValue(true)
 			} else {
-				item.CapabilityAdditionalPathsSendDisable = types.BoolValue(false)
+				item.CapabilityAdditionalPathsSendDisable = types.BoolNull()
 			}
 			if cValue := v.Get("capability.additional-paths.receive"); cValue.Exists() {
 				item.CapabilityAdditionalPathsReceive = types.BoolValue(true)
 			} else {
-				item.CapabilityAdditionalPathsReceive = types.BoolValue(false)
+				item.CapabilityAdditionalPathsReceive = types.BoolNull()
 			}
 			if cValue := v.Get("capability.additional-paths.receive.disable"); cValue.Exists() {
 				item.CapabilityAdditionalPathsReceiveDisable = types.BoolValue(true)
 			} else {
-				item.CapabilityAdditionalPathsReceiveDisable = types.BoolValue(false)
+				item.CapabilityAdditionalPathsReceiveDisable = types.BoolNull()
 			}
 			if cValue := v.Get("capability.suppress.all"); cValue.Exists() {
 				item.CapabilitySuppressAll = types.BoolValue(true)
 			} else {
-				item.CapabilitySuppressAll = types.BoolValue(false)
+				item.CapabilitySuppressAll = types.BoolNull()
 			}
 			if cValue := v.Get("capability.suppress.all.inheritance-disable"); cValue.Exists() {
 				item.CapabilitySuppressAllInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.CapabilitySuppressAllInheritanceDisable = types.BoolValue(false)
+				item.CapabilitySuppressAllInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("capability.suppress.extended-nexthop-encoding"); cValue.Exists() {
 				item.CapabilitySuppressExtendedNexthopEncoding = types.BoolValue(true)
 			} else {
-				item.CapabilitySuppressExtendedNexthopEncoding = types.BoolValue(false)
+				item.CapabilitySuppressExtendedNexthopEncoding = types.BoolNull()
 			}
 			if cValue := v.Get("capability.suppress.extended-nexthop-encoding.inheritance-disable"); cValue.Exists() {
 				item.CapabilitySuppressExtendedNexthopEncodingInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.CapabilitySuppressExtendedNexthopEncodingInheritanceDisable = types.BoolValue(false)
+				item.CapabilitySuppressExtendedNexthopEncodingInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("capability.suppress.four-byte-as"); cValue.Exists() {
 				item.CapabilitySuppressFourByteAs = types.BoolValue(true)
 			} else {
-				item.CapabilitySuppressFourByteAs = types.BoolValue(false)
+				item.CapabilitySuppressFourByteAs = types.BoolNull()
 			}
 			if cValue := v.Get("capability.suppress.four-byte-as.inheritance-disable"); cValue.Exists() {
 				item.CapabilitySuppressFourByteAsInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.CapabilitySuppressFourByteAsInheritanceDisable = types.BoolValue(false)
+				item.CapabilitySuppressFourByteAsInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("graceful-restart.graceful-restart-enable"); cValue.Exists() {
 				item.GracefulRestart = types.BoolValue(true)
 			} else {
-				item.GracefulRestart = types.BoolValue(false)
+				item.GracefulRestart = types.BoolNull()
 			}
 			if cValue := v.Get("graceful-restart.graceful-restart-enable.disable"); cValue.Exists() {
 				item.GracefulRestartDisable = types.BoolValue(true)
 			} else {
-				item.GracefulRestartDisable = types.BoolValue(false)
+				item.GracefulRestartDisable = types.BoolNull()
 			}
 			if cValue := v.Get("graceful-restart.helper-only"); cValue.Exists() {
 				item.GracefulRestartHelperOnly = types.BoolValue(true)
 			} else {
-				item.GracefulRestartHelperOnly = types.BoolValue(false)
+				item.GracefulRestartHelperOnly = types.BoolNull()
 			}
 			if cValue := v.Get("graceful-restart.helper-only.inheritance-disable"); cValue.Exists() {
 				item.GracefulRestartHelperOnlyInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.GracefulRestartHelperOnlyInheritanceDisable = types.BoolValue(false)
+				item.GracefulRestartHelperOnlyInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("graceful-restart.restart-time"); cValue.Exists() {
 				item.GracefulRestartRestartTime = types.Int64Value(cValue.Int())
@@ -4809,12 +4792,12 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("egress-engineering"); cValue.Exists() {
 				item.EgressEngineering = types.BoolValue(true)
 			} else {
-				item.EgressEngineering = types.BoolValue(false)
+				item.EgressEngineering = types.BoolNull()
 			}
 			if cValue := v.Get("egress-engineering.inheritance-disable"); cValue.Exists() {
 				item.EgressEngineeringInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.EgressEngineeringInheritanceDisable = types.BoolValue(false)
+				item.EgressEngineeringInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("peer-set.peer-sets"); cValue.Exists() {
 				item.PeerSets = make([]RouterBGPNeighborsPeerSets, 0)
@@ -4839,12 +4822,12 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ao.key-chain-name.accept-ao-mismatch-connection"); cValue.Exists() {
 				item.AoKeyChainAcceptMismatch = types.BoolValue(true)
 			} else {
-				item.AoKeyChainAcceptMismatch = types.BoolValue(false)
+				item.AoKeyChainAcceptMismatch = types.BoolNull()
 			}
 			if cValue := v.Get("ao.inheritance-disable"); cValue.Exists() {
 				item.AoInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.AoInheritanceDisable = types.BoolValue(false)
+				item.AoInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("dampening"); cValue.Exists() {
 				item.Dampening = types.StringValue(cValue.String())
@@ -4861,22 +4844,22 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("origin-as.validation.disable"); cValue.Exists() {
 				item.OriginAsValidationDisable = types.BoolValue(true)
 			} else {
-				item.OriginAsValidationDisable = types.BoolValue(false)
+				item.OriginAsValidationDisable = types.BoolNull()
 			}
 			if cValue := v.Get("send-extended-community-ebgp"); cValue.Exists() {
 				item.SendExtendedCommunityEbgp = types.BoolValue(true)
 			} else {
-				item.SendExtendedCommunityEbgp = types.BoolValue(false)
+				item.SendExtendedCommunityEbgp = types.BoolNull()
 			}
 			if cValue := v.Get("send-extended-community-ebgp.inheritance-disable"); cValue.Exists() {
 				item.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(false)
+				item.SendExtendedCommunityEbgpInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("bestpath.origin-as.allow.invalid"); cValue.Exists() {
 				item.BestpathOriginAsAllowInvalid = types.BoolValue(true)
 			} else {
-				item.BestpathOriginAsAllowInvalid = types.BoolValue(false)
+				item.BestpathOriginAsAllowInvalid = types.BoolNull()
 			}
 			if cValue := v.Get("update.in.filtering.message.buffers.buffers-number"); cValue.Exists() {
 				item.UpdateInFilteringMessageBuffers = types.Int64Value(cValue.Int())
@@ -4887,7 +4870,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("update.in.filtering.logging.disable"); cValue.Exists() {
 				item.UpdateInFilteringLoggingDisable = types.BoolValue(true)
 			} else {
-				item.UpdateInFilteringLoggingDisable = types.BoolValue(false)
+				item.UpdateInFilteringLoggingDisable = types.BoolNull()
 			}
 			if cValue := v.Get("update.in.filtering.attribute-filter.group"); cValue.Exists() {
 				item.UpdateInFilteringAttributeFilterGroup = types.StringValue(cValue.String())
@@ -4895,12 +4878,12 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("update.in.labeled-unicast.equivalent"); cValue.Exists() {
 				item.UpdateInLabeledUnicastEquivalent = types.BoolValue(true)
 			} else {
-				item.UpdateInLabeledUnicastEquivalent = types.BoolValue(false)
+				item.UpdateInLabeledUnicastEquivalent = types.BoolNull()
 			}
 			if cValue := v.Get("update.in.labeled-unicast.equivalent.inheritance-disable"); cValue.Exists() {
 				item.UpdateInLabeledUnicastEquivalentInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.UpdateInLabeledUnicastEquivalentInheritanceDisable = types.BoolValue(false)
+				item.UpdateInLabeledUnicastEquivalentInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("update.in.error-handling.avoid-reset"); cValue.Exists() {
 				item.UpdateInErrorHandlingAvoidReset = types.StringValue(cValue.String())
@@ -4911,12 +4894,12 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("graceful-maintenance.activate"); cValue.Exists() {
 				item.GracefulMaintenanceActivate = types.BoolValue(true)
 			} else {
-				item.GracefulMaintenanceActivate = types.BoolValue(false)
+				item.GracefulMaintenanceActivate = types.BoolNull()
 			}
 			if cValue := v.Get("graceful-maintenance.activate.inheritance-disable"); cValue.Exists() {
 				item.GracefulMaintenanceActivateInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.GracefulMaintenanceActivateInheritanceDisable = types.BoolValue(false)
+				item.GracefulMaintenanceActivateInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("graceful-maintenance.local-preference.local-preference-number"); cValue.Exists() {
 				item.GracefulMaintenanceLocalPreference = types.Int64Value(cValue.Int())
@@ -4924,7 +4907,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("graceful-maintenance.local-preference.inheritance-disable"); cValue.Exists() {
 				item.GracefulMaintenanceLocalPreferenceInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.GracefulMaintenanceLocalPreferenceInheritanceDisable = types.BoolValue(false)
+				item.GracefulMaintenanceLocalPreferenceInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("graceful-maintenance.as-prepends.prepends-number"); cValue.Exists() {
 				item.GracefulMaintenanceAsPrependsNumber = types.Int64Value(cValue.Int())
@@ -4932,7 +4915,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("graceful-maintenance.as-prepends.inheritance-disable"); cValue.Exists() {
 				item.GracefulMaintenanceAsPrependsInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.GracefulMaintenanceAsPrependsInheritanceDisable = types.BoolValue(false)
+				item.GracefulMaintenanceAsPrependsInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("graceful-maintenance.bandwidth-aware.percentage-threshold.percentage-threshold-number"); cValue.Exists() {
 				item.GracefulMaintenanceBandwidthAwarePercentageThreshold = types.Int64Value(cValue.Int())
@@ -4949,7 +4932,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("graceful-maintenance.bandwidth-aware.inheritance-disable"); cValue.Exists() {
 				item.GracefulMaintenanceBandwidthAwareInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.GracefulMaintenanceBandwidthAwareInheritanceDisable = types.BoolValue(false)
+				item.GracefulMaintenanceBandwidthAwareInheritanceDisable = types.BoolNull()
 			}
 			data.Neighbors = append(data.Neighbors, item)
 			return true
@@ -5029,12 +5012,12 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("discard"); ccValue.Exists() {
 						cItem.Discard = types.BoolValue(true)
 					} else {
-						cItem.Discard = types.BoolValue(false)
+						cItem.Discard = types.BoolNull()
 					}
 					if ccValue := cv.Get("treat-as-withdraw"); ccValue.Exists() {
 						cItem.TreatAsWithdraw = types.BoolValue(true)
 					} else {
-						cItem.TreatAsWithdraw = types.BoolValue(false)
+						cItem.TreatAsWithdraw = types.BoolNull()
 					}
 					item.AttributeCodeRanges = append(item.AttributeCodeRanges, cItem)
 					return true
@@ -5454,7 +5437,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("refresh-time.off"); cValue.Exists() {
 				item.RefreshTimeOff = types.BoolValue(true)
 			} else {
-				item.RefreshTimeOff = types.BoolValue(false)
+				item.RefreshTimeOff = types.BoolNull()
 			}
 			if cValue := v.Get("response-time.response-time-seconds"); cValue.Exists() {
 				item.ResponseTimeSeconds = types.Int64Value(cValue.Int())
@@ -5462,7 +5445,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("response-time.off"); cValue.Exists() {
 				item.ResponseTimeOff = types.BoolValue(true)
 			} else {
-				item.ResponseTimeOff = types.BoolValue(false)
+				item.ResponseTimeOff = types.BoolNull()
 			}
 			if cValue := v.Get("purge-time"); cValue.Exists() {
 				item.PurgeTime = types.Int64Value(cValue.Int())
@@ -5482,7 +5465,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
 			} else {
-				item.Shutdown = types.BoolValue(false)
+				item.Shutdown = types.BoolNull()
 			}
 			data.RpkiServers = append(data.RpkiServers, item)
 			return true
@@ -5668,10 +5651,10 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res gjson.Result) {
 			} else {
 				item.LocalAsNoPrependReplaceAsDualAs = types.BoolNull()
 			}
-			if cValue := v.Get(""); cValue.Exists() {
+			if cValue := v.Get("password.encrypted"); cValue.Exists() {
 				item.Password = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get(""); cValue.Exists() {
+			if cValue := v.Get("password.inheritance-disable"); cValue.Exists() {
 				item.PasswordInheritanceDisable = types.BoolValue(true)
 			} else {
 				item.PasswordInheritanceDisable = types.BoolNull()
@@ -7596,10 +7579,10 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/receive-buffer-size", state.getPath(), keyString))
 				}
 				if !state.Neighbors[i].PasswordInheritanceDisable.IsNull() && data.Neighbors[j].PasswordInheritanceDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/password/inheritance-disable", state.getPath(), keyString))
 				}
 				if !state.Neighbors[i].Password.IsNull() && data.Neighbors[j].Password.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/password/encrypted", state.getPath(), keyString))
 				}
 				if !state.Neighbors[i].LocalAsNoPrependReplaceAsDualAs.IsNull() && data.Neighbors[j].LocalAsNoPrependReplaceAsDualAs.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as/as/no-prepend/replace-as", state.getPath(), keyString))
@@ -8588,7 +8571,7 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context, state *RouterBGP
 		if !data.Neighbors[i].PasswordInheritanceDisable.IsNull() && !data.Neighbors[i].PasswordInheritanceDisable.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.Neighbors) && !state.Neighbors[i].PasswordInheritanceDisable.IsNull() && state.Neighbors[i].PasswordInheritanceDisable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/password/inheritance-disable", data.getXPath(), keyString))
 			}
 		}
 		// Only delete if state has true and plan has false
@@ -9167,7 +9150,9 @@ func (data RouterBGP) toBodyXML(ctx context.Context) string {
 			if len(item.BmpActivateServers) > 0 {
 				for _, citem := range item.BmpActivateServers {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.ServerNumber.IsNull() && !citem.ServerNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "server-number", strconv.FormatInt(citem.ServerNumber.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "bmp-activate/servers/server", ccBody.Res())
 				}
 			}
@@ -9234,11 +9219,11 @@ func (data RouterBGP) toBodyXML(ctx context.Context) string {
 				}
 			}
 			if !item.Password.IsNull() && !item.Password.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "", item.Password.ValueString())
+				cBody = helpers.SetFromXPath(cBody, "password/encrypted", item.Password.ValueString())
 			}
 			if !item.PasswordInheritanceDisable.IsNull() && !item.PasswordInheritanceDisable.IsUnknown() {
 				if item.PasswordInheritanceDisable.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "", "")
+					cBody = helpers.SetFromXPath(cBody, "password/inheritance-disable", "")
 				}
 			}
 			if !item.ReceiveBufferSize.IsNull() && !item.ReceiveBufferSize.IsUnknown() {
@@ -9506,7 +9491,9 @@ func (data RouterBGP) toBodyXML(ctx context.Context) string {
 			if len(item.PeerSets) > 0 {
 				for _, citem := range item.PeerSets {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Peer.IsNull() && !citem.Peer.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "peer", strconv.FormatInt(citem.Peer.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "peer-set/peer-sets", ccBody.Res())
 				}
 			}
@@ -9702,7 +9689,12 @@ func (data RouterBGP) toBodyXML(ctx context.Context) string {
 			if len(item.AttributeCodeRanges) > 0 {
 				for _, citem := range item.AttributeCodeRanges {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Start.IsNull() && !citem.Start.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "start", strconv.FormatInt(citem.Start.ValueInt64(), 10))
+					}
+					if !citem.End.IsNull() && !citem.End.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "end", strconv.FormatInt(citem.End.ValueInt64(), 10))
+					}
 					if !citem.Discard.IsNull() && !citem.Discard.IsUnknown() {
 						if citem.Discard.ValueBool() {
 							ccBody = helpers.SetFromXPath(ccBody, "discard", "")
@@ -9730,7 +9722,9 @@ func (data RouterBGP) toBodyXML(ctx context.Context) string {
 			if len(item.AsNumbers) > 0 {
 				for _, citem := range item.AsNumbers {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.AsValue.IsNull() && !citem.AsValue.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "as-list-value", citem.AsValue.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "as-list-numbers/as-list-number", ccBody.Res())
 				}
 			}
@@ -10361,34 +10355,36 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 				data.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable = types.BoolNull()
 			}
 		}
-		for ci := range data.Neighbors[i].BmpActivateServers {
-			keys := [...]string{"server-number"}
-			keyValues := [...]string{strconv.FormatInt(data.Neighbors[i].BmpActivateServers[ci].ServerNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "bmp-activate/servers/server"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Neighbors[i].BmpActivateServers
+			data.Neighbors[i].BmpActivateServers = make([]RouterBGPNeighborsBmpActivateServers, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "bmp-activate/servers/server").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterBGPNeighborsBmpActivateServers{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "server-number"); cValue.Exists() {
+					citem.ServerNumber = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.ServerNumber.Equal(citem.ServerNumber) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "server-number"); value.Exists() {
-				data.Neighbors[i].BmpActivateServers[ci].ServerNumber = types.Int64Value(value.Int())
-			} else {
-				data.Neighbors[i].BmpActivateServers[ci].ServerNumber = types.Int64Null()
-			}
+				}
+
+				data.Neighbors[i].BmpActivateServers = append(data.Neighbors[i].BmpActivateServers, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "bfd/minimum-interval"); value.Exists() {
 			data.Neighbors[i].BfdMinimumInterval = types.Int64Value(value.Int())
@@ -10500,7 +10496,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 				data.Neighbors[i].LocalAsNoPrependReplaceAsDualAs = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, ""); value.Exists() {
+		if value := helpers.GetFromXPath(r, "password/inheritance-disable"); value.Exists() {
 			data.Neighbors[i].PasswordInheritanceDisable = types.BoolValue(true)
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
@@ -10971,34 +10967,36 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 				data.Neighbors[i].EgressEngineeringInheritanceDisable = types.BoolNull()
 			}
 		}
-		for ci := range data.Neighbors[i].PeerSets {
-			keys := [...]string{"peer"}
-			keyValues := [...]string{strconv.FormatInt(data.Neighbors[i].PeerSets[ci].Peer.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "peer-set/peer-sets"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Neighbors[i].PeerSets
+			data.Neighbors[i].PeerSets = make([]RouterBGPNeighborsPeerSets, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "peer-set/peer-sets").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterBGPNeighborsPeerSets{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "peer"); cValue.Exists() {
+					citem.Peer = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Peer.Equal(citem.Peer) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "peer"); value.Exists() {
-				data.Neighbors[i].PeerSets[ci].Peer = types.Int64Value(value.Int())
-			} else {
-				data.Neighbors[i].PeerSets[ci].Peer = types.Int64Null()
-			}
+				}
+
+				data.Neighbors[i].PeerSets = append(data.Neighbors[i].PeerSets, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "peer-node-sid/index"); value.Exists() {
 			data.Neighbors[i].PeerNodeSidIndex = types.Int64Value(value.Int())
@@ -11377,59 +11375,60 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 		} else if data.AttributeFilterGroups[i].GroupName.IsNull() {
 			data.AttributeFilterGroups[i].GroupName = types.StringNull()
 		}
-		for ci := range data.AttributeFilterGroups[i].AttributeCodeRanges {
-			keys := [...]string{"start", "end"}
-			keyValues := [...]string{strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start.ValueInt64(), 10), strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "attributes/attribute-code-ranges/attribute-code-range"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.AttributeFilterGroups[i].AttributeCodeRanges
+			data.AttributeFilterGroups[i].AttributeCodeRanges = make([]RouterBGPAttributeFilterGroupsAttributeCodeRanges, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "attributes/attribute-code-ranges/attribute-code-range").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterBGPAttributeFilterGroupsAttributeCodeRanges{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "start"); cValue.Exists() {
+					citem.Start = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "end"); cValue.Exists() {
+					citem.End = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "discard"); cValue.Exists() {
+					citem.Discard = types.BoolValue(true)
+				} else {
+					citem.Discard = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "treat-as-withdraw"); cValue.Exists() {
+					citem.TreatAsWithdraw = types.BoolValue(true)
+				} else {
+					citem.TreatAsWithdraw = types.BoolValue(false)
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Start.Equal(citem.Start) {
+						match = false
+					}
+					if !existingItem.End.Equal(citem.End) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Discard.ValueBool() && existingItem.Discard.ValueBool() == false {
+							citem.Discard = existingItem.Discard
 						}
-						found = false
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.TreatAsWithdraw.ValueBool() && existingItem.TreatAsWithdraw.ValueBool() == false {
+							citem.TreatAsWithdraw = existingItem.TreatAsWithdraw
+						}
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "start"); value.Exists() {
-				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start = types.Int64Value(value.Int())
-			} else {
-				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "end"); value.Exists() {
-				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End = types.Int64Value(value.Int())
-			} else {
-				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "discard"); value.Exists() {
-				if !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.IsNull() {
-					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.IsNull() {
-					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "treat-as-withdraw"); value.Exists() {
-				if !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() {
-					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() {
-					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw = types.BoolNull()
-				}
-			}
+
+				data.AttributeFilterGroups[i].AttributeCodeRanges = append(data.AttributeFilterGroups[i].AttributeCodeRanges, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.AsLists {
@@ -11460,34 +11459,36 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 		} else if data.AsLists[i].ListName.IsNull() {
 			data.AsLists[i].ListName = types.StringNull()
 		}
-		for ci := range data.AsLists[i].AsNumbers {
-			keys := [...]string{"as-list-value"}
-			keyValues := [...]string{data.AsLists[i].AsNumbers[ci].AsValue.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "as-list-numbers/as-list-number"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.AsLists[i].AsNumbers
+			data.AsLists[i].AsNumbers = make([]RouterBGPAsListsAsNumbers, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "as-list-numbers/as-list-number").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterBGPAsListsAsNumbers{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "as-list-value"); cValue.Exists() {
+					citem.AsValue = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AsValue.ValueString() != citem.AsValue.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "as-list-value"); value.Exists() {
-				data.AsLists[i].AsNumbers[ci].AsValue = types.StringValue(value.String())
-			} else {
-				data.AsLists[i].AsNumbers[ci].AsValue = types.StringNull()
-			}
+				}
+
+				data.AsLists[i].AsNumbers = append(data.AsLists[i].AsNumbers, citem)
+				return true
+			})
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-information/originate"); value.Exists() {
@@ -12386,10 +12387,10 @@ func (data *RouterBGP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			} else {
 				item.LocalAsNoPrependReplaceAsDualAs = types.BoolNull()
 			}
-			if cValue := helpers.GetFromXPath(v, ""); cValue.Exists() {
+			if cValue := helpers.GetFromXPath(v, "password/encrypted"); cValue.Exists() {
 				item.Password = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, ""); cValue.Exists() {
+			if cValue := helpers.GetFromXPath(v, "password/inheritance-disable"); cValue.Exists() {
 				item.PasswordInheritanceDisable = types.BoolValue(true)
 			} else {
 				item.PasswordInheritanceDisable = types.BoolNull()
@@ -12867,15 +12868,21 @@ func (data *RouterBGP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 						cItem.End = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "discard"); ccValue.Exists() {
+
 						cItem.Discard = types.BoolValue(true)
+
 					} else {
-						cItem.Discard = types.BoolNull()
+						cItem.Discard = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "treat-as-withdraw"); ccValue.Exists() {
+
 						cItem.TreatAsWithdraw = types.BoolValue(true)
+
 					} else {
-						cItem.TreatAsWithdraw = types.BoolNull()
+						cItem.TreatAsWithdraw = types.BoolValue(false)
 					}
+
 					item.AttributeCodeRanges = append(item.AttributeCodeRanges, cItem)
 					return true
 				})
@@ -13507,10 +13514,10 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			} else {
 				item.LocalAsNoPrependReplaceAsDualAs = types.BoolValue(false)
 			}
-			if cValue := helpers.GetFromXPath(v, ""); cValue.Exists() {
+			if cValue := helpers.GetFromXPath(v, "password/encrypted"); cValue.Exists() {
 				item.Password = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, ""); cValue.Exists() {
+			if cValue := helpers.GetFromXPath(v, "password/inheritance-disable"); cValue.Exists() {
 				item.PasswordInheritanceDisable = types.BoolValue(true)
 			} else {
 				item.PasswordInheritanceDisable = types.BoolValue(false)
@@ -16157,10 +16164,10 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Neighbors[i].PasswordInheritanceDisable.IsNull() && state.Neighbors[i].PasswordInheritanceDisable.ValueBool() && data.Neighbors[j].PasswordInheritanceDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/password/inheritance-disable", predicates))
 				}
 				if !state.Neighbors[i].Password.IsNull() && data.Neighbors[j].Password.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/password/encrypted", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Neighbors[i].LocalAsNoPrependReplaceAsDualAs.IsNull() && state.Neighbors[i].LocalAsNoPrependReplaceAsDualAs.ValueBool() && data.Neighbors[j].LocalAsNoPrependReplaceAsDualAs.IsNull() {

@@ -549,34 +549,33 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 				data.Vrfs[i].Disable = types.BoolValue(false)
 			}
 		}
-		for ci := range data.Vrfs[i].EastWestInterfaces {
-			keys := [...]string{"east-west-name"}
-			keyValues := [...]string{data.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("east-wests.east-west"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Vrfs[i].EastWestInterfaces
+			data.Vrfs[i].EastWestInterfaces = make([]LinuxNetworkingVrfsEastWestInterfaces, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := LinuxNetworkingVrfsEastWestInterfaces{}
+				if cValue := cr.Get("east-west-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("east-wests.east-west").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("east-west-name"); value.Exists() && !data.Vrfs[i].EastWestInterfaces[ci].InterfaceName.IsNull() {
-				data.Vrfs[i].EastWestInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].EastWestInterfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.Vrfs[i].EastWestInterfaces = append(data.Vrfs[i].EastWestInterfaces, citem)
+				return true
+			})
 		}
 		if value := r.Get("address-family.ipv4.source-hint.default-route.interface"); value.Exists() && !data.Vrfs[i].Ipv4SourceInterfaceDefaultRoute.IsNull() {
 			data.Vrfs[i].Ipv4SourceInterfaceDefaultRoute = types.StringValue(value.String())
@@ -785,7 +784,9 @@ func (data LinuxNetworking) toBodyXML(ctx context.Context) string {
 			if len(item.EastWestInterfaces) > 0 {
 				for _, citem := range item.EastWestInterfaces {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "east-west-name", citem.InterfaceName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "east-wests/east-west", ccBody.Res())
 				}
 			}
@@ -1036,34 +1037,36 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 				data.Vrfs[i].Disable = types.BoolNull()
 			}
 		}
-		for ci := range data.Vrfs[i].EastWestInterfaces {
-			keys := [...]string{"east-west-name"}
-			keyValues := [...]string{data.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "east-wests/east-west"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Vrfs[i].EastWestInterfaces
+			data.Vrfs[i].EastWestInterfaces = make([]LinuxNetworkingVrfsEastWestInterfaces, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "east-wests/east-west").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := LinuxNetworkingVrfsEastWestInterfaces{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "east-west-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "east-west-name"); value.Exists() {
-				data.Vrfs[i].EastWestInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].EastWestInterfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.Vrfs[i].EastWestInterfaces = append(data.Vrfs[i].EastWestInterfaces, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "address-family/ipv4/source-hint/default-route/interface"); value.Exists() {
 			data.Vrfs[i].Ipv4SourceInterfaceDefaultRoute = types.StringValue(value.String())
@@ -1203,22 +1206,22 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("statistics-synchronization.from-xr.every.five-seconds"); cValue.Exists() {
 				item.StatisticsSynchronizationFiveSeconds = types.BoolValue(true)
 			} else {
-				item.StatisticsSynchronizationFiveSeconds = types.BoolValue(false)
+				item.StatisticsSynchronizationFiveSeconds = types.BoolNull()
 			}
 			if cValue := v.Get("statistics-synchronization.from-xr.every.ten-seconds"); cValue.Exists() {
 				item.StatisticsSynchronizationTenSeconds = types.BoolValue(true)
 			} else {
-				item.StatisticsSynchronizationTenSeconds = types.BoolValue(false)
+				item.StatisticsSynchronizationTenSeconds = types.BoolNull()
 			}
 			if cValue := v.Get("statistics-synchronization.from-xr.every.thirty-seconds"); cValue.Exists() {
 				item.StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
 			} else {
-				item.StatisticsSynchronizationThirtySeconds = types.BoolValue(false)
+				item.StatisticsSynchronizationThirtySeconds = types.BoolNull()
 			}
 			if cValue := v.Get("statistics-synchronization.from-xr.every.sixty-seconds"); cValue.Exists() {
 				item.StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
 			} else {
-				item.StatisticsSynchronizationSixtySeconds = types.BoolValue(false)
+				item.StatisticsSynchronizationSixtySeconds = types.BoolNull()
 			}
 			data.ExposedInterfaces = append(data.ExposedInterfaces, item)
 			return true
@@ -1234,7 +1237,7 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("disable"); cValue.Exists() {
 				item.Disable = types.BoolValue(true)
 			} else {
-				item.Disable = types.BoolValue(false)
+				item.Disable = types.BoolNull()
 			}
 			if cValue := v.Get("east-wests.east-west"); cValue.Exists() {
 				item.EastWestInterfaces = make([]LinuxNetworkingVrfsEastWestInterfaces, 0)
@@ -1253,7 +1256,7 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv4.source-hint.default-route.active-management"); cValue.Exists() {
 				item.Ipv4SourceDefaultRouteActiveManagement = types.BoolValue(true)
 			} else {
-				item.Ipv4SourceDefaultRouteActiveManagement = types.BoolValue(false)
+				item.Ipv4SourceDefaultRouteActiveManagement = types.BoolNull()
 			}
 			if cValue := v.Get("address-family.ipv4.source-hint.management-route.interface"); cValue.Exists() {
 				item.Ipv4SourceInterfaceManagementRoute = types.StringValue(cValue.String())
@@ -1261,7 +1264,7 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv4.default-route.software-forwarding"); cValue.Exists() {
 				item.Ipv4DefaultRouteSoftwareForwarding = types.BoolValue(true)
 			} else {
-				item.Ipv4DefaultRouteSoftwareForwarding = types.BoolValue(false)
+				item.Ipv4DefaultRouteSoftwareForwarding = types.BoolNull()
 			}
 			if cValue := v.Get("address-family.ipv6.source-hint.default-route.interface"); cValue.Exists() {
 				item.Ipv6SourceInterfaceDefaultRoute = types.StringValue(cValue.String())
@@ -1269,7 +1272,7 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv6.source-hint.default-route.active-management"); cValue.Exists() {
 				item.Ipv6SourceDefaultRouteActiveManagement = types.BoolValue(true)
 			} else {
-				item.Ipv6SourceDefaultRouteActiveManagement = types.BoolValue(false)
+				item.Ipv6SourceDefaultRouteActiveManagement = types.BoolNull()
 			}
 			if cValue := v.Get("address-family.ipv6.source-hint.management-route.interface"); cValue.Exists() {
 				item.Ipv6SourceInterfaceManagementRoute = types.StringValue(cValue.String())
@@ -1277,7 +1280,7 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv6.default-route.software-forwarding"); cValue.Exists() {
 				item.Ipv6DefaultRouteSoftwareForwarding = types.BoolValue(true)
 			} else {
-				item.Ipv6DefaultRouteSoftwareForwarding = types.BoolValue(false)
+				item.Ipv6DefaultRouteSoftwareForwarding = types.BoolNull()
 			}
 			data.Vrfs = append(data.Vrfs, item)
 			return true

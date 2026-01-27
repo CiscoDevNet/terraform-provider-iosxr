@@ -2242,7 +2242,7 @@ func (data *RouterOSPFAreaInterface) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("database-filter.all.out"); cValue.Exists() {
 				item.DatabaseFilterAllOut = types.BoolValue(true)
 			} else {
-				item.DatabaseFilterAllOut = types.BoolValue(false)
+				item.DatabaseFilterAllOut = types.BoolNull()
 			}
 			if cValue := v.Get("priority"); cValue.Exists() {
 				item.Priority = types.Int64Value(cValue.Int())
@@ -2732,12 +2732,12 @@ func (data *RouterOSPFAreaInterface) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
 				item.IndexExplicitNull = types.BoolValue(true)
 			} else {
-				item.IndexExplicitNull = types.BoolValue(false)
+				item.IndexExplicitNull = types.BoolNull()
 			}
 			if cValue := v.Get("index.n-flag-clear"); cValue.Exists() {
 				item.IndexNFlagClear = types.BoolValue(true)
 			} else {
-				item.IndexNFlagClear = types.BoolValue(false)
+				item.IndexNFlagClear = types.BoolNull()
 			}
 			if cValue := v.Get("absolute.sid-label"); cValue.Exists() {
 				item.Absolute = types.Int64Value(cValue.Int())
@@ -2745,12 +2745,12 @@ func (data *RouterOSPFAreaInterface) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
 				item.AbsoluteExplicitNull = types.BoolValue(true)
 			} else {
-				item.AbsoluteExplicitNull = types.BoolValue(false)
+				item.AbsoluteExplicitNull = types.BoolNull()
 			}
 			if cValue := v.Get("absolute.n-flag-clear"); cValue.Exists() {
 				item.AbsoluteNFlagClear = types.BoolValue(true)
 			} else {
-				item.AbsoluteNFlagClear = types.BoolValue(false)
+				item.AbsoluteNFlagClear = types.BoolNull()
 			}
 			data.PrefixSidAlgorithms = append(data.PrefixSidAlgorithms, item)
 			return true
@@ -2776,7 +2776,7 @@ func (data *RouterOSPFAreaInterface) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("protected"); cValue.Exists() {
 				item.Protected = types.BoolValue(true)
 			} else {
-				item.Protected = types.BoolValue(false)
+				item.Protected = types.BoolNull()
 			}
 			if cValue := v.Get("neighbor-address"); cValue.Exists() {
 				item.NeighborAddress = types.StringValue(cValue.String())
@@ -2795,7 +2795,7 @@ func (data *RouterOSPFAreaInterface) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("protected"); cValue.Exists() {
 				item.Protected = types.BoolValue(true)
 			} else {
-				item.Protected = types.BoolValue(false)
+				item.Protected = types.BoolNull()
 			}
 			if cValue := v.Get("neighbor-address"); cValue.Exists() {
 				item.NeighborAddress = types.StringValue(cValue.String())

@@ -419,64 +419,50 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.RedundancyIccpGroups[i].GroupNumber = types.Int64Null()
 		}
-		for ci := range data.RedundancyIccpGroups[i].Interfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("interface"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.RedundancyIccpGroups[i].Interfaces
+			data.RedundancyIccpGroups[i].Interfaces = make([]L2VPNRedundancyIccpGroupsInterfaces, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNRedundancyIccpGroupsInterfaces{}
+				if cValue := cr.Get("interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("primary.vlan"); cValue.Exists() {
+					citem.PrimaryVlan = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("secondary.vlan"); cValue.Exists() {
+					citem.SecondaryVlan = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("mac-flush.stp-tcn"); cValue.Exists() {
+					citem.MacFlushStpTcn = types.BoolValue(true)
+				} else {
+					citem.MacFlushStpTcn = types.BoolValue(false)
+				}
+				if cValue := cr.Get("recovery.delay"); cValue.Exists() {
+					citem.RecoveryDelay = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("interface").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.MacFlushStpTcn.ValueBool() && existingItem.MacFlushStpTcn.ValueBool() == false {
+							citem.MacFlushStpTcn = existingItem.MacFlushStpTcn
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.IsNull() {
-				data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName = types.StringNull()
-			}
-			if value := cr.Get("primary.vlan"); value.Exists() && !data.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan.IsNull() {
-				data.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan = types.StringValue(value.String())
-			} else {
-				data.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan = types.StringNull()
-			}
-			if value := cr.Get("secondary.vlan"); value.Exists() && !data.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan.IsNull() {
-				data.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan = types.StringValue(value.String())
-			} else {
-				data.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan = types.StringNull()
-			}
-			if value := cr.Get("mac-flush.stp-tcn"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() && !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.ValueBool() {
-					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolValue(false)
-				} else if !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() {
-					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() {
-					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolNull()
-				} else {
-					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("recovery.delay"); value.Exists() {
-				data.RedundancyIccpGroups[i].Interfaces[ci].RecoveryDelay = types.Int64Value(value.Int())
-			} else if data.RedundancyIccpGroups[i].Interfaces[ci].RecoveryDelay.IsNull() {
-				data.RedundancyIccpGroups[i].Interfaces[ci].RecoveryDelay = types.Int64Null()
-			}
+
+				data.RedundancyIccpGroups[i].Interfaces = append(data.RedundancyIccpGroups[i].Interfaces, citem)
+				return true
+			})
 		}
 		if value := r.Get("multi-homing.node-id"); value.Exists() && !data.RedundancyIccpGroups[i].MultiHomingNodeId.IsNull() {
 			data.RedundancyIccpGroups[i].MultiHomingNodeId = types.Int64Value(value.Int())
@@ -512,68 +498,67 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.FlexibleXconnectServiceVlanUnaware[i].ServiceName = types.StringNull()
 		}
-		for ci := range data.FlexibleXconnectServiceVlanUnaware[i].Interfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("interfaces.interface"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.FlexibleXconnectServiceVlanUnaware[i].Interfaces
+			data.FlexibleXconnectServiceVlanUnaware[i].Interfaces = make([]L2VPNFlexibleXconnectServiceVlanUnawareInterfaces, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNFlexibleXconnectServiceVlanUnawareInterfaces{}
+				if cValue := cr.Get("interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("interfaces.interface").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.IsNull() {
-				data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.FlexibleXconnectServiceVlanUnaware[i].Interfaces = append(data.FlexibleXconnectServiceVlanUnaware[i].Interfaces, citem)
+				return true
+			})
 		}
-		for ci := range data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis {
-			keys := [...]string{"vpn-id", "remote-ac-id"}
-			keyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("neighbor.evpn.evis.evi"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis
+			data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis = make([]L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis{}
+				if cValue := cr.Get("vpn-id"); cValue.Exists() {
+					citem.VpnId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("remote-ac-id"); cValue.Exists() {
+					citem.RemoteAcId = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("neighbor.evpn.evis.evi").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.VpnId.Equal(citem.VpnId) {
+						match = false
+					}
+					if !existingItem.RemoteAcId.Equal(citem.RemoteAcId) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("vpn-id"); value.Exists() {
-				data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId = types.Int64Value(value.Int())
-			} else if data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.IsNull() {
-				data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId = types.Int64Null()
-			}
-			if value := cr.Get("remote-ac-id"); value.Exists() {
-				data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId = types.Int64Value(value.Int())
-			} else if data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.IsNull() {
-				data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId = types.Int64Null()
-			}
+				}
+
+				data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis = append(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.FlexibleXconnectServiceVlanAwareEvis {
@@ -604,34 +589,33 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId = types.Int64Null()
 		}
-		for ci := range data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("interfaces.interface"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces
+			data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces = make([]L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces{}
+				if cValue := cr.Get("interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("interfaces.interface").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.IsNull() {
-				data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces = append(data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces, citem)
+				return true
+			})
 		}
 	}
 	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); value.Exists() {
@@ -882,7 +866,9 @@ func (data L2VPN) toBodyXML(ctx context.Context) string {
 			if len(item.Interfaces) > 0 {
 				for _, citem := range item.Interfaces {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "interface-name", citem.InterfaceName.ValueString())
+					}
 					if !citem.PrimaryVlan.IsNull() && !citem.PrimaryVlan.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "primary/vlan", citem.PrimaryVlan.ValueString())
 					}
@@ -917,14 +903,21 @@ func (data L2VPN) toBodyXML(ctx context.Context) string {
 			if len(item.Interfaces) > 0 {
 				for _, citem := range item.Interfaces {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "interface-name", citem.InterfaceName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "interfaces/interface", ccBody.Res())
 				}
 			}
 			if len(item.NeighborEvpnEvis) > 0 {
 				for _, citem := range item.NeighborEvpnEvis {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.VpnId.IsNull() && !citem.VpnId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "vpn-id", strconv.FormatInt(citem.VpnId.ValueInt64(), 10))
+					}
+					if !citem.RemoteAcId.IsNull() && !citem.RemoteAcId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "remote-ac-id", strconv.FormatInt(citem.RemoteAcId.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "neighbor/evpn/evis/evi", ccBody.Res())
 				}
 			}
@@ -942,7 +935,9 @@ func (data L2VPN) toBodyXML(ctx context.Context) string {
 			if len(item.Interfaces) > 0 {
 				for _, citem := range item.Interfaces {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "interface-name", citem.InterfaceName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "interfaces/interface", ccBody.Res())
 				}
 			}
@@ -1116,59 +1111,54 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.RedundancyIccpGroups[i].GroupNumber.IsNull() {
 			data.RedundancyIccpGroups[i].GroupNumber = types.Int64Null()
 		}
-		for ci := range data.RedundancyIccpGroups[i].Interfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "interface"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.RedundancyIccpGroups[i].Interfaces
+			data.RedundancyIccpGroups[i].Interfaces = make([]L2VPNRedundancyIccpGroupsInterfaces, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "interface").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNRedundancyIccpGroupsInterfaces{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "primary/vlan"); cValue.Exists() {
+					citem.PrimaryVlan = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "secondary/vlan"); cValue.Exists() {
+					citem.SecondaryVlan = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "mac-flush/stp-tcn"); cValue.Exists() {
+					citem.MacFlushStpTcn = types.BoolValue(true)
+				} else {
+					citem.MacFlushStpTcn = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "recovery/delay"); cValue.Exists() {
+					citem.RecoveryDelay = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.MacFlushStpTcn.ValueBool() && existingItem.MacFlushStpTcn.ValueBool() == false {
+							citem.MacFlushStpTcn = existingItem.MacFlushStpTcn
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
-				data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "primary/vlan"); value.Exists() {
-				data.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan = types.StringValue(value.String())
-			} else {
-				data.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "secondary/vlan"); value.Exists() {
-				data.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan = types.StringValue(value.String())
-			} else {
-				data.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "mac-flush/stp-tcn"); value.Exists() {
-				if !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() {
-					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() {
-					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "recovery/delay"); value.Exists() {
-				data.RedundancyIccpGroups[i].Interfaces[ci].RecoveryDelay = types.Int64Value(value.Int())
-			} else {
-				data.RedundancyIccpGroups[i].Interfaces[ci].RecoveryDelay = types.Int64Null()
-			}
+
+				data.RedundancyIccpGroups[i].Interfaces = append(data.RedundancyIccpGroups[i].Interfaces, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "multi-homing/node-id"); value.Exists() {
 			data.RedundancyIccpGroups[i].MultiHomingNodeId = types.Int64Value(value.Int())
@@ -1204,68 +1194,73 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.IsNull() {
 			data.FlexibleXconnectServiceVlanUnaware[i].ServiceName = types.StringNull()
 		}
-		for ci := range data.FlexibleXconnectServiceVlanUnaware[i].Interfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "interfaces/interface"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.FlexibleXconnectServiceVlanUnaware[i].Interfaces
+			data.FlexibleXconnectServiceVlanUnaware[i].Interfaces = make([]L2VPNFlexibleXconnectServiceVlanUnawareInterfaces, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "interfaces/interface").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNFlexibleXconnectServiceVlanUnawareInterfaces{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
-				data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.FlexibleXconnectServiceVlanUnaware[i].Interfaces = append(data.FlexibleXconnectServiceVlanUnaware[i].Interfaces, citem)
+				return true
+			})
 		}
-		for ci := range data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis {
-			keys := [...]string{"vpn-id", "remote-ac-id"}
-			keyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "neighbor/evpn/evis/evi"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis
+			data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis = make([]L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "neighbor/evpn/evis/evi").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "vpn-id"); cValue.Exists() {
+					citem.VpnId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "remote-ac-id"); cValue.Exists() {
+					citem.RemoteAcId = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.VpnId.Equal(citem.VpnId) {
+						match = false
+					}
+					if !existingItem.RemoteAcId.Equal(citem.RemoteAcId) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "vpn-id"); value.Exists() {
-				data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId = types.Int64Value(value.Int())
-			} else {
-				data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "remote-ac-id"); value.Exists() {
-				data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId = types.Int64Value(value.Int())
-			} else {
-				data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId = types.Int64Null()
-			}
+				}
+
+				data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis = append(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.FlexibleXconnectServiceVlanAwareEvis {
@@ -1296,34 +1291,36 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.IsNull() {
 			data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId = types.Int64Null()
 		}
-		for ci := range data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "interfaces/interface"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces
+			data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces = make([]L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "interfaces/interface").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
-				data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces = append(data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces, citem)
+				return true
+			})
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
@@ -1554,7 +1551,7 @@ func (data *L2VPN) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("mac-flush.stp-tcn"); ccValue.Exists() {
 						cItem.MacFlushStpTcn = types.BoolValue(true)
 					} else {
-						cItem.MacFlushStpTcn = types.BoolValue(false)
+						cItem.MacFlushStpTcn = types.BoolNull()
 					}
 					if ccValue := cv.Get("recovery.delay"); ccValue.Exists() {
 						cItem.RecoveryDelay = types.Int64Value(ccValue.Int())
@@ -2008,10 +2005,13 @@ func (data *L2VPN) fromBodyXML(ctx context.Context, res xmldot.Result) {
 						cItem.SecondaryVlan = types.StringValue(ccValue.String())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "mac-flush/stp-tcn"); ccValue.Exists() {
+
 						cItem.MacFlushStpTcn = types.BoolValue(true)
+
 					} else {
-						cItem.MacFlushStpTcn = types.BoolNull()
+						cItem.MacFlushStpTcn = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "recovery/delay"); ccValue.Exists() {
 						cItem.RecoveryDelay = types.Int64Value(ccValue.Int())
 					}

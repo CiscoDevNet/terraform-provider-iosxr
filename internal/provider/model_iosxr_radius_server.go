@@ -565,63 +565,45 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.AttributeLists[i].RadiusAttributes = types.StringNull()
 		}
-		for ci := range data.AttributeLists[i].AttributeVendorIds {
-			keys := [...]string{"id"}
-			keyValues := [...]string{strconv.FormatInt(data.AttributeLists[i].AttributeVendorIds[ci].Id.ValueInt64(), 10)}
-
-			var cr gjson.Result
-			r.Get("attribute.vendor-ids.vendor-id").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+		// Rebuild nested list from device response
+		if value := r.Get("attribute.vendor-ids.vendor-id"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.AttributeLists[i].AttributeVendorIds
+			data.AttributeLists[i].AttributeVendorIds = make([]RadiusServerAttributeListsAttributeVendorIds, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RadiusServerAttributeListsAttributeVendorIds{}
+				if cValue := cr.Get("id"); cValue.Exists() {
+					citem.Id = types.Int64Value(cValue.Int())
+				}
+				// Rebuild nested nested list from device response
+				if ccValue := cr.Get("vendor-types.vendor-type"); ccValue.Exists() {
+					citem.VendorTypes = make([]RadiusServerAttributeListsAttributeVendorIdsVendorTypes, 0)
+					ccValue.ForEach(func(_, ccr gjson.Result) bool {
+						ccitem := RadiusServerAttributeListsAttributeVendorIdsVendorTypes{}
+						if ccValue := ccr.Get("vendor-type-id"); ccValue.Exists() {
+							ccitem.VendorTypeId = types.Int64Value(ccValue.Int())
 						}
-						found = false
+						citem.VendorTypes = append(citem.VendorTypes, ccitem)
+						return true
+					})
+				}
+
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Id.Equal(citem.Id) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("id"); value.Exists() {
-				data.AttributeLists[i].AttributeVendorIds[ci].Id = types.Int64Value(value.Int())
-			} else if data.AttributeLists[i].AttributeVendorIds[ci].Id.IsNull() {
-				data.AttributeLists[i].AttributeVendorIds[ci].Id = types.Int64Null()
-			}
-			for cci := range data.AttributeLists[i].AttributeVendorIds[ci].VendorTypes {
-				keys := [...]string{"vendor-type-id"}
-				keyValues := [...]string{strconv.FormatInt(data.AttributeLists[i].AttributeVendorIds[ci].VendorTypes[cci].VendorTypeId.ValueInt64(), 10)}
-
-				var ccr gjson.Result
-				cr.Get("vendor-types.vendor-type").ForEach(
-					func(_, v gjson.Result) bool {
-						found := false
-						for ik := range keys {
-							if v.Get(keys[ik]).String() == keyValues[ik] {
-								found = true
-								continue
-							}
-							found = false
-							break
-						}
-						if found {
-							ccr = v
-							return false
-						}
-						return true
-					},
-				)
-				if value := ccr.Get("vendor-type-id"); value.Exists() && !data.AttributeLists[i].AttributeVendorIds[ci].VendorTypes[cci].VendorTypeId.IsNull() {
-					data.AttributeLists[i].AttributeVendorIds[ci].VendorTypes[cci].VendorTypeId = types.Int64Value(value.Int())
-				} else {
-					data.AttributeLists[i].AttributeVendorIds[ci].VendorTypes[cci].VendorTypeId = types.Int64Null()
 				}
-			}
+
+				data.AttributeLists[i].AttributeVendorIds = append(data.AttributeLists[i].AttributeVendorIds, citem)
+				return true
+			})
 		}
 	}
 	if value := gjson.GetBytes(res, "attribute.acct-session-id.prepend-nas-port-id"); value.Exists() {
@@ -787,11 +769,15 @@ func (data RadiusServer) toBodyXML(ctx context.Context) string {
 			if len(item.AttributeVendorIds) > 0 {
 				for _, citem := range item.AttributeVendorIds {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Id.IsNull() && !citem.Id.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "id", strconv.FormatInt(citem.Id.ValueInt64(), 10))
+					}
 					if len(citem.VendorTypes) > 0 {
 						for _, ccitem := range citem.VendorTypes {
 							cccBody := netconf.Body{}
-							_ = ccitem // Suppress unused variable warning
+							if !ccitem.VendorTypeId.IsNull() && !ccitem.VendorTypeId.IsUnknown() {
+								cccBody = helpers.SetFromXPath(cccBody, "vendor-type-id", strconv.FormatInt(ccitem.VendorTypeId.ValueInt64(), 10))
+							}
 							ccBody = helpers.AppendRawFromXPath(ccBody, "vendor-types/vendor-type", cccBody.Res())
 						}
 					}
@@ -1046,34 +1032,48 @@ func (data *RadiusServer) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 		} else if data.AttributeLists[i].RadiusAttributes.IsNull() {
 			data.AttributeLists[i].RadiusAttributes = types.StringNull()
 		}
-		for ci := range data.AttributeLists[i].AttributeVendorIds {
-			keys := [...]string{"id"}
-			keyValues := [...]string{strconv.FormatInt(data.AttributeLists[i].AttributeVendorIds[ci].Id.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "attribute/vendor-ids/vendor-id"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.AttributeLists[i].AttributeVendorIds
+			data.AttributeLists[i].AttributeVendorIds = make([]RadiusServerAttributeListsAttributeVendorIds, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "attribute/vendor-ids/vendor-id").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RadiusServerAttributeListsAttributeVendorIds{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "id"); cValue.Exists() {
+					citem.Id = types.Int64Value(cValue.Int())
+				}
+				// Rebuild nested nested list from device XML response
+				if ccValue := helpers.GetFromXPath(cr, "vendor-types/vendor-type"); ccValue.Exists() {
+					citem.VendorTypes = make([]RadiusServerAttributeListsAttributeVendorIdsVendorTypes, 0)
+					ccValue.ForEach(func(_ int, ccr xmldot.Result) bool {
+						ccitem := RadiusServerAttributeListsAttributeVendorIdsVendorTypes{}
+						if ccValue := helpers.GetFromXPath(ccr, "vendor-type-id"); ccValue.Exists() {
+							ccitem.VendorTypeId = types.Int64Value(ccValue.Int())
 						}
-						found = false
+						citem.VendorTypes = append(citem.VendorTypes, ccitem)
+						return true
+					})
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Id.Equal(citem.Id) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "id"); value.Exists() {
-				data.AttributeLists[i].AttributeVendorIds[ci].Id = types.Int64Value(value.Int())
-			} else {
-				data.AttributeLists[i].AttributeVendorIds[ci].Id = types.Int64Null()
-			}
+				}
+
+				data.AttributeLists[i].AttributeVendorIds = append(data.AttributeLists[i].AttributeVendorIds, citem)
+				return true
+			})
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/attribute/acct-session-id/prepend-nas-port-id"); value.Exists() {
@@ -1138,12 +1138,12 @@ func (data *RadiusServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ignore-auth-port"); cValue.Exists() {
 				item.IgnoreAuthPort = types.BoolValue(true)
 			} else {
-				item.IgnoreAuthPort = types.BoolValue(false)
+				item.IgnoreAuthPort = types.BoolNull()
 			}
 			if cValue := v.Get("ignore-acct-port"); cValue.Exists() {
 				item.IgnoreAcctPort = types.BoolValue(true)
 			} else {
-				item.IgnoreAcctPort = types.BoolValue(false)
+				item.IgnoreAcctPort = types.BoolNull()
 			}
 			if cValue := v.Get("dtls-server.trustpoint"); cValue.Exists() {
 				item.DtlsServerTrustpoint = types.StringValue(cValue.String())

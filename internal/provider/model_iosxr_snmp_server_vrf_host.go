@@ -430,7 +430,7 @@ func (data *SNMPServerVRFHost) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("version.v2c"); cValue.Exists() {
 				item.VersionV2c = types.BoolValue(true)
 			} else {
-				item.VersionV2c = types.BoolValue(false)
+				item.VersionV2c = types.BoolNull()
 			}
 			if cValue := v.Get("version.v3.security-level"); cValue.Exists() {
 				item.VersionV3SecurityLevel = types.StringValue(cValue.String())
@@ -449,7 +449,7 @@ func (data *SNMPServerVRFHost) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("version.v2c"); cValue.Exists() {
 				item.VersionV2c = types.BoolValue(true)
 			} else {
-				item.VersionV2c = types.BoolValue(false)
+				item.VersionV2c = types.BoolNull()
 			}
 			if cValue := v.Get("version.v3.security-level"); cValue.Exists() {
 				item.VersionV3SecurityLevel = types.StringValue(cValue.String())

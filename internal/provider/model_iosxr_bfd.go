@@ -1041,12 +1041,12 @@ func (data *BFD) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ipv6.checksum.disable"); cValue.Exists() {
 				item.Ipv6ChecksumDisable = types.BoolValue(true)
 			} else {
-				item.Ipv6ChecksumDisable = types.BoolValue(false)
+				item.Ipv6ChecksumDisable = types.BoolNull()
 			}
 			if cValue := v.Get("disable"); cValue.Exists() {
 				item.Disable = types.BoolValue(true)
 			} else {
-				item.Disable = types.BoolValue(false)
+				item.Disable = types.BoolNull()
 			}
 			if cValue := v.Get("local-address"); cValue.Exists() {
 				item.LocalAddress = types.StringValue(cValue.String())

@@ -803,306 +803,227 @@ func (data *RouterStaticVRFIPv4Multicast) updateFromBody(ctx context.Context, re
 		} else {
 			data.Vrfs[i].VrfName = types.StringNull()
 		}
-		for ci := range data.Vrfs[i].NexthopInterfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.Vrfs[i].NexthopInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("nexthop-interfaces.nexthop-interface"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Vrfs[i].NexthopInterfaces
+			data.Vrfs[i].NexthopInterfaces = make([]RouterStaticVRFIPv4MulticastVrfsNexthopInterfaces, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterStaticVRFIPv4MulticastVrfsNexthopInterfaces{}
+				if cValue := cr.Get("interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("description"); cValue.Exists() {
+					citem.Description = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("tag"); cValue.Exists() {
+					citem.Tag = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("distance-metric"); cValue.Exists() {
+					citem.DistanceMetric = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("permanent"); cValue.Exists() {
+					citem.Permanent = types.BoolValue(true)
+				} else {
+					citem.Permanent = types.BoolValue(false)
+				}
+				if cValue := cr.Get("track"); cValue.Exists() {
+					citem.Track = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("metric"); cValue.Exists() {
+					citem.Metric = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("nexthop-interfaces.nexthop-interface").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.Permanent.ValueBool() && existingItem.Permanent.ValueBool() == false {
+							citem.Permanent = existingItem.Permanent
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.Vrfs[i].NexthopInterfaces[ci].InterfaceName.IsNull() {
-				data.Vrfs[i].NexthopInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopInterfaces[ci].InterfaceName = types.StringNull()
-			}
-			if value := cr.Get("description"); value.Exists() && !data.Vrfs[i].NexthopInterfaces[ci].Description.IsNull() {
-				data.Vrfs[i].NexthopInterfaces[ci].Description = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopInterfaces[ci].Description = types.StringNull()
-			}
-			if value := cr.Get("tag"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaces[ci].Tag = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].NexthopInterfaces[ci].Tag.IsNull() {
-				data.Vrfs[i].NexthopInterfaces[ci].Tag = types.Int64Null()
-			}
-			if value := cr.Get("distance-metric"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaces[ci].DistanceMetric = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].NexthopInterfaces[ci].DistanceMetric.IsNull() {
-				data.Vrfs[i].NexthopInterfaces[ci].DistanceMetric = types.Int64Null()
-			}
-			if value := cr.Get("permanent"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopInterfaces[ci].Permanent.ValueBool() {
-					data.Vrfs[i].NexthopInterfaces[ci].Permanent = types.BoolValue(false)
-				} else if !data.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() {
-					data.Vrfs[i].NexthopInterfaces[ci].Permanent = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() {
-					data.Vrfs[i].NexthopInterfaces[ci].Permanent = types.BoolNull()
-				} else {
-					data.Vrfs[i].NexthopInterfaces[ci].Permanent = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("track"); value.Exists() && !data.Vrfs[i].NexthopInterfaces[ci].Track.IsNull() {
-				data.Vrfs[i].NexthopInterfaces[ci].Track = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopInterfaces[ci].Track = types.StringNull()
-			}
-			if value := cr.Get("metric"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaces[ci].Metric = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].NexthopInterfaces[ci].Metric.IsNull() {
-				data.Vrfs[i].NexthopInterfaces[ci].Metric = types.Int64Null()
-			}
+
+				data.Vrfs[i].NexthopInterfaces = append(data.Vrfs[i].NexthopInterfaces, citem)
+				return true
+			})
 		}
-		for ci := range data.Vrfs[i].NexthopInterfaceAddresses {
-			keys := [...]string{"interface-name", "address"}
-			keyValues := [...]string{data.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName.ValueString(), data.Vrfs[i].NexthopInterfaceAddresses[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("nexthop-interface-addresses.nexthop-interface-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Vrfs[i].NexthopInterfaceAddresses
+			data.Vrfs[i].NexthopInterfaceAddresses = make([]RouterStaticVRFIPv4MulticastVrfsNexthopInterfaceAddresses, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterStaticVRFIPv4MulticastVrfsNexthopInterfaceAddresses{}
+				if cValue := cr.Get("interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("bfd.fast-detect.minimum-interval"); cValue.Exists() {
+					citem.BfdFastDetectMinimumInterval = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("bfd.fast-detect.multiplier"); cValue.Exists() {
+					citem.BfdFastDetectMultiplier = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("description"); cValue.Exists() {
+					citem.Description = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("tag"); cValue.Exists() {
+					citem.Tag = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("distance-metric"); cValue.Exists() {
+					citem.DistanceMetric = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("permanent"); cValue.Exists() {
+					citem.Permanent = types.BoolValue(true)
+				} else {
+					citem.Permanent = types.BoolValue(false)
+				}
+				if cValue := cr.Get("track"); cValue.Exists() {
+					citem.Track = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("metric"); cValue.Exists() {
+					citem.Metric = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("nexthop-interface-addresses.nexthop-interface-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.Permanent.ValueBool() && existingItem.Permanent.ValueBool() == false {
+							citem.Permanent = existingItem.Permanent
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName.IsNull() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName = types.StringNull()
-			}
-			if value := cr.Get("address"); value.Exists() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Address.IsNull() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Address = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("bfd.fast-detect.minimum-interval"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMinimumInterval = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMinimumInterval.IsNull() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMinimumInterval = types.Int64Null()
-			}
-			if value := cr.Get("bfd.fast-detect.multiplier"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMultiplier = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMultiplier.IsNull() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMultiplier = types.Int64Null()
-			}
-			if value := cr.Get("description"); value.Exists() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Description.IsNull() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Description = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Description = types.StringNull()
-			}
-			if value := cr.Get("tag"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Tag = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].NexthopInterfaceAddresses[ci].Tag.IsNull() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Tag = types.Int64Null()
-			}
-			if value := cr.Get("distance-metric"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].DistanceMetric = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].NexthopInterfaceAddresses[ci].DistanceMetric.IsNull() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].DistanceMetric = types.Int64Null()
-			}
-			if value := cr.Get("permanent"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.ValueBool() {
-					data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent = types.BoolValue(false)
-				} else if !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() {
-					data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() {
-					data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent = types.BoolNull()
-				} else {
-					data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("track"); value.Exists() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Track.IsNull() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Track = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Track = types.StringNull()
-			}
-			if value := cr.Get("metric"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Metric = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].NexthopInterfaceAddresses[ci].Metric.IsNull() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Metric = types.Int64Null()
-			}
+
+				data.Vrfs[i].NexthopInterfaceAddresses = append(data.Vrfs[i].NexthopInterfaceAddresses, citem)
+				return true
+			})
 		}
-		for ci := range data.Vrfs[i].NexthopAddresses {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.Vrfs[i].NexthopAddresses[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("nexthop-addresses.nexthop-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Vrfs[i].NexthopAddresses
+			data.Vrfs[i].NexthopAddresses = make([]RouterStaticVRFIPv4MulticastVrfsNexthopAddresses, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterStaticVRFIPv4MulticastVrfsNexthopAddresses{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("bfd.fast-detect.minimum-interval"); cValue.Exists() {
+					citem.BfdFastDetectMinimumInterval = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("bfd.fast-detect.multiplier"); cValue.Exists() {
+					citem.BfdFastDetectMultiplier = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("description"); cValue.Exists() {
+					citem.Description = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("tag"); cValue.Exists() {
+					citem.Tag = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("distance-metric"); cValue.Exists() {
+					citem.DistanceMetric = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("permanent"); cValue.Exists() {
+					citem.Permanent = types.BoolValue(true)
+				} else {
+					citem.Permanent = types.BoolValue(false)
+				}
+				if cValue := cr.Get("track"); cValue.Exists() {
+					citem.Track = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("metric"); cValue.Exists() {
+					citem.Metric = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("nexthop-addresses.nexthop-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.Permanent.ValueBool() && existingItem.Permanent.ValueBool() == false {
+							citem.Permanent = existingItem.Permanent
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.Vrfs[i].NexthopAddresses[ci].Address.IsNull() {
-				data.Vrfs[i].NexthopAddresses[ci].Address = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopAddresses[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("bfd.fast-detect.minimum-interval"); value.Exists() {
-				data.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMinimumInterval = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMinimumInterval.IsNull() {
-				data.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMinimumInterval = types.Int64Null()
-			}
-			if value := cr.Get("bfd.fast-detect.multiplier"); value.Exists() {
-				data.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMultiplier = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMultiplier.IsNull() {
-				data.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMultiplier = types.Int64Null()
-			}
-			if value := cr.Get("description"); value.Exists() && !data.Vrfs[i].NexthopAddresses[ci].Description.IsNull() {
-				data.Vrfs[i].NexthopAddresses[ci].Description = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopAddresses[ci].Description = types.StringNull()
-			}
-			if value := cr.Get("tag"); value.Exists() {
-				data.Vrfs[i].NexthopAddresses[ci].Tag = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].NexthopAddresses[ci].Tag.IsNull() {
-				data.Vrfs[i].NexthopAddresses[ci].Tag = types.Int64Null()
-			}
-			if value := cr.Get("distance-metric"); value.Exists() {
-				data.Vrfs[i].NexthopAddresses[ci].DistanceMetric = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].NexthopAddresses[ci].DistanceMetric.IsNull() {
-				data.Vrfs[i].NexthopAddresses[ci].DistanceMetric = types.Int64Null()
-			}
-			if value := cr.Get("permanent"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopAddresses[ci].Permanent.ValueBool() {
-					data.Vrfs[i].NexthopAddresses[ci].Permanent = types.BoolValue(false)
-				} else if !data.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() {
-					data.Vrfs[i].NexthopAddresses[ci].Permanent = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() {
-					data.Vrfs[i].NexthopAddresses[ci].Permanent = types.BoolNull()
-				} else {
-					data.Vrfs[i].NexthopAddresses[ci].Permanent = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("track"); value.Exists() && !data.Vrfs[i].NexthopAddresses[ci].Track.IsNull() {
-				data.Vrfs[i].NexthopAddresses[ci].Track = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopAddresses[ci].Track = types.StringNull()
-			}
-			if value := cr.Get("metric"); value.Exists() {
-				data.Vrfs[i].NexthopAddresses[ci].Metric = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].NexthopAddresses[ci].Metric.IsNull() {
-				data.Vrfs[i].NexthopAddresses[ci].Metric = types.Int64Null()
-			}
+
+				data.Vrfs[i].NexthopAddresses = append(data.Vrfs[i].NexthopAddresses, citem)
+				return true
+			})
 		}
-		for ci := range data.Vrfs[i].SrPolicies {
-			keys := [...]string{"sr-policy-name"}
-			keyValues := [...]string{data.Vrfs[i].SrPolicies[ci].SrPolicyName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("sr-policies.sr-policy"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Vrfs[i].SrPolicies
+			data.Vrfs[i].SrPolicies = make([]RouterStaticVRFIPv4MulticastVrfsSrPolicies, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterStaticVRFIPv4MulticastVrfsSrPolicies{}
+				if cValue := cr.Get("sr-policy-name"); cValue.Exists() {
+					citem.SrPolicyName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("description"); cValue.Exists() {
+					citem.Description = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("tag"); cValue.Exists() {
+					citem.Tag = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("distance-metric"); cValue.Exists() {
+					citem.DistanceMetric = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("permanent"); cValue.Exists() {
+					citem.Permanent = types.BoolValue(true)
+				} else {
+					citem.Permanent = types.BoolValue(false)
+				}
+				if cValue := cr.Get("track"); cValue.Exists() {
+					citem.Track = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("metric"); cValue.Exists() {
+					citem.Metric = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("sr-policies.sr-policy").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.SrPolicyName.ValueString() != citem.SrPolicyName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.Permanent.ValueBool() && existingItem.Permanent.ValueBool() == false {
+							citem.Permanent = existingItem.Permanent
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("sr-policy-name"); value.Exists() && !data.Vrfs[i].SrPolicies[ci].SrPolicyName.IsNull() {
-				data.Vrfs[i].SrPolicies[ci].SrPolicyName = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].SrPolicies[ci].SrPolicyName = types.StringNull()
-			}
-			if value := cr.Get("description"); value.Exists() && !data.Vrfs[i].SrPolicies[ci].Description.IsNull() {
-				data.Vrfs[i].SrPolicies[ci].Description = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].SrPolicies[ci].Description = types.StringNull()
-			}
-			if value := cr.Get("tag"); value.Exists() {
-				data.Vrfs[i].SrPolicies[ci].Tag = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].SrPolicies[ci].Tag.IsNull() {
-				data.Vrfs[i].SrPolicies[ci].Tag = types.Int64Null()
-			}
-			if value := cr.Get("distance-metric"); value.Exists() {
-				data.Vrfs[i].SrPolicies[ci].DistanceMetric = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].SrPolicies[ci].DistanceMetric.IsNull() {
-				data.Vrfs[i].SrPolicies[ci].DistanceMetric = types.Int64Null()
-			}
-			if value := cr.Get("permanent"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Vrfs[i].SrPolicies[ci].Permanent.IsNull() && !data.Vrfs[i].SrPolicies[ci].Permanent.ValueBool() {
-					data.Vrfs[i].SrPolicies[ci].Permanent = types.BoolValue(false)
-				} else if !data.Vrfs[i].SrPolicies[ci].Permanent.IsNull() {
-					data.Vrfs[i].SrPolicies[ci].Permanent = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.Vrfs[i].SrPolicies[ci].Permanent.IsNull() {
-					data.Vrfs[i].SrPolicies[ci].Permanent = types.BoolNull()
-				} else {
-					data.Vrfs[i].SrPolicies[ci].Permanent = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("track"); value.Exists() && !data.Vrfs[i].SrPolicies[ci].Track.IsNull() {
-				data.Vrfs[i].SrPolicies[ci].Track = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].SrPolicies[ci].Track = types.StringNull()
-			}
-			if value := cr.Get("metric"); value.Exists() {
-				data.Vrfs[i].SrPolicies[ci].Metric = types.Int64Value(value.Int())
-			} else if data.Vrfs[i].SrPolicies[ci].Metric.IsNull() {
-				data.Vrfs[i].SrPolicies[ci].Metric = types.Int64Null()
-			}
+
+				data.Vrfs[i].SrPolicies = append(data.Vrfs[i].SrPolicies, citem)
+				return true
+			})
 		}
 	}
 }
@@ -1267,7 +1188,9 @@ func (data RouterStaticVRFIPv4Multicast) toBodyXML(ctx context.Context) string {
 			if len(item.NexthopInterfaces) > 0 {
 				for _, citem := range item.NexthopInterfaces {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "interface-name", citem.InterfaceName.ValueString())
+					}
 					if !citem.Description.IsNull() && !citem.Description.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "description", citem.Description.ValueString())
 					}
@@ -1294,7 +1217,12 @@ func (data RouterStaticVRFIPv4Multicast) toBodyXML(ctx context.Context) string {
 			if len(item.NexthopInterfaceAddresses) > 0 {
 				for _, citem := range item.NexthopInterfaceAddresses {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "interface-name", citem.InterfaceName.ValueString())
+					}
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					if !citem.BfdFastDetectMinimumInterval.IsNull() && !citem.BfdFastDetectMinimumInterval.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "bfd/fast-detect/minimum-interval", strconv.FormatInt(citem.BfdFastDetectMinimumInterval.ValueInt64(), 10))
 					}
@@ -1327,7 +1255,9 @@ func (data RouterStaticVRFIPv4Multicast) toBodyXML(ctx context.Context) string {
 			if len(item.NexthopAddresses) > 0 {
 				for _, citem := range item.NexthopAddresses {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					if !citem.BfdFastDetectMinimumInterval.IsNull() && !citem.BfdFastDetectMinimumInterval.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "bfd/fast-detect/minimum-interval", strconv.FormatInt(citem.BfdFastDetectMinimumInterval.ValueInt64(), 10))
 					}
@@ -1360,7 +1290,9 @@ func (data RouterStaticVRFIPv4Multicast) toBodyXML(ctx context.Context) string {
 			if len(item.SrPolicies) > 0 {
 				for _, citem := range item.SrPolicies {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.SrPolicyName.IsNull() && !citem.SrPolicyName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "sr-policy-name", citem.SrPolicyName.ValueString())
+					}
 					if !citem.Description.IsNull() && !citem.Description.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "description", citem.Description.ValueString())
 					}
@@ -1714,286 +1646,243 @@ func (data *RouterStaticVRFIPv4Multicast) updateFromBodyXML(ctx context.Context,
 		} else if data.Vrfs[i].VrfName.IsNull() {
 			data.Vrfs[i].VrfName = types.StringNull()
 		}
-		for ci := range data.Vrfs[i].NexthopInterfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.Vrfs[i].NexthopInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "nexthop-interfaces/nexthop-interface"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Vrfs[i].NexthopInterfaces
+			data.Vrfs[i].NexthopInterfaces = make([]RouterStaticVRFIPv4MulticastVrfsNexthopInterfaces, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "nexthop-interfaces/nexthop-interface").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterStaticVRFIPv4MulticastVrfsNexthopInterfaces{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "description"); cValue.Exists() {
+					citem.Description = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "tag"); cValue.Exists() {
+					citem.Tag = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "distance-metric"); cValue.Exists() {
+					citem.DistanceMetric = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "permanent"); cValue.Exists() {
+					citem.Permanent = types.BoolValue(true)
+				} else {
+					citem.Permanent = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "track"); cValue.Exists() {
+					citem.Track = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "metric"); cValue.Exists() {
+					citem.Metric = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Permanent.ValueBool() && existingItem.Permanent.ValueBool() == false {
+							citem.Permanent = existingItem.Permanent
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopInterfaces[ci].InterfaceName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "description"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaces[ci].Description = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopInterfaces[ci].Description = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "tag"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaces[ci].Tag = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].NexthopInterfaces[ci].Tag = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "distance-metric"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaces[ci].DistanceMetric = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].NexthopInterfaces[ci].DistanceMetric = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "permanent"); value.Exists() {
-				if !data.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() {
-					data.Vrfs[i].NexthopInterfaces[ci].Permanent = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() {
-					data.Vrfs[i].NexthopInterfaces[ci].Permanent = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "track"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaces[ci].Track = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopInterfaces[ci].Track = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "metric"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaces[ci].Metric = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].NexthopInterfaces[ci].Metric = types.Int64Null()
-			}
+
+				data.Vrfs[i].NexthopInterfaces = append(data.Vrfs[i].NexthopInterfaces, citem)
+				return true
+			})
 		}
-		for ci := range data.Vrfs[i].NexthopInterfaceAddresses {
-			keys := [...]string{"interface-name", "address"}
-			keyValues := [...]string{data.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName.ValueString(), data.Vrfs[i].NexthopInterfaceAddresses[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "nexthop-interface-addresses/nexthop-interface-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Vrfs[i].NexthopInterfaceAddresses
+			data.Vrfs[i].NexthopInterfaceAddresses = make([]RouterStaticVRFIPv4MulticastVrfsNexthopInterfaceAddresses, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "nexthop-interface-addresses/nexthop-interface-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterStaticVRFIPv4MulticastVrfsNexthopInterfaceAddresses{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "bfd/fast-detect/minimum-interval"); cValue.Exists() {
+					citem.BfdFastDetectMinimumInterval = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "bfd/fast-detect/multiplier"); cValue.Exists() {
+					citem.BfdFastDetectMultiplier = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "description"); cValue.Exists() {
+					citem.Description = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "tag"); cValue.Exists() {
+					citem.Tag = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "distance-metric"); cValue.Exists() {
+					citem.DistanceMetric = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "permanent"); cValue.Exists() {
+					citem.Permanent = types.BoolValue(true)
+				} else {
+					citem.Permanent = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "track"); cValue.Exists() {
+					citem.Track = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "metric"); cValue.Exists() {
+					citem.Metric = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Permanent.ValueBool() && existingItem.Permanent.ValueBool() == false {
+							citem.Permanent = existingItem.Permanent
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Address = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "bfd/fast-detect/minimum-interval"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMinimumInterval = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMinimumInterval = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "bfd/fast-detect/multiplier"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMultiplier = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMultiplier = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "description"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Description = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Description = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "tag"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Tag = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Tag = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "distance-metric"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].DistanceMetric = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].DistanceMetric = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "permanent"); value.Exists() {
-				if !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() {
-					data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() {
-					data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "track"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Track = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Track = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "metric"); value.Exists() {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Metric = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].NexthopInterfaceAddresses[ci].Metric = types.Int64Null()
-			}
+
+				data.Vrfs[i].NexthopInterfaceAddresses = append(data.Vrfs[i].NexthopInterfaceAddresses, citem)
+				return true
+			})
 		}
-		for ci := range data.Vrfs[i].NexthopAddresses {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.Vrfs[i].NexthopAddresses[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "nexthop-addresses/nexthop-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Vrfs[i].NexthopAddresses
+			data.Vrfs[i].NexthopAddresses = make([]RouterStaticVRFIPv4MulticastVrfsNexthopAddresses, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "nexthop-addresses/nexthop-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterStaticVRFIPv4MulticastVrfsNexthopAddresses{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "bfd/fast-detect/minimum-interval"); cValue.Exists() {
+					citem.BfdFastDetectMinimumInterval = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "bfd/fast-detect/multiplier"); cValue.Exists() {
+					citem.BfdFastDetectMultiplier = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "description"); cValue.Exists() {
+					citem.Description = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "tag"); cValue.Exists() {
+					citem.Tag = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "distance-metric"); cValue.Exists() {
+					citem.DistanceMetric = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "permanent"); cValue.Exists() {
+					citem.Permanent = types.BoolValue(true)
+				} else {
+					citem.Permanent = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "track"); cValue.Exists() {
+					citem.Track = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "metric"); cValue.Exists() {
+					citem.Metric = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Permanent.ValueBool() && existingItem.Permanent.ValueBool() == false {
+							citem.Permanent = existingItem.Permanent
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.Vrfs[i].NexthopAddresses[ci].Address = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopAddresses[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "bfd/fast-detect/minimum-interval"); value.Exists() {
-				data.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMinimumInterval = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMinimumInterval = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "bfd/fast-detect/multiplier"); value.Exists() {
-				data.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMultiplier = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMultiplier = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "description"); value.Exists() {
-				data.Vrfs[i].NexthopAddresses[ci].Description = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopAddresses[ci].Description = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "tag"); value.Exists() {
-				data.Vrfs[i].NexthopAddresses[ci].Tag = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].NexthopAddresses[ci].Tag = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "distance-metric"); value.Exists() {
-				data.Vrfs[i].NexthopAddresses[ci].DistanceMetric = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].NexthopAddresses[ci].DistanceMetric = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "permanent"); value.Exists() {
-				if !data.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() {
-					data.Vrfs[i].NexthopAddresses[ci].Permanent = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() {
-					data.Vrfs[i].NexthopAddresses[ci].Permanent = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "track"); value.Exists() {
-				data.Vrfs[i].NexthopAddresses[ci].Track = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].NexthopAddresses[ci].Track = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "metric"); value.Exists() {
-				data.Vrfs[i].NexthopAddresses[ci].Metric = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].NexthopAddresses[ci].Metric = types.Int64Null()
-			}
+
+				data.Vrfs[i].NexthopAddresses = append(data.Vrfs[i].NexthopAddresses, citem)
+				return true
+			})
 		}
-		for ci := range data.Vrfs[i].SrPolicies {
-			keys := [...]string{"sr-policy-name"}
-			keyValues := [...]string{data.Vrfs[i].SrPolicies[ci].SrPolicyName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "sr-policies/sr-policy"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Vrfs[i].SrPolicies
+			data.Vrfs[i].SrPolicies = make([]RouterStaticVRFIPv4MulticastVrfsSrPolicies, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "sr-policies/sr-policy").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterStaticVRFIPv4MulticastVrfsSrPolicies{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "sr-policy-name"); cValue.Exists() {
+					citem.SrPolicyName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "description"); cValue.Exists() {
+					citem.Description = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "tag"); cValue.Exists() {
+					citem.Tag = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "distance-metric"); cValue.Exists() {
+					citem.DistanceMetric = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "permanent"); cValue.Exists() {
+					citem.Permanent = types.BoolValue(true)
+				} else {
+					citem.Permanent = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "track"); cValue.Exists() {
+					citem.Track = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "metric"); cValue.Exists() {
+					citem.Metric = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.SrPolicyName.ValueString() != citem.SrPolicyName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Permanent.ValueBool() && existingItem.Permanent.ValueBool() == false {
+							citem.Permanent = existingItem.Permanent
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "sr-policy-name"); value.Exists() {
-				data.Vrfs[i].SrPolicies[ci].SrPolicyName = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].SrPolicies[ci].SrPolicyName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "description"); value.Exists() {
-				data.Vrfs[i].SrPolicies[ci].Description = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].SrPolicies[ci].Description = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "tag"); value.Exists() {
-				data.Vrfs[i].SrPolicies[ci].Tag = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].SrPolicies[ci].Tag = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "distance-metric"); value.Exists() {
-				data.Vrfs[i].SrPolicies[ci].DistanceMetric = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].SrPolicies[ci].DistanceMetric = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "permanent"); value.Exists() {
-				if !data.Vrfs[i].SrPolicies[ci].Permanent.IsNull() {
-					data.Vrfs[i].SrPolicies[ci].Permanent = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Vrfs[i].SrPolicies[ci].Permanent.IsNull() {
-					data.Vrfs[i].SrPolicies[ci].Permanent = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "track"); value.Exists() {
-				data.Vrfs[i].SrPolicies[ci].Track = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].SrPolicies[ci].Track = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "metric"); value.Exists() {
-				data.Vrfs[i].SrPolicies[ci].Metric = types.Int64Value(value.Int())
-			} else {
-				data.Vrfs[i].SrPolicies[ci].Metric = types.Int64Null()
-			}
+
+				data.Vrfs[i].SrPolicies = append(data.Vrfs[i].SrPolicies, citem)
+				return true
+			})
 		}
 	}
 }
@@ -2025,7 +1914,7 @@ func (data *RouterStaticVRFIPv4Multicast) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("permanent"); cValue.Exists() {
 				item.Permanent = types.BoolValue(true)
 			} else {
-				item.Permanent = types.BoolValue(false)
+				item.Permanent = types.BoolNull()
 			}
 			if cValue := v.Get("track"); cValue.Exists() {
 				item.Track = types.StringValue(cValue.String())
@@ -2065,7 +1954,7 @@ func (data *RouterStaticVRFIPv4Multicast) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("permanent"); cValue.Exists() {
 				item.Permanent = types.BoolValue(true)
 			} else {
-				item.Permanent = types.BoolValue(false)
+				item.Permanent = types.BoolNull()
 			}
 			if cValue := v.Get("track"); cValue.Exists() {
 				item.Track = types.StringValue(cValue.String())
@@ -2102,7 +1991,7 @@ func (data *RouterStaticVRFIPv4Multicast) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("permanent"); cValue.Exists() {
 				item.Permanent = types.BoolValue(true)
 			} else {
-				item.Permanent = types.BoolValue(false)
+				item.Permanent = types.BoolNull()
 			}
 			if cValue := v.Get("track"); cValue.Exists() {
 				item.Track = types.StringValue(cValue.String())
@@ -2133,7 +2022,7 @@ func (data *RouterStaticVRFIPv4Multicast) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("permanent"); cValue.Exists() {
 				item.Permanent = types.BoolValue(true)
 			} else {
-				item.Permanent = types.BoolValue(false)
+				item.Permanent = types.BoolNull()
 			}
 			if cValue := v.Get("track"); cValue.Exists() {
 				item.Track = types.StringValue(cValue.String())
@@ -2171,7 +2060,7 @@ func (data *RouterStaticVRFIPv4Multicast) fromBody(ctx context.Context, res gjso
 					if ccValue := cv.Get("permanent"); ccValue.Exists() {
 						cItem.Permanent = types.BoolValue(true)
 					} else {
-						cItem.Permanent = types.BoolValue(false)
+						cItem.Permanent = types.BoolNull()
 					}
 					if ccValue := cv.Get("track"); ccValue.Exists() {
 						cItem.Track = types.StringValue(ccValue.String())
@@ -2211,7 +2100,7 @@ func (data *RouterStaticVRFIPv4Multicast) fromBody(ctx context.Context, res gjso
 					if ccValue := cv.Get("permanent"); ccValue.Exists() {
 						cItem.Permanent = types.BoolValue(true)
 					} else {
-						cItem.Permanent = types.BoolValue(false)
+						cItem.Permanent = types.BoolNull()
 					}
 					if ccValue := cv.Get("track"); ccValue.Exists() {
 						cItem.Track = types.StringValue(ccValue.String())
@@ -2248,7 +2137,7 @@ func (data *RouterStaticVRFIPv4Multicast) fromBody(ctx context.Context, res gjso
 					if ccValue := cv.Get("permanent"); ccValue.Exists() {
 						cItem.Permanent = types.BoolValue(true)
 					} else {
-						cItem.Permanent = types.BoolValue(false)
+						cItem.Permanent = types.BoolNull()
 					}
 					if ccValue := cv.Get("track"); ccValue.Exists() {
 						cItem.Track = types.StringValue(ccValue.String())
@@ -2279,7 +2168,7 @@ func (data *RouterStaticVRFIPv4Multicast) fromBody(ctx context.Context, res gjso
 					if ccValue := cv.Get("permanent"); ccValue.Exists() {
 						cItem.Permanent = types.BoolValue(true)
 					} else {
-						cItem.Permanent = types.BoolValue(false)
+						cItem.Permanent = types.BoolNull()
 					}
 					if ccValue := cv.Get("track"); ccValue.Exists() {
 						cItem.Track = types.StringValue(ccValue.String())
@@ -2763,10 +2652,13 @@ func (data *RouterStaticVRFIPv4Multicast) fromBodyXML(ctx context.Context, res x
 						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "permanent"); ccValue.Exists() {
+
 						cItem.Permanent = types.BoolValue(true)
+
 					} else {
-						cItem.Permanent = types.BoolNull()
+						cItem.Permanent = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "track"); ccValue.Exists() {
 						cItem.Track = types.StringValue(ccValue.String())
 					}
@@ -2803,10 +2695,13 @@ func (data *RouterStaticVRFIPv4Multicast) fromBodyXML(ctx context.Context, res x
 						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "permanent"); ccValue.Exists() {
+
 						cItem.Permanent = types.BoolValue(true)
+
 					} else {
-						cItem.Permanent = types.BoolNull()
+						cItem.Permanent = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "track"); ccValue.Exists() {
 						cItem.Track = types.StringValue(ccValue.String())
 					}
@@ -2840,10 +2735,13 @@ func (data *RouterStaticVRFIPv4Multicast) fromBodyXML(ctx context.Context, res x
 						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "permanent"); ccValue.Exists() {
+
 						cItem.Permanent = types.BoolValue(true)
+
 					} else {
-						cItem.Permanent = types.BoolNull()
+						cItem.Permanent = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "track"); ccValue.Exists() {
 						cItem.Track = types.StringValue(ccValue.String())
 					}
@@ -2871,10 +2769,13 @@ func (data *RouterStaticVRFIPv4Multicast) fromBodyXML(ctx context.Context, res x
 						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "permanent"); ccValue.Exists() {
+
 						cItem.Permanent = types.BoolValue(true)
+
 					} else {
-						cItem.Permanent = types.BoolNull()
+						cItem.Permanent = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "track"); ccValue.Exists() {
 						cItem.Track = types.StringValue(ccValue.String())
 					}

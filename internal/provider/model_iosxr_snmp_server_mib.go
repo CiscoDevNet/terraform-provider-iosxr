@@ -983,17 +983,17 @@ func (data *SNMPServerMIB) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("notification.linkupdown.enable"); cValue.Exists() {
 				item.NotificationLinkupdownEnable = types.BoolValue(true)
 			} else {
-				item.NotificationLinkupdownEnable = types.BoolValue(false)
+				item.NotificationLinkupdownEnable = types.BoolNull()
 			}
 			if cValue := v.Get("notification.linkupdown.disable"); cValue.Exists() {
 				item.NotificationLinkupdownDisable = types.BoolValue(true)
 			} else {
-				item.NotificationLinkupdownDisable = types.BoolValue(false)
+				item.NotificationLinkupdownDisable = types.BoolNull()
 			}
 			if cValue := v.Get("index.persistence"); cValue.Exists() {
 				item.IndexPersistence = types.BoolValue(true)
 			} else {
-				item.IndexPersistence = types.BoolValue(false)
+				item.IndexPersistence = types.BoolNull()
 			}
 			data.Interfaces = append(data.Interfaces, item)
 			return true

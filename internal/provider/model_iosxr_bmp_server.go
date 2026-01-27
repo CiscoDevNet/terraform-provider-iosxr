@@ -713,7 +713,7 @@ func (data *BMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
 			} else {
-				item.Shutdown = types.BoolValue(false)
+				item.Shutdown = types.BoolNull()
 			}
 			if cValue := v.Get("host.host-name"); cValue.Exists() {
 				item.Host = types.StringValue(cValue.String())
@@ -736,7 +736,7 @@ func (data *BMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("initial-refresh.skip"); cValue.Exists() {
 				item.InitialRefreshSkip = types.BoolValue(true)
 			} else {
-				item.InitialRefreshSkip = types.BoolValue(false)
+				item.InitialRefreshSkip = types.BoolNull()
 			}
 			if cValue := v.Get("stats-reporting-period"); cValue.Exists() {
 				item.StatsReportingPeriod = types.Int64Value(cValue.Int())

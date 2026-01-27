@@ -646,10 +646,10 @@ func (data InterfaceEthernetSubinterface) toBody(ctx context.Context) string {
 		body, _ = sjson.Set(body, "dampening.decay-half-life.reuse-threshold.suppress-threshold.max-suppress-time.value", strconv.FormatInt(data.DampeningMaxSuppressTime.ValueInt64(), 10))
 	}
 	if !data.EncapsulationDot1qVlanId.IsNull() && !data.EncapsulationDot1qVlanId.IsUnknown() {
-		body, _ = sjson.Set(body, "", strconv.FormatInt(data.EncapsulationDot1qVlanId.ValueInt64(), 10))
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.vlan-id", strconv.FormatInt(data.EncapsulationDot1qVlanId.ValueInt64(), 10))
 	}
 	if !data.EncapsulationDot1qSecondDot1q.IsNull() && !data.EncapsulationDot1qSecondDot1q.IsUnknown() {
-		body, _ = sjson.Set(body, "", strconv.FormatInt(data.EncapsulationDot1qSecondDot1q.ValueInt64(), 10))
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.second-dot1q", strconv.FormatInt(data.EncapsulationDot1qSecondDot1q.ValueInt64(), 10))
 	}
 	if !data.L2transportEncapsulationDot1qVlanId.IsNull() && !data.L2transportEncapsulationDot1qVlanId.IsUnknown() {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation.dot1q.vlan-id", data.L2transportEncapsulationDot1qVlanId.ValueString())
@@ -1235,18 +1235,18 @@ func (data InterfaceEthernetSubinterface) toBody(ctx context.Context) string {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ptp-cfg:ptp.interop.ingress-conversion.clock-class.default", strconv.FormatInt(data.PtpInteropIngressConversionClockClassDefault.ValueInt64(), 10))
 	}
 	if len(data.ServicePolicyInput) > 0 {
-		body, _ = sjson.Set(body, "", []interface{}{})
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input", []interface{}{})
 		for index, item := range data.ServicePolicyInput {
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", item.Name.ValueString())
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input"+"."+strconv.Itoa(index)+"."+"", item.Name.ValueString())
 			}
 		}
 	}
 	if len(data.ServicePolicyOutput) > 0 {
-		body, _ = sjson.Set(body, "", []interface{}{})
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.output", []interface{}{})
 		for index, item := range data.ServicePolicyOutput {
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", item.Name.ValueString())
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.output"+"."+strconv.Itoa(index)+"."+"", item.Name.ValueString())
 			}
 		}
 	}
@@ -1780,7 +1780,7 @@ func (data *InterfaceEthernetSubinterface) updateFromBody(ctx context.Context, r
 		keyValues := [...]string{data.ServicePolicyInput[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "").ForEach(
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1809,7 +1809,7 @@ func (data *InterfaceEthernetSubinterface) updateFromBody(ctx context.Context, r
 		keyValues := [...]string{data.ServicePolicyOutput[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "").ForEach(
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.output").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1833,12 +1833,12 @@ func (data *InterfaceEthernetSubinterface) updateFromBody(ctx context.Context, r
 			data.ServicePolicyOutput[i].Name = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() && !data.EncapsulationDot1qVlanId.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.vlan-id"); value.Exists() && !data.EncapsulationDot1qVlanId.IsNull() {
 		data.EncapsulationDot1qVlanId = types.Int64Value(value.Int())
 	} else {
 		data.EncapsulationDot1qVlanId = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() && !data.EncapsulationDot1qSecondDot1q.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.second-dot1q"); value.Exists() && !data.EncapsulationDot1qSecondDot1q.IsNull() {
 		data.EncapsulationDot1qSecondDot1q = types.Int64Value(value.Int())
 	} else {
 		data.EncapsulationDot1qSecondDot1q = types.Int64Null()
@@ -2615,73 +2615,73 @@ func (data *InterfaceEthernetSubinterface) updateFromBody(ctx context.Context, r
 		} else {
 			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue7 = types.Int64Null()
 		}
-		for ci := range data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds {
-			keys := [...]string{"profile-name", "mep-id"}
-			keyValues := [...]string{data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName.ValueString(), strconv.FormatInt(data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get(""); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds
+			data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds = make([]InterfaceEthernetSubinterfaceEthernetCfmMepDomainsSlaOperationProfileTargetMepIds, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := InterfaceEthernetSubinterfaceEthernetCfmMepDomainsSlaOperationProfileTargetMepIds{}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.ProfileName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.MepId = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.ProfileName.ValueString() != citem.ProfileName.ValueString() {
+						match = false
+					}
+					if !existingItem.MepId.Equal(citem.MepId) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get(""); value.Exists() && !data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName.IsNull() {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName = types.StringValue(value.String())
-			} else {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName = types.StringNull()
-			}
-			if value := cr.Get(""); value.Exists() {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId = types.Int64Value(value.Int())
-			} else if data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId.IsNull() {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId = types.Int64Null()
-			}
+				}
+
+				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds = append(data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds, citem)
+				return true
+			})
 		}
-		for ci := range data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses {
-			keys := [...]string{"profile-name", "mac-address"}
-			keyValues := [...]string{data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName.ValueString(), data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get(""); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses
+			data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses = make([]InterfaceEthernetSubinterfaceEthernetCfmMepDomainsSlaOperationProfileTargetMacAddresses, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := InterfaceEthernetSubinterfaceEthernetCfmMepDomainsSlaOperationProfileTargetMacAddresses{}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.ProfileName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.MacAddress = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.ProfileName.ValueString() != citem.ProfileName.ValueString() {
+						match = false
+					}
+					if existingItem.MacAddress.ValueString() != citem.MacAddress.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get(""); value.Exists() && !data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName.IsNull() {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName = types.StringValue(value.String())
-			} else {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName = types.StringNull()
-			}
-			if value := cr.Get(""); value.Exists() && !data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress.IsNull() {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress = types.StringValue(value.String())
-			} else {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress = types.StringNull()
-			}
+				}
+
+				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses = append(data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses, citem)
+				return true
+			})
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.ais.transmission.up.interval"); value.Exists() && !data.EthernetCfmAisTransmissionUpInterval.IsNull() {
@@ -4365,7 +4365,7 @@ func (data InterfaceEthernetSubinterface) toBodyXML(ctx context.Context) string 
 				cBody = helpers.SetFromXPath(cBody, "", item.Name.ValueString())
 			}
 			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"", cBody.Res())
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input", cBody.Res())
 		}
 	}
 	if len(data.ServicePolicyOutput) > 0 {
@@ -4376,14 +4376,14 @@ func (data InterfaceEthernetSubinterface) toBodyXML(ctx context.Context) string 
 				cBody = helpers.SetFromXPath(cBody, "", item.Name.ValueString())
 			}
 			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"", cBody.Res())
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output", cBody.Res())
 		}
 	}
 	if !data.EncapsulationDot1qVlanId.IsNull() && !data.EncapsulationDot1qVlanId.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/", strconv.FormatInt(data.EncapsulationDot1qVlanId.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id", strconv.FormatInt(data.EncapsulationDot1qVlanId.ValueInt64(), 10))
 	}
 	if !data.EncapsulationDot1qSecondDot1q.IsNull() && !data.EncapsulationDot1qSecondDot1q.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/", strconv.FormatInt(data.EncapsulationDot1qSecondDot1q.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/second-dot1q", strconv.FormatInt(data.EncapsulationDot1qSecondDot1q.ValueInt64(), 10))
 	}
 	if !data.L2transportEncapsulationDot1qVlanId.IsNull() && !data.L2transportEncapsulationDot1qVlanId.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id", data.L2transportEncapsulationDot1qVlanId.ValueString())
@@ -4780,14 +4780,24 @@ func (data InterfaceEthernetSubinterface) toBodyXML(ctx context.Context) string 
 			if len(item.SlaOperationProfileTargetMepIds) > 0 {
 				for _, citem := range item.SlaOperationProfileTargetMepIds {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.ProfileName.IsNull() && !citem.ProfileName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", citem.ProfileName.ValueString())
+					}
+					if !citem.MepId.IsNull() && !citem.MepId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", strconv.FormatInt(citem.MepId.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "", ccBody.Res())
 				}
 			}
 			if len(item.SlaOperationProfileTargetMacAddresses) > 0 {
 				for _, citem := range item.SlaOperationProfileTargetMacAddresses {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.ProfileName.IsNull() && !citem.ProfileName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", citem.ProfileName.ValueString())
+					}
+					if !citem.MacAddress.IsNull() && !citem.MacAddress.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", citem.MacAddress.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "", ccBody.Res())
 				}
 			}
@@ -5561,7 +5571,7 @@ func (data *InterfaceEthernetSubinterface) updateFromBodyXML(ctx context.Context
 		keyValues := [...]string{data.ServicePolicyInput[i].Name.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5590,7 +5600,7 @@ func (data *InterfaceEthernetSubinterface) updateFromBodyXML(ctx context.Context
 		keyValues := [...]string{data.ServicePolicyOutput[i].Name.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5614,12 +5624,12 @@ func (data *InterfaceEthernetSubinterface) updateFromBodyXML(ctx context.Context
 			data.ServicePolicyOutput[i].Name = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id"); value.Exists() {
 		data.EncapsulationDot1qVlanId = types.Int64Value(value.Int())
 	} else if data.EncapsulationDot1qVlanId.IsNull() {
 		data.EncapsulationDot1qVlanId = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/second-dot1q"); value.Exists() {
 		data.EncapsulationDot1qSecondDot1q = types.Int64Value(value.Int())
 	} else if data.EncapsulationDot1qSecondDot1q.IsNull() {
 		data.EncapsulationDot1qSecondDot1q = types.Int64Null()
@@ -6327,73 +6337,79 @@ func (data *InterfaceEthernetSubinterface) updateFromBodyXML(ctx context.Context
 		} else if data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue7.IsNull() {
 			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue7 = types.Int64Null()
 		}
-		for ci := range data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds {
-			keys := [...]string{"", ""}
-			keyValues := [...]string{data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName.ValueString(), strconv.FormatInt(data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, ""); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds
+			data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds = make([]InterfaceEthernetSubinterfaceEthernetCfmMepDomainsSlaOperationProfileTargetMepIds, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := InterfaceEthernetSubinterfaceEthernetCfmMepDomainsSlaOperationProfileTargetMepIds{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.ProfileName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.MepId = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.ProfileName.ValueString() != citem.ProfileName.ValueString() {
+						match = false
+					}
+					if !existingItem.MepId.Equal(citem.MepId) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName = types.StringValue(value.String())
-			} else {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId = types.Int64Value(value.Int())
-			} else {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId = types.Int64Null()
-			}
+				}
+
+				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds = append(data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds, citem)
+				return true
+			})
 		}
-		for ci := range data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses {
-			keys := [...]string{"", ""}
-			keyValues := [...]string{data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName.ValueString(), data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, ""); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses
+			data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses = make([]InterfaceEthernetSubinterfaceEthernetCfmMepDomainsSlaOperationProfileTargetMacAddresses, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := InterfaceEthernetSubinterfaceEthernetCfmMepDomainsSlaOperationProfileTargetMacAddresses{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.ProfileName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.MacAddress = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.ProfileName.ValueString() != citem.ProfileName.ValueString() {
+						match = false
+					}
+					if existingItem.MacAddress.ValueString() != citem.MacAddress.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName = types.StringValue(value.String())
-			} else {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress = types.StringValue(value.String())
-			} else {
-				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress = types.StringNull()
-			}
+				}
+
+				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses = append(data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses, citem)
+				return true
+			})
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/ais/transmission/up/interval"); value.Exists() {
@@ -7771,7 +7787,7 @@ func (data *InterfaceEthernetSubinterface) fromBody(ctx context.Context, res gjs
 	if value := res.Get(prefix + "dampening.decay-half-life.reuse-threshold.suppress-threshold.max-suppress-time.value"); value.Exists() {
 		data.DampeningMaxSuppressTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input"); value.Exists() {
 		data.ServicePolicyInput = make([]InterfaceEthernetSubinterfaceServicePolicyInput, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := InterfaceEthernetSubinterfaceServicePolicyInput{}
@@ -7782,7 +7798,7 @@ func (data *InterfaceEthernetSubinterface) fromBody(ctx context.Context, res gjs
 			return true
 		})
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.output"); value.Exists() {
 		data.ServicePolicyOutput = make([]InterfaceEthernetSubinterfaceServicePolicyOutput, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := InterfaceEthernetSubinterfaceServicePolicyOutput{}
@@ -7793,10 +7809,10 @@ func (data *InterfaceEthernetSubinterface) fromBody(ctx context.Context, res gjs
 			return true
 		})
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.vlan-id"); value.Exists() {
 		data.EncapsulationDot1qVlanId = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.second-dot1q"); value.Exists() {
 		data.EncapsulationDot1qSecondDot1q = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation.dot1q.vlan-id"); value.Exists() {
@@ -8170,7 +8186,7 @@ func (data *InterfaceEthernetSubinterface) fromBody(ctx context.Context, res gjs
 			if cValue := v.Get(""); cValue.Exists() {
 				item.LossMeasurementCountersAggregate = types.BoolValue(true)
 			} else {
-				item.LossMeasurementCountersAggregate = types.BoolValue(false)
+				item.LossMeasurementCountersAggregate = types.BoolNull()
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.LossMeasurementCountersPriorityCosRangeStart = types.Int64Value(cValue.Int())
@@ -8427,22 +8443,22 @@ func (data *InterfaceEthernetSubinterface) fromBody(ctx context.Context, res gjs
 			if cValue := v.Get("ethernet"); cValue.Exists() {
 				item.Ethernet = types.BoolValue(true)
 			} else {
-				item.Ethernet = types.BoolValue(false)
+				item.Ethernet = types.BoolNull()
 			}
 			if cValue := v.Get("direction.rx-only"); cValue.Exists() {
 				item.DirectionRxOnly = types.BoolValue(true)
 			} else {
-				item.DirectionRxOnly = types.BoolValue(false)
+				item.DirectionRxOnly = types.BoolNull()
 			}
 			if cValue := v.Get("direction.tx-only"); cValue.Exists() {
 				item.DirectionTxOnly = types.BoolValue(true)
 			} else {
-				item.DirectionTxOnly = types.BoolValue(false)
+				item.DirectionTxOnly = types.BoolNull()
 			}
 			if cValue := v.Get("acl"); cValue.Exists() {
 				item.Acl = types.BoolValue(true)
 			} else {
-				item.Acl = types.BoolValue(false)
+				item.Acl = types.BoolNull()
 			}
 			if cValue := v.Get("acl-ipv4.acl-name"); cValue.Exists() {
 				item.AclIpv4Name = types.StringValue(cValue.String())
@@ -8650,7 +8666,7 @@ func (data *InterfaceEthernetSubinterface) fromBody(ctx context.Context, res gjs
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			data.PtpSlaveIpv4s = append(data.PtpSlaveIpv4s, item)
 			return true
@@ -8666,7 +8682,7 @@ func (data *InterfaceEthernetSubinterface) fromBody(ctx context.Context, res gjs
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			data.PtpSlaveIpv6s = append(data.PtpSlaveIpv6s, item)
 			return true
@@ -8682,7 +8698,7 @@ func (data *InterfaceEthernetSubinterface) fromBody(ctx context.Context, res gjs
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			data.PtpSlaveEthernets = append(data.PtpSlaveEthernets, item)
 			return true
@@ -8704,17 +8720,17 @@ func (data *InterfaceEthernetSubinterface) fromBody(ctx context.Context, res gjs
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolValue(false)
+				item.Multicast = types.BoolNull()
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolValue(false)
+				item.MulticastMixed = types.BoolNull()
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -8722,17 +8738,17 @@ func (data *InterfaceEthernetSubinterface) fromBody(ctx context.Context, res gjs
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolValue(false)
+				item.Nanoseconds = types.BoolNull()
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolValue(false)
+				item.Microseconds = types.BoolNull()
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolValue(false)
+				item.Milliseconds = types.BoolNull()
 			}
 			data.PtpMasterIpv4s = append(data.PtpMasterIpv4s, item)
 			return true
@@ -8754,17 +8770,17 @@ func (data *InterfaceEthernetSubinterface) fromBody(ctx context.Context, res gjs
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolValue(false)
+				item.Multicast = types.BoolNull()
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolValue(false)
+				item.MulticastMixed = types.BoolNull()
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -8772,17 +8788,17 @@ func (data *InterfaceEthernetSubinterface) fromBody(ctx context.Context, res gjs
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolValue(false)
+				item.Nanoseconds = types.BoolNull()
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolValue(false)
+				item.Microseconds = types.BoolNull()
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolValue(false)
+				item.Milliseconds = types.BoolNull()
 			}
 			data.PtpMasterIpv6s = append(data.PtpMasterIpv6s, item)
 			return true
@@ -8804,17 +8820,17 @@ func (data *InterfaceEthernetSubinterface) fromBody(ctx context.Context, res gjs
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolValue(false)
+				item.Multicast = types.BoolNull()
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolValue(false)
+				item.MulticastMixed = types.BoolNull()
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -8822,17 +8838,17 @@ func (data *InterfaceEthernetSubinterface) fromBody(ctx context.Context, res gjs
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolValue(false)
+				item.Nanoseconds = types.BoolNull()
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolValue(false)
+				item.Microseconds = types.BoolNull()
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolValue(false)
+				item.Milliseconds = types.BoolNull()
 			}
 			data.PtpMasterEthernets = append(data.PtpMasterEthernets, item)
 			return true
@@ -8961,7 +8977,7 @@ func (data *InterfaceEthernetSubinterfaceData) fromBody(ctx context.Context, res
 	if value := res.Get(prefix + "dampening.decay-half-life.reuse-threshold.suppress-threshold.max-suppress-time.value"); value.Exists() {
 		data.DampeningMaxSuppressTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input"); value.Exists() {
 		data.ServicePolicyInput = make([]InterfaceEthernetSubinterfaceServicePolicyInput, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := InterfaceEthernetSubinterfaceServicePolicyInput{}
@@ -8972,7 +8988,7 @@ func (data *InterfaceEthernetSubinterfaceData) fromBody(ctx context.Context, res
 			return true
 		})
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.output"); value.Exists() {
 		data.ServicePolicyOutput = make([]InterfaceEthernetSubinterfaceServicePolicyOutput, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := InterfaceEthernetSubinterfaceServicePolicyOutput{}
@@ -8983,10 +8999,10 @@ func (data *InterfaceEthernetSubinterfaceData) fromBody(ctx context.Context, res
 			return true
 		})
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.vlan-id"); value.Exists() {
 		data.EncapsulationDot1qVlanId = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.second-dot1q"); value.Exists() {
 		data.EncapsulationDot1qSecondDot1q = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation.dot1q.vlan-id"); value.Exists() {
@@ -10147,7 +10163,7 @@ func (data *InterfaceEthernetSubinterface) fromBodyXML(ctx context.Context, res 
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/decay-half-life/reuse-threshold/suppress-threshold/max-suppress-time/value"); value.Exists() {
 		data.DampeningMaxSuppressTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input"); value.Exists() {
 		data.ServicePolicyInput = make([]InterfaceEthernetSubinterfaceServicePolicyInput, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := InterfaceEthernetSubinterfaceServicePolicyInput{}
@@ -10158,7 +10174,7 @@ func (data *InterfaceEthernetSubinterface) fromBodyXML(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output"); value.Exists() {
 		data.ServicePolicyOutput = make([]InterfaceEthernetSubinterfaceServicePolicyOutput, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := InterfaceEthernetSubinterfaceServicePolicyOutput{}
@@ -10169,10 +10185,10 @@ func (data *InterfaceEthernetSubinterface) fromBodyXML(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id"); value.Exists() {
 		data.EncapsulationDot1qVlanId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/second-dot1q"); value.Exists() {
 		data.EncapsulationDot1qSecondDot1q = types.Int64Value(value.Int())
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id"); value.Exists() {
@@ -11333,7 +11349,7 @@ func (data *InterfaceEthernetSubinterfaceData) fromBodyXML(ctx context.Context, 
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/decay-half-life/reuse-threshold/suppress-threshold/max-suppress-time/value"); value.Exists() {
 		data.DampeningMaxSuppressTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input"); value.Exists() {
 		data.ServicePolicyInput = make([]InterfaceEthernetSubinterfaceServicePolicyInput, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := InterfaceEthernetSubinterfaceServicePolicyInput{}
@@ -11344,7 +11360,7 @@ func (data *InterfaceEthernetSubinterfaceData) fromBodyXML(ctx context.Context, 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output"); value.Exists() {
 		data.ServicePolicyOutput = make([]InterfaceEthernetSubinterfaceServicePolicyOutput, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := InterfaceEthernetSubinterfaceServicePolicyOutput{}
@@ -11355,10 +11371,10 @@ func (data *InterfaceEthernetSubinterfaceData) fromBodyXML(ctx context.Context, 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id"); value.Exists() {
 		data.EncapsulationDot1qVlanId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/second-dot1q"); value.Exists() {
 		data.EncapsulationDot1qSecondDot1q = types.Int64Value(value.Int())
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id"); value.Exists() {
@@ -13896,10 +13912,10 @@ func (data *InterfaceEthernetSubinterface) getDeletedItems(ctx context.Context, 
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id", state.getPath()))
 	}
 	if !state.EncapsulationDot1qSecondDot1q.IsNull() && data.EncapsulationDot1qSecondDot1q.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/second-dot1q", state.getPath()))
 	}
 	if !state.EncapsulationDot1qVlanId.IsNull() && data.EncapsulationDot1qVlanId.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id", state.getPath()))
 	}
 	for i := range state.ServicePolicyOutput {
 		keys := [...]string{""}
@@ -13928,7 +13944,7 @@ func (data *InterfaceEthernetSubinterface) getDeletedItems(ctx context.Context, 
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.ServicePolicyInput {
@@ -13958,7 +13974,7 @@ func (data *InterfaceEthernetSubinterface) getDeletedItems(ctx context.Context, 
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input%v", state.getPath(), keyString))
 		}
 	}
 	if !state.DampeningDecayHalfLife.IsNull() && data.DampeningDecayHalfLife.IsNull() {
@@ -15360,20 +15376,20 @@ func (data *InterfaceEthernetSubinterface) getDeletePaths(ctx context.Context) [
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id", data.getPath()))
 	}
 	if !data.EncapsulationDot1qSecondDot1q.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/second-dot1q", data.getPath()))
 	}
 	if !data.EncapsulationDot1qVlanId.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id", data.getPath()))
 	}
 	for i := range data.ServicePolicyOutput {
 		keyValues := [...]string{data.ServicePolicyOutput[i].Name.ValueString()}
 
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.ServicePolicyInput {
 		keyValues := [...]string{data.ServicePolicyInput[i].Name.ValueString()}
 
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.DampeningDecayHalfLife.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/dampening", data.getPath()))
@@ -18036,14 +18052,14 @@ func (data *InterfaceEthernetSubinterface) addDeletedItemsXML(ctx context.Contex
 		}
 	}
 	if !state.EncapsulationDot1qSecondDot1q.IsNull() && data.EncapsulationDot1qSecondDot1q.IsNull() {
-		deletePath := state.getXPath() + "/"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/second-dot1q"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EncapsulationDot1qVlanId.IsNull() && data.EncapsulationDot1qVlanId.IsNull() {
-		deletePath := state.getXPath() + "/"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -18076,7 +18092,7 @@ func (data *InterfaceEthernetSubinterface) addDeletedItemsXML(ctx context.Contex
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v", predicates))
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output%v", predicates))
 		}
 	}
 	for i := range state.ServicePolicyInput {
@@ -18106,7 +18122,7 @@ func (data *InterfaceEthernetSubinterface) addDeletedItemsXML(ctx context.Contex
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v", predicates))
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input%v", predicates))
 		}
 	}
 	if !state.DampeningDecayHalfLife.IsNull() && data.DampeningDecayHalfLife.IsNull() {
@@ -18845,10 +18861,10 @@ func (data *InterfaceEthernetSubinterface) addDeletePathsXML(ctx context.Context
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id")
 	}
 	if !data.EncapsulationDot1qSecondDot1q.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/second-dot1q")
 	}
 	if !data.EncapsulationDot1qVlanId.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id")
 	}
 	for i := range data.ServicePolicyOutput {
 		keys := [...]string{""}
@@ -18858,7 +18874,7 @@ func (data *InterfaceEthernetSubinterface) addDeletePathsXML(ctx context.Context
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
 		}
 
-		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/%v", predicates))
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output%v", predicates))
 	}
 	for i := range data.ServicePolicyInput {
 		keys := [...]string{""}
@@ -18868,7 +18884,7 @@ func (data *InterfaceEthernetSubinterface) addDeletePathsXML(ctx context.Context
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
 		}
 
-		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/%v", predicates))
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input%v", predicates))
 	}
 	if !data.DampeningDecayHalfLife.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/dampening")

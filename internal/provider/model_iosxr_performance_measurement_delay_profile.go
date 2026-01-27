@@ -3039,7 +3039,7 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
 				item.ProbeFlowLabelExplicit = types.BoolValue(true)
 			} else {
-				item.ProbeFlowLabelExplicit = types.BoolValue(false)
+				item.ProbeFlowLabelExplicit = types.BoolNull()
 			}
 			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
 				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
@@ -3058,12 +3058,12 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 			if cValue := v.Get("probe.protocol.pm-mpls"); cValue.Exists() {
 				item.ProbeProtocolPmMpls = types.BoolValue(true)
 			} else {
-				item.ProbeProtocolPmMpls = types.BoolValue(false)
+				item.ProbeProtocolPmMpls = types.BoolNull()
 			}
 			if cValue := v.Get("probe.protocol.twamp-light"); cValue.Exists() {
 				item.ProbeProtocolTwampLight = types.BoolValue(true)
 			} else {
-				item.ProbeProtocolTwampLight = types.BoolValue(false)
+				item.ProbeProtocolTwampLight = types.BoolNull()
 			}
 			if cValue := v.Get("probe.tos.traffic-class"); cValue.Exists() {
 				item.ProbeTosTrafficClass = types.Int64Value(cValue.Int())
@@ -3074,42 +3074,42 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 			if cValue := v.Get("probe.measurement-mode.one-way"); cValue.Exists() {
 				item.ProbeMeasurementModeOneWay = types.BoolValue(true)
 			} else {
-				item.ProbeMeasurementModeOneWay = types.BoolValue(false)
+				item.ProbeMeasurementModeOneWay = types.BoolNull()
 			}
 			if cValue := v.Get("probe.measurement-mode.two-way"); cValue.Exists() {
 				item.ProbeMeasurementModeTwoWay = types.BoolValue(true)
 			} else {
-				item.ProbeMeasurementModeTwoWay = types.BoolValue(false)
+				item.ProbeMeasurementModeTwoWay = types.BoolNull()
 			}
 			if cValue := v.Get("probe.measurement-mode.loopback"); cValue.Exists() {
 				item.ProbeMeasurementModeLoopback = types.BoolValue(true)
 			} else {
-				item.ProbeMeasurementModeLoopback = types.BoolValue(false)
+				item.ProbeMeasurementModeLoopback = types.BoolNull()
 			}
 			if cValue := v.Get("advertisement.logging.delay-exceeded"); cValue.Exists() {
 				item.AdvertiseLoggingDelayExceeded = types.BoolValue(true)
 			} else {
-				item.AdvertiseLoggingDelayExceeded = types.BoolValue(false)
+				item.AdvertiseLoggingDelayExceeded = types.BoolNull()
 			}
 			if cValue := v.Get("advertisement.threshold-check.average-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(true)
 			} else {
-				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(false)
+				item.AdvertiseThresholdCheckAverageDelay = types.BoolNull()
 			}
 			if cValue := v.Get("advertisement.threshold-check.minimum-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(true)
 			} else {
-				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(false)
+				item.AdvertiseThresholdCheckMinimumDelay = types.BoolNull()
 			}
 			if cValue := v.Get("advertisement.threshold-check.maximum-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(true)
 			} else {
-				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(false)
+				item.AdvertiseThresholdCheckMaximumDelay = types.BoolNull()
 			}
 			if cValue := v.Get("advertisement.periodic.disabled"); cValue.Exists() {
 				item.AdvertisePeriodicDisabled = types.BoolValue(true)
 			} else {
-				item.AdvertisePeriodicDisabled = types.BoolValue(false)
+				item.AdvertisePeriodicDisabled = types.BoolNull()
 			}
 			if cValue := v.Get("advertisement.periodic.interval"); cValue.Exists() {
 				item.AdvertisePeriodicInterval = types.Int64Value(cValue.Int())
@@ -3123,7 +3123,7 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 			if cValue := v.Get("advertisement.accelerated"); cValue.Exists() {
 				item.AdvertiseAccelerated = types.BoolValue(true)
 			} else {
-				item.AdvertiseAccelerated = types.BoolValue(false)
+				item.AdvertiseAccelerated = types.BoolNull()
 			}
 			if cValue := v.Get("advertisement.accelerated.threshold"); cValue.Exists() {
 				item.AdvertiseAcceleratedThreshold = types.Int64Value(cValue.Int())

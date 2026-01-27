@@ -571,6 +571,10 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 	addKeys(e, config)
 
 	for ia := range config.Attributes {
+		// Default XPath from YangName if not explicitly set (do this first for all attributes)
+		if config.Attributes[ia].XPath == "" {
+			config.Attributes[ia].XPath = config.Attributes[ia].YangName
+		}
 		if config.Attributes[ia].Id || config.Attributes[ia].Reference || config.Attributes[ia].NoAugmentConfig {
 			continue
 		}
@@ -578,6 +582,10 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 		if config.Attributes[ia].Type == "List" {
 			el := resolvePath(e, config.Attributes[ia].YangName)
 			for iaa := range config.Attributes[ia].Attributes {
+				// Default XPath from YangName if not explicitly set (do this first for all attributes)
+				if config.Attributes[ia].Attributes[iaa].XPath == "" {
+					config.Attributes[ia].Attributes[iaa].XPath = config.Attributes[ia].Attributes[iaa].YangName
+				}
 				if config.Attributes[ia].Attributes[iaa].NoAugmentConfig {
 					continue
 				}
@@ -585,6 +593,10 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 				if config.Attributes[ia].Attributes[iaa].Type == "List" {
 					ell := resolvePath(el, config.Attributes[ia].Attributes[iaa].YangName)
 					for iaaa := range config.Attributes[ia].Attributes[iaa].Attributes {
+						// Default XPath from YangName if not explicitly set (do this first for all attributes)
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].XPath == "" {
+							config.Attributes[ia].Attributes[iaa].Attributes[iaaa].XPath = config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName
+						}
 						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
 							continue
 						}
@@ -592,6 +604,10 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Type == "List" {
 							elll := resolvePath(ell, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName)
 							for iaaaa := range config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes {
+								// Default XPath from YangName if not explicitly set (do this first for all attributes)
+								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].XPath == "" {
+									config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].XPath = config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].YangName
+								}
 								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig {
 									continue
 								}

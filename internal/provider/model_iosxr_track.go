@@ -1910,7 +1910,7 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("not"); cValue.Exists() {
 				item.Not = types.BoolValue(true)
 			} else {
-				item.Not = types.BoolValue(false)
+				item.Not = types.BoolNull()
 			}
 			data.BooleanAndList = append(data.BooleanAndList, item)
 			return true
@@ -1926,7 +1926,7 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("not"); cValue.Exists() {
 				item.Not = types.BoolValue(true)
 			} else {
-				item.Not = types.BoolValue(false)
+				item.Not = types.BoolNull()
 			}
 			data.BooleanOrList = append(data.BooleanOrList, item)
 			return true
@@ -2110,7 +2110,7 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("auto-recover"); cValue.Exists() {
 				item.AutoRecover = types.BoolValue(true)
 			} else {
-				item.AutoRecover = types.BoolValue(false)
+				item.AutoRecover = types.BoolNull()
 			}
 			data.TrackDownErrorDisableInterfaces = append(data.TrackDownErrorDisableInterfaces, item)
 			return true
@@ -2126,7 +2126,7 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("auto-recover"); cValue.Exists() {
 				item.AutoRecover = types.BoolValue(true)
 			} else {
-				item.AutoRecover = types.BoolValue(false)
+				item.AutoRecover = types.BoolNull()
 			}
 			data.TrackUpErrorDisableInterfaces = append(data.TrackUpErrorDisableInterfaces, item)
 			return true

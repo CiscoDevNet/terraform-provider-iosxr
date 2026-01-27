@@ -507,7 +507,7 @@ func (data *MPLSLDPInterface) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("discovery.transport-address.interface"); cValue.Exists() {
 				item.DiscoveryTransportAddressInterface = types.BoolValue(true)
 			} else {
-				item.DiscoveryTransportAddressInterface = types.BoolValue(false)
+				item.DiscoveryTransportAddressInterface = types.BoolNull()
 			}
 			if cValue := v.Get("discovery.transport-address.ip-address"); cValue.Exists() {
 				item.DiscoveryTransportAddressIp = types.StringValue(cValue.String())
@@ -515,12 +515,12 @@ func (data *MPLSLDPInterface) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("igp.auto-config.disable"); cValue.Exists() {
 				item.IgpAutoConfigDisable = types.BoolValue(true)
 			} else {
-				item.IgpAutoConfigDisable = types.BoolValue(false)
+				item.IgpAutoConfigDisable = types.BoolNull()
 			}
 			if cValue := v.Get("mldp.disable"); cValue.Exists() {
 				item.MldpDisable = types.BoolValue(true)
 			} else {
-				item.MldpDisable = types.BoolValue(false)
+				item.MldpDisable = types.BoolNull()
 			}
 			data.AddressFamily = append(data.AddressFamily, item)
 			return true

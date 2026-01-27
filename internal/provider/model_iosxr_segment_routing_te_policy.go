@@ -854,102 +854,82 @@ func (data *SegmentRoutingTEPolicy) updateFromBody(ctx context.Context, res []by
 				data.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly = types.BoolValue(false)
 			}
 		}
-		for ci := range data.CandidatePathsPreferences[i].ConstraintsAffinityRules {
-			keys := [...]string{"rule"}
-			keyValues := [...]string{data.CandidatePathsPreferences[i].ConstraintsAffinityRules[ci].AffinityType.ValueString()}
-
-			var cr gjson.Result
-			r.Get("constraints.affinity-rules.affinity-rule").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("rule"); value.Exists() && !data.CandidatePathsPreferences[i].ConstraintsAffinityRules[ci].AffinityType.IsNull() {
-				data.CandidatePathsPreferences[i].ConstraintsAffinityRules[ci].AffinityType = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].ConstraintsAffinityRules[ci].AffinityType = types.StringNull()
-			}
-			for cci := range data.CandidatePathsPreferences[i].ConstraintsAffinityRules[ci].Affinities {
-				keys := [...]string{"affinity-name"}
-				keyValues := [...]string{data.CandidatePathsPreferences[i].ConstraintsAffinityRules[ci].Affinities[cci].AffinityName.ValueString()}
-
-				var ccr gjson.Result
-				cr.Get("affinity-name").ForEach(
-					func(_, v gjson.Result) bool {
-						found := false
-						for ik := range keys {
-							if v.Get(keys[ik]).String() == keyValues[ik] {
-								found = true
-								continue
-							}
-							found = false
-							break
-						}
-						if found {
-							ccr = v
-							return false
-						}
-						return true
-					},
-				)
-				if value := ccr.Get("affinity-name"); value.Exists() && !data.CandidatePathsPreferences[i].ConstraintsAffinityRules[ci].Affinities[cci].AffinityName.IsNull() {
-					data.CandidatePathsPreferences[i].ConstraintsAffinityRules[ci].Affinities[cci].AffinityName = types.StringValue(value.String())
-				} else {
-					data.CandidatePathsPreferences[i].ConstraintsAffinityRules[ci].Affinities[cci].AffinityName = types.StringNull()
+		// Rebuild nested list from device response
+		if value := r.Get("constraints.affinity-rules.affinity-rule"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.CandidatePathsPreferences[i].ConstraintsAffinityRules
+			data.CandidatePathsPreferences[i].ConstraintsAffinityRules = make([]SegmentRoutingTEPolicyCandidatePathsPreferencesConstraintsAffinityRules, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := SegmentRoutingTEPolicyCandidatePathsPreferencesConstraintsAffinityRules{}
+				if cValue := cr.Get("rule"); cValue.Exists() {
+					citem.AffinityType = types.StringValue(cValue.String())
 				}
-			}
-		}
-		for ci := range data.CandidatePathsPreferences[i].ConstraintsBounds {
-			keys := [...]string{"scope-type", "metric-type"}
-			keyValues := [...]string{data.CandidatePathsPreferences[i].ConstraintsBounds[ci].Type.ValueString(), data.CandidatePathsPreferences[i].ConstraintsBounds[ci].MetricType.ValueString()}
-
-			var cr gjson.Result
-			r.Get("constraints.bounds.bounds.bound").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Rebuild nested nested list from device response
+				if ccValue := cr.Get("affinity-name"); ccValue.Exists() {
+					citem.Affinities = make([]SegmentRoutingTEPolicyCandidatePathsPreferencesConstraintsAffinityRulesAffinities, 0)
+					ccValue.ForEach(func(_, ccr gjson.Result) bool {
+						ccitem := SegmentRoutingTEPolicyCandidatePathsPreferencesConstraintsAffinityRulesAffinities{}
+						if ccValue := ccr.Get("affinity-name"); ccValue.Exists() {
+							ccitem.AffinityName = types.StringValue(ccValue.String())
 						}
-						found = false
+						citem.Affinities = append(citem.Affinities, ccitem)
+						return true
+					})
+				}
+
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AffinityType.ValueString() != citem.AffinityType.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
+				}
+
+				data.CandidatePathsPreferences[i].ConstraintsAffinityRules = append(data.CandidatePathsPreferences[i].ConstraintsAffinityRules, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device response
+		if value := r.Get("constraints.bounds.bounds.bound"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.CandidatePathsPreferences[i].ConstraintsBounds
+			data.CandidatePathsPreferences[i].ConstraintsBounds = make([]SegmentRoutingTEPolicyCandidatePathsPreferencesConstraintsBounds, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := SegmentRoutingTEPolicyCandidatePathsPreferencesConstraintsBounds{}
+				if cValue := cr.Get("scope-type"); cValue.Exists() {
+					citem.Type = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("metric-type"); cValue.Exists() {
+					citem.MetricType = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("bound-value"); cValue.Exists() {
+					citem.Value = types.Int64Value(cValue.Int())
+				}
+
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Type.ValueString() != citem.Type.ValueString() {
+						match = false
 					}
-					return true
-				},
-			)
-			if value := cr.Get("scope-type"); value.Exists() && !data.CandidatePathsPreferences[i].ConstraintsBounds[ci].Type.IsNull() {
-				data.CandidatePathsPreferences[i].ConstraintsBounds[ci].Type = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].ConstraintsBounds[ci].Type = types.StringNull()
-			}
-			if value := cr.Get("metric-type"); value.Exists() && !data.CandidatePathsPreferences[i].ConstraintsBounds[ci].MetricType.IsNull() {
-				data.CandidatePathsPreferences[i].ConstraintsBounds[ci].MetricType = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].ConstraintsBounds[ci].MetricType = types.StringNull()
-			}
-			if value := cr.Get("bound-value"); value.Exists() {
-				data.CandidatePathsPreferences[i].ConstraintsBounds[ci].Value = types.Int64Value(value.Int())
-			} else if data.CandidatePathsPreferences[i].ConstraintsBounds[ci].Value.IsNull() {
-				data.CandidatePathsPreferences[i].ConstraintsBounds[ci].Value = types.Int64Null()
-			}
+					if existingItem.MetricType.ValueString() != citem.MetricType.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						break
+					}
+				}
+
+				data.CandidatePathsPreferences[i].ConstraintsBounds = append(data.CandidatePathsPreferences[i].ConstraintsBounds, citem)
+				return true
+			})
 		}
 		if value := r.Get("bidirectional.association-id"); value.Exists() && !data.CandidatePathsPreferences[i].BidirectionalAssociationId.IsNull() {
 			data.CandidatePathsPreferences[i].BidirectionalAssociationId = types.Int64Value(value.Int())
@@ -974,124 +954,84 @@ func (data *SegmentRoutingTEPolicy) updateFromBody(ctx context.Context, res []by
 				data.CandidatePathsPreferences[i].BidirectionalCorouted = types.BoolValue(false)
 			}
 		}
-		for ci := range data.CandidatePathsPreferences[i].Paths {
-			keys := [...]string{"type"}
-			keyValues := [...]string{data.CandidatePathsPreferences[i].Paths[ci].Type.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("path-infos.path-info"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.CandidatePathsPreferences[i].Paths
+			data.CandidatePathsPreferences[i].Paths = make([]SegmentRoutingTEPolicyCandidatePathsPreferencesPaths, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := SegmentRoutingTEPolicyCandidatePathsPreferencesPaths{}
+				if cValue := cr.Get("type"); cValue.Exists() {
+					citem.Type = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("hop-type"); cValue.Exists() {
+					citem.HopType = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("segment-list-name"); cValue.Exists() {
+					citem.SegmentListName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("disable-auto-reroute"); cValue.Exists() {
+					citem.Sticky = types.BoolValue(true)
+				} else {
+					citem.Sticky = types.BoolValue(false)
+				}
+				if cValue := cr.Get("metric.sid-limit"); cValue.Exists() {
+					citem.MetricSidLimit = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("metric.metric-type"); cValue.Exists() {
+					citem.MetricType = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("metric.metric-margin.value-type"); cValue.Exists() {
+					citem.MetricMarginType = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("metric.metric-margin.relative-value"); cValue.Exists() {
+					citem.MetricMarginRelative = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("metric.metric-margin.absolute-value"); cValue.Exists() {
+					citem.MetricMarginAbsolute = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("anycast"); cValue.Exists() {
+					citem.Anycast = types.BoolValue(true)
+				} else {
+					citem.Anycast = types.BoolValue(false)
+				}
+				if cValue := cr.Get("pcep"); cValue.Exists() {
+					citem.Pcep = types.BoolValue(true)
+				} else {
+					citem.Pcep = types.BoolValue(false)
+				}
+				if cValue := cr.Get("reverse-path-segment-list-name"); cValue.Exists() {
+					citem.ReversePathSegmentList = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("weight"); cValue.Exists() {
+					citem.Weight = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("path-infos.path-info").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Type.ValueString() != citem.Type.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.Sticky.ValueBool() && existingItem.Sticky.ValueBool() == false {
+							citem.Sticky = existingItem.Sticky
 						}
-						found = false
+						if !citem.Anycast.ValueBool() && existingItem.Anycast.ValueBool() == false {
+							citem.Anycast = existingItem.Anycast
+						}
+						if !citem.Pcep.ValueBool() && existingItem.Pcep.ValueBool() == false {
+							citem.Pcep = existingItem.Pcep
+						}
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("type"); value.Exists() && !data.CandidatePathsPreferences[i].Paths[ci].Type.IsNull() {
-				data.CandidatePathsPreferences[i].Paths[ci].Type = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].Type = types.StringNull()
-			}
-			if value := cr.Get("hop-type"); value.Exists() && !data.CandidatePathsPreferences[i].Paths[ci].HopType.IsNull() {
-				data.CandidatePathsPreferences[i].Paths[ci].HopType = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].HopType = types.StringNull()
-			}
-			if value := cr.Get("segment-list-name"); value.Exists() && !data.CandidatePathsPreferences[i].Paths[ci].SegmentListName.IsNull() {
-				data.CandidatePathsPreferences[i].Paths[ci].SegmentListName = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].SegmentListName = types.StringNull()
-			}
-			if value := cr.Get("disable-auto-reroute"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.CandidatePathsPreferences[i].Paths[ci].Sticky.IsNull() && !data.CandidatePathsPreferences[i].Paths[ci].Sticky.ValueBool() {
-					data.CandidatePathsPreferences[i].Paths[ci].Sticky = types.BoolValue(false)
-				} else if !data.CandidatePathsPreferences[i].Paths[ci].Sticky.IsNull() {
-					data.CandidatePathsPreferences[i].Paths[ci].Sticky = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.CandidatePathsPreferences[i].Paths[ci].Sticky.IsNull() {
-					data.CandidatePathsPreferences[i].Paths[ci].Sticky = types.BoolNull()
-				} else {
-					data.CandidatePathsPreferences[i].Paths[ci].Sticky = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("metric.sid-limit"); value.Exists() {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricSidLimit = types.Int64Value(value.Int())
-			} else if data.CandidatePathsPreferences[i].Paths[ci].MetricSidLimit.IsNull() {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricSidLimit = types.Int64Null()
-			}
-			if value := cr.Get("metric.metric-type"); value.Exists() && !data.CandidatePathsPreferences[i].Paths[ci].MetricType.IsNull() {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricType = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricType = types.StringNull()
-			}
-			if value := cr.Get("metric.metric-margin.value-type"); value.Exists() && !data.CandidatePathsPreferences[i].Paths[ci].MetricMarginType.IsNull() {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricMarginType = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricMarginType = types.StringNull()
-			}
-			if value := cr.Get("metric.metric-margin.relative-value"); value.Exists() {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricMarginRelative = types.Int64Value(value.Int())
-			} else if data.CandidatePathsPreferences[i].Paths[ci].MetricMarginRelative.IsNull() {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricMarginRelative = types.Int64Null()
-			}
-			if value := cr.Get("metric.metric-margin.absolute-value"); value.Exists() {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricMarginAbsolute = types.Int64Value(value.Int())
-			} else if data.CandidatePathsPreferences[i].Paths[ci].MetricMarginAbsolute.IsNull() {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricMarginAbsolute = types.Int64Null()
-			}
-			if value := cr.Get("anycast"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.CandidatePathsPreferences[i].Paths[ci].Anycast.IsNull() && !data.CandidatePathsPreferences[i].Paths[ci].Anycast.ValueBool() {
-					data.CandidatePathsPreferences[i].Paths[ci].Anycast = types.BoolValue(false)
-				} else if !data.CandidatePathsPreferences[i].Paths[ci].Anycast.IsNull() {
-					data.CandidatePathsPreferences[i].Paths[ci].Anycast = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.CandidatePathsPreferences[i].Paths[ci].Anycast.IsNull() {
-					data.CandidatePathsPreferences[i].Paths[ci].Anycast = types.BoolNull()
-				} else {
-					data.CandidatePathsPreferences[i].Paths[ci].Anycast = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("pcep"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.CandidatePathsPreferences[i].Paths[ci].Pcep.IsNull() && !data.CandidatePathsPreferences[i].Paths[ci].Pcep.ValueBool() {
-					data.CandidatePathsPreferences[i].Paths[ci].Pcep = types.BoolValue(false)
-				} else if !data.CandidatePathsPreferences[i].Paths[ci].Pcep.IsNull() {
-					data.CandidatePathsPreferences[i].Paths[ci].Pcep = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.CandidatePathsPreferences[i].Paths[ci].Pcep.IsNull() {
-					data.CandidatePathsPreferences[i].Paths[ci].Pcep = types.BoolNull()
-				} else {
-					data.CandidatePathsPreferences[i].Paths[ci].Pcep = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("reverse-path-segment-list-name"); value.Exists() && !data.CandidatePathsPreferences[i].Paths[ci].ReversePathSegmentList.IsNull() {
-				data.CandidatePathsPreferences[i].Paths[ci].ReversePathSegmentList = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].ReversePathSegmentList = types.StringNull()
-			}
-			if value := cr.Get("weight"); value.Exists() {
-				data.CandidatePathsPreferences[i].Paths[ci].Weight = types.Int64Value(value.Int())
-			} else if data.CandidatePathsPreferences[i].Paths[ci].Weight.IsNull() {
-				data.CandidatePathsPreferences[i].Paths[ci].Weight = types.Int64Null()
-			}
+
+				data.CandidatePathsPreferences[i].Paths = append(data.CandidatePathsPreferences[i].Paths, citem)
+				return true
+			})
 		}
 		if value := r.Get("backup-ineligible"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -1134,39 +1074,36 @@ func (data *SegmentRoutingTEPolicy) updateFromBody(ctx context.Context, res []by
 		} else {
 			data.CandidatePathsPreferences[i].PerFlowForwardClassDefault = types.Int64Null()
 		}
-		for ci := range data.CandidatePathsPreferences[i].PerFlowForwardClasses {
-			keys := [...]string{"forward-class"}
-			keyValues := [...]string{strconv.FormatInt(data.CandidatePathsPreferences[i].PerFlowForwardClasses[ci].ForwardClass.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("per-flow.forward-class-and-colors.forward-class-and-color"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.CandidatePathsPreferences[i].PerFlowForwardClasses
+			data.CandidatePathsPreferences[i].PerFlowForwardClasses = make([]SegmentRoutingTEPolicyCandidatePathsPreferencesPerFlowForwardClasses, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := SegmentRoutingTEPolicyCandidatePathsPreferencesPerFlowForwardClasses{}
+				if cValue := cr.Get("forward-class"); cValue.Exists() {
+					citem.ForwardClass = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("color"); cValue.Exists() {
+					citem.Color = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("per-flow.forward-class-and-colors.forward-class-and-color").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.ForwardClass.Equal(citem.ForwardClass) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("forward-class"); value.Exists() {
-				data.CandidatePathsPreferences[i].PerFlowForwardClasses[ci].ForwardClass = types.Int64Value(value.Int())
-			} else if data.CandidatePathsPreferences[i].PerFlowForwardClasses[ci].ForwardClass.IsNull() {
-				data.CandidatePathsPreferences[i].PerFlowForwardClasses[ci].ForwardClass = types.Int64Null()
-			}
-			if value := cr.Get("color"); value.Exists() {
-				data.CandidatePathsPreferences[i].PerFlowForwardClasses[ci].Color = types.Int64Value(value.Int())
-			} else if data.CandidatePathsPreferences[i].PerFlowForwardClasses[ci].Color.IsNull() {
-				data.CandidatePathsPreferences[i].PerFlowForwardClasses[ci].Color = types.Int64Null()
-			}
+				}
+
+				data.CandidatePathsPreferences[i].PerFlowForwardClasses = append(data.CandidatePathsPreferences[i].PerFlowForwardClasses, citem)
+				return true
+			})
 		}
 		if value := r.Get("effective-metric.metric-value-type.metric-value"); value.Exists() && !data.CandidatePathsPreferences[i].EffectiveMetricValue.IsNull() {
 			data.CandidatePathsPreferences[i].EffectiveMetricValue = types.Int64Value(value.Int())
@@ -1464,11 +1401,15 @@ func (data SegmentRoutingTEPolicy) toBodyXML(ctx context.Context) string {
 			if len(item.ConstraintsAffinityRules) > 0 {
 				for _, citem := range item.ConstraintsAffinityRules {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.AffinityType.IsNull() && !citem.AffinityType.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "rule", citem.AffinityType.ValueString())
+					}
 					if len(citem.Affinities) > 0 {
 						for _, ccitem := range citem.Affinities {
 							cccBody := netconf.Body{}
-							_ = ccitem // Suppress unused variable warning
+							if !ccitem.AffinityName.IsNull() && !ccitem.AffinityName.IsUnknown() {
+								cccBody = helpers.SetFromXPath(cccBody, "affinity-name", ccitem.AffinityName.ValueString())
+							}
 							ccBody = helpers.AppendRawFromXPath(ccBody, "affinity-name", cccBody.Res())
 						}
 					}
@@ -1478,7 +1419,12 @@ func (data SegmentRoutingTEPolicy) toBodyXML(ctx context.Context) string {
 			if len(item.ConstraintsBounds) > 0 {
 				for _, citem := range item.ConstraintsBounds {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "scope-type", citem.Type.ValueString())
+					}
+					if !citem.MetricType.IsNull() && !citem.MetricType.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "metric-type", citem.MetricType.ValueString())
+					}
 					if !citem.Value.IsNull() && !citem.Value.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "bound-value", strconv.FormatInt(citem.Value.ValueInt64(), 10))
 					}
@@ -1496,7 +1442,9 @@ func (data SegmentRoutingTEPolicy) toBodyXML(ctx context.Context) string {
 			if len(item.Paths) > 0 {
 				for _, citem := range item.Paths {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "type", citem.Type.ValueString())
+					}
 					if !citem.HopType.IsNull() && !citem.HopType.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "hop-type", citem.HopType.ValueString())
 					}
@@ -1558,7 +1506,9 @@ func (data SegmentRoutingTEPolicy) toBodyXML(ctx context.Context) string {
 			if len(item.PerFlowForwardClasses) > 0 {
 				for _, citem := range item.PerFlowForwardClasses {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.ForwardClass.IsNull() && !citem.ForwardClass.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "forward-class", strconv.FormatInt(citem.ForwardClass.ValueInt64(), 10))
+					}
 					if !citem.Color.IsNull() && !citem.Color.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "color", strconv.FormatInt(citem.Color.ValueInt64(), 10))
 					}
@@ -1928,73 +1878,88 @@ func (data *SegmentRoutingTEPolicy) updateFromBodyXML(ctx context.Context, res x
 				data.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly = types.BoolNull()
 			}
 		}
-		for ci := range data.CandidatePathsPreferences[i].ConstraintsAffinityRules {
-			keys := [...]string{"rule"}
-			keyValues := [...]string{data.CandidatePathsPreferences[i].ConstraintsAffinityRules[ci].AffinityType.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "constraints/affinity-rules/affinity-rule"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.CandidatePathsPreferences[i].ConstraintsAffinityRules
+			data.CandidatePathsPreferences[i].ConstraintsAffinityRules = make([]SegmentRoutingTEPolicyCandidatePathsPreferencesConstraintsAffinityRules, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "constraints/affinity-rules/affinity-rule").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := SegmentRoutingTEPolicyCandidatePathsPreferencesConstraintsAffinityRules{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "rule"); cValue.Exists() {
+					citem.AffinityType = types.StringValue(cValue.String())
+				}
+				// Rebuild nested nested list from device XML response
+				if ccValue := helpers.GetFromXPath(cr, "affinity-name"); ccValue.Exists() {
+					citem.Affinities = make([]SegmentRoutingTEPolicyCandidatePathsPreferencesConstraintsAffinityRulesAffinities, 0)
+					ccValue.ForEach(func(_ int, ccr xmldot.Result) bool {
+						ccitem := SegmentRoutingTEPolicyCandidatePathsPreferencesConstraintsAffinityRulesAffinities{}
+						if ccValue := helpers.GetFromXPath(ccr, "affinity-name"); ccValue.Exists() {
+							ccitem.AffinityName = types.StringValue(ccValue.String())
 						}
-						found = false
+						citem.Affinities = append(citem.Affinities, ccitem)
+						return true
+					})
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AffinityType.ValueString() != citem.AffinityType.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "rule"); value.Exists() {
-				data.CandidatePathsPreferences[i].ConstraintsAffinityRules[ci].AffinityType = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].ConstraintsAffinityRules[ci].AffinityType = types.StringNull()
-			}
+				}
+
+				data.CandidatePathsPreferences[i].ConstraintsAffinityRules = append(data.CandidatePathsPreferences[i].ConstraintsAffinityRules, citem)
+				return true
+			})
 		}
-		for ci := range data.CandidatePathsPreferences[i].ConstraintsBounds {
-			keys := [...]string{"scope-type", "metric-type"}
-			keyValues := [...]string{data.CandidatePathsPreferences[i].ConstraintsBounds[ci].Type.ValueString(), data.CandidatePathsPreferences[i].ConstraintsBounds[ci].MetricType.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "constraints/bounds/bounds/bound"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.CandidatePathsPreferences[i].ConstraintsBounds
+			data.CandidatePathsPreferences[i].ConstraintsBounds = make([]SegmentRoutingTEPolicyCandidatePathsPreferencesConstraintsBounds, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "constraints/bounds/bounds/bound").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := SegmentRoutingTEPolicyCandidatePathsPreferencesConstraintsBounds{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "scope-type"); cValue.Exists() {
+					citem.Type = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "metric-type"); cValue.Exists() {
+					citem.MetricType = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "bound-value"); cValue.Exists() {
+					citem.Value = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Type.ValueString() != citem.Type.ValueString() {
+						match = false
+					}
+					if existingItem.MetricType.ValueString() != citem.MetricType.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "scope-type"); value.Exists() {
-				data.CandidatePathsPreferences[i].ConstraintsBounds[ci].Type = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].ConstraintsBounds[ci].Type = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "metric-type"); value.Exists() {
-				data.CandidatePathsPreferences[i].ConstraintsBounds[ci].MetricType = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].ConstraintsBounds[ci].MetricType = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "bound-value"); value.Exists() {
-				data.CandidatePathsPreferences[i].ConstraintsBounds[ci].Value = types.Int64Value(value.Int())
-			} else {
-				data.CandidatePathsPreferences[i].ConstraintsBounds[ci].Value = types.Int64Null()
-			}
+				}
+
+				data.CandidatePathsPreferences[i].ConstraintsBounds = append(data.CandidatePathsPreferences[i].ConstraintsBounds, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "bidirectional/association-id"); value.Exists() {
 			data.CandidatePathsPreferences[i].BidirectionalAssociationId = types.Int64Value(value.Int())
@@ -2010,109 +1975,90 @@ func (data *SegmentRoutingTEPolicy) updateFromBodyXML(ctx context.Context, res x
 				data.CandidatePathsPreferences[i].BidirectionalCorouted = types.BoolNull()
 			}
 		}
-		for ci := range data.CandidatePathsPreferences[i].Paths {
-			keys := [...]string{"type"}
-			keyValues := [...]string{data.CandidatePathsPreferences[i].Paths[ci].Type.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "path-infos/path-info"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.CandidatePathsPreferences[i].Paths
+			data.CandidatePathsPreferences[i].Paths = make([]SegmentRoutingTEPolicyCandidatePathsPreferencesPaths, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "path-infos/path-info").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := SegmentRoutingTEPolicyCandidatePathsPreferencesPaths{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "type"); cValue.Exists() {
+					citem.Type = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "hop-type"); cValue.Exists() {
+					citem.HopType = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "segment-list-name"); cValue.Exists() {
+					citem.SegmentListName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "disable-auto-reroute"); cValue.Exists() {
+					citem.Sticky = types.BoolValue(true)
+				} else {
+					citem.Sticky = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "metric/sid-limit"); cValue.Exists() {
+					citem.MetricSidLimit = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "metric/metric-type"); cValue.Exists() {
+					citem.MetricType = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "metric/metric-margin/value-type"); cValue.Exists() {
+					citem.MetricMarginType = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "metric/metric-margin/relative-value"); cValue.Exists() {
+					citem.MetricMarginRelative = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "metric/metric-margin/absolute-value"); cValue.Exists() {
+					citem.MetricMarginAbsolute = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "anycast"); cValue.Exists() {
+					citem.Anycast = types.BoolValue(true)
+				} else {
+					citem.Anycast = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "pcep"); cValue.Exists() {
+					citem.Pcep = types.BoolValue(true)
+				} else {
+					citem.Pcep = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "reverse-path-segment-list-name"); cValue.Exists() {
+					citem.ReversePathSegmentList = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "weight"); cValue.Exists() {
+					citem.Weight = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Type.ValueString() != citem.Type.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Sticky.ValueBool() && existingItem.Sticky.ValueBool() == false {
+							citem.Sticky = existingItem.Sticky
 						}
-						found = false
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Anycast.ValueBool() && existingItem.Anycast.ValueBool() == false {
+							citem.Anycast = existingItem.Anycast
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Pcep.ValueBool() && existingItem.Pcep.ValueBool() == false {
+							citem.Pcep = existingItem.Pcep
+						}
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "type"); value.Exists() {
-				data.CandidatePathsPreferences[i].Paths[ci].Type = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].Type = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "hop-type"); value.Exists() {
-				data.CandidatePathsPreferences[i].Paths[ci].HopType = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].HopType = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "segment-list-name"); value.Exists() {
-				data.CandidatePathsPreferences[i].Paths[ci].SegmentListName = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].SegmentListName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "disable-auto-reroute"); value.Exists() {
-				if !data.CandidatePathsPreferences[i].Paths[ci].Sticky.IsNull() {
-					data.CandidatePathsPreferences[i].Paths[ci].Sticky = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.CandidatePathsPreferences[i].Paths[ci].Sticky.IsNull() {
-					data.CandidatePathsPreferences[i].Paths[ci].Sticky = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "metric/sid-limit"); value.Exists() {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricSidLimit = types.Int64Value(value.Int())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricSidLimit = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "metric/metric-type"); value.Exists() {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricType = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricType = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "metric/metric-margin/value-type"); value.Exists() {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricMarginType = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricMarginType = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "metric/metric-margin/relative-value"); value.Exists() {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricMarginRelative = types.Int64Value(value.Int())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricMarginRelative = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "metric/metric-margin/absolute-value"); value.Exists() {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricMarginAbsolute = types.Int64Value(value.Int())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].MetricMarginAbsolute = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "anycast"); value.Exists() {
-				if !data.CandidatePathsPreferences[i].Paths[ci].Anycast.IsNull() {
-					data.CandidatePathsPreferences[i].Paths[ci].Anycast = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.CandidatePathsPreferences[i].Paths[ci].Anycast.IsNull() {
-					data.CandidatePathsPreferences[i].Paths[ci].Anycast = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "pcep"); value.Exists() {
-				if !data.CandidatePathsPreferences[i].Paths[ci].Pcep.IsNull() {
-					data.CandidatePathsPreferences[i].Paths[ci].Pcep = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.CandidatePathsPreferences[i].Paths[ci].Pcep.IsNull() {
-					data.CandidatePathsPreferences[i].Paths[ci].Pcep = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "reverse-path-segment-list-name"); value.Exists() {
-				data.CandidatePathsPreferences[i].Paths[ci].ReversePathSegmentList = types.StringValue(value.String())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].ReversePathSegmentList = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "weight"); value.Exists() {
-				data.CandidatePathsPreferences[i].Paths[ci].Weight = types.Int64Value(value.Int())
-			} else {
-				data.CandidatePathsPreferences[i].Paths[ci].Weight = types.Int64Null()
-			}
+
+				data.CandidatePathsPreferences[i].Paths = append(data.CandidatePathsPreferences[i].Paths, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "backup-ineligible"); value.Exists() {
 			data.CandidatePathsPreferences[i].BackupIneligible = types.BoolValue(true)
@@ -2137,39 +2083,39 @@ func (data *SegmentRoutingTEPolicy) updateFromBodyXML(ctx context.Context, res x
 		} else if data.CandidatePathsPreferences[i].PerFlowForwardClassDefault.IsNull() {
 			data.CandidatePathsPreferences[i].PerFlowForwardClassDefault = types.Int64Null()
 		}
-		for ci := range data.CandidatePathsPreferences[i].PerFlowForwardClasses {
-			keys := [...]string{"forward-class"}
-			keyValues := [...]string{strconv.FormatInt(data.CandidatePathsPreferences[i].PerFlowForwardClasses[ci].ForwardClass.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "per-flow/forward-class-and-colors/forward-class-and-color"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.CandidatePathsPreferences[i].PerFlowForwardClasses
+			data.CandidatePathsPreferences[i].PerFlowForwardClasses = make([]SegmentRoutingTEPolicyCandidatePathsPreferencesPerFlowForwardClasses, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "per-flow/forward-class-and-colors/forward-class-and-color").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := SegmentRoutingTEPolicyCandidatePathsPreferencesPerFlowForwardClasses{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "forward-class"); cValue.Exists() {
+					citem.ForwardClass = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "color"); cValue.Exists() {
+					citem.Color = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.ForwardClass.Equal(citem.ForwardClass) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "forward-class"); value.Exists() {
-				data.CandidatePathsPreferences[i].PerFlowForwardClasses[ci].ForwardClass = types.Int64Value(value.Int())
-			} else {
-				data.CandidatePathsPreferences[i].PerFlowForwardClasses[ci].ForwardClass = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "color"); value.Exists() {
-				data.CandidatePathsPreferences[i].PerFlowForwardClasses[ci].Color = types.Int64Value(value.Int())
-			} else {
-				data.CandidatePathsPreferences[i].PerFlowForwardClasses[ci].Color = types.Int64Null()
-			}
+				}
+
+				data.CandidatePathsPreferences[i].PerFlowForwardClasses = append(data.CandidatePathsPreferences[i].PerFlowForwardClasses, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "effective-metric/metric-value-type/metric-value"); value.Exists() {
 			data.CandidatePathsPreferences[i].EffectiveMetricValue = types.Int64Value(value.Int())
@@ -2440,12 +2386,12 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("constraints.disjoint-path.shortest-path"); cValue.Exists() {
 				item.ConstraintsDisjointPathShortestPath = types.BoolValue(cValue.Bool())
 			} else {
-				item.ConstraintsDisjointPathShortestPath = types.BoolValue(false)
+				item.ConstraintsDisjointPathShortestPath = types.BoolNull()
 			}
 			if cValue := v.Get("constraints.disjoint-path.fallback-disable"); cValue.Exists() {
 				item.ConstraintsDisjointPathFallbackDisable = types.BoolValue(cValue.Bool())
 			} else {
-				item.ConstraintsDisjointPathFallbackDisable = types.BoolValue(false)
+				item.ConstraintsDisjointPathFallbackDisable = types.BoolNull()
 			}
 			if cValue := v.Get("constraints.segment-rules.protection-type"); cValue.Exists() {
 				item.ConstraintsSegmentRulesProtectionType = types.StringValue(cValue.String())
@@ -2456,7 +2402,7 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("constraints.segment-rules.adjacency-sid-only"); cValue.Exists() {
 				item.ConstraintsSegmentRulesAdjacencySidOnly = types.BoolValue(true)
 			} else {
-				item.ConstraintsSegmentRulesAdjacencySidOnly = types.BoolValue(false)
+				item.ConstraintsSegmentRulesAdjacencySidOnly = types.BoolNull()
 			}
 			if cValue := v.Get("constraints.affinity-rules.affinity-rule"); cValue.Exists() {
 				item.ConstraintsAffinityRules = make([]SegmentRoutingTEPolicyCandidatePathsPreferencesConstraintsAffinityRules, 0)
@@ -2503,7 +2449,7 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("bidirectional.corouted"); cValue.Exists() {
 				item.BidirectionalCorouted = types.BoolValue(true)
 			} else {
-				item.BidirectionalCorouted = types.BoolValue(false)
+				item.BidirectionalCorouted = types.BoolNull()
 			}
 			if cValue := v.Get("path-infos.path-info"); cValue.Exists() {
 				item.Paths = make([]SegmentRoutingTEPolicyCandidatePathsPreferencesPaths, 0)
@@ -2521,7 +2467,7 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res gjson.Resu
 					if ccValue := cv.Get("disable-auto-reroute"); ccValue.Exists() {
 						cItem.Sticky = types.BoolValue(true)
 					} else {
-						cItem.Sticky = types.BoolValue(false)
+						cItem.Sticky = types.BoolNull()
 					}
 					if ccValue := cv.Get("metric.sid-limit"); ccValue.Exists() {
 						cItem.MetricSidLimit = types.Int64Value(ccValue.Int())
@@ -2541,12 +2487,12 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res gjson.Resu
 					if ccValue := cv.Get("anycast"); ccValue.Exists() {
 						cItem.Anycast = types.BoolValue(true)
 					} else {
-						cItem.Anycast = types.BoolValue(false)
+						cItem.Anycast = types.BoolNull()
 					}
 					if ccValue := cv.Get("pcep"); ccValue.Exists() {
 						cItem.Pcep = types.BoolValue(true)
 					} else {
-						cItem.Pcep = types.BoolValue(false)
+						cItem.Pcep = types.BoolNull()
 					}
 					if ccValue := cv.Get("reverse-path-segment-list-name"); ccValue.Exists() {
 						cItem.ReversePathSegmentList = types.StringValue(ccValue.String())
@@ -2561,12 +2507,12 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("backup-ineligible"); cValue.Exists() {
 				item.BackupIneligible = types.BoolValue(true)
 			} else {
-				item.BackupIneligible = types.BoolValue(false)
+				item.BackupIneligible = types.BoolNull()
 			}
 			if cValue := v.Get("per-flow.enable"); cValue.Exists() {
 				item.PerFlow = types.BoolValue(true)
 			} else {
-				item.PerFlow = types.BoolValue(false)
+				item.PerFlow = types.BoolNull()
 			}
 			if cValue := v.Get("per-flow.default-forward-class"); cValue.Exists() {
 				item.PerFlowForwardClassDefault = types.Int64Value(cValue.Int())
@@ -3243,10 +3189,13 @@ func (data *SegmentRoutingTEPolicy) fromBodyXML(ctx context.Context, res xmldot.
 						cItem.SegmentListName = types.StringValue(ccValue.String())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "disable-auto-reroute"); ccValue.Exists() {
+
 						cItem.Sticky = types.BoolValue(true)
+
 					} else {
-						cItem.Sticky = types.BoolNull()
+						cItem.Sticky = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "metric/sid-limit"); ccValue.Exists() {
 						cItem.MetricSidLimit = types.Int64Value(ccValue.Int())
 					}
@@ -3263,15 +3212,21 @@ func (data *SegmentRoutingTEPolicy) fromBodyXML(ctx context.Context, res xmldot.
 						cItem.MetricMarginAbsolute = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "anycast"); ccValue.Exists() {
+
 						cItem.Anycast = types.BoolValue(true)
+
 					} else {
-						cItem.Anycast = types.BoolNull()
+						cItem.Anycast = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "pcep"); ccValue.Exists() {
+
 						cItem.Pcep = types.BoolValue(true)
+
 					} else {
-						cItem.Pcep = types.BoolNull()
+						cItem.Pcep = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "reverse-path-segment-list-name"); ccValue.Exists() {
 						cItem.ReversePathSegmentList = types.StringValue(ccValue.String())
 					}

@@ -1085,7 +1085,7 @@ func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context,
 			if cValue := v.Get("liveness-detection.logging.state-change"); cValue.Exists() {
 				item.LivenessDetectionLoggingStateChange = types.BoolValue(true)
 			} else {
-				item.LivenessDetectionLoggingStateChange = types.BoolValue(false)
+				item.LivenessDetectionLoggingStateChange = types.BoolNull()
 			}
 			if cValue := v.Get("probe.tx-interval"); cValue.Exists() {
 				item.ProbeTxInterval = types.Int64Value(cValue.Int())
@@ -1093,7 +1093,7 @@ func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context,
 			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
 				item.ProbeFlowLabelExplicit = types.BoolValue(true)
 			} else {
-				item.ProbeFlowLabelExplicit = types.BoolValue(false)
+				item.ProbeFlowLabelExplicit = types.BoolNull()
 			}
 			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
 				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
@@ -1121,7 +1121,7 @@ func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context,
 			if cValue := v.Get("npu-offload"); cValue.Exists() {
 				item.NpuOffload = types.BoolValue(true)
 			} else {
-				item.NpuOffload = types.BoolValue(false)
+				item.NpuOffload = types.BoolNull()
 			}
 			data.Profiles = append(data.Profiles, item)
 			return true

@@ -1024,18 +1024,18 @@ func (data InterfaceBVI) toBody(ctx context.Context) string {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ptp-cfg:ptp.interop.ingress-conversion.clock-class.default", strconv.FormatInt(data.PtpInteropIngressConversionClockClassDefault.ValueInt64(), 10))
 	}
 	if len(data.ServicePolicyInput) > 0 {
-		body, _ = sjson.Set(body, "", []interface{}{})
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input", []interface{}{})
 		for index, item := range data.ServicePolicyInput {
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", item.Name.ValueString())
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input"+"."+strconv.Itoa(index)+"."+"", item.Name.ValueString())
 			}
 		}
 	}
 	if len(data.ServicePolicyOutput) > 0 {
-		body, _ = sjson.Set(body, "", []interface{}{})
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.output", []interface{}{})
 		for index, item := range data.ServicePolicyOutput {
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", item.Name.ValueString())
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.output"+"."+strconv.Itoa(index)+"."+"", item.Name.ValueString())
 			}
 		}
 	}
@@ -1372,7 +1372,7 @@ func (data *InterfaceBVI) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.ServicePolicyInput[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "").ForEach(
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1401,7 +1401,7 @@ func (data *InterfaceBVI) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.ServicePolicyOutput[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "").ForEach(
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.output").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3266,7 +3266,7 @@ func (data InterfaceBVI) toBodyXML(ctx context.Context) string {
 				cBody = helpers.SetFromXPath(cBody, "", item.Name.ValueString())
 			}
 			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"", cBody.Res())
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input", cBody.Res())
 		}
 	}
 	if len(data.ServicePolicyOutput) > 0 {
@@ -3277,7 +3277,7 @@ func (data InterfaceBVI) toBodyXML(ctx context.Context) string {
 				cBody = helpers.SetFromXPath(cBody, "", item.Name.ValueString())
 			}
 			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"", cBody.Res())
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output", cBody.Res())
 		}
 	}
 	if !data.Shutdown.IsNull() && !data.Shutdown.IsUnknown() {
@@ -4166,7 +4166,7 @@ func (data *InterfaceBVI) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 		keyValues := [...]string{data.ServicePolicyInput[i].Name.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4195,7 +4195,7 @@ func (data *InterfaceBVI) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 		keyValues := [...]string{data.ServicePolicyOutput[i].Name.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5747,7 +5747,7 @@ func (data *InterfaceBVI) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "dampening.decay-half-life.reuse-threshold.suppress-threshold.max-suppress-time.value"); value.Exists() {
 		data.DampeningMaxSuppressTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input"); value.Exists() {
 		data.ServicePolicyInput = make([]InterfaceBVIServicePolicyInput, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := InterfaceBVIServicePolicyInput{}
@@ -5758,7 +5758,7 @@ func (data *InterfaceBVI) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.output"); value.Exists() {
 		data.ServicePolicyOutput = make([]InterfaceBVIServicePolicyOutput, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := InterfaceBVIServicePolicyOutput{}
@@ -6329,7 +6329,7 @@ func (data *InterfaceBVI) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			data.PtpSlaveIpv4s = append(data.PtpSlaveIpv4s, item)
 			return true
@@ -6345,7 +6345,7 @@ func (data *InterfaceBVI) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			data.PtpSlaveIpv6s = append(data.PtpSlaveIpv6s, item)
 			return true
@@ -6361,7 +6361,7 @@ func (data *InterfaceBVI) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			data.PtpSlaveEthernets = append(data.PtpSlaveEthernets, item)
 			return true
@@ -6383,17 +6383,17 @@ func (data *InterfaceBVI) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolValue(false)
+				item.Multicast = types.BoolNull()
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolValue(false)
+				item.MulticastMixed = types.BoolNull()
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -6401,17 +6401,17 @@ func (data *InterfaceBVI) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolValue(false)
+				item.Nanoseconds = types.BoolNull()
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolValue(false)
+				item.Microseconds = types.BoolNull()
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolValue(false)
+				item.Milliseconds = types.BoolNull()
 			}
 			data.PtpMasterIpv4s = append(data.PtpMasterIpv4s, item)
 			return true
@@ -6433,17 +6433,17 @@ func (data *InterfaceBVI) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolValue(false)
+				item.Multicast = types.BoolNull()
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolValue(false)
+				item.MulticastMixed = types.BoolNull()
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -6451,17 +6451,17 @@ func (data *InterfaceBVI) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolValue(false)
+				item.Nanoseconds = types.BoolNull()
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolValue(false)
+				item.Microseconds = types.BoolNull()
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolValue(false)
+				item.Milliseconds = types.BoolNull()
 			}
 			data.PtpMasterIpv6s = append(data.PtpMasterIpv6s, item)
 			return true
@@ -6483,17 +6483,17 @@ func (data *InterfaceBVI) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolValue(false)
+				item.Multicast = types.BoolNull()
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolValue(false)
+				item.MulticastMixed = types.BoolNull()
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -6501,17 +6501,17 @@ func (data *InterfaceBVI) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolValue(false)
+				item.Nanoseconds = types.BoolNull()
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolValue(false)
+				item.Microseconds = types.BoolNull()
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolValue(false)
+				item.Milliseconds = types.BoolNull()
 			}
 			data.PtpMasterEthernets = append(data.PtpMasterEthernets, item)
 			return true
@@ -6635,7 +6635,7 @@ func (data *InterfaceBVIData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "dampening.decay-half-life.reuse-threshold.suppress-threshold.max-suppress-time.value"); value.Exists() {
 		data.DampeningMaxSuppressTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input"); value.Exists() {
 		data.ServicePolicyInput = make([]InterfaceBVIServicePolicyInput, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := InterfaceBVIServicePolicyInput{}
@@ -6646,7 +6646,7 @@ func (data *InterfaceBVIData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.output"); value.Exists() {
 		data.ServicePolicyOutput = make([]InterfaceBVIServicePolicyOutput, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := InterfaceBVIServicePolicyOutput{}
@@ -7519,7 +7519,7 @@ func (data *InterfaceBVI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/decay-half-life/reuse-threshold/suppress-threshold/max-suppress-time/value"); value.Exists() {
 		data.DampeningMaxSuppressTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input"); value.Exists() {
 		data.ServicePolicyInput = make([]InterfaceBVIServicePolicyInput, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := InterfaceBVIServicePolicyInput{}
@@ -7530,7 +7530,7 @@ func (data *InterfaceBVI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output"); value.Exists() {
 		data.ServicePolicyOutput = make([]InterfaceBVIServicePolicyOutput, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := InterfaceBVIServicePolicyOutput{}
@@ -8403,7 +8403,7 @@ func (data *InterfaceBVIData) fromBodyXML(ctx context.Context, res xmldot.Result
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/decay-half-life/reuse-threshold/suppress-threshold/max-suppress-time/value"); value.Exists() {
 		data.DampeningMaxSuppressTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input"); value.Exists() {
 		data.ServicePolicyInput = make([]InterfaceBVIServicePolicyInput, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := InterfaceBVIServicePolicyInput{}
@@ -8414,7 +8414,7 @@ func (data *InterfaceBVIData) fromBodyXML(ctx context.Context, res xmldot.Result
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output"); value.Exists() {
 		data.ServicePolicyOutput = make([]InterfaceBVIServicePolicyOutput, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := InterfaceBVIServicePolicyOutput{}
@@ -10182,7 +10182,7 @@ func (data *InterfaceBVI) getDeletedItems(ctx context.Context, state InterfaceBV
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.ServicePolicyInput {
@@ -10212,7 +10212,7 @@ func (data *InterfaceBVI) getDeletedItems(ctx context.Context, state InterfaceBV
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input%v", state.getPath(), keyString))
 		}
 	}
 	if !state.DampeningDecayHalfLife.IsNull() && data.DampeningDecayHalfLife.IsNull() {
@@ -11330,12 +11330,12 @@ func (data *InterfaceBVI) getDeletePaths(ctx context.Context) []string {
 	for i := range data.ServicePolicyOutput {
 		keyValues := [...]string{data.ServicePolicyOutput[i].Name.ValueString()}
 
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.ServicePolicyInput {
 		keyValues := [...]string{data.ServicePolicyInput[i].Name.ValueString()}
 
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.DampeningDecayHalfLife.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/dampening", data.getPath()))
@@ -13394,7 +13394,7 @@ func (data *InterfaceBVI) addDeletedItemsXML(ctx context.Context, state Interfac
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v", predicates))
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output%v", predicates))
 		}
 	}
 	for i := range state.ServicePolicyInput {
@@ -13424,7 +13424,7 @@ func (data *InterfaceBVI) addDeletedItemsXML(ctx context.Context, state Interfac
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v", predicates))
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input%v", predicates))
 		}
 	}
 	if !state.DampeningDecayHalfLife.IsNull() && data.DampeningDecayHalfLife.IsNull() {
@@ -14008,7 +14008,7 @@ func (data *InterfaceBVI) addDeletePathsXML(ctx context.Context, body string) st
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
 		}
 
-		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/%v", predicates))
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output%v", predicates))
 	}
 	for i := range data.ServicePolicyInput {
 		keys := [...]string{""}
@@ -14018,7 +14018,7 @@ func (data *InterfaceBVI) addDeletePathsXML(ctx context.Context, body string) st
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
 		}
 
-		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/%v", predicates))
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input%v", predicates))
 	}
 	if !data.DampeningDecayHalfLife.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/dampening")

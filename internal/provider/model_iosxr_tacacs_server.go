@@ -444,7 +444,7 @@ func (data *TACACSServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("single-connection"); cValue.Exists() {
 				item.SingleConnection = types.BoolValue(true)
 			} else {
-				item.SingleConnection = types.BoolValue(false)
+				item.SingleConnection = types.BoolNull()
 			}
 			if cValue := v.Get("single-connection-idle-timeout"); cValue.Exists() {
 				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())

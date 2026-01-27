@@ -1980,34 +1980,33 @@ func (data *RouterOSPFVRFArea) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.VirtualLinks[i].TransmitDelay = types.Int64Null()
 		}
-		for ci := range data.VirtualLinks[i].MessageDigestKeys {
-			keys := [...]string{"message-digest-key-id"}
-			keyValues := [...]string{strconv.FormatInt(data.VirtualLinks[i].MessageDigestKeys[ci].KeyId.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("message-digest-keys.message-digest-key"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.VirtualLinks[i].MessageDigestKeys
+			data.VirtualLinks[i].MessageDigestKeys = make([]RouterOSPFVRFAreaVirtualLinksMessageDigestKeys, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterOSPFVRFAreaVirtualLinksMessageDigestKeys{}
+				if cValue := cr.Get("message-digest-key-id"); cValue.Exists() {
+					citem.KeyId = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("message-digest-keys.message-digest-key").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.KeyId.Equal(citem.KeyId) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("message-digest-key-id"); value.Exists() {
-				data.VirtualLinks[i].MessageDigestKeys[ci].KeyId = types.Int64Value(value.Int())
-			} else if data.VirtualLinks[i].MessageDigestKeys[ci].KeyId.IsNull() {
-				data.VirtualLinks[i].MessageDigestKeys[ci].KeyId = types.Int64Null()
-			}
+				}
+
+				data.VirtualLinks[i].MessageDigestKeys = append(data.VirtualLinks[i].MessageDigestKeys, citem)
+				return true
+			})
 		}
 		if value := r.Get("authentication"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -2145,34 +2144,33 @@ func (data *RouterOSPFVRFArea) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.ShamLinks[i].TransmitDelay = types.Int64Null()
 		}
-		for ci := range data.ShamLinks[i].MessageDigestKeys {
-			keys := [...]string{"message-digest-key-id"}
-			keyValues := [...]string{strconv.FormatInt(data.ShamLinks[i].MessageDigestKeys[ci].KeyId.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("message-digest-keys.message-digest-key"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.ShamLinks[i].MessageDigestKeys
+			data.ShamLinks[i].MessageDigestKeys = make([]RouterOSPFVRFAreaShamLinksMessageDigestKeys, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterOSPFVRFAreaShamLinksMessageDigestKeys{}
+				if cValue := cr.Get("message-digest-key-id"); cValue.Exists() {
+					citem.KeyId = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("message-digest-keys.message-digest-key").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.KeyId.Equal(citem.KeyId) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("message-digest-key-id"); value.Exists() {
-				data.ShamLinks[i].MessageDigestKeys[ci].KeyId = types.Int64Value(value.Int())
-			} else if data.ShamLinks[i].MessageDigestKeys[ci].KeyId.IsNull() {
-				data.ShamLinks[i].MessageDigestKeys[ci].KeyId = types.Int64Null()
-			}
+				}
+
+				data.ShamLinks[i].MessageDigestKeys = append(data.ShamLinks[i].MessageDigestKeys, citem)
+				return true
+			})
 		}
 		if value := r.Get("authentication"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -2276,12 +2274,12 @@ func (data *RouterOSPFVRFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("advertise"); cValue.Exists() {
 				item.Advertise = types.BoolValue(true)
 			} else {
-				item.Advertise = types.BoolValue(false)
+				item.Advertise = types.BoolNull()
 			}
 			if cValue := v.Get("not-advertise"); cValue.Exists() {
 				item.NotAdvertise = types.BoolValue(true)
 			} else {
-				item.NotAdvertise = types.BoolValue(false)
+				item.NotAdvertise = types.BoolNull()
 			}
 			data.Ranges = append(data.Ranges, item)
 			return true
@@ -2775,17 +2773,17 @@ func (data *RouterOSPFVRFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication"); cValue.Exists() {
 				item.Authentication = types.BoolValue(true)
 			} else {
-				item.Authentication = types.BoolValue(false)
+				item.Authentication = types.BoolNull()
 			}
 			if cValue := v.Get("authentication.message-digest"); cValue.Exists() {
 				item.AuthenticationMessageDigest = types.BoolValue(true)
 			} else {
-				item.AuthenticationMessageDigest = types.BoolValue(false)
+				item.AuthenticationMessageDigest = types.BoolNull()
 			}
 			if cValue := v.Get("authentication.keychain"); cValue.Exists() {
 				item.AuthenticationKeychain = types.BoolValue(true)
 			} else {
-				item.AuthenticationKeychain = types.BoolValue(false)
+				item.AuthenticationKeychain = types.BoolNull()
 			}
 			if cValue := v.Get("authentication.keychain-name"); cValue.Exists() {
 				item.AuthenticationKeychainName = types.StringValue(cValue.String())
@@ -2793,7 +2791,7 @@ func (data *RouterOSPFVRFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication.null"); cValue.Exists() {
 				item.AuthenticationNull = types.BoolValue(true)
 			} else {
-				item.AuthenticationNull = types.BoolValue(false)
+				item.AuthenticationNull = types.BoolNull()
 			}
 			data.VirtualLinks = append(data.VirtualLinks, item)
 			return true
@@ -2838,17 +2836,17 @@ func (data *RouterOSPFVRFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication"); cValue.Exists() {
 				item.Authentication = types.BoolValue(true)
 			} else {
-				item.Authentication = types.BoolValue(false)
+				item.Authentication = types.BoolNull()
 			}
 			if cValue := v.Get("authentication.message-digest"); cValue.Exists() {
 				item.AuthenticationMessageDigest = types.BoolValue(true)
 			} else {
-				item.AuthenticationMessageDigest = types.BoolValue(false)
+				item.AuthenticationMessageDigest = types.BoolNull()
 			}
 			if cValue := v.Get("authentication.keychain"); cValue.Exists() {
 				item.AuthenticationKeychain = types.BoolValue(true)
 			} else {
-				item.AuthenticationKeychain = types.BoolValue(false)
+				item.AuthenticationKeychain = types.BoolNull()
 			}
 			if cValue := v.Get("authentication.keychain-name"); cValue.Exists() {
 				item.AuthenticationKeychainName = types.StringValue(cValue.String())
@@ -2856,7 +2854,7 @@ func (data *RouterOSPFVRFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication.null"); cValue.Exists() {
 				item.AuthenticationNull = types.BoolValue(true)
 			} else {
-				item.AuthenticationNull = types.BoolValue(false)
+				item.AuthenticationNull = types.BoolNull()
 			}
 			data.ShamLinks = append(data.ShamLinks, item)
 			return true
@@ -5543,7 +5541,9 @@ func (data RouterOSPFVRFArea) toBodyXML(ctx context.Context) string {
 			if len(item.MessageDigestKeys) > 0 {
 				for _, citem := range item.MessageDigestKeys {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.KeyId.IsNull() && !citem.KeyId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "message-digest-key-id", strconv.FormatInt(citem.KeyId.ValueInt64(), 10))
+					}
 					if !citem.Md5Encrypted.IsNull() && !citem.Md5Encrypted.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "md5/encrypted", citem.Md5Encrypted.ValueString())
 					}
@@ -5608,7 +5608,9 @@ func (data RouterOSPFVRFArea) toBodyXML(ctx context.Context) string {
 			if len(item.MessageDigestKeys) > 0 {
 				for _, citem := range item.MessageDigestKeys {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.KeyId.IsNull() && !citem.KeyId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "message-digest-key-id", strconv.FormatInt(citem.KeyId.ValueInt64(), 10))
+					}
 					if !citem.Md5Encrypted.IsNull() && !citem.Md5Encrypted.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "md5/encrypted", citem.Md5Encrypted.ValueString())
 					}
@@ -6551,34 +6553,36 @@ func (data *RouterOSPFVRFArea) updateFromBodyXML(ctx context.Context, res xmldot
 		} else if data.VirtualLinks[i].TransmitDelay.IsNull() {
 			data.VirtualLinks[i].TransmitDelay = types.Int64Null()
 		}
-		for ci := range data.VirtualLinks[i].MessageDigestKeys {
-			keys := [...]string{"message-digest-key-id"}
-			keyValues := [...]string{strconv.FormatInt(data.VirtualLinks[i].MessageDigestKeys[ci].KeyId.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "message-digest-keys/message-digest-key"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.VirtualLinks[i].MessageDigestKeys
+			data.VirtualLinks[i].MessageDigestKeys = make([]RouterOSPFVRFAreaVirtualLinksMessageDigestKeys, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "message-digest-keys/message-digest-key").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterOSPFVRFAreaVirtualLinksMessageDigestKeys{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "message-digest-key-id"); cValue.Exists() {
+					citem.KeyId = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.KeyId.Equal(citem.KeyId) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "message-digest-key-id"); value.Exists() {
-				data.VirtualLinks[i].MessageDigestKeys[ci].KeyId = types.Int64Value(value.Int())
-			} else {
-				data.VirtualLinks[i].MessageDigestKeys[ci].KeyId = types.Int64Null()
-			}
+				}
+
+				data.VirtualLinks[i].MessageDigestKeys = append(data.VirtualLinks[i].MessageDigestKeys, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "authentication"); value.Exists() {
 			data.VirtualLinks[i].Authentication = types.BoolValue(true)
@@ -6680,34 +6684,36 @@ func (data *RouterOSPFVRFArea) updateFromBodyXML(ctx context.Context, res xmldot
 		} else if data.ShamLinks[i].TransmitDelay.IsNull() {
 			data.ShamLinks[i].TransmitDelay = types.Int64Null()
 		}
-		for ci := range data.ShamLinks[i].MessageDigestKeys {
-			keys := [...]string{"message-digest-key-id"}
-			keyValues := [...]string{strconv.FormatInt(data.ShamLinks[i].MessageDigestKeys[ci].KeyId.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "message-digest-keys/message-digest-key"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.ShamLinks[i].MessageDigestKeys
+			data.ShamLinks[i].MessageDigestKeys = make([]RouterOSPFVRFAreaShamLinksMessageDigestKeys, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "message-digest-keys/message-digest-key").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterOSPFVRFAreaShamLinksMessageDigestKeys{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "message-digest-key-id"); cValue.Exists() {
+					citem.KeyId = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.KeyId.Equal(citem.KeyId) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "message-digest-key-id"); value.Exists() {
-				data.ShamLinks[i].MessageDigestKeys[ci].KeyId = types.Int64Value(value.Int())
-			} else {
-				data.ShamLinks[i].MessageDigestKeys[ci].KeyId = types.Int64Null()
-			}
+				}
+
+				data.ShamLinks[i].MessageDigestKeys = append(data.ShamLinks[i].MessageDigestKeys, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "authentication"); value.Exists() {
 			data.ShamLinks[i].Authentication = types.BoolValue(true)

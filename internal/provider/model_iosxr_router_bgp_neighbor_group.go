@@ -595,11 +595,11 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 		}
 	}
 	if !data.Password.IsNull() && !data.Password.IsUnknown() {
-		body, _ = sjson.Set(body, "", data.Password.ValueString())
+		body, _ = sjson.Set(body, "password.encrypted", data.Password.ValueString())
 	}
 	if !data.PasswordInheritanceDisable.IsNull() && !data.PasswordInheritanceDisable.IsUnknown() {
 		if data.PasswordInheritanceDisable.ValueBool() {
-			body, _ = sjson.Set(body, "", []interface{}{nil})
+			body, _ = sjson.Set(body, "password.inheritance-disable", []interface{}{nil})
 		}
 	}
 	if !data.ReceiveBufferSize.IsNull() && !data.ReceiveBufferSize.IsUnknown() {
@@ -1709,7 +1709,7 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 			data.LocalAsNoPrependReplaceAsDualAs = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "password.inheritance-disable"); value.Exists() {
 		if !data.PasswordInheritanceDisable.IsNull() {
 			data.PasswordInheritanceDisable = types.BoolValue(true)
 		}
@@ -3961,7 +3961,7 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 	} else {
 		data.LocalAsNoPrependReplaceAsDualAs = types.BoolNull()
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "password.inheritance-disable"); value.Exists() {
 		data.PasswordInheritanceDisable = types.BoolValue(true)
 	} else {
 		data.PasswordInheritanceDisable = types.BoolNull()
@@ -4346,7 +4346,7 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("multipath"); cValue.Exists() {
 				item.Multipath = types.BoolValue(true)
 			} else {
-				item.Multipath = types.BoolValue(false)
+				item.Multipath = types.BoolNull()
 			}
 			if cValue := v.Get("use.af-group"); cValue.Exists() {
 				item.UseAfGroup = types.StringValue(cValue.String())
@@ -4357,27 +4357,27 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("additional-paths.send"); cValue.Exists() {
 				item.AdditionalPathsSend = types.BoolValue(true)
 			} else {
-				item.AdditionalPathsSend = types.BoolValue(false)
+				item.AdditionalPathsSend = types.BoolNull()
 			}
 			if cValue := v.Get("additional-paths.send.disable"); cValue.Exists() {
 				item.AdditionalPathsSendDisable = types.BoolValue(true)
 			} else {
-				item.AdditionalPathsSendDisable = types.BoolValue(false)
+				item.AdditionalPathsSendDisable = types.BoolNull()
 			}
 			if cValue := v.Get("additional-paths.receive"); cValue.Exists() {
 				item.AdditionalPathsReceive = types.BoolValue(true)
 			} else {
-				item.AdditionalPathsReceive = types.BoolValue(false)
+				item.AdditionalPathsReceive = types.BoolNull()
 			}
 			if cValue := v.Get("additional-paths.receive.disable"); cValue.Exists() {
 				item.AdditionalPathsReceiveDisable = types.BoolValue(true)
 			} else {
-				item.AdditionalPathsReceiveDisable = types.BoolValue(false)
+				item.AdditionalPathsReceiveDisable = types.BoolNull()
 			}
 			if cValue := v.Get("default-originate"); cValue.Exists() {
 				item.DefaultOriginate = types.BoolValue(true)
 			} else {
-				item.DefaultOriginate = types.BoolValue(false)
+				item.DefaultOriginate = types.BoolNull()
 			}
 			if cValue := v.Get("default-originate.route-policy"); cValue.Exists() {
 				item.DefaultOriginateRoutePolicy = types.StringValue(cValue.String())
@@ -4385,7 +4385,7 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("default-originate.inheritance-disable"); cValue.Exists() {
 				item.DefaultOriginateInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.DefaultOriginateInheritanceDisable = types.BoolValue(false)
+				item.DefaultOriginateInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("maximum-prefix.maximum-prefix-number"); cValue.Exists() {
 				item.MaximumPrefixLimit = types.Int64Value(cValue.Int())
@@ -4399,37 +4399,37 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("maximum-prefix.discard-extra-paths"); cValue.Exists() {
 				item.MaximumPrefixDiscardExtraPaths = types.BoolValue(true)
 			} else {
-				item.MaximumPrefixDiscardExtraPaths = types.BoolValue(false)
+				item.MaximumPrefixDiscardExtraPaths = types.BoolNull()
 			}
 			if cValue := v.Get("maximum-prefix.warning-only"); cValue.Exists() {
 				item.MaximumPrefixWarningOnly = types.BoolValue(true)
 			} else {
-				item.MaximumPrefixWarningOnly = types.BoolValue(false)
+				item.MaximumPrefixWarningOnly = types.BoolNull()
 			}
 			if cValue := v.Get("next-hop-self"); cValue.Exists() {
 				item.NextHopSelf = types.BoolValue(true)
 			} else {
-				item.NextHopSelf = types.BoolValue(false)
+				item.NextHopSelf = types.BoolNull()
 			}
 			if cValue := v.Get("next-hop-self.inheritance-disable"); cValue.Exists() {
 				item.NextHopSelfInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.NextHopSelfInheritanceDisable = types.BoolValue(false)
+				item.NextHopSelfInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("next-hop-unchanged.next-hop-unchanged-enable"); cValue.Exists() {
 				item.NextHopUnchanged = types.BoolValue(true)
 			} else {
-				item.NextHopUnchanged = types.BoolValue(false)
+				item.NextHopUnchanged = types.BoolNull()
 			}
 			if cValue := v.Get("next-hop-unchanged.multipath"); cValue.Exists() {
 				item.NextHopUnchangedMultipath = types.BoolValue(true)
 			} else {
-				item.NextHopUnchangedMultipath = types.BoolValue(false)
+				item.NextHopUnchangedMultipath = types.BoolNull()
 			}
 			if cValue := v.Get("next-hop-unchanged.next-hop-unchanged-enable.inheritance-disable"); cValue.Exists() {
 				item.NextHopUnchangedInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.NextHopUnchangedInheritanceDisable = types.BoolValue(false)
+				item.NextHopUnchangedInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("route-policy.in"); cValue.Exists() {
 				item.RoutePolicyIn = types.StringValue(cValue.String())
@@ -4443,177 +4443,177 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("cluster-id.allow-equal"); cValue.Exists() {
 				item.ClusterIdAllowEqual = types.BoolValue(true)
 			} else {
-				item.ClusterIdAllowEqual = types.BoolValue(false)
+				item.ClusterIdAllowEqual = types.BoolNull()
 			}
 			if cValue := v.Get("cluster-id.allow-equal.disable"); cValue.Exists() {
 				item.ClusterIdAllowEqualDisable = types.BoolValue(true)
 			} else {
-				item.ClusterIdAllowEqualDisable = types.BoolValue(false)
+				item.ClusterIdAllowEqualDisable = types.BoolNull()
 			}
 			if cValue := v.Get("replace-private-as"); cValue.Exists() {
 				item.ReplacePrivateAs = types.BoolValue(true)
 			} else {
-				item.ReplacePrivateAs = types.BoolValue(false)
+				item.ReplacePrivateAs = types.BoolNull()
 			}
 			if cValue := v.Get("replace-private-as.internal"); cValue.Exists() {
 				item.ReplacePrivateAsInternal = types.BoolValue(true)
 			} else {
-				item.ReplacePrivateAsInternal = types.BoolValue(false)
+				item.ReplacePrivateAsInternal = types.BoolNull()
 			}
 			if cValue := v.Get("remove-private-as.inbound"); cValue.Exists() {
 				item.RemovePrivateAsInbound = types.BoolValue(true)
 			} else {
-				item.RemovePrivateAsInbound = types.BoolValue(false)
+				item.RemovePrivateAsInbound = types.BoolNull()
 			}
 			if cValue := v.Get("remove-private-as.inbound.entire-aspath"); cValue.Exists() {
 				item.RemovePrivateAsInboundEntireAspath = types.BoolValue(true)
 			} else {
-				item.RemovePrivateAsInboundEntireAspath = types.BoolValue(false)
+				item.RemovePrivateAsInboundEntireAspath = types.BoolNull()
 			}
 			if cValue := v.Get("remove-private-as.inbound.inheritance-disable"); cValue.Exists() {
 				item.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(false)
+				item.RemovePrivateAsInboundInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("remove-private-as.remove-private-as-outbound"); cValue.Exists() {
 				item.RemovePrivateAs = types.BoolValue(true)
 			} else {
-				item.RemovePrivateAs = types.BoolValue(false)
+				item.RemovePrivateAs = types.BoolNull()
 			}
 			if cValue := v.Get("remove-private-as.remove-private-as-outbound.entire-aspath"); cValue.Exists() {
 				item.RemovePrivateAsEntireAspath = types.BoolValue(true)
 			} else {
-				item.RemovePrivateAsEntireAspath = types.BoolValue(false)
+				item.RemovePrivateAsEntireAspath = types.BoolNull()
 			}
 			if cValue := v.Get("remove-private-as.remove-private-as-outbound.internal"); cValue.Exists() {
 				item.RemovePrivateAsInternal = types.BoolValue(true)
 			} else {
-				item.RemovePrivateAsInternal = types.BoolValue(false)
+				item.RemovePrivateAsInternal = types.BoolNull()
 			}
 			if cValue := v.Get("route-reflector-client"); cValue.Exists() {
 				item.RouteReflectorClient = types.BoolValue(true)
 			} else {
-				item.RouteReflectorClient = types.BoolValue(false)
+				item.RouteReflectorClient = types.BoolNull()
 			}
 			if cValue := v.Get("route-reflector-client.inheritance-disable"); cValue.Exists() {
 				item.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
+				item.RouteReflectorClientInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("send-community-ebgp"); cValue.Exists() {
 				item.SendCommunityEbgp = types.BoolValue(true)
 			} else {
-				item.SendCommunityEbgp = types.BoolValue(false)
+				item.SendCommunityEbgp = types.BoolNull()
 			}
 			if cValue := v.Get("send-community-ebgp.inheritance-disable"); cValue.Exists() {
 				item.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
+				item.SendCommunityEbgpInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("send-community-gshut-ebgp"); cValue.Exists() {
 				item.SendCommunityGshutEbgp = types.BoolValue(true)
 			} else {
-				item.SendCommunityGshutEbgp = types.BoolValue(false)
+				item.SendCommunityGshutEbgp = types.BoolNull()
 			}
 			if cValue := v.Get("send-community-gshut-ebgp.inheritance-disable"); cValue.Exists() {
 				item.SendCommunityGshutEbgpInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.SendCommunityGshutEbgpInheritanceDisable = types.BoolValue(false)
+				item.SendCommunityGshutEbgpInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("send-extended-community-ebgp"); cValue.Exists() {
 				item.SendExtendedCommunityEbgp = types.BoolValue(true)
 			} else {
-				item.SendExtendedCommunityEbgp = types.BoolValue(false)
+				item.SendExtendedCommunityEbgp = types.BoolNull()
 			}
 			if cValue := v.Get("send-extended-community-ebgp.inheritance-disable"); cValue.Exists() {
 				item.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(false)
+				item.SendExtendedCommunityEbgpInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("soft-reconfiguration.inbound"); cValue.Exists() {
 				item.SoftReconfigurationInbound = types.BoolValue(true)
 			} else {
-				item.SoftReconfigurationInbound = types.BoolValue(false)
+				item.SoftReconfigurationInbound = types.BoolNull()
 			}
 			if cValue := v.Get("soft-reconfiguration.inbound.always"); cValue.Exists() {
 				item.SoftReconfigurationInboundAlways = types.BoolValue(true)
 			} else {
-				item.SoftReconfigurationInboundAlways = types.BoolValue(false)
+				item.SoftReconfigurationInboundAlways = types.BoolNull()
 			}
 			if cValue := v.Get("update.out.originator-loopcheck"); cValue.Exists() {
 				item.UpdateOutOriginatorLoopcheck = types.BoolValue(true)
 			} else {
-				item.UpdateOutOriginatorLoopcheck = types.BoolValue(false)
+				item.UpdateOutOriginatorLoopcheck = types.BoolNull()
 			}
 			if cValue := v.Get("update.out.originator-loopcheck.disable"); cValue.Exists() {
 				item.UpdateOutOriginatorLoopcheckDisable = types.BoolValue(true)
 			} else {
-				item.UpdateOutOriginatorLoopcheckDisable = types.BoolValue(false)
+				item.UpdateOutOriginatorLoopcheckDisable = types.BoolNull()
 			}
 			if cValue := v.Get("advertise.vpnv4.unicast.enable"); cValue.Exists() {
 				item.AdvertiseVpnv4Unicast = types.BoolValue(true)
 			} else {
-				item.AdvertiseVpnv4Unicast = types.BoolValue(false)
+				item.AdvertiseVpnv4Unicast = types.BoolNull()
 			}
 			if cValue := v.Get("advertise.vpnv4.unicast.enable.re-originated"); cValue.Exists() {
 				item.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(true)
 			} else {
-				item.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(false)
+				item.AdvertiseVpnv4UnicastReOriginated = types.BoolNull()
 			}
 			if cValue := v.Get("advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); cValue.Exists() {
 				item.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(true)
 			} else {
-				item.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(false)
+				item.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolNull()
 			}
 			if cValue := v.Get("advertise.vpnv6.unicast.enable"); cValue.Exists() {
 				item.AdvertiseVpnv6Unicast = types.BoolValue(true)
 			} else {
-				item.AdvertiseVpnv6Unicast = types.BoolValue(false)
+				item.AdvertiseVpnv6Unicast = types.BoolNull()
 			}
 			if cValue := v.Get("advertise.vpnv6.unicast.enable.re-originated"); cValue.Exists() {
 				item.AdvertiseVpnv6UnicastReOriginated = types.BoolValue(true)
 			} else {
-				item.AdvertiseVpnv6UnicastReOriginated = types.BoolValue(false)
+				item.AdvertiseVpnv6UnicastReOriginated = types.BoolNull()
 			}
 			if cValue := v.Get("advertise.vpnv6.unicast.enable.re-originated.stitching-rt"); cValue.Exists() {
 				item.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolValue(true)
 			} else {
-				item.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolValue(false)
+				item.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolNull()
 			}
 			if cValue := v.Get("advertise.l2vpn.evpn.re-originated"); cValue.Exists() {
 				item.AdvertiseL2vpnEvpnReOriginated = types.BoolValue(true)
 			} else {
-				item.AdvertiseL2vpnEvpnReOriginated = types.BoolValue(false)
+				item.AdvertiseL2vpnEvpnReOriginated = types.BoolNull()
 			}
 			if cValue := v.Get("advertise.l2vpn.evpn.re-originated.stitching-rt"); cValue.Exists() {
 				item.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolValue(true)
 			} else {
-				item.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolValue(false)
+				item.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolNull()
 			}
 			if cValue := v.Get("segment-routing.srv6.prefix-sid-type4"); cValue.Exists() {
 				item.SegmentRoutingSrv6PrefixSidType4 = types.BoolValue(true)
 			} else {
-				item.SegmentRoutingSrv6PrefixSidType4 = types.BoolValue(false)
+				item.SegmentRoutingSrv6PrefixSidType4 = types.BoolNull()
 			}
 			if cValue := v.Get("import.stitching-rt"); cValue.Exists() {
 				item.ImportStitchingRt = types.BoolValue(true)
 			} else {
-				item.ImportStitchingRt = types.BoolValue(false)
+				item.ImportStitchingRt = types.BoolNull()
 			}
 			if cValue := v.Get("import.stitching-rt.re-originate"); cValue.Exists() {
 				item.ImportStitchingRtReOriginate = types.BoolValue(true)
 			} else {
-				item.ImportStitchingRtReOriginate = types.BoolValue(false)
+				item.ImportStitchingRtReOriginate = types.BoolNull()
 			}
 			if cValue := v.Get("import.stitching-rt.re-originate.stitching-rt"); cValue.Exists() {
 				item.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(true)
 			} else {
-				item.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(false)
+				item.ImportStitchingRtReOriginateStitchingRt = types.BoolNull()
 			}
 			if cValue := v.Get("import.re-originate"); cValue.Exists() {
 				item.ImportReOriginate = types.BoolValue(true)
 			} else {
-				item.ImportReOriginate = types.BoolValue(false)
+				item.ImportReOriginate = types.BoolNull()
 			}
 			if cValue := v.Get("allowas-in.number-of-occurrences-of-as-number"); cValue.Exists() {
 				item.AllowasIn = types.Int64Value(cValue.Int())
@@ -4642,37 +4642,37 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("as-override"); cValue.Exists() {
 				item.AsOverride = types.BoolValue(true)
 			} else {
-				item.AsOverride = types.BoolValue(false)
+				item.AsOverride = types.BoolNull()
 			}
 			if cValue := v.Get("as-override.inheritance-disable"); cValue.Exists() {
 				item.AsOverrideInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.AsOverrideInheritanceDisable = types.BoolValue(false)
+				item.AsOverrideInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("aigp.enable"); cValue.Exists() {
 				item.Aigp = types.BoolValue(true)
 			} else {
-				item.Aigp = types.BoolValue(false)
+				item.Aigp = types.BoolNull()
 			}
 			if cValue := v.Get("aigp.enable.disable"); cValue.Exists() {
 				item.AigpDisable = types.BoolValue(true)
 			} else {
-				item.AigpDisable = types.BoolValue(false)
+				item.AigpDisable = types.BoolNull()
 			}
 			if cValue := v.Get("aigp.send.med"); cValue.Exists() {
 				item.AigpSendMed = types.BoolValue(true)
 			} else {
-				item.AigpSendMed = types.BoolValue(false)
+				item.AigpSendMed = types.BoolNull()
 			}
 			if cValue := v.Get("aigp.send.med.disable"); cValue.Exists() {
 				item.AigpSendMedDisable = types.BoolValue(true)
 			} else {
-				item.AigpSendMedDisable = types.BoolValue(false)
+				item.AigpSendMedDisable = types.BoolNull()
 			}
 			if cValue := v.Get("aigp.send.cost-community.disable"); cValue.Exists() {
 				item.AigpSendCostCommunityDisable = types.BoolValue(true)
 			} else {
-				item.AigpSendCostCommunityDisable = types.BoolValue(false)
+				item.AigpSendCostCommunityDisable = types.BoolNull()
 			}
 			if cValue := v.Get("aigp.send.cost-community.cost-community-id.cost-community-id-number"); cValue.Exists() {
 				item.AigpSendCostCommunityId = types.Int64Value(cValue.Int())
@@ -4680,47 +4680,47 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("aigp.send.cost-community.cost-community-id.poi.igp-cost"); cValue.Exists() {
 				item.AigpSendCostCommunityIdPoiIgpCost = types.BoolValue(true)
 			} else {
-				item.AigpSendCostCommunityIdPoiIgpCost = types.BoolValue(false)
+				item.AigpSendCostCommunityIdPoiIgpCost = types.BoolNull()
 			}
 			if cValue := v.Get("aigp.send.cost-community.cost-community-id.poi.igp-cost.transitive"); cValue.Exists() {
 				item.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolValue(true)
 			} else {
-				item.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolValue(false)
+				item.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolNull()
 			}
 			if cValue := v.Get("aigp.send.cost-community.cost-community-id.poi.pre-bestpath"); cValue.Exists() {
 				item.AigpSendCostCommunityIdPoiPreBestpath = types.BoolValue(true)
 			} else {
-				item.AigpSendCostCommunityIdPoiPreBestpath = types.BoolValue(false)
+				item.AigpSendCostCommunityIdPoiPreBestpath = types.BoolNull()
 			}
 			if cValue := v.Get("aigp.send.cost-community.cost-community-id.poi.pre-bestpath.transitive"); cValue.Exists() {
 				item.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolValue(true)
 			} else {
-				item.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolValue(false)
+				item.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolNull()
 			}
 			if cValue := v.Get("send-multicast-attributes"); cValue.Exists() {
 				item.SendMulticastAttributes = types.BoolValue(true)
 			} else {
-				item.SendMulticastAttributes = types.BoolValue(false)
+				item.SendMulticastAttributes = types.BoolNull()
 			}
 			if cValue := v.Get("send-multicast-attributes.disable"); cValue.Exists() {
 				item.SendMulticastAttributesDisable = types.BoolValue(true)
 			} else {
-				item.SendMulticastAttributesDisable = types.BoolValue(false)
+				item.SendMulticastAttributesDisable = types.BoolNull()
 			}
 			if cValue := v.Get("accept-own"); cValue.Exists() {
 				item.AcceptOwn = types.BoolValue(true)
 			} else {
-				item.AcceptOwn = types.BoolValue(false)
+				item.AcceptOwn = types.BoolNull()
 			}
 			if cValue := v.Get("accept-own.inheritance-disable"); cValue.Exists() {
 				item.AcceptOwnInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.AcceptOwnInheritanceDisable = types.BoolValue(false)
+				item.AcceptOwnInheritanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("slow-peer.dynamic"); cValue.Exists() {
 				item.SlowPeerDynamic = types.BoolValue(true)
 			} else {
-				item.SlowPeerDynamic = types.BoolValue(false)
+				item.SlowPeerDynamic = types.BoolNull()
 			}
 			if cValue := v.Get("slow-peer.dynamic.threshold"); cValue.Exists() {
 				item.SlowPeerDynamicThreshold = types.Int64Value(cValue.Int())
@@ -4728,22 +4728,22 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("slow-peer.dynamic.disable"); cValue.Exists() {
 				item.SlowPeerDynamicDisable = types.BoolValue(true)
 			} else {
-				item.SlowPeerDynamicDisable = types.BoolValue(false)
+				item.SlowPeerDynamicDisable = types.BoolNull()
 			}
 			if cValue := v.Get("slow-peer.static"); cValue.Exists() {
 				item.SlowPeerStatic = types.BoolValue(true)
 			} else {
-				item.SlowPeerStatic = types.BoolValue(false)
+				item.SlowPeerStatic = types.BoolNull()
 			}
 			if cValue := v.Get("origin-as.validation.disable"); cValue.Exists() {
 				item.OriginAsValidationDisable = types.BoolValue(true)
 			} else {
-				item.OriginAsValidationDisable = types.BoolValue(false)
+				item.OriginAsValidationDisable = types.BoolNull()
 			}
 			if cValue := v.Get("bestpath.origin-as.allow.invalid"); cValue.Exists() {
 				item.BestpathOriginAsAllowInvalid = types.BoolValue(true)
 			} else {
-				item.BestpathOriginAsAllowInvalid = types.BoolValue(false)
+				item.BestpathOriginAsAllowInvalid = types.BoolNull()
 			}
 			data.AddressFamily = append(data.AddressFamily, item)
 			return true
@@ -4921,10 +4921,10 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res gjson.
 	} else {
 		data.LocalAsNoPrependReplaceAsDualAs = types.BoolNull()
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "password.encrypted"); value.Exists() {
 		data.Password = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "password.inheritance-disable"); value.Exists() {
 		data.PasswordInheritanceDisable = types.BoolValue(true)
 	} else {
 		data.PasswordInheritanceDisable = types.BoolNull()
@@ -6312,10 +6312,10 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/receive-buffer-size", state.getPath()))
 	}
 	if !state.PasswordInheritanceDisable.IsNull() && data.PasswordInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/password/inheritance-disable", state.getPath()))
 	}
 	if !state.Password.IsNull() && data.Password.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/password/encrypted", state.getPath()))
 	}
 	if !state.LocalAsNoPrependReplaceAsDualAs.IsNull() && data.LocalAsNoPrependReplaceAsDualAs.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/as/no-prepend/replace-as", state.getPath()))
@@ -7242,7 +7242,7 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context, sta
 	// Only delete if state has true and plan has false
 	if !data.PasswordInheritanceDisable.IsNull() && !data.PasswordInheritanceDisable.ValueBool() {
 		if state != nil && !state.PasswordInheritanceDisable.IsNull() && state.PasswordInheritanceDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/password/inheritance-disable", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -7660,10 +7660,10 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/receive-buffer-size", data.getPath()))
 	}
 	if !data.PasswordInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/password/inheritance-disable", data.getPath()))
 	}
 	if !data.Password.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/password/encrypted", data.getPath()))
 	}
 	if !data.LocalAsNoPrependReplaceAsDualAs.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/as/no-prepend/replace-as", data.getPath()))
@@ -7953,11 +7953,11 @@ func (data RouterBGPNeighborGroup) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.Password.IsNull() && !data.Password.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/", data.Password.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/password/encrypted", data.Password.ValueString())
 	}
 	if !data.PasswordInheritanceDisable.IsNull() && !data.PasswordInheritanceDisable.IsUnknown() {
 		if data.PasswordInheritanceDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/password/inheritance-disable", "")
 		}
 	}
 	if !data.ReceiveBufferSize.IsNull() && !data.ReceiveBufferSize.IsUnknown() {
@@ -9032,7 +9032,7 @@ func (data *RouterBGPNeighborGroup) updateFromBodyXML(ctx context.Context, res x
 			data.LocalAsNoPrependReplaceAsDualAs = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/password/inheritance-disable"); value.Exists() {
 		data.PasswordInheritanceDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10565,10 +10565,10 @@ func (data *RouterBGPNeighborGroup) fromBodyXML(ctx context.Context, res xmldot.
 	} else {
 		data.LocalAsNoPrependReplaceAsDualAs = types.BoolNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/password/encrypted"); value.Exists() {
 		data.Password = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/password/inheritance-disable"); value.Exists() {
 		data.PasswordInheritanceDisable = types.BoolValue(true)
 	} else {
 		data.PasswordInheritanceDisable = types.BoolNull()
@@ -11524,10 +11524,10 @@ func (data *RouterBGPNeighborGroupData) fromBodyXML(ctx context.Context, res xml
 	} else {
 		data.LocalAsNoPrependReplaceAsDualAs = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/password/encrypted"); value.Exists() {
 		data.Password = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/password/inheritance-disable"); value.Exists() {
 		data.PasswordInheritanceDisable = types.BoolValue(true)
 	} else {
 		data.PasswordInheritanceDisable = types.BoolValue(false)
@@ -13987,14 +13987,14 @@ func (data *RouterBGPNeighborGroup) addDeletedItemsXML(ctx context.Context, stat
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PasswordInheritanceDisable.IsNull() && state.PasswordInheritanceDisable.ValueBool() && data.PasswordInheritanceDisable.IsNull() {
-		deletePath := state.getXPath() + "/"
+		deletePath := state.getXPath() + "/password/inheritance-disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Password.IsNull() && data.Password.IsNull() {
-		deletePath := state.getXPath() + "/"
+		deletePath := state.getXPath() + "/password/encrypted"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14735,10 +14735,10 @@ func (data *RouterBGPNeighborGroup) addDeletePathsXML(ctx context.Context, body 
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/receive-buffer-size")
 	}
 	if !data.PasswordInheritanceDisable.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/password/inheritance-disable")
 	}
 	if !data.Password.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/password/encrypted")
 	}
 	if !data.LocalAsNoPrependReplaceAsDualAs.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/local-as/as/no-prepend/replace-as")

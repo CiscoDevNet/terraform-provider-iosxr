@@ -79,7 +79,7 @@ func (data BGPASFormatData) getXPath() string {
 func (data BGPASFormat) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.AsFormat.IsNull() && !data.AsFormat.IsUnknown() {
-		body, _ = sjson.Set(body, "", data.AsFormat.ValueString())
+		body, _ = sjson.Set(body, "as-format", data.AsFormat.ValueString())
 	}
 	return body
 }
@@ -91,7 +91,7 @@ func (data BGPASFormat) toBody(ctx context.Context) string {
 func (data BGPASFormat) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.AsFormat.IsNull() && !data.AsFormat.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/", data.AsFormat.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/as-format", data.AsFormat.ValueString())
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -105,7 +105,7 @@ func (data BGPASFormat) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *BGPASFormat) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, ""); value.Exists() && !data.AsFormat.IsNull() {
+	if value := gjson.GetBytes(res, "as-format"); value.Exists() && !data.AsFormat.IsNull() {
 		data.AsFormat = types.StringValue(value.String())
 	} else {
 		data.AsFormat = types.StringNull()
@@ -117,7 +117,7 @@ func (data *BGPASFormat) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *BGPASFormat) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/as-format"); value.Exists() {
 		data.AsFormat = types.StringValue(value.String())
 	} else if data.AsFormat.IsNull() {
 		data.AsFormat = types.StringNull()
@@ -133,7 +133,7 @@ func (data *BGPASFormat) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "as-format"); value.Exists() {
 		data.AsFormat = types.StringValue(value.String())
 	}
 }
@@ -147,7 +147,7 @@ func (data *BGPASFormatData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "as-format"); value.Exists() {
 		data.AsFormat = types.StringValue(value.String())
 	}
 }
@@ -157,7 +157,7 @@ func (data *BGPASFormatData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *BGPASFormat) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/as-format"); value.Exists() {
 		data.AsFormat = types.StringValue(value.String())
 	}
 }
@@ -167,7 +167,7 @@ func (data *BGPASFormat) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *BGPASFormatData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/as-format"); value.Exists() {
 		data.AsFormat = types.StringValue(value.String())
 	}
 }
@@ -179,7 +179,7 @@ func (data *BGPASFormatData) fromBodyXML(ctx context.Context, res xmldot.Result)
 func (data *BGPASFormat) getDeletedItems(ctx context.Context, state BGPASFormat) []string {
 	deletedItems := make([]string, 0)
 	if !state.AsFormat.IsNull() && data.AsFormat.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/as-format", state.getPath()))
 	}
 	return deletedItems
 }
@@ -200,7 +200,7 @@ func (data *BGPASFormat) getEmptyLeafsDelete(ctx context.Context, state *BGPASFo
 func (data *BGPASFormat) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.AsFormat.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/as-format", data.getPath()))
 	}
 
 	return deletePaths
@@ -215,7 +215,7 @@ func (data *BGPASFormat) addDeletedItemsXML(ctx context.Context, state BGPASForm
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.AsFormat.IsNull() && data.AsFormat.IsNull() {
-		deletePath := state.getXPath() + "/"
+		deletePath := state.getXPath() + "/as-format"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -234,7 +234,7 @@ func (data *BGPASFormat) addDeletedItemsXML(ctx context.Context, state BGPASForm
 func (data *BGPASFormat) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	if !data.AsFormat.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/as-format")
 	}
 
 	b = helpers.CleanupRedundantRemoveOperations(b)

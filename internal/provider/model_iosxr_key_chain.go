@@ -1300,7 +1300,7 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("lifetime.infinite"); cValue.Exists() {
 				item.LifetimeInfinite = types.BoolValue(true)
 			} else {
-				item.LifetimeInfinite = types.BoolValue(false)
+				item.LifetimeInfinite = types.BoolNull()
 			}
 			data.MacsecKeys = append(data.MacsecKeys, item)
 			return true
@@ -1358,7 +1358,7 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("accept-lifetime.infinite"); cValue.Exists() {
 				item.AcceptLifetimeInfinite = types.BoolValue(true)
 			} else {
-				item.AcceptLifetimeInfinite = types.BoolValue(false)
+				item.AcceptLifetimeInfinite = types.BoolNull()
 			}
 			if cValue := v.Get("send-lifetime.start-time.hour"); cValue.Exists() {
 				item.SendLifetimeStartTimeHour = types.Int64Value(cValue.Int())
@@ -1402,7 +1402,7 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("send-lifetime.infinite"); cValue.Exists() {
 				item.SendLifetimeInfinite = types.BoolValue(true)
 			} else {
-				item.SendLifetimeInfinite = types.BoolValue(false)
+				item.SendLifetimeInfinite = types.BoolNull()
 			}
 			data.Keys = append(data.Keys, item)
 			return true

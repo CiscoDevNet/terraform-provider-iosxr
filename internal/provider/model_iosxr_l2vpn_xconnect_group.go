@@ -631,10 +631,10 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 								body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"interface"+"."+strconv.Itoa(ccindex)+"."+"interface-name", ccitem.InterfaceName.ValueString())
 							}
 							if len(ccitem.RemoteCeIds) > 0 {
-								body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"interface"+"."+strconv.Itoa(ccindex)+"."+"", []interface{}{})
+								body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"interface"+"."+strconv.Itoa(ccindex)+"."+"remote-ce-id", []interface{}{})
 								for cccindex, cccitem := range ccitem.RemoteCeIds {
 									if !cccitem.RemoteCeIdValue.IsNull() && !cccitem.RemoteCeIdValue.IsUnknown() {
-										body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"interface"+"."+strconv.Itoa(ccindex)+"."+""+"."+strconv.Itoa(cccindex)+"."+"", strconv.FormatInt(cccitem.RemoteCeIdValue.ValueInt64(), 10))
+										body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"interface"+"."+strconv.Itoa(ccindex)+"."+"remote-ce-id"+"."+strconv.Itoa(cccindex)+"."+"", strconv.FormatInt(cccitem.RemoteCeIdValue.ValueInt64(), 10))
 									}
 								}
 							}
@@ -685,34 +685,33 @@ func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res []byte) 
 		} else {
 			data.P2ps[i].Description = types.StringNull()
 		}
-		for ci := range data.P2ps[i].Interfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.P2ps[i].Interfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("interfaces.interface"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.P2ps[i].Interfaces
+			data.P2ps[i].Interfaces = make([]L2VPNXconnectGroupP2psInterfaces, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupP2psInterfaces{}
+				if cValue := cr.Get("interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("interfaces.interface").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.P2ps[i].Interfaces[ci].InterfaceName.IsNull() {
-				data.P2ps[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].Interfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.P2ps[i].Interfaces = append(data.P2ps[i].Interfaces, citem)
+				return true
+			})
 		}
 		if value := r.Get("interworking.ipv4"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -750,416 +749,339 @@ func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res []byte) 
 				data.P2ps[i].InterworkingEthernet = types.BoolValue(false)
 			}
 		}
-		for ci := range data.P2ps[i].BackupInterfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.P2ps[i].BackupInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("backup.interface"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.P2ps[i].BackupInterfaces
+			data.P2ps[i].BackupInterfaces = make([]L2VPNXconnectGroupP2psBackupInterfaces, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupP2psBackupInterfaces{}
+				if cValue := cr.Get("interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("backup.interface").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.P2ps[i].BackupInterfaces[ci].InterfaceName.IsNull() {
-				data.P2ps[i].BackupInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].BackupInterfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.P2ps[i].BackupInterfaces = append(data.P2ps[i].BackupInterfaces, citem)
+				return true
+			})
 		}
-		for ci := range data.P2ps[i].Ipv4Neighbors {
-			keys := [...]string{"address", "pw-id"}
-			keyValues := [...]string{data.P2ps[i].Ipv4Neighbors[ci].Address.ValueString(), strconv.FormatInt(data.P2ps[i].Ipv4Neighbors[ci].PwId.ValueInt64(), 10)}
-
-			var cr gjson.Result
-			r.Get("neighbor.ipv4s.ipv4").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+		// Rebuild nested list from device response
+		if value := r.Get("neighbor.ipv4s.ipv4"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.P2ps[i].Ipv4Neighbors
+			data.P2ps[i].Ipv4Neighbors = make([]L2VPNXconnectGroupP2psIpv4Neighbors, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupP2psIpv4Neighbors{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("pw-id"); cValue.Exists() {
+					citem.PwId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("pw-class"); cValue.Exists() {
+					citem.PwClass = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("bandwidth"); cValue.Exists() {
+					citem.Bandwidth = types.Int64Value(cValue.Int())
+				}
+				// Rebuild nested nested list from device response
+				if ccValue := cr.Get("backup.neighbors.neighbor"); ccValue.Exists() {
+					citem.BackupNeighbors = make([]L2VPNXconnectGroupP2psIpv4NeighborsBackupNeighbors, 0)
+					ccValue.ForEach(func(_, ccr gjson.Result) bool {
+						ccitem := L2VPNXconnectGroupP2psIpv4NeighborsBackupNeighbors{}
+						if ccValue := ccr.Get("address"); ccValue.Exists() {
+							ccitem.Address = types.StringValue(ccValue.String())
 						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.P2ps[i].Ipv4Neighbors[ci].Address.IsNull() {
-				data.P2ps[i].Ipv4Neighbors[ci].Address = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].Ipv4Neighbors[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("pw-id"); value.Exists() {
-				data.P2ps[i].Ipv4Neighbors[ci].PwId = types.Int64Value(value.Int())
-			} else if data.P2ps[i].Ipv4Neighbors[ci].PwId.IsNull() {
-				data.P2ps[i].Ipv4Neighbors[ci].PwId = types.Int64Null()
-			}
-			if value := cr.Get("pw-class"); value.Exists() && !data.P2ps[i].Ipv4Neighbors[ci].PwClass.IsNull() {
-				data.P2ps[i].Ipv4Neighbors[ci].PwClass = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].Ipv4Neighbors[ci].PwClass = types.StringNull()
-			}
-			if value := cr.Get("bandwidth"); value.Exists() {
-				data.P2ps[i].Ipv4Neighbors[ci].Bandwidth = types.Int64Value(value.Int())
-			} else if data.P2ps[i].Ipv4Neighbors[ci].Bandwidth.IsNull() {
-				data.P2ps[i].Ipv4Neighbors[ci].Bandwidth = types.Int64Null()
-			}
-			for cci := range data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors {
-				keys := [...]string{"address", "pw-id"}
-				keyValues := [...]string{data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].Address.ValueString(), strconv.FormatInt(data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwId.ValueInt64(), 10)}
-
-				var ccr gjson.Result
-				cr.Get("backup.neighbors.neighbor").ForEach(
-					func(_, v gjson.Result) bool {
-						found := false
-						for ik := range keys {
-							if v.Get(keys[ik]).String() == keyValues[ik] {
-								found = true
-								continue
-							}
-							found = false
-							break
+						if ccValue := ccr.Get("pw-id"); ccValue.Exists() {
+							ccitem.PwId = types.Int64Value(ccValue.Int())
 						}
-						if found {
-							ccr = v
-							return false
+						if ccValue := ccr.Get("pw-class"); ccValue.Exists() {
+							ccitem.PwClass = types.StringValue(ccValue.String())
 						}
+						if ccValue := ccr.Get("mpls.static.label.local"); ccValue.Exists() {
+							ccitem.MplsStaticLabelLocal = types.Int64Value(ccValue.Int())
+						}
+						if ccValue := ccr.Get("mpls.static.label.remote"); ccValue.Exists() {
+							ccitem.MplsStaticLabelRemote = types.Int64Value(ccValue.Int())
+						}
+						citem.BackupNeighbors = append(citem.BackupNeighbors, ccitem)
 						return true
-					},
-				)
-				if value := ccr.Get("address"); value.Exists() && !data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].Address.IsNull() {
-					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].Address = types.StringValue(value.String())
-				} else {
-					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].Address = types.StringNull()
+					})
 				}
-				if value := ccr.Get("pw-id"); value.Exists() && !data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwId.IsNull() {
-					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwId = types.Int64Value(value.Int())
-				} else {
-					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwId = types.Int64Null()
+				if cValue := cr.Get("mpls.static.label.local"); cValue.Exists() {
+					citem.MplsStaticLabelLocal = types.Int64Value(cValue.Int())
 				}
-				if value := ccr.Get("pw-class"); value.Exists() && !data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwClass.IsNull() {
-					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwClass = types.StringValue(value.String())
-				} else {
-					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwClass = types.StringNull()
+				if cValue := cr.Get("mpls.static.label.remote"); cValue.Exists() {
+					citem.MplsStaticLabelRemote = types.Int64Value(cValue.Int())
 				}
-				if value := ccr.Get("mpls.static.label.local"); value.Exists() && !data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelLocal.IsNull() {
-					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelLocal = types.Int64Value(value.Int())
-				} else {
-					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelLocal = types.Int64Null()
+				if cValue := cr.Get("tag-impose.vlan"); cValue.Exists() {
+					citem.TagImposeVlan = types.Int64Value(cValue.Int())
 				}
-				if value := ccr.Get("mpls.static.label.remote"); value.Exists() && !data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelRemote.IsNull() {
-					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelRemote = types.Int64Value(value.Int())
-				} else {
-					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelRemote = types.Int64Null()
-				}
-			}
-			if value := cr.Get("mpls.static.label.local"); value.Exists() {
-				data.P2ps[i].Ipv4Neighbors[ci].MplsStaticLabelLocal = types.Int64Value(value.Int())
-			} else if data.P2ps[i].Ipv4Neighbors[ci].MplsStaticLabelLocal.IsNull() {
-				data.P2ps[i].Ipv4Neighbors[ci].MplsStaticLabelLocal = types.Int64Null()
-			}
-			if value := cr.Get("mpls.static.label.remote"); value.Exists() {
-				data.P2ps[i].Ipv4Neighbors[ci].MplsStaticLabelRemote = types.Int64Value(value.Int())
-			} else if data.P2ps[i].Ipv4Neighbors[ci].MplsStaticLabelRemote.IsNull() {
-				data.P2ps[i].Ipv4Neighbors[ci].MplsStaticLabelRemote = types.Int64Null()
-			}
-			if value := cr.Get("tag-impose.vlan"); value.Exists() {
-				data.P2ps[i].Ipv4Neighbors[ci].TagImposeVlan = types.Int64Value(value.Int())
-			} else if data.P2ps[i].Ipv4Neighbors[ci].TagImposeVlan.IsNull() {
-				data.P2ps[i].Ipv4Neighbors[ci].TagImposeVlan = types.Int64Null()
-			}
-		}
-		for ci := range data.P2ps[i].Ipv6Neighbors {
-			keys := [...]string{"address", "pw-id"}
-			keyValues := [...]string{data.P2ps[i].Ipv6Neighbors[ci].Address.ValueString(), strconv.FormatInt(data.P2ps[i].Ipv6Neighbors[ci].PwId.ValueInt64(), 10)}
 
-			var cr gjson.Result
-			r.Get("neighbor.ipv6s.ipv6").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.PwId.Equal(citem.PwId) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.P2ps[i].Ipv6Neighbors[ci].Address.IsNull() {
-				data.P2ps[i].Ipv6Neighbors[ci].Address = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].Ipv6Neighbors[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("pw-id"); value.Exists() {
-				data.P2ps[i].Ipv6Neighbors[ci].PwId = types.Int64Value(value.Int())
-			} else if data.P2ps[i].Ipv6Neighbors[ci].PwId.IsNull() {
-				data.P2ps[i].Ipv6Neighbors[ci].PwId = types.Int64Null()
-			}
-			if value := cr.Get("pw-class"); value.Exists() && !data.P2ps[i].Ipv6Neighbors[ci].PwClass.IsNull() {
-				data.P2ps[i].Ipv6Neighbors[ci].PwClass = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].Ipv6Neighbors[ci].PwClass = types.StringNull()
-			}
-			for cci := range data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors {
-				keys := [...]string{"address", "pw-id"}
-				keyValues := [...]string{data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].Address.ValueString(), strconv.FormatInt(data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwId.ValueInt64(), 10)}
+				}
 
-				var ccr gjson.Result
-				cr.Get("backup.neighbors.neighbor").ForEach(
-					func(_, v gjson.Result) bool {
-						found := false
-						for ik := range keys {
-							if v.Get(keys[ik]).String() == keyValues[ik] {
-								found = true
-								continue
-							}
-							found = false
-							break
+				data.P2ps[i].Ipv4Neighbors = append(data.P2ps[i].Ipv4Neighbors, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device response
+		if value := r.Get("neighbor.ipv6s.ipv6"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.P2ps[i].Ipv6Neighbors
+			data.P2ps[i].Ipv6Neighbors = make([]L2VPNXconnectGroupP2psIpv6Neighbors, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupP2psIpv6Neighbors{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("pw-id"); cValue.Exists() {
+					citem.PwId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("pw-class"); cValue.Exists() {
+					citem.PwClass = types.StringValue(cValue.String())
+				}
+				// Rebuild nested nested list from device response
+				if ccValue := cr.Get("backup.neighbors.neighbor"); ccValue.Exists() {
+					citem.BackupNeighbors = make([]L2VPNXconnectGroupP2psIpv6NeighborsBackupNeighbors, 0)
+					ccValue.ForEach(func(_, ccr gjson.Result) bool {
+						ccitem := L2VPNXconnectGroupP2psIpv6NeighborsBackupNeighbors{}
+						if ccValue := ccr.Get("address"); ccValue.Exists() {
+							ccitem.Address = types.StringValue(ccValue.String())
 						}
-						if found {
-							ccr = v
-							return false
+						if ccValue := ccr.Get("pw-id"); ccValue.Exists() {
+							ccitem.PwId = types.Int64Value(ccValue.Int())
 						}
+						if ccValue := ccr.Get("pw-class"); ccValue.Exists() {
+							ccitem.PwClass = types.StringValue(ccValue.String())
+						}
+						if ccValue := ccr.Get("mpls.static.label.local"); ccValue.Exists() {
+							ccitem.MplsStaticLabelLocal = types.Int64Value(ccValue.Int())
+						}
+						if ccValue := ccr.Get("mpls.static.label.remote"); ccValue.Exists() {
+							ccitem.MplsStaticLabelRemote = types.Int64Value(ccValue.Int())
+						}
+						citem.BackupNeighbors = append(citem.BackupNeighbors, ccitem)
 						return true
-					},
-				)
-				if value := ccr.Get("address"); value.Exists() && !data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].Address.IsNull() {
-					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].Address = types.StringValue(value.String())
-				} else {
-					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].Address = types.StringNull()
+					})
 				}
-				if value := ccr.Get("pw-id"); value.Exists() && !data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwId.IsNull() {
-					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwId = types.Int64Value(value.Int())
-				} else {
-					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwId = types.Int64Null()
+				if cValue := cr.Get("mpls.static.label.local"); cValue.Exists() {
+					citem.MplsStaticLabelLocal = types.Int64Value(cValue.Int())
 				}
-				if value := ccr.Get("pw-class"); value.Exists() && !data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwClass.IsNull() {
-					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwClass = types.StringValue(value.String())
-				} else {
-					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwClass = types.StringNull()
+				if cValue := cr.Get("mpls.static.label.remote"); cValue.Exists() {
+					citem.MplsStaticLabelRemote = types.Int64Value(cValue.Int())
 				}
-				if value := ccr.Get("mpls.static.label.local"); value.Exists() && !data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelLocal.IsNull() {
-					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelLocal = types.Int64Value(value.Int())
-				} else {
-					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelLocal = types.Int64Null()
+				if cValue := cr.Get("tag-impose.vlan"); cValue.Exists() {
+					citem.TagImposeVlan = types.Int64Value(cValue.Int())
 				}
-				if value := ccr.Get("mpls.static.label.remote"); value.Exists() && !data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelRemote.IsNull() {
-					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelRemote = types.Int64Value(value.Int())
-				} else {
-					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelRemote = types.Int64Null()
+				if cValue := cr.Get("source.ipv6-address"); cValue.Exists() {
+					citem.SourceIpv6Address = types.StringValue(cValue.String())
 				}
-			}
-			if value := cr.Get("mpls.static.label.local"); value.Exists() {
-				data.P2ps[i].Ipv6Neighbors[ci].MplsStaticLabelLocal = types.Int64Value(value.Int())
-			} else if data.P2ps[i].Ipv6Neighbors[ci].MplsStaticLabelLocal.IsNull() {
-				data.P2ps[i].Ipv6Neighbors[ci].MplsStaticLabelLocal = types.Int64Null()
-			}
-			if value := cr.Get("mpls.static.label.remote"); value.Exists() {
-				data.P2ps[i].Ipv6Neighbors[ci].MplsStaticLabelRemote = types.Int64Value(value.Int())
-			} else if data.P2ps[i].Ipv6Neighbors[ci].MplsStaticLabelRemote.IsNull() {
-				data.P2ps[i].Ipv6Neighbors[ci].MplsStaticLabelRemote = types.Int64Null()
-			}
-			if value := cr.Get("tag-impose.vlan"); value.Exists() {
-				data.P2ps[i].Ipv6Neighbors[ci].TagImposeVlan = types.Int64Value(value.Int())
-			} else if data.P2ps[i].Ipv6Neighbors[ci].TagImposeVlan.IsNull() {
-				data.P2ps[i].Ipv6Neighbors[ci].TagImposeVlan = types.Int64Null()
-			}
-			if value := cr.Get("source.ipv6-address"); value.Exists() && !data.P2ps[i].Ipv6Neighbors[ci].SourceIpv6Address.IsNull() {
-				data.P2ps[i].Ipv6Neighbors[ci].SourceIpv6Address = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].Ipv6Neighbors[ci].SourceIpv6Address = types.StringNull()
-			}
-		}
-		for ci := range data.P2ps[i].EvpnTargetNeighbors {
-			keys := [...]string{"vpn-id", "remote-ac-id", "source"}
-			keyValues := [...]string{strconv.FormatInt(data.P2ps[i].EvpnTargetNeighbors[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.P2ps[i].EvpnTargetNeighbors[ci].RemoteAcId.ValueInt64(), 10), strconv.FormatInt(data.P2ps[i].EvpnTargetNeighbors[ci].Source.ValueInt64(), 10)}
 
-			var cr gjson.Result
-			r.Get("neighbor.evpn.evi.targets.target").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.PwId.Equal(citem.PwId) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("vpn-id"); value.Exists() {
-				data.P2ps[i].EvpnTargetNeighbors[ci].VpnId = types.Int64Value(value.Int())
-			} else if data.P2ps[i].EvpnTargetNeighbors[ci].VpnId.IsNull() {
-				data.P2ps[i].EvpnTargetNeighbors[ci].VpnId = types.Int64Null()
-			}
-			if value := cr.Get("remote-ac-id"); value.Exists() {
-				data.P2ps[i].EvpnTargetNeighbors[ci].RemoteAcId = types.Int64Value(value.Int())
-			} else if data.P2ps[i].EvpnTargetNeighbors[ci].RemoteAcId.IsNull() {
-				data.P2ps[i].EvpnTargetNeighbors[ci].RemoteAcId = types.Int64Null()
-			}
-			if value := cr.Get("source"); value.Exists() {
-				data.P2ps[i].EvpnTargetNeighbors[ci].Source = types.Int64Value(value.Int())
-			} else if data.P2ps[i].EvpnTargetNeighbors[ci].Source.IsNull() {
-				data.P2ps[i].EvpnTargetNeighbors[ci].Source = types.Int64Null()
-			}
-			if value := cr.Get("pw-class"); value.Exists() && !data.P2ps[i].EvpnTargetNeighbors[ci].PwClass.IsNull() {
-				data.P2ps[i].EvpnTargetNeighbors[ci].PwClass = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].EvpnTargetNeighbors[ci].PwClass = types.StringNull()
-			}
-		}
-		for ci := range data.P2ps[i].EvpnServiceNeighbors {
-			keys := [...]string{"vpn-id", "service-id"}
-			keyValues := [...]string{strconv.FormatInt(data.P2ps[i].EvpnServiceNeighbors[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.P2ps[i].EvpnServiceNeighbors[ci].ServiceId.ValueInt64(), 10)}
+				}
 
-			var cr gjson.Result
-			r.Get("neighbor.evpn.evi.services.service").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				data.P2ps[i].Ipv6Neighbors = append(data.P2ps[i].Ipv6Neighbors, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device response
+		if value := r.Get("neighbor.evpn.evi.targets.target"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.P2ps[i].EvpnTargetNeighbors
+			data.P2ps[i].EvpnTargetNeighbors = make([]L2VPNXconnectGroupP2psEvpnTargetNeighbors, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupP2psEvpnTargetNeighbors{}
+				if cValue := cr.Get("vpn-id"); cValue.Exists() {
+					citem.VpnId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("remote-ac-id"); cValue.Exists() {
+					citem.RemoteAcId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("source"); cValue.Exists() {
+					citem.Source = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("pw-class"); cValue.Exists() {
+					citem.PwClass = types.StringValue(cValue.String())
+				}
+
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.VpnId.Equal(citem.VpnId) {
+						match = false
+					}
+					if !existingItem.RemoteAcId.Equal(citem.RemoteAcId) {
+						match = false
+					}
+					if !existingItem.Source.Equal(citem.Source) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("vpn-id"); value.Exists() {
-				data.P2ps[i].EvpnServiceNeighbors[ci].VpnId = types.Int64Value(value.Int())
-			} else if data.P2ps[i].EvpnServiceNeighbors[ci].VpnId.IsNull() {
-				data.P2ps[i].EvpnServiceNeighbors[ci].VpnId = types.Int64Null()
-			}
-			if value := cr.Get("service-id"); value.Exists() {
-				data.P2ps[i].EvpnServiceNeighbors[ci].ServiceId = types.Int64Value(value.Int())
-			} else if data.P2ps[i].EvpnServiceNeighbors[ci].ServiceId.IsNull() {
-				data.P2ps[i].EvpnServiceNeighbors[ci].ServiceId = types.Int64Null()
-			}
-			if value := cr.Get("pw-class"); value.Exists() && !data.P2ps[i].EvpnServiceNeighbors[ci].PwClass.IsNull() {
-				data.P2ps[i].EvpnServiceNeighbors[ci].PwClass = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].EvpnServiceNeighbors[ci].PwClass = types.StringNull()
-			}
-		}
-		for ci := range data.P2ps[i].EvpnTargetNeighborsSegmentRouting {
-			keys := [...]string{"vpn-id", "remote-ac-id", "source"}
-			keyValues := [...]string{strconv.FormatInt(data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].RemoteAcId.ValueInt64(), 10), strconv.FormatInt(data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].Source.ValueInt64(), 10)}
+				}
 
-			var cr gjson.Result
-			r.Get("neighbor.evpn.evi.segment-routing-targets.target").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				data.P2ps[i].EvpnTargetNeighbors = append(data.P2ps[i].EvpnTargetNeighbors, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device response
+		if value := r.Get("neighbor.evpn.evi.services.service"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.P2ps[i].EvpnServiceNeighbors
+			data.P2ps[i].EvpnServiceNeighbors = make([]L2VPNXconnectGroupP2psEvpnServiceNeighbors, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupP2psEvpnServiceNeighbors{}
+				if cValue := cr.Get("vpn-id"); cValue.Exists() {
+					citem.VpnId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("service-id"); cValue.Exists() {
+					citem.ServiceId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("pw-class"); cValue.Exists() {
+					citem.PwClass = types.StringValue(cValue.String())
+				}
+
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.VpnId.Equal(citem.VpnId) {
+						match = false
+					}
+					if !existingItem.ServiceId.Equal(citem.ServiceId) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("vpn-id"); value.Exists() {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].VpnId = types.Int64Value(value.Int())
-			} else if data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].VpnId.IsNull() {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].VpnId = types.Int64Null()
-			}
-			if value := cr.Get("remote-ac-id"); value.Exists() {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].RemoteAcId = types.Int64Value(value.Int())
-			} else if data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].RemoteAcId.IsNull() {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].RemoteAcId = types.Int64Null()
-			}
-			if value := cr.Get("source"); value.Exists() {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].Source = types.Int64Value(value.Int())
-			} else if data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].Source.IsNull() {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].Source = types.Int64Null()
-			}
-			if value := cr.Get("segment-routing.srv6.locator"); value.Exists() && !data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].SegmentRoutingSrv6Locator.IsNull() {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].SegmentRoutingSrv6Locator = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].SegmentRoutingSrv6Locator = types.StringNull()
-			}
-		}
-		for ci := range data.P2ps[i].EvpnServiceNeighborsSegmentRouting {
-			keys := [...]string{"vpn-id", "service-id"}
-			keyValues := [...]string{strconv.FormatInt(data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].ServiceId.ValueInt64(), 10)}
+				}
 
-			var cr gjson.Result
-			r.Get("neighbor.evpn.evi.segment-routing-services.service").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				data.P2ps[i].EvpnServiceNeighbors = append(data.P2ps[i].EvpnServiceNeighbors, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device response
+		if value := r.Get("neighbor.evpn.evi.segment-routing-targets.target"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.P2ps[i].EvpnTargetNeighborsSegmentRouting
+			data.P2ps[i].EvpnTargetNeighborsSegmentRouting = make([]L2VPNXconnectGroupP2psEvpnTargetNeighborsSegmentRouting, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupP2psEvpnTargetNeighborsSegmentRouting{}
+				if cValue := cr.Get("vpn-id"); cValue.Exists() {
+					citem.VpnId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("remote-ac-id"); cValue.Exists() {
+					citem.RemoteAcId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("source"); cValue.Exists() {
+					citem.Source = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("segment-routing.srv6.locator"); cValue.Exists() {
+					citem.SegmentRoutingSrv6Locator = types.StringValue(cValue.String())
+				}
+
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.VpnId.Equal(citem.VpnId) {
+						match = false
+					}
+					if !existingItem.RemoteAcId.Equal(citem.RemoteAcId) {
+						match = false
+					}
+					if !existingItem.Source.Equal(citem.Source) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
+				}
+
+				data.P2ps[i].EvpnTargetNeighborsSegmentRouting = append(data.P2ps[i].EvpnTargetNeighborsSegmentRouting, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device response
+		if value := r.Get("neighbor.evpn.evi.segment-routing-services.service"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.P2ps[i].EvpnServiceNeighborsSegmentRouting
+			data.P2ps[i].EvpnServiceNeighborsSegmentRouting = make([]L2VPNXconnectGroupP2psEvpnServiceNeighborsSegmentRouting, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupP2psEvpnServiceNeighborsSegmentRouting{}
+				if cValue := cr.Get("vpn-id"); cValue.Exists() {
+					citem.VpnId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("service-id"); cValue.Exists() {
+					citem.ServiceId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("segment-routing.srv6.locator"); cValue.Exists() {
+					citem.SegmentRoutingSrv6Locator = types.StringValue(cValue.String())
+				}
+
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.VpnId.Equal(citem.VpnId) {
+						match = false
 					}
-					return true
-				},
-			)
-			if value := cr.Get("vpn-id"); value.Exists() {
-				data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].VpnId = types.Int64Value(value.Int())
-			} else if data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].VpnId.IsNull() {
-				data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].VpnId = types.Int64Null()
-			}
-			if value := cr.Get("service-id"); value.Exists() {
-				data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].ServiceId = types.Int64Value(value.Int())
-			} else if data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].ServiceId.IsNull() {
-				data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].ServiceId = types.Int64Null()
-			}
-			if value := cr.Get("segment-routing.srv6.locator"); value.Exists() && !data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].SegmentRoutingSrv6Locator.IsNull() {
-				data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].SegmentRoutingSrv6Locator = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].SegmentRoutingSrv6Locator = types.StringNull()
-			}
+					if !existingItem.ServiceId.Equal(citem.ServiceId) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						break
+					}
+				}
+
+				data.P2ps[i].EvpnServiceNeighborsSegmentRouting = append(data.P2ps[i].EvpnServiceNeighborsSegmentRouting, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.Mp2mps {
@@ -1312,413 +1234,359 @@ func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res []byte) 
 		} else {
 			data.Mp2mps[i].AutodiscoveryBgpRdIpv4AddressIndex = types.Int64Null()
 		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat {
-			keys := [...]string{"two-byte-as-number", "assigned-number"}
-			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("autodiscovery.bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportTwoByteAsFormat, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportTwoByteAsFormat{}
+				if cValue := cr.Get("two-byte-as-number"); cValue.Exists() {
+					citem.TwoByteAsNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("autodiscovery.bgp.route-target.import.two-byte-as-rts.two-byte-as-rt").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.TwoByteAsNumber.Equal(citem.TwoByteAsNumber) {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("two-byte-as-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Null()
-			}
-			if value := cr.Get("assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber = types.Int64Null()
-			}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat, citem)
+				return true
+			})
 		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat {
-			keys := [...]string{"four-byte-as-number", "assigned-number"}
-			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("autodiscovery.bgp.route-target.import.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportFourByteAsFormat, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportFourByteAsFormat{}
+				if cValue := cr.Get("four-byte-as-number"); cValue.Exists() {
+					citem.FourByteAsNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("autodiscovery.bgp.route-target.import.four-byte-as-rts.four-byte-as-rt").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.FourByteAsNumber.Equal(citem.FourByteAsNumber) {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("four-byte-as-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber = types.Int64Null()
-			}
-			if value := cr.Get("assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber = types.Int64Null()
-			}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat, citem)
+				return true
+			})
 		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat {
-			keys := [...]string{"ipv4-address", "assigned-number"}
-			keyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("autodiscovery.bgp.route-target.import.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportIpv4AddressFormat, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportIpv4AddressFormat{}
+				if cValue := cr.Get("ipv4-address"); cValue.Exists() {
+					citem.Ipv4Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("autodiscovery.bgp.route-target.import.ipv4-address-rts.ipv4-address-rt").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Ipv4Address.ValueString() != citem.Ipv4Address.ValueString() {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("ipv4-address"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address = types.StringValue(value.String())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address = types.StringNull()
-			}
-			if value := cr.Get("assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber = types.Int64Null()
-			}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat, citem)
+				return true
+			})
 		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat {
-			keys := [...]string{"two-byte-as-number", "assigned-number"}
-			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("autodiscovery.bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportTwoByteAsFormat, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportTwoByteAsFormat{}
+				if cValue := cr.Get("two-byte-as-number"); cValue.Exists() {
+					citem.TwoByteAsNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("autodiscovery.bgp.route-target.export.two-byte-as-rts.two-byte-as-rt").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.TwoByteAsNumber.Equal(citem.TwoByteAsNumber) {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("two-byte-as-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Null()
-			}
-			if value := cr.Get("assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber = types.Int64Null()
-			}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat, citem)
+				return true
+			})
 		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat {
-			keys := [...]string{"four-byte-as-number", "assigned-number"}
-			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("autodiscovery.bgp.route-target.export.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportFourByteAsFormat, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportFourByteAsFormat{}
+				if cValue := cr.Get("four-byte-as-number"); cValue.Exists() {
+					citem.FourByteAsNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("autodiscovery.bgp.route-target.export.four-byte-as-rts.four-byte-as-rt").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.FourByteAsNumber.Equal(citem.FourByteAsNumber) {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("four-byte-as-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber = types.Int64Null()
-			}
-			if value := cr.Get("assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber = types.Int64Null()
-			}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat, citem)
+				return true
+			})
 		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat {
-			keys := [...]string{"ipv4-address", "assigned-number"}
-			keyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("autodiscovery.bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportIpv4AddressFormat, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportIpv4AddressFormat{}
+				if cValue := cr.Get("ipv4-address"); cValue.Exists() {
+					citem.Ipv4Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("autodiscovery.bgp.route-target.export.ipv4-address-rts.ipv4-address-rt").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Ipv4Address.ValueString() != citem.Ipv4Address.ValueString() {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("ipv4-address"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address = types.StringValue(value.String())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address = types.StringNull()
-			}
-			if value := cr.Get("assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber = types.Int64Null()
-			}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat, citem)
+				return true
+			})
 		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat {
-			keys := [...]string{"two-byte-as-number", "assigned-number"}
-			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("autodiscovery.bgp.route-target.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetTwoByteAsFormat, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetTwoByteAsFormat{}
+				if cValue := cr.Get("two-byte-as-number"); cValue.Exists() {
+					citem.TwoByteAsNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("autodiscovery.bgp.route-target.two-byte-as-rts.two-byte-as-rt").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.TwoByteAsNumber.Equal(citem.TwoByteAsNumber) {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("two-byte-as-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Null()
-			}
-			if value := cr.Get("assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber = types.Int64Null()
-			}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat, citem)
+				return true
+			})
 		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat {
-			keys := [...]string{"four-byte-as-number", "assigned-number"}
-			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("autodiscovery.bgp.route-target.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetFourByteAsFormat, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetFourByteAsFormat{}
+				if cValue := cr.Get("four-byte-as-number"); cValue.Exists() {
+					citem.FourByteAsNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("autodiscovery.bgp.route-target.four-byte-as-rts.four-byte-as-rt").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.FourByteAsNumber.Equal(citem.FourByteAsNumber) {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("four-byte-as-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber = types.Int64Null()
-			}
-			if value := cr.Get("assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber = types.Int64Null()
-			}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat, citem)
+				return true
+			})
 		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat {
-			keys := [...]string{"ipv4-address", "assigned-number"}
-			keyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("autodiscovery.bgp.route-target.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetIpv4AddressFormat, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetIpv4AddressFormat{}
+				if cValue := cr.Get("ipv4-address"); cValue.Exists() {
+					citem.Ipv4Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("autodiscovery.bgp.route-target.ipv4-address-rts.ipv4-address-rt").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Ipv4Address.ValueString() != citem.Ipv4Address.ValueString() {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("ipv4-address"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address = types.StringValue(value.String())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address = types.StringNull()
-			}
-			if value := cr.Get("assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber = types.Int64Null()
-			}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat, citem)
+				return true
+			})
 		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds {
-			keys := [...]string{"local-ce-id-value"}
-			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue.ValueInt64(), 10)}
-
-			var cr gjson.Result
-			r.Get("autodiscovery.bgp.signaling-protocol.bgp.ce-id").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+		// Rebuild nested list from device response
+		if value := r.Get("autodiscovery.bgp.signaling-protocol.bgp.ce-id"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds
+			data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIds, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIds{}
+				if cValue := cr.Get("local-ce-id-value"); cValue.Exists() {
+					citem.LocalCeIdValue = types.Int64Value(cValue.Int())
+				}
+				// Rebuild nested nested list from device response
+				if ccValue := cr.Get("interface"); ccValue.Exists() {
+					citem.Interfaces = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfaces, 0)
+					ccValue.ForEach(func(_, ccr gjson.Result) bool {
+						ccitem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfaces{}
+						if ccValue := ccr.Get("interface-name"); ccValue.Exists() {
+							ccitem.InterfaceName = types.StringValue(ccValue.String())
 						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("local-ce-id-value"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue = types.Int64Value(value.Int())
-			} else if data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue.IsNull() {
-				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue = types.Int64Null()
-			}
-			for cci := range data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces {
-				keys := [...]string{"interface-name"}
-				keyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].InterfaceName.ValueString()}
-
-				var ccr gjson.Result
-				cr.Get("interface").ForEach(
-					func(_, v gjson.Result) bool {
-						found := false
-						for ik := range keys {
-							if v.Get(keys[ik]).String() == keyValues[ik] {
-								found = true
-								continue
-							}
-							found = false
-							break
-						}
-						if found {
-							ccr = v
-							return false
-						}
+						citem.Interfaces = append(citem.Interfaces, ccitem)
 						return true
-					},
-				)
-				if value := ccr.Get("interface-name"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].InterfaceName.IsNull() {
-					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].InterfaceName = types.StringValue(value.String())
-				} else {
-					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].InterfaceName = types.StringNull()
+					})
 				}
-				for ccci := range data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds {
-					keys := [...]string{"remote-ce-id-value"}
-					keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds[ccci].RemoteCeIdValue.ValueInt64(), 10)}
+				if cValue := cr.Get("vpws-seamless-integration"); cValue.Exists() {
+					citem.VpwsSeamlessIntegration = types.BoolValue(true)
+				} else {
+					citem.VpwsSeamlessIntegration = types.BoolValue(false)
+				}
 
-					var cccr gjson.Result
-					ccr.Get("").ForEach(
-						func(_, v gjson.Result) bool {
-							found := false
-							for ik := range keys {
-								if v.Get(keys[ik]).String() == keyValues[ik] {
-									found = true
-									continue
-								}
-								found = false
-								break
-							}
-							if found {
-								cccr = v
-								return false
-							}
-							return true
-						},
-					)
-					if value := cccr.Get(""); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds[ccci].RemoteCeIdValue.IsNull() {
-						data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds[ccci].RemoteCeIdValue = types.Int64Value(value.Int())
-					} else {
-						data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds[ccci].RemoteCeIdValue = types.Int64Null()
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.LocalCeIdValue.Equal(citem.LocalCeIdValue) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.VpwsSeamlessIntegration.ValueBool() && existingItem.VpwsSeamlessIntegration.ValueBool() == false {
+							citem.VpwsSeamlessIntegration = existingItem.VpwsSeamlessIntegration
+						}
+						break
 					}
 				}
-			}
-			if value := cr.Get("vpws-seamless-integration"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.ValueBool() {
-					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration = types.BoolValue(false)
-				} else if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() {
-					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() {
-					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration = types.BoolNull()
-				} else {
-					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration = types.BoolValue(false)
-				}
-			}
+
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds = append(data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds, citem)
+				return true
+			})
 		}
 		if value := r.Get("autodiscovery.bgp.signaling-protocol.bgp.ce-range"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeRange.IsNull() {
 			data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeRange = types.Int64Value(value.Int())
@@ -1808,7 +1676,9 @@ func (data L2VPNXconnectGroup) toBodyXML(ctx context.Context) string {
 			if len(item.Interfaces) > 0 {
 				for _, citem := range item.Interfaces {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "interface-name", citem.InterfaceName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "interfaces/interface", ccBody.Res())
 				}
 			}
@@ -1825,14 +1695,21 @@ func (data L2VPNXconnectGroup) toBodyXML(ctx context.Context) string {
 			if len(item.BackupInterfaces) > 0 {
 				for _, citem := range item.BackupInterfaces {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "interface-name", citem.InterfaceName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "backup/interface", ccBody.Res())
 				}
 			}
 			if len(item.Ipv4Neighbors) > 0 {
 				for _, citem := range item.Ipv4Neighbors {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.PwId.IsNull() && !citem.PwId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "pw-id", strconv.FormatInt(citem.PwId.ValueInt64(), 10))
+					}
 					if !citem.PwClass.IsNull() && !citem.PwClass.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "pw-class", citem.PwClass.ValueString())
 					}
@@ -1842,7 +1719,12 @@ func (data L2VPNXconnectGroup) toBodyXML(ctx context.Context) string {
 					if len(citem.BackupNeighbors) > 0 {
 						for _, ccitem := range citem.BackupNeighbors {
 							cccBody := netconf.Body{}
-							_ = ccitem // Suppress unused variable warning
+							if !ccitem.Address.IsNull() && !ccitem.Address.IsUnknown() {
+								cccBody = helpers.SetFromXPath(cccBody, "address", ccitem.Address.ValueString())
+							}
+							if !ccitem.PwId.IsNull() && !ccitem.PwId.IsUnknown() {
+								cccBody = helpers.SetFromXPath(cccBody, "pw-id", strconv.FormatInt(ccitem.PwId.ValueInt64(), 10))
+							}
 							if !ccitem.PwClass.IsNull() && !ccitem.PwClass.IsUnknown() {
 								cccBody = helpers.SetFromXPath(cccBody, "pw-class", ccitem.PwClass.ValueString())
 							}
@@ -1870,14 +1752,24 @@ func (data L2VPNXconnectGroup) toBodyXML(ctx context.Context) string {
 			if len(item.Ipv6Neighbors) > 0 {
 				for _, citem := range item.Ipv6Neighbors {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.PwId.IsNull() && !citem.PwId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "pw-id", strconv.FormatInt(citem.PwId.ValueInt64(), 10))
+					}
 					if !citem.PwClass.IsNull() && !citem.PwClass.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "pw-class", citem.PwClass.ValueString())
 					}
 					if len(citem.BackupNeighbors) > 0 {
 						for _, ccitem := range citem.BackupNeighbors {
 							cccBody := netconf.Body{}
-							_ = ccitem // Suppress unused variable warning
+							if !ccitem.Address.IsNull() && !ccitem.Address.IsUnknown() {
+								cccBody = helpers.SetFromXPath(cccBody, "address", ccitem.Address.ValueString())
+							}
+							if !ccitem.PwId.IsNull() && !ccitem.PwId.IsUnknown() {
+								cccBody = helpers.SetFromXPath(cccBody, "pw-id", strconv.FormatInt(ccitem.PwId.ValueInt64(), 10))
+							}
 							if !ccitem.PwClass.IsNull() && !ccitem.PwClass.IsUnknown() {
 								cccBody = helpers.SetFromXPath(cccBody, "pw-class", ccitem.PwClass.ValueString())
 							}
@@ -1908,7 +1800,15 @@ func (data L2VPNXconnectGroup) toBodyXML(ctx context.Context) string {
 			if len(item.EvpnTargetNeighbors) > 0 {
 				for _, citem := range item.EvpnTargetNeighbors {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.VpnId.IsNull() && !citem.VpnId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "vpn-id", strconv.FormatInt(citem.VpnId.ValueInt64(), 10))
+					}
+					if !citem.RemoteAcId.IsNull() && !citem.RemoteAcId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "remote-ac-id", strconv.FormatInt(citem.RemoteAcId.ValueInt64(), 10))
+					}
+					if !citem.Source.IsNull() && !citem.Source.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "source", strconv.FormatInt(citem.Source.ValueInt64(), 10))
+					}
 					if !citem.PwClass.IsNull() && !citem.PwClass.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "pw-class", citem.PwClass.ValueString())
 					}
@@ -1918,7 +1818,12 @@ func (data L2VPNXconnectGroup) toBodyXML(ctx context.Context) string {
 			if len(item.EvpnServiceNeighbors) > 0 {
 				for _, citem := range item.EvpnServiceNeighbors {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.VpnId.IsNull() && !citem.VpnId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "vpn-id", strconv.FormatInt(citem.VpnId.ValueInt64(), 10))
+					}
+					if !citem.ServiceId.IsNull() && !citem.ServiceId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "service-id", strconv.FormatInt(citem.ServiceId.ValueInt64(), 10))
+					}
 					if !citem.PwClass.IsNull() && !citem.PwClass.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "pw-class", citem.PwClass.ValueString())
 					}
@@ -1928,7 +1833,15 @@ func (data L2VPNXconnectGroup) toBodyXML(ctx context.Context) string {
 			if len(item.EvpnTargetNeighborsSegmentRouting) > 0 {
 				for _, citem := range item.EvpnTargetNeighborsSegmentRouting {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.VpnId.IsNull() && !citem.VpnId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "vpn-id", strconv.FormatInt(citem.VpnId.ValueInt64(), 10))
+					}
+					if !citem.RemoteAcId.IsNull() && !citem.RemoteAcId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "remote-ac-id", strconv.FormatInt(citem.RemoteAcId.ValueInt64(), 10))
+					}
+					if !citem.Source.IsNull() && !citem.Source.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "source", strconv.FormatInt(citem.Source.ValueInt64(), 10))
+					}
 					if !citem.SegmentRoutingSrv6Locator.IsNull() && !citem.SegmentRoutingSrv6Locator.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "segment-routing/srv6/locator", citem.SegmentRoutingSrv6Locator.ValueString())
 					}
@@ -1938,7 +1851,12 @@ func (data L2VPNXconnectGroup) toBodyXML(ctx context.Context) string {
 			if len(item.EvpnServiceNeighborsSegmentRouting) > 0 {
 				for _, citem := range item.EvpnServiceNeighborsSegmentRouting {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.VpnId.IsNull() && !citem.VpnId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "vpn-id", strconv.FormatInt(citem.VpnId.ValueInt64(), 10))
+					}
+					if !citem.ServiceId.IsNull() && !citem.ServiceId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "service-id", strconv.FormatInt(citem.ServiceId.ValueInt64(), 10))
+					}
 					if !citem.SegmentRoutingSrv6Locator.IsNull() && !citem.SegmentRoutingSrv6Locator.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "segment-routing/srv6/locator", citem.SegmentRoutingSrv6Locator.ValueString())
 					}
@@ -2009,74 +1927,123 @@ func (data L2VPNXconnectGroup) toBodyXML(ctx context.Context) string {
 			if len(item.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat) > 0 {
 				for _, citem := range item.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.TwoByteAsNumber.IsNull() && !citem.TwoByteAsNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "two-byte-as-number", strconv.FormatInt(citem.TwoByteAsNumber.ValueInt64(), 10))
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt", ccBody.Res())
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetImportFourByteAsFormat) > 0 {
 				for _, citem := range item.AutodiscoveryBgpRouteTargetImportFourByteAsFormat {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.FourByteAsNumber.IsNull() && !citem.FourByteAsNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "four-byte-as-number", strconv.FormatInt(citem.FourByteAsNumber.ValueInt64(), 10))
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt", ccBody.Res())
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat) > 0 {
 				for _, citem := range item.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Ipv4Address.IsNull() && !citem.Ipv4Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "ipv4-address", citem.Ipv4Address.ValueString())
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt", ccBody.Res())
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat) > 0 {
 				for _, citem := range item.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.TwoByteAsNumber.IsNull() && !citem.TwoByteAsNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "two-byte-as-number", strconv.FormatInt(citem.TwoByteAsNumber.ValueInt64(), 10))
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt", ccBody.Res())
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetExportFourByteAsFormat) > 0 {
 				for _, citem := range item.AutodiscoveryBgpRouteTargetExportFourByteAsFormat {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.FourByteAsNumber.IsNull() && !citem.FourByteAsNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "four-byte-as-number", strconv.FormatInt(citem.FourByteAsNumber.ValueInt64(), 10))
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt", ccBody.Res())
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat) > 0 {
 				for _, citem := range item.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Ipv4Address.IsNull() && !citem.Ipv4Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "ipv4-address", citem.Ipv4Address.ValueString())
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt", ccBody.Res())
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetTwoByteAsFormat) > 0 {
 				for _, citem := range item.AutodiscoveryBgpRouteTargetTwoByteAsFormat {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.TwoByteAsNumber.IsNull() && !citem.TwoByteAsNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "two-byte-as-number", strconv.FormatInt(citem.TwoByteAsNumber.ValueInt64(), 10))
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt", ccBody.Res())
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetFourByteAsFormat) > 0 {
 				for _, citem := range item.AutodiscoveryBgpRouteTargetFourByteAsFormat {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.FourByteAsNumber.IsNull() && !citem.FourByteAsNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "four-byte-as-number", strconv.FormatInt(citem.FourByteAsNumber.ValueInt64(), 10))
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt", ccBody.Res())
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetIpv4AddressFormat) > 0 {
 				for _, citem := range item.AutodiscoveryBgpRouteTargetIpv4AddressFormat {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Ipv4Address.IsNull() && !citem.Ipv4Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "ipv4-address", citem.Ipv4Address.ValueString())
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt", ccBody.Res())
 				}
 			}
 			if len(item.AutodiscoveryBgpSignalingProtocolBgpCeIds) > 0 {
 				for _, citem := range item.AutodiscoveryBgpSignalingProtocolBgpCeIds {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.LocalCeIdValue.IsNull() && !citem.LocalCeIdValue.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "local-ce-id-value", strconv.FormatInt(citem.LocalCeIdValue.ValueInt64(), 10))
+					}
 					if len(citem.Interfaces) > 0 {
 						for _, ccitem := range citem.Interfaces {
 							cccBody := netconf.Body{}
-							_ = ccitem // Suppress unused variable warning
+							if !ccitem.InterfaceName.IsNull() && !ccitem.InterfaceName.IsUnknown() {
+								cccBody = helpers.SetFromXPath(cccBody, "interface-name", ccitem.InterfaceName.ValueString())
+							}
 							ccBody = helpers.AppendRawFromXPath(ccBody, "interface", cccBody.Res())
 						}
 					}
@@ -2162,34 +2129,36 @@ func (data *L2VPNXconnectGroup) updateFromBodyXML(ctx context.Context, res xmldo
 		} else if data.P2ps[i].Description.IsNull() {
 			data.P2ps[i].Description = types.StringNull()
 		}
-		for ci := range data.P2ps[i].Interfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.P2ps[i].Interfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "interfaces/interface"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.P2ps[i].Interfaces
+			data.P2ps[i].Interfaces = make([]L2VPNXconnectGroupP2psInterfaces, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "interfaces/interface").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupP2psInterfaces{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
-				data.P2ps[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].Interfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.P2ps[i].Interfaces = append(data.P2ps[i].Interfaces, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "interworking/ipv4"); value.Exists() {
 			data.P2ps[i].InterworkingIpv4 = types.BoolValue(true)
@@ -2209,318 +2178,360 @@ func (data *L2VPNXconnectGroup) updateFromBodyXML(ctx context.Context, res xmldo
 				data.P2ps[i].InterworkingEthernet = types.BoolNull()
 			}
 		}
-		for ci := range data.P2ps[i].BackupInterfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.P2ps[i].BackupInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "backup/interface"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.P2ps[i].BackupInterfaces
+			data.P2ps[i].BackupInterfaces = make([]L2VPNXconnectGroupP2psBackupInterfaces, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "backup/interface").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupP2psBackupInterfaces{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
-				data.P2ps[i].BackupInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].BackupInterfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.P2ps[i].BackupInterfaces = append(data.P2ps[i].BackupInterfaces, citem)
+				return true
+			})
 		}
-		for ci := range data.P2ps[i].Ipv4Neighbors {
-			keys := [...]string{"address", "pw-id"}
-			keyValues := [...]string{data.P2ps[i].Ipv4Neighbors[ci].Address.ValueString(), strconv.FormatInt(data.P2ps[i].Ipv4Neighbors[ci].PwId.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "neighbor/ipv4s/ipv4"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.P2ps[i].Ipv4Neighbors
+			data.P2ps[i].Ipv4Neighbors = make([]L2VPNXconnectGroupP2psIpv4Neighbors, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "neighbor/ipv4s/ipv4").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupP2psIpv4Neighbors{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "pw-id"); cValue.Exists() {
+					citem.PwId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "pw-class"); cValue.Exists() {
+					citem.PwClass = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "bandwidth"); cValue.Exists() {
+					citem.Bandwidth = types.Int64Value(cValue.Int())
+				}
+				// Rebuild nested nested list from device XML response
+				if ccValue := helpers.GetFromXPath(cr, "backup/neighbors/neighbor"); ccValue.Exists() {
+					citem.BackupNeighbors = make([]L2VPNXconnectGroupP2psIpv4NeighborsBackupNeighbors, 0)
+					ccValue.ForEach(func(_ int, ccr xmldot.Result) bool {
+						ccitem := L2VPNXconnectGroupP2psIpv4NeighborsBackupNeighbors{}
+						if ccValue := helpers.GetFromXPath(ccr, "address"); ccValue.Exists() {
+							ccitem.Address = types.StringValue(ccValue.String())
 						}
-						found = false
+						if ccValue := helpers.GetFromXPath(ccr, "pw-id"); ccValue.Exists() {
+							ccitem.PwId = types.Int64Value(ccValue.Int())
+						}
+						if ccValue := helpers.GetFromXPath(ccr, "pw-class"); ccValue.Exists() {
+							ccitem.PwClass = types.StringValue(ccValue.String())
+						}
+						if ccValue := helpers.GetFromXPath(ccr, "mpls/static/label/local"); ccValue.Exists() {
+							ccitem.MplsStaticLabelLocal = types.Int64Value(ccValue.Int())
+						}
+						if ccValue := helpers.GetFromXPath(ccr, "mpls/static/label/remote"); ccValue.Exists() {
+							ccitem.MplsStaticLabelRemote = types.Int64Value(ccValue.Int())
+						}
+						citem.BackupNeighbors = append(citem.BackupNeighbors, ccitem)
+						return true
+					})
+				}
+				if cValue := helpers.GetFromXPath(cr, "mpls/static/label/local"); cValue.Exists() {
+					citem.MplsStaticLabelLocal = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "mpls/static/label/remote"); cValue.Exists() {
+					citem.MplsStaticLabelRemote = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "tag-impose/vlan"); cValue.Exists() {
+					citem.TagImposeVlan = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.PwId.Equal(citem.PwId) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.P2ps[i].Ipv4Neighbors[ci].Address = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].Ipv4Neighbors[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "pw-id"); value.Exists() {
-				data.P2ps[i].Ipv4Neighbors[ci].PwId = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].Ipv4Neighbors[ci].PwId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "pw-class"); value.Exists() {
-				data.P2ps[i].Ipv4Neighbors[ci].PwClass = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].Ipv4Neighbors[ci].PwClass = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "bandwidth"); value.Exists() {
-				data.P2ps[i].Ipv4Neighbors[ci].Bandwidth = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].Ipv4Neighbors[ci].Bandwidth = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "mpls/static/label/local"); value.Exists() {
-				data.P2ps[i].Ipv4Neighbors[ci].MplsStaticLabelLocal = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].Ipv4Neighbors[ci].MplsStaticLabelLocal = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "mpls/static/label/remote"); value.Exists() {
-				data.P2ps[i].Ipv4Neighbors[ci].MplsStaticLabelRemote = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].Ipv4Neighbors[ci].MplsStaticLabelRemote = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "tag-impose/vlan"); value.Exists() {
-				data.P2ps[i].Ipv4Neighbors[ci].TagImposeVlan = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].Ipv4Neighbors[ci].TagImposeVlan = types.Int64Null()
-			}
+				}
+
+				data.P2ps[i].Ipv4Neighbors = append(data.P2ps[i].Ipv4Neighbors, citem)
+				return true
+			})
 		}
-		for ci := range data.P2ps[i].Ipv6Neighbors {
-			keys := [...]string{"address", "pw-id"}
-			keyValues := [...]string{data.P2ps[i].Ipv6Neighbors[ci].Address.ValueString(), strconv.FormatInt(data.P2ps[i].Ipv6Neighbors[ci].PwId.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "neighbor/ipv6s/ipv6"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.P2ps[i].Ipv6Neighbors
+			data.P2ps[i].Ipv6Neighbors = make([]L2VPNXconnectGroupP2psIpv6Neighbors, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "neighbor/ipv6s/ipv6").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupP2psIpv6Neighbors{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "pw-id"); cValue.Exists() {
+					citem.PwId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "pw-class"); cValue.Exists() {
+					citem.PwClass = types.StringValue(cValue.String())
+				}
+				// Rebuild nested nested list from device XML response
+				if ccValue := helpers.GetFromXPath(cr, "backup/neighbors/neighbor"); ccValue.Exists() {
+					citem.BackupNeighbors = make([]L2VPNXconnectGroupP2psIpv6NeighborsBackupNeighbors, 0)
+					ccValue.ForEach(func(_ int, ccr xmldot.Result) bool {
+						ccitem := L2VPNXconnectGroupP2psIpv6NeighborsBackupNeighbors{}
+						if ccValue := helpers.GetFromXPath(ccr, "address"); ccValue.Exists() {
+							ccitem.Address = types.StringValue(ccValue.String())
 						}
-						found = false
+						if ccValue := helpers.GetFromXPath(ccr, "pw-id"); ccValue.Exists() {
+							ccitem.PwId = types.Int64Value(ccValue.Int())
+						}
+						if ccValue := helpers.GetFromXPath(ccr, "pw-class"); ccValue.Exists() {
+							ccitem.PwClass = types.StringValue(ccValue.String())
+						}
+						if ccValue := helpers.GetFromXPath(ccr, "mpls/static/label/local"); ccValue.Exists() {
+							ccitem.MplsStaticLabelLocal = types.Int64Value(ccValue.Int())
+						}
+						if ccValue := helpers.GetFromXPath(ccr, "mpls/static/label/remote"); ccValue.Exists() {
+							ccitem.MplsStaticLabelRemote = types.Int64Value(ccValue.Int())
+						}
+						citem.BackupNeighbors = append(citem.BackupNeighbors, ccitem)
+						return true
+					})
+				}
+				if cValue := helpers.GetFromXPath(cr, "mpls/static/label/local"); cValue.Exists() {
+					citem.MplsStaticLabelLocal = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "mpls/static/label/remote"); cValue.Exists() {
+					citem.MplsStaticLabelRemote = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "tag-impose/vlan"); cValue.Exists() {
+					citem.TagImposeVlan = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "source/ipv6-address"); cValue.Exists() {
+					citem.SourceIpv6Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.PwId.Equal(citem.PwId) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.P2ps[i].Ipv6Neighbors[ci].Address = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].Ipv6Neighbors[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "pw-id"); value.Exists() {
-				data.P2ps[i].Ipv6Neighbors[ci].PwId = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].Ipv6Neighbors[ci].PwId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "pw-class"); value.Exists() {
-				data.P2ps[i].Ipv6Neighbors[ci].PwClass = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].Ipv6Neighbors[ci].PwClass = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "mpls/static/label/local"); value.Exists() {
-				data.P2ps[i].Ipv6Neighbors[ci].MplsStaticLabelLocal = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].Ipv6Neighbors[ci].MplsStaticLabelLocal = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "mpls/static/label/remote"); value.Exists() {
-				data.P2ps[i].Ipv6Neighbors[ci].MplsStaticLabelRemote = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].Ipv6Neighbors[ci].MplsStaticLabelRemote = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "tag-impose/vlan"); value.Exists() {
-				data.P2ps[i].Ipv6Neighbors[ci].TagImposeVlan = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].Ipv6Neighbors[ci].TagImposeVlan = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "source/ipv6-address"); value.Exists() {
-				data.P2ps[i].Ipv6Neighbors[ci].SourceIpv6Address = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].Ipv6Neighbors[ci].SourceIpv6Address = types.StringNull()
-			}
+				}
+
+				data.P2ps[i].Ipv6Neighbors = append(data.P2ps[i].Ipv6Neighbors, citem)
+				return true
+			})
 		}
-		for ci := range data.P2ps[i].EvpnTargetNeighbors {
-			keys := [...]string{"vpn-id", "remote-ac-id", "source"}
-			keyValues := [...]string{strconv.FormatInt(data.P2ps[i].EvpnTargetNeighbors[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.P2ps[i].EvpnTargetNeighbors[ci].RemoteAcId.ValueInt64(), 10), strconv.FormatInt(data.P2ps[i].EvpnTargetNeighbors[ci].Source.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "neighbor/evpn/evi/targets/target"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.P2ps[i].EvpnTargetNeighbors
+			data.P2ps[i].EvpnTargetNeighbors = make([]L2VPNXconnectGroupP2psEvpnTargetNeighbors, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "neighbor/evpn/evi/targets/target").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupP2psEvpnTargetNeighbors{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "vpn-id"); cValue.Exists() {
+					citem.VpnId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "remote-ac-id"); cValue.Exists() {
+					citem.RemoteAcId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "source"); cValue.Exists() {
+					citem.Source = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "pw-class"); cValue.Exists() {
+					citem.PwClass = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.VpnId.Equal(citem.VpnId) {
+						match = false
+					}
+					if !existingItem.RemoteAcId.Equal(citem.RemoteAcId) {
+						match = false
+					}
+					if !existingItem.Source.Equal(citem.Source) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "vpn-id"); value.Exists() {
-				data.P2ps[i].EvpnTargetNeighbors[ci].VpnId = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].EvpnTargetNeighbors[ci].VpnId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "remote-ac-id"); value.Exists() {
-				data.P2ps[i].EvpnTargetNeighbors[ci].RemoteAcId = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].EvpnTargetNeighbors[ci].RemoteAcId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "source"); value.Exists() {
-				data.P2ps[i].EvpnTargetNeighbors[ci].Source = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].EvpnTargetNeighbors[ci].Source = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "pw-class"); value.Exists() {
-				data.P2ps[i].EvpnTargetNeighbors[ci].PwClass = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].EvpnTargetNeighbors[ci].PwClass = types.StringNull()
-			}
+				}
+
+				data.P2ps[i].EvpnTargetNeighbors = append(data.P2ps[i].EvpnTargetNeighbors, citem)
+				return true
+			})
 		}
-		for ci := range data.P2ps[i].EvpnServiceNeighbors {
-			keys := [...]string{"vpn-id", "service-id"}
-			keyValues := [...]string{strconv.FormatInt(data.P2ps[i].EvpnServiceNeighbors[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.P2ps[i].EvpnServiceNeighbors[ci].ServiceId.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "neighbor/evpn/evi/services/service"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.P2ps[i].EvpnServiceNeighbors
+			data.P2ps[i].EvpnServiceNeighbors = make([]L2VPNXconnectGroupP2psEvpnServiceNeighbors, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "neighbor/evpn/evi/services/service").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupP2psEvpnServiceNeighbors{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "vpn-id"); cValue.Exists() {
+					citem.VpnId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "service-id"); cValue.Exists() {
+					citem.ServiceId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "pw-class"); cValue.Exists() {
+					citem.PwClass = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.VpnId.Equal(citem.VpnId) {
+						match = false
+					}
+					if !existingItem.ServiceId.Equal(citem.ServiceId) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "vpn-id"); value.Exists() {
-				data.P2ps[i].EvpnServiceNeighbors[ci].VpnId = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].EvpnServiceNeighbors[ci].VpnId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "service-id"); value.Exists() {
-				data.P2ps[i].EvpnServiceNeighbors[ci].ServiceId = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].EvpnServiceNeighbors[ci].ServiceId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "pw-class"); value.Exists() {
-				data.P2ps[i].EvpnServiceNeighbors[ci].PwClass = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].EvpnServiceNeighbors[ci].PwClass = types.StringNull()
-			}
+				}
+
+				data.P2ps[i].EvpnServiceNeighbors = append(data.P2ps[i].EvpnServiceNeighbors, citem)
+				return true
+			})
 		}
-		for ci := range data.P2ps[i].EvpnTargetNeighborsSegmentRouting {
-			keys := [...]string{"vpn-id", "remote-ac-id", "source"}
-			keyValues := [...]string{strconv.FormatInt(data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].RemoteAcId.ValueInt64(), 10), strconv.FormatInt(data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].Source.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "neighbor/evpn/evi/segment-routing-targets/target"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.P2ps[i].EvpnTargetNeighborsSegmentRouting
+			data.P2ps[i].EvpnTargetNeighborsSegmentRouting = make([]L2VPNXconnectGroupP2psEvpnTargetNeighborsSegmentRouting, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "neighbor/evpn/evi/segment-routing-targets/target").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupP2psEvpnTargetNeighborsSegmentRouting{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "vpn-id"); cValue.Exists() {
+					citem.VpnId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "remote-ac-id"); cValue.Exists() {
+					citem.RemoteAcId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "source"); cValue.Exists() {
+					citem.Source = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "segment-routing/srv6/locator"); cValue.Exists() {
+					citem.SegmentRoutingSrv6Locator = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.VpnId.Equal(citem.VpnId) {
+						match = false
+					}
+					if !existingItem.RemoteAcId.Equal(citem.RemoteAcId) {
+						match = false
+					}
+					if !existingItem.Source.Equal(citem.Source) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "vpn-id"); value.Exists() {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].VpnId = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].VpnId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "remote-ac-id"); value.Exists() {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].RemoteAcId = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].RemoteAcId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "source"); value.Exists() {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].Source = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].Source = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "segment-routing/srv6/locator"); value.Exists() {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].SegmentRoutingSrv6Locator = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].EvpnTargetNeighborsSegmentRouting[ci].SegmentRoutingSrv6Locator = types.StringNull()
-			}
+				}
+
+				data.P2ps[i].EvpnTargetNeighborsSegmentRouting = append(data.P2ps[i].EvpnTargetNeighborsSegmentRouting, citem)
+				return true
+			})
 		}
-		for ci := range data.P2ps[i].EvpnServiceNeighborsSegmentRouting {
-			keys := [...]string{"vpn-id", "service-id"}
-			keyValues := [...]string{strconv.FormatInt(data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].ServiceId.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "neighbor/evpn/evi/segment-routing-services/service"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.P2ps[i].EvpnServiceNeighborsSegmentRouting
+			data.P2ps[i].EvpnServiceNeighborsSegmentRouting = make([]L2VPNXconnectGroupP2psEvpnServiceNeighborsSegmentRouting, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "neighbor/evpn/evi/segment-routing-services/service").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupP2psEvpnServiceNeighborsSegmentRouting{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "vpn-id"); cValue.Exists() {
+					citem.VpnId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "service-id"); cValue.Exists() {
+					citem.ServiceId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "segment-routing/srv6/locator"); cValue.Exists() {
+					citem.SegmentRoutingSrv6Locator = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.VpnId.Equal(citem.VpnId) {
+						match = false
+					}
+					if !existingItem.ServiceId.Equal(citem.ServiceId) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "vpn-id"); value.Exists() {
-				data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].VpnId = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].VpnId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "service-id"); value.Exists() {
-				data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].ServiceId = types.Int64Value(value.Int())
-			} else {
-				data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].ServiceId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "segment-routing/srv6/locator"); value.Exists() {
-				data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].SegmentRoutingSrv6Locator = types.StringValue(value.String())
-			} else {
-				data.P2ps[i].EvpnServiceNeighborsSegmentRouting[ci].SegmentRoutingSrv6Locator = types.StringNull()
-			}
+				}
+
+				data.P2ps[i].EvpnServiceNeighborsSegmentRouting = append(data.P2ps[i].EvpnServiceNeighborsSegmentRouting, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.Mp2mps {
@@ -2637,350 +2648,390 @@ func (data *L2VPNXconnectGroup) updateFromBodyXML(ctx context.Context, res xmldo
 		} else if data.Mp2mps[i].AutodiscoveryBgpRdIpv4AddressIndex.IsNull() {
 			data.Mp2mps[i].AutodiscoveryBgpRdIpv4AddressIndex = types.Int64Null()
 		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat {
-			keys := [...]string{"two-byte-as-number", "assigned-number"}
-			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportTwoByteAsFormat, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "two-byte-as-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber = types.Int64Null()
-			}
-		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat {
-			keys := [...]string{"four-byte-as-number", "assigned-number"}
-			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportTwoByteAsFormat{}
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "four-byte-as-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber = types.Int64Null()
-			}
-		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat {
-			keys := [...]string{"ipv4-address", "assigned-number"}
-			keyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
-
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "ipv4-address"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address = types.StringValue(value.String())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber = types.Int64Null()
-			}
-		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat {
-			keys := [...]string{"two-byte-as-number", "assigned-number"}
-			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
-
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "two-byte-as-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber = types.Int64Null()
-			}
-		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat {
-			keys := [...]string{"four-byte-as-number", "assigned-number"}
-			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
-
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "four-byte-as-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber = types.Int64Null()
-			}
-		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat {
-			keys := [...]string{"ipv4-address", "assigned-number"}
-			keyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
-
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "ipv4-address"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address = types.StringValue(value.String())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber = types.Int64Null()
-			}
-		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat {
-			keys := [...]string{"two-byte-as-number", "assigned-number"}
-			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
-
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "two-byte-as-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber = types.Int64Null()
-			}
-		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat {
-			keys := [...]string{"four-byte-as-number", "assigned-number"}
-			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
-
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "four-byte-as-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber = types.Int64Null()
-			}
-		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat {
-			keys := [...]string{"ipv4-address", "assigned-number"}
-			keyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
-
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "ipv4-address"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address = types.StringValue(value.String())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "assigned-number"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber = types.Int64Null()
-			}
-		}
-		for ci := range data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds {
-			keys := [...]string{"local-ce-id-value"}
-			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue.ValueInt64(), 10)}
-
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "autodiscovery/bgp/signaling-protocol/bgp/ce-id").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "local-ce-id-value"); value.Exists() {
-				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue = types.Int64Value(value.Int())
-			} else {
-				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "vpws-seamless-integration"); value.Exists() {
-				if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() {
-					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration = types.BoolValue(true)
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "two-byte-as-number"); cValue.Exists() {
+					citem.TwoByteAsNumber = types.Int64Value(cValue.Int())
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() {
-					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration = types.BoolNull()
+				if cValue := helpers.GetFromXPath(cr, "assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
 				}
-			}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.TwoByteAsNumber.Equal(citem.TwoByteAsNumber) {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						break
+					}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportFourByteAsFormat, 0)
+
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportFourByteAsFormat{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "four-byte-as-number"); cValue.Exists() {
+					citem.FourByteAsNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.FourByteAsNumber.Equal(citem.FourByteAsNumber) {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						break
+					}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportIpv4AddressFormat, 0)
+
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportIpv4AddressFormat{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "ipv4-address"); cValue.Exists() {
+					citem.Ipv4Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Ipv4Address.ValueString() != citem.Ipv4Address.ValueString() {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						break
+					}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportTwoByteAsFormat, 0)
+
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportTwoByteAsFormat{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "two-byte-as-number"); cValue.Exists() {
+					citem.TwoByteAsNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.TwoByteAsNumber.Equal(citem.TwoByteAsNumber) {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						break
+					}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportFourByteAsFormat, 0)
+
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportFourByteAsFormat{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "four-byte-as-number"); cValue.Exists() {
+					citem.FourByteAsNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.FourByteAsNumber.Equal(citem.FourByteAsNumber) {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						break
+					}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportIpv4AddressFormat, 0)
+
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportIpv4AddressFormat{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "ipv4-address"); cValue.Exists() {
+					citem.Ipv4Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Ipv4Address.ValueString() != citem.Ipv4Address.ValueString() {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						break
+					}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetTwoByteAsFormat, 0)
+
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetTwoByteAsFormat{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "two-byte-as-number"); cValue.Exists() {
+					citem.TwoByteAsNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.TwoByteAsNumber.Equal(citem.TwoByteAsNumber) {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						break
+					}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetFourByteAsFormat, 0)
+
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetFourByteAsFormat{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "four-byte-as-number"); cValue.Exists() {
+					citem.FourByteAsNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.FourByteAsNumber.Equal(citem.FourByteAsNumber) {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						break
+					}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat
+			data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetIpv4AddressFormat, 0)
+
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetIpv4AddressFormat{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "ipv4-address"); cValue.Exists() {
+					citem.Ipv4Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "assigned-number"); cValue.Exists() {
+					citem.AssignedNumber = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Ipv4Address.ValueString() != citem.Ipv4Address.ValueString() {
+						match = false
+					}
+					if !existingItem.AssignedNumber.Equal(citem.AssignedNumber) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						break
+					}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat = append(data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "autodiscovery/bgp/signaling-protocol/bgp/ce-id"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds
+			data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIds, 0)
+
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIds{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "local-ce-id-value"); cValue.Exists() {
+					citem.LocalCeIdValue = types.Int64Value(cValue.Int())
+				}
+				// Rebuild nested nested list from device XML response
+				if ccValue := helpers.GetFromXPath(cr, "interface"); ccValue.Exists() {
+					citem.Interfaces = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfaces, 0)
+					ccValue.ForEach(func(_ int, ccr xmldot.Result) bool {
+						ccitem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfaces{}
+						if ccValue := helpers.GetFromXPath(ccr, "interface-name"); ccValue.Exists() {
+							ccitem.InterfaceName = types.StringValue(ccValue.String())
+						}
+						citem.Interfaces = append(citem.Interfaces, ccitem)
+						return true
+					})
+				}
+				if cValue := helpers.GetFromXPath(cr, "vpws-seamless-integration"); cValue.Exists() {
+					citem.VpwsSeamlessIntegration = types.BoolValue(true)
+				} else {
+					citem.VpwsSeamlessIntegration = types.BoolValue(false)
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.LocalCeIdValue.Equal(citem.LocalCeIdValue) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.VpwsSeamlessIntegration.ValueBool() && existingItem.VpwsSeamlessIntegration.ValueBool() == false {
+							citem.VpwsSeamlessIntegration = existingItem.VpwsSeamlessIntegration
+						}
+						break
+					}
+				}
+
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds = append(data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "autodiscovery/bgp/signaling-protocol/bgp/ce-range"); value.Exists() {
 			data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeRange = types.Int64Value(value.Int())
@@ -3054,12 +3105,12 @@ func (data *L2VPNXconnectGroup) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("interworking.ipv4"); cValue.Exists() {
 				item.InterworkingIpv4 = types.BoolValue(true)
 			} else {
-				item.InterworkingIpv4 = types.BoolValue(false)
+				item.InterworkingIpv4 = types.BoolNull()
 			}
 			if cValue := v.Get("interworking.ethernet"); cValue.Exists() {
 				item.InterworkingEthernet = types.BoolValue(true)
 			} else {
-				item.InterworkingEthernet = types.BoolValue(false)
+				item.InterworkingEthernet = types.BoolNull()
 			}
 			if cValue := v.Get("backup.interface"); cValue.Exists() {
 				item.BackupInterfaces = make([]L2VPNXconnectGroupP2psBackupInterfaces, 0)
@@ -3270,7 +3321,7 @@ func (data *L2VPNXconnectGroup) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
 			} else {
-				item.Shutdown = types.BoolValue(false)
+				item.Shutdown = types.BoolNull()
 			}
 			if cValue := v.Get("l2-encapsulation"); cValue.Exists() {
 				item.L2Encapsulation = types.StringValue(cValue.String())
@@ -3281,17 +3332,17 @@ func (data *L2VPNXconnectGroup) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("control-word.disable"); cValue.Exists() {
 				item.ControlWordDisable = types.BoolValue(true)
 			} else {
-				item.ControlWordDisable = types.BoolValue(false)
+				item.ControlWordDisable = types.BoolNull()
 			}
 			if cValue := v.Get("autodiscovery.bgp"); cValue.Exists() {
 				item.AutodiscoveryBgp = types.BoolValue(true)
 			} else {
-				item.AutodiscoveryBgp = types.BoolValue(false)
+				item.AutodiscoveryBgp = types.BoolNull()
 			}
 			if cValue := v.Get("autodiscovery.bgp.rd.auto"); cValue.Exists() {
 				item.AutodiscoveryBgpRdAuto = types.BoolValue(true)
 			} else {
-				item.AutodiscoveryBgpRdAuto = types.BoolValue(false)
+				item.AutodiscoveryBgpRdAuto = types.BoolNull()
 			}
 			if cValue := v.Get("autodiscovery.bgp.rd.two-byte-as-number"); cValue.Exists() {
 				item.AutodiscoveryBgpRdTwoByteAsNumber = types.Int64Value(cValue.Int())
@@ -3451,7 +3502,7 @@ func (data *L2VPNXconnectGroup) fromBody(ctx context.Context, res gjson.Result) 
 							if cccValue := ccv.Get("interface-name"); cccValue.Exists() {
 								ccItem.InterfaceName = types.StringValue(cccValue.String())
 							}
-							if cccValue := ccv.Get(""); cccValue.Exists() {
+							if cccValue := ccv.Get("remote-ce-id"); cccValue.Exists() {
 								ccItem.RemoteCeIds = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfacesRemoteCeIds, 0)
 								cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
 									cccItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfacesRemoteCeIds{}
@@ -3469,7 +3520,7 @@ func (data *L2VPNXconnectGroup) fromBody(ctx context.Context, res gjson.Result) 
 					if ccValue := cv.Get("vpws-seamless-integration"); ccValue.Exists() {
 						cItem.VpwsSeamlessIntegration = types.BoolValue(true)
 					} else {
-						cItem.VpwsSeamlessIntegration = types.BoolValue(false)
+						cItem.VpwsSeamlessIntegration = types.BoolNull()
 					}
 					item.AutodiscoveryBgpSignalingProtocolBgpCeIds = append(item.AutodiscoveryBgpSignalingProtocolBgpCeIds, cItem)
 					return true
@@ -3481,17 +3532,17 @@ func (data *L2VPNXconnectGroup) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.transmit"); cValue.Exists() {
 				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 			} else {
-				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(false)
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolNull()
 			}
 			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.receive"); cValue.Exists() {
 				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(true)
 			} else {
-				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(false)
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolNull()
 			}
 			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.both"); cValue.Exists() {
 				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(true)
 			} else {
-				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(false)
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolNull()
 			}
 			if cValue := v.Get("autodiscovery.bgp.route-policy.export"); cValue.Exists() {
 				item.AutodiscoveryBgpRoutePolicyExport = types.StringValue(cValue.String())
@@ -3931,7 +3982,7 @@ func (data *L2VPNXconnectGroupData) fromBody(ctx context.Context, res gjson.Resu
 							if cccValue := ccv.Get("interface-name"); cccValue.Exists() {
 								ccItem.InterfaceName = types.StringValue(cccValue.String())
 							}
-							if cccValue := ccv.Get(""); cccValue.Exists() {
+							if cccValue := ccv.Get("remote-ce-id"); cccValue.Exists() {
 								ccItem.RemoteCeIds = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfacesRemoteCeIds, 0)
 								cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
 									cccItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfacesRemoteCeIds{}
@@ -4407,7 +4458,7 @@ func (data *L2VPNXconnectGroup) fromBodyXML(ctx context.Context, res xmldot.Resu
 							if cccValue := helpers.GetFromXPath(ccv, "interface-name"); cccValue.Exists() {
 								ccItem.InterfaceName = types.StringValue(cccValue.String())
 							}
-							if cccValue := helpers.GetFromXPath(ccv, ""); cccValue.Exists() {
+							if cccValue := helpers.GetFromXPath(ccv, "remote-ce-id"); cccValue.Exists() {
 								ccItem.RemoteCeIds = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfacesRemoteCeIds, 0)
 								cccValue.ForEach(func(_ int, cccv xmldot.Result) bool {
 									cccItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfacesRemoteCeIds{}
@@ -4423,10 +4474,13 @@ func (data *L2VPNXconnectGroup) fromBodyXML(ctx context.Context, res xmldot.Resu
 						})
 					}
 					if ccValue := helpers.GetFromXPath(cv, "vpws-seamless-integration"); ccValue.Exists() {
+
 						cItem.VpwsSeamlessIntegration = types.BoolValue(true)
+
 					} else {
-						cItem.VpwsSeamlessIntegration = types.BoolNull()
+						cItem.VpwsSeamlessIntegration = types.BoolValue(false)
 					}
+
 					item.AutodiscoveryBgpSignalingProtocolBgpCeIds = append(item.AutodiscoveryBgpSignalingProtocolBgpCeIds, cItem)
 					return true
 				})
@@ -4984,7 +5038,7 @@ func (data *L2VPNXconnectGroup) getDeletedItems(ctx context.Context, state L2VPN
 												}
 											}
 											if !found {
-												deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/signaling-protocol/bgp/ce-id%v/interface%v/%v", state.getPath(), keyString, ckeyString, cckeyString, ccckeyString))
+												deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/signaling-protocol/bgp/ce-id%v/interface%v/remote-ce-id%v", state.getPath(), keyString, ckeyString, cckeyString, ccckeyString))
 											}
 										}
 										break

@@ -1455,178 +1455,126 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 		} else {
 			data.ProfilePriorityFlowControlLocations[i].LocationName = types.StringNull()
 		}
-		for ci := range data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass {
-			keys := [...]string{"traffic-class-id"}
-			keyValues := [...]string{strconv.FormatInt(data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("buffer-extended.traffic-class"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass
+			data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass = make([]HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferExtendedTrafficClass, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferExtendedTrafficClass{}
+				if cValue := cr.Get("traffic-class-id"); cValue.Exists() {
+					citem.TrafficClassId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("pause-threshold"); cValue.Exists() {
+					citem.PauseThreshold = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("pause-threshold-bytes"); cValue.Exists() {
+					citem.PauseThresholdBytes = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("ms"); cValue.Exists() {
+					citem.Ms = types.BoolValue(true)
+				} else {
+					citem.Ms = types.BoolValue(false)
+				}
+				if cValue := cr.Get("ms.headroom"); cValue.Exists() {
+					citem.MsHeadroom = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("us"); cValue.Exists() {
+					citem.Us = types.BoolValue(true)
+				} else {
+					citem.Us = types.BoolValue(false)
+				}
+				if cValue := cr.Get("us.headroom"); cValue.Exists() {
+					citem.UsHeadroom = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("kbytes"); cValue.Exists() {
+					citem.Kbytes = types.BoolValue(true)
+				} else {
+					citem.Kbytes = types.BoolValue(false)
+				}
+				if cValue := cr.Get("kbytes.headroom"); cValue.Exists() {
+					citem.KbytesHeadroom = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("mbytes"); cValue.Exists() {
+					citem.Mbytes = types.BoolValue(true)
+				} else {
+					citem.Mbytes = types.BoolValue(false)
+				}
+				if cValue := cr.Get("mbytes.headroom"); cValue.Exists() {
+					citem.MbytesHeadroom = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("buffer-extended.traffic-class").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.TrafficClassId.Equal(citem.TrafficClassId) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.Ms.ValueBool() && existingItem.Ms.ValueBool() == false {
+							citem.Ms = existingItem.Ms
 						}
-						found = false
+						if !citem.Us.ValueBool() && existingItem.Us.ValueBool() == false {
+							citem.Us = existingItem.Us
+						}
+						if !citem.Kbytes.ValueBool() && existingItem.Kbytes.ValueBool() == false {
+							citem.Kbytes = existingItem.Kbytes
+						}
+						if !citem.Mbytes.ValueBool() && existingItem.Mbytes.ValueBool() == false {
+							citem.Mbytes = existingItem.Mbytes
+						}
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("traffic-class-id"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId = types.Int64Value(value.Int())
-			} else if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId.IsNull() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId = types.Int64Null()
-			}
-			if value := cr.Get("pause-threshold"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThreshold = types.Int64Value(value.Int())
-			} else if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThreshold.IsNull() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThreshold = types.Int64Null()
-			}
-			if value := cr.Get("pause-threshold-bytes"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThresholdBytes = types.Int64Value(value.Int())
-			} else if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThresholdBytes.IsNull() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThresholdBytes = types.Int64Null()
-			}
-			if value := cr.Get("ms"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.ValueBool() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms = types.BoolValue(false)
-				} else if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms = types.BoolNull()
-				} else {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("ms.headroom"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MsHeadroom = types.Int64Value(value.Int())
-			} else if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MsHeadroom.IsNull() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MsHeadroom = types.Int64Null()
-			}
-			if value := cr.Get("us"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.ValueBool() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us = types.BoolValue(false)
-				} else if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us = types.BoolNull()
-				} else {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("us.headroom"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].UsHeadroom = types.Int64Value(value.Int())
-			} else if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].UsHeadroom.IsNull() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].UsHeadroom = types.Int64Null()
-			}
-			if value := cr.Get("kbytes"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.ValueBool() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes = types.BoolValue(false)
-				} else if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes = types.BoolNull()
-				} else {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("kbytes.headroom"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].KbytesHeadroom = types.Int64Value(value.Int())
-			} else if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].KbytesHeadroom.IsNull() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].KbytesHeadroom = types.Int64Null()
-			}
-			if value := cr.Get("mbytes"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.ValueBool() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes = types.BoolValue(false)
-				} else if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes = types.BoolNull()
-				} else {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("mbytes.headroom"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MbytesHeadroom = types.Int64Value(value.Int())
-			} else if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MbytesHeadroom.IsNull() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MbytesHeadroom = types.Int64Null()
-			}
+
+				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass = append(data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass, citem)
+				return true
+			})
 		}
-		for ci := range data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass {
-			keys := [...]string{"traffic-class-id"}
-			keyValues := [...]string{strconv.FormatInt(data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("buffer-internal.traffic-class"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass
+			data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass = make([]HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferInternalTrafficClass, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferInternalTrafficClass{}
+				if cValue := cr.Get("traffic-class-id"); cValue.Exists() {
+					citem.TrafficClassId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("pause-threshold"); cValue.Exists() {
+					citem.PauseThreshold = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("headroom"); cValue.Exists() {
+					citem.Headroom = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("ecn"); cValue.Exists() {
+					citem.Ecn = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("max-threshold"); cValue.Exists() {
+					citem.MaxThreshold = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("probability-percentage"); cValue.Exists() {
+					citem.ProbabilityPercentage = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("buffer-internal.traffic-class").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.TrafficClassId.Equal(citem.TrafficClassId) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("traffic-class-id"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId = types.Int64Value(value.Int())
-			} else if data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId.IsNull() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId = types.Int64Null()
-			}
-			if value := cr.Get("pause-threshold"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].PauseThreshold = types.Int64Value(value.Int())
-			} else if data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].PauseThreshold.IsNull() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].PauseThreshold = types.Int64Null()
-			}
-			if value := cr.Get("headroom"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].Headroom = types.Int64Value(value.Int())
-			} else if data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].Headroom.IsNull() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].Headroom = types.Int64Null()
-			}
-			if value := cr.Get("ecn"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].Ecn = types.Int64Value(value.Int())
-			} else if data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].Ecn.IsNull() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].Ecn = types.Int64Null()
-			}
-			if value := cr.Get("max-threshold"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].MaxThreshold = types.Int64Value(value.Int())
-			} else if data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].MaxThreshold.IsNull() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].MaxThreshold = types.Int64Null()
-			}
-			if value := cr.Get("probability-percentage"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].ProbabilityPercentage = types.Int64Value(value.Int())
-			} else if data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].ProbabilityPercentage.IsNull() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].ProbabilityPercentage = types.Int64Null()
-			}
+				}
+
+				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass = append(data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass, citem)
+				return true
+			})
 		}
 	}
 	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv4"); value.Exists() && !data.ProfileGueUdpDestPortIpv4.IsNull() {
@@ -2139,7 +2087,9 @@ func (data HWModuleProfile8000) toBodyXML(ctx context.Context) string {
 			if len(item.BufferExtendedTrafficClass) > 0 {
 				for _, citem := range item.BufferExtendedTrafficClass {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.TrafficClassId.IsNull() && !citem.TrafficClassId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "traffic-class-id", strconv.FormatInt(citem.TrafficClassId.ValueInt64(), 10))
+					}
 					if !citem.PauseThreshold.IsNull() && !citem.PauseThreshold.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "pause-threshold", strconv.FormatInt(citem.PauseThreshold.ValueInt64(), 10))
 					}
@@ -2184,7 +2134,9 @@ func (data HWModuleProfile8000) toBodyXML(ctx context.Context) string {
 			if len(item.BufferInternalTrafficClass) > 0 {
 				for _, citem := range item.BufferInternalTrafficClass {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.TrafficClassId.IsNull() && !citem.TrafficClassId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "traffic-class-id", strconv.FormatInt(citem.TrafficClassId.ValueInt64(), 10))
+					}
 					if !citem.PauseThreshold.IsNull() && !citem.PauseThreshold.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "pause-threshold", strconv.FormatInt(citem.PauseThreshold.ValueInt64(), 10))
 					}
@@ -2878,158 +2830,136 @@ func (data *HWModuleProfile8000) updateFromBodyXML(ctx context.Context, res xmld
 		} else if data.ProfilePriorityFlowControlLocations[i].LocationName.IsNull() {
 			data.ProfilePriorityFlowControlLocations[i].LocationName = types.StringNull()
 		}
-		for ci := range data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass {
-			keys := [...]string{"traffic-class-id"}
-			keyValues := [...]string{strconv.FormatInt(data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "buffer-extended/traffic-class"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass
+			data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass = make([]HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferExtendedTrafficClass, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "buffer-extended/traffic-class").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferExtendedTrafficClass{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "traffic-class-id"); cValue.Exists() {
+					citem.TrafficClassId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "pause-threshold"); cValue.Exists() {
+					citem.PauseThreshold = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "pause-threshold-bytes"); cValue.Exists() {
+					citem.PauseThresholdBytes = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "ms"); cValue.Exists() {
+					citem.Ms = types.BoolValue(true)
+				} else {
+					citem.Ms = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "ms/headroom"); cValue.Exists() {
+					citem.MsHeadroom = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "us"); cValue.Exists() {
+					citem.Us = types.BoolValue(true)
+				} else {
+					citem.Us = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "us/headroom"); cValue.Exists() {
+					citem.UsHeadroom = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "kbytes"); cValue.Exists() {
+					citem.Kbytes = types.BoolValue(true)
+				} else {
+					citem.Kbytes = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "kbytes/headroom"); cValue.Exists() {
+					citem.KbytesHeadroom = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "mbytes"); cValue.Exists() {
+					citem.Mbytes = types.BoolValue(true)
+				} else {
+					citem.Mbytes = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "mbytes/headroom"); cValue.Exists() {
+					citem.MbytesHeadroom = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.TrafficClassId.Equal(citem.TrafficClassId) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Ms.ValueBool() && existingItem.Ms.ValueBool() == false {
+							citem.Ms = existingItem.Ms
 						}
-						found = false
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Us.ValueBool() && existingItem.Us.ValueBool() == false {
+							citem.Us = existingItem.Us
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Kbytes.ValueBool() && existingItem.Kbytes.ValueBool() == false {
+							citem.Kbytes = existingItem.Kbytes
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Mbytes.ValueBool() && existingItem.Mbytes.ValueBool() == false {
+							citem.Mbytes = existingItem.Mbytes
+						}
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "traffic-class-id"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId = types.Int64Value(value.Int())
-			} else {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "pause-threshold"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThreshold = types.Int64Value(value.Int())
-			} else {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThreshold = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "pause-threshold-bytes"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThresholdBytes = types.Int64Value(value.Int())
-			} else {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThresholdBytes = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "ms"); value.Exists() {
-				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "ms/headroom"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MsHeadroom = types.Int64Value(value.Int())
-			} else {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MsHeadroom = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "us"); value.Exists() {
-				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "us/headroom"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].UsHeadroom = types.Int64Value(value.Int())
-			} else {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].UsHeadroom = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "kbytes"); value.Exists() {
-				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "kbytes/headroom"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].KbytesHeadroom = types.Int64Value(value.Int())
-			} else {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].KbytesHeadroom = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "mbytes"); value.Exists() {
-				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() {
-					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "mbytes/headroom"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MbytesHeadroom = types.Int64Value(value.Int())
-			} else {
-				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MbytesHeadroom = types.Int64Null()
-			}
+
+				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass = append(data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass, citem)
+				return true
+			})
 		}
-		for ci := range data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass {
-			keys := [...]string{"traffic-class-id"}
-			keyValues := [...]string{strconv.FormatInt(data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "buffer-internal/traffic-class"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass
+			data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass = make([]HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferInternalTrafficClass, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "buffer-internal/traffic-class").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferInternalTrafficClass{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "traffic-class-id"); cValue.Exists() {
+					citem.TrafficClassId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "pause-threshold"); cValue.Exists() {
+					citem.PauseThreshold = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "headroom"); cValue.Exists() {
+					citem.Headroom = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "ecn"); cValue.Exists() {
+					citem.Ecn = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "max-threshold"); cValue.Exists() {
+					citem.MaxThreshold = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "probability-percentage"); cValue.Exists() {
+					citem.ProbabilityPercentage = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.TrafficClassId.Equal(citem.TrafficClassId) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "traffic-class-id"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId = types.Int64Value(value.Int())
-			} else {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "pause-threshold"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].PauseThreshold = types.Int64Value(value.Int())
-			} else {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].PauseThreshold = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "headroom"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].Headroom = types.Int64Value(value.Int())
-			} else {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].Headroom = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "ecn"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].Ecn = types.Int64Value(value.Int())
-			} else {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].Ecn = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "max-threshold"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].MaxThreshold = types.Int64Value(value.Int())
-			} else {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].MaxThreshold = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "probability-percentage"); value.Exists() {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].ProbabilityPercentage = types.Int64Value(value.Int())
-			} else {
-				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].ProbabilityPercentage = types.Int64Null()
-			}
+				}
+
+				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass = append(data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass, citem)
+				return true
+			})
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/profile/gue/udp-dest-port/ipv4"); value.Exists() {
@@ -3524,7 +3454,7 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res gjson.Result)
 					if ccValue := cv.Get("ms"); ccValue.Exists() {
 						cItem.Ms = types.BoolValue(true)
 					} else {
-						cItem.Ms = types.BoolValue(false)
+						cItem.Ms = types.BoolNull()
 					}
 					if ccValue := cv.Get("ms.headroom"); ccValue.Exists() {
 						cItem.MsHeadroom = types.Int64Value(ccValue.Int())
@@ -3532,7 +3462,7 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res gjson.Result)
 					if ccValue := cv.Get("us"); ccValue.Exists() {
 						cItem.Us = types.BoolValue(true)
 					} else {
-						cItem.Us = types.BoolValue(false)
+						cItem.Us = types.BoolNull()
 					}
 					if ccValue := cv.Get("us.headroom"); ccValue.Exists() {
 						cItem.UsHeadroom = types.Int64Value(ccValue.Int())
@@ -3540,7 +3470,7 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res gjson.Result)
 					if ccValue := cv.Get("kbytes"); ccValue.Exists() {
 						cItem.Kbytes = types.BoolValue(true)
 					} else {
-						cItem.Kbytes = types.BoolValue(false)
+						cItem.Kbytes = types.BoolNull()
 					}
 					if ccValue := cv.Get("kbytes.headroom"); ccValue.Exists() {
 						cItem.KbytesHeadroom = types.Int64Value(ccValue.Int())
@@ -3548,7 +3478,7 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res gjson.Result)
 					if ccValue := cv.Get("mbytes"); ccValue.Exists() {
 						cItem.Mbytes = types.BoolValue(true)
 					} else {
-						cItem.Mbytes = types.BoolValue(false)
+						cItem.Mbytes = types.BoolNull()
 					}
 					if ccValue := cv.Get("mbytes.headroom"); ccValue.Exists() {
 						cItem.MbytesHeadroom = types.Int64Value(ccValue.Int())
@@ -3606,12 +3536,12 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res gjson.Result)
 			if cValue := v.Get("bandwidth-congestion-detection.enable"); cValue.Exists() {
 				item.BandwidthCongestionDetectionEnable = types.BoolValue(true)
 			} else {
-				item.BandwidthCongestionDetectionEnable = types.BoolValue(false)
+				item.BandwidthCongestionDetectionEnable = types.BoolNull()
 			}
 			if cValue := v.Get("bandwidth-congestion-protect.enable"); cValue.Exists() {
 				item.BandwidthCongestionProtectEnable = types.BoolValue(true)
 			} else {
-				item.BandwidthCongestionProtectEnable = types.BoolValue(false)
+				item.BandwidthCongestionProtectEnable = types.BoolNull()
 			}
 			data.ProfileNpuBufferExtendedLocations = append(data.ProfileNpuBufferExtendedLocations, item)
 			return true
@@ -4518,34 +4448,46 @@ func (data *HWModuleProfile8000) fromBodyXML(ctx context.Context, res xmldot.Res
 						cItem.PauseThresholdBytes = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "ms"); ccValue.Exists() {
+
 						cItem.Ms = types.BoolValue(true)
+
 					} else {
-						cItem.Ms = types.BoolNull()
+						cItem.Ms = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "ms/headroom"); ccValue.Exists() {
 						cItem.MsHeadroom = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "us"); ccValue.Exists() {
+
 						cItem.Us = types.BoolValue(true)
+
 					} else {
-						cItem.Us = types.BoolNull()
+						cItem.Us = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "us/headroom"); ccValue.Exists() {
 						cItem.UsHeadroom = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "kbytes"); ccValue.Exists() {
+
 						cItem.Kbytes = types.BoolValue(true)
+
 					} else {
-						cItem.Kbytes = types.BoolNull()
+						cItem.Kbytes = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "kbytes/headroom"); ccValue.Exists() {
 						cItem.KbytesHeadroom = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "mbytes"); ccValue.Exists() {
+
 						cItem.Mbytes = types.BoolValue(true)
+
 					} else {
-						cItem.Mbytes = types.BoolNull()
+						cItem.Mbytes = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "mbytes/headroom"); ccValue.Exists() {
 						cItem.MbytesHeadroom = types.Int64Value(ccValue.Int())
 					}

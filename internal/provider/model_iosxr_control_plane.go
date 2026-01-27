@@ -2089,28 +2089,42 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.SshIpv4Prefixes) > 0 {
 				for _, citem := range item.SshIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.SshIpv4Hosts) > 0 {
 				for _, citem := range item.SshIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
 			if len(item.SshIpv6Prefixes) > 0 {
 				for _, citem := range item.SshIpv6Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.SshIpv6Hosts) > 0 {
 				for _, citem := range item.SshIpv6Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address", ccBody.Res())
 				}
 			}
@@ -2122,28 +2136,42 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.TelnetIpv4Prefixes) > 0 {
 				for _, citem := range item.TelnetIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.TelnetIpv4Hosts) > 0 {
 				for _, citem := range item.TelnetIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
 			if len(item.TelnetIpv6Prefixes) > 0 {
 				for _, citem := range item.TelnetIpv6Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.TelnetIpv6Hosts) > 0 {
 				for _, citem := range item.TelnetIpv6Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address", ccBody.Res())
 				}
 			}
@@ -2155,28 +2183,42 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.SnmpIpv4Prefixes) > 0 {
 				for _, citem := range item.SnmpIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.SnmpIpv4Hosts) > 0 {
 				for _, citem := range item.SnmpIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
 			if len(item.SnmpIpv6Prefixes) > 0 {
 				for _, citem := range item.SnmpIpv6Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.SnmpIpv6Hosts) > 0 {
 				for _, citem := range item.SnmpIpv6Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address", ccBody.Res())
 				}
 			}
@@ -2188,28 +2230,42 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.TftpIpv4Prefixes) > 0 {
 				for _, citem := range item.TftpIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.TftpIpv4Hosts) > 0 {
 				for _, citem := range item.TftpIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
 			if len(item.TftpIpv6Prefixes) > 0 {
 				for _, citem := range item.TftpIpv6Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.TftpIpv6Hosts) > 0 {
 				for _, citem := range item.TftpIpv6Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address", ccBody.Res())
 				}
 			}
@@ -2221,14 +2277,21 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.HttpIpv4Prefixes) > 0 {
 				for _, citem := range item.HttpIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.HttpIpv4Hosts) > 0 {
 				for _, citem := range item.HttpIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
@@ -2240,28 +2303,42 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.XmlIpv4Prefixes) > 0 {
 				for _, citem := range item.XmlIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.XmlIpv4Hosts) > 0 {
 				for _, citem := range item.XmlIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
 			if len(item.XmlIpv6Prefixes) > 0 {
 				for _, citem := range item.XmlIpv6Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.XmlIpv6Hosts) > 0 {
 				for _, citem := range item.XmlIpv6Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address", ccBody.Res())
 				}
 			}
@@ -2273,28 +2350,42 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.NetconfIpv4Prefixes) > 0 {
 				for _, citem := range item.NetconfIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.NetconfIpv4Hosts) > 0 {
 				for _, citem := range item.NetconfIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
 			if len(item.NetconfIpv6Prefixes) > 0 {
 				for _, citem := range item.NetconfIpv6Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.NetconfIpv6Hosts) > 0 {
 				for _, citem := range item.NetconfIpv6Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address", ccBody.Res())
 				}
 			}
@@ -2306,28 +2397,42 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.AllowAllIpv4Prefixes) > 0 {
 				for _, citem := range item.AllowAllIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.AllowAllIpv4Hosts) > 0 {
 				for _, citem := range item.AllowAllIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
 			if len(item.AllowAllIpv6Prefixes) > 0 {
 				for _, citem := range item.AllowAllIpv6Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.AllowAllIpv6Hosts) > 0 {
 				for _, citem := range item.AllowAllIpv6Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address", ccBody.Res())
 				}
 			}
@@ -2765,28 +2870,42 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.SshIpv4Prefixes) > 0 {
 				for _, citem := range item.SshIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.SshIpv4Hosts) > 0 {
 				for _, citem := range item.SshIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
 			if len(item.SshIpv6Prefixes) > 0 {
 				for _, citem := range item.SshIpv6Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.SshIpv6Hosts) > 0 {
 				for _, citem := range item.SshIpv6Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address", ccBody.Res())
 				}
 			}
@@ -2798,28 +2917,42 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.TelnetIpv4Prefixes) > 0 {
 				for _, citem := range item.TelnetIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.TelnetIpv4Hosts) > 0 {
 				for _, citem := range item.TelnetIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
 			if len(item.TelnetIpv6Prefixes) > 0 {
 				for _, citem := range item.TelnetIpv6Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.TelnetIpv6Hosts) > 0 {
 				for _, citem := range item.TelnetIpv6Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address", ccBody.Res())
 				}
 			}
@@ -2831,28 +2964,42 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.SnmpIpv4Prefixes) > 0 {
 				for _, citem := range item.SnmpIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.SnmpIpv4Hosts) > 0 {
 				for _, citem := range item.SnmpIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
 			if len(item.SnmpIpv6Prefixes) > 0 {
 				for _, citem := range item.SnmpIpv6Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.SnmpIpv6Hosts) > 0 {
 				for _, citem := range item.SnmpIpv6Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address", ccBody.Res())
 				}
 			}
@@ -2864,28 +3011,42 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.TftpIpv4Prefixes) > 0 {
 				for _, citem := range item.TftpIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.TftpIpv4Hosts) > 0 {
 				for _, citem := range item.TftpIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
 			if len(item.TftpIpv6Prefixes) > 0 {
 				for _, citem := range item.TftpIpv6Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.TftpIpv6Hosts) > 0 {
 				for _, citem := range item.TftpIpv6Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address", ccBody.Res())
 				}
 			}
@@ -2897,14 +3058,21 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.HttpIpv4Prefixes) > 0 {
 				for _, citem := range item.HttpIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.HttpIpv4Hosts) > 0 {
 				for _, citem := range item.HttpIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
@@ -2916,28 +3084,42 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.XmlIpv4Prefixes) > 0 {
 				for _, citem := range item.XmlIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.XmlIpv4Hosts) > 0 {
 				for _, citem := range item.XmlIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
 			if len(item.XmlIpv6Prefixes) > 0 {
 				for _, citem := range item.XmlIpv6Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.XmlIpv6Hosts) > 0 {
 				for _, citem := range item.XmlIpv6Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address", ccBody.Res())
 				}
 			}
@@ -2949,28 +3131,42 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.NetconfIpv4Prefixes) > 0 {
 				for _, citem := range item.NetconfIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.NetconfIpv4Hosts) > 0 {
 				for _, citem := range item.NetconfIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
 			if len(item.NetconfIpv6Prefixes) > 0 {
 				for _, citem := range item.NetconfIpv6Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.NetconfIpv6Hosts) > 0 {
 				for _, citem := range item.NetconfIpv6Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address", ccBody.Res())
 				}
 			}
@@ -2982,28 +3178,42 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 			if len(item.AllowAllIpv4Prefixes) > 0 {
 				for _, citem := range item.AllowAllIpv4Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.AllowAllIpv4Hosts) > 0 {
 				for _, citem := range item.AllowAllIpv4Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address", ccBody.Res())
 				}
 			}
 			if len(item.AllowAllIpv6Prefixes) > 0 {
 				for _, citem := range item.AllowAllIpv6Prefixes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix", ccBody.Res())
 				}
 			}
 			if len(item.AllowAllIpv6Hosts) > 0 {
 				for _, citem := range item.AllowAllIpv6Hosts {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address", ccBody.Res())
 				}
 			}
@@ -3492,131 +3702,129 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].Ssh = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SshIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].SshIpv4Prefixes
+			data.MgmtInbandInterfaces[i].SshIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesSshIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSshIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SshIpv4Prefixes = append(data.MgmtInbandInterfaces[i].SshIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SshIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SshIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].SshIpv4Hosts
+			data.MgmtInbandInterfaces[i].SshIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesSshIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSshIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].SshIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].SshIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SshIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SshIpv4Hosts = append(data.MgmtInbandInterfaces[i].SshIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SshIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].SshIpv6Prefixes
+			data.MgmtInbandInterfaces[i].SshIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesSshIpv6Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSshIpv6Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SshIpv6Prefixes = append(data.MgmtInbandInterfaces[i].SshIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SshIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SshIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].SshIpv6Hosts
+			data.MgmtInbandInterfaces[i].SshIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesSshIpv6Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSshIpv6Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].SshIpv6Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].SshIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SshIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SshIpv6Hosts = append(data.MgmtInbandInterfaces[i].SshIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := r.Get("allow.telnet"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -3636,131 +3844,129 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].Telnet = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes
+			data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTelnetIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes = append(data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TelnetIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].TelnetIpv4Hosts
+			data.MgmtInbandInterfaces[i].TelnetIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTelnetIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].TelnetIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].TelnetIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TelnetIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TelnetIpv4Hosts = append(data.MgmtInbandInterfaces[i].TelnetIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes
+			data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv6Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTelnetIpv6Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes = append(data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TelnetIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].TelnetIpv6Hosts
+			data.MgmtInbandInterfaces[i].TelnetIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv6Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTelnetIpv6Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].TelnetIpv6Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].TelnetIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TelnetIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TelnetIpv6Hosts = append(data.MgmtInbandInterfaces[i].TelnetIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := r.Get("allow.snmp"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -3780,131 +3986,129 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].Snmp = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes
+			data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSnmpIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes = append(data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SnmpIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].SnmpIpv4Hosts
+			data.MgmtInbandInterfaces[i].SnmpIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSnmpIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].SnmpIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].SnmpIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SnmpIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SnmpIpv4Hosts = append(data.MgmtInbandInterfaces[i].SnmpIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes
+			data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv6Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSnmpIpv6Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes = append(data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SnmpIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].SnmpIpv6Hosts
+			data.MgmtInbandInterfaces[i].SnmpIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv6Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSnmpIpv6Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].SnmpIpv6Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].SnmpIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SnmpIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SnmpIpv6Hosts = append(data.MgmtInbandInterfaces[i].SnmpIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := r.Get("allow.tftp"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -3924,131 +4128,129 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].Tftp = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TftpIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].TftpIpv4Prefixes
+			data.MgmtInbandInterfaces[i].TftpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesTftpIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTftpIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TftpIpv4Prefixes = append(data.MgmtInbandInterfaces[i].TftpIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TftpIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TftpIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].TftpIpv4Hosts
+			data.MgmtInbandInterfaces[i].TftpIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesTftpIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTftpIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].TftpIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].TftpIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TftpIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TftpIpv4Hosts = append(data.MgmtInbandInterfaces[i].TftpIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TftpIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].TftpIpv6Prefixes
+			data.MgmtInbandInterfaces[i].TftpIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesTftpIpv6Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTftpIpv6Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TftpIpv6Prefixes = append(data.MgmtInbandInterfaces[i].TftpIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TftpIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TftpIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].TftpIpv6Hosts
+			data.MgmtInbandInterfaces[i].TftpIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesTftpIpv6Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTftpIpv6Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].TftpIpv6Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].TftpIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TftpIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TftpIpv6Hosts = append(data.MgmtInbandInterfaces[i].TftpIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := r.Get("allow.http"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -4068,68 +4270,67 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].Http = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].HttpIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].HttpIpv4Prefixes
+			data.MgmtInbandInterfaces[i].HttpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesHttpIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesHttpIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].HttpIpv4Prefixes = append(data.MgmtInbandInterfaces[i].HttpIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].HttpIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].HttpIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].HttpIpv4Hosts
+			data.MgmtInbandInterfaces[i].HttpIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesHttpIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesHttpIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].HttpIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].HttpIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].HttpIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].HttpIpv4Hosts = append(data.MgmtInbandInterfaces[i].HttpIpv4Hosts, citem)
+				return true
+			})
 		}
 		if value := r.Get("allow.xr-xml"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -4149,131 +4350,129 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].Xml = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].XmlIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].XmlIpv4Prefixes
+			data.MgmtInbandInterfaces[i].XmlIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesXmlIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesXmlIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].XmlIpv4Prefixes = append(data.MgmtInbandInterfaces[i].XmlIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].XmlIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].XmlIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].XmlIpv4Hosts
+			data.MgmtInbandInterfaces[i].XmlIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesXmlIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesXmlIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].XmlIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].XmlIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].XmlIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].XmlIpv4Hosts = append(data.MgmtInbandInterfaces[i].XmlIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].XmlIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].XmlIpv6Prefixes
+			data.MgmtInbandInterfaces[i].XmlIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesXmlIpv6Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesXmlIpv6Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].XmlIpv6Prefixes = append(data.MgmtInbandInterfaces[i].XmlIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].XmlIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].XmlIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].XmlIpv6Hosts
+			data.MgmtInbandInterfaces[i].XmlIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesXmlIpv6Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesXmlIpv6Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].XmlIpv6Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].XmlIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].XmlIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].XmlIpv6Hosts = append(data.MgmtInbandInterfaces[i].XmlIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := r.Get("allow.netconf"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -4293,131 +4492,129 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].Netconf = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes
+			data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesNetconfIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes = append(data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].NetconfIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].NetconfIpv4Hosts
+			data.MgmtInbandInterfaces[i].NetconfIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesNetconfIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].NetconfIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].NetconfIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].NetconfIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].NetconfIpv4Hosts = append(data.MgmtInbandInterfaces[i].NetconfIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes
+			data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv6Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesNetconfIpv6Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes = append(data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].NetconfIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].NetconfIpv6Hosts
+			data.MgmtInbandInterfaces[i].NetconfIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv6Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesNetconfIpv6Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].NetconfIpv6Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].NetconfIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].NetconfIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].NetconfIpv6Hosts = append(data.MgmtInbandInterfaces[i].NetconfIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := r.Get("allow.all"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -4437,131 +4634,129 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].AllowAll = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes
+			data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesAllowAllIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes = append(data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts
+			data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesAllowAllIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts = append(data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes
+			data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv6Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesAllowAllIpv6Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Length.IsNull() {
-				data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes = append(data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts
+			data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv6Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesAllowAllIpv6Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts[ci].Address.IsNull() {
-				data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts = append(data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts, citem)
+				return true
+			})
 		}
 	}
 	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh"); value.Exists() {
@@ -5635,131 +5830,129 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].Ssh = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].SshIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].SshIpv4Prefixes
+			data.MgmtOobInterfaces[i].SshIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesSshIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSshIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SshIpv4Prefixes = append(data.MgmtOobInterfaces[i].SshIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].SshIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SshIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].SshIpv4Hosts
+			data.MgmtOobInterfaces[i].SshIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesSshIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSshIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].SshIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].SshIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SshIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SshIpv4Hosts = append(data.MgmtOobInterfaces[i].SshIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].SshIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].SshIpv6Prefixes
+			data.MgmtOobInterfaces[i].SshIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesSshIpv6Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSshIpv6Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SshIpv6Prefixes = append(data.MgmtOobInterfaces[i].SshIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].SshIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SshIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].SshIpv6Hosts
+			data.MgmtOobInterfaces[i].SshIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesSshIpv6Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSshIpv6Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].SshIpv6Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].SshIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SshIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SshIpv6Hosts = append(data.MgmtOobInterfaces[i].SshIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := r.Get("allow.telnet"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -5779,131 +5972,129 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].Telnet = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].TelnetIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].TelnetIpv4Prefixes
+			data.MgmtOobInterfaces[i].TelnetIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesTelnetIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTelnetIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TelnetIpv4Prefixes = append(data.MgmtOobInterfaces[i].TelnetIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].TelnetIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TelnetIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].TelnetIpv4Hosts
+			data.MgmtOobInterfaces[i].TelnetIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesTelnetIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTelnetIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].TelnetIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].TelnetIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TelnetIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TelnetIpv4Hosts = append(data.MgmtOobInterfaces[i].TelnetIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].TelnetIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].TelnetIpv6Prefixes
+			data.MgmtOobInterfaces[i].TelnetIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesTelnetIpv6Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTelnetIpv6Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TelnetIpv6Prefixes = append(data.MgmtOobInterfaces[i].TelnetIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].TelnetIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TelnetIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].TelnetIpv6Hosts
+			data.MgmtOobInterfaces[i].TelnetIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesTelnetIpv6Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTelnetIpv6Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].TelnetIpv6Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].TelnetIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TelnetIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TelnetIpv6Hosts = append(data.MgmtOobInterfaces[i].TelnetIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := r.Get("allow.snmp"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -5923,131 +6114,129 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].Snmp = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].SnmpIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].SnmpIpv4Prefixes
+			data.MgmtOobInterfaces[i].SnmpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesSnmpIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSnmpIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SnmpIpv4Prefixes = append(data.MgmtOobInterfaces[i].SnmpIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].SnmpIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SnmpIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].SnmpIpv4Hosts
+			data.MgmtOobInterfaces[i].SnmpIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesSnmpIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSnmpIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].SnmpIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].SnmpIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SnmpIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SnmpIpv4Hosts = append(data.MgmtOobInterfaces[i].SnmpIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].SnmpIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].SnmpIpv6Prefixes
+			data.MgmtOobInterfaces[i].SnmpIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesSnmpIpv6Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSnmpIpv6Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SnmpIpv6Prefixes = append(data.MgmtOobInterfaces[i].SnmpIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].SnmpIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SnmpIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].SnmpIpv6Hosts
+			data.MgmtOobInterfaces[i].SnmpIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesSnmpIpv6Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSnmpIpv6Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].SnmpIpv6Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].SnmpIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SnmpIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SnmpIpv6Hosts = append(data.MgmtOobInterfaces[i].SnmpIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := r.Get("allow.tftp"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -6067,131 +6256,129 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].Tftp = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].TftpIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].TftpIpv4Prefixes
+			data.MgmtOobInterfaces[i].TftpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesTftpIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTftpIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TftpIpv4Prefixes = append(data.MgmtOobInterfaces[i].TftpIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].TftpIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TftpIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].TftpIpv4Hosts
+			data.MgmtOobInterfaces[i].TftpIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesTftpIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTftpIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].TftpIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].TftpIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TftpIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TftpIpv4Hosts = append(data.MgmtOobInterfaces[i].TftpIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].TftpIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].TftpIpv6Prefixes
+			data.MgmtOobInterfaces[i].TftpIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesTftpIpv6Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTftpIpv6Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TftpIpv6Prefixes = append(data.MgmtOobInterfaces[i].TftpIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].TftpIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TftpIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].TftpIpv6Hosts
+			data.MgmtOobInterfaces[i].TftpIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesTftpIpv6Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTftpIpv6Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].TftpIpv6Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].TftpIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TftpIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TftpIpv6Hosts = append(data.MgmtOobInterfaces[i].TftpIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := r.Get("allow.http"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -6211,68 +6398,67 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].Http = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].HttpIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].HttpIpv4Prefixes
+			data.MgmtOobInterfaces[i].HttpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesHttpIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesHttpIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].HttpIpv4Prefixes = append(data.MgmtOobInterfaces[i].HttpIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].HttpIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].HttpIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].HttpIpv4Hosts
+			data.MgmtOobInterfaces[i].HttpIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesHttpIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesHttpIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].HttpIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].HttpIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].HttpIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].HttpIpv4Hosts = append(data.MgmtOobInterfaces[i].HttpIpv4Hosts, citem)
+				return true
+			})
 		}
 		if value := r.Get("allow.xr-xml"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -6292,131 +6478,129 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].Xml = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].XmlIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].XmlIpv4Prefixes
+			data.MgmtOobInterfaces[i].XmlIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesXmlIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesXmlIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].XmlIpv4Prefixes = append(data.MgmtOobInterfaces[i].XmlIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].XmlIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].XmlIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].XmlIpv4Hosts
+			data.MgmtOobInterfaces[i].XmlIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesXmlIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesXmlIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].XmlIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].XmlIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].XmlIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].XmlIpv4Hosts = append(data.MgmtOobInterfaces[i].XmlIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].XmlIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].XmlIpv6Prefixes
+			data.MgmtOobInterfaces[i].XmlIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesXmlIpv6Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesXmlIpv6Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].XmlIpv6Prefixes = append(data.MgmtOobInterfaces[i].XmlIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].XmlIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].XmlIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].XmlIpv6Hosts
+			data.MgmtOobInterfaces[i].XmlIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesXmlIpv6Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesXmlIpv6Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].XmlIpv6Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].XmlIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].XmlIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].XmlIpv6Hosts = append(data.MgmtOobInterfaces[i].XmlIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := r.Get("allow.netconf"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -6436,131 +6620,129 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].Netconf = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].NetconfIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].NetconfIpv4Prefixes
+			data.MgmtOobInterfaces[i].NetconfIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesNetconfIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesNetconfIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].NetconfIpv4Prefixes = append(data.MgmtOobInterfaces[i].NetconfIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].NetconfIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].NetconfIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].NetconfIpv4Hosts
+			data.MgmtOobInterfaces[i].NetconfIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesNetconfIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesNetconfIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].NetconfIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].NetconfIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].NetconfIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].NetconfIpv4Hosts = append(data.MgmtOobInterfaces[i].NetconfIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].NetconfIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].NetconfIpv6Prefixes
+			data.MgmtOobInterfaces[i].NetconfIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesNetconfIpv6Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesNetconfIpv6Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].NetconfIpv6Prefixes = append(data.MgmtOobInterfaces[i].NetconfIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].NetconfIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].NetconfIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].NetconfIpv6Hosts
+			data.MgmtOobInterfaces[i].NetconfIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesNetconfIpv6Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesNetconfIpv6Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].NetconfIpv6Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].NetconfIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].NetconfIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].NetconfIpv6Hosts = append(data.MgmtOobInterfaces[i].NetconfIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := r.Get("allow.all"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -6580,131 +6762,129 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].AllowAll = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes
+			data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv4Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesAllowAllIpv4Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes = append(data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].AllowAllIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].AllowAllIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].AllowAllIpv4Hosts
+			data.MgmtOobInterfaces[i].AllowAllIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv4Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesAllowAllIpv4Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].AllowAllIpv4Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].AllowAllIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].AllowAllIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].AllowAllIpv4Hosts = append(data.MgmtOobInterfaces[i].AllowAllIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes
+			data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv6Prefixes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesAllowAllIpv6Prefixes{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("length"); value.Exists() {
-				data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else if data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Length.IsNull() {
-				data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes = append(data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].AllowAllIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].AllowAllIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MgmtOobInterfaces[i].AllowAllIpv6Hosts
+			data.MgmtOobInterfaces[i].AllowAllIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv6Hosts, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesAllowAllIpv6Hosts{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MgmtOobInterfaces[i].AllowAllIpv6Hosts[ci].Address.IsNull() {
-				data.MgmtOobInterfaces[i].AllowAllIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].AllowAllIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].AllowAllIpv6Hosts = append(data.MgmtOobInterfaces[i].AllowAllIpv6Hosts, citem)
+				return true
+			})
 		}
 	}
 	if value := gjson.GetBytes(res, "management-plane.out-of-band.vrf"); value.Exists() && !data.MgmtOobVrf.IsNull() {
@@ -7791,131 +7971,141 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtInbandInterfaces[i].Ssh = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SshIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].SshIpv4Prefixes
+			data.MgmtInbandInterfaces[i].SshIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesSshIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSshIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SshIpv4Prefixes = append(data.MgmtInbandInterfaces[i].SshIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SshIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SshIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].SshIpv4Hosts
+			data.MgmtInbandInterfaces[i].SshIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesSshIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSshIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SshIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SshIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SshIpv4Hosts = append(data.MgmtInbandInterfaces[i].SshIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SshIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].SshIpv6Prefixes
+			data.MgmtInbandInterfaces[i].SshIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesSshIpv6Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSshIpv6Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SshIpv6Prefixes = append(data.MgmtInbandInterfaces[i].SshIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SshIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SshIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].SshIpv6Hosts
+			data.MgmtInbandInterfaces[i].SshIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesSshIpv6Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSshIpv6Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SshIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SshIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SshIpv6Hosts = append(data.MgmtInbandInterfaces[i].SshIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "allow/telnet"); value.Exists() {
 			data.MgmtInbandInterfaces[i].Telnet = types.BoolValue(true)
@@ -7926,131 +8116,141 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtInbandInterfaces[i].Telnet = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes
+			data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTelnetIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes = append(data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TelnetIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].TelnetIpv4Hosts
+			data.MgmtInbandInterfaces[i].TelnetIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTelnetIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TelnetIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TelnetIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TelnetIpv4Hosts = append(data.MgmtInbandInterfaces[i].TelnetIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes
+			data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv6Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTelnetIpv6Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes = append(data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TelnetIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].TelnetIpv6Hosts
+			data.MgmtInbandInterfaces[i].TelnetIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv6Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTelnetIpv6Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TelnetIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TelnetIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TelnetIpv6Hosts = append(data.MgmtInbandInterfaces[i].TelnetIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "allow/snmp"); value.Exists() {
 			data.MgmtInbandInterfaces[i].Snmp = types.BoolValue(true)
@@ -8061,131 +8261,141 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtInbandInterfaces[i].Snmp = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes
+			data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSnmpIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes = append(data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SnmpIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].SnmpIpv4Hosts
+			data.MgmtInbandInterfaces[i].SnmpIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSnmpIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SnmpIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SnmpIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SnmpIpv4Hosts = append(data.MgmtInbandInterfaces[i].SnmpIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes
+			data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv6Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSnmpIpv6Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes = append(data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].SnmpIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].SnmpIpv6Hosts
+			data.MgmtInbandInterfaces[i].SnmpIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv6Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesSnmpIpv6Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].SnmpIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].SnmpIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].SnmpIpv6Hosts = append(data.MgmtInbandInterfaces[i].SnmpIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "allow/tftp"); value.Exists() {
 			data.MgmtInbandInterfaces[i].Tftp = types.BoolValue(true)
@@ -8196,131 +8406,141 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtInbandInterfaces[i].Tftp = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TftpIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].TftpIpv4Prefixes
+			data.MgmtInbandInterfaces[i].TftpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesTftpIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTftpIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TftpIpv4Prefixes = append(data.MgmtInbandInterfaces[i].TftpIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TftpIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TftpIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].TftpIpv4Hosts
+			data.MgmtInbandInterfaces[i].TftpIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesTftpIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTftpIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TftpIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TftpIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TftpIpv4Hosts = append(data.MgmtInbandInterfaces[i].TftpIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TftpIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].TftpIpv6Prefixes
+			data.MgmtInbandInterfaces[i].TftpIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesTftpIpv6Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTftpIpv6Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TftpIpv6Prefixes = append(data.MgmtInbandInterfaces[i].TftpIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].TftpIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].TftpIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].TftpIpv6Hosts
+			data.MgmtInbandInterfaces[i].TftpIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesTftpIpv6Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesTftpIpv6Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].TftpIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].TftpIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].TftpIpv6Hosts = append(data.MgmtInbandInterfaces[i].TftpIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "allow/http"); value.Exists() {
 			data.MgmtInbandInterfaces[i].Http = types.BoolValue(true)
@@ -8331,68 +8551,73 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtInbandInterfaces[i].Http = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].HttpIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].HttpIpv4Prefixes
+			data.MgmtInbandInterfaces[i].HttpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesHttpIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesHttpIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].HttpIpv4Prefixes = append(data.MgmtInbandInterfaces[i].HttpIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].HttpIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].HttpIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].HttpIpv4Hosts
+			data.MgmtInbandInterfaces[i].HttpIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesHttpIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesHttpIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].HttpIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].HttpIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].HttpIpv4Hosts = append(data.MgmtInbandInterfaces[i].HttpIpv4Hosts, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "allow/xr-xml"); value.Exists() {
 			data.MgmtInbandInterfaces[i].Xml = types.BoolValue(true)
@@ -8403,131 +8628,141 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtInbandInterfaces[i].Xml = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].XmlIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].XmlIpv4Prefixes
+			data.MgmtInbandInterfaces[i].XmlIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesXmlIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesXmlIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].XmlIpv4Prefixes = append(data.MgmtInbandInterfaces[i].XmlIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].XmlIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].XmlIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].XmlIpv4Hosts
+			data.MgmtInbandInterfaces[i].XmlIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesXmlIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesXmlIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].XmlIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].XmlIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].XmlIpv4Hosts = append(data.MgmtInbandInterfaces[i].XmlIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].XmlIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].XmlIpv6Prefixes
+			data.MgmtInbandInterfaces[i].XmlIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesXmlIpv6Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesXmlIpv6Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].XmlIpv6Prefixes = append(data.MgmtInbandInterfaces[i].XmlIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].XmlIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].XmlIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].XmlIpv6Hosts
+			data.MgmtInbandInterfaces[i].XmlIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesXmlIpv6Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesXmlIpv6Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].XmlIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].XmlIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].XmlIpv6Hosts = append(data.MgmtInbandInterfaces[i].XmlIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "allow/netconf"); value.Exists() {
 			data.MgmtInbandInterfaces[i].Netconf = types.BoolValue(true)
@@ -8538,131 +8773,141 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtInbandInterfaces[i].Netconf = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes
+			data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesNetconfIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes = append(data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].NetconfIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].NetconfIpv4Hosts
+			data.MgmtInbandInterfaces[i].NetconfIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesNetconfIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].NetconfIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].NetconfIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].NetconfIpv4Hosts = append(data.MgmtInbandInterfaces[i].NetconfIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes
+			data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv6Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesNetconfIpv6Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes = append(data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].NetconfIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].NetconfIpv6Hosts
+			data.MgmtInbandInterfaces[i].NetconfIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv6Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesNetconfIpv6Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].NetconfIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].NetconfIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].NetconfIpv6Hosts = append(data.MgmtInbandInterfaces[i].NetconfIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "allow/all"); value.Exists() {
 			data.MgmtInbandInterfaces[i].AllowAll = types.BoolValue(true)
@@ -8673,131 +8918,141 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtInbandInterfaces[i].AllowAll = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes
+			data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesAllowAllIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes = append(data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts
+			data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesAllowAllIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts = append(data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes
+			data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv6Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesAllowAllIpv6Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes = append(data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts
+			data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv6Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtInbandInterfacesAllowAllIpv6Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts = append(data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts, citem)
+				return true
+			})
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh"); value.Exists() {
@@ -9846,131 +10101,141 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtOobInterfaces[i].Ssh = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].SshIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].SshIpv4Prefixes
+			data.MgmtOobInterfaces[i].SshIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesSshIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSshIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SshIpv4Prefixes = append(data.MgmtOobInterfaces[i].SshIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].SshIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SshIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].SshIpv4Hosts
+			data.MgmtOobInterfaces[i].SshIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesSshIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSshIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].SshIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SshIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SshIpv4Hosts = append(data.MgmtOobInterfaces[i].SshIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].SshIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].SshIpv6Prefixes
+			data.MgmtOobInterfaces[i].SshIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesSshIpv6Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSshIpv6Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SshIpv6Prefixes = append(data.MgmtOobInterfaces[i].SshIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].SshIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SshIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].SshIpv6Hosts
+			data.MgmtOobInterfaces[i].SshIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesSshIpv6Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSshIpv6Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].SshIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SshIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SshIpv6Hosts = append(data.MgmtOobInterfaces[i].SshIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "allow/telnet"); value.Exists() {
 			data.MgmtOobInterfaces[i].Telnet = types.BoolValue(true)
@@ -9981,131 +10246,141 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtOobInterfaces[i].Telnet = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].TelnetIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].TelnetIpv4Prefixes
+			data.MgmtOobInterfaces[i].TelnetIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesTelnetIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTelnetIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TelnetIpv4Prefixes = append(data.MgmtOobInterfaces[i].TelnetIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].TelnetIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TelnetIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].TelnetIpv4Hosts
+			data.MgmtOobInterfaces[i].TelnetIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesTelnetIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTelnetIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].TelnetIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TelnetIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TelnetIpv4Hosts = append(data.MgmtOobInterfaces[i].TelnetIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].TelnetIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].TelnetIpv6Prefixes
+			data.MgmtOobInterfaces[i].TelnetIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesTelnetIpv6Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTelnetIpv6Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TelnetIpv6Prefixes = append(data.MgmtOobInterfaces[i].TelnetIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].TelnetIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TelnetIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].TelnetIpv6Hosts
+			data.MgmtOobInterfaces[i].TelnetIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesTelnetIpv6Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTelnetIpv6Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].TelnetIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TelnetIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TelnetIpv6Hosts = append(data.MgmtOobInterfaces[i].TelnetIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "allow/snmp"); value.Exists() {
 			data.MgmtOobInterfaces[i].Snmp = types.BoolValue(true)
@@ -10116,131 +10391,141 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtOobInterfaces[i].Snmp = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].SnmpIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].SnmpIpv4Prefixes
+			data.MgmtOobInterfaces[i].SnmpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesSnmpIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSnmpIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SnmpIpv4Prefixes = append(data.MgmtOobInterfaces[i].SnmpIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].SnmpIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SnmpIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].SnmpIpv4Hosts
+			data.MgmtOobInterfaces[i].SnmpIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesSnmpIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSnmpIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].SnmpIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SnmpIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SnmpIpv4Hosts = append(data.MgmtOobInterfaces[i].SnmpIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].SnmpIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].SnmpIpv6Prefixes
+			data.MgmtOobInterfaces[i].SnmpIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesSnmpIpv6Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSnmpIpv6Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SnmpIpv6Prefixes = append(data.MgmtOobInterfaces[i].SnmpIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].SnmpIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].SnmpIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].SnmpIpv6Hosts
+			data.MgmtOobInterfaces[i].SnmpIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesSnmpIpv6Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesSnmpIpv6Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].SnmpIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].SnmpIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].SnmpIpv6Hosts = append(data.MgmtOobInterfaces[i].SnmpIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "allow/tftp"); value.Exists() {
 			data.MgmtOobInterfaces[i].Tftp = types.BoolValue(true)
@@ -10251,131 +10536,141 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtOobInterfaces[i].Tftp = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].TftpIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].TftpIpv4Prefixes
+			data.MgmtOobInterfaces[i].TftpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesTftpIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTftpIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TftpIpv4Prefixes = append(data.MgmtOobInterfaces[i].TftpIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].TftpIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TftpIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].TftpIpv4Hosts
+			data.MgmtOobInterfaces[i].TftpIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesTftpIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTftpIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].TftpIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TftpIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TftpIpv4Hosts = append(data.MgmtOobInterfaces[i].TftpIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].TftpIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].TftpIpv6Prefixes
+			data.MgmtOobInterfaces[i].TftpIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesTftpIpv6Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTftpIpv6Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TftpIpv6Prefixes = append(data.MgmtOobInterfaces[i].TftpIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].TftpIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].TftpIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].TftpIpv6Hosts
+			data.MgmtOobInterfaces[i].TftpIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesTftpIpv6Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesTftpIpv6Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].TftpIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].TftpIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].TftpIpv6Hosts = append(data.MgmtOobInterfaces[i].TftpIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "allow/http"); value.Exists() {
 			data.MgmtOobInterfaces[i].Http = types.BoolValue(true)
@@ -10386,68 +10681,73 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtOobInterfaces[i].Http = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].HttpIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].HttpIpv4Prefixes
+			data.MgmtOobInterfaces[i].HttpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesHttpIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesHttpIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].HttpIpv4Prefixes = append(data.MgmtOobInterfaces[i].HttpIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].HttpIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].HttpIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].HttpIpv4Hosts
+			data.MgmtOobInterfaces[i].HttpIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesHttpIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesHttpIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].HttpIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].HttpIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].HttpIpv4Hosts = append(data.MgmtOobInterfaces[i].HttpIpv4Hosts, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "allow/xr-xml"); value.Exists() {
 			data.MgmtOobInterfaces[i].Xml = types.BoolValue(true)
@@ -10458,131 +10758,141 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtOobInterfaces[i].Xml = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].XmlIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].XmlIpv4Prefixes
+			data.MgmtOobInterfaces[i].XmlIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesXmlIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesXmlIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].XmlIpv4Prefixes = append(data.MgmtOobInterfaces[i].XmlIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].XmlIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].XmlIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].XmlIpv4Hosts
+			data.MgmtOobInterfaces[i].XmlIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesXmlIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesXmlIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].XmlIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].XmlIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].XmlIpv4Hosts = append(data.MgmtOobInterfaces[i].XmlIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].XmlIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].XmlIpv6Prefixes
+			data.MgmtOobInterfaces[i].XmlIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesXmlIpv6Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesXmlIpv6Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].XmlIpv6Prefixes = append(data.MgmtOobInterfaces[i].XmlIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].XmlIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].XmlIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].XmlIpv6Hosts
+			data.MgmtOobInterfaces[i].XmlIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesXmlIpv6Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesXmlIpv6Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].XmlIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].XmlIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].XmlIpv6Hosts = append(data.MgmtOobInterfaces[i].XmlIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "allow/netconf"); value.Exists() {
 			data.MgmtOobInterfaces[i].Netconf = types.BoolValue(true)
@@ -10593,131 +10903,141 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtOobInterfaces[i].Netconf = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].NetconfIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].NetconfIpv4Prefixes
+			data.MgmtOobInterfaces[i].NetconfIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesNetconfIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesNetconfIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].NetconfIpv4Prefixes = append(data.MgmtOobInterfaces[i].NetconfIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].NetconfIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].NetconfIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].NetconfIpv4Hosts
+			data.MgmtOobInterfaces[i].NetconfIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesNetconfIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesNetconfIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].NetconfIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].NetconfIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].NetconfIpv4Hosts = append(data.MgmtOobInterfaces[i].NetconfIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].NetconfIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].NetconfIpv6Prefixes
+			data.MgmtOobInterfaces[i].NetconfIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesNetconfIpv6Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesNetconfIpv6Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].NetconfIpv6Prefixes = append(data.MgmtOobInterfaces[i].NetconfIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].NetconfIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].NetconfIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].NetconfIpv6Hosts
+			data.MgmtOobInterfaces[i].NetconfIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesNetconfIpv6Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesNetconfIpv6Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].NetconfIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].NetconfIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].NetconfIpv6Hosts = append(data.MgmtOobInterfaces[i].NetconfIpv6Hosts, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "allow/all"); value.Exists() {
 			data.MgmtOobInterfaces[i].AllowAll = types.BoolValue(true)
@@ -10728,131 +11048,141 @@ func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.MgmtOobInterfaces[i].AllowAll = types.BoolNull()
 			}
 		}
-		for ci := range data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes
+			data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv4Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesAllowAllIpv4Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes = append(data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].AllowAllIpv4Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].AllowAllIpv4Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].AllowAllIpv4Hosts
+			data.MgmtOobInterfaces[i].AllowAllIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv4Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesAllowAllIpv4Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].AllowAllIpv4Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].AllowAllIpv4Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].AllowAllIpv4Hosts = append(data.MgmtOobInterfaces[i].AllowAllIpv4Hosts, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes {
-			keys := [...]string{"address", "length"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes
+			data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv6Prefixes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesAllowAllIpv6Prefixes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
+					citem.Length = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Length.Equal(citem.Length) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
-				data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
-			} else {
-				data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Length = types.Int64Null()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes = append(data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes, citem)
+				return true
+			})
 		}
-		for ci := range data.MgmtOobInterfaces[i].AllowAllIpv6Hosts {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MgmtOobInterfaces[i].AllowAllIpv6Hosts[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MgmtOobInterfaces[i].AllowAllIpv6Hosts
+			data.MgmtOobInterfaces[i].AllowAllIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv6Hosts, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := ControlPlaneMgmtOobInterfacesAllowAllIpv6Hosts{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MgmtOobInterfaces[i].AllowAllIpv6Hosts[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MgmtOobInterfaces[i].AllowAllIpv6Hosts[ci].Address = types.StringNull()
-			}
+				}
+
+				data.MgmtOobInterfaces[i].AllowAllIpv6Hosts = append(data.MgmtOobInterfaces[i].AllowAllIpv6Hosts, citem)
+				return true
+			})
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/management-plane/out-of-band/vrf"); value.Exists() {
@@ -11898,7 +12228,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.ssh"); cValue.Exists() {
 				item.Ssh = types.BoolValue(true)
 			} else {
-				item.Ssh = types.BoolValue(false)
+				item.Ssh = types.BoolNull()
 			}
 			if cValue := v.Get("allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.SshIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesSshIpv4Prefixes, 0)
@@ -11953,7 +12283,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.telnet"); cValue.Exists() {
 				item.Telnet = types.BoolValue(true)
 			} else {
-				item.Telnet = types.BoolValue(false)
+				item.Telnet = types.BoolNull()
 			}
 			if cValue := v.Get("allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.TelnetIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv4Prefixes, 0)
@@ -12008,7 +12338,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.snmp"); cValue.Exists() {
 				item.Snmp = types.BoolValue(true)
 			} else {
-				item.Snmp = types.BoolValue(false)
+				item.Snmp = types.BoolNull()
 			}
 			if cValue := v.Get("allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.SnmpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv4Prefixes, 0)
@@ -12063,7 +12393,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.tftp"); cValue.Exists() {
 				item.Tftp = types.BoolValue(true)
 			} else {
-				item.Tftp = types.BoolValue(false)
+				item.Tftp = types.BoolNull()
 			}
 			if cValue := v.Get("allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.TftpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesTftpIpv4Prefixes, 0)
@@ -12118,7 +12448,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.http"); cValue.Exists() {
 				item.Http = types.BoolValue(true)
 			} else {
-				item.Http = types.BoolValue(false)
+				item.Http = types.BoolNull()
 			}
 			if cValue := v.Get("allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.HttpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesHttpIpv4Prefixes, 0)
@@ -12148,7 +12478,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.xr-xml"); cValue.Exists() {
 				item.Xml = types.BoolValue(true)
 			} else {
-				item.Xml = types.BoolValue(false)
+				item.Xml = types.BoolNull()
 			}
 			if cValue := v.Get("allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.XmlIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesXmlIpv4Prefixes, 0)
@@ -12203,7 +12533,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.netconf"); cValue.Exists() {
 				item.Netconf = types.BoolValue(true)
 			} else {
-				item.Netconf = types.BoolValue(false)
+				item.Netconf = types.BoolNull()
 			}
 			if cValue := v.Get("allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.NetconfIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv4Prefixes, 0)
@@ -12258,7 +12588,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.all"); cValue.Exists() {
 				item.AllowAll = types.BoolValue(true)
 			} else {
-				item.AllowAll = types.BoolValue(false)
+				item.AllowAll = types.BoolNull()
 			}
 			if cValue := v.Get("allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.AllowAllIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv4Prefixes, 0)
@@ -12739,7 +13069,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.ssh"); cValue.Exists() {
 				item.Ssh = types.BoolValue(true)
 			} else {
-				item.Ssh = types.BoolValue(false)
+				item.Ssh = types.BoolNull()
 			}
 			if cValue := v.Get("allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.SshIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesSshIpv4Prefixes, 0)
@@ -12794,7 +13124,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.telnet"); cValue.Exists() {
 				item.Telnet = types.BoolValue(true)
 			} else {
-				item.Telnet = types.BoolValue(false)
+				item.Telnet = types.BoolNull()
 			}
 			if cValue := v.Get("allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.TelnetIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesTelnetIpv4Prefixes, 0)
@@ -12849,7 +13179,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.snmp"); cValue.Exists() {
 				item.Snmp = types.BoolValue(true)
 			} else {
-				item.Snmp = types.BoolValue(false)
+				item.Snmp = types.BoolNull()
 			}
 			if cValue := v.Get("allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.SnmpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesSnmpIpv4Prefixes, 0)
@@ -12904,7 +13234,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.tftp"); cValue.Exists() {
 				item.Tftp = types.BoolValue(true)
 			} else {
-				item.Tftp = types.BoolValue(false)
+				item.Tftp = types.BoolNull()
 			}
 			if cValue := v.Get("allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.TftpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesTftpIpv4Prefixes, 0)
@@ -12959,7 +13289,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.http"); cValue.Exists() {
 				item.Http = types.BoolValue(true)
 			} else {
-				item.Http = types.BoolValue(false)
+				item.Http = types.BoolNull()
 			}
 			if cValue := v.Get("allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.HttpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesHttpIpv4Prefixes, 0)
@@ -12989,7 +13319,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.xr-xml"); cValue.Exists() {
 				item.Xml = types.BoolValue(true)
 			} else {
-				item.Xml = types.BoolValue(false)
+				item.Xml = types.BoolNull()
 			}
 			if cValue := v.Get("allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.XmlIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesXmlIpv4Prefixes, 0)
@@ -13044,7 +13374,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.netconf"); cValue.Exists() {
 				item.Netconf = types.BoolValue(true)
 			} else {
-				item.Netconf = types.BoolValue(false)
+				item.Netconf = types.BoolNull()
 			}
 			if cValue := v.Get("allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.NetconfIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesNetconfIpv4Prefixes, 0)
@@ -13099,7 +13429,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.all"); cValue.Exists() {
 				item.AllowAll = types.BoolValue(true)
 			} else {
-				item.AllowAll = types.BoolValue(false)
+				item.AllowAll = types.BoolNull()
 			}
 			if cValue := v.Get("allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.AllowAllIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv4Prefixes, 0)

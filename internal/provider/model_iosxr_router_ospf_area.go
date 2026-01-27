@@ -1523,88 +1523,75 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.MultiAreaInterfaces[i].InterfaceName = types.StringNull()
 		}
-		for ci := range data.MultiAreaInterfaces[i].Neighbors {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MultiAreaInterfaces[i].Neighbors[ci].Address.ValueString()}
-
-			var cr gjson.Result
-			r.Get("neighbors.neighbor").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address"); value.Exists() && !data.MultiAreaInterfaces[i].Neighbors[ci].Address.IsNull() {
-				data.MultiAreaInterfaces[i].Neighbors[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MultiAreaInterfaces[i].Neighbors[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("database-filter.all.out"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut.IsNull() && !data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut.ValueBool() {
-					data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut = types.BoolValue(false)
-				} else if !data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut.IsNull() {
-					data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut = types.BoolValue(true)
+		// Rebuild nested list from device response
+		if value := r.Get("neighbors.neighbor"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MultiAreaInterfaces[i].Neighbors
+			data.MultiAreaInterfaces[i].Neighbors = make([]RouterOSPFAreaMultiAreaInterfacesNeighbors, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterOSPFAreaMultiAreaInterfacesNeighbors{}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut.IsNull() {
-					data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut = types.BoolNull()
+				if cValue := cr.Get("database-filter.all.out"); cValue.Exists() {
+					citem.DatabaseFilterAllOut = types.BoolValue(true)
 				} else {
-					data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut = types.BoolValue(false)
+					citem.DatabaseFilterAllOut = types.BoolValue(false)
 				}
-			}
-			if value := cr.Get("poll-interval"); value.Exists() {
-				data.MultiAreaInterfaces[i].Neighbors[ci].PollInterval = types.Int64Value(value.Int())
-			} else if data.MultiAreaInterfaces[i].Neighbors[ci].PollInterval.IsNull() {
-				data.MultiAreaInterfaces[i].Neighbors[ci].PollInterval = types.Int64Null()
-			}
-			if value := cr.Get("cost"); value.Exists() {
-				data.MultiAreaInterfaces[i].Neighbors[ci].Cost = types.Int64Value(value.Int())
-			} else if data.MultiAreaInterfaces[i].Neighbors[ci].Cost.IsNull() {
-				data.MultiAreaInterfaces[i].Neighbors[ci].Cost = types.Int64Null()
-			}
-		}
-		for ci := range data.MultiAreaInterfaces[i].MessageDigestKeys {
-			keys := [...]string{"message-digest-key-id"}
-			keyValues := [...]string{strconv.FormatInt(data.MultiAreaInterfaces[i].MessageDigestKeys[ci].KeyId.ValueInt64(), 10)}
+				if cValue := cr.Get("poll-interval"); cValue.Exists() {
+					citem.PollInterval = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("cost"); cValue.Exists() {
+					citem.Cost = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("message-digest-keys.message-digest-key").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.DatabaseFilterAllOut.ValueBool() && existingItem.DatabaseFilterAllOut.ValueBool() == false {
+							citem.DatabaseFilterAllOut = existingItem.DatabaseFilterAllOut
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
+				}
+
+				data.MultiAreaInterfaces[i].Neighbors = append(data.MultiAreaInterfaces[i].Neighbors, citem)
+				return true
+			})
+		}
+		// Rebuild nested list from device response
+		if value := r.Get("message-digest-keys.message-digest-key"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MultiAreaInterfaces[i].MessageDigestKeys
+			data.MultiAreaInterfaces[i].MessageDigestKeys = make([]RouterOSPFAreaMultiAreaInterfacesMessageDigestKeys, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterOSPFAreaMultiAreaInterfacesMessageDigestKeys{}
+				if cValue := cr.Get("message-digest-key-id"); cValue.Exists() {
+					citem.KeyId = types.Int64Value(cValue.Int())
+				}
+
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.KeyId.Equal(citem.KeyId) {
+						match = false
 					}
-					return true
-				},
-			)
-			if value := cr.Get("message-digest-key-id"); value.Exists() {
-				data.MultiAreaInterfaces[i].MessageDigestKeys[ci].KeyId = types.Int64Value(value.Int())
-			} else if data.MultiAreaInterfaces[i].MessageDigestKeys[ci].KeyId.IsNull() {
-				data.MultiAreaInterfaces[i].MessageDigestKeys[ci].KeyId = types.Int64Null()
-			}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						break
+					}
+				}
+
+				data.MultiAreaInterfaces[i].MessageDigestKeys = append(data.MultiAreaInterfaces[i].MessageDigestKeys, citem)
+				return true
+			})
 		}
 		if value := r.Get("authentication"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -1823,63 +1810,61 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 				data.MultiAreaInterfaces[i].FastReroutePerLink = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("fast-reroute.per-link.exclude.interfaces.interface"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces
+			data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces = make([]RouterOSPFAreaMultiAreaInterfacesFastReroutePerLinkExcludeInterfaces, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterOSPFAreaMultiAreaInterfacesFastReroutePerLinkExcludeInterfaces{}
+				if cValue := cr.Get("interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("fast-reroute.per-link.exclude.interfaces.interface").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces[ci].InterfaceName.IsNull() {
-				data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces = append(data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces, citem)
+				return true
+			})
 		}
-		for ci := range data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("fast-reroute.per-link.lfa-candidate.interfaces.interface"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces
+			data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces = make([]RouterOSPFAreaMultiAreaInterfacesFastReroutePerLinkLfaCandidateInterfaces, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterOSPFAreaMultiAreaInterfacesFastReroutePerLinkLfaCandidateInterfaces{}
+				if cValue := cr.Get("interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("fast-reroute.per-link.lfa-candidate.interfaces.interface").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces[ci].InterfaceName.IsNull() {
-				data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces = append(data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces, citem)
+				return true
+			})
 		}
 		if value := r.Get("fast-reroute.per-link.use-candidate-only.enable"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -1953,63 +1938,61 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefix = types.BoolValue(false)
 			}
 		}
-		for ci := range data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("fast-reroute.per-prefix.exclude.interfaces.interface"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces
+			data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces = make([]RouterOSPFAreaMultiAreaInterfacesFastReroutePerPrefixExcludeInterfaces, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterOSPFAreaMultiAreaInterfacesFastReroutePerPrefixExcludeInterfaces{}
+				if cValue := cr.Get("interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("fast-reroute.per-prefix.exclude.interfaces.interface").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces[ci].InterfaceName.IsNull() {
-				data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces = append(data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces, citem)
+				return true
+			})
 		}
-		for ci := range data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("fast-reroute.per-prefix.lfa-candidate.interfaces.interface"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces
+			data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces = make([]RouterOSPFAreaMultiAreaInterfacesFastReroutePerPrefixLfaCandidateInterfaces, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterOSPFAreaMultiAreaInterfacesFastReroutePerPrefixLfaCandidateInterfaces{}
+				if cValue := cr.Get("interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("fast-reroute.per-prefix.lfa-candidate.interfaces.interface").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces[ci].InterfaceName.IsNull() {
-				data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces = append(data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces, citem)
+				return true
+			})
 		}
 		if value := r.Get("fast-reroute.per-prefix.use-candidate-only.enable"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -3388,34 +3371,33 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.VirtualLinks[i].TransmitDelay = types.Int64Null()
 		}
-		for ci := range data.VirtualLinks[i].MessageDigestKeys {
-			keys := [...]string{"message-digest-key-id"}
-			keyValues := [...]string{strconv.FormatInt(data.VirtualLinks[i].MessageDigestKeys[ci].KeyId.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("message-digest-keys.message-digest-key"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.VirtualLinks[i].MessageDigestKeys
+			data.VirtualLinks[i].MessageDigestKeys = make([]RouterOSPFAreaVirtualLinksMessageDigestKeys, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterOSPFAreaVirtualLinksMessageDigestKeys{}
+				if cValue := cr.Get("message-digest-key-id"); cValue.Exists() {
+					citem.KeyId = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("message-digest-keys.message-digest-key").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.KeyId.Equal(citem.KeyId) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("message-digest-key-id"); value.Exists() {
-				data.VirtualLinks[i].MessageDigestKeys[ci].KeyId = types.Int64Value(value.Int())
-			} else if data.VirtualLinks[i].MessageDigestKeys[ci].KeyId.IsNull() {
-				data.VirtualLinks[i].MessageDigestKeys[ci].KeyId = types.Int64Null()
-			}
+				}
+
+				data.VirtualLinks[i].MessageDigestKeys = append(data.VirtualLinks[i].MessageDigestKeys, citem)
+				return true
+			})
 		}
 		if value := r.Get("authentication"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -3501,12 +3483,12 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("advertise"); cValue.Exists() {
 				item.Advertise = types.BoolValue(true)
 			} else {
-				item.Advertise = types.BoolValue(false)
+				item.Advertise = types.BoolNull()
 			}
 			if cValue := v.Get("not-advertise"); cValue.Exists() {
 				item.NotAdvertise = types.BoolValue(true)
 			} else {
-				item.NotAdvertise = types.BoolValue(false)
+				item.NotAdvertise = types.BoolNull()
 			}
 			data.Ranges = append(data.Ranges, item)
 			return true
@@ -3573,7 +3555,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("database-filter.all.out"); ccValue.Exists() {
 						cItem.DatabaseFilterAllOut = types.BoolValue(true)
 					} else {
-						cItem.DatabaseFilterAllOut = types.BoolValue(false)
+						cItem.DatabaseFilterAllOut = types.BoolNull()
 					}
 					if ccValue := cv.Get("poll-interval"); ccValue.Exists() {
 						cItem.PollInterval = types.Int64Value(ccValue.Int())
@@ -3599,12 +3581,12 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication"); cValue.Exists() {
 				item.Authentication = types.BoolValue(true)
 			} else {
-				item.Authentication = types.BoolValue(false)
+				item.Authentication = types.BoolNull()
 			}
 			if cValue := v.Get("authentication.message-digest"); cValue.Exists() {
 				item.AuthenticationMessageDigest = types.BoolValue(true)
 			} else {
-				item.AuthenticationMessageDigest = types.BoolValue(false)
+				item.AuthenticationMessageDigest = types.BoolNull()
 			}
 			if cValue := v.Get("authentication.keychain-name"); cValue.Exists() {
 				item.AuthenticationKeychainName = types.StringValue(cValue.String())
@@ -3612,12 +3594,12 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication.keychain"); cValue.Exists() {
 				item.AuthenticationKeychain = types.BoolValue(true)
 			} else {
-				item.AuthenticationKeychain = types.BoolValue(false)
+				item.AuthenticationKeychain = types.BoolNull()
 			}
 			if cValue := v.Get("authentication.null"); cValue.Exists() {
 				item.AuthenticationNull = types.BoolValue(true)
 			} else {
-				item.AuthenticationNull = types.BoolValue(false)
+				item.AuthenticationNull = types.BoolNull()
 			}
 			if cValue := v.Get("cost"); cValue.Exists() {
 				item.Cost = types.Int64Value(cValue.Int())
@@ -3643,22 +3625,22 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("mtu-ignore.enable"); cValue.Exists() {
 				item.MtuIgnoreEnable = types.BoolValue(true)
 			} else {
-				item.MtuIgnoreEnable = types.BoolValue(false)
+				item.MtuIgnoreEnable = types.BoolNull()
 			}
 			if cValue := v.Get("mtu-ignore.disable"); cValue.Exists() {
 				item.MtuIgnoreDisable = types.BoolValue(true)
 			} else {
-				item.MtuIgnoreDisable = types.BoolValue(false)
+				item.MtuIgnoreDisable = types.BoolNull()
 			}
 			if cValue := v.Get("database-filter.all.out.enable"); cValue.Exists() {
 				item.DatabaseFilterAllOutEnable = types.BoolValue(true)
 			} else {
-				item.DatabaseFilterAllOutEnable = types.BoolValue(false)
+				item.DatabaseFilterAllOutEnable = types.BoolNull()
 			}
 			if cValue := v.Get("database-filter.all.out.disable"); cValue.Exists() {
 				item.DatabaseFilterAllOutDisable = types.BoolValue(true)
 			} else {
-				item.DatabaseFilterAllOutDisable = types.BoolValue(false)
+				item.DatabaseFilterAllOutDisable = types.BoolNull()
 			}
 			if cValue := v.Get("distribute-list.access-list"); cValue.Exists() {
 				item.DistributeListInAcl = types.StringValue(cValue.String())
@@ -3672,7 +3654,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-link.enable"); cValue.Exists() {
 				item.FastReroutePerLink = types.BoolValue(true)
 			} else {
-				item.FastReroutePerLink = types.BoolValue(false)
+				item.FastReroutePerLink = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-link.exclude.interfaces.interface"); cValue.Exists() {
 				item.FastReroutePerLinkExcludeInterfaces = make([]RouterOSPFAreaMultiAreaInterfacesFastReroutePerLinkExcludeInterfaces, 0)
@@ -3699,22 +3681,22 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-link.use-candidate-only.enable"); cValue.Exists() {
 				item.FastReroutePerLinkUseCandidateOnlyEnable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerLinkUseCandidateOnlyEnable = types.BoolValue(false)
+				item.FastReroutePerLinkUseCandidateOnlyEnable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-link.use-candidate-only.disable"); cValue.Exists() {
 				item.FastReroutePerLinkUseCandidateOnlyDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerLinkUseCandidateOnlyDisable = types.BoolValue(false)
+				item.FastReroutePerLinkUseCandidateOnlyDisable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.disable"); cValue.Exists() {
 				item.FastRerouteDisable = types.BoolValue(true)
 			} else {
-				item.FastRerouteDisable = types.BoolValue(false)
+				item.FastRerouteDisable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.enable"); cValue.Exists() {
 				item.FastReroutePerPrefix = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefix = types.BoolValue(false)
+				item.FastReroutePerPrefix = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.exclude.interfaces.interface"); cValue.Exists() {
 				item.FastReroutePerPrefixExcludeInterfaces = make([]RouterOSPFAreaMultiAreaInterfacesFastReroutePerPrefixExcludeInterfaces, 0)
@@ -3741,22 +3723,22 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.use-candidate-only.enable"); cValue.Exists() {
 				item.FastReroutePerPrefixUseCandidateOnlyEnable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixUseCandidateOnlyEnable = types.BoolValue(false)
+				item.FastReroutePerPrefixUseCandidateOnlyEnable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.use-candidate-only.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixUseCandidateOnlyDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixUseCandidateOnlyDisable = types.BoolValue(false)
+				item.FastReroutePerPrefixUseCandidateOnlyDisable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.remote-lfa.tunnel.mpls-ldp"); cValue.Exists() {
 				item.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(false)
+				item.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.remote-lfa.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixRemoteLfaDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixRemoteLfaDisable = types.BoolValue(false)
+				item.FastReroutePerPrefixRemoteLfaDisable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.remote-lfa.maximum-cost"); cValue.Exists() {
 				item.FastReroutePerPrefixRemoteLfaMaximumCost = types.Int64Value(cValue.Int())
@@ -3764,12 +3746,12 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.ti-lfa.enable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiLfaEnable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiLfaEnable = types.BoolValue(false)
+				item.FastReroutePerPrefixTiLfaEnable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.ti-lfa.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiLfaDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiLfaDisable = types.BoolValue(false)
+				item.FastReroutePerPrefixTiLfaDisable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.downstream.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Value(cValue.Int())
@@ -3777,7 +3759,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.downstream.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerDownstreamDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerDownstreamDisable = types.BoolValue(false)
+				item.FastReroutePerPrefixTiebreakerDownstreamDisable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(cValue.Int())
@@ -3785,7 +3767,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.lc-disjoint.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerLcDisjointDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerLcDisjointDisable = types.BoolValue(false)
+				item.FastReroutePerPrefixTiebreakerLcDisjointDisable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Value(cValue.Int())
@@ -3793,7 +3775,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerLowestBackupMetricDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerLowestBackupMetricDisable = types.BoolValue(false)
+				item.FastReroutePerPrefixTiebreakerLowestBackupMetricDisable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.node-protecting.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(cValue.Int())
@@ -3801,7 +3783,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.node-protecting.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerNodeProtectingDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerNodeProtectingDisable = types.BoolValue(false)
+				item.FastReroutePerPrefixTiebreakerNodeProtectingDisable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.primary-path.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Value(cValue.Int())
@@ -3809,7 +3791,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.primary-path.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerPrimaryPathDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerPrimaryPathDisable = types.BoolValue(false)
+				item.FastReroutePerPrefixTiebreakerPrimaryPathDisable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.secondary-path.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Value(cValue.Int())
@@ -3817,7 +3799,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.secondary-path.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerSecondaryPathDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerSecondaryPathDisable = types.BoolValue(false)
+				item.FastReroutePerPrefixTiebreakerSecondaryPathDisable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.interface-disjoint.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerInterfaceDisjointIndex = types.Int64Value(cValue.Int())
@@ -3825,7 +3807,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.interface-disjoint.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerInterfaceDisjointDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerInterfaceDisjointDisable = types.BoolValue(false)
+				item.FastReroutePerPrefixTiebreakerInterfaceDisjointDisable = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(cValue.Int())
@@ -3833,17 +3815,17 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.srlg-disjoint.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerSrlgDisjointDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerSrlgDisjointDisable = types.BoolValue(false)
+				item.FastReroutePerPrefixTiebreakerSrlgDisjointDisable = types.BoolNull()
 			}
 			if cValue := v.Get("passive.enable"); cValue.Exists() {
 				item.PassiveEnable = types.BoolValue(true)
 			} else {
-				item.PassiveEnable = types.BoolValue(false)
+				item.PassiveEnable = types.BoolNull()
 			}
 			if cValue := v.Get("passive.disable"); cValue.Exists() {
 				item.PassiveDisable = types.BoolValue(true)
 			} else {
-				item.PassiveDisable = types.BoolValue(false)
+				item.PassiveDisable = types.BoolNull()
 			}
 			if cValue := v.Get("delay.normalize.interval"); cValue.Exists() {
 				item.DelayNormalizeInterval = types.Int64Value(cValue.Int())
@@ -4379,12 +4361,12 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication"); cValue.Exists() {
 				item.Authentication = types.BoolValue(true)
 			} else {
-				item.Authentication = types.BoolValue(false)
+				item.Authentication = types.BoolNull()
 			}
 			if cValue := v.Get("authentication.message-digest"); cValue.Exists() {
 				item.AuthenticationMessageDigest = types.BoolValue(true)
 			} else {
-				item.AuthenticationMessageDigest = types.BoolValue(false)
+				item.AuthenticationMessageDigest = types.BoolNull()
 			}
 			if cValue := v.Get("authentication.keychain-name"); cValue.Exists() {
 				item.AuthenticationKeychainName = types.StringValue(cValue.String())
@@ -4392,7 +4374,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication.null"); cValue.Exists() {
 				item.AuthenticationNull = types.BoolValue(true)
 			} else {
-				item.AuthenticationNull = types.BoolValue(false)
+				item.AuthenticationNull = types.BoolNull()
 			}
 			data.VirtualLinks = append(data.VirtualLinks, item)
 			return true
@@ -7638,7 +7620,9 @@ func (data RouterOSPFArea) toBodyXML(ctx context.Context) string {
 			if len(item.Neighbors) > 0 {
 				for _, citem := range item.Neighbors {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+					}
 					if !citem.DatabaseFilterAllOut.IsNull() && !citem.DatabaseFilterAllOut.IsUnknown() {
 						if citem.DatabaseFilterAllOut.ValueBool() {
 							ccBody = helpers.SetFromXPath(ccBody, "database-filter/all/out", "")
@@ -7659,7 +7643,9 @@ func (data RouterOSPFArea) toBodyXML(ctx context.Context) string {
 			if len(item.MessageDigestKeys) > 0 {
 				for _, citem := range item.MessageDigestKeys {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.KeyId.IsNull() && !citem.KeyId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "message-digest-key-id", strconv.FormatInt(citem.KeyId.ValueInt64(), 10))
+					}
 					if !citem.Md5Encrypted.IsNull() && !citem.Md5Encrypted.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "md5/encrypted", citem.Md5Encrypted.ValueString())
 					}
@@ -7747,14 +7733,18 @@ func (data RouterOSPFArea) toBodyXML(ctx context.Context) string {
 			if len(item.FastReroutePerLinkExcludeInterfaces) > 0 {
 				for _, citem := range item.FastReroutePerLinkExcludeInterfaces {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "interface-name", citem.InterfaceName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "fast-reroute/per-link/exclude/interfaces/interface", ccBody.Res())
 				}
 			}
 			if len(item.FastReroutePerLinkLfaCandidateInterfaces) > 0 {
 				for _, citem := range item.FastReroutePerLinkLfaCandidateInterfaces {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "interface-name", citem.InterfaceName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "fast-reroute/per-link/lfa-candidate/interfaces/interface", ccBody.Res())
 				}
 			}
@@ -7781,14 +7771,18 @@ func (data RouterOSPFArea) toBodyXML(ctx context.Context) string {
 			if len(item.FastReroutePerPrefixExcludeInterfaces) > 0 {
 				for _, citem := range item.FastReroutePerPrefixExcludeInterfaces {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "interface-name", citem.InterfaceName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "fast-reroute/per-prefix/exclude/interfaces/interface", ccBody.Res())
 				}
 			}
 			if len(item.FastReroutePerPrefixLfaCandidateInterfaces) > 0 {
 				for _, citem := range item.FastReroutePerPrefixLfaCandidateInterfaces {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "interface-name", citem.InterfaceName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "fast-reroute/per-prefix/lfa-candidate/interfaces/interface", ccBody.Res())
 				}
 			}
@@ -8431,7 +8425,9 @@ func (data RouterOSPFArea) toBodyXML(ctx context.Context) string {
 			if len(item.MessageDigestKeys) > 0 {
 				for _, citem := range item.MessageDigestKeys {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.KeyId.IsNull() && !citem.KeyId.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "message-digest-key-id", strconv.FormatInt(citem.KeyId.ValueInt64(), 10))
+					}
 					if !citem.Md5Encrypted.IsNull() && !citem.Md5Encrypted.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "md5/encrypted", citem.Md5Encrypted.ValueString())
 					}
@@ -8628,83 +8624,82 @@ func (data *RouterOSPFArea) updateFromBodyXML(ctx context.Context, res xmldot.Re
 		} else if data.MultiAreaInterfaces[i].InterfaceName.IsNull() {
 			data.MultiAreaInterfaces[i].InterfaceName = types.StringNull()
 		}
-		for ci := range data.MultiAreaInterfaces[i].Neighbors {
-			keys := [...]string{"address"}
-			keyValues := [...]string{data.MultiAreaInterfaces[i].Neighbors[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "neighbors/neighbor"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MultiAreaInterfaces[i].Neighbors
+			data.MultiAreaInterfaces[i].Neighbors = make([]RouterOSPFAreaMultiAreaInterfacesNeighbors, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "neighbors/neighbor").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterOSPFAreaMultiAreaInterfacesNeighbors{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "database-filter/all/out"); cValue.Exists() {
+					citem.DatabaseFilterAllOut = types.BoolValue(true)
+				} else {
+					citem.DatabaseFilterAllOut = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "poll-interval"); cValue.Exists() {
+					citem.PollInterval = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "cost"); cValue.Exists() {
+					citem.Cost = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.DatabaseFilterAllOut.ValueBool() && existingItem.DatabaseFilterAllOut.ValueBool() == false {
+							citem.DatabaseFilterAllOut = existingItem.DatabaseFilterAllOut
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.MultiAreaInterfaces[i].Neighbors[ci].Address = types.StringValue(value.String())
-			} else {
-				data.MultiAreaInterfaces[i].Neighbors[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "database-filter/all/out"); value.Exists() {
-				if !data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut.IsNull() {
-					data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut.IsNull() {
-					data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "poll-interval"); value.Exists() {
-				data.MultiAreaInterfaces[i].Neighbors[ci].PollInterval = types.Int64Value(value.Int())
-			} else {
-				data.MultiAreaInterfaces[i].Neighbors[ci].PollInterval = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "cost"); value.Exists() {
-				data.MultiAreaInterfaces[i].Neighbors[ci].Cost = types.Int64Value(value.Int())
-			} else {
-				data.MultiAreaInterfaces[i].Neighbors[ci].Cost = types.Int64Null()
-			}
+
+				data.MultiAreaInterfaces[i].Neighbors = append(data.MultiAreaInterfaces[i].Neighbors, citem)
+				return true
+			})
 		}
-		for ci := range data.MultiAreaInterfaces[i].MessageDigestKeys {
-			keys := [...]string{"message-digest-key-id"}
-			keyValues := [...]string{strconv.FormatInt(data.MultiAreaInterfaces[i].MessageDigestKeys[ci].KeyId.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "message-digest-keys/message-digest-key"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MultiAreaInterfaces[i].MessageDigestKeys
+			data.MultiAreaInterfaces[i].MessageDigestKeys = make([]RouterOSPFAreaMultiAreaInterfacesMessageDigestKeys, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "message-digest-keys/message-digest-key").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterOSPFAreaMultiAreaInterfacesMessageDigestKeys{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "message-digest-key-id"); cValue.Exists() {
+					citem.KeyId = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.KeyId.Equal(citem.KeyId) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "message-digest-key-id"); value.Exists() {
-				data.MultiAreaInterfaces[i].MessageDigestKeys[ci].KeyId = types.Int64Value(value.Int())
-			} else {
-				data.MultiAreaInterfaces[i].MessageDigestKeys[ci].KeyId = types.Int64Null()
-			}
+				}
+
+				data.MultiAreaInterfaces[i].MessageDigestKeys = append(data.MultiAreaInterfaces[i].MessageDigestKeys, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "authentication"); value.Exists() {
 			data.MultiAreaInterfaces[i].Authentication = types.BoolValue(true)
@@ -8842,63 +8837,67 @@ func (data *RouterOSPFArea) updateFromBodyXML(ctx context.Context, res xmldot.Re
 				data.MultiAreaInterfaces[i].FastReroutePerLink = types.BoolNull()
 			}
 		}
-		for ci := range data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "fast-reroute/per-link/exclude/interfaces/interface"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces
+			data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces = make([]RouterOSPFAreaMultiAreaInterfacesFastReroutePerLinkExcludeInterfaces, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "fast-reroute/per-link/exclude/interfaces/interface").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterOSPFAreaMultiAreaInterfacesFastReroutePerLinkExcludeInterfaces{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
-				data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces = append(data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces, citem)
+				return true
+			})
 		}
-		for ci := range data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "fast-reroute/per-link/lfa-candidate/interfaces/interface"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces
+			data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces = make([]RouterOSPFAreaMultiAreaInterfacesFastReroutePerLinkLfaCandidateInterfaces, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "fast-reroute/per-link/lfa-candidate/interfaces/interface").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterOSPFAreaMultiAreaInterfacesFastReroutePerLinkLfaCandidateInterfaces{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
-				data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces = append(data.MultiAreaInterfaces[i].FastReroutePerLinkLfaCandidateInterfaces, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "fast-reroute/per-link/use-candidate-only/enable"); value.Exists() {
 			data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyEnable = types.BoolValue(true)
@@ -8936,63 +8935,67 @@ func (data *RouterOSPFArea) updateFromBodyXML(ctx context.Context, res xmldot.Re
 				data.MultiAreaInterfaces[i].FastReroutePerPrefix = types.BoolNull()
 			}
 		}
-		for ci := range data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "fast-reroute/per-prefix/exclude/interfaces/interface"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces
+			data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces = make([]RouterOSPFAreaMultiAreaInterfacesFastReroutePerPrefixExcludeInterfaces, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "fast-reroute/per-prefix/exclude/interfaces/interface").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterOSPFAreaMultiAreaInterfacesFastReroutePerPrefixExcludeInterfaces{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
-				data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces = append(data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces, citem)
+				return true
+			})
 		}
-		for ci := range data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "fast-reroute/per-prefix/lfa-candidate/interfaces/interface"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces
+			data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces = make([]RouterOSPFAreaMultiAreaInterfacesFastReroutePerPrefixLfaCandidateInterfaces, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "fast-reroute/per-prefix/lfa-candidate/interfaces/interface").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterOSPFAreaMultiAreaInterfacesFastReroutePerPrefixLfaCandidateInterfaces{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
-				data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces = append(data.MultiAreaInterfaces[i].FastReroutePerPrefixLfaCandidateInterfaces, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "fast-reroute/per-prefix/use-candidate-only/enable"); value.Exists() {
 			data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyEnable = types.BoolValue(true)
@@ -10091,34 +10094,36 @@ func (data *RouterOSPFArea) updateFromBodyXML(ctx context.Context, res xmldot.Re
 		} else if data.VirtualLinks[i].TransmitDelay.IsNull() {
 			data.VirtualLinks[i].TransmitDelay = types.Int64Null()
 		}
-		for ci := range data.VirtualLinks[i].MessageDigestKeys {
-			keys := [...]string{"message-digest-key-id"}
-			keyValues := [...]string{strconv.FormatInt(data.VirtualLinks[i].MessageDigestKeys[ci].KeyId.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "message-digest-keys/message-digest-key"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.VirtualLinks[i].MessageDigestKeys
+			data.VirtualLinks[i].MessageDigestKeys = make([]RouterOSPFAreaVirtualLinksMessageDigestKeys, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "message-digest-keys/message-digest-key").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterOSPFAreaVirtualLinksMessageDigestKeys{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "message-digest-key-id"); cValue.Exists() {
+					citem.KeyId = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.KeyId.Equal(citem.KeyId) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "message-digest-key-id"); value.Exists() {
-				data.VirtualLinks[i].MessageDigestKeys[ci].KeyId = types.Int64Value(value.Int())
-			} else {
-				data.VirtualLinks[i].MessageDigestKeys[ci].KeyId = types.Int64Null()
-			}
+				}
+
+				data.VirtualLinks[i].MessageDigestKeys = append(data.VirtualLinks[i].MessageDigestKeys, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "authentication"); value.Exists() {
 			data.VirtualLinks[i].Authentication = types.BoolValue(true)
@@ -10243,10 +10248,13 @@ func (data *RouterOSPFArea) fromBodyXML(ctx context.Context, res xmldot.Result) 
 						cItem.Address = types.StringValue(ccValue.String())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "database-filter/all/out"); ccValue.Exists() {
+
 						cItem.DatabaseFilterAllOut = types.BoolValue(true)
+
 					} else {
-						cItem.DatabaseFilterAllOut = types.BoolNull()
+						cItem.DatabaseFilterAllOut = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "poll-interval"); ccValue.Exists() {
 						cItem.PollInterval = types.Int64Value(ccValue.Int())
 					}

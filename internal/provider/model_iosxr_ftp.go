@@ -316,7 +316,7 @@ func (data *FTP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("passive"); cValue.Exists() {
 				item.Passive = types.BoolValue(true)
 			} else {
-				item.Passive = types.BoolValue(false)
+				item.Passive = types.BoolNull()
 			}
 			if cValue := v.Get("source-interface"); cValue.Exists() {
 				item.SourceInterface = types.StringValue(cValue.String())

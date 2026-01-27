@@ -618,7 +618,7 @@ func (data *PerformanceMeasurementEndpointIPv4) fromBody(ctx context.Context, re
 			if cValue := v.Get("insert-srh.sl-zero"); cValue.Exists() {
 				item.InsertSrhSlZero = types.BoolValue(true)
 			} else {
-				item.InsertSrhSlZero = types.BoolValue(false)
+				item.InsertSrhSlZero = types.BoolNull()
 			}
 			data.SegmentRoutingTeExplicitSegmentLists = append(data.SegmentRoutingTeExplicitSegmentLists, item)
 			return true

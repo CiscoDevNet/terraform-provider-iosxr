@@ -1836,34 +1836,33 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 				data.Interfaces[i].SplitHorizonGroup = types.BoolValue(false)
 			}
 		}
-		for ci := range data.Interfaces[i].StaticMacAddresses {
-			keys := [...]string{"mac-address"}
-			keyValues := [...]string{data.Interfaces[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("static-mac-addresses.static-mac-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Interfaces[i].StaticMacAddresses
+			data.Interfaces[i].StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses{}
+				if cValue := cr.Get("mac-address"); cValue.Exists() {
+					citem.MacAddress = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("static-mac-addresses.static-mac-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.MacAddress.ValueString() != citem.MacAddress.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("mac-address"); value.Exists() && !data.Interfaces[i].StaticMacAddresses[ci].MacAddress.IsNull() {
-				data.Interfaces[i].StaticMacAddresses[ci].MacAddress = types.StringValue(value.String())
-			} else {
-				data.Interfaces[i].StaticMacAddresses[ci].MacAddress = types.StringNull()
-			}
+				}
+
+				data.Interfaces[i].StaticMacAddresses = append(data.Interfaces[i].StaticMacAddresses, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.RoutedInterface {
@@ -2267,39 +2266,36 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		} else {
 			data.MemberVnisVni[i].VniId = types.Int64Null()
 		}
-		for ci := range data.MemberVnisVni[i].StaticMacAddresses {
-			keys := [...]string{"mac-address"}
-			keyValues := [...]string{data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("static-mac-addresses.static-mac-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.MemberVnisVni[i].StaticMacAddresses
+			data.MemberVnisVni[i].StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainMemberVnisVniStaticMacAddresses, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNBridgeGroupBridgeDomainMemberVnisVniStaticMacAddresses{}
+				if cValue := cr.Get("mac-address"); cValue.Exists() {
+					citem.MacAddress = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("next-hop"); cValue.Exists() {
+					citem.NextHop = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("static-mac-addresses.static-mac-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.MacAddress.ValueString() != citem.MacAddress.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("mac-address"); value.Exists() && !data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress.IsNull() {
-				data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress = types.StringValue(value.String())
-			} else {
-				data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress = types.StringNull()
-			}
-			if value := cr.Get("next-hop"); value.Exists() && !data.MemberVnisVni[i].StaticMacAddresses[ci].NextHop.IsNull() {
-				data.MemberVnisVni[i].StaticMacAddresses[ci].NextHop = types.StringValue(value.String())
-			} else {
-				data.MemberVnisVni[i].StaticMacAddresses[ci].NextHop = types.StringNull()
-			}
+				}
+
+				data.MemberVnisVni[i].StaticMacAddresses = append(data.MemberVnisVni[i].StaticMacAddresses, citem)
+				return true
+			})
 		}
 	}
 }
@@ -2668,7 +2664,9 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 			if len(item.StaticMacAddresses) > 0 {
 				for _, citem := range item.StaticMacAddresses {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.MacAddress.IsNull() && !citem.MacAddress.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "mac-address", citem.MacAddress.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "static-mac-addresses/static-mac-address", ccBody.Res())
 				}
 			}
@@ -2856,7 +2854,9 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 			if len(item.StaticMacAddresses) > 0 {
 				for _, citem := range item.StaticMacAddresses {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.MacAddress.IsNull() && !citem.MacAddress.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "mac-address", citem.MacAddress.ValueString())
+					}
 					if !citem.NextHop.IsNull() && !citem.NextHop.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "next-hop", citem.NextHop.ValueString())
 					}
@@ -3539,34 +3539,36 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 				data.Interfaces[i].SplitHorizonGroup = types.BoolNull()
 			}
 		}
-		for ci := range data.Interfaces[i].StaticMacAddresses {
-			keys := [...]string{"mac-address"}
-			keyValues := [...]string{data.Interfaces[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "static-mac-addresses/static-mac-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Interfaces[i].StaticMacAddresses
+			data.Interfaces[i].StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "static-mac-addresses/static-mac-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "mac-address"); cValue.Exists() {
+					citem.MacAddress = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.MacAddress.ValueString() != citem.MacAddress.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "mac-address"); value.Exists() {
-				data.Interfaces[i].StaticMacAddresses[ci].MacAddress = types.StringValue(value.String())
-			} else {
-				data.Interfaces[i].StaticMacAddresses[ci].MacAddress = types.StringNull()
-			}
+				}
+
+				data.Interfaces[i].StaticMacAddresses = append(data.Interfaces[i].StaticMacAddresses, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.RoutedInterface {
@@ -3906,39 +3908,39 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 		} else if data.MemberVnisVni[i].VniId.IsNull() {
 			data.MemberVnisVni[i].VniId = types.Int64Null()
 		}
-		for ci := range data.MemberVnisVni[i].StaticMacAddresses {
-			keys := [...]string{"mac-address"}
-			keyValues := [...]string{data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "static-mac-addresses/static-mac-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.MemberVnisVni[i].StaticMacAddresses
+			data.MemberVnisVni[i].StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainMemberVnisVniStaticMacAddresses, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "static-mac-addresses/static-mac-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNBridgeGroupBridgeDomainMemberVnisVniStaticMacAddresses{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "mac-address"); cValue.Exists() {
+					citem.MacAddress = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "next-hop"); cValue.Exists() {
+					citem.NextHop = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.MacAddress.ValueString() != citem.MacAddress.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "mac-address"); value.Exists() {
-				data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress = types.StringValue(value.String())
-			} else {
-				data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "next-hop"); value.Exists() {
-				data.MemberVnisVni[i].StaticMacAddresses[ci].NextHop = types.StringValue(value.String())
-			} else {
-				data.MemberVnisVni[i].StaticMacAddresses[ci].NextHop = types.StringNull()
-			}
+				}
+
+				data.MemberVnisVni[i].StaticMacAddresses = append(data.MemberVnisVni[i].StaticMacAddresses, citem)
+				return true
+			})
 		}
 	}
 }
@@ -4094,52 +4096,52 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("dynamic-arp-inspection.logging"); cValue.Exists() {
 				item.DynamicArpInspectionLogging = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionLogging = types.BoolValue(false)
+				item.DynamicArpInspectionLogging = types.BoolNull()
 			}
 			if cValue := v.Get("dynamic-arp-inspection.logging.disable"); cValue.Exists() {
 				item.DynamicArpInspectionLoggingDisable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionLoggingDisable = types.BoolValue(false)
+				item.DynamicArpInspectionLoggingDisable = types.BoolNull()
 			}
 			if cValue := v.Get("dynamic-arp-inspection.disable"); cValue.Exists() {
 				item.DynamicArpInspectionDisable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionDisable = types.BoolValue(false)
+				item.DynamicArpInspectionDisable = types.BoolNull()
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.src-mac"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(false)
+				item.DynamicArpInspectionAddressValidationSrcMac = types.BoolNull()
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.src-mac.disable"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(false)
+				item.DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolNull()
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.dst-mac"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(false)
+				item.DynamicArpInspectionAddressValidationDstMac = types.BoolNull()
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.dst-mac.disable"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(false)
+				item.DynamicArpInspectionAddressValidationDstMacDisable = types.BoolNull()
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.ipv4"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(false)
+				item.DynamicArpInspectionAddressValidationIpv4 = types.BoolNull()
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.ipv4.disable"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(false)
+				item.DynamicArpInspectionAddressValidationIpv4Disable = types.BoolNull()
 			}
 			if cValue := v.Get("flooding.disable"); cValue.Exists() {
 				item.FloodingDisable = types.BoolValue(true)
 			} else {
-				item.FloodingDisable = types.BoolValue(false)
+				item.FloodingDisable = types.BoolNull()
 			}
 			if cValue := v.Get("igmp.snooping.profile"); cValue.Exists() {
 				item.IgmpSnoopingProfile = types.StringValue(cValue.String())
@@ -4147,22 +4149,22 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("ip-source-guard"); cValue.Exists() {
 				item.IpSourceGuard = types.BoolValue(true)
 			} else {
-				item.IpSourceGuard = types.BoolValue(false)
+				item.IpSourceGuard = types.BoolNull()
 			}
 			if cValue := v.Get("ip-source-guard.disable"); cValue.Exists() {
 				item.IpSourceGuardDisable = types.BoolValue(true)
 			} else {
-				item.IpSourceGuardDisable = types.BoolValue(false)
+				item.IpSourceGuardDisable = types.BoolNull()
 			}
 			if cValue := v.Get("ip-source-guard.logging"); cValue.Exists() {
 				item.IpSourceGuardLogging = types.BoolValue(true)
 			} else {
-				item.IpSourceGuardLogging = types.BoolValue(false)
+				item.IpSourceGuardLogging = types.BoolNull()
 			}
 			if cValue := v.Get("ip-source-guard.logging.disable"); cValue.Exists() {
 				item.IpSourceGuardLoggingDisable = types.BoolValue(true)
 			} else {
-				item.IpSourceGuardLoggingDisable = types.BoolValue(false)
+				item.IpSourceGuardLoggingDisable = types.BoolNull()
 			}
 			if cValue := v.Get("mac.aging.time"); cValue.Exists() {
 				item.MacAgingTime = types.Int64Value(cValue.Int())
@@ -4170,22 +4172,22 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("mac.aging.type.absolute"); cValue.Exists() {
 				item.MacAgingTypeAbsolute = types.BoolValue(true)
 			} else {
-				item.MacAgingTypeAbsolute = types.BoolValue(false)
+				item.MacAgingTypeAbsolute = types.BoolNull()
 			}
 			if cValue := v.Get("mac.aging.type.inactivity"); cValue.Exists() {
 				item.MacAgingTypeInactivity = types.BoolValue(true)
 			} else {
-				item.MacAgingTypeInactivity = types.BoolValue(false)
+				item.MacAgingTypeInactivity = types.BoolNull()
 			}
 			if cValue := v.Get("mac.learning"); cValue.Exists() {
 				item.MacLearning = types.BoolValue(true)
 			} else {
-				item.MacLearning = types.BoolValue(false)
+				item.MacLearning = types.BoolNull()
 			}
 			if cValue := v.Get("mac.learning.disable"); cValue.Exists() {
 				item.MacLearningDisable = types.BoolValue(true)
 			} else {
-				item.MacLearningDisable = types.BoolValue(false)
+				item.MacLearningDisable = types.BoolNull()
 			}
 			if cValue := v.Get("mac.limit.maximum"); cValue.Exists() {
 				item.MacLimitMaximum = types.Int64Value(cValue.Int())
@@ -4193,82 +4195,82 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("mac.limit.action.flood"); cValue.Exists() {
 				item.MacLimitActionFlood = types.BoolValue(true)
 			} else {
-				item.MacLimitActionFlood = types.BoolValue(false)
+				item.MacLimitActionFlood = types.BoolNull()
 			}
 			if cValue := v.Get("mac.limit.action.no-flood"); cValue.Exists() {
 				item.MacLimitActionNoFlood = types.BoolValue(true)
 			} else {
-				item.MacLimitActionNoFlood = types.BoolValue(false)
+				item.MacLimitActionNoFlood = types.BoolNull()
 			}
 			if cValue := v.Get("mac.limit.action.shutdown"); cValue.Exists() {
 				item.MacLimitActionShutdown = types.BoolValue(true)
 			} else {
-				item.MacLimitActionShutdown = types.BoolValue(false)
+				item.MacLimitActionShutdown = types.BoolNull()
 			}
 			if cValue := v.Get("mac.limit.action.none"); cValue.Exists() {
 				item.MacLimitActionNone = types.BoolValue(true)
 			} else {
-				item.MacLimitActionNone = types.BoolValue(false)
+				item.MacLimitActionNone = types.BoolNull()
 			}
 			if cValue := v.Get("mac.limit.notification.trap"); cValue.Exists() {
 				item.MacLimitNotificationTrap = types.BoolValue(true)
 			} else {
-				item.MacLimitNotificationTrap = types.BoolValue(false)
+				item.MacLimitNotificationTrap = types.BoolNull()
 			}
 			if cValue := v.Get("mac.limit.notification.both"); cValue.Exists() {
 				item.MacLimitNotificationBoth = types.BoolValue(true)
 			} else {
-				item.MacLimitNotificationBoth = types.BoolValue(false)
+				item.MacLimitNotificationBoth = types.BoolNull()
 			}
 			if cValue := v.Get("mac.limit.notification.none"); cValue.Exists() {
 				item.MacLimitNotificationNone = types.BoolValue(true)
 			} else {
-				item.MacLimitNotificationNone = types.BoolValue(false)
+				item.MacLimitNotificationNone = types.BoolNull()
 			}
 			if cValue := v.Get("mac.limit.notification.syslog"); cValue.Exists() {
 				item.MacLimitNotificationSyslog = types.BoolValue(true)
 			} else {
-				item.MacLimitNotificationSyslog = types.BoolValue(false)
+				item.MacLimitNotificationSyslog = types.BoolNull()
 			}
 			if cValue := v.Get("mac.port-down.flush.disable"); cValue.Exists() {
 				item.MacPortDownFlushDisable = types.BoolValue(true)
 			} else {
-				item.MacPortDownFlushDisable = types.BoolValue(false)
+				item.MacPortDownFlushDisable = types.BoolNull()
 			}
 			if cValue := v.Get("mac.secure"); cValue.Exists() {
 				item.MacSecure = types.BoolValue(true)
 			} else {
-				item.MacSecure = types.BoolValue(false)
+				item.MacSecure = types.BoolNull()
 			}
 			if cValue := v.Get("mac.secure.logging"); cValue.Exists() {
 				item.MacSecureLogging = types.BoolValue(true)
 			} else {
-				item.MacSecureLogging = types.BoolValue(false)
+				item.MacSecureLogging = types.BoolNull()
 			}
 			if cValue := v.Get("mac.secure.logging.disable"); cValue.Exists() {
 				item.MacSecureLoggingDisable = types.BoolValue(true)
 			} else {
-				item.MacSecureLoggingDisable = types.BoolValue(false)
+				item.MacSecureLoggingDisable = types.BoolNull()
 			}
 			if cValue := v.Get("mac.secure.action.none"); cValue.Exists() {
 				item.MacSecureActionNone = types.BoolValue(true)
 			} else {
-				item.MacSecureActionNone = types.BoolValue(false)
+				item.MacSecureActionNone = types.BoolNull()
 			}
 			if cValue := v.Get("mac.secure.action.shutdown"); cValue.Exists() {
 				item.MacSecureActionShutdown = types.BoolValue(true)
 			} else {
-				item.MacSecureActionShutdown = types.BoolValue(false)
+				item.MacSecureActionShutdown = types.BoolNull()
 			}
 			if cValue := v.Get("mac.secure.action.restrict"); cValue.Exists() {
 				item.MacSecureActionRestrict = types.BoolValue(true)
 			} else {
-				item.MacSecureActionRestrict = types.BoolValue(false)
+				item.MacSecureActionRestrict = types.BoolNull()
 			}
 			if cValue := v.Get("mac.secure.disable"); cValue.Exists() {
 				item.MacSecureDisable = types.BoolValue(true)
 			} else {
-				item.MacSecureDisable = types.BoolValue(false)
+				item.MacSecureDisable = types.BoolNull()
 			}
 			if cValue := v.Get("mac.secure.shutdown-recovery-timeout.recovery-timer-in-second"); cValue.Exists() {
 				item.MacSecureShutdownRecoveryTimeout = types.Int64Value(cValue.Int())
@@ -4276,7 +4278,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("mac.secure.shutdown-recovery-timeout.disable"); cValue.Exists() {
 				item.MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(true)
 			} else {
-				item.MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(false)
+				item.MacSecureShutdownRecoveryTimeoutDisable = types.BoolNull()
 			}
 			if cValue := v.Get("mld.snooping.profile"); cValue.Exists() {
 				item.MldSnoopingProfile = types.StringValue(cValue.String())
@@ -4302,7 +4304,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("split-horizon.group"); cValue.Exists() {
 				item.SplitHorizonGroup = types.BoolValue(true)
 			} else {
-				item.SplitHorizonGroup = types.BoolValue(false)
+				item.SplitHorizonGroup = types.BoolNull()
 			}
 			if cValue := v.Get("static-mac-addresses.static-mac-address"); cValue.Exists() {
 				item.StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses, 0)
@@ -4329,7 +4331,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("split-horizon.group.core"); cValue.Exists() {
 				item.SplitHorizonGroupCore = types.BoolValue(true)
 			} else {
-				item.SplitHorizonGroupCore = types.BoolValue(false)
+				item.SplitHorizonGroupCore = types.BoolNull()
 			}
 			data.RoutedInterface = append(data.RoutedInterface, item)
 			return true
@@ -4358,7 +4360,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("drop"); cValue.Exists() {
 				item.Drop = types.BoolValue(true)
 			} else {
-				item.Drop = types.BoolValue(false)
+				item.Drop = types.BoolNull()
 			}
 			data.MacStaticAddresses = append(data.MacStaticAddresses, item)
 			return true

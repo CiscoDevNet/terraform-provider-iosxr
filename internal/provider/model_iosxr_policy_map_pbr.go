@@ -709,12 +709,12 @@ func (data *PolicyMapPBR) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("drop"); cValue.Exists() {
 				item.Drop = types.BoolValue(true)
 			} else {
-				item.Drop = types.BoolValue(false)
+				item.Drop = types.BoolNull()
 			}
 			if cValue := v.Get("redirect-ipv4.default-route"); cValue.Exists() {
 				item.RedirectIpv4DefaultRoute = types.BoolValue(true)
 			} else {
-				item.RedirectIpv4DefaultRoute = types.BoolValue(false)
+				item.RedirectIpv4DefaultRoute = types.BoolNull()
 			}
 			if cValue := v.Get("redirect-ipv4.nexthop1.address"); cValue.Exists() {
 				item.RedirectIpv4Nexthop1Address = types.StringValue(cValue.String())
@@ -737,7 +737,7 @@ func (data *PolicyMapPBR) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("redirect-ipv6.default-route"); cValue.Exists() {
 				item.RedirectIpv6DefaultRoute = types.BoolValue(true)
 			} else {
-				item.RedirectIpv6DefaultRoute = types.BoolValue(false)
+				item.RedirectIpv6DefaultRoute = types.BoolNull()
 			}
 			if cValue := v.Get("redirect-ipv6.nexthop1.address"); cValue.Exists() {
 				item.RedirectIpv6Nexthop1Address = types.StringValue(cValue.String())
@@ -769,7 +769,7 @@ func (data *PolicyMapPBR) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("decapsulate.gre"); cValue.Exists() {
 				item.DecapsulateGre = types.BoolValue(true)
 			} else {
-				item.DecapsulateGre = types.BoolValue(false)
+				item.DecapsulateGre = types.BoolNull()
 			}
 			data.Classes = append(data.Classes, item)
 			return true

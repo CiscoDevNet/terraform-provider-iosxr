@@ -361,112 +361,101 @@ func (data *TPA) updateFromBody(ctx context.Context, res []byte) {
 				data.Vrfs[i].Ipv6DefaultRouteMgmt = types.BoolValue(false)
 			}
 		}
-		for ci := range data.Vrfs[i].Ipv4UpdateSourceDestinations {
-			keys := [...]string{"destination-interface"}
-			keyValues := [...]string{data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].DestinationInterface.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("address-family.ipv4.update-source.destinations.destination"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Vrfs[i].Ipv4UpdateSourceDestinations
+			data.Vrfs[i].Ipv4UpdateSourceDestinations = make([]TPAVrfsIpv4UpdateSourceDestinations, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := TPAVrfsIpv4UpdateSourceDestinations{}
+				if cValue := cr.Get("destination-interface"); cValue.Exists() {
+					citem.DestinationInterface = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("source"); cValue.Exists() {
+					citem.SourceInterface = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("address-family.ipv4.update-source.destinations.destination").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.DestinationInterface.ValueString() != citem.DestinationInterface.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("destination-interface"); value.Exists() && !data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].DestinationInterface.IsNull() {
-				data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].DestinationInterface = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].DestinationInterface = types.StringNull()
-			}
-			if value := cr.Get("source"); value.Exists() && !data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].SourceInterface.IsNull() {
-				data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].SourceInterface = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].SourceInterface = types.StringNull()
-			}
+				}
+
+				data.Vrfs[i].Ipv4UpdateSourceDestinations = append(data.Vrfs[i].Ipv4UpdateSourceDestinations, citem)
+				return true
+			})
 		}
-		for ci := range data.Vrfs[i].Ipv6UpdateSourceDestinations {
-			keys := [...]string{"destination-interface"}
-			keyValues := [...]string{data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].DestinationInterface.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("address-family.ipv6.update-source.destinations.destination"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Vrfs[i].Ipv6UpdateSourceDestinations
+			data.Vrfs[i].Ipv6UpdateSourceDestinations = make([]TPAVrfsIpv6UpdateSourceDestinations, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := TPAVrfsIpv6UpdateSourceDestinations{}
+				if cValue := cr.Get("destination-interface"); cValue.Exists() {
+					citem.DestinationInterface = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("source"); cValue.Exists() {
+					citem.SourceInterface = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("address-family.ipv6.update-source.destinations.destination").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.DestinationInterface.ValueString() != citem.DestinationInterface.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("destination-interface"); value.Exists() && !data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].DestinationInterface.IsNull() {
-				data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].DestinationInterface = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].DestinationInterface = types.StringNull()
-			}
-			if value := cr.Get("source"); value.Exists() && !data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].SourceInterface.IsNull() {
-				data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].SourceInterface = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].SourceInterface = types.StringNull()
-			}
+				}
+
+				data.Vrfs[i].Ipv6UpdateSourceDestinations = append(data.Vrfs[i].Ipv6UpdateSourceDestinations, citem)
+				return true
+			})
 		}
-		for ci := range data.Vrfs[i].EastWestInterfaces {
-			keys := [...]string{"east-west-interface"}
-			keyValues := [...]string{data.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("east-wests.east-west"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Vrfs[i].EastWestInterfaces
+			data.Vrfs[i].EastWestInterfaces = make([]TPAVrfsEastWestInterfaces, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := TPAVrfsEastWestInterfaces{}
+				if cValue := cr.Get("east-west-interface"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("vrf"); cValue.Exists() {
+					citem.ReferencedVrf = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("interface"); cValue.Exists() {
+					citem.ReferencedInterface = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("east-wests.east-west").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("east-west-interface"); value.Exists() && !data.Vrfs[i].EastWestInterfaces[ci].InterfaceName.IsNull() {
-				data.Vrfs[i].EastWestInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].EastWestInterfaces[ci].InterfaceName = types.StringNull()
-			}
-			if value := cr.Get("vrf"); value.Exists() && !data.Vrfs[i].EastWestInterfaces[ci].ReferencedVrf.IsNull() {
-				data.Vrfs[i].EastWestInterfaces[ci].ReferencedVrf = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].EastWestInterfaces[ci].ReferencedVrf = types.StringNull()
-			}
-			if value := cr.Get("interface"); value.Exists() && !data.Vrfs[i].EastWestInterfaces[ci].ReferencedInterface.IsNull() {
-				data.Vrfs[i].EastWestInterfaces[ci].ReferencedInterface = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].EastWestInterfaces[ci].ReferencedInterface = types.StringNull()
-			}
+				}
+
+				data.Vrfs[i].EastWestInterfaces = append(data.Vrfs[i].EastWestInterfaces, citem)
+				return true
+			})
 		}
 	}
 }
@@ -532,7 +521,9 @@ func (data TPA) toBodyXML(ctx context.Context) string {
 			if len(item.Ipv4UpdateSourceDestinations) > 0 {
 				for _, citem := range item.Ipv4UpdateSourceDestinations {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.DestinationInterface.IsNull() && !citem.DestinationInterface.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "destination-interface", citem.DestinationInterface.ValueString())
+					}
 					if !citem.SourceInterface.IsNull() && !citem.SourceInterface.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "source", citem.SourceInterface.ValueString())
 					}
@@ -542,7 +533,9 @@ func (data TPA) toBodyXML(ctx context.Context) string {
 			if len(item.Ipv6UpdateSourceDestinations) > 0 {
 				for _, citem := range item.Ipv6UpdateSourceDestinations {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.DestinationInterface.IsNull() && !citem.DestinationInterface.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "destination-interface", citem.DestinationInterface.ValueString())
+					}
 					if !citem.SourceInterface.IsNull() && !citem.SourceInterface.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "source", citem.SourceInterface.ValueString())
 					}
@@ -552,7 +545,9 @@ func (data TPA) toBodyXML(ctx context.Context) string {
 			if len(item.EastWestInterfaces) > 0 {
 				for _, citem := range item.EastWestInterfaces {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "east-west-interface", citem.InterfaceName.ValueString())
+					}
 					if !citem.ReferencedVrf.IsNull() && !citem.ReferencedVrf.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "vrf", citem.ReferencedVrf.ValueString())
 					}
@@ -684,112 +679,110 @@ func (data *TPA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				data.Vrfs[i].Ipv6DefaultRouteMgmt = types.BoolNull()
 			}
 		}
-		for ci := range data.Vrfs[i].Ipv4UpdateSourceDestinations {
-			keys := [...]string{"destination-interface"}
-			keyValues := [...]string{data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].DestinationInterface.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "address-family/ipv4/update-source/destinations/destination"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Vrfs[i].Ipv4UpdateSourceDestinations
+			data.Vrfs[i].Ipv4UpdateSourceDestinations = make([]TPAVrfsIpv4UpdateSourceDestinations, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "address-family/ipv4/update-source/destinations/destination").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := TPAVrfsIpv4UpdateSourceDestinations{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "destination-interface"); cValue.Exists() {
+					citem.DestinationInterface = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "source"); cValue.Exists() {
+					citem.SourceInterface = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.DestinationInterface.ValueString() != citem.DestinationInterface.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "destination-interface"); value.Exists() {
-				data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].DestinationInterface = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].DestinationInterface = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "source"); value.Exists() {
-				data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].SourceInterface = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].SourceInterface = types.StringNull()
-			}
+				}
+
+				data.Vrfs[i].Ipv4UpdateSourceDestinations = append(data.Vrfs[i].Ipv4UpdateSourceDestinations, citem)
+				return true
+			})
 		}
-		for ci := range data.Vrfs[i].Ipv6UpdateSourceDestinations {
-			keys := [...]string{"destination-interface"}
-			keyValues := [...]string{data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].DestinationInterface.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "address-family/ipv6/update-source/destinations/destination"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Vrfs[i].Ipv6UpdateSourceDestinations
+			data.Vrfs[i].Ipv6UpdateSourceDestinations = make([]TPAVrfsIpv6UpdateSourceDestinations, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "address-family/ipv6/update-source/destinations/destination").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := TPAVrfsIpv6UpdateSourceDestinations{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "destination-interface"); cValue.Exists() {
+					citem.DestinationInterface = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "source"); cValue.Exists() {
+					citem.SourceInterface = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.DestinationInterface.ValueString() != citem.DestinationInterface.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "destination-interface"); value.Exists() {
-				data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].DestinationInterface = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].DestinationInterface = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "source"); value.Exists() {
-				data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].SourceInterface = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].SourceInterface = types.StringNull()
-			}
+				}
+
+				data.Vrfs[i].Ipv6UpdateSourceDestinations = append(data.Vrfs[i].Ipv6UpdateSourceDestinations, citem)
+				return true
+			})
 		}
-		for ci := range data.Vrfs[i].EastWestInterfaces {
-			keys := [...]string{"east-west-interface"}
-			keyValues := [...]string{data.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "east-wests/east-west"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Vrfs[i].EastWestInterfaces
+			data.Vrfs[i].EastWestInterfaces = make([]TPAVrfsEastWestInterfaces, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "east-wests/east-west").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := TPAVrfsEastWestInterfaces{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "east-west-interface"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "vrf"); cValue.Exists() {
+					citem.ReferencedVrf = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "interface"); cValue.Exists() {
+					citem.ReferencedInterface = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "east-west-interface"); value.Exists() {
-				data.Vrfs[i].EastWestInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].EastWestInterfaces[ci].InterfaceName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "vrf"); value.Exists() {
-				data.Vrfs[i].EastWestInterfaces[ci].ReferencedVrf = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].EastWestInterfaces[ci].ReferencedVrf = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "interface"); value.Exists() {
-				data.Vrfs[i].EastWestInterfaces[ci].ReferencedInterface = types.StringValue(value.String())
-			} else {
-				data.Vrfs[i].EastWestInterfaces[ci].ReferencedInterface = types.StringNull()
-			}
+				}
+
+				data.Vrfs[i].EastWestInterfaces = append(data.Vrfs[i].EastWestInterfaces, citem)
+				return true
+			})
 		}
 	}
 }
@@ -832,7 +825,7 @@ func (data *TPA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv4.update-source.dataports.active-management"); cValue.Exists() {
 				item.Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(true)
 			} else {
-				item.Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(false)
+				item.Ipv4UpdateSourceDataportsActiveManagement = types.BoolNull()
 			}
 			if cValue := v.Get("address-family.ipv4.update-source.dataports.interface"); cValue.Exists() {
 				item.Ipv4UpdateSourceDataports = types.StringValue(cValue.String())
@@ -840,12 +833,12 @@ func (data *TPA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv4.default-route.mgmt"); cValue.Exists() {
 				item.Ipv4DefaultRouteMgmt = types.BoolValue(true)
 			} else {
-				item.Ipv4DefaultRouteMgmt = types.BoolValue(false)
+				item.Ipv4DefaultRouteMgmt = types.BoolNull()
 			}
 			if cValue := v.Get("address-family.ipv6.update-source.dataports.active-management"); cValue.Exists() {
 				item.Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(true)
 			} else {
-				item.Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(false)
+				item.Ipv6UpdateSourceDataportsActiveManagement = types.BoolNull()
 			}
 			if cValue := v.Get("address-family.ipv6.update-source.dataports.interface"); cValue.Exists() {
 				item.Ipv6UpdateSourceDataports = types.StringValue(cValue.String())
@@ -853,7 +846,7 @@ func (data *TPA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv6.default-route.mgmt"); cValue.Exists() {
 				item.Ipv6DefaultRouteMgmt = types.BoolValue(true)
 			} else {
-				item.Ipv6DefaultRouteMgmt = types.BoolValue(false)
+				item.Ipv6DefaultRouteMgmt = types.BoolNull()
 			}
 			if cValue := v.Get("address-family.ipv4.update-source.destinations.destination"); cValue.Exists() {
 				item.Ipv4UpdateSourceDestinations = make([]TPAVrfsIpv4UpdateSourceDestinations, 0)

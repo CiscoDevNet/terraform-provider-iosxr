@@ -3064,27 +3064,27 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("start-stop"); cValue.Exists() {
 				item.StartStop = types.BoolValue(true)
 			} else {
-				item.StartStop = types.BoolValue(false)
+				item.StartStop = types.BoolNull()
 			}
 			if cValue := v.Get("stop-only"); cValue.Exists() {
 				item.StopOnly = types.BoolValue(true)
 			} else {
-				item.StopOnly = types.BoolValue(false)
+				item.StopOnly = types.BoolNull()
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolValue(false)
+				item.A1None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolValue(false)
+				item.A1Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolValue(false)
+				item.A1Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -3092,17 +3092,17 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolValue(false)
+				item.A2None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolValue(false)
+				item.A2Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolValue(false)
+				item.A2Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -3110,17 +3110,17 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolValue(false)
+				item.A3None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolValue(false)
+				item.A3Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolValue(false)
+				item.A3Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -3128,17 +3128,17 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolValue(false)
+				item.A4None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolValue(false)
+				item.A4Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolValue(false)
+				item.A4Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -3157,32 +3157,32 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("start-stop"); cValue.Exists() {
 				item.StartStop = types.BoolValue(true)
 			} else {
-				item.StartStop = types.BoolValue(false)
+				item.StartStop = types.BoolNull()
 			}
 			if cValue := v.Get("stop-only"); cValue.Exists() {
 				item.StopOnly = types.BoolValue(true)
 			} else {
-				item.StopOnly = types.BoolValue(false)
+				item.StopOnly = types.BoolNull()
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolValue(false)
+				item.A1None = types.BoolNull()
 			}
 			if cValue := v.Get("local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolValue(false)
+				item.A1Local = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolValue(false)
+				item.A1Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolValue(false)
+				item.A1Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -3190,22 +3190,22 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolValue(false)
+				item.A2Local = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolValue(false)
+				item.A2None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolValue(false)
+				item.A2Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolValue(false)
+				item.A2Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -3213,22 +3213,22 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.local"); cValue.Exists() {
 				item.A3Local = types.BoolValue(true)
 			} else {
-				item.A3Local = types.BoolValue(false)
+				item.A3Local = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolValue(false)
+				item.A3None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolValue(false)
+				item.A3Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolValue(false)
+				item.A3Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -3236,22 +3236,22 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.local"); cValue.Exists() {
 				item.A4Local = types.BoolValue(true)
 			} else {
-				item.A4Local = types.BoolValue(false)
+				item.A4Local = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolValue(false)
+				item.A4None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolValue(false)
+				item.A4Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolValue(false)
+				item.A4Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -3270,27 +3270,27 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("start-stop"); cValue.Exists() {
 				item.StartStop = types.BoolValue(true)
 			} else {
-				item.StartStop = types.BoolValue(false)
+				item.StartStop = types.BoolNull()
 			}
 			if cValue := v.Get("broadcast"); cValue.Exists() {
 				item.Broadcast = types.BoolValue(true)
 			} else {
-				item.Broadcast = types.BoolValue(false)
+				item.Broadcast = types.BoolNull()
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolValue(false)
+				item.A1None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolValue(false)
+				item.A1Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolValue(false)
+				item.A1Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -3298,17 +3298,17 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolValue(false)
+				item.A2None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolValue(false)
+				item.A2Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolValue(false)
+				item.A2Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -3316,17 +3316,17 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolValue(false)
+				item.A3None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolValue(false)
+				item.A3Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolValue(false)
+				item.A3Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -3334,17 +3334,17 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolValue(false)
+				item.A4None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolValue(false)
+				item.A4Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolValue(false)
+				item.A4Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -3363,27 +3363,27 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("start-stop"); cValue.Exists() {
 				item.StartStop = types.BoolValue(true)
 			} else {
-				item.StartStop = types.BoolValue(false)
+				item.StartStop = types.BoolNull()
 			}
 			if cValue := v.Get("stop-only"); cValue.Exists() {
 				item.StopOnly = types.BoolValue(true)
 			} else {
-				item.StopOnly = types.BoolValue(false)
+				item.StopOnly = types.BoolNull()
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolValue(false)
+				item.A1None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolValue(false)
+				item.A1Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolValue(false)
+				item.A1Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -3391,17 +3391,17 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolValue(false)
+				item.A2None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolValue(false)
+				item.A2Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolValue(false)
+				item.A2Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -3409,17 +3409,17 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolValue(false)
+				item.A3None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolValue(false)
+				item.A3Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolValue(false)
+				item.A3Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -3427,17 +3427,17 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolValue(false)
+				item.A4None = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolValue(false)
+				item.A4Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolValue(false)
+				item.A4Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())

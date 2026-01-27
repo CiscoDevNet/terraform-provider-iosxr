@@ -2937,7 +2937,7 @@ func (data *RouterPIMVRFIPv4) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("override"); cValue.Exists() {
 				item.Override = types.BoolValue(true)
 			} else {
-				item.Override = types.BoolValue(false)
+				item.Override = types.BoolNull()
 			}
 			data.RpAddresses = append(data.RpAddresses, item)
 			return true
@@ -2956,7 +2956,7 @@ func (data *RouterPIMVRFIPv4) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("override"); cValue.Exists() {
 				item.Override = types.BoolValue(true)
 			} else {
-				item.Override = types.BoolValue(false)
+				item.Override = types.BoolNull()
 			}
 			data.RpAddressesBidir = append(data.RpAddressesBidir, item)
 			return true
@@ -3239,7 +3239,7 @@ func (data *RouterPIMVRFIPv4) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("listen"); cValue.Exists() {
 				item.Listen = types.BoolValue(true)
 			} else {
-				item.Listen = types.BoolValue(false)
+				item.Listen = types.BoolNull()
 			}
 			data.AutoRpRelayVrfs = append(data.AutoRpRelayVrfs, item)
 			return true
@@ -3293,7 +3293,7 @@ func (data *RouterPIMVRFIPv4) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("listen"); cValue.Exists() {
 				item.Listen = types.BoolValue(true)
 			} else {
-				item.Listen = types.BoolValue(false)
+				item.Listen = types.BoolNull()
 			}
 			data.BsrRelayVrfs = append(data.BsrRelayVrfs, item)
 			return true
@@ -3309,12 +3309,12 @@ func (data *RouterPIMVRFIPv4) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("enable"); cValue.Exists() {
 				item.Enable = types.BoolValue(true)
 			} else {
-				item.Enable = types.BoolValue(false)
+				item.Enable = types.BoolNull()
 			}
 			if cValue := v.Get("disable"); cValue.Exists() {
 				item.Disable = types.BoolValue(true)
 			} else {
-				item.Disable = types.BoolValue(false)
+				item.Disable = types.BoolNull()
 			}
 			if cValue := v.Get("dr-priority"); cValue.Exists() {
 				item.DrPriority = types.Int64Value(cValue.Int())
@@ -3355,12 +3355,12 @@ func (data *RouterPIMVRFIPv4) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("bfd.fast-detect"); cValue.Exists() {
 				item.BfdFastDetect = types.BoolValue(true)
 			} else {
-				item.BfdFastDetect = types.BoolValue(false)
+				item.BfdFastDetect = types.BoolNull()
 			}
 			if cValue := v.Get("bsr-border"); cValue.Exists() {
 				item.BsrBorder = types.BoolValue(true)
 			} else {
-				item.BsrBorder = types.BoolValue(false)
+				item.BsrBorder = types.BoolNull()
 			}
 			data.Interfaces = append(data.Interfaces, item)
 			return true

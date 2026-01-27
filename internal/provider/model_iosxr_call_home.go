@@ -436,7 +436,12 @@ func (data CallHome) toBodyXML(ctx context.Context) string {
 			if len(item.DestinationAddresses) > 0 {
 				for _, citem := range item.DestinationAddresses {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.AddressType.IsNull() && !citem.AddressType.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "address-type", citem.AddressType.ValueString())
+					}
+					if !citem.DestinationAddress.IsNull() && !citem.DestinationAddress.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "destination-address", citem.DestinationAddress.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "destination/addresses/address", ccBody.Res())
 				}
 			}
@@ -734,39 +739,39 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 				data.Profiles[i].Active = types.BoolValue(false)
 			}
 		}
-		for ci := range data.Profiles[i].DestinationAddresses {
-			keys := [...]string{"address-type", "destination-address"}
-			keyValues := [...]string{data.Profiles[i].DestinationAddresses[ci].AddressType.ValueString(), data.Profiles[i].DestinationAddresses[ci].DestinationAddress.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("destination.addresses.address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Profiles[i].DestinationAddresses
+			data.Profiles[i].DestinationAddresses = make([]CallHomeProfilesDestinationAddresses, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := CallHomeProfilesDestinationAddresses{}
+				if cValue := cr.Get("address-type"); cValue.Exists() {
+					citem.AddressType = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("destination-address"); cValue.Exists() {
+					citem.DestinationAddress = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("destination.addresses.address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AddressType.ValueString() != citem.AddressType.ValueString() {
+						match = false
+					}
+					if existingItem.DestinationAddress.ValueString() != citem.DestinationAddress.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("address-type"); value.Exists() && !data.Profiles[i].DestinationAddresses[ci].AddressType.IsNull() {
-				data.Profiles[i].DestinationAddresses[ci].AddressType = types.StringValue(value.String())
-			} else {
-				data.Profiles[i].DestinationAddresses[ci].AddressType = types.StringNull()
-			}
-			if value := cr.Get("destination-address"); value.Exists() && !data.Profiles[i].DestinationAddresses[ci].DestinationAddress.IsNull() {
-				data.Profiles[i].DestinationAddresses[ci].DestinationAddress = types.StringValue(value.String())
-			} else {
-				data.Profiles[i].DestinationAddresses[ci].DestinationAddress = types.StringNull()
-			}
+				}
+
+				data.Profiles[i].DestinationAddresses = append(data.Profiles[i].DestinationAddresses, citem)
+				return true
+			})
 		}
 		if value := r.Get("destination.message-size-limit"); value.Exists() && !data.Profiles[i].DestinationMessageSizeLimit.IsNull() {
 			data.Profiles[i].DestinationMessageSizeLimit = types.Int64Value(value.Int())
@@ -1176,39 +1181,42 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 				data.Profiles[i].Active = types.BoolNull()
 			}
 		}
-		for ci := range data.Profiles[i].DestinationAddresses {
-			keys := [...]string{"address-type", "destination-address"}
-			keyValues := [...]string{data.Profiles[i].DestinationAddresses[ci].AddressType.ValueString(), data.Profiles[i].DestinationAddresses[ci].DestinationAddress.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "destination/addresses/address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Profiles[i].DestinationAddresses
+			data.Profiles[i].DestinationAddresses = make([]CallHomeProfilesDestinationAddresses, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "destination/addresses/address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := CallHomeProfilesDestinationAddresses{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "address-type"); cValue.Exists() {
+					citem.AddressType = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "destination-address"); cValue.Exists() {
+					citem.DestinationAddress = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AddressType.ValueString() != citem.AddressType.ValueString() {
+						match = false
+					}
+					if existingItem.DestinationAddress.ValueString() != citem.DestinationAddress.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "address-type"); value.Exists() {
-				data.Profiles[i].DestinationAddresses[ci].AddressType = types.StringValue(value.String())
-			} else {
-				data.Profiles[i].DestinationAddresses[ci].AddressType = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "destination-address"); value.Exists() {
-				data.Profiles[i].DestinationAddresses[ci].DestinationAddress = types.StringValue(value.String())
-			} else {
-				data.Profiles[i].DestinationAddresses[ci].DestinationAddress = types.StringNull()
-			}
+				}
+
+				data.Profiles[i].DestinationAddresses = append(data.Profiles[i].DestinationAddresses, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "destination/message-size-limit"); value.Exists() {
 			data.Profiles[i].DestinationMessageSizeLimit = types.Int64Value(value.Int())
@@ -1427,7 +1435,7 @@ func (data *CallHome) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("active"); cValue.Exists() {
 				item.Active = types.BoolValue(true)
 			} else {
-				item.Active = types.BoolValue(false)
+				item.Active = types.BoolNull()
 			}
 			if cValue := v.Get("destination.addresses.address"); cValue.Exists() {
 				item.DestinationAddresses = make([]CallHomeProfilesDestinationAddresses, 0)
@@ -1449,57 +1457,57 @@ func (data *CallHome) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("destination.preferred-msg-format.short-text"); cValue.Exists() {
 				item.DestinationMsgFormatShort = types.BoolValue(true)
 			} else {
-				item.DestinationMsgFormatShort = types.BoolValue(false)
+				item.DestinationMsgFormatShort = types.BoolNull()
 			}
 			if cValue := v.Get("destination.preferred-msg-format.long-text"); cValue.Exists() {
 				item.DestinationMsgFormatLong = types.BoolValue(true)
 			} else {
-				item.DestinationMsgFormatLong = types.BoolValue(false)
+				item.DestinationMsgFormatLong = types.BoolNull()
 			}
 			if cValue := v.Get("destination.transport-method.email"); cValue.Exists() {
 				item.DestinationTransportMethodEmail = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodEmail = types.BoolValue(false)
+				item.DestinationTransportMethodEmail = types.BoolNull()
 			}
 			if cValue := v.Get("destination.transport-method.email.disable"); cValue.Exists() {
 				item.DestinationTransportMethodEmailDisable = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodEmailDisable = types.BoolValue(false)
+				item.DestinationTransportMethodEmailDisable = types.BoolNull()
 			}
 			if cValue := v.Get("destination.transport-method.http"); cValue.Exists() {
 				item.DestinationTransportMethodHttp = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodHttp = types.BoolValue(false)
+				item.DestinationTransportMethodHttp = types.BoolNull()
 			}
 			if cValue := v.Get("destination.transport-method.http.disable"); cValue.Exists() {
 				item.DestinationTransportMethodHttpDisable = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodHttpDisable = types.BoolValue(false)
+				item.DestinationTransportMethodHttpDisable = types.BoolNull()
 			}
 			if cValue := v.Get("reporting.smart-call-home-data"); cValue.Exists() {
 				item.ReportingSmartCallHomeData = types.BoolValue(true)
 			} else {
-				item.ReportingSmartCallHomeData = types.BoolValue(false)
+				item.ReportingSmartCallHomeData = types.BoolNull()
 			}
 			if cValue := v.Get("reporting.smart-call-home-data.disable"); cValue.Exists() {
 				item.ReportingSmartCallHomeDataDisable = types.BoolValue(true)
 			} else {
-				item.ReportingSmartCallHomeDataDisable = types.BoolValue(false)
+				item.ReportingSmartCallHomeDataDisable = types.BoolNull()
 			}
 			if cValue := v.Get("reporting.smart-licensing-data"); cValue.Exists() {
 				item.ReportingSmartLicensingData = types.BoolValue(true)
 			} else {
-				item.ReportingSmartLicensingData = types.BoolValue(false)
+				item.ReportingSmartLicensingData = types.BoolNull()
 			}
 			if cValue := v.Get("reporting.smart-licensing-data.disable"); cValue.Exists() {
 				item.ReportingSmartLicensingDataDisable = types.BoolValue(true)
 			} else {
-				item.ReportingSmartLicensingDataDisable = types.BoolValue(false)
+				item.ReportingSmartLicensingDataDisable = types.BoolNull()
 			}
 			if cValue := v.Get("anonymous-reporting-only"); cValue.Exists() {
 				item.AnonymousReportingOnly = types.BoolValue(true)
 			} else {
-				item.AnonymousReportingOnly = types.BoolValue(false)
+				item.AnonymousReportingOnly = types.BoolNull()
 			}
 			data.Profiles = append(data.Profiles, item)
 			return true

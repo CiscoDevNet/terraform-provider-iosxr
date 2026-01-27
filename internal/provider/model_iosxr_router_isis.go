@@ -2705,39 +2705,39 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.SrlgNames[i].AdminWeight = types.Int64Null()
 		}
-		for ci := range data.SrlgNames[i].StaticIpv4Addresses {
-			keys := [...]string{"local-end-point", "remote-end-point"}
-			keyValues := [...]string{data.SrlgNames[i].StaticIpv4Addresses[ci].LocalEndPoint.ValueString(), data.SrlgNames[i].StaticIpv4Addresses[ci].RemoteEndPoint.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("static.ipv4.addresses.addresss"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.SrlgNames[i].StaticIpv4Addresses
+			data.SrlgNames[i].StaticIpv4Addresses = make([]RouterISISSrlgNamesStaticIpv4Addresses, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterISISSrlgNamesStaticIpv4Addresses{}
+				if cValue := cr.Get("local-end-point"); cValue.Exists() {
+					citem.LocalEndPoint = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("remote-end-point"); cValue.Exists() {
+					citem.RemoteEndPoint = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("static.ipv4.addresses.addresss").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.LocalEndPoint.ValueString() != citem.LocalEndPoint.ValueString() {
+						match = false
+					}
+					if existingItem.RemoteEndPoint.ValueString() != citem.RemoteEndPoint.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("local-end-point"); value.Exists() && !data.SrlgNames[i].StaticIpv4Addresses[ci].LocalEndPoint.IsNull() {
-				data.SrlgNames[i].StaticIpv4Addresses[ci].LocalEndPoint = types.StringValue(value.String())
-			} else {
-				data.SrlgNames[i].StaticIpv4Addresses[ci].LocalEndPoint = types.StringNull()
-			}
-			if value := cr.Get("remote-end-point"); value.Exists() && !data.SrlgNames[i].StaticIpv4Addresses[ci].RemoteEndPoint.IsNull() {
-				data.SrlgNames[i].StaticIpv4Addresses[ci].RemoteEndPoint = types.StringValue(value.String())
-			} else {
-				data.SrlgNames[i].StaticIpv4Addresses[ci].RemoteEndPoint = types.StringNull()
-			}
+				}
+
+				data.SrlgNames[i].StaticIpv4Addresses = append(data.SrlgNames[i].StaticIpv4Addresses, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.FlexAlgos {
@@ -2977,49 +2977,45 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 				data.FlexAlgos[i].UcmpDisable = types.BoolValue(false)
 			}
 		}
-		for ci := range data.FlexAlgos[i].AddressFamily {
-			keys := [...]string{"af-name", "saf-name"}
-			keyValues := [...]string{data.FlexAlgos[i].AddressFamily[ci].AfName.ValueString(), data.FlexAlgos[i].AddressFamily[ci].SafName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("address-families.address-family"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.FlexAlgos[i].AddressFamily
+			data.FlexAlgos[i].AddressFamily = make([]RouterISISFlexAlgosAddressFamily, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterISISFlexAlgosAddressFamily{}
+				if cValue := cr.Get("af-name"); cValue.Exists() {
+					citem.AfName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("saf-name"); cValue.Exists() {
+					citem.SafName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("maximum-paths.number-of-paths"); cValue.Exists() {
+					citem.MaximumPaths = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("maximum-paths.route-policy"); cValue.Exists() {
+					citem.MaximumPathsRoutePolicy = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("address-families.address-family").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AfName.ValueString() != citem.AfName.ValueString() {
+						match = false
+					}
+					if existingItem.SafName.ValueString() != citem.SafName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("af-name"); value.Exists() && !data.FlexAlgos[i].AddressFamily[ci].AfName.IsNull() {
-				data.FlexAlgos[i].AddressFamily[ci].AfName = types.StringValue(value.String())
-			} else {
-				data.FlexAlgos[i].AddressFamily[ci].AfName = types.StringNull()
-			}
-			if value := cr.Get("saf-name"); value.Exists() && !data.FlexAlgos[i].AddressFamily[ci].SafName.IsNull() {
-				data.FlexAlgos[i].AddressFamily[ci].SafName = types.StringValue(value.String())
-			} else {
-				data.FlexAlgos[i].AddressFamily[ci].SafName = types.StringNull()
-			}
-			if value := cr.Get("maximum-paths.number-of-paths"); value.Exists() {
-				data.FlexAlgos[i].AddressFamily[ci].MaximumPaths = types.Int64Value(value.Int())
-			} else if data.FlexAlgos[i].AddressFamily[ci].MaximumPaths.IsNull() {
-				data.FlexAlgos[i].AddressFamily[ci].MaximumPaths = types.Int64Null()
-			}
-			if value := cr.Get("maximum-paths.route-policy"); value.Exists() && !data.FlexAlgos[i].AddressFamily[ci].MaximumPathsRoutePolicy.IsNull() {
-				data.FlexAlgos[i].AddressFamily[ci].MaximumPathsRoutePolicy = types.StringValue(value.String())
-			} else {
-				data.FlexAlgos[i].AddressFamily[ci].MaximumPathsRoutePolicy = types.StringNull()
-			}
+				}
+
+				data.FlexAlgos[i].AddressFamily = append(data.FlexAlgos[i].AddressFamily, citem)
+				return true
+			})
 		}
 	}
 }
@@ -3102,17 +3098,17 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("on-startup.wait-for-bgp"); cValue.Exists() {
 				item.OnStartupWaitForBgp = types.BoolValue(true)
 			} else {
-				item.OnStartupWaitForBgp = types.BoolValue(false)
+				item.OnStartupWaitForBgp = types.BoolNull()
 			}
 			if cValue := v.Get("advertise.external"); cValue.Exists() {
 				item.AdvertiseExternal = types.BoolValue(true)
 			} else {
-				item.AdvertiseExternal = types.BoolValue(false)
+				item.AdvertiseExternal = types.BoolNull()
 			}
 			if cValue := v.Get("advertise.interlevel"); cValue.Exists() {
 				item.AdvertiseInterlevel = types.BoolValue(true)
 			} else {
-				item.AdvertiseInterlevel = types.BoolValue(false)
+				item.AdvertiseInterlevel = types.BoolNull()
 			}
 			data.SetOverloadBitLevels = append(data.SetOverloadBitLevels, item)
 			return true
@@ -3260,17 +3256,17 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("neighbor"); cValue.Exists() {
 				item.Neighbor = types.BoolValue(true)
 			} else {
-				item.Neighbor = types.BoolValue(false)
+				item.Neighbor = types.BoolNull()
 			}
 			if cValue := v.Get("prefix-tlvs"); cValue.Exists() {
 				item.PrefixTlvs = types.BoolValue(true)
 			} else {
-				item.PrefixTlvs = types.BoolValue(false)
+				item.PrefixTlvs = types.BoolNull()
 			}
 			if cValue := v.Get("router-capability"); cValue.Exists() {
 				item.RouterCapability = types.BoolValue(true)
 			} else {
-				item.RouterCapability = types.BoolValue(false)
+				item.RouterCapability = types.BoolNull()
 			}
 			data.MultiPartTlvDisableLevels = append(data.MultiPartTlvDisableLevels, item)
 			return true
@@ -3374,32 +3370,32 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("text.password-options.send-only"); cValue.Exists() {
 				item.TextSendOnly = types.BoolValue(true)
 			} else {
-				item.TextSendOnly = types.BoolValue(false)
+				item.TextSendOnly = types.BoolNull()
 			}
 			if cValue := v.Get("text.password-options.snp.send-only"); cValue.Exists() {
 				item.TextSnpSendOnly = types.BoolValue(true)
 			} else {
-				item.TextSnpSendOnly = types.BoolValue(false)
+				item.TextSnpSendOnly = types.BoolNull()
 			}
 			if cValue := v.Get("text.password-options.enable-poi"); cValue.Exists() {
 				item.TextEnablePoi = types.BoolValue(true)
 			} else {
-				item.TextEnablePoi = types.BoolValue(false)
+				item.TextEnablePoi = types.BoolNull()
 			}
 			if cValue := v.Get("hmac-md5.password-options.send-only"); cValue.Exists() {
 				item.HmacMd5SendOnly = types.BoolValue(true)
 			} else {
-				item.HmacMd5SendOnly = types.BoolValue(false)
+				item.HmacMd5SendOnly = types.BoolNull()
 			}
 			if cValue := v.Get("hmac-md5.password-options.snp.send-only"); cValue.Exists() {
 				item.HmacMd5SnpSendOnly = types.BoolValue(true)
 			} else {
-				item.HmacMd5SnpSendOnly = types.BoolValue(false)
+				item.HmacMd5SnpSendOnly = types.BoolNull()
 			}
 			if cValue := v.Get("hmac-md5.password-options.enable-poi"); cValue.Exists() {
 				item.HmacMd5EnablePoi = types.BoolValue(true)
 			} else {
-				item.HmacMd5EnablePoi = types.BoolValue(false)
+				item.HmacMd5EnablePoi = types.BoolNull()
 			}
 			if cValue := v.Get("keychain.keychain-name"); cValue.Exists() {
 				item.KeychainName = types.StringValue(cValue.String())
@@ -3407,17 +3403,17 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("keychain.send-only"); cValue.Exists() {
 				item.KeychainSendOnly = types.BoolValue(true)
 			} else {
-				item.KeychainSendOnly = types.BoolValue(false)
+				item.KeychainSendOnly = types.BoolNull()
 			}
 			if cValue := v.Get("keychain.snp.send-only"); cValue.Exists() {
 				item.KeychainSnpSendOnly = types.BoolValue(true)
 			} else {
-				item.KeychainSnpSendOnly = types.BoolValue(false)
+				item.KeychainSnpSendOnly = types.BoolNull()
 			}
 			if cValue := v.Get("keychain.enable-poi"); cValue.Exists() {
 				item.KeychainEnablePoi = types.BoolValue(true)
 			} else {
-				item.KeychainEnablePoi = types.BoolValue(false)
+				item.KeychainEnablePoi = types.BoolNull()
 			}
 			data.LspPasswordLevels = append(data.LspPasswordLevels, item)
 			return true
@@ -3531,37 +3527,37 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("on-startup.wait-for-bgp"); cValue.Exists() {
 				item.OnStartupWaitForBgp = types.BoolValue(true)
 			} else {
-				item.OnStartupWaitForBgp = types.BoolValue(false)
+				item.OnStartupWaitForBgp = types.BoolNull()
 			}
 			if cValue := v.Get("external"); cValue.Exists() {
 				item.External = types.BoolValue(true)
 			} else {
-				item.External = types.BoolValue(false)
+				item.External = types.BoolNull()
 			}
 			if cValue := v.Get("interlevel"); cValue.Exists() {
 				item.Interlevel = types.BoolValue(true)
 			} else {
-				item.Interlevel = types.BoolValue(false)
+				item.Interlevel = types.BoolNull()
 			}
 			if cValue := v.Get("default-route"); cValue.Exists() {
 				item.DefaultRoute = types.BoolValue(true)
 			} else {
-				item.DefaultRoute = types.BoolValue(false)
+				item.DefaultRoute = types.BoolNull()
 			}
 			if cValue := v.Get("srv6-locator"); cValue.Exists() {
 				item.Srv6Locator = types.BoolValue(true)
 			} else {
-				item.Srv6Locator = types.BoolValue(false)
+				item.Srv6Locator = types.BoolNull()
 			}
 			if cValue := v.Get("te"); cValue.Exists() {
 				item.Te = types.BoolValue(true)
 			} else {
-				item.Te = types.BoolValue(false)
+				item.Te = types.BoolNull()
 			}
 			if cValue := v.Get("delay"); cValue.Exists() {
 				item.Delay = types.BoolValue(true)
 			} else {
-				item.Delay = types.BoolValue(false)
+				item.Delay = types.BoolNull()
 			}
 			data.MaxMetricLevels = append(data.MaxMetricLevels, item)
 			return true
@@ -3722,12 +3718,12 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("advertise-definition"); cValue.Exists() {
 				item.AdvertiseDefinition = types.BoolValue(true)
 			} else {
-				item.AdvertiseDefinition = types.BoolValue(false)
+				item.AdvertiseDefinition = types.BoolNull()
 			}
 			if cValue := v.Get("prefix-metric"); cValue.Exists() {
 				item.PrefixMetric = types.BoolValue(true)
 			} else {
-				item.PrefixMetric = types.BoolValue(false)
+				item.PrefixMetric = types.BoolNull()
 			}
 			if cValue := v.Get("auto-cost.reference.reference-bandwidth.reference-bandwidth-number"); cValue.Exists() {
 				item.AutoCostReferenceBandwidth = types.Int64Value(cValue.Int())
@@ -3738,7 +3734,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("auto-cost.reference.group-mode"); cValue.Exists() {
 				item.AutoCostReferenceGroupMode = types.BoolValue(true)
 			} else {
-				item.AutoCostReferenceGroupMode = types.BoolValue(false)
+				item.AutoCostReferenceGroupMode = types.BoolNull()
 			}
 			if cValue := v.Get("affinity.exclude-any.exclude-any-argument"); cValue.Exists() {
 				item.AffinityExcludeAny = helpers.GetStringList(cValue.Array())
@@ -3778,27 +3774,27 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.disable"); cValue.Exists() {
 				item.FastRerouteDisable = types.BoolValue(true)
 			} else {
-				item.FastRerouteDisable = types.BoolValue(false)
+				item.FastRerouteDisable = types.BoolNull()
 			}
 			if cValue := v.Get("microloop.avoidance.disable"); cValue.Exists() {
 				item.MicroloopAvoidanceDisable = types.BoolValue(true)
 			} else {
-				item.MicroloopAvoidanceDisable = types.BoolValue(false)
+				item.MicroloopAvoidanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("data-plane.segment-routing"); cValue.Exists() {
 				item.DataPlaneSegmentRouting = types.BoolValue(true)
 			} else {
-				item.DataPlaneSegmentRouting = types.BoolValue(false)
+				item.DataPlaneSegmentRouting = types.BoolNull()
 			}
 			if cValue := v.Get("data-plane.ip"); cValue.Exists() {
 				item.DataPlaneIp = types.BoolValue(true)
 			} else {
-				item.DataPlaneIp = types.BoolValue(false)
+				item.DataPlaneIp = types.BoolNull()
 			}
 			if cValue := v.Get("ucmp.disable"); cValue.Exists() {
 				item.UcmpDisable = types.BoolValue(true)
 			} else {
-				item.UcmpDisable = types.BoolValue(false)
+				item.UcmpDisable = types.BoolNull()
 			}
 			if cValue := v.Get("address-families.address-family"); cValue.Exists() {
 				item.AddressFamily = make([]RouterISISFlexAlgosAddressFamily, 0)
@@ -7299,7 +7295,12 @@ func (data RouterISIS) toBodyXML(ctx context.Context) string {
 			if len(item.StaticIpv4Addresses) > 0 {
 				for _, citem := range item.StaticIpv4Addresses {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.LocalEndPoint.IsNull() && !citem.LocalEndPoint.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "local-end-point", citem.LocalEndPoint.ValueString())
+					}
+					if !citem.RemoteEndPoint.IsNull() && !citem.RemoteEndPoint.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "remote-end-point", citem.RemoteEndPoint.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "static/ipv4/addresses/addresss", ccBody.Res())
 				}
 			}
@@ -7424,7 +7425,12 @@ func (data RouterISIS) toBodyXML(ctx context.Context) string {
 			if len(item.AddressFamily) > 0 {
 				for _, citem := range item.AddressFamily {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.AfName.IsNull() && !citem.AfName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "af-name", citem.AfName.ValueString())
+					}
+					if !citem.SafName.IsNull() && !citem.SafName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "saf-name", citem.SafName.ValueString())
+					}
 					if !citem.MaximumPaths.IsNull() && !citem.MaximumPaths.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "maximum-paths/number-of-paths", strconv.FormatInt(citem.MaximumPaths.ValueInt64(), 10))
 					}
@@ -8702,39 +8708,42 @@ func (data *RouterISIS) updateFromBodyXML(ctx context.Context, res xmldot.Result
 		} else if data.SrlgNames[i].AdminWeight.IsNull() {
 			data.SrlgNames[i].AdminWeight = types.Int64Null()
 		}
-		for ci := range data.SrlgNames[i].StaticIpv4Addresses {
-			keys := [...]string{"local-end-point", "remote-end-point"}
-			keyValues := [...]string{data.SrlgNames[i].StaticIpv4Addresses[ci].LocalEndPoint.ValueString(), data.SrlgNames[i].StaticIpv4Addresses[ci].RemoteEndPoint.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "static/ipv4/addresses/addresss"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.SrlgNames[i].StaticIpv4Addresses
+			data.SrlgNames[i].StaticIpv4Addresses = make([]RouterISISSrlgNamesStaticIpv4Addresses, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "static/ipv4/addresses/addresss").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterISISSrlgNamesStaticIpv4Addresses{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "local-end-point"); cValue.Exists() {
+					citem.LocalEndPoint = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "remote-end-point"); cValue.Exists() {
+					citem.RemoteEndPoint = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.LocalEndPoint.ValueString() != citem.LocalEndPoint.ValueString() {
+						match = false
+					}
+					if existingItem.RemoteEndPoint.ValueString() != citem.RemoteEndPoint.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "local-end-point"); value.Exists() {
-				data.SrlgNames[i].StaticIpv4Addresses[ci].LocalEndPoint = types.StringValue(value.String())
-			} else {
-				data.SrlgNames[i].StaticIpv4Addresses[ci].LocalEndPoint = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "remote-end-point"); value.Exists() {
-				data.SrlgNames[i].StaticIpv4Addresses[ci].RemoteEndPoint = types.StringValue(value.String())
-			} else {
-				data.SrlgNames[i].StaticIpv4Addresses[ci].RemoteEndPoint = types.StringNull()
-			}
+				}
+
+				data.SrlgNames[i].StaticIpv4Addresses = append(data.SrlgNames[i].StaticIpv4Addresses, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.FlexAlgos {
@@ -8888,49 +8897,48 @@ func (data *RouterISIS) updateFromBodyXML(ctx context.Context, res xmldot.Result
 				data.FlexAlgos[i].UcmpDisable = types.BoolNull()
 			}
 		}
-		for ci := range data.FlexAlgos[i].AddressFamily {
-			keys := [...]string{"af-name", "saf-name"}
-			keyValues := [...]string{data.FlexAlgos[i].AddressFamily[ci].AfName.ValueString(), data.FlexAlgos[i].AddressFamily[ci].SafName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "address-families/address-family"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.FlexAlgos[i].AddressFamily
+			data.FlexAlgos[i].AddressFamily = make([]RouterISISFlexAlgosAddressFamily, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "address-families/address-family").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterISISFlexAlgosAddressFamily{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "af-name"); cValue.Exists() {
+					citem.AfName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "saf-name"); cValue.Exists() {
+					citem.SafName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "maximum-paths/number-of-paths"); cValue.Exists() {
+					citem.MaximumPaths = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "maximum-paths/route-policy"); cValue.Exists() {
+					citem.MaximumPathsRoutePolicy = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AfName.ValueString() != citem.AfName.ValueString() {
+						match = false
+					}
+					if existingItem.SafName.ValueString() != citem.SafName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "af-name"); value.Exists() {
-				data.FlexAlgos[i].AddressFamily[ci].AfName = types.StringValue(value.String())
-			} else {
-				data.FlexAlgos[i].AddressFamily[ci].AfName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "saf-name"); value.Exists() {
-				data.FlexAlgos[i].AddressFamily[ci].SafName = types.StringValue(value.String())
-			} else {
-				data.FlexAlgos[i].AddressFamily[ci].SafName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "maximum-paths/number-of-paths"); value.Exists() {
-				data.FlexAlgos[i].AddressFamily[ci].MaximumPaths = types.Int64Value(value.Int())
-			} else {
-				data.FlexAlgos[i].AddressFamily[ci].MaximumPaths = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "maximum-paths/route-policy"); value.Exists() {
-				data.FlexAlgos[i].AddressFamily[ci].MaximumPathsRoutePolicy = types.StringValue(value.String())
-			} else {
-				data.FlexAlgos[i].AddressFamily[ci].MaximumPathsRoutePolicy = types.StringNull()
-			}
+				}
+
+				data.FlexAlgos[i].AddressFamily = append(data.FlexAlgos[i].AddressFamily, citem)
+				return true
+			})
 		}
 	}
 }

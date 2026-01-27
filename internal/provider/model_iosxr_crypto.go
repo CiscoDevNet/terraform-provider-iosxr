@@ -1984,7 +1984,7 @@ func (data *Crypto) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("enrollment.terminal"); cValue.Exists() {
 				item.EnrollmentTerminal = types.BoolValue(true)
 			} else {
-				item.EnrollmentTerminal = types.BoolValue(false)
+				item.EnrollmentTerminal = types.BoolNull()
 			}
 			if cValue := v.Get("sftp-username"); cValue.Exists() {
 				item.SftpUsername = types.StringValue(cValue.String())
@@ -1998,17 +1998,17 @@ func (data *Crypto) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("renewal-message-type.pkcsreq"); cValue.Exists() {
 				item.RenewalMessageTypePkcsreq = types.BoolValue(true)
 			} else {
-				item.RenewalMessageTypePkcsreq = types.BoolValue(false)
+				item.RenewalMessageTypePkcsreq = types.BoolNull()
 			}
 			if cValue := v.Get("renewal-message-type.renewalreq"); cValue.Exists() {
 				item.RenewalMessageTypeRenewalreq = types.BoolValue(true)
 			} else {
-				item.RenewalMessageTypeRenewalreq = types.BoolValue(false)
+				item.RenewalMessageTypeRenewalreq = types.BoolNull()
 			}
 			if cValue := v.Get("skip-challenge-password"); cValue.Exists() {
 				item.SkipChallengePassword = types.BoolValue(true)
 			} else {
-				item.SkipChallengePassword = types.BoolValue(false)
+				item.SkipChallengePassword = types.BoolNull()
 			}
 			if cValue := v.Get("rsakeypair"); cValue.Exists() {
 				item.Rsakeypair = types.StringValue(cValue.String())
@@ -2016,7 +2016,7 @@ func (data *Crypto) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("crl.optional"); cValue.Exists() {
 				item.CrlOptional = types.BoolValue(true)
 			} else {
-				item.CrlOptional = types.BoolValue(false)
+				item.CrlOptional = types.BoolNull()
 			}
 			if cValue := v.Get("query.url"); cValue.Exists() {
 				item.QueryUrl = types.StringValue(cValue.String())
@@ -2027,7 +2027,7 @@ func (data *Crypto) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ip-address.none"); cValue.Exists() {
 				item.IpAddressNone = types.BoolValue(true)
 			} else {
-				item.IpAddressNone = types.BoolValue(false)
+				item.IpAddressNone = types.BoolNull()
 			}
 			if cValue := v.Get("subject-name"); cValue.Exists() {
 				item.SubjectName = types.StringValue(cValue.String())
@@ -2038,12 +2038,12 @@ func (data *Crypto) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("serial-number"); cValue.Exists() {
 				item.SerialNumber = types.BoolValue(true)
 			} else {
-				item.SerialNumber = types.BoolValue(false)
+				item.SerialNumber = types.BoolNull()
 			}
 			if cValue := v.Get("serial-number.none"); cValue.Exists() {
 				item.SerialNumberNone = types.BoolValue(true)
 			} else {
-				item.SerialNumberNone = types.BoolValue(false)
+				item.SerialNumberNone = types.BoolNull()
 			}
 			if cValue := v.Get("vrf"); cValue.Exists() {
 				item.Vrf = types.StringValue(cValue.String())

@@ -296,44 +296,39 @@ func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.AoKeychains[i].KeychainName = types.StringNull()
 		}
-		for ci := range data.AoKeychains[i].Keys {
-			keys := [...]string{"key-name"}
-			keyValues := [...]string{data.AoKeychains[i].Keys[ci].KeyName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("keys.key"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.AoKeychains[i].Keys
+			data.AoKeychains[i].Keys = make([]TCPAoKeychainsKeys, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := TCPAoKeychainsKeys{}
+				if cValue := cr.Get("key-name"); cValue.Exists() {
+					citem.KeyName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("send-id"); cValue.Exists() {
+					citem.SendId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("receive-id"); cValue.Exists() {
+					citem.ReceiveId = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("keys.key").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.KeyName.ValueString() != citem.KeyName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("key-name"); value.Exists() && !data.AoKeychains[i].Keys[ci].KeyName.IsNull() {
-				data.AoKeychains[i].Keys[ci].KeyName = types.StringValue(value.String())
-			} else {
-				data.AoKeychains[i].Keys[ci].KeyName = types.StringNull()
-			}
-			if value := cr.Get("send-id"); value.Exists() {
-				data.AoKeychains[i].Keys[ci].SendId = types.Int64Value(value.Int())
-			} else if data.AoKeychains[i].Keys[ci].SendId.IsNull() {
-				data.AoKeychains[i].Keys[ci].SendId = types.Int64Null()
-			}
-			if value := cr.Get("receive-id"); value.Exists() {
-				data.AoKeychains[i].Keys[ci].ReceiveId = types.Int64Value(value.Int())
-			} else if data.AoKeychains[i].Keys[ci].ReceiveId.IsNull() {
-				data.AoKeychains[i].Keys[ci].ReceiveId = types.Int64Null()
-			}
+				}
+
+				data.AoKeychains[i].Keys = append(data.AoKeychains[i].Keys, citem)
+				return true
+			})
 		}
 	}
 }
@@ -397,7 +392,9 @@ func (data TCP) toBodyXML(ctx context.Context) string {
 			if len(item.Keys) > 0 {
 				for _, citem := range item.Keys {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.KeyName.IsNull() && !citem.KeyName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "key-name", citem.KeyName.ValueString())
+					}
 					if !citem.SendId.IsNull() && !citem.SendId.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "send-id", strconv.FormatInt(citem.SendId.ValueInt64(), 10))
 					}
@@ -522,44 +519,42 @@ func (data *TCP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.AoKeychains[i].KeychainName.IsNull() {
 			data.AoKeychains[i].KeychainName = types.StringNull()
 		}
-		for ci := range data.AoKeychains[i].Keys {
-			keys := [...]string{"key-name"}
-			keyValues := [...]string{data.AoKeychains[i].Keys[ci].KeyName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "keys/key"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.AoKeychains[i].Keys
+			data.AoKeychains[i].Keys = make([]TCPAoKeychainsKeys, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "keys/key").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := TCPAoKeychainsKeys{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "key-name"); cValue.Exists() {
+					citem.KeyName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "send-id"); cValue.Exists() {
+					citem.SendId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "receive-id"); cValue.Exists() {
+					citem.ReceiveId = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.KeyName.ValueString() != citem.KeyName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "key-name"); value.Exists() {
-				data.AoKeychains[i].Keys[ci].KeyName = types.StringValue(value.String())
-			} else {
-				data.AoKeychains[i].Keys[ci].KeyName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "send-id"); value.Exists() {
-				data.AoKeychains[i].Keys[ci].SendId = types.Int64Value(value.Int())
-			} else {
-				data.AoKeychains[i].Keys[ci].SendId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "receive-id"); value.Exists() {
-				data.AoKeychains[i].Keys[ci].ReceiveId = types.Int64Value(value.Int())
-			} else {
-				data.AoKeychains[i].Keys[ci].ReceiveId = types.Int64Null()
-			}
+				}
+
+				data.AoKeychains[i].Keys = append(data.AoKeychains[i].Keys, citem)
+				return true
+			})
 		}
 	}
 }

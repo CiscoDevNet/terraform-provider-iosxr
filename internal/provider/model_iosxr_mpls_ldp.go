@@ -1533,7 +1533,7 @@ func (data *MPLSLDP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("password.disable"); cValue.Exists() {
 				item.PasswordDisable = types.BoolValue(true)
 			} else {
-				item.PasswordDisable = types.BoolValue(false)
+				item.PasswordDisable = types.BoolNull()
 			}
 			data.Neighbors = append(data.Neighbors, item)
 			return true

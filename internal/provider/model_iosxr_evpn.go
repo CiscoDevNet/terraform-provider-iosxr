@@ -565,7 +565,9 @@ func (data EVPN) toBodyXML(ctx context.Context) string {
 			if len(item.CoreInterfaces) > 0 {
 				for _, citem := range item.CoreInterfaces {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "interface-name", citem.InterfaceName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "core/interface", ccBody.Res())
 				}
 			}
@@ -929,34 +931,33 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Groups[i].GroupId = types.Int64Null()
 		}
-		for ci := range data.Groups[i].CoreInterfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.Groups[i].CoreInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("core.interface"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Groups[i].CoreInterfaces
+			data.Groups[i].CoreInterfaces = make([]EVPNGroupsCoreInterfaces, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := EVPNGroupsCoreInterfaces{}
+				if cValue := cr.Get("interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("core.interface").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.Groups[i].CoreInterfaces[ci].InterfaceName.IsNull() {
-				data.Groups[i].CoreInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.Groups[i].CoreInterfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.Groups[i].CoreInterfaces = append(data.Groups[i].CoreInterfaces, citem)
+				return true
+			})
 		}
 	}
 	if value := gjson.GetBytes(res, "segment-routing.srv6"); value.Exists() {
@@ -1549,34 +1550,36 @@ func (data *EVPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.Groups[i].GroupId.IsNull() {
 			data.Groups[i].GroupId = types.Int64Null()
 		}
-		for ci := range data.Groups[i].CoreInterfaces {
-			keys := [...]string{"interface-name"}
-			keyValues := [...]string{data.Groups[i].CoreInterfaces[ci].InterfaceName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "core/interface"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Groups[i].CoreInterfaces
+			data.Groups[i].CoreInterfaces = make([]EVPNGroupsCoreInterfaces, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "core/interface").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := EVPNGroupsCoreInterfaces{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "interface-name"); cValue.Exists() {
+					citem.InterfaceName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
-				data.Groups[i].CoreInterfaces[ci].InterfaceName = types.StringValue(value.String())
-			} else {
-				data.Groups[i].CoreInterfaces[ci].InterfaceName = types.StringNull()
-			}
+				}
+
+				data.Groups[i].CoreInterfaces = append(data.Groups[i].CoreInterfaces, citem)
+				return true
+			})
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6"); value.Exists() {
@@ -2061,7 +2064,7 @@ func (data *EVPN) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("usid.allocation.wide-local-id-block"); cValue.Exists() {
 				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 			} else {
-				item.UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+				item.UsidAllocationWideLocalIdBlock = types.BoolNull()
 			}
 			data.Srv6Locators = append(data.Srv6Locators, item)
 			return true
@@ -2166,7 +2169,7 @@ func (data *EVPN) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ethernet-segment.service-carving.hrw"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
 			} else {
-				item.EthernetSegmentServiceCarvingHrw = types.BoolValue(false)
+				item.EthernetSegmentServiceCarvingHrw = types.BoolNull()
 			}
 			if cValue := v.Get("ethernet-segment.service-carving.preference-based.weight"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingPreferenceBasedWeight = types.Int64Value(cValue.Int())
@@ -2174,17 +2177,17 @@ func (data *EVPN) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ethernet-segment.service-carving.preference-based.access-driven"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(true)
 			} else {
-				item.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(false)
+				item.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolNull()
 			}
 			if cValue := v.Get("ethernet-segment.service-carving.multicast.hrw-s-g"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolValue(true)
 			} else {
-				item.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolValue(false)
+				item.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolNull()
 			}
 			if cValue := v.Get("ethernet-segment.service-carving.multicast.hrw-g"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolValue(true)
 			} else {
-				item.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolValue(false)
+				item.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolNull()
 			}
 			if cValue := v.Get("ethernet-segment.bgp.route-target"); cValue.Exists() {
 				item.EthernetSegmentBgpRt = types.StringValue(cValue.String())
@@ -2224,7 +2227,7 @@ func (data *EVPN) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ethernet-segment.service-carving.hrw"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
 			} else {
-				item.EthernetSegmentServiceCarvingHrw = types.BoolValue(false)
+				item.EthernetSegmentServiceCarvingHrw = types.BoolNull()
 			}
 			if cValue := v.Get("ethernet-segment.service-carving.preference-based.weight"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingPreferenceBasedWeight = types.Int64Value(cValue.Int())
@@ -2232,7 +2235,7 @@ func (data *EVPN) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ethernet-segment.service-carving.preference-based.access-driven"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(true)
 			} else {
-				item.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(false)
+				item.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolNull()
 			}
 			if cValue := v.Get("ethernet-segment.bgp.route-target"); cValue.Exists() {
 				item.EthernetSegmentBgpRt = types.StringValue(cValue.String())

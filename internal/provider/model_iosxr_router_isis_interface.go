@@ -1213,12 +1213,12 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			if cValue := v.Get("text.hello-password-options.send-only"); cValue.Exists() {
 				item.TextSendOnly = types.BoolValue(true)
 			} else {
-				item.TextSendOnly = types.BoolValue(false)
+				item.TextSendOnly = types.BoolNull()
 			}
 			if cValue := v.Get("hmac-md5.hello-password-options.send-only"); cValue.Exists() {
 				item.HmacMd5SendOnly = types.BoolValue(true)
 			} else {
-				item.HmacMd5SendOnly = types.BoolValue(false)
+				item.HmacMd5SendOnly = types.BoolNull()
 			}
 			if cValue := v.Get("keychain.keychain-name"); cValue.Exists() {
 				item.KeychainName = types.StringValue(cValue.String())
@@ -1226,7 +1226,7 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			if cValue := v.Get("keychain.send-only"); cValue.Exists() {
 				item.KeychainSendOnly = types.BoolValue(true)
 			} else {
-				item.KeychainSendOnly = types.BoolValue(false)
+				item.KeychainSendOnly = types.BoolNull()
 			}
 			data.HelloPasswordLevels = append(data.HelloPasswordLevels, item)
 			return true

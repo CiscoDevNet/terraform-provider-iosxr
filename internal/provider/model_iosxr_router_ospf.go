@@ -4548,121 +4548,117 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 				data.FlexAlgos[i].FastRerouteDisable = types.BoolValue(false)
 			}
 		}
-		for ci := range data.FlexAlgos[i].AffinityExcludeAny {
-			keys := [...]string{"affinity-attribute-name"}
-			keyValues := [...]string{data.FlexAlgos[i].AffinityExcludeAny[ci].AffinityName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("affinity.exclude-any.affinity-attributes.affinity-attribute"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.FlexAlgos[i].AffinityExcludeAny
+			data.FlexAlgos[i].AffinityExcludeAny = make([]RouterOSPFFlexAlgosAffinityExcludeAny, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterOSPFFlexAlgosAffinityExcludeAny{}
+				if cValue := cr.Get("affinity-attribute-name"); cValue.Exists() {
+					citem.AffinityName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("affinity.exclude-any.affinity-attributes.affinity-attribute").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AffinityName.ValueString() != citem.AffinityName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("affinity-attribute-name"); value.Exists() && !data.FlexAlgos[i].AffinityExcludeAny[ci].AffinityName.IsNull() {
-				data.FlexAlgos[i].AffinityExcludeAny[ci].AffinityName = types.StringValue(value.String())
-			} else {
-				data.FlexAlgos[i].AffinityExcludeAny[ci].AffinityName = types.StringNull()
-			}
+				}
+
+				data.FlexAlgos[i].AffinityExcludeAny = append(data.FlexAlgos[i].AffinityExcludeAny, citem)
+				return true
+			})
 		}
-		for ci := range data.FlexAlgos[i].AffinityIncludeAny {
-			keys := [...]string{"affinity-attribute-name"}
-			keyValues := [...]string{data.FlexAlgos[i].AffinityIncludeAny[ci].AffinityName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("affinity.include-any.affinity-attributes.affinity-attribute"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.FlexAlgos[i].AffinityIncludeAny
+			data.FlexAlgos[i].AffinityIncludeAny = make([]RouterOSPFFlexAlgosAffinityIncludeAny, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterOSPFFlexAlgosAffinityIncludeAny{}
+				if cValue := cr.Get("affinity-attribute-name"); cValue.Exists() {
+					citem.AffinityName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("affinity.include-any.affinity-attributes.affinity-attribute").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AffinityName.ValueString() != citem.AffinityName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("affinity-attribute-name"); value.Exists() && !data.FlexAlgos[i].AffinityIncludeAny[ci].AffinityName.IsNull() {
-				data.FlexAlgos[i].AffinityIncludeAny[ci].AffinityName = types.StringValue(value.String())
-			} else {
-				data.FlexAlgos[i].AffinityIncludeAny[ci].AffinityName = types.StringNull()
-			}
+				}
+
+				data.FlexAlgos[i].AffinityIncludeAny = append(data.FlexAlgos[i].AffinityIncludeAny, citem)
+				return true
+			})
 		}
-		for ci := range data.FlexAlgos[i].AffinityIncludeAll {
-			keys := [...]string{"affinity-attribute-name"}
-			keyValues := [...]string{data.FlexAlgos[i].AffinityIncludeAll[ci].AffinityName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("affinity.include-all.affinity-attributes.affinity-attribute"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.FlexAlgos[i].AffinityIncludeAll
+			data.FlexAlgos[i].AffinityIncludeAll = make([]RouterOSPFFlexAlgosAffinityIncludeAll, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterOSPFFlexAlgosAffinityIncludeAll{}
+				if cValue := cr.Get("affinity-attribute-name"); cValue.Exists() {
+					citem.AffinityName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("affinity.include-all.affinity-attributes.affinity-attribute").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AffinityName.ValueString() != citem.AffinityName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("affinity-attribute-name"); value.Exists() && !data.FlexAlgos[i].AffinityIncludeAll[ci].AffinityName.IsNull() {
-				data.FlexAlgos[i].AffinityIncludeAll[ci].AffinityName = types.StringValue(value.String())
-			} else {
-				data.FlexAlgos[i].AffinityIncludeAll[ci].AffinityName = types.StringNull()
-			}
+				}
+
+				data.FlexAlgos[i].AffinityIncludeAll = append(data.FlexAlgos[i].AffinityIncludeAll, citem)
+				return true
+			})
 		}
-		for ci := range data.FlexAlgos[i].SrlgExcludeAny {
-			keys := [...]string{"srlg-name"}
-			keyValues := [...]string{data.FlexAlgos[i].SrlgExcludeAny[ci].SrlgName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("srlg.exclude-any.srlgs.srlg"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.FlexAlgos[i].SrlgExcludeAny
+			data.FlexAlgos[i].SrlgExcludeAny = make([]RouterOSPFFlexAlgosSrlgExcludeAny, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterOSPFFlexAlgosSrlgExcludeAny{}
+				if cValue := cr.Get("srlg-name"); cValue.Exists() {
+					citem.SrlgName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("srlg.exclude-any.srlgs.srlg").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.SrlgName.ValueString() != citem.SrlgName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("srlg-name"); value.Exists() && !data.FlexAlgos[i].SrlgExcludeAny[ci].SrlgName.IsNull() {
-				data.FlexAlgos[i].SrlgExcludeAny[ci].SrlgName = types.StringValue(value.String())
-			} else {
-				data.FlexAlgos[i].SrlgExcludeAny[ci].SrlgName = types.StringNull()
-			}
+				}
+
+				data.FlexAlgos[i].SrlgExcludeAny = append(data.FlexAlgos[i].SrlgExcludeAny, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.MessageDigestKeys {
@@ -5359,7 +5355,7 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("preserve-med"); cValue.Exists() {
 				item.PreserveMed = types.BoolValue(true)
 			} else {
-				item.PreserveMed = types.BoolValue(false)
+				item.PreserveMed = types.BoolNull()
 			}
 			if cValue := v.Get("metric.default-metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -5367,17 +5363,17 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("metric.use-rib-metric"); cValue.Exists() {
 				item.MetricUseRibMetric = types.BoolValue(true)
 			} else {
-				item.MetricUseRibMetric = types.BoolValue(false)
+				item.MetricUseRibMetric = types.BoolNull()
 			}
 			if cValue := v.Get("lsa-type.summary"); cValue.Exists() {
 				item.LsaTypeSummary = types.BoolValue(true)
 			} else {
-				item.LsaTypeSummary = types.BoolValue(false)
+				item.LsaTypeSummary = types.BoolNull()
 			}
 			if cValue := v.Get("nssa-only"); cValue.Exists() {
 				item.NssaOnly = types.BoolValue(true)
 			} else {
-				item.NssaOnly = types.BoolValue(false)
+				item.NssaOnly = types.BoolNull()
 			}
 			data.RedistributeBgp = append(data.RedistributeBgp, item)
 			return true
@@ -5393,17 +5389,17 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("level-1"); cValue.Exists() {
 				item.Level1 = types.BoolValue(true)
 			} else {
-				item.Level1 = types.BoolValue(false)
+				item.Level1 = types.BoolNull()
 			}
 			if cValue := v.Get("level-2"); cValue.Exists() {
 				item.Level2 = types.BoolValue(true)
 			} else {
-				item.Level2 = types.BoolValue(false)
+				item.Level2 = types.BoolNull()
 			}
 			if cValue := v.Get("level-1-2"); cValue.Exists() {
 				item.Level12 = types.BoolValue(true)
 			} else {
-				item.Level12 = types.BoolValue(false)
+				item.Level12 = types.BoolNull()
 			}
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
@@ -5420,17 +5416,17 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("metric.use-rib-metric"); cValue.Exists() {
 				item.MetricUseRibMetric = types.BoolValue(true)
 			} else {
-				item.MetricUseRibMetric = types.BoolValue(false)
+				item.MetricUseRibMetric = types.BoolNull()
 			}
 			if cValue := v.Get("lsa-type.summary"); cValue.Exists() {
 				item.LsaTypeSummary = types.BoolValue(true)
 			} else {
-				item.LsaTypeSummary = types.BoolValue(false)
+				item.LsaTypeSummary = types.BoolNull()
 			}
 			if cValue := v.Get("nssa-only"); cValue.Exists() {
 				item.NssaOnly = types.BoolValue(true)
 			} else {
-				item.NssaOnly = types.BoolValue(false)
+				item.NssaOnly = types.BoolNull()
 			}
 			data.RedistributeIsis = append(data.RedistributeIsis, item)
 			return true
@@ -5455,37 +5451,37 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("match.internal"); cValue.Exists() {
 				item.MatchInternal = types.BoolValue(true)
 			} else {
-				item.MatchInternal = types.BoolValue(false)
+				item.MatchInternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external"); cValue.Exists() {
 				item.MatchExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternal = types.BoolValue(false)
+				item.MatchExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.one"); cValue.Exists() {
 				item.MatchExternalOne = types.BoolValue(true)
 			} else {
-				item.MatchExternalOne = types.BoolValue(false)
+				item.MatchExternalOne = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.two"); cValue.Exists() {
 				item.MatchExternalTwo = types.BoolValue(true)
 			} else {
-				item.MatchExternalTwo = types.BoolValue(false)
+				item.MatchExternalTwo = types.BoolNull()
 			}
 			if cValue := v.Get("match.nssa-external"); cValue.Exists() {
 				item.MatchNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternal = types.BoolValue(false)
+				item.MatchNssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.nssa-external.one"); cValue.Exists() {
 				item.MatchNssaExternalOne = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternalOne = types.BoolValue(false)
+				item.MatchNssaExternalOne = types.BoolNull()
 			}
 			if cValue := v.Get("match.nssa-external.two"); cValue.Exists() {
 				item.MatchNssaExternalTwo = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternalTwo = types.BoolValue(false)
+				item.MatchNssaExternalTwo = types.BoolNull()
 			}
 			if cValue := v.Get("metric.default-metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -5493,17 +5489,17 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("metric.use-rib-metric"); cValue.Exists() {
 				item.MetricUseRibMetric = types.BoolValue(true)
 			} else {
-				item.MetricUseRibMetric = types.BoolValue(false)
+				item.MetricUseRibMetric = types.BoolNull()
 			}
 			if cValue := v.Get("lsa-type.summary"); cValue.Exists() {
 				item.LsaTypeSummary = types.BoolValue(true)
 			} else {
-				item.LsaTypeSummary = types.BoolValue(false)
+				item.LsaTypeSummary = types.BoolNull()
 			}
 			if cValue := v.Get("nssa-only"); cValue.Exists() {
 				item.NssaOnly = types.BoolValue(true)
 			} else {
-				item.NssaOnly = types.BoolValue(false)
+				item.NssaOnly = types.BoolNull()
 			}
 			data.RedistributeOspf = append(data.RedistributeOspf, item)
 			return true
@@ -5914,7 +5910,7 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("not-advertise"); cValue.Exists() {
 				item.NotAdvertise = types.BoolValue(true)
 			} else {
-				item.NotAdvertise = types.BoolValue(false)
+				item.NotAdvertise = types.BoolNull()
 			}
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
@@ -6245,32 +6241,32 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("microloop.avoidance.disable"); cValue.Exists() {
 				item.MicroloopAvoidanceDisable = types.BoolValue(true)
 			} else {
-				item.MicroloopAvoidanceDisable = types.BoolValue(false)
+				item.MicroloopAvoidanceDisable = types.BoolNull()
 			}
 			if cValue := v.Get("prefix-metric"); cValue.Exists() {
 				item.PrefixMetric = types.BoolValue(true)
 			} else {
-				item.PrefixMetric = types.BoolValue(false)
+				item.PrefixMetric = types.BoolNull()
 			}
 			if cValue := v.Get("metric-type.delay"); cValue.Exists() {
 				item.MetricTypeDelay = types.BoolValue(true)
 			} else {
-				item.MetricTypeDelay = types.BoolValue(false)
+				item.MetricTypeDelay = types.BoolNull()
 			}
 			if cValue := v.Get("metric-type.te-metric"); cValue.Exists() {
 				item.MetricTypeTeMetric = types.BoolValue(true)
 			} else {
-				item.MetricTypeTeMetric = types.BoolValue(false)
+				item.MetricTypeTeMetric = types.BoolNull()
 			}
 			if cValue := v.Get("advertise-definition"); cValue.Exists() {
 				item.AdvertiseDefinition = types.BoolValue(true)
 			} else {
-				item.AdvertiseDefinition = types.BoolValue(false)
+				item.AdvertiseDefinition = types.BoolNull()
 			}
 			if cValue := v.Get("fast-reroute.disable"); cValue.Exists() {
 				item.FastRerouteDisable = types.BoolValue(true)
 			} else {
-				item.FastRerouteDisable = types.BoolValue(false)
+				item.FastRerouteDisable = types.BoolNull()
 			}
 			if cValue := v.Get("affinity.exclude-any.affinity-attributes.affinity-attribute"); cValue.Exists() {
 				item.AffinityExcludeAny = make([]RouterOSPFFlexAlgosAffinityExcludeAny, 0)
@@ -12554,28 +12550,36 @@ func (data RouterOSPF) toBodyXML(ctx context.Context) string {
 			if len(item.AffinityExcludeAny) > 0 {
 				for _, citem := range item.AffinityExcludeAny {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.AffinityName.IsNull() && !citem.AffinityName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "affinity-attribute-name", citem.AffinityName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "affinity/exclude-any/affinity-attributes/affinity-attribute", ccBody.Res())
 				}
 			}
 			if len(item.AffinityIncludeAny) > 0 {
 				for _, citem := range item.AffinityIncludeAny {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.AffinityName.IsNull() && !citem.AffinityName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "affinity-attribute-name", citem.AffinityName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "affinity/include-any/affinity-attributes/affinity-attribute", ccBody.Res())
 				}
 			}
 			if len(item.AffinityIncludeAll) > 0 {
 				for _, citem := range item.AffinityIncludeAll {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.AffinityName.IsNull() && !citem.AffinityName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "affinity-attribute-name", citem.AffinityName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "affinity/include-all/affinity-attributes/affinity-attribute", ccBody.Res())
 				}
 			}
 			if len(item.SrlgExcludeAny) > 0 {
 				for _, citem := range item.SrlgExcludeAny {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.SrlgName.IsNull() && !citem.SrlgName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "srlg-name", citem.SrlgName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "srlg/exclude-any/srlgs/srlg", ccBody.Res())
 				}
 			}
@@ -14834,121 +14838,129 @@ func (data *RouterOSPF) updateFromBodyXML(ctx context.Context, res xmldot.Result
 				data.FlexAlgos[i].FastRerouteDisable = types.BoolNull()
 			}
 		}
-		for ci := range data.FlexAlgos[i].AffinityExcludeAny {
-			keys := [...]string{"affinity-attribute-name"}
-			keyValues := [...]string{data.FlexAlgos[i].AffinityExcludeAny[ci].AffinityName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "affinity/exclude-any/affinity-attributes/affinity-attribute"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.FlexAlgos[i].AffinityExcludeAny
+			data.FlexAlgos[i].AffinityExcludeAny = make([]RouterOSPFFlexAlgosAffinityExcludeAny, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "affinity/exclude-any/affinity-attributes/affinity-attribute").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterOSPFFlexAlgosAffinityExcludeAny{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "affinity-attribute-name"); cValue.Exists() {
+					citem.AffinityName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AffinityName.ValueString() != citem.AffinityName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "affinity-attribute-name"); value.Exists() {
-				data.FlexAlgos[i].AffinityExcludeAny[ci].AffinityName = types.StringValue(value.String())
-			} else {
-				data.FlexAlgos[i].AffinityExcludeAny[ci].AffinityName = types.StringNull()
-			}
+				}
+
+				data.FlexAlgos[i].AffinityExcludeAny = append(data.FlexAlgos[i].AffinityExcludeAny, citem)
+				return true
+			})
 		}
-		for ci := range data.FlexAlgos[i].AffinityIncludeAny {
-			keys := [...]string{"affinity-attribute-name"}
-			keyValues := [...]string{data.FlexAlgos[i].AffinityIncludeAny[ci].AffinityName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "affinity/include-any/affinity-attributes/affinity-attribute"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.FlexAlgos[i].AffinityIncludeAny
+			data.FlexAlgos[i].AffinityIncludeAny = make([]RouterOSPFFlexAlgosAffinityIncludeAny, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "affinity/include-any/affinity-attributes/affinity-attribute").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterOSPFFlexAlgosAffinityIncludeAny{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "affinity-attribute-name"); cValue.Exists() {
+					citem.AffinityName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AffinityName.ValueString() != citem.AffinityName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "affinity-attribute-name"); value.Exists() {
-				data.FlexAlgos[i].AffinityIncludeAny[ci].AffinityName = types.StringValue(value.String())
-			} else {
-				data.FlexAlgos[i].AffinityIncludeAny[ci].AffinityName = types.StringNull()
-			}
+				}
+
+				data.FlexAlgos[i].AffinityIncludeAny = append(data.FlexAlgos[i].AffinityIncludeAny, citem)
+				return true
+			})
 		}
-		for ci := range data.FlexAlgos[i].AffinityIncludeAll {
-			keys := [...]string{"affinity-attribute-name"}
-			keyValues := [...]string{data.FlexAlgos[i].AffinityIncludeAll[ci].AffinityName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "affinity/include-all/affinity-attributes/affinity-attribute"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.FlexAlgos[i].AffinityIncludeAll
+			data.FlexAlgos[i].AffinityIncludeAll = make([]RouterOSPFFlexAlgosAffinityIncludeAll, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "affinity/include-all/affinity-attributes/affinity-attribute").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterOSPFFlexAlgosAffinityIncludeAll{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "affinity-attribute-name"); cValue.Exists() {
+					citem.AffinityName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AffinityName.ValueString() != citem.AffinityName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "affinity-attribute-name"); value.Exists() {
-				data.FlexAlgos[i].AffinityIncludeAll[ci].AffinityName = types.StringValue(value.String())
-			} else {
-				data.FlexAlgos[i].AffinityIncludeAll[ci].AffinityName = types.StringNull()
-			}
+				}
+
+				data.FlexAlgos[i].AffinityIncludeAll = append(data.FlexAlgos[i].AffinityIncludeAll, citem)
+				return true
+			})
 		}
-		for ci := range data.FlexAlgos[i].SrlgExcludeAny {
-			keys := [...]string{"srlg-name"}
-			keyValues := [...]string{data.FlexAlgos[i].SrlgExcludeAny[ci].SrlgName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "srlg/exclude-any/srlgs/srlg"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.FlexAlgos[i].SrlgExcludeAny
+			data.FlexAlgos[i].SrlgExcludeAny = make([]RouterOSPFFlexAlgosSrlgExcludeAny, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "srlg/exclude-any/srlgs/srlg").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterOSPFFlexAlgosSrlgExcludeAny{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "srlg-name"); cValue.Exists() {
+					citem.SrlgName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.SrlgName.ValueString() != citem.SrlgName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "srlg-name"); value.Exists() {
-				data.FlexAlgos[i].SrlgExcludeAny[ci].SrlgName = types.StringValue(value.String())
-			} else {
-				data.FlexAlgos[i].SrlgExcludeAny[ci].SrlgName = types.StringNull()
-			}
+				}
+
+				data.FlexAlgos[i].SrlgExcludeAny = append(data.FlexAlgos[i].SrlgExcludeAny, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.MessageDigestKeys {

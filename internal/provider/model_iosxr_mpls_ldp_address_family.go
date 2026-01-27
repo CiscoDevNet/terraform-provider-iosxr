@@ -1316,7 +1316,7 @@ func (data *MPLSLDPAddressFamily) fromBody(ctx context.Context, res gjson.Result
 			if cValue := v.Get("targeted"); cValue.Exists() {
 				item.Targeted = types.BoolValue(true)
 			} else {
-				item.Targeted = types.BoolValue(false)
+				item.Targeted = types.BoolNull()
 			}
 			data.NeighborSrPolicies = append(data.NeighborSrPolicies, item)
 			return true

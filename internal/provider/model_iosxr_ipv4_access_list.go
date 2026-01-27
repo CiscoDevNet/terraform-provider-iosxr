@@ -3460,7 +3460,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.source.any"); cValue.Exists() {
 				item.PermitSourceAny = types.BoolValue(true)
 			} else {
-				item.PermitSourceAny = types.BoolValue(false)
+				item.PermitSourceAny = types.BoolNull()
 			}
 			if cValue := v.Get("permit.source.host"); cValue.Exists() {
 				item.PermitSourceHost = types.StringValue(cValue.String())
@@ -3501,7 +3501,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.destination.any"); cValue.Exists() {
 				item.PermitDestinationAny = types.BoolValue(true)
 			} else {
-				item.PermitDestinationAny = types.BoolValue(false)
+				item.PermitDestinationAny = types.BoolNull()
 			}
 			if cValue := v.Get("permit.destination.host"); cValue.Exists() {
 				item.PermitDestinationHost = types.StringValue(cValue.String())
@@ -3620,7 +3620,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.fragments"); cValue.Exists() {
 				item.PermitFragments = types.BoolValue(true)
 			} else {
-				item.PermitFragments = types.BoolValue(false)
+				item.PermitFragments = types.BoolNull()
 			}
 			if cValue := v.Get("permit.police.value"); cValue.Exists() {
 				item.PermitPoliceValue = types.Int64Value(cValue.Int())
@@ -3640,7 +3640,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.default"); cValue.Exists() {
 				item.PermitDefault = types.BoolValue(true)
 			} else {
-				item.PermitDefault = types.BoolValue(false)
+				item.PermitDefault = types.BoolNull()
 			}
 			if cValue := v.Get("permit.nexthop1.ipv4"); cValue.Exists() {
 				item.PermitNexthop1Ipv4 = types.StringValue(cValue.String())
@@ -3672,7 +3672,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.capture"); cValue.Exists() {
 				item.PermitCapture = types.BoolValue(true)
 			} else {
-				item.PermitCapture = types.BoolValue(false)
+				item.PermitCapture = types.BoolNull()
 			}
 			if cValue := v.Get("permit.counter"); cValue.Exists() {
 				item.PermitCounter = types.StringValue(cValue.String())
@@ -3680,12 +3680,12 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.log"); cValue.Exists() {
 				item.PermitLog = types.BoolValue(true)
 			} else {
-				item.PermitLog = types.BoolValue(false)
+				item.PermitLog = types.BoolNull()
 			}
 			if cValue := v.Get("permit.log-input"); cValue.Exists() {
 				item.PermitLogInput = types.BoolValue(true)
 			} else {
-				item.PermitLogInput = types.BoolValue(false)
+				item.PermitLogInput = types.BoolNull()
 			}
 			if cValue := v.Get("permit.set.qos-group"); cValue.Exists() {
 				item.PermitSetQosGroup = types.Int64Value(cValue.Int())
@@ -3726,7 +3726,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.source.any"); cValue.Exists() {
 				item.DenySourceAny = types.BoolValue(true)
 			} else {
-				item.DenySourceAny = types.BoolValue(false)
+				item.DenySourceAny = types.BoolNull()
 			}
 			if cValue := v.Get("deny.source.host"); cValue.Exists() {
 				item.DenySourceHost = types.StringValue(cValue.String())
@@ -3767,7 +3767,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.destination.any"); cValue.Exists() {
 				item.DenyDestinationAny = types.BoolValue(true)
 			} else {
-				item.DenyDestinationAny = types.BoolValue(false)
+				item.DenyDestinationAny = types.BoolNull()
 			}
 			if cValue := v.Get("deny.destination.host"); cValue.Exists() {
 				item.DenyDestinationHost = types.StringValue(cValue.String())
@@ -3886,7 +3886,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.fragments"); cValue.Exists() {
 				item.DenyFragments = types.BoolValue(true)
 			} else {
-				item.DenyFragments = types.BoolValue(false)
+				item.DenyFragments = types.BoolNull()
 			}
 			if cValue := v.Get("deny.police.value"); cValue.Exists() {
 				item.DenyPoliceValue = types.Int64Value(cValue.Int())
@@ -3906,7 +3906,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.default"); cValue.Exists() {
 				item.DenyDefault = types.BoolValue(true)
 			} else {
-				item.DenyDefault = types.BoolValue(false)
+				item.DenyDefault = types.BoolNull()
 			}
 			if cValue := v.Get("deny.nexthop1.ipv4"); cValue.Exists() {
 				item.DenyNexthop1Ipv4 = types.StringValue(cValue.String())
@@ -3938,17 +3938,17 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.capture"); cValue.Exists() {
 				item.DenyCapture = types.BoolValue(true)
 			} else {
-				item.DenyCapture = types.BoolValue(false)
+				item.DenyCapture = types.BoolNull()
 			}
 			if cValue := v.Get("deny.log"); cValue.Exists() {
 				item.DenyLog = types.BoolValue(true)
 			} else {
-				item.DenyLog = types.BoolValue(false)
+				item.DenyLog = types.BoolNull()
 			}
 			if cValue := v.Get("deny.log-input"); cValue.Exists() {
 				item.DenyLogInput = types.BoolValue(true)
 			} else {
-				item.DenyLogInput = types.BoolValue(false)
+				item.DenyLogInput = types.BoolNull()
 			}
 			if cValue := v.Get("deny.set.qos-group"); cValue.Exists() {
 				item.DenySetQosGroup = types.Int64Value(cValue.Int())
@@ -3959,12 +3959,12 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.icmp-off"); cValue.Exists() {
 				item.DenyIcmpOff = types.BoolValue(true)
 			} else {
-				item.DenyIcmpOff = types.BoolValue(false)
+				item.DenyIcmpOff = types.BoolNull()
 			}
 			if cValue := v.Get("deny.icmp-on"); cValue.Exists() {
 				item.DenyIcmpOn = types.BoolValue(true)
 			} else {
-				item.DenyIcmpOn = types.BoolValue(false)
+				item.DenyIcmpOn = types.BoolNull()
 			}
 			data.Sequences = append(data.Sequences, item)
 			return true

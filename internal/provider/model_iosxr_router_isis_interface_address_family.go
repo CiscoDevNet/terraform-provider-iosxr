@@ -1000,39 +1000,36 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 		} else {
 			data.GenericMetricFlexAlgoLevels[i].LevelNumber = types.Int64Null()
 		}
-		for ci := range data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes {
-			keys := [...]string{"type-number"}
-			keyValues := [...]string{strconv.FormatInt(data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("types.type"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes
+			data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes = make([]RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevelsFlexAlgosTypes, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevelsFlexAlgosTypes{}
+				if cValue := cr.Get("type-number"); cValue.Exists() {
+					citem.Type = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("flex-algo-metric-value"); cValue.Exists() {
+					citem.Metric = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("types.type").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Type.Equal(citem.Type) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("type-number"); value.Exists() {
-				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type = types.Int64Value(value.Int())
-			} else if data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type.IsNull() {
-				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type = types.Int64Null()
-			}
-			if value := cr.Get("flex-algo-metric-value"); value.Exists() {
-				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Metric = types.Int64Value(value.Int())
-			} else if data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Metric.IsNull() {
-				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Metric = types.Int64Null()
-			}
+				}
+
+				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes = append(data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes, citem)
+				return true
+			})
 		}
 	}
 	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
@@ -2123,7 +2120,7 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 			if cValue := v.Get("maximum"); cValue.Exists() {
 				item.MetricMaximum = types.BoolValue(true)
 			} else {
-				item.MetricMaximum = types.BoolValue(false)
+				item.MetricMaximum = types.BoolNull()
 			}
 			data.MetricLevels = append(data.MetricLevels, item)
 			return true
@@ -2312,17 +2309,17 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
 				item.IndexPhpDisable = types.BoolValue(true)
 			} else {
-				item.IndexPhpDisable = types.BoolValue(false)
+				item.IndexPhpDisable = types.BoolNull()
 			}
 			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
 				item.IndexExplicitNull = types.BoolValue(true)
 			} else {
-				item.IndexExplicitNull = types.BoolValue(false)
+				item.IndexExplicitNull = types.BoolNull()
 			}
 			if cValue := v.Get("index.n-flag-clear"); cValue.Exists() {
 				item.IndexNFlagClear = types.BoolValue(true)
 			} else {
-				item.IndexNFlagClear = types.BoolValue(false)
+				item.IndexNFlagClear = types.BoolNull()
 			}
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
@@ -2330,17 +2327,17 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
 				item.AbsolutePhpDisable = types.BoolValue(true)
 			} else {
-				item.AbsolutePhpDisable = types.BoolValue(false)
+				item.AbsolutePhpDisable = types.BoolNull()
 			}
 			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
 				item.AbsoluteExplicitNull = types.BoolValue(true)
 			} else {
-				item.AbsoluteExplicitNull = types.BoolValue(false)
+				item.AbsoluteExplicitNull = types.BoolNull()
 			}
 			if cValue := v.Get("absolute.n-flag-clear"); cValue.Exists() {
 				item.AbsoluteNFlagClear = types.BoolValue(true)
 			} else {
-				item.AbsoluteNFlagClear = types.BoolValue(false)
+				item.AbsoluteNFlagClear = types.BoolNull()
 			}
 			data.PrefixSidAlgorithms = append(data.PrefixSidAlgorithms, item)
 			return true
@@ -2356,7 +2353,7 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 			if cValue := v.Get("protected"); cValue.Exists() {
 				item.Protected = types.BoolValue(true)
 			} else {
-				item.Protected = types.BoolValue(false)
+				item.Protected = types.BoolNull()
 			}
 			data.AdjacencySidIndices = append(data.AdjacencySidIndices, item)
 			return true
@@ -2372,7 +2369,7 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 			if cValue := v.Get("protected"); cValue.Exists() {
 				item.Protected = types.BoolValue(true)
 			} else {
-				item.Protected = types.BoolValue(false)
+				item.Protected = types.BoolNull()
 			}
 			data.AdjacencySidAbsolutes = append(data.AdjacencySidAbsolutes, item)
 			return true
@@ -2398,12 +2395,12 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 			if cValue := v.Get("per-prefix"); cValue.Exists() {
 				item.PerPrefix = types.BoolValue(true)
 			} else {
-				item.PerPrefix = types.BoolValue(false)
+				item.PerPrefix = types.BoolNull()
 			}
 			if cValue := v.Get("per-link"); cValue.Exists() {
 				item.PerLink = types.BoolValue(true)
 			} else {
-				item.PerLink = types.BoolValue(false)
+				item.PerLink = types.BoolNull()
 			}
 			data.FastRerouteLevels = append(data.FastRerouteLevels, item)
 			return true
@@ -4885,7 +4882,9 @@ func (data RouterISISInterfaceAddressFamily) toBodyXML(ctx context.Context) stri
 			if len(item.FlexAlgosTypes) > 0 {
 				for _, citem := range item.FlexAlgosTypes {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "type-number", strconv.FormatInt(citem.Type.ValueInt64(), 10))
+					}
 					if !citem.Metric.IsNull() && !citem.Metric.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "flex-algo-metric-value", strconv.FormatInt(citem.Metric.ValueInt64(), 10))
 					}
@@ -5550,39 +5549,39 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		} else if data.GenericMetricFlexAlgoLevels[i].LevelNumber.IsNull() {
 			data.GenericMetricFlexAlgoLevels[i].LevelNumber = types.Int64Null()
 		}
-		for ci := range data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes {
-			keys := [...]string{"type-number"}
-			keyValues := [...]string{strconv.FormatInt(data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "types/type"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes
+			data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes = make([]RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevelsFlexAlgosTypes, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "types/type").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevelsFlexAlgosTypes{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "type-number"); cValue.Exists() {
+					citem.Type = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "flex-algo-metric-value"); cValue.Exists() {
+					citem.Metric = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Type.Equal(citem.Type) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "type-number"); value.Exists() {
-				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type = types.Int64Value(value.Int())
-			} else {
-				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "flex-algo-metric-value"); value.Exists() {
-				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Metric = types.Int64Value(value.Int())
-			} else {
-				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Metric = types.Int64Null()
-			}
+				}
+
+				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes = append(data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes, citem)
+				return true
+			})
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync"); value.Exists() {

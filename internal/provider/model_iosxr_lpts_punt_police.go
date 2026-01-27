@@ -741,7 +741,7 @@ func (data *LPTSPuntPolice) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("mcast.disabled"); cValue.Exists() {
 				item.McastDisabled = types.BoolValue(true)
 			} else {
-				item.McastDisabled = types.BoolValue(false)
+				item.McastDisabled = types.BoolNull()
 			}
 			if cValue := v.Get("bcast.rate"); cValue.Exists() {
 				item.BcastRate = types.Int64Value(cValue.Int())
@@ -749,7 +749,7 @@ func (data *LPTSPuntPolice) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("bcast.disabled"); cValue.Exists() {
 				item.BcastDisabled = types.BoolValue(true)
 			} else {
-				item.BcastDisabled = types.BoolValue(false)
+				item.BcastDisabled = types.BoolNull()
 			}
 			data.Interfaces = append(data.Interfaces, item)
 			return true

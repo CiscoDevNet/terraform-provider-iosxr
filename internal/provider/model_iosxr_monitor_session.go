@@ -1079,7 +1079,7 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("destination.pseudowire"); cValue.Exists() {
 				item.DestinationPseudowire = types.BoolValue(true)
 			} else {
-				item.DestinationPseudowire = types.BoolValue(false)
+				item.DestinationPseudowire = types.BoolNull()
 			}
 			if cValue := v.Get("destination.file.size"); cValue.Exists() {
 				item.DestinationFileSize = types.Int64Value(cValue.Int())
@@ -1087,12 +1087,12 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("destination.file.buffer-type.linear"); cValue.Exists() {
 				item.DestinationFileBufferTypeLinear = types.BoolValue(true)
 			} else {
-				item.DestinationFileBufferTypeLinear = types.BoolValue(false)
+				item.DestinationFileBufferTypeLinear = types.BoolNull()
 			}
 			if cValue := v.Get("destination.file.format.pcapng"); cValue.Exists() {
 				item.DestinationFileFormatPcapng = types.BoolValue(true)
 			} else {
-				item.DestinationFileFormatPcapng = types.BoolValue(false)
+				item.DestinationFileFormatPcapng = types.BoolNull()
 			}
 			if cValue := v.Get("destination.file.filter"); cValue.Exists() {
 				item.DestinationFileFilter = types.StringValue(cValue.String())
@@ -1100,27 +1100,27 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("destination.file.always-on"); cValue.Exists() {
 				item.DestinationFileAlwaysOn = types.BoolValue(true)
 			} else {
-				item.DestinationFileAlwaysOn = types.BoolValue(false)
+				item.DestinationFileAlwaysOn = types.BoolNull()
 			}
 			if cValue := v.Get("drops.packet-processing"); cValue.Exists() {
 				item.DropsPacketProcessing = types.BoolValue(true)
 			} else {
-				item.DropsPacketProcessing = types.BoolValue(false)
+				item.DropsPacketProcessing = types.BoolNull()
 			}
 			if cValue := v.Get("drops.traffic-management"); cValue.Exists() {
 				item.DropsTrafficManagement = types.BoolValue(true)
 			} else {
-				item.DropsTrafficManagement = types.BoolValue(false)
+				item.DropsTrafficManagement = types.BoolNull()
 			}
 			if cValue := v.Get("drops.rx"); cValue.Exists() {
 				item.DropsRx = types.BoolValue(true)
 			} else {
-				item.DropsRx = types.BoolValue(false)
+				item.DropsRx = types.BoolNull()
 			}
 			if cValue := v.Get("drops.tx"); cValue.Exists() {
 				item.DropsTx = types.BoolValue(true)
 			} else {
-				item.DropsTx = types.BoolValue(false)
+				item.DropsTx = types.BoolNull()
 			}
 			if cValue := v.Get("drops.filter"); cValue.Exists() {
 				item.DropsFilter = types.StringValue(cValue.String())
@@ -1131,7 +1131,7 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("rx.pseudowire"); cValue.Exists() {
 				item.RxPseudowire = types.BoolValue(true)
 			} else {
-				item.RxPseudowire = types.BoolValue(false)
+				item.RxPseudowire = types.BoolNull()
 			}
 			if cValue := v.Get("tx.interface"); cValue.Exists() {
 				item.TxInterface = types.StringValue(cValue.String())
@@ -1139,7 +1139,7 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("tx.pseudowire"); cValue.Exists() {
 				item.TxPseudowire = types.BoolValue(true)
 			} else {
-				item.TxPseudowire = types.BoolValue(false)
+				item.TxPseudowire = types.BoolNull()
 			}
 			if cValue := v.Get("inject-interface"); cValue.Exists() {
 				item.InjectInterface = types.StringValue(cValue.String())
@@ -1159,12 +1159,12 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("protocol-capture.rx"); cValue.Exists() {
 				item.ProtocolCaptureRx = types.BoolValue(true)
 			} else {
-				item.ProtocolCaptureRx = types.BoolValue(false)
+				item.ProtocolCaptureRx = types.BoolNull()
 			}
 			if cValue := v.Get("protocol-capture.tx"); cValue.Exists() {
 				item.ProtocolCaptureTx = types.BoolValue(true)
 			} else {
-				item.ProtocolCaptureTx = types.BoolValue(false)
+				item.ProtocolCaptureTx = types.BoolNull()
 			}
 			if cValue := v.Get("protocol-capture.filter"); cValue.Exists() {
 				item.ProtocolCaptureFilter = types.StringValue(cValue.String())

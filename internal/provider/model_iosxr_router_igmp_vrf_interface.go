@@ -470,152 +470,125 @@ func (data *RouterIGMPVRFInterface) updateFromBody(ctx context.Context, res []by
 				data.StaticGroups[i].SuppressReports = types.BoolValue(false)
 			}
 		}
-		for ci := range data.StaticGroups[i].GroupMasks {
-			keys := [...]string{"group-mask-address"}
-			keyValues := [...]string{data.StaticGroups[i].GroupMasks[ci].GroupIncMask.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("group-address-inc-mask.inc-mask"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.StaticGroups[i].GroupMasks
+			data.StaticGroups[i].GroupMasks = make([]RouterIGMPVRFInterfaceStaticGroupsGroupMasks, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterIGMPVRFInterfaceStaticGroupsGroupMasks{}
+				if cValue := cr.Get("group-mask-address"); cValue.Exists() {
+					citem.GroupIncMask = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("group-address-count"); cValue.Exists() {
+					citem.GroupCount = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("suppress-reports"); cValue.Exists() {
+					citem.SuppressReports = types.BoolValue(true)
+				} else {
+					citem.SuppressReports = types.BoolValue(false)
+				}
 
-			var cr gjson.Result
-			r.Get("group-address-inc-mask.inc-mask").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.GroupIncMask.ValueString() != citem.GroupIncMask.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.SuppressReports.ValueBool() && existingItem.SuppressReports.ValueBool() == false {
+							citem.SuppressReports = existingItem.SuppressReports
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("group-mask-address"); value.Exists() && !data.StaticGroups[i].GroupMasks[ci].GroupIncMask.IsNull() {
-				data.StaticGroups[i].GroupMasks[ci].GroupIncMask = types.StringValue(value.String())
-			} else {
-				data.StaticGroups[i].GroupMasks[ci].GroupIncMask = types.StringNull()
-			}
-			if value := cr.Get("group-address-count"); value.Exists() {
-				data.StaticGroups[i].GroupMasks[ci].GroupCount = types.Int64Value(value.Int())
-			} else if data.StaticGroups[i].GroupMasks[ci].GroupCount.IsNull() {
-				data.StaticGroups[i].GroupMasks[ci].GroupCount = types.Int64Null()
-			}
-			if value := cr.Get("suppress-reports"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.StaticGroups[i].GroupMasks[ci].SuppressReports.IsNull() && !data.StaticGroups[i].GroupMasks[ci].SuppressReports.ValueBool() {
-					data.StaticGroups[i].GroupMasks[ci].SuppressReports = types.BoolValue(false)
-				} else if !data.StaticGroups[i].GroupMasks[ci].SuppressReports.IsNull() {
-					data.StaticGroups[i].GroupMasks[ci].SuppressReports = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.StaticGroups[i].GroupMasks[ci].SuppressReports.IsNull() {
-					data.StaticGroups[i].GroupMasks[ci].SuppressReports = types.BoolNull()
-				} else {
-					data.StaticGroups[i].GroupMasks[ci].SuppressReports = types.BoolValue(false)
-				}
-			}
+
+				data.StaticGroups[i].GroupMasks = append(data.StaticGroups[i].GroupMasks, citem)
+				return true
+			})
 		}
-		for ci := range data.StaticGroups[i].SourceAddresses {
-			keys := [...]string{"source-address"}
-			keyValues := [...]string{data.StaticGroups[i].SourceAddresses[ci].SourceIp.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("group-address-source-address.source-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.StaticGroups[i].SourceAddresses
+			data.StaticGroups[i].SourceAddresses = make([]RouterIGMPVRFInterfaceStaticGroupsSourceAddresses, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterIGMPVRFInterfaceStaticGroupsSourceAddresses{}
+				if cValue := cr.Get("source-address"); cValue.Exists() {
+					citem.SourceIp = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("suppress-reports"); cValue.Exists() {
+					citem.SuppressReports = types.BoolValue(true)
+				} else {
+					citem.SuppressReports = types.BoolValue(false)
+				}
 
-			var cr gjson.Result
-			r.Get("group-address-source-address.source-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.SourceIp.ValueString() != citem.SourceIp.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.SuppressReports.ValueBool() && existingItem.SuppressReports.ValueBool() == false {
+							citem.SuppressReports = existingItem.SuppressReports
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("source-address"); value.Exists() && !data.StaticGroups[i].SourceAddresses[ci].SourceIp.IsNull() {
-				data.StaticGroups[i].SourceAddresses[ci].SourceIp = types.StringValue(value.String())
-			} else {
-				data.StaticGroups[i].SourceAddresses[ci].SourceIp = types.StringNull()
-			}
-			if value := cr.Get("suppress-reports"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.StaticGroups[i].SourceAddresses[ci].SuppressReports.IsNull() && !data.StaticGroups[i].SourceAddresses[ci].SuppressReports.ValueBool() {
-					data.StaticGroups[i].SourceAddresses[ci].SuppressReports = types.BoolValue(false)
-				} else if !data.StaticGroups[i].SourceAddresses[ci].SuppressReports.IsNull() {
-					data.StaticGroups[i].SourceAddresses[ci].SuppressReports = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.StaticGroups[i].SourceAddresses[ci].SuppressReports.IsNull() {
-					data.StaticGroups[i].SourceAddresses[ci].SuppressReports = types.BoolNull()
-				} else {
-					data.StaticGroups[i].SourceAddresses[ci].SuppressReports = types.BoolValue(false)
-				}
-			}
+
+				data.StaticGroups[i].SourceAddresses = append(data.StaticGroups[i].SourceAddresses, citem)
+				return true
+			})
 		}
-		for ci := range data.StaticGroups[i].GroupMasksSourceAddresses {
-			keys := [...]string{"group-mask-address", "source-address"}
-			keyValues := [...]string{data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupIncMask.ValueString(), data.StaticGroups[i].GroupMasksSourceAddresses[ci].SourceIp.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("group-address-inc-mask-source-address.inc-mask"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.StaticGroups[i].GroupMasksSourceAddresses
+			data.StaticGroups[i].GroupMasksSourceAddresses = make([]RouterIGMPVRFInterfaceStaticGroupsGroupMasksSourceAddresses, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterIGMPVRFInterfaceStaticGroupsGroupMasksSourceAddresses{}
+				if cValue := cr.Get("group-mask-address"); cValue.Exists() {
+					citem.GroupIncMask = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("source-address"); cValue.Exists() {
+					citem.SourceIp = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("group-address-count"); cValue.Exists() {
+					citem.GroupCount = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("suppress-reports"); cValue.Exists() {
+					citem.SuppressReports = types.BoolValue(true)
+				} else {
+					citem.SuppressReports = types.BoolValue(false)
+				}
 
-			var cr gjson.Result
-			r.Get("group-address-inc-mask-source-address.inc-mask").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.GroupIncMask.ValueString() != citem.GroupIncMask.ValueString() {
+						match = false
+					}
+					if existingItem.SourceIp.ValueString() != citem.SourceIp.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.SuppressReports.ValueBool() && existingItem.SuppressReports.ValueBool() == false {
+							citem.SuppressReports = existingItem.SuppressReports
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("group-mask-address"); value.Exists() && !data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupIncMask.IsNull() {
-				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupIncMask = types.StringValue(value.String())
-			} else {
-				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupIncMask = types.StringNull()
-			}
-			if value := cr.Get("source-address"); value.Exists() && !data.StaticGroups[i].GroupMasksSourceAddresses[ci].SourceIp.IsNull() {
-				data.StaticGroups[i].GroupMasksSourceAddresses[ci].SourceIp = types.StringValue(value.String())
-			} else {
-				data.StaticGroups[i].GroupMasksSourceAddresses[ci].SourceIp = types.StringNull()
-			}
-			if value := cr.Get("group-address-count"); value.Exists() {
-				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount = types.Int64Value(value.Int())
-			} else if data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount.IsNull() {
-				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount = types.Int64Null()
-			}
-			if value := cr.Get("suppress-reports"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.IsNull() && !data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.ValueBool() {
-					data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports = types.BoolValue(false)
-				} else if !data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.IsNull() {
-					data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.IsNull() {
-					data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports = types.BoolNull()
-				} else {
-					data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports = types.BoolValue(false)
-				}
-			}
+
+				data.StaticGroups[i].GroupMasksSourceAddresses = append(data.StaticGroups[i].GroupMasksSourceAddresses, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.JoinGroups {
@@ -664,64 +637,49 @@ func (data *RouterIGMPVRFInterface) updateFromBody(ctx context.Context, res []by
 				data.JoinGroups[i].GroupAddressOnly = types.BoolValue(false)
 			}
 		}
-		for ci := range data.JoinGroups[i].SourceAddresses {
-			keys := [...]string{"source-address"}
-			keyValues := [...]string{data.JoinGroups[i].SourceAddresses[ci].SourceIp.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("source-addresses"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.JoinGroups[i].SourceAddresses
+			data.JoinGroups[i].SourceAddresses = make([]RouterIGMPVRFInterfaceJoinGroupsSourceAddresses, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterIGMPVRFInterfaceJoinGroupsSourceAddresses{}
+				if cValue := cr.Get("source-address"); cValue.Exists() {
+					citem.SourceIp = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("include"); cValue.Exists() {
+					citem.Include = types.BoolValue(true)
+				} else {
+					citem.Include = types.BoolValue(false)
+				}
+				if cValue := cr.Get("exclude"); cValue.Exists() {
+					citem.Exclude = types.BoolValue(true)
+				} else {
+					citem.Exclude = types.BoolValue(false)
+				}
 
-			var cr gjson.Result
-			r.Get("source-addresses").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.SourceIp.ValueString() != citem.SourceIp.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.Include.ValueBool() && existingItem.Include.ValueBool() == false {
+							citem.Include = existingItem.Include
 						}
-						found = false
+						if !citem.Exclude.ValueBool() && existingItem.Exclude.ValueBool() == false {
+							citem.Exclude = existingItem.Exclude
+						}
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("source-address"); value.Exists() && !data.JoinGroups[i].SourceAddresses[ci].SourceIp.IsNull() {
-				data.JoinGroups[i].SourceAddresses[ci].SourceIp = types.StringValue(value.String())
-			} else {
-				data.JoinGroups[i].SourceAddresses[ci].SourceIp = types.StringNull()
-			}
-			if value := cr.Get("include"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.JoinGroups[i].SourceAddresses[ci].Include.IsNull() && !data.JoinGroups[i].SourceAddresses[ci].Include.ValueBool() {
-					data.JoinGroups[i].SourceAddresses[ci].Include = types.BoolValue(false)
-				} else if !data.JoinGroups[i].SourceAddresses[ci].Include.IsNull() {
-					data.JoinGroups[i].SourceAddresses[ci].Include = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.JoinGroups[i].SourceAddresses[ci].Include.IsNull() {
-					data.JoinGroups[i].SourceAddresses[ci].Include = types.BoolNull()
-				} else {
-					data.JoinGroups[i].SourceAddresses[ci].Include = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("exclude"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.JoinGroups[i].SourceAddresses[ci].Exclude.IsNull() && !data.JoinGroups[i].SourceAddresses[ci].Exclude.ValueBool() {
-					data.JoinGroups[i].SourceAddresses[ci].Exclude = types.BoolValue(false)
-				} else if !data.JoinGroups[i].SourceAddresses[ci].Exclude.IsNull() {
-					data.JoinGroups[i].SourceAddresses[ci].Exclude = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.JoinGroups[i].SourceAddresses[ci].Exclude.IsNull() {
-					data.JoinGroups[i].SourceAddresses[ci].Exclude = types.BoolNull()
-				} else {
-					data.JoinGroups[i].SourceAddresses[ci].Exclude = types.BoolValue(false)
-				}
-			}
+
+				data.JoinGroups[i].SourceAddresses = append(data.JoinGroups[i].SourceAddresses, citem)
+				return true
+			})
 		}
 	}
 }
@@ -806,7 +764,9 @@ func (data RouterIGMPVRFInterface) toBodyXML(ctx context.Context) string {
 			if len(item.GroupMasks) > 0 {
 				for _, citem := range item.GroupMasks {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.GroupIncMask.IsNull() && !citem.GroupIncMask.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "group-mask-address", citem.GroupIncMask.ValueString())
+					}
 					if !citem.GroupCount.IsNull() && !citem.GroupCount.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "group-address-count", strconv.FormatInt(citem.GroupCount.ValueInt64(), 10))
 					}
@@ -821,7 +781,9 @@ func (data RouterIGMPVRFInterface) toBodyXML(ctx context.Context) string {
 			if len(item.SourceAddresses) > 0 {
 				for _, citem := range item.SourceAddresses {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.SourceIp.IsNull() && !citem.SourceIp.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "source-address", citem.SourceIp.ValueString())
+					}
 					if !citem.SuppressReports.IsNull() && !citem.SuppressReports.IsUnknown() {
 						if citem.SuppressReports.ValueBool() {
 							ccBody = helpers.SetFromXPath(ccBody, "suppress-reports", "")
@@ -833,7 +795,12 @@ func (data RouterIGMPVRFInterface) toBodyXML(ctx context.Context) string {
 			if len(item.GroupMasksSourceAddresses) > 0 {
 				for _, citem := range item.GroupMasksSourceAddresses {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.GroupIncMask.IsNull() && !citem.GroupIncMask.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "group-mask-address", citem.GroupIncMask.ValueString())
+					}
+					if !citem.SourceIp.IsNull() && !citem.SourceIp.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "source-address", citem.SourceIp.ValueString())
+					}
 					if !citem.GroupCount.IsNull() && !citem.GroupCount.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "group-address-count", strconv.FormatInt(citem.GroupCount.ValueInt64(), 10))
 					}
@@ -864,7 +831,9 @@ func (data RouterIGMPVRFInterface) toBodyXML(ctx context.Context) string {
 			if len(item.SourceAddresses) > 0 {
 				for _, citem := range item.SourceAddresses {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.SourceIp.IsNull() && !citem.SourceIp.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "source-address", citem.SourceIp.ValueString())
+					}
 					if !citem.Include.IsNull() && !citem.Include.IsUnknown() {
 						if citem.Include.ValueBool() {
 							ccBody = helpers.SetFromXPath(ccBody, "include", "")
@@ -1029,137 +998,137 @@ func (data *RouterIGMPVRFInterface) updateFromBodyXML(ctx context.Context, res x
 				data.StaticGroups[i].SuppressReports = types.BoolNull()
 			}
 		}
-		for ci := range data.StaticGroups[i].GroupMasks {
-			keys := [...]string{"group-mask-address"}
-			keyValues := [...]string{data.StaticGroups[i].GroupMasks[ci].GroupIncMask.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "group-address-inc-mask/inc-mask"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.StaticGroups[i].GroupMasks
+			data.StaticGroups[i].GroupMasks = make([]RouterIGMPVRFInterfaceStaticGroupsGroupMasks, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "group-address-inc-mask/inc-mask").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterIGMPVRFInterfaceStaticGroupsGroupMasks{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "group-mask-address"); cValue.Exists() {
+					citem.GroupIncMask = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "group-address-count"); cValue.Exists() {
+					citem.GroupCount = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "suppress-reports"); cValue.Exists() {
+					citem.SuppressReports = types.BoolValue(true)
+				} else {
+					citem.SuppressReports = types.BoolValue(false)
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.GroupIncMask.ValueString() != citem.GroupIncMask.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.SuppressReports.ValueBool() && existingItem.SuppressReports.ValueBool() == false {
+							citem.SuppressReports = existingItem.SuppressReports
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "group-mask-address"); value.Exists() {
-				data.StaticGroups[i].GroupMasks[ci].GroupIncMask = types.StringValue(value.String())
-			} else {
-				data.StaticGroups[i].GroupMasks[ci].GroupIncMask = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "group-address-count"); value.Exists() {
-				data.StaticGroups[i].GroupMasks[ci].GroupCount = types.Int64Value(value.Int())
-			} else {
-				data.StaticGroups[i].GroupMasks[ci].GroupCount = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "suppress-reports"); value.Exists() {
-				if !data.StaticGroups[i].GroupMasks[ci].SuppressReports.IsNull() {
-					data.StaticGroups[i].GroupMasks[ci].SuppressReports = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.StaticGroups[i].GroupMasks[ci].SuppressReports.IsNull() {
-					data.StaticGroups[i].GroupMasks[ci].SuppressReports = types.BoolNull()
-				}
-			}
+
+				data.StaticGroups[i].GroupMasks = append(data.StaticGroups[i].GroupMasks, citem)
+				return true
+			})
 		}
-		for ci := range data.StaticGroups[i].SourceAddresses {
-			keys := [...]string{"source-address"}
-			keyValues := [...]string{data.StaticGroups[i].SourceAddresses[ci].SourceIp.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "group-address-source-address/source-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.StaticGroups[i].SourceAddresses
+			data.StaticGroups[i].SourceAddresses = make([]RouterIGMPVRFInterfaceStaticGroupsSourceAddresses, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "group-address-source-address/source-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterIGMPVRFInterfaceStaticGroupsSourceAddresses{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "source-address"); cValue.Exists() {
+					citem.SourceIp = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "suppress-reports"); cValue.Exists() {
+					citem.SuppressReports = types.BoolValue(true)
+				} else {
+					citem.SuppressReports = types.BoolValue(false)
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.SourceIp.ValueString() != citem.SourceIp.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.SuppressReports.ValueBool() && existingItem.SuppressReports.ValueBool() == false {
+							citem.SuppressReports = existingItem.SuppressReports
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "source-address"); value.Exists() {
-				data.StaticGroups[i].SourceAddresses[ci].SourceIp = types.StringValue(value.String())
-			} else {
-				data.StaticGroups[i].SourceAddresses[ci].SourceIp = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "suppress-reports"); value.Exists() {
-				if !data.StaticGroups[i].SourceAddresses[ci].SuppressReports.IsNull() {
-					data.StaticGroups[i].SourceAddresses[ci].SuppressReports = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.StaticGroups[i].SourceAddresses[ci].SuppressReports.IsNull() {
-					data.StaticGroups[i].SourceAddresses[ci].SuppressReports = types.BoolNull()
-				}
-			}
+
+				data.StaticGroups[i].SourceAddresses = append(data.StaticGroups[i].SourceAddresses, citem)
+				return true
+			})
 		}
-		for ci := range data.StaticGroups[i].GroupMasksSourceAddresses {
-			keys := [...]string{"group-mask-address", "source-address"}
-			keyValues := [...]string{data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupIncMask.ValueString(), data.StaticGroups[i].GroupMasksSourceAddresses[ci].SourceIp.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "group-address-inc-mask-source-address/inc-mask"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.StaticGroups[i].GroupMasksSourceAddresses
+			data.StaticGroups[i].GroupMasksSourceAddresses = make([]RouterIGMPVRFInterfaceStaticGroupsGroupMasksSourceAddresses, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "group-address-inc-mask-source-address/inc-mask").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterIGMPVRFInterfaceStaticGroupsGroupMasksSourceAddresses{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "group-mask-address"); cValue.Exists() {
+					citem.GroupIncMask = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "source-address"); cValue.Exists() {
+					citem.SourceIp = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "group-address-count"); cValue.Exists() {
+					citem.GroupCount = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "suppress-reports"); cValue.Exists() {
+					citem.SuppressReports = types.BoolValue(true)
+				} else {
+					citem.SuppressReports = types.BoolValue(false)
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.GroupIncMask.ValueString() != citem.GroupIncMask.ValueString() {
+						match = false
+					}
+					if existingItem.SourceIp.ValueString() != citem.SourceIp.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.SuppressReports.ValueBool() && existingItem.SuppressReports.ValueBool() == false {
+							citem.SuppressReports = existingItem.SuppressReports
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "group-mask-address"); value.Exists() {
-				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupIncMask = types.StringValue(value.String())
-			} else {
-				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupIncMask = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "source-address"); value.Exists() {
-				data.StaticGroups[i].GroupMasksSourceAddresses[ci].SourceIp = types.StringValue(value.String())
-			} else {
-				data.StaticGroups[i].GroupMasksSourceAddresses[ci].SourceIp = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "group-address-count"); value.Exists() {
-				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount = types.Int64Value(value.Int())
-			} else {
-				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "suppress-reports"); value.Exists() {
-				if !data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.IsNull() {
-					data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.IsNull() {
-					data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports = types.BoolNull()
-				}
-			}
+
+				data.StaticGroups[i].GroupMasksSourceAddresses = append(data.StaticGroups[i].GroupMasksSourceAddresses, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.JoinGroups {
@@ -1199,54 +1168,54 @@ func (data *RouterIGMPVRFInterface) updateFromBodyXML(ctx context.Context, res x
 				data.JoinGroups[i].GroupAddressOnly = types.BoolNull()
 			}
 		}
-		for ci := range data.JoinGroups[i].SourceAddresses {
-			keys := [...]string{"source-address"}
-			keyValues := [...]string{data.JoinGroups[i].SourceAddresses[ci].SourceIp.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "source-addresses"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.JoinGroups[i].SourceAddresses
+			data.JoinGroups[i].SourceAddresses = make([]RouterIGMPVRFInterfaceJoinGroupsSourceAddresses, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "source-addresses").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterIGMPVRFInterfaceJoinGroupsSourceAddresses{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "source-address"); cValue.Exists() {
+					citem.SourceIp = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "include"); cValue.Exists() {
+					citem.Include = types.BoolValue(true)
+				} else {
+					citem.Include = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "exclude"); cValue.Exists() {
+					citem.Exclude = types.BoolValue(true)
+				} else {
+					citem.Exclude = types.BoolValue(false)
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.SourceIp.ValueString() != citem.SourceIp.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Include.ValueBool() && existingItem.Include.ValueBool() == false {
+							citem.Include = existingItem.Include
 						}
-						found = false
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Exclude.ValueBool() && existingItem.Exclude.ValueBool() == false {
+							citem.Exclude = existingItem.Exclude
+						}
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "source-address"); value.Exists() {
-				data.JoinGroups[i].SourceAddresses[ci].SourceIp = types.StringValue(value.String())
-			} else {
-				data.JoinGroups[i].SourceAddresses[ci].SourceIp = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "include"); value.Exists() {
-				if !data.JoinGroups[i].SourceAddresses[ci].Include.IsNull() {
-					data.JoinGroups[i].SourceAddresses[ci].Include = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.JoinGroups[i].SourceAddresses[ci].Include.IsNull() {
-					data.JoinGroups[i].SourceAddresses[ci].Include = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "exclude"); value.Exists() {
-				if !data.JoinGroups[i].SourceAddresses[ci].Exclude.IsNull() {
-					data.JoinGroups[i].SourceAddresses[ci].Exclude = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.JoinGroups[i].SourceAddresses[ci].Exclude.IsNull() {
-					data.JoinGroups[i].SourceAddresses[ci].Exclude = types.BoolNull()
-				}
-			}
+
+				data.JoinGroups[i].SourceAddresses = append(data.JoinGroups[i].SourceAddresses, citem)
+				return true
+			})
 		}
 	}
 }
@@ -1321,12 +1290,12 @@ func (data *RouterIGMPVRFInterface) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("group-address-only"); cValue.Exists() {
 				item.GroupAddressOnly = types.BoolValue(true)
 			} else {
-				item.GroupAddressOnly = types.BoolValue(false)
+				item.GroupAddressOnly = types.BoolNull()
 			}
 			if cValue := v.Get("group-address-only.suppress-reports"); cValue.Exists() {
 				item.SuppressReports = types.BoolValue(true)
 			} else {
-				item.SuppressReports = types.BoolValue(false)
+				item.SuppressReports = types.BoolNull()
 			}
 			if cValue := v.Get("group-address-inc-mask.inc-mask"); cValue.Exists() {
 				item.GroupMasks = make([]RouterIGMPVRFInterfaceStaticGroupsGroupMasks, 0)
@@ -1341,7 +1310,7 @@ func (data *RouterIGMPVRFInterface) fromBody(ctx context.Context, res gjson.Resu
 					if ccValue := cv.Get("suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
 					} else {
-						cItem.SuppressReports = types.BoolValue(false)
+						cItem.SuppressReports = types.BoolNull()
 					}
 					item.GroupMasks = append(item.GroupMasks, cItem)
 					return true
@@ -1357,7 +1326,7 @@ func (data *RouterIGMPVRFInterface) fromBody(ctx context.Context, res gjson.Resu
 					if ccValue := cv.Get("suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
 					} else {
-						cItem.SuppressReports = types.BoolValue(false)
+						cItem.SuppressReports = types.BoolNull()
 					}
 					item.SourceAddresses = append(item.SourceAddresses, cItem)
 					return true
@@ -1379,7 +1348,7 @@ func (data *RouterIGMPVRFInterface) fromBody(ctx context.Context, res gjson.Resu
 					if ccValue := cv.Get("suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
 					} else {
-						cItem.SuppressReports = types.BoolValue(false)
+						cItem.SuppressReports = types.BoolNull()
 					}
 					item.GroupMasksSourceAddresses = append(item.GroupMasksSourceAddresses, cItem)
 					return true
@@ -1399,7 +1368,7 @@ func (data *RouterIGMPVRFInterface) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("group-address-only"); cValue.Exists() {
 				item.GroupAddressOnly = types.BoolValue(true)
 			} else {
-				item.GroupAddressOnly = types.BoolValue(false)
+				item.GroupAddressOnly = types.BoolNull()
 			}
 			if cValue := v.Get("source-addresses"); cValue.Exists() {
 				item.SourceAddresses = make([]RouterIGMPVRFInterfaceJoinGroupsSourceAddresses, 0)
@@ -1411,12 +1380,12 @@ func (data *RouterIGMPVRFInterface) fromBody(ctx context.Context, res gjson.Resu
 					if ccValue := cv.Get("include"); ccValue.Exists() {
 						cItem.Include = types.BoolValue(true)
 					} else {
-						cItem.Include = types.BoolValue(false)
+						cItem.Include = types.BoolNull()
 					}
 					if ccValue := cv.Get("exclude"); ccValue.Exists() {
 						cItem.Exclude = types.BoolValue(true)
 					} else {
-						cItem.Exclude = types.BoolValue(false)
+						cItem.Exclude = types.BoolNull()
 					}
 					item.SourceAddresses = append(item.SourceAddresses, cItem)
 					return true
@@ -1689,10 +1658,13 @@ func (data *RouterIGMPVRFInterface) fromBodyXML(ctx context.Context, res xmldot.
 						cItem.GroupCount = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "suppress-reports"); ccValue.Exists() {
+
 						cItem.SuppressReports = types.BoolValue(true)
+
 					} else {
-						cItem.SuppressReports = types.BoolNull()
+						cItem.SuppressReports = types.BoolValue(false)
 					}
+
 					item.GroupMasks = append(item.GroupMasks, cItem)
 					return true
 				})
@@ -1705,10 +1677,13 @@ func (data *RouterIGMPVRFInterface) fromBodyXML(ctx context.Context, res xmldot.
 						cItem.SourceIp = types.StringValue(ccValue.String())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "suppress-reports"); ccValue.Exists() {
+
 						cItem.SuppressReports = types.BoolValue(true)
+
 					} else {
-						cItem.SuppressReports = types.BoolNull()
+						cItem.SuppressReports = types.BoolValue(false)
 					}
+
 					item.SourceAddresses = append(item.SourceAddresses, cItem)
 					return true
 				})
@@ -1727,10 +1702,13 @@ func (data *RouterIGMPVRFInterface) fromBodyXML(ctx context.Context, res xmldot.
 						cItem.GroupCount = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "suppress-reports"); ccValue.Exists() {
+
 						cItem.SuppressReports = types.BoolValue(true)
+
 					} else {
-						cItem.SuppressReports = types.BoolNull()
+						cItem.SuppressReports = types.BoolValue(false)
 					}
+
 					item.GroupMasksSourceAddresses = append(item.GroupMasksSourceAddresses, cItem)
 					return true
 				})
@@ -1759,15 +1737,21 @@ func (data *RouterIGMPVRFInterface) fromBodyXML(ctx context.Context, res xmldot.
 						cItem.SourceIp = types.StringValue(ccValue.String())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "include"); ccValue.Exists() {
+
 						cItem.Include = types.BoolValue(true)
+
 					} else {
-						cItem.Include = types.BoolNull()
+						cItem.Include = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "exclude"); ccValue.Exists() {
+
 						cItem.Exclude = types.BoolValue(true)
+
 					} else {
-						cItem.Exclude = types.BoolNull()
+						cItem.Exclude = types.BoolValue(false)
 					}
+
 					item.SourceAddresses = append(item.SourceAddresses, cItem)
 					return true
 				})

@@ -486,34 +486,33 @@ func (data *SegmentRoutingTEOnDemandColor) updateFromBody(ctx context.Context, r
 		} else {
 			data.DynamicAffinityRules[i].AffinityType = types.StringNull()
 		}
-		for ci := range data.DynamicAffinityRules[i].Affinities {
-			keys := [...]string{"affinity-name"}
-			keyValues := [...]string{data.DynamicAffinityRules[i].Affinities[ci].AffinityName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("affinity-name"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.DynamicAffinityRules[i].Affinities
+			data.DynamicAffinityRules[i].Affinities = make([]SegmentRoutingTEOnDemandColorDynamicAffinityRulesAffinities, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := SegmentRoutingTEOnDemandColorDynamicAffinityRulesAffinities{}
+				if cValue := cr.Get("affinity-name"); cValue.Exists() {
+					citem.AffinityName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("affinity-name").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AffinityName.ValueString() != citem.AffinityName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("affinity-name"); value.Exists() && !data.DynamicAffinityRules[i].Affinities[ci].AffinityName.IsNull() {
-				data.DynamicAffinityRules[i].Affinities[ci].AffinityName = types.StringValue(value.String())
-			} else {
-				data.DynamicAffinityRules[i].Affinities[ci].AffinityName = types.StringNull()
-			}
+				}
+
+				data.DynamicAffinityRules[i].Affinities = append(data.DynamicAffinityRules[i].Affinities, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.DynamicBounds {
@@ -846,7 +845,9 @@ func (data SegmentRoutingTEOnDemandColor) toBodyXML(ctx context.Context) string 
 			if len(item.Affinities) > 0 {
 				for _, citem := range item.Affinities {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.AffinityName.IsNull() && !citem.AffinityName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "affinity-name", citem.AffinityName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "affinity-name", ccBody.Res())
 				}
 			}
@@ -1102,34 +1103,36 @@ func (data *SegmentRoutingTEOnDemandColor) updateFromBodyXML(ctx context.Context
 		} else if data.DynamicAffinityRules[i].AffinityType.IsNull() {
 			data.DynamicAffinityRules[i].AffinityType = types.StringNull()
 		}
-		for ci := range data.DynamicAffinityRules[i].Affinities {
-			keys := [...]string{"affinity-name"}
-			keyValues := [...]string{data.DynamicAffinityRules[i].Affinities[ci].AffinityName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "affinity-name"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.DynamicAffinityRules[i].Affinities
+			data.DynamicAffinityRules[i].Affinities = make([]SegmentRoutingTEOnDemandColorDynamicAffinityRulesAffinities, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "affinity-name").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := SegmentRoutingTEOnDemandColorDynamicAffinityRulesAffinities{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "affinity-name"); cValue.Exists() {
+					citem.AffinityName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AffinityName.ValueString() != citem.AffinityName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "affinity-name"); value.Exists() {
-				data.DynamicAffinityRules[i].Affinities[ci].AffinityName = types.StringValue(value.String())
-			} else {
-				data.DynamicAffinityRules[i].Affinities[ci].AffinityName = types.StringNull()
-			}
+				}
+
+				data.DynamicAffinityRules[i].Affinities = append(data.DynamicAffinityRules[i].Affinities, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.DynamicBounds {

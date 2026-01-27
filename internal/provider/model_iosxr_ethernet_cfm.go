@@ -465,7 +465,9 @@ func (data EthernetCFM) toBodyXML(ctx context.Context) string {
 			if len(item.Services) > 0 {
 				for _, citem := range item.Services {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.ServiceName.IsNull() && !citem.ServiceName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "service-name", citem.ServiceName.ValueString())
+					}
 					if !citem.BridgeGroup.IsNull() && !citem.BridgeGroup.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "bridge/group", citem.BridgeGroup.ValueString())
 					}
@@ -606,7 +608,9 @@ func (data EthernetCFM) toBodyXML(ctx context.Context) string {
 					if len(citem.MepCrosschecks) > 0 {
 						for _, ccitem := range citem.MepCrosschecks {
 							cccBody := netconf.Body{}
-							_ = ccitem // Suppress unused variable warning
+							if !ccitem.MepId.IsNull() && !ccitem.MepId.IsUnknown() {
+								cccBody = helpers.SetFromXPath(cccBody, "mep-id", strconv.FormatInt(ccitem.MepId.ValueInt64(), 10))
+							}
 							if !ccitem.MacAddress.IsNull() && !ccitem.MacAddress.IsUnknown() {
 								cccBody = helpers.SetFromXPath(cccBody, "mac-address", ccitem.MacAddress.ValueString())
 							}
@@ -788,608 +792,344 @@ func (data *EthernetCFM) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Domains[i].IdString = types.StringNull()
 		}
-		for ci := range data.Domains[i].Services {
-			keys := [...]string{"service-name"}
-			keyValues := [...]string{data.Domains[i].Services[ci].ServiceName.ValueString()}
-
-			var cr gjson.Result
-			r.Get("services.service").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+		// Rebuild nested list from device response
+		if value := r.Get("services.service"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Domains[i].Services
+			data.Domains[i].Services = make([]EthernetCFMDomainsServices, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := EthernetCFMDomainsServices{}
+				if cValue := cr.Get("service-name"); cValue.Exists() {
+					citem.ServiceName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("bridge.group"); cValue.Exists() {
+					citem.BridgeGroup = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("bridge.bridge-domain"); cValue.Exists() {
+					citem.BridgeDomain = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("down-meps"); cValue.Exists() {
+					citem.DownMeps = types.BoolValue(true)
+				} else {
+					citem.DownMeps = types.BoolValue(false)
+				}
+				if cValue := cr.Get("flexible-xconnect.vlan-aware.evi"); cValue.Exists() {
+					citem.FlexibleXconnectVlanAwareEvi = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("flexible-xconnect.vlan-unaware.cross-connect-name"); cValue.Exists() {
+					citem.FlexibleXconnectVlanUnawareName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("xconnect.mp2mp.group"); cValue.Exists() {
+					citem.XconnectMp2mpGroup = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("xconnect.mp2mp.cross-connect-name"); cValue.Exists() {
+					citem.XconnectMp2mpName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("xconnect.mp2mp.ce-id"); cValue.Exists() {
+					citem.XconnectMp2mpCeId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("xconnect.mp2mp.remote-ce-id"); cValue.Exists() {
+					citem.XconnectMp2mpRemoteCeId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("xconnect.p2p.group"); cValue.Exists() {
+					citem.XconnectP2pGroupName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("xconnect.p2p.cross-connect-name"); cValue.Exists() {
+					citem.XconnectP2pXcName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("id.icc-based.icc"); cValue.Exists() {
+					citem.IdIccBasedIcc = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("id.icc-based.umc"); cValue.Exists() {
+					citem.IdIccBasedUmc = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("id.vlanid"); cValue.Exists() {
+					citem.IdVlanId = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("id.number"); cValue.Exists() {
+					citem.IdNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("id.string"); cValue.Exists() {
+					citem.IdString = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("id.vpn-id.vpn-oui"); cValue.Exists() {
+					citem.IdVpnIdOui = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("id.vpn-id.vpn-index"); cValue.Exists() {
+					citem.IdVpnIdIndex = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("tags"); cValue.Exists() {
+					citem.Tags = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("mip.auto-create.all"); cValue.Exists() {
+					citem.MipAutoCreateAll = types.BoolValue(true)
+				} else {
+					citem.MipAutoCreateAll = types.BoolValue(false)
+				}
+				if cValue := cr.Get("mip.auto-create.lower-mep-only"); cValue.Exists() {
+					citem.MipAutoCreateLowerMepOnly = types.BoolValue(true)
+				} else {
+					citem.MipAutoCreateLowerMepOnly = types.BoolValue(false)
+				}
+				if cValue := cr.Get("mip.auto-create.ccm-learning"); cValue.Exists() {
+					citem.MipAutoCreateCcmLearning = types.BoolValue(true)
+				} else {
+					citem.MipAutoCreateCcmLearning = types.BoolValue(false)
+				}
+				if cValue := cr.Get("efd"); cValue.Exists() {
+					citem.Efd = types.BoolValue(true)
+				} else {
+					citem.Efd = types.BoolValue(false)
+				}
+				if cValue := cr.Get("efd.protection-switching"); cValue.Exists() {
+					citem.EfdProtectionSwitching = types.BoolValue(true)
+				} else {
+					citem.EfdProtectionSwitching = types.BoolValue(false)
+				}
+				if cValue := cr.Get("continuity-check.interval.interval-time"); cValue.Exists() {
+					citem.ContinuityCheckInterval = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("continuity-check.interval.loss-threshold"); cValue.Exists() {
+					citem.ContinuityCheckIntervalLossThreshold = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("continuity-check.archive.hold-time"); cValue.Exists() {
+					citem.ContinuityCheckArchiveHoldTime = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("continuity-check.loss.auto-traceroute"); cValue.Exists() {
+					citem.ContinuityCheckLossAutoTraceroute = types.BoolValue(true)
+				} else {
+					citem.ContinuityCheckLossAutoTraceroute = types.BoolValue(false)
+				}
+				if cValue := cr.Get("maximum-meps"); cValue.Exists() {
+					citem.MaximumMeps = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("ais.transmission.interval"); cValue.Exists() {
+					citem.AisTransmissionInterval = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("ais.transmission.cos"); cValue.Exists() {
+					citem.AisTransmissionCos = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("log.continuity-check.mep.changes"); cValue.Exists() {
+					citem.LogContinuityCheckMepChanges = types.BoolValue(true)
+				} else {
+					citem.LogContinuityCheckMepChanges = types.BoolValue(false)
+				}
+				if cValue := cr.Get("log.continuity-check.errors"); cValue.Exists() {
+					citem.LogContinuityCheckErrors = types.BoolValue(true)
+				} else {
+					citem.LogContinuityCheckErrors = types.BoolValue(false)
+				}
+				if cValue := cr.Get("log.crosscheck.errors"); cValue.Exists() {
+					citem.LogCrosscheckErrors = types.BoolValue(true)
+				} else {
+					citem.LogCrosscheckErrors = types.BoolValue(false)
+				}
+				if cValue := cr.Get("log.ais"); cValue.Exists() {
+					citem.LogAis = types.BoolValue(true)
+				} else {
+					citem.LogAis = types.BoolValue(false)
+				}
+				if cValue := cr.Get("log.csf"); cValue.Exists() {
+					citem.LogCsf = types.BoolValue(true)
+				} else {
+					citem.LogCsf = types.BoolValue(false)
+				}
+				if cValue := cr.Get("log.efd"); cValue.Exists() {
+					citem.LogEfd = types.BoolValue(true)
+				} else {
+					citem.LogEfd = types.BoolValue(false)
+				}
+				// Rebuild nested nested list from device response
+				if ccValue := cr.Get("mep.crosscheck.mep-ids.mep-id"); ccValue.Exists() {
+					citem.MepCrosschecks = make([]EthernetCFMDomainsServicesMepCrosschecks, 0)
+					ccValue.ForEach(func(_, ccr gjson.Result) bool {
+						ccitem := EthernetCFMDomainsServicesMepCrosschecks{}
+						if ccValue := ccr.Get("mep-id"); ccValue.Exists() {
+							ccitem.MepId = types.Int64Value(ccValue.Int())
 						}
-						found = false
+						if ccValue := ccr.Get("mac-address"); ccValue.Exists() {
+							ccitem.MacAddress = types.StringValue(ccValue.String())
+						}
+						citem.MepCrosschecks = append(citem.MepCrosschecks, ccitem)
+						return true
+					})
+				}
+				if cValue := cr.Get("mep.crosscheck.auto"); cValue.Exists() {
+					citem.MepCrosscheckAuto = types.BoolValue(true)
+				} else {
+					citem.MepCrosscheckAuto = types.BoolValue(false)
+				}
+				if cValue := cr.Get("report.defects.none"); cValue.Exists() {
+					citem.ReportDefectsNone = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsNone = types.BoolValue(false)
+				}
+				if cValue := cr.Get("report.defects.all"); cValue.Exists() {
+					citem.ReportDefectsAll = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsAll = types.BoolValue(false)
+				}
+				if cValue := cr.Get("report.defects.ieee.xcon"); cValue.Exists() {
+					citem.ReportDefectsIeeeXcon = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsIeeeXcon = types.BoolValue(false)
+				}
+				if cValue := cr.Get("report.defects.ieee.error-xcon"); cValue.Exists() {
+					citem.ReportDefectsIeeeErrorXcon = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsIeeeErrorXcon = types.BoolValue(false)
+				}
+				if cValue := cr.Get("report.defects.ieee.remote-error-xcon"); cValue.Exists() {
+					citem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(false)
+				}
+				if cValue := cr.Get("report.defects.ieee.mac-remote-error-xcon"); cValue.Exists() {
+					citem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(false)
+				}
+				if cValue := cr.Get("report.defects.wrong-maid"); cValue.Exists() {
+					citem.ReportDefectsWrongMaid = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsWrongMaid = types.BoolValue(false)
+				}
+				if cValue := cr.Get("report.defects.wrong-level"); cValue.Exists() {
+					citem.ReportDefectsWrongLevel = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsWrongLevel = types.BoolValue(false)
+				}
+				if cValue := cr.Get("report.defects.our-mac"); cValue.Exists() {
+					citem.ReportDefectsOurMac = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsOurMac = types.BoolValue(false)
+				}
+				if cValue := cr.Get("report.defects.our-mepid"); cValue.Exists() {
+					citem.ReportDefectsOurMepid = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsOurMepid = types.BoolValue(false)
+				}
+				if cValue := cr.Get("report.defects.wrong-interval"); cValue.Exists() {
+					citem.ReportDefectsWrongInterval = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsWrongInterval = types.BoolValue(false)
+				}
+				if cValue := cr.Get("report.defects.missing"); cValue.Exists() {
+					citem.ReportDefectsMissing = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsMissing = types.BoolValue(false)
+				}
+				if cValue := cr.Get("report.defects.peer-port-down"); cValue.Exists() {
+					citem.ReportDefectsPeerPortDown = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsPeerPortDown = types.BoolValue(false)
+				}
+				if cValue := cr.Get("report.defects.rdi"); cValue.Exists() {
+					citem.ReportDefectsRdi = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsRdi = types.BoolValue(false)
+				}
+
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.ServiceName.ValueString() != citem.ServiceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.DownMeps.ValueBool() && existingItem.DownMeps.ValueBool() == false {
+							citem.DownMeps = existingItem.DownMeps
+						}
+						if !citem.MipAutoCreateAll.ValueBool() && existingItem.MipAutoCreateAll.ValueBool() == false {
+							citem.MipAutoCreateAll = existingItem.MipAutoCreateAll
+						}
+						if !citem.MipAutoCreateLowerMepOnly.ValueBool() && existingItem.MipAutoCreateLowerMepOnly.ValueBool() == false {
+							citem.MipAutoCreateLowerMepOnly = existingItem.MipAutoCreateLowerMepOnly
+						}
+						if !citem.MipAutoCreateCcmLearning.ValueBool() && existingItem.MipAutoCreateCcmLearning.ValueBool() == false {
+							citem.MipAutoCreateCcmLearning = existingItem.MipAutoCreateCcmLearning
+						}
+						if !citem.Efd.ValueBool() && existingItem.Efd.ValueBool() == false {
+							citem.Efd = existingItem.Efd
+						}
+						if !citem.EfdProtectionSwitching.ValueBool() && existingItem.EfdProtectionSwitching.ValueBool() == false {
+							citem.EfdProtectionSwitching = existingItem.EfdProtectionSwitching
+						}
+						if !citem.ContinuityCheckLossAutoTraceroute.ValueBool() && existingItem.ContinuityCheckLossAutoTraceroute.ValueBool() == false {
+							citem.ContinuityCheckLossAutoTraceroute = existingItem.ContinuityCheckLossAutoTraceroute
+						}
+						if !citem.LogContinuityCheckMepChanges.ValueBool() && existingItem.LogContinuityCheckMepChanges.ValueBool() == false {
+							citem.LogContinuityCheckMepChanges = existingItem.LogContinuityCheckMepChanges
+						}
+						if !citem.LogContinuityCheckErrors.ValueBool() && existingItem.LogContinuityCheckErrors.ValueBool() == false {
+							citem.LogContinuityCheckErrors = existingItem.LogContinuityCheckErrors
+						}
+						if !citem.LogCrosscheckErrors.ValueBool() && existingItem.LogCrosscheckErrors.ValueBool() == false {
+							citem.LogCrosscheckErrors = existingItem.LogCrosscheckErrors
+						}
+						if !citem.LogAis.ValueBool() && existingItem.LogAis.ValueBool() == false {
+							citem.LogAis = existingItem.LogAis
+						}
+						if !citem.LogCsf.ValueBool() && existingItem.LogCsf.ValueBool() == false {
+							citem.LogCsf = existingItem.LogCsf
+						}
+						if !citem.LogEfd.ValueBool() && existingItem.LogEfd.ValueBool() == false {
+							citem.LogEfd = existingItem.LogEfd
+						}
+						if !citem.MepCrosscheckAuto.ValueBool() && existingItem.MepCrosscheckAuto.ValueBool() == false {
+							citem.MepCrosscheckAuto = existingItem.MepCrosscheckAuto
+						}
+						if !citem.ReportDefectsNone.ValueBool() && existingItem.ReportDefectsNone.ValueBool() == false {
+							citem.ReportDefectsNone = existingItem.ReportDefectsNone
+						}
+						if !citem.ReportDefectsAll.ValueBool() && existingItem.ReportDefectsAll.ValueBool() == false {
+							citem.ReportDefectsAll = existingItem.ReportDefectsAll
+						}
+						if !citem.ReportDefectsIeeeXcon.ValueBool() && existingItem.ReportDefectsIeeeXcon.ValueBool() == false {
+							citem.ReportDefectsIeeeXcon = existingItem.ReportDefectsIeeeXcon
+						}
+						if !citem.ReportDefectsIeeeErrorXcon.ValueBool() && existingItem.ReportDefectsIeeeErrorXcon.ValueBool() == false {
+							citem.ReportDefectsIeeeErrorXcon = existingItem.ReportDefectsIeeeErrorXcon
+						}
+						if !citem.ReportDefectsIeeeRemoteErrorXcon.ValueBool() && existingItem.ReportDefectsIeeeRemoteErrorXcon.ValueBool() == false {
+							citem.ReportDefectsIeeeRemoteErrorXcon = existingItem.ReportDefectsIeeeRemoteErrorXcon
+						}
+						if !citem.ReportDefectsIeeeMacRemoteErrorXcon.ValueBool() && existingItem.ReportDefectsIeeeMacRemoteErrorXcon.ValueBool() == false {
+							citem.ReportDefectsIeeeMacRemoteErrorXcon = existingItem.ReportDefectsIeeeMacRemoteErrorXcon
+						}
+						if !citem.ReportDefectsWrongMaid.ValueBool() && existingItem.ReportDefectsWrongMaid.ValueBool() == false {
+							citem.ReportDefectsWrongMaid = existingItem.ReportDefectsWrongMaid
+						}
+						if !citem.ReportDefectsWrongLevel.ValueBool() && existingItem.ReportDefectsWrongLevel.ValueBool() == false {
+							citem.ReportDefectsWrongLevel = existingItem.ReportDefectsWrongLevel
+						}
+						if !citem.ReportDefectsOurMac.ValueBool() && existingItem.ReportDefectsOurMac.ValueBool() == false {
+							citem.ReportDefectsOurMac = existingItem.ReportDefectsOurMac
+						}
+						if !citem.ReportDefectsOurMepid.ValueBool() && existingItem.ReportDefectsOurMepid.ValueBool() == false {
+							citem.ReportDefectsOurMepid = existingItem.ReportDefectsOurMepid
+						}
+						if !citem.ReportDefectsWrongInterval.ValueBool() && existingItem.ReportDefectsWrongInterval.ValueBool() == false {
+							citem.ReportDefectsWrongInterval = existingItem.ReportDefectsWrongInterval
+						}
+						if !citem.ReportDefectsMissing.ValueBool() && existingItem.ReportDefectsMissing.ValueBool() == false {
+							citem.ReportDefectsMissing = existingItem.ReportDefectsMissing
+						}
+						if !citem.ReportDefectsPeerPortDown.ValueBool() && existingItem.ReportDefectsPeerPortDown.ValueBool() == false {
+							citem.ReportDefectsPeerPortDown = existingItem.ReportDefectsPeerPortDown
+						}
+						if !citem.ReportDefectsRdi.ValueBool() && existingItem.ReportDefectsRdi.ValueBool() == false {
+							citem.ReportDefectsRdi = existingItem.ReportDefectsRdi
+						}
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("service-name"); value.Exists() && !data.Domains[i].Services[ci].ServiceName.IsNull() {
-				data.Domains[i].Services[ci].ServiceName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].ServiceName = types.StringNull()
-			}
-			if value := cr.Get("bridge.group"); value.Exists() && !data.Domains[i].Services[ci].BridgeGroup.IsNull() {
-				data.Domains[i].Services[ci].BridgeGroup = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].BridgeGroup = types.StringNull()
-			}
-			if value := cr.Get("bridge.bridge-domain"); value.Exists() && !data.Domains[i].Services[ci].BridgeDomain.IsNull() {
-				data.Domains[i].Services[ci].BridgeDomain = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].BridgeDomain = types.StringNull()
-			}
-			if value := cr.Get("down-meps"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].DownMeps.IsNull() && !data.Domains[i].Services[ci].DownMeps.ValueBool() {
-					data.Domains[i].Services[ci].DownMeps = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].DownMeps.IsNull() {
-					data.Domains[i].Services[ci].DownMeps = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].DownMeps.IsNull() {
-					data.Domains[i].Services[ci].DownMeps = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].DownMeps = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("flexible-xconnect.vlan-aware.evi"); value.Exists() {
-				data.Domains[i].Services[ci].FlexibleXconnectVlanAwareEvi = types.Int64Value(value.Int())
-			} else if data.Domains[i].Services[ci].FlexibleXconnectVlanAwareEvi.IsNull() {
-				data.Domains[i].Services[ci].FlexibleXconnectVlanAwareEvi = types.Int64Null()
-			}
-			if value := cr.Get("flexible-xconnect.vlan-unaware.cross-connect-name"); value.Exists() && !data.Domains[i].Services[ci].FlexibleXconnectVlanUnawareName.IsNull() {
-				data.Domains[i].Services[ci].FlexibleXconnectVlanUnawareName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].FlexibleXconnectVlanUnawareName = types.StringNull()
-			}
-			if value := cr.Get("xconnect.mp2mp.group"); value.Exists() && !data.Domains[i].Services[ci].XconnectMp2mpGroup.IsNull() {
-				data.Domains[i].Services[ci].XconnectMp2mpGroup = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].XconnectMp2mpGroup = types.StringNull()
-			}
-			if value := cr.Get("xconnect.mp2mp.cross-connect-name"); value.Exists() && !data.Domains[i].Services[ci].XconnectMp2mpName.IsNull() {
-				data.Domains[i].Services[ci].XconnectMp2mpName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].XconnectMp2mpName = types.StringNull()
-			}
-			if value := cr.Get("xconnect.mp2mp.ce-id"); value.Exists() {
-				data.Domains[i].Services[ci].XconnectMp2mpCeId = types.Int64Value(value.Int())
-			} else if data.Domains[i].Services[ci].XconnectMp2mpCeId.IsNull() {
-				data.Domains[i].Services[ci].XconnectMp2mpCeId = types.Int64Null()
-			}
-			if value := cr.Get("xconnect.mp2mp.remote-ce-id"); value.Exists() {
-				data.Domains[i].Services[ci].XconnectMp2mpRemoteCeId = types.Int64Value(value.Int())
-			} else if data.Domains[i].Services[ci].XconnectMp2mpRemoteCeId.IsNull() {
-				data.Domains[i].Services[ci].XconnectMp2mpRemoteCeId = types.Int64Null()
-			}
-			if value := cr.Get("xconnect.p2p.group"); value.Exists() && !data.Domains[i].Services[ci].XconnectP2pGroupName.IsNull() {
-				data.Domains[i].Services[ci].XconnectP2pGroupName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].XconnectP2pGroupName = types.StringNull()
-			}
-			if value := cr.Get("xconnect.p2p.cross-connect-name"); value.Exists() && !data.Domains[i].Services[ci].XconnectP2pXcName.IsNull() {
-				data.Domains[i].Services[ci].XconnectP2pXcName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].XconnectP2pXcName = types.StringNull()
-			}
-			if value := cr.Get("id.icc-based.icc"); value.Exists() && !data.Domains[i].Services[ci].IdIccBasedIcc.IsNull() {
-				data.Domains[i].Services[ci].IdIccBasedIcc = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].IdIccBasedIcc = types.StringNull()
-			}
-			if value := cr.Get("id.icc-based.umc"); value.Exists() && !data.Domains[i].Services[ci].IdIccBasedUmc.IsNull() {
-				data.Domains[i].Services[ci].IdIccBasedUmc = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].IdIccBasedUmc = types.StringNull()
-			}
-			if value := cr.Get("id.vlanid"); value.Exists() {
-				data.Domains[i].Services[ci].IdVlanId = types.Int64Value(value.Int())
-			} else if data.Domains[i].Services[ci].IdVlanId.IsNull() {
-				data.Domains[i].Services[ci].IdVlanId = types.Int64Null()
-			}
-			if value := cr.Get("id.number"); value.Exists() {
-				data.Domains[i].Services[ci].IdNumber = types.Int64Value(value.Int())
-			} else if data.Domains[i].Services[ci].IdNumber.IsNull() {
-				data.Domains[i].Services[ci].IdNumber = types.Int64Null()
-			}
-			if value := cr.Get("id.string"); value.Exists() && !data.Domains[i].Services[ci].IdString.IsNull() {
-				data.Domains[i].Services[ci].IdString = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].IdString = types.StringNull()
-			}
-			if value := cr.Get("id.vpn-id.vpn-oui"); value.Exists() {
-				data.Domains[i].Services[ci].IdVpnIdOui = types.Int64Value(value.Int())
-			} else if data.Domains[i].Services[ci].IdVpnIdOui.IsNull() {
-				data.Domains[i].Services[ci].IdVpnIdOui = types.Int64Null()
-			}
-			if value := cr.Get("id.vpn-id.vpn-index"); value.Exists() {
-				data.Domains[i].Services[ci].IdVpnIdIndex = types.Int64Value(value.Int())
-			} else if data.Domains[i].Services[ci].IdVpnIdIndex.IsNull() {
-				data.Domains[i].Services[ci].IdVpnIdIndex = types.Int64Null()
-			}
-			if value := cr.Get("tags"); value.Exists() && !data.Domains[i].Services[ci].Tags.IsNull() {
-				data.Domains[i].Services[ci].Tags = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].Tags = types.StringNull()
-			}
-			if value := cr.Get("mip.auto-create.all"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].MipAutoCreateAll.IsNull() && !data.Domains[i].Services[ci].MipAutoCreateAll.ValueBool() {
-					data.Domains[i].Services[ci].MipAutoCreateAll = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].MipAutoCreateAll.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateAll = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].MipAutoCreateAll.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateAll = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].MipAutoCreateAll = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("mip.auto-create.lower-mep-only"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() && !data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.ValueBool() {
-					data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("mip.auto-create.ccm-learning"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() && !data.Domains[i].Services[ci].MipAutoCreateCcmLearning.ValueBool() {
-					data.Domains[i].Services[ci].MipAutoCreateCcmLearning = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateCcmLearning = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateCcmLearning = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].MipAutoCreateCcmLearning = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("efd"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].Efd.IsNull() && !data.Domains[i].Services[ci].Efd.ValueBool() {
-					data.Domains[i].Services[ci].Efd = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].Efd.IsNull() {
-					data.Domains[i].Services[ci].Efd = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].Efd.IsNull() {
-					data.Domains[i].Services[ci].Efd = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].Efd = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("efd.protection-switching"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() && !data.Domains[i].Services[ci].EfdProtectionSwitching.ValueBool() {
-					data.Domains[i].Services[ci].EfdProtectionSwitching = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() {
-					data.Domains[i].Services[ci].EfdProtectionSwitching = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() {
-					data.Domains[i].Services[ci].EfdProtectionSwitching = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].EfdProtectionSwitching = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("continuity-check.interval.interval-time"); value.Exists() && !data.Domains[i].Services[ci].ContinuityCheckInterval.IsNull() {
-				data.Domains[i].Services[ci].ContinuityCheckInterval = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].ContinuityCheckInterval = types.StringNull()
-			}
-			if value := cr.Get("continuity-check.interval.loss-threshold"); value.Exists() {
-				data.Domains[i].Services[ci].ContinuityCheckIntervalLossThreshold = types.Int64Value(value.Int())
-			} else if data.Domains[i].Services[ci].ContinuityCheckIntervalLossThreshold.IsNull() {
-				data.Domains[i].Services[ci].ContinuityCheckIntervalLossThreshold = types.Int64Null()
-			}
-			if value := cr.Get("continuity-check.archive.hold-time"); value.Exists() {
-				data.Domains[i].Services[ci].ContinuityCheckArchiveHoldTime = types.Int64Value(value.Int())
-			} else if data.Domains[i].Services[ci].ContinuityCheckArchiveHoldTime.IsNull() {
-				data.Domains[i].Services[ci].ContinuityCheckArchiveHoldTime = types.Int64Null()
-			}
-			if value := cr.Get("continuity-check.loss.auto-traceroute"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() && !data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.ValueBool() {
-					data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() {
-					data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() {
-					data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("maximum-meps"); value.Exists() {
-				data.Domains[i].Services[ci].MaximumMeps = types.Int64Value(value.Int())
-			} else if data.Domains[i].Services[ci].MaximumMeps.IsNull() {
-				data.Domains[i].Services[ci].MaximumMeps = types.Int64Null()
-			}
-			if value := cr.Get("ais.transmission.interval"); value.Exists() && !data.Domains[i].Services[ci].AisTransmissionInterval.IsNull() {
-				data.Domains[i].Services[ci].AisTransmissionInterval = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].AisTransmissionInterval = types.StringNull()
-			}
-			if value := cr.Get("ais.transmission.cos"); value.Exists() {
-				data.Domains[i].Services[ci].AisTransmissionCos = types.Int64Value(value.Int())
-			} else if data.Domains[i].Services[ci].AisTransmissionCos.IsNull() {
-				data.Domains[i].Services[ci].AisTransmissionCos = types.Int64Null()
-			}
-			if value := cr.Get("log.continuity-check.mep.changes"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() && !data.Domains[i].Services[ci].LogContinuityCheckMepChanges.ValueBool() {
-					data.Domains[i].Services[ci].LogContinuityCheckMepChanges = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() {
-					data.Domains[i].Services[ci].LogContinuityCheckMepChanges = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() {
-					data.Domains[i].Services[ci].LogContinuityCheckMepChanges = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].LogContinuityCheckMepChanges = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("log.continuity-check.errors"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() && !data.Domains[i].Services[ci].LogContinuityCheckErrors.ValueBool() {
-					data.Domains[i].Services[ci].LogContinuityCheckErrors = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() {
-					data.Domains[i].Services[ci].LogContinuityCheckErrors = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() {
-					data.Domains[i].Services[ci].LogContinuityCheckErrors = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].LogContinuityCheckErrors = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("log.crosscheck.errors"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() && !data.Domains[i].Services[ci].LogCrosscheckErrors.ValueBool() {
-					data.Domains[i].Services[ci].LogCrosscheckErrors = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() {
-					data.Domains[i].Services[ci].LogCrosscheckErrors = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() {
-					data.Domains[i].Services[ci].LogCrosscheckErrors = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].LogCrosscheckErrors = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("log.ais"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].LogAis.IsNull() && !data.Domains[i].Services[ci].LogAis.ValueBool() {
-					data.Domains[i].Services[ci].LogAis = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].LogAis.IsNull() {
-					data.Domains[i].Services[ci].LogAis = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].LogAis.IsNull() {
-					data.Domains[i].Services[ci].LogAis = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].LogAis = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("log.csf"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].LogCsf.IsNull() && !data.Domains[i].Services[ci].LogCsf.ValueBool() {
-					data.Domains[i].Services[ci].LogCsf = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].LogCsf.IsNull() {
-					data.Domains[i].Services[ci].LogCsf = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].LogCsf.IsNull() {
-					data.Domains[i].Services[ci].LogCsf = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].LogCsf = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("log.efd"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].LogEfd.IsNull() && !data.Domains[i].Services[ci].LogEfd.ValueBool() {
-					data.Domains[i].Services[ci].LogEfd = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].LogEfd.IsNull() {
-					data.Domains[i].Services[ci].LogEfd = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].LogEfd.IsNull() {
-					data.Domains[i].Services[ci].LogEfd = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].LogEfd = types.BoolValue(false)
-				}
-			}
-			for cci := range data.Domains[i].Services[ci].MepCrosschecks {
-				keys := [...]string{"mep-id"}
-				keyValues := [...]string{strconv.FormatInt(data.Domains[i].Services[ci].MepCrosschecks[cci].MepId.ValueInt64(), 10)}
 
-				var ccr gjson.Result
-				cr.Get("mep.crosscheck.mep-ids.mep-id").ForEach(
-					func(_, v gjson.Result) bool {
-						found := false
-						for ik := range keys {
-							if v.Get(keys[ik]).String() == keyValues[ik] {
-								found = true
-								continue
-							}
-							found = false
-							break
-						}
-						if found {
-							ccr = v
-							return false
-						}
-						return true
-					},
-				)
-				if value := ccr.Get("mep-id"); value.Exists() && !data.Domains[i].Services[ci].MepCrosschecks[cci].MepId.IsNull() {
-					data.Domains[i].Services[ci].MepCrosschecks[cci].MepId = types.Int64Value(value.Int())
-				} else {
-					data.Domains[i].Services[ci].MepCrosschecks[cci].MepId = types.Int64Null()
-				}
-				if value := ccr.Get("mac-address"); value.Exists() && !data.Domains[i].Services[ci].MepCrosschecks[cci].MacAddress.IsNull() {
-					data.Domains[i].Services[ci].MepCrosschecks[cci].MacAddress = types.StringValue(value.String())
-				} else {
-					data.Domains[i].Services[ci].MepCrosschecks[cci].MacAddress = types.StringNull()
-				}
-			}
-			if value := cr.Get("mep.crosscheck.auto"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() && !data.Domains[i].Services[ci].MepCrosscheckAuto.ValueBool() {
-					data.Domains[i].Services[ci].MepCrosscheckAuto = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() {
-					data.Domains[i].Services[ci].MepCrosscheckAuto = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() {
-					data.Domains[i].Services[ci].MepCrosscheckAuto = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].MepCrosscheckAuto = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("report.defects.none"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ReportDefectsNone.IsNull() && !data.Domains[i].Services[ci].ReportDefectsNone.ValueBool() {
-					data.Domains[i].Services[ci].ReportDefectsNone = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ReportDefectsNone.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsNone = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ReportDefectsNone.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsNone = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ReportDefectsNone = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("report.defects.all"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ReportDefectsAll.IsNull() && !data.Domains[i].Services[ci].ReportDefectsAll.ValueBool() {
-					data.Domains[i].Services[ci].ReportDefectsAll = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ReportDefectsAll.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsAll = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ReportDefectsAll.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsAll = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ReportDefectsAll = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("report.defects.ieee.xcon"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeXcon.ValueBool() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeXcon = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeXcon = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeXcon = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ReportDefectsIeeeXcon = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("report.defects.ieee.error-xcon"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.ValueBool() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("report.defects.ieee.remote-error-xcon"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.ValueBool() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("report.defects.ieee.mac-remote-error-xcon"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.ValueBool() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("report.defects.wrong-maid"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() && !data.Domains[i].Services[ci].ReportDefectsWrongMaid.ValueBool() {
-					data.Domains[i].Services[ci].ReportDefectsWrongMaid = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongMaid = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongMaid = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ReportDefectsWrongMaid = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("report.defects.wrong-level"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() && !data.Domains[i].Services[ci].ReportDefectsWrongLevel.ValueBool() {
-					data.Domains[i].Services[ci].ReportDefectsWrongLevel = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongLevel = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongLevel = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ReportDefectsWrongLevel = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("report.defects.our-mac"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() && !data.Domains[i].Services[ci].ReportDefectsOurMac.ValueBool() {
-					data.Domains[i].Services[ci].ReportDefectsOurMac = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsOurMac = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsOurMac = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ReportDefectsOurMac = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("report.defects.our-mepid"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() && !data.Domains[i].Services[ci].ReportDefectsOurMepid.ValueBool() {
-					data.Domains[i].Services[ci].ReportDefectsOurMepid = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsOurMepid = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsOurMepid = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ReportDefectsOurMepid = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("report.defects.wrong-interval"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() && !data.Domains[i].Services[ci].ReportDefectsWrongInterval.ValueBool() {
-					data.Domains[i].Services[ci].ReportDefectsWrongInterval = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongInterval = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongInterval = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ReportDefectsWrongInterval = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("report.defects.missing"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ReportDefectsMissing.IsNull() && !data.Domains[i].Services[ci].ReportDefectsMissing.ValueBool() {
-					data.Domains[i].Services[ci].ReportDefectsMissing = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ReportDefectsMissing.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsMissing = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ReportDefectsMissing.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsMissing = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ReportDefectsMissing = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("report.defects.peer-port-down"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() && !data.Domains[i].Services[ci].ReportDefectsPeerPortDown.ValueBool() {
-					data.Domains[i].Services[ci].ReportDefectsPeerPortDown = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsPeerPortDown = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsPeerPortDown = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ReportDefectsPeerPortDown = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get("report.defects.rdi"); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.Domains[i].Services[ci].ReportDefectsRdi.IsNull() && !data.Domains[i].Services[ci].ReportDefectsRdi.ValueBool() {
-					data.Domains[i].Services[ci].ReportDefectsRdi = types.BoolValue(false)
-				} else if !data.Domains[i].Services[ci].ReportDefectsRdi.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsRdi = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.Domains[i].Services[ci].ReportDefectsRdi.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsRdi = types.BoolNull()
-				} else {
-					data.Domains[i].Services[ci].ReportDefectsRdi = types.BoolValue(false)
-				}
-			}
+				data.Domains[i].Services = append(data.Domains[i].Services, citem)
+				return true
+			})
 		}
 	}
 }
@@ -1471,434 +1211,375 @@ func (data *EthernetCFM) updateFromBodyXML(ctx context.Context, res xmldot.Resul
 		} else if data.Domains[i].IdString.IsNull() {
 			data.Domains[i].IdString = types.StringNull()
 		}
-		for ci := range data.Domains[i].Services {
-			keys := [...]string{"service-name"}
-			keyValues := [...]string{data.Domains[i].Services[ci].ServiceName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "services/service"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Domains[i].Services
+			data.Domains[i].Services = make([]EthernetCFMDomainsServices, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "services/service").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := EthernetCFMDomainsServices{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "service-name"); cValue.Exists() {
+					citem.ServiceName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "bridge/group"); cValue.Exists() {
+					citem.BridgeGroup = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "bridge/bridge-domain"); cValue.Exists() {
+					citem.BridgeDomain = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "down-meps"); cValue.Exists() {
+					citem.DownMeps = types.BoolValue(true)
+				} else {
+					citem.DownMeps = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "flexible-xconnect/vlan-aware/evi"); cValue.Exists() {
+					citem.FlexibleXconnectVlanAwareEvi = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "flexible-xconnect/vlan-unaware/cross-connect-name"); cValue.Exists() {
+					citem.FlexibleXconnectVlanUnawareName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "xconnect/mp2mp/group"); cValue.Exists() {
+					citem.XconnectMp2mpGroup = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "xconnect/mp2mp/cross-connect-name"); cValue.Exists() {
+					citem.XconnectMp2mpName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "xconnect/mp2mp/ce-id"); cValue.Exists() {
+					citem.XconnectMp2mpCeId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "xconnect/mp2mp/remote-ce-id"); cValue.Exists() {
+					citem.XconnectMp2mpRemoteCeId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "xconnect/p2p/group"); cValue.Exists() {
+					citem.XconnectP2pGroupName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "xconnect/p2p/cross-connect-name"); cValue.Exists() {
+					citem.XconnectP2pXcName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "id/icc-based/icc"); cValue.Exists() {
+					citem.IdIccBasedIcc = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "id/icc-based/umc"); cValue.Exists() {
+					citem.IdIccBasedUmc = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "id/vlanid"); cValue.Exists() {
+					citem.IdVlanId = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "id/number"); cValue.Exists() {
+					citem.IdNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "id/string"); cValue.Exists() {
+					citem.IdString = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "id/vpn-id/vpn-oui"); cValue.Exists() {
+					citem.IdVpnIdOui = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "id/vpn-id/vpn-index"); cValue.Exists() {
+					citem.IdVpnIdIndex = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "tags"); cValue.Exists() {
+					citem.Tags = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "mip/auto-create/all"); cValue.Exists() {
+					citem.MipAutoCreateAll = types.BoolValue(true)
+				} else {
+					citem.MipAutoCreateAll = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "mip/auto-create/lower-mep-only"); cValue.Exists() {
+					citem.MipAutoCreateLowerMepOnly = types.BoolValue(true)
+				} else {
+					citem.MipAutoCreateLowerMepOnly = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "mip/auto-create/ccm-learning"); cValue.Exists() {
+					citem.MipAutoCreateCcmLearning = types.BoolValue(true)
+				} else {
+					citem.MipAutoCreateCcmLearning = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "efd"); cValue.Exists() {
+					citem.Efd = types.BoolValue(true)
+				} else {
+					citem.Efd = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "efd/protection-switching"); cValue.Exists() {
+					citem.EfdProtectionSwitching = types.BoolValue(true)
+				} else {
+					citem.EfdProtectionSwitching = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "continuity-check/interval/interval-time"); cValue.Exists() {
+					citem.ContinuityCheckInterval = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "continuity-check/interval/loss-threshold"); cValue.Exists() {
+					citem.ContinuityCheckIntervalLossThreshold = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "continuity-check/archive/hold-time"); cValue.Exists() {
+					citem.ContinuityCheckArchiveHoldTime = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "continuity-check/loss/auto-traceroute"); cValue.Exists() {
+					citem.ContinuityCheckLossAutoTraceroute = types.BoolValue(true)
+				} else {
+					citem.ContinuityCheckLossAutoTraceroute = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "maximum-meps"); cValue.Exists() {
+					citem.MaximumMeps = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "ais/transmission/interval"); cValue.Exists() {
+					citem.AisTransmissionInterval = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "ais/transmission/cos"); cValue.Exists() {
+					citem.AisTransmissionCos = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "log/continuity-check/mep/changes"); cValue.Exists() {
+					citem.LogContinuityCheckMepChanges = types.BoolValue(true)
+				} else {
+					citem.LogContinuityCheckMepChanges = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "log/continuity-check/errors"); cValue.Exists() {
+					citem.LogContinuityCheckErrors = types.BoolValue(true)
+				} else {
+					citem.LogContinuityCheckErrors = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "log/crosscheck/errors"); cValue.Exists() {
+					citem.LogCrosscheckErrors = types.BoolValue(true)
+				} else {
+					citem.LogCrosscheckErrors = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "log/ais"); cValue.Exists() {
+					citem.LogAis = types.BoolValue(true)
+				} else {
+					citem.LogAis = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "log/csf"); cValue.Exists() {
+					citem.LogCsf = types.BoolValue(true)
+				} else {
+					citem.LogCsf = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "log/efd"); cValue.Exists() {
+					citem.LogEfd = types.BoolValue(true)
+				} else {
+					citem.LogEfd = types.BoolValue(false)
+				}
+				// Rebuild nested nested list from device XML response
+				if ccValue := helpers.GetFromXPath(cr, "mep/crosscheck/mep-ids/mep-id"); ccValue.Exists() {
+					citem.MepCrosschecks = make([]EthernetCFMDomainsServicesMepCrosschecks, 0)
+					ccValue.ForEach(func(_ int, ccr xmldot.Result) bool {
+						ccitem := EthernetCFMDomainsServicesMepCrosschecks{}
+						if ccValue := helpers.GetFromXPath(ccr, "mep-id"); ccValue.Exists() {
+							ccitem.MepId = types.Int64Value(ccValue.Int())
 						}
-						found = false
+						if ccValue := helpers.GetFromXPath(ccr, "mac-address"); ccValue.Exists() {
+							ccitem.MacAddress = types.StringValue(ccValue.String())
+						}
+						citem.MepCrosschecks = append(citem.MepCrosschecks, ccitem)
+						return true
+					})
+				}
+				if cValue := helpers.GetFromXPath(cr, "mep/crosscheck/auto"); cValue.Exists() {
+					citem.MepCrosscheckAuto = types.BoolValue(true)
+				} else {
+					citem.MepCrosscheckAuto = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "report/defects/none"); cValue.Exists() {
+					citem.ReportDefectsNone = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsNone = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "report/defects/all"); cValue.Exists() {
+					citem.ReportDefectsAll = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsAll = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "report/defects/ieee/xcon"); cValue.Exists() {
+					citem.ReportDefectsIeeeXcon = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsIeeeXcon = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "report/defects/ieee/error-xcon"); cValue.Exists() {
+					citem.ReportDefectsIeeeErrorXcon = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsIeeeErrorXcon = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "report/defects/ieee/remote-error-xcon"); cValue.Exists() {
+					citem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "report/defects/ieee/mac-remote-error-xcon"); cValue.Exists() {
+					citem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "report/defects/wrong-maid"); cValue.Exists() {
+					citem.ReportDefectsWrongMaid = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsWrongMaid = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "report/defects/wrong-level"); cValue.Exists() {
+					citem.ReportDefectsWrongLevel = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsWrongLevel = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "report/defects/our-mac"); cValue.Exists() {
+					citem.ReportDefectsOurMac = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsOurMac = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "report/defects/our-mepid"); cValue.Exists() {
+					citem.ReportDefectsOurMepid = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsOurMepid = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "report/defects/wrong-interval"); cValue.Exists() {
+					citem.ReportDefectsWrongInterval = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsWrongInterval = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "report/defects/missing"); cValue.Exists() {
+					citem.ReportDefectsMissing = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsMissing = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "report/defects/peer-port-down"); cValue.Exists() {
+					citem.ReportDefectsPeerPortDown = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsPeerPortDown = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, "report/defects/rdi"); cValue.Exists() {
+					citem.ReportDefectsRdi = types.BoolValue(true)
+				} else {
+					citem.ReportDefectsRdi = types.BoolValue(false)
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.ServiceName.ValueString() != citem.ServiceName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.DownMeps.ValueBool() && existingItem.DownMeps.ValueBool() == false {
+							citem.DownMeps = existingItem.DownMeps
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.MipAutoCreateAll.ValueBool() && existingItem.MipAutoCreateAll.ValueBool() == false {
+							citem.MipAutoCreateAll = existingItem.MipAutoCreateAll
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.MipAutoCreateLowerMepOnly.ValueBool() && existingItem.MipAutoCreateLowerMepOnly.ValueBool() == false {
+							citem.MipAutoCreateLowerMepOnly = existingItem.MipAutoCreateLowerMepOnly
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.MipAutoCreateCcmLearning.ValueBool() && existingItem.MipAutoCreateCcmLearning.ValueBool() == false {
+							citem.MipAutoCreateCcmLearning = existingItem.MipAutoCreateCcmLearning
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.Efd.ValueBool() && existingItem.Efd.ValueBool() == false {
+							citem.Efd = existingItem.Efd
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.EfdProtectionSwitching.ValueBool() && existingItem.EfdProtectionSwitching.ValueBool() == false {
+							citem.EfdProtectionSwitching = existingItem.EfdProtectionSwitching
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ContinuityCheckLossAutoTraceroute.ValueBool() && existingItem.ContinuityCheckLossAutoTraceroute.ValueBool() == false {
+							citem.ContinuityCheckLossAutoTraceroute = existingItem.ContinuityCheckLossAutoTraceroute
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.LogContinuityCheckMepChanges.ValueBool() && existingItem.LogContinuityCheckMepChanges.ValueBool() == false {
+							citem.LogContinuityCheckMepChanges = existingItem.LogContinuityCheckMepChanges
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.LogContinuityCheckErrors.ValueBool() && existingItem.LogContinuityCheckErrors.ValueBool() == false {
+							citem.LogContinuityCheckErrors = existingItem.LogContinuityCheckErrors
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.LogCrosscheckErrors.ValueBool() && existingItem.LogCrosscheckErrors.ValueBool() == false {
+							citem.LogCrosscheckErrors = existingItem.LogCrosscheckErrors
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.LogAis.ValueBool() && existingItem.LogAis.ValueBool() == false {
+							citem.LogAis = existingItem.LogAis
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.LogCsf.ValueBool() && existingItem.LogCsf.ValueBool() == false {
+							citem.LogCsf = existingItem.LogCsf
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.LogEfd.ValueBool() && existingItem.LogEfd.ValueBool() == false {
+							citem.LogEfd = existingItem.LogEfd
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.MepCrosscheckAuto.ValueBool() && existingItem.MepCrosscheckAuto.ValueBool() == false {
+							citem.MepCrosscheckAuto = existingItem.MepCrosscheckAuto
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ReportDefectsNone.ValueBool() && existingItem.ReportDefectsNone.ValueBool() == false {
+							citem.ReportDefectsNone = existingItem.ReportDefectsNone
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ReportDefectsAll.ValueBool() && existingItem.ReportDefectsAll.ValueBool() == false {
+							citem.ReportDefectsAll = existingItem.ReportDefectsAll
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ReportDefectsIeeeXcon.ValueBool() && existingItem.ReportDefectsIeeeXcon.ValueBool() == false {
+							citem.ReportDefectsIeeeXcon = existingItem.ReportDefectsIeeeXcon
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ReportDefectsIeeeErrorXcon.ValueBool() && existingItem.ReportDefectsIeeeErrorXcon.ValueBool() == false {
+							citem.ReportDefectsIeeeErrorXcon = existingItem.ReportDefectsIeeeErrorXcon
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ReportDefectsIeeeRemoteErrorXcon.ValueBool() && existingItem.ReportDefectsIeeeRemoteErrorXcon.ValueBool() == false {
+							citem.ReportDefectsIeeeRemoteErrorXcon = existingItem.ReportDefectsIeeeRemoteErrorXcon
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ReportDefectsIeeeMacRemoteErrorXcon.ValueBool() && existingItem.ReportDefectsIeeeMacRemoteErrorXcon.ValueBool() == false {
+							citem.ReportDefectsIeeeMacRemoteErrorXcon = existingItem.ReportDefectsIeeeMacRemoteErrorXcon
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ReportDefectsWrongMaid.ValueBool() && existingItem.ReportDefectsWrongMaid.ValueBool() == false {
+							citem.ReportDefectsWrongMaid = existingItem.ReportDefectsWrongMaid
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ReportDefectsWrongLevel.ValueBool() && existingItem.ReportDefectsWrongLevel.ValueBool() == false {
+							citem.ReportDefectsWrongLevel = existingItem.ReportDefectsWrongLevel
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ReportDefectsOurMac.ValueBool() && existingItem.ReportDefectsOurMac.ValueBool() == false {
+							citem.ReportDefectsOurMac = existingItem.ReportDefectsOurMac
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ReportDefectsOurMepid.ValueBool() && existingItem.ReportDefectsOurMepid.ValueBool() == false {
+							citem.ReportDefectsOurMepid = existingItem.ReportDefectsOurMepid
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ReportDefectsWrongInterval.ValueBool() && existingItem.ReportDefectsWrongInterval.ValueBool() == false {
+							citem.ReportDefectsWrongInterval = existingItem.ReportDefectsWrongInterval
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ReportDefectsMissing.ValueBool() && existingItem.ReportDefectsMissing.ValueBool() == false {
+							citem.ReportDefectsMissing = existingItem.ReportDefectsMissing
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ReportDefectsPeerPortDown.ValueBool() && existingItem.ReportDefectsPeerPortDown.ValueBool() == false {
+							citem.ReportDefectsPeerPortDown = existingItem.ReportDefectsPeerPortDown
+						}
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.ReportDefectsRdi.ValueBool() && existingItem.ReportDefectsRdi.ValueBool() == false {
+							citem.ReportDefectsRdi = existingItem.ReportDefectsRdi
+						}
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "service-name"); value.Exists() {
-				data.Domains[i].Services[ci].ServiceName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].ServiceName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "bridge/group"); value.Exists() {
-				data.Domains[i].Services[ci].BridgeGroup = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].BridgeGroup = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "bridge/bridge-domain"); value.Exists() {
-				data.Domains[i].Services[ci].BridgeDomain = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].BridgeDomain = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "down-meps"); value.Exists() {
-				if !data.Domains[i].Services[ci].DownMeps.IsNull() {
-					data.Domains[i].Services[ci].DownMeps = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].DownMeps.IsNull() {
-					data.Domains[i].Services[ci].DownMeps = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "flexible-xconnect/vlan-aware/evi"); value.Exists() {
-				data.Domains[i].Services[ci].FlexibleXconnectVlanAwareEvi = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].FlexibleXconnectVlanAwareEvi = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "flexible-xconnect/vlan-unaware/cross-connect-name"); value.Exists() {
-				data.Domains[i].Services[ci].FlexibleXconnectVlanUnawareName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].FlexibleXconnectVlanUnawareName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "xconnect/mp2mp/group"); value.Exists() {
-				data.Domains[i].Services[ci].XconnectMp2mpGroup = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].XconnectMp2mpGroup = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "xconnect/mp2mp/cross-connect-name"); value.Exists() {
-				data.Domains[i].Services[ci].XconnectMp2mpName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].XconnectMp2mpName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "xconnect/mp2mp/ce-id"); value.Exists() {
-				data.Domains[i].Services[ci].XconnectMp2mpCeId = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].XconnectMp2mpCeId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "xconnect/mp2mp/remote-ce-id"); value.Exists() {
-				data.Domains[i].Services[ci].XconnectMp2mpRemoteCeId = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].XconnectMp2mpRemoteCeId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "xconnect/p2p/group"); value.Exists() {
-				data.Domains[i].Services[ci].XconnectP2pGroupName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].XconnectP2pGroupName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "xconnect/p2p/cross-connect-name"); value.Exists() {
-				data.Domains[i].Services[ci].XconnectP2pXcName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].XconnectP2pXcName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "id/icc-based/icc"); value.Exists() {
-				data.Domains[i].Services[ci].IdIccBasedIcc = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].IdIccBasedIcc = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "id/icc-based/umc"); value.Exists() {
-				data.Domains[i].Services[ci].IdIccBasedUmc = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].IdIccBasedUmc = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "id/vlanid"); value.Exists() {
-				data.Domains[i].Services[ci].IdVlanId = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].IdVlanId = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "id/number"); value.Exists() {
-				data.Domains[i].Services[ci].IdNumber = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].IdNumber = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "id/string"); value.Exists() {
-				data.Domains[i].Services[ci].IdString = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].IdString = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "id/vpn-id/vpn-oui"); value.Exists() {
-				data.Domains[i].Services[ci].IdVpnIdOui = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].IdVpnIdOui = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "id/vpn-id/vpn-index"); value.Exists() {
-				data.Domains[i].Services[ci].IdVpnIdIndex = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].IdVpnIdIndex = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "tags"); value.Exists() {
-				data.Domains[i].Services[ci].Tags = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].Tags = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "mip/auto-create/all"); value.Exists() {
-				if !data.Domains[i].Services[ci].MipAutoCreateAll.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateAll = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].MipAutoCreateAll.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateAll = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "mip/auto-create/lower-mep-only"); value.Exists() {
-				if !data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "mip/auto-create/ccm-learning"); value.Exists() {
-				if !data.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateCcmLearning = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateCcmLearning = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "efd"); value.Exists() {
-				if !data.Domains[i].Services[ci].Efd.IsNull() {
-					data.Domains[i].Services[ci].Efd = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].Efd.IsNull() {
-					data.Domains[i].Services[ci].Efd = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "efd/protection-switching"); value.Exists() {
-				if !data.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() {
-					data.Domains[i].Services[ci].EfdProtectionSwitching = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() {
-					data.Domains[i].Services[ci].EfdProtectionSwitching = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "continuity-check/interval/interval-time"); value.Exists() {
-				data.Domains[i].Services[ci].ContinuityCheckInterval = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].ContinuityCheckInterval = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "continuity-check/interval/loss-threshold"); value.Exists() {
-				data.Domains[i].Services[ci].ContinuityCheckIntervalLossThreshold = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].ContinuityCheckIntervalLossThreshold = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "continuity-check/archive/hold-time"); value.Exists() {
-				data.Domains[i].Services[ci].ContinuityCheckArchiveHoldTime = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].ContinuityCheckArchiveHoldTime = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "continuity-check/loss/auto-traceroute"); value.Exists() {
-				if !data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() {
-					data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() {
-					data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "maximum-meps"); value.Exists() {
-				data.Domains[i].Services[ci].MaximumMeps = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].MaximumMeps = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "ais/transmission/interval"); value.Exists() {
-				data.Domains[i].Services[ci].AisTransmissionInterval = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].AisTransmissionInterval = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "ais/transmission/cos"); value.Exists() {
-				data.Domains[i].Services[ci].AisTransmissionCos = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].AisTransmissionCos = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "log/continuity-check/mep/changes"); value.Exists() {
-				if !data.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() {
-					data.Domains[i].Services[ci].LogContinuityCheckMepChanges = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() {
-					data.Domains[i].Services[ci].LogContinuityCheckMepChanges = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "log/continuity-check/errors"); value.Exists() {
-				if !data.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() {
-					data.Domains[i].Services[ci].LogContinuityCheckErrors = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() {
-					data.Domains[i].Services[ci].LogContinuityCheckErrors = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "log/crosscheck/errors"); value.Exists() {
-				if !data.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() {
-					data.Domains[i].Services[ci].LogCrosscheckErrors = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() {
-					data.Domains[i].Services[ci].LogCrosscheckErrors = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "log/ais"); value.Exists() {
-				if !data.Domains[i].Services[ci].LogAis.IsNull() {
-					data.Domains[i].Services[ci].LogAis = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].LogAis.IsNull() {
-					data.Domains[i].Services[ci].LogAis = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "log/csf"); value.Exists() {
-				if !data.Domains[i].Services[ci].LogCsf.IsNull() {
-					data.Domains[i].Services[ci].LogCsf = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].LogCsf.IsNull() {
-					data.Domains[i].Services[ci].LogCsf = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "log/efd"); value.Exists() {
-				if !data.Domains[i].Services[ci].LogEfd.IsNull() {
-					data.Domains[i].Services[ci].LogEfd = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].LogEfd.IsNull() {
-					data.Domains[i].Services[ci].LogEfd = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "mep/crosscheck/auto"); value.Exists() {
-				if !data.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() {
-					data.Domains[i].Services[ci].MepCrosscheckAuto = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() {
-					data.Domains[i].Services[ci].MepCrosscheckAuto = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "report/defects/none"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsNone.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsNone = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsNone.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsNone = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "report/defects/all"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsAll.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsAll = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsAll.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsAll = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "report/defects/ieee/xcon"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeXcon = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeXcon = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "report/defects/ieee/error-xcon"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "report/defects/ieee/remote-error-xcon"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "report/defects/ieee/mac-remote-error-xcon"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "report/defects/wrong-maid"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongMaid = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongMaid = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "report/defects/wrong-level"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongLevel = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongLevel = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "report/defects/our-mac"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsOurMac = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsOurMac = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "report/defects/our-mepid"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsOurMepid = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsOurMepid = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "report/defects/wrong-interval"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongInterval = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongInterval = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "report/defects/missing"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsMissing.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsMissing = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsMissing.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsMissing = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "report/defects/peer-port-down"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsPeerPortDown = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsPeerPortDown = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, "report/defects/rdi"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsRdi.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsRdi = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsRdi.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsRdi = types.BoolNull()
-				}
-			}
+
+				data.Domains[i].Services = append(data.Domains[i].Services, citem)
+				return true
+			})
 		}
 	}
 }
@@ -1940,7 +1621,7 @@ func (data *EthernetCFM) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("id.null"); cValue.Exists() {
 				item.IdNull = types.BoolValue(true)
 			} else {
-				item.IdNull = types.BoolValue(false)
+				item.IdNull = types.BoolNull()
 			}
 			if cValue := v.Get("id.string"); cValue.Exists() {
 				item.IdString = types.StringValue(cValue.String())
@@ -1961,7 +1642,7 @@ func (data *EthernetCFM) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("down-meps"); ccValue.Exists() {
 						cItem.DownMeps = types.BoolValue(true)
 					} else {
-						cItem.DownMeps = types.BoolValue(false)
+						cItem.DownMeps = types.BoolNull()
 					}
 					if ccValue := cv.Get("flexible-xconnect.vlan-aware.evi"); ccValue.Exists() {
 						cItem.FlexibleXconnectVlanAwareEvi = types.Int64Value(ccValue.Int())
@@ -2014,27 +1695,27 @@ func (data *EthernetCFM) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("mip.auto-create.all"); ccValue.Exists() {
 						cItem.MipAutoCreateAll = types.BoolValue(true)
 					} else {
-						cItem.MipAutoCreateAll = types.BoolValue(false)
+						cItem.MipAutoCreateAll = types.BoolNull()
 					}
 					if ccValue := cv.Get("mip.auto-create.lower-mep-only"); ccValue.Exists() {
 						cItem.MipAutoCreateLowerMepOnly = types.BoolValue(true)
 					} else {
-						cItem.MipAutoCreateLowerMepOnly = types.BoolValue(false)
+						cItem.MipAutoCreateLowerMepOnly = types.BoolNull()
 					}
 					if ccValue := cv.Get("mip.auto-create.ccm-learning"); ccValue.Exists() {
 						cItem.MipAutoCreateCcmLearning = types.BoolValue(true)
 					} else {
-						cItem.MipAutoCreateCcmLearning = types.BoolValue(false)
+						cItem.MipAutoCreateCcmLearning = types.BoolNull()
 					}
 					if ccValue := cv.Get("efd"); ccValue.Exists() {
 						cItem.Efd = types.BoolValue(true)
 					} else {
-						cItem.Efd = types.BoolValue(false)
+						cItem.Efd = types.BoolNull()
 					}
 					if ccValue := cv.Get("efd.protection-switching"); ccValue.Exists() {
 						cItem.EfdProtectionSwitching = types.BoolValue(true)
 					} else {
-						cItem.EfdProtectionSwitching = types.BoolValue(false)
+						cItem.EfdProtectionSwitching = types.BoolNull()
 					}
 					if ccValue := cv.Get("continuity-check.interval.interval-time"); ccValue.Exists() {
 						cItem.ContinuityCheckInterval = types.StringValue(ccValue.String())
@@ -2048,7 +1729,7 @@ func (data *EthernetCFM) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("continuity-check.loss.auto-traceroute"); ccValue.Exists() {
 						cItem.ContinuityCheckLossAutoTraceroute = types.BoolValue(true)
 					} else {
-						cItem.ContinuityCheckLossAutoTraceroute = types.BoolValue(false)
+						cItem.ContinuityCheckLossAutoTraceroute = types.BoolNull()
 					}
 					if ccValue := cv.Get("maximum-meps"); ccValue.Exists() {
 						cItem.MaximumMeps = types.Int64Value(ccValue.Int())
@@ -2062,32 +1743,32 @@ func (data *EthernetCFM) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("log.continuity-check.mep.changes"); ccValue.Exists() {
 						cItem.LogContinuityCheckMepChanges = types.BoolValue(true)
 					} else {
-						cItem.LogContinuityCheckMepChanges = types.BoolValue(false)
+						cItem.LogContinuityCheckMepChanges = types.BoolNull()
 					}
 					if ccValue := cv.Get("log.continuity-check.errors"); ccValue.Exists() {
 						cItem.LogContinuityCheckErrors = types.BoolValue(true)
 					} else {
-						cItem.LogContinuityCheckErrors = types.BoolValue(false)
+						cItem.LogContinuityCheckErrors = types.BoolNull()
 					}
 					if ccValue := cv.Get("log.crosscheck.errors"); ccValue.Exists() {
 						cItem.LogCrosscheckErrors = types.BoolValue(true)
 					} else {
-						cItem.LogCrosscheckErrors = types.BoolValue(false)
+						cItem.LogCrosscheckErrors = types.BoolNull()
 					}
 					if ccValue := cv.Get("log.ais"); ccValue.Exists() {
 						cItem.LogAis = types.BoolValue(true)
 					} else {
-						cItem.LogAis = types.BoolValue(false)
+						cItem.LogAis = types.BoolNull()
 					}
 					if ccValue := cv.Get("log.csf"); ccValue.Exists() {
 						cItem.LogCsf = types.BoolValue(true)
 					} else {
-						cItem.LogCsf = types.BoolValue(false)
+						cItem.LogCsf = types.BoolNull()
 					}
 					if ccValue := cv.Get("log.efd"); ccValue.Exists() {
 						cItem.LogEfd = types.BoolValue(true)
 					} else {
-						cItem.LogEfd = types.BoolValue(false)
+						cItem.LogEfd = types.BoolNull()
 					}
 					if ccValue := cv.Get("mep.crosscheck.mep-ids.mep-id"); ccValue.Exists() {
 						cItem.MepCrosschecks = make([]EthernetCFMDomainsServicesMepCrosschecks, 0)
@@ -2106,77 +1787,77 @@ func (data *EthernetCFM) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("mep.crosscheck.auto"); ccValue.Exists() {
 						cItem.MepCrosscheckAuto = types.BoolValue(true)
 					} else {
-						cItem.MepCrosscheckAuto = types.BoolValue(false)
+						cItem.MepCrosscheckAuto = types.BoolNull()
 					}
 					if ccValue := cv.Get("report.defects.none"); ccValue.Exists() {
 						cItem.ReportDefectsNone = types.BoolValue(true)
 					} else {
-						cItem.ReportDefectsNone = types.BoolValue(false)
+						cItem.ReportDefectsNone = types.BoolNull()
 					}
 					if ccValue := cv.Get("report.defects.all"); ccValue.Exists() {
 						cItem.ReportDefectsAll = types.BoolValue(true)
 					} else {
-						cItem.ReportDefectsAll = types.BoolValue(false)
+						cItem.ReportDefectsAll = types.BoolNull()
 					}
 					if ccValue := cv.Get("report.defects.ieee.xcon"); ccValue.Exists() {
 						cItem.ReportDefectsIeeeXcon = types.BoolValue(true)
 					} else {
-						cItem.ReportDefectsIeeeXcon = types.BoolValue(false)
+						cItem.ReportDefectsIeeeXcon = types.BoolNull()
 					}
 					if ccValue := cv.Get("report.defects.ieee.error-xcon"); ccValue.Exists() {
 						cItem.ReportDefectsIeeeErrorXcon = types.BoolValue(true)
 					} else {
-						cItem.ReportDefectsIeeeErrorXcon = types.BoolValue(false)
+						cItem.ReportDefectsIeeeErrorXcon = types.BoolNull()
 					}
 					if ccValue := cv.Get("report.defects.ieee.remote-error-xcon"); ccValue.Exists() {
 						cItem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(true)
 					} else {
-						cItem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(false)
+						cItem.ReportDefectsIeeeRemoteErrorXcon = types.BoolNull()
 					}
 					if ccValue := cv.Get("report.defects.ieee.mac-remote-error-xcon"); ccValue.Exists() {
 						cItem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(true)
 					} else {
-						cItem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(false)
+						cItem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolNull()
 					}
 					if ccValue := cv.Get("report.defects.wrong-maid"); ccValue.Exists() {
 						cItem.ReportDefectsWrongMaid = types.BoolValue(true)
 					} else {
-						cItem.ReportDefectsWrongMaid = types.BoolValue(false)
+						cItem.ReportDefectsWrongMaid = types.BoolNull()
 					}
 					if ccValue := cv.Get("report.defects.wrong-level"); ccValue.Exists() {
 						cItem.ReportDefectsWrongLevel = types.BoolValue(true)
 					} else {
-						cItem.ReportDefectsWrongLevel = types.BoolValue(false)
+						cItem.ReportDefectsWrongLevel = types.BoolNull()
 					}
 					if ccValue := cv.Get("report.defects.our-mac"); ccValue.Exists() {
 						cItem.ReportDefectsOurMac = types.BoolValue(true)
 					} else {
-						cItem.ReportDefectsOurMac = types.BoolValue(false)
+						cItem.ReportDefectsOurMac = types.BoolNull()
 					}
 					if ccValue := cv.Get("report.defects.our-mepid"); ccValue.Exists() {
 						cItem.ReportDefectsOurMepid = types.BoolValue(true)
 					} else {
-						cItem.ReportDefectsOurMepid = types.BoolValue(false)
+						cItem.ReportDefectsOurMepid = types.BoolNull()
 					}
 					if ccValue := cv.Get("report.defects.wrong-interval"); ccValue.Exists() {
 						cItem.ReportDefectsWrongInterval = types.BoolValue(true)
 					} else {
-						cItem.ReportDefectsWrongInterval = types.BoolValue(false)
+						cItem.ReportDefectsWrongInterval = types.BoolNull()
 					}
 					if ccValue := cv.Get("report.defects.missing"); ccValue.Exists() {
 						cItem.ReportDefectsMissing = types.BoolValue(true)
 					} else {
-						cItem.ReportDefectsMissing = types.BoolValue(false)
+						cItem.ReportDefectsMissing = types.BoolNull()
 					}
 					if ccValue := cv.Get("report.defects.peer-port-down"); ccValue.Exists() {
 						cItem.ReportDefectsPeerPortDown = types.BoolValue(true)
 					} else {
-						cItem.ReportDefectsPeerPortDown = types.BoolValue(false)
+						cItem.ReportDefectsPeerPortDown = types.BoolNull()
 					}
 					if ccValue := cv.Get("report.defects.rdi"); ccValue.Exists() {
 						cItem.ReportDefectsRdi = types.BoolValue(true)
 					} else {
-						cItem.ReportDefectsRdi = types.BoolValue(false)
+						cItem.ReportDefectsRdi = types.BoolNull()
 					}
 					item.Services = append(item.Services, cItem)
 					return true
@@ -2525,10 +2206,13 @@ func (data *EthernetCFM) fromBodyXML(ctx context.Context, res xmldot.Result) {
 						cItem.BridgeDomain = types.StringValue(ccValue.String())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "down-meps"); ccValue.Exists() {
+
 						cItem.DownMeps = types.BoolValue(true)
+
 					} else {
-						cItem.DownMeps = types.BoolNull()
+						cItem.DownMeps = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "flexible-xconnect/vlan-aware/evi"); ccValue.Exists() {
 						cItem.FlexibleXconnectVlanAwareEvi = types.Int64Value(ccValue.Int())
 					}
@@ -2578,30 +2262,45 @@ func (data *EthernetCFM) fromBodyXML(ctx context.Context, res xmldot.Result) {
 						cItem.Tags = types.StringValue(ccValue.String())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "mip/auto-create/all"); ccValue.Exists() {
+
 						cItem.MipAutoCreateAll = types.BoolValue(true)
+
 					} else {
-						cItem.MipAutoCreateAll = types.BoolNull()
+						cItem.MipAutoCreateAll = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "mip/auto-create/lower-mep-only"); ccValue.Exists() {
+
 						cItem.MipAutoCreateLowerMepOnly = types.BoolValue(true)
+
 					} else {
-						cItem.MipAutoCreateLowerMepOnly = types.BoolNull()
+						cItem.MipAutoCreateLowerMepOnly = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "mip/auto-create/ccm-learning"); ccValue.Exists() {
+
 						cItem.MipAutoCreateCcmLearning = types.BoolValue(true)
+
 					} else {
-						cItem.MipAutoCreateCcmLearning = types.BoolNull()
+						cItem.MipAutoCreateCcmLearning = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "efd"); ccValue.Exists() {
+
 						cItem.Efd = types.BoolValue(true)
+
 					} else {
-						cItem.Efd = types.BoolNull()
+						cItem.Efd = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "efd/protection-switching"); ccValue.Exists() {
+
 						cItem.EfdProtectionSwitching = types.BoolValue(true)
+
 					} else {
-						cItem.EfdProtectionSwitching = types.BoolNull()
+						cItem.EfdProtectionSwitching = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "continuity-check/interval/interval-time"); ccValue.Exists() {
 						cItem.ContinuityCheckInterval = types.StringValue(ccValue.String())
 					}
@@ -2612,10 +2311,13 @@ func (data *EthernetCFM) fromBodyXML(ctx context.Context, res xmldot.Result) {
 						cItem.ContinuityCheckArchiveHoldTime = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "continuity-check/loss/auto-traceroute"); ccValue.Exists() {
+
 						cItem.ContinuityCheckLossAutoTraceroute = types.BoolValue(true)
+
 					} else {
-						cItem.ContinuityCheckLossAutoTraceroute = types.BoolNull()
+						cItem.ContinuityCheckLossAutoTraceroute = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "maximum-meps"); ccValue.Exists() {
 						cItem.MaximumMeps = types.Int64Value(ccValue.Int())
 					}
@@ -2626,35 +2328,53 @@ func (data *EthernetCFM) fromBodyXML(ctx context.Context, res xmldot.Result) {
 						cItem.AisTransmissionCos = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "log/continuity-check/mep/changes"); ccValue.Exists() {
+
 						cItem.LogContinuityCheckMepChanges = types.BoolValue(true)
+
 					} else {
-						cItem.LogContinuityCheckMepChanges = types.BoolNull()
+						cItem.LogContinuityCheckMepChanges = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "log/continuity-check/errors"); ccValue.Exists() {
+
 						cItem.LogContinuityCheckErrors = types.BoolValue(true)
+
 					} else {
-						cItem.LogContinuityCheckErrors = types.BoolNull()
+						cItem.LogContinuityCheckErrors = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "log/crosscheck/errors"); ccValue.Exists() {
+
 						cItem.LogCrosscheckErrors = types.BoolValue(true)
+
 					} else {
-						cItem.LogCrosscheckErrors = types.BoolNull()
+						cItem.LogCrosscheckErrors = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "log/ais"); ccValue.Exists() {
+
 						cItem.LogAis = types.BoolValue(true)
+
 					} else {
-						cItem.LogAis = types.BoolNull()
+						cItem.LogAis = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "log/csf"); ccValue.Exists() {
+
 						cItem.LogCsf = types.BoolValue(true)
+
 					} else {
-						cItem.LogCsf = types.BoolNull()
+						cItem.LogCsf = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "log/efd"); ccValue.Exists() {
+
 						cItem.LogEfd = types.BoolValue(true)
+
 					} else {
-						cItem.LogEfd = types.BoolNull()
+						cItem.LogEfd = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "mep/crosscheck/mep-ids/mep-id"); ccValue.Exists() {
 						cItem.MepCrosschecks = make([]EthernetCFMDomainsServicesMepCrosschecks, 0)
 						ccValue.ForEach(func(_ int, ccv xmldot.Result) bool {
@@ -2670,80 +2390,125 @@ func (data *EthernetCFM) fromBodyXML(ctx context.Context, res xmldot.Result) {
 						})
 					}
 					if ccValue := helpers.GetFromXPath(cv, "mep/crosscheck/auto"); ccValue.Exists() {
+
 						cItem.MepCrosscheckAuto = types.BoolValue(true)
+
 					} else {
-						cItem.MepCrosscheckAuto = types.BoolNull()
+						cItem.MepCrosscheckAuto = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "report/defects/none"); ccValue.Exists() {
+
 						cItem.ReportDefectsNone = types.BoolValue(true)
+
 					} else {
-						cItem.ReportDefectsNone = types.BoolNull()
+						cItem.ReportDefectsNone = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "report/defects/all"); ccValue.Exists() {
+
 						cItem.ReportDefectsAll = types.BoolValue(true)
+
 					} else {
-						cItem.ReportDefectsAll = types.BoolNull()
+						cItem.ReportDefectsAll = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "report/defects/ieee/xcon"); ccValue.Exists() {
+
 						cItem.ReportDefectsIeeeXcon = types.BoolValue(true)
+
 					} else {
-						cItem.ReportDefectsIeeeXcon = types.BoolNull()
+						cItem.ReportDefectsIeeeXcon = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "report/defects/ieee/error-xcon"); ccValue.Exists() {
+
 						cItem.ReportDefectsIeeeErrorXcon = types.BoolValue(true)
+
 					} else {
-						cItem.ReportDefectsIeeeErrorXcon = types.BoolNull()
+						cItem.ReportDefectsIeeeErrorXcon = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "report/defects/ieee/remote-error-xcon"); ccValue.Exists() {
+
 						cItem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(true)
+
 					} else {
-						cItem.ReportDefectsIeeeRemoteErrorXcon = types.BoolNull()
+						cItem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "report/defects/ieee/mac-remote-error-xcon"); ccValue.Exists() {
+
 						cItem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(true)
+
 					} else {
-						cItem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolNull()
+						cItem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "report/defects/wrong-maid"); ccValue.Exists() {
+
 						cItem.ReportDefectsWrongMaid = types.BoolValue(true)
+
 					} else {
-						cItem.ReportDefectsWrongMaid = types.BoolNull()
+						cItem.ReportDefectsWrongMaid = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "report/defects/wrong-level"); ccValue.Exists() {
+
 						cItem.ReportDefectsWrongLevel = types.BoolValue(true)
+
 					} else {
-						cItem.ReportDefectsWrongLevel = types.BoolNull()
+						cItem.ReportDefectsWrongLevel = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "report/defects/our-mac"); ccValue.Exists() {
+
 						cItem.ReportDefectsOurMac = types.BoolValue(true)
+
 					} else {
-						cItem.ReportDefectsOurMac = types.BoolNull()
+						cItem.ReportDefectsOurMac = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "report/defects/our-mepid"); ccValue.Exists() {
+
 						cItem.ReportDefectsOurMepid = types.BoolValue(true)
+
 					} else {
-						cItem.ReportDefectsOurMepid = types.BoolNull()
+						cItem.ReportDefectsOurMepid = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "report/defects/wrong-interval"); ccValue.Exists() {
+
 						cItem.ReportDefectsWrongInterval = types.BoolValue(true)
+
 					} else {
-						cItem.ReportDefectsWrongInterval = types.BoolNull()
+						cItem.ReportDefectsWrongInterval = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "report/defects/missing"); ccValue.Exists() {
+
 						cItem.ReportDefectsMissing = types.BoolValue(true)
+
 					} else {
-						cItem.ReportDefectsMissing = types.BoolNull()
+						cItem.ReportDefectsMissing = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "report/defects/peer-port-down"); ccValue.Exists() {
+
 						cItem.ReportDefectsPeerPortDown = types.BoolValue(true)
+
 					} else {
-						cItem.ReportDefectsPeerPortDown = types.BoolNull()
+						cItem.ReportDefectsPeerPortDown = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, "report/defects/rdi"); ccValue.Exists() {
+
 						cItem.ReportDefectsRdi = types.BoolValue(true)
+
 					} else {
-						cItem.ReportDefectsRdi = types.BoolNull()
+						cItem.ReportDefectsRdi = types.BoolValue(false)
 					}
+
 					item.Services = append(item.Services, cItem)
 					return true
 				})

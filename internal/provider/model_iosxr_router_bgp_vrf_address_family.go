@@ -3814,12 +3814,12 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res gjson.R
 			if cValue := v.Get("backdoor"); cValue.Exists() {
 				item.Backdoor = types.BoolValue(true)
 			} else {
-				item.Backdoor = types.BoolValue(false)
+				item.Backdoor = types.BoolNull()
 			}
 			if cValue := v.Get("multipath"); cValue.Exists() {
 				item.Multipath = types.BoolValue(true)
 			} else {
-				item.Multipath = types.BoolValue(false)
+				item.Multipath = types.BoolNull()
 			}
 			data.Networks = append(data.Networks, item)
 			return true
@@ -3838,17 +3838,17 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res gjson.R
 			if cValue := v.Get("as-set"); cValue.Exists() {
 				item.AsSet = types.BoolValue(true)
 			} else {
-				item.AsSet = types.BoolValue(false)
+				item.AsSet = types.BoolNull()
 			}
 			if cValue := v.Get("as-confed-set"); cValue.Exists() {
 				item.AsConfedSet = types.BoolValue(true)
 			} else {
-				item.AsConfedSet = types.BoolValue(false)
+				item.AsConfedSet = types.BoolNull()
 			}
 			if cValue := v.Get("summary-only"); cValue.Exists() {
 				item.SummaryOnly = types.BoolValue(true)
 			} else {
-				item.SummaryOnly = types.BoolValue(false)
+				item.SummaryOnly = types.BoolNull()
 			}
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
@@ -3873,157 +3873,157 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res gjson.R
 			if cValue := v.Get("match.internal"); cValue.Exists() {
 				item.MatchInternal = types.BoolValue(true)
 			} else {
-				item.MatchInternal = types.BoolValue(false)
+				item.MatchInternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external"); cValue.Exists() {
 				item.MatchExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternal = types.BoolValue(false)
+				item.MatchExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.nssa-external"); cValue.Exists() {
 				item.MatchNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternal = types.BoolValue(false)
+				item.MatchNssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external"); cValue.Exists() {
 				item.MatchInternalExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal = types.BoolValue(false)
+				item.MatchInternalExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.one"); cValue.Exists() {
 				item.MatchInternalExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal1 = types.BoolValue(false)
+				item.MatchInternalExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external"); cValue.Exists() {
 				item.MatchInternalExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal1NssaExternal = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external.one"); cValue.Exists() {
 				item.MatchInternalExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal1NssaExternal1 = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external.two"); cValue.Exists() {
 				item.MatchInternalExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal1NssaExternal2 = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.two"); cValue.Exists() {
 				item.MatchInternalExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal2 = types.BoolValue(false)
+				item.MatchInternalExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external"); cValue.Exists() {
 				item.MatchInternalExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal2NssaExternal = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external.one"); cValue.Exists() {
 				item.MatchInternalExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal2NssaExternal1 = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external.two"); cValue.Exists() {
 				item.MatchInternalExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal2NssaExternal2 = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.nssa-external"); cValue.Exists() {
 				item.MatchInternalExternalNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalNssaExternal = types.BoolValue(false)
+				item.MatchInternalExternalNssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.nssa-external.one"); cValue.Exists() {
 				item.MatchInternalExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalNssaExternal1 = types.BoolValue(false)
+				item.MatchInternalExternalNssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.nssa-external.two"); cValue.Exists() {
 				item.MatchInternalExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalNssaExternal2 = types.BoolValue(false)
+				item.MatchInternalExternalNssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.nssa-external"); cValue.Exists() {
 				item.MatchInternalNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalNssaExternal = types.BoolValue(false)
+				item.MatchInternalNssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.nssa-external.one"); cValue.Exists() {
 				item.MatchInternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalNssaExternal1 = types.BoolValue(false)
+				item.MatchInternalNssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.nssa-external.two"); cValue.Exists() {
 				item.MatchInternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalNssaExternal2 = types.BoolValue(false)
+				item.MatchInternalNssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.one"); cValue.Exists() {
 				item.MatchExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternal1 = types.BoolValue(false)
+				item.MatchExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.one.nssa-external"); cValue.Exists() {
 				item.MatchExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternal1NssaExternal = types.BoolValue(false)
+				item.MatchExternal1NssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.one.nssa-external.one"); cValue.Exists() {
 				item.MatchExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternal1NssaExternal1 = types.BoolValue(false)
+				item.MatchExternal1NssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.one.nssa-external.two"); cValue.Exists() {
 				item.MatchExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternal1NssaExternal2 = types.BoolValue(false)
+				item.MatchExternal1NssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.two"); cValue.Exists() {
 				item.MatchExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternal2 = types.BoolValue(false)
+				item.MatchExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.two.nssa-external"); cValue.Exists() {
 				item.MatchExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternal2NssaExternal = types.BoolValue(false)
+				item.MatchExternal2NssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.two.nssa-external.one"); cValue.Exists() {
 				item.MatchExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternal2NssaExternal1 = types.BoolValue(false)
+				item.MatchExternal2NssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.two.nssa-external.two"); cValue.Exists() {
 				item.MatchExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternal2NssaExternal2 = types.BoolValue(false)
+				item.MatchExternal2NssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.nssa-external"); cValue.Exists() {
 				item.MatchExternalNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternalNssaExternal = types.BoolValue(false)
+				item.MatchExternalNssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.nssa-external.one"); cValue.Exists() {
 				item.MatchExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalNssaExternal1 = types.BoolValue(false)
+				item.MatchExternalNssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.nssa-external.two"); cValue.Exists() {
 				item.MatchExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalNssaExternal2 = types.BoolValue(false)
+				item.MatchExternalNssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.nssa-external.one"); cValue.Exists() {
 				item.MatchNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternal1 = types.BoolValue(false)
+				item.MatchNssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.nssa-external.two"); cValue.Exists() {
 				item.MatchNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternal2 = types.BoolValue(false)
+				item.MatchNssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -4031,7 +4031,7 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res gjson.R
 			if cValue := v.Get("multipath"); cValue.Exists() {
 				item.Multipath = types.BoolValue(true)
 			} else {
-				item.Multipath = types.BoolValue(false)
+				item.Multipath = types.BoolNull()
 			}
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
@@ -4050,157 +4050,157 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res gjson.R
 			if cValue := v.Get("match.internal"); cValue.Exists() {
 				item.MatchInternal = types.BoolValue(true)
 			} else {
-				item.MatchInternal = types.BoolValue(false)
+				item.MatchInternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external"); cValue.Exists() {
 				item.MatchExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternal = types.BoolValue(false)
+				item.MatchExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.nssa-external"); cValue.Exists() {
 				item.MatchNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternal = types.BoolValue(false)
+				item.MatchNssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external"); cValue.Exists() {
 				item.MatchInternalExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal = types.BoolValue(false)
+				item.MatchInternalExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.one"); cValue.Exists() {
 				item.MatchInternalExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal1 = types.BoolValue(false)
+				item.MatchInternalExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external"); cValue.Exists() {
 				item.MatchInternalExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal1NssaExternal = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external.one"); cValue.Exists() {
 				item.MatchInternalExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal1NssaExternal1 = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external.two"); cValue.Exists() {
 				item.MatchInternalExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal1NssaExternal2 = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.two"); cValue.Exists() {
 				item.MatchInternalExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal2 = types.BoolValue(false)
+				item.MatchInternalExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external"); cValue.Exists() {
 				item.MatchInternalExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal2NssaExternal = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external.one"); cValue.Exists() {
 				item.MatchInternalExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal2NssaExternal1 = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external.two"); cValue.Exists() {
 				item.MatchInternalExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal2NssaExternal2 = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.nssa-external"); cValue.Exists() {
 				item.MatchInternalExternalNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalNssaExternal = types.BoolValue(false)
+				item.MatchInternalExternalNssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.nssa-external.one"); cValue.Exists() {
 				item.MatchInternalExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalNssaExternal1 = types.BoolValue(false)
+				item.MatchInternalExternalNssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external.nssa-external.two"); cValue.Exists() {
 				item.MatchInternalExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalNssaExternal2 = types.BoolValue(false)
+				item.MatchInternalExternalNssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.nssa-external"); cValue.Exists() {
 				item.MatchInternalNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalNssaExternal = types.BoolValue(false)
+				item.MatchInternalNssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.nssa-external.one"); cValue.Exists() {
 				item.MatchInternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalNssaExternal1 = types.BoolValue(false)
+				item.MatchInternalNssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.nssa-external.two"); cValue.Exists() {
 				item.MatchInternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalNssaExternal2 = types.BoolValue(false)
+				item.MatchInternalNssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.one"); cValue.Exists() {
 				item.MatchExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternal1 = types.BoolValue(false)
+				item.MatchExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.one.nssa-external"); cValue.Exists() {
 				item.MatchExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternal1NssaExternal = types.BoolValue(false)
+				item.MatchExternal1NssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.one.nssa-external.one"); cValue.Exists() {
 				item.MatchExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternal1NssaExternal1 = types.BoolValue(false)
+				item.MatchExternal1NssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.one.nssa-external.two"); cValue.Exists() {
 				item.MatchExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternal1NssaExternal2 = types.BoolValue(false)
+				item.MatchExternal1NssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.two"); cValue.Exists() {
 				item.MatchExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternal2 = types.BoolValue(false)
+				item.MatchExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.two.nssa-external"); cValue.Exists() {
 				item.MatchExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternal2NssaExternal = types.BoolValue(false)
+				item.MatchExternal2NssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.two.nssa-external.one"); cValue.Exists() {
 				item.MatchExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternal2NssaExternal1 = types.BoolValue(false)
+				item.MatchExternal2NssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.two.nssa-external.two"); cValue.Exists() {
 				item.MatchExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternal2NssaExternal2 = types.BoolValue(false)
+				item.MatchExternal2NssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.nssa-external"); cValue.Exists() {
 				item.MatchExternalNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternalNssaExternal = types.BoolValue(false)
+				item.MatchExternalNssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.nssa-external.one"); cValue.Exists() {
 				item.MatchExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalNssaExternal1 = types.BoolValue(false)
+				item.MatchExternalNssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.nssa-external.two"); cValue.Exists() {
 				item.MatchExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalNssaExternal2 = types.BoolValue(false)
+				item.MatchExternalNssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("match.nssa-external.one"); cValue.Exists() {
 				item.MatchNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternal1 = types.BoolValue(false)
+				item.MatchNssaExternal1 = types.BoolNull()
 			}
 			if cValue := v.Get("match.nssa-external.two"); cValue.Exists() {
 				item.MatchNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternal2 = types.BoolValue(false)
+				item.MatchNssaExternal2 = types.BoolNull()
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -4208,7 +4208,7 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res gjson.R
 			if cValue := v.Get("multipath"); cValue.Exists() {
 				item.Multipath = types.BoolValue(true)
 			} else {
-				item.Multipath = types.BoolValue(false)
+				item.Multipath = types.BoolNull()
 			}
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
@@ -4227,17 +4227,17 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res gjson.R
 			if cValue := v.Get("match.internal"); cValue.Exists() {
 				item.MatchInternal = types.BoolValue(true)
 			} else {
-				item.MatchInternal = types.BoolValue(false)
+				item.MatchInternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.internal.external"); cValue.Exists() {
 				item.MatchInternalExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternal = types.BoolValue(false)
+				item.MatchInternalExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external"); cValue.Exists() {
 				item.MatchExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternal = types.BoolValue(false)
+				item.MatchExternal = types.BoolNull()
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -4245,7 +4245,7 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res gjson.R
 			if cValue := v.Get("multipath"); cValue.Exists() {
 				item.Multipath = types.BoolValue(true)
 			} else {
-				item.Multipath = types.BoolValue(false)
+				item.Multipath = types.BoolNull()
 			}
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
@@ -4264,37 +4264,37 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res gjson.R
 			if cValue := v.Get("level.one"); cValue.Exists() {
 				item.Level1 = types.BoolValue(true)
 			} else {
-				item.Level1 = types.BoolValue(false)
+				item.Level1 = types.BoolNull()
 			}
 			if cValue := v.Get("level.one.level.two"); cValue.Exists() {
 				item.Level1Level2 = types.BoolValue(true)
 			} else {
-				item.Level1Level2 = types.BoolValue(false)
+				item.Level1Level2 = types.BoolNull()
 			}
 			if cValue := v.Get("level.one.level.two.level.one-inter-area"); cValue.Exists() {
 				item.Level1Level2Level1InterArea = types.BoolValue(true)
 			} else {
-				item.Level1Level2Level1InterArea = types.BoolValue(false)
+				item.Level1Level2Level1InterArea = types.BoolNull()
 			}
 			if cValue := v.Get("level.one.level.one-inter-area"); cValue.Exists() {
 				item.Level1Level1InterArea = types.BoolValue(true)
 			} else {
-				item.Level1Level1InterArea = types.BoolValue(false)
+				item.Level1Level1InterArea = types.BoolNull()
 			}
 			if cValue := v.Get("level.two"); cValue.Exists() {
 				item.Level2 = types.BoolValue(true)
 			} else {
-				item.Level2 = types.BoolValue(false)
+				item.Level2 = types.BoolNull()
 			}
 			if cValue := v.Get("level.two.level.one-inter-area"); cValue.Exists() {
 				item.Level2Level1InterArea = types.BoolValue(true)
 			} else {
-				item.Level2Level1InterArea = types.BoolValue(false)
+				item.Level2Level1InterArea = types.BoolNull()
 			}
 			if cValue := v.Get("level.one-inter-area"); cValue.Exists() {
 				item.Level1InterArea = types.BoolValue(true)
 			} else {
-				item.Level1InterArea = types.BoolValue(false)
+				item.Level1InterArea = types.BoolNull()
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -4302,7 +4302,7 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res gjson.R
 			if cValue := v.Get("multipath"); cValue.Exists() {
 				item.Multipath = types.BoolValue(true)
 			} else {
-				item.Multipath = types.BoolValue(false)
+				item.Multipath = types.BoolNull()
 			}
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())

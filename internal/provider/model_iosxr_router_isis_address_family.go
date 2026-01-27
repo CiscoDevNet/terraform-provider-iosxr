@@ -3523,78 +3523,72 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 		} else {
 			data.SegmentRoutingSrv6Locators[i].Metric = types.Int64Null()
 		}
-		for ci := range data.SegmentRoutingSrv6Locators[i].MetricLevels {
-			keys := [...]string{"level-number"}
-			keyValues := [...]string{strconv.FormatInt(data.SegmentRoutingSrv6Locators[i].MetricLevels[ci].LevelNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("metric-levels.metric-level"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.SegmentRoutingSrv6Locators[i].MetricLevels
+			data.SegmentRoutingSrv6Locators[i].MetricLevels = make([]RouterISISAddressFamilySegmentRoutingSrv6LocatorsMetricLevels, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterISISAddressFamilySegmentRoutingSrv6LocatorsMetricLevels{}
+				if cValue := cr.Get("level-number"); cValue.Exists() {
+					citem.LevelNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("metric"); cValue.Exists() {
+					citem.Metric = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("metric-levels.metric-level").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.LevelNumber.Equal(citem.LevelNumber) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("level-number"); value.Exists() {
-				data.SegmentRoutingSrv6Locators[i].MetricLevels[ci].LevelNumber = types.Int64Value(value.Int())
-			} else if data.SegmentRoutingSrv6Locators[i].MetricLevels[ci].LevelNumber.IsNull() {
-				data.SegmentRoutingSrv6Locators[i].MetricLevels[ci].LevelNumber = types.Int64Null()
-			}
-			if value := cr.Get("metric"); value.Exists() {
-				data.SegmentRoutingSrv6Locators[i].MetricLevels[ci].Metric = types.Int64Value(value.Int())
-			} else if data.SegmentRoutingSrv6Locators[i].MetricLevels[ci].Metric.IsNull() {
-				data.SegmentRoutingSrv6Locators[i].MetricLevels[ci].Metric = types.Int64Null()
-			}
+				}
+
+				data.SegmentRoutingSrv6Locators[i].MetricLevels = append(data.SegmentRoutingSrv6Locators[i].MetricLevels, citem)
+				return true
+			})
 		}
 		if value := r.Get("tag"); value.Exists() && !data.SegmentRoutingSrv6Locators[i].Tag.IsNull() {
 			data.SegmentRoutingSrv6Locators[i].Tag = types.Int64Value(value.Int())
 		} else {
 			data.SegmentRoutingSrv6Locators[i].Tag = types.Int64Null()
 		}
-		for ci := range data.SegmentRoutingSrv6Locators[i].TagLevels {
-			keys := [...]string{"level-number"}
-			keyValues := [...]string{strconv.FormatInt(data.SegmentRoutingSrv6Locators[i].TagLevels[ci].LevelNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("tag-levels.tag-level"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.SegmentRoutingSrv6Locators[i].TagLevels
+			data.SegmentRoutingSrv6Locators[i].TagLevels = make([]RouterISISAddressFamilySegmentRoutingSrv6LocatorsTagLevels, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := RouterISISAddressFamilySegmentRoutingSrv6LocatorsTagLevels{}
+				if cValue := cr.Get("level-number"); cValue.Exists() {
+					citem.LevelNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("tag"); cValue.Exists() {
+					citem.Tag = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("tag-levels.tag-level").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.LevelNumber.Equal(citem.LevelNumber) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("level-number"); value.Exists() {
-				data.SegmentRoutingSrv6Locators[i].TagLevels[ci].LevelNumber = types.Int64Value(value.Int())
-			} else if data.SegmentRoutingSrv6Locators[i].TagLevels[ci].LevelNumber.IsNull() {
-				data.SegmentRoutingSrv6Locators[i].TagLevels[ci].LevelNumber = types.Int64Null()
-			}
-			if value := cr.Get("tag"); value.Exists() {
-				data.SegmentRoutingSrv6Locators[i].TagLevels[ci].Tag = types.Int64Value(value.Int())
-			} else if data.SegmentRoutingSrv6Locators[i].TagLevels[ci].Tag.IsNull() {
-				data.SegmentRoutingSrv6Locators[i].TagLevels[ci].Tag = types.Int64Null()
-			}
+				}
+
+				data.SegmentRoutingSrv6Locators[i].TagLevels = append(data.SegmentRoutingSrv6Locators[i].TagLevels, citem)
+				return true
+			})
 		}
 	}
 	if value := gjson.GetBytes(res, "partition-detect"); value.Exists() {
@@ -3976,7 +3970,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("down-flag-clear"); cValue.Exists() {
 				item.DownFlagClear = types.BoolValue(true)
 			} else {
-				item.DownFlagClear = types.BoolValue(false)
+				item.DownFlagClear = types.BoolNull()
 			}
 			data.RedistributeIsis = append(data.RedistributeIsis, item)
 			return true
@@ -4015,12 +4009,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("match.internal"); cValue.Exists() {
 				item.MatchInternal = types.BoolValue(true)
 			} else {
-				item.MatchInternal = types.BoolValue(false)
+				item.MatchInternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external"); cValue.Exists() {
 				item.MatchExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternal = types.BoolValue(false)
+				item.MatchExternal = types.BoolNull()
 			}
 			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
 				item.Level = types.StringValue(cValue.String())
@@ -4048,12 +4042,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("match.internal"); cValue.Exists() {
 				item.MatchInternal = types.BoolValue(true)
 			} else {
-				item.MatchInternal = types.BoolValue(false)
+				item.MatchInternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external"); cValue.Exists() {
 				item.MatchExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternal = types.BoolValue(false)
+				item.MatchExternal = types.BoolNull()
 			}
 			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
 				item.Level = types.StringValue(cValue.String())
@@ -4128,12 +4122,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("explicit"); cValue.Exists() {
 				item.Explicit = types.BoolValue(true)
 			} else {
-				item.Explicit = types.BoolValue(false)
+				item.Explicit = types.BoolNull()
 			}
 			if cValue := v.Get("adv-unreachable"); cValue.Exists() {
 				item.AdvUnreachable = types.BoolValue(true)
 			} else {
-				item.AdvUnreachable = types.BoolValue(false)
+				item.AdvUnreachable = types.BoolNull()
 			}
 			if cValue := v.Get("adv-unreachable.unreachable-component-tag.unreachable-component-tag-number"); cValue.Exists() {
 				item.UnreachableTag = types.Int64Value(cValue.Int())
@@ -4141,12 +4135,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("adv-unreachable.unreachable-component-tag.exclude"); cValue.Exists() {
 				item.UnreachableTagExcludePrefixes = types.BoolValue(true)
 			} else {
-				item.UnreachableTagExcludePrefixes = types.BoolValue(false)
+				item.UnreachableTagExcludePrefixes = types.BoolNull()
 			}
 			if cValue := v.Get("partition-repair"); cValue.Exists() {
 				item.PartitionRepair = types.BoolValue(true)
 			} else {
-				item.PartitionRepair = types.BoolValue(false)
+				item.PartitionRepair = types.BoolNull()
 			}
 			data.SummaryPrefixes = append(data.SummaryPrefixes, item)
 			return true
@@ -4204,27 +4198,27 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("narrow"); cValue.Exists() {
 				item.Narrow = types.BoolValue(true)
 			} else {
-				item.Narrow = types.BoolValue(false)
+				item.Narrow = types.BoolNull()
 			}
 			if cValue := v.Get("narrow.transition"); cValue.Exists() {
 				item.NarrowTransition = types.BoolValue(true)
 			} else {
-				item.NarrowTransition = types.BoolValue(false)
+				item.NarrowTransition = types.BoolNull()
 			}
 			if cValue := v.Get("wide"); cValue.Exists() {
 				item.Wide = types.BoolValue(true)
 			} else {
-				item.Wide = types.BoolValue(false)
+				item.Wide = types.BoolNull()
 			}
 			if cValue := v.Get("wide.transition"); cValue.Exists() {
 				item.WideTransition = types.BoolValue(true)
 			} else {
-				item.WideTransition = types.BoolValue(false)
+				item.WideTransition = types.BoolNull()
 			}
 			if cValue := v.Get("transition"); cValue.Exists() {
 				item.Transition = types.BoolValue(true)
 			} else {
-				item.Transition = types.BoolValue(false)
+				item.Transition = types.BoolNull()
 			}
 			data.MetricStyleLevels = append(data.MetricStyleLevels, item)
 			return true
@@ -4278,7 +4272,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("ietf"); cValue.Exists() {
 				item.Ietf = types.BoolValue(true)
 			} else {
-				item.Ietf = types.BoolValue(false)
+				item.Ietf = types.BoolNull()
 			}
 			if cValue := v.Get("ietf.initial-wait"); cValue.Exists() {
 				item.IetfInitialWait = types.Int64Value(cValue.Int())
@@ -4634,12 +4628,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
 				item.IndexPhpDisable = types.BoolValue(true)
 			} else {
-				item.IndexPhpDisable = types.BoolValue(false)
+				item.IndexPhpDisable = types.BoolNull()
 			}
 			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
 				item.IndexExplicitNull = types.BoolValue(true)
 			} else {
-				item.IndexExplicitNull = types.BoolValue(false)
+				item.IndexExplicitNull = types.BoolNull()
 			}
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
@@ -4650,12 +4644,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
 				item.AbsolutePhpDisable = types.BoolValue(true)
 			} else {
-				item.AbsolutePhpDisable = types.BoolValue(false)
+				item.AbsolutePhpDisable = types.BoolNull()
 			}
 			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
 				item.AbsoluteExplicitNull = types.BoolValue(true)
 			} else {
-				item.AbsoluteExplicitNull = types.BoolValue(false)
+				item.AbsoluteExplicitNull = types.BoolNull()
 			}
 			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses = append(data.SegmentRoutingMplsConnectedPrefixSidMapAddresses, item)
 			return true
@@ -4683,12 +4677,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
 				item.IndexPhpDisable = types.BoolValue(true)
 			} else {
-				item.IndexPhpDisable = types.BoolValue(false)
+				item.IndexPhpDisable = types.BoolNull()
 			}
 			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
 				item.IndexExplicitNull = types.BoolValue(true)
 			} else {
-				item.IndexExplicitNull = types.BoolValue(false)
+				item.IndexExplicitNull = types.BoolNull()
 			}
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
@@ -4699,12 +4693,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
 				item.AbsolutePhpDisable = types.BoolValue(true)
 			} else {
-				item.AbsolutePhpDisable = types.BoolValue(false)
+				item.AbsolutePhpDisable = types.BoolNull()
 			}
 			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
 				item.AbsoluteExplicitNull = types.BoolValue(true)
 			} else {
-				item.AbsoluteExplicitNull = types.BoolValue(false)
+				item.AbsoluteExplicitNull = types.BoolNull()
 			}
 			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses = append(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses, item)
 			return true
@@ -4729,12 +4723,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
 				item.IndexPhpDisable = types.BoolValue(true)
 			} else {
-				item.IndexPhpDisable = types.BoolValue(false)
+				item.IndexPhpDisable = types.BoolNull()
 			}
 			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
 				item.IndexExplicitNull = types.BoolValue(true)
 			} else {
-				item.IndexExplicitNull = types.BoolValue(false)
+				item.IndexExplicitNull = types.BoolNull()
 			}
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
@@ -4745,12 +4739,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
 				item.AbsolutePhpDisable = types.BoolValue(true)
 			} else {
-				item.AbsolutePhpDisable = types.BoolValue(false)
+				item.AbsolutePhpDisable = types.BoolNull()
 			}
 			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
 				item.AbsoluteExplicitNull = types.BoolValue(true)
 			} else {
-				item.AbsoluteExplicitNull = types.BoolValue(false)
+				item.AbsoluteExplicitNull = types.BoolNull()
 			}
 			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses = append(data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses, item)
 			return true
@@ -4819,12 +4813,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("ipv4"); cValue.Exists() {
 				item.Ipv4 = types.BoolValue(true)
 			} else {
-				item.Ipv4 = types.BoolValue(false)
+				item.Ipv4 = types.BoolNull()
 			}
 			if cValue := v.Get("ipv6"); cValue.Exists() {
 				item.Ipv6 = types.BoolValue(true)
 			} else {
-				item.Ipv6 = types.BoolValue(false)
+				item.Ipv6 = types.BoolNull()
 			}
 			data.PartitionDetectTracks = append(data.PartitionDetectTracks, item)
 			return true
@@ -9485,7 +9479,9 @@ func (data RouterISISAddressFamily) toBodyXML(ctx context.Context) string {
 			if len(item.MetricLevels) > 0 {
 				for _, citem := range item.MetricLevels {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.LevelNumber.IsNull() && !citem.LevelNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "level-number", strconv.FormatInt(citem.LevelNumber.ValueInt64(), 10))
+					}
 					if !citem.Metric.IsNull() && !citem.Metric.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "metric", strconv.FormatInt(citem.Metric.ValueInt64(), 10))
 					}
@@ -9498,7 +9494,9 @@ func (data RouterISISAddressFamily) toBodyXML(ctx context.Context) string {
 			if len(item.TagLevels) > 0 {
 				for _, citem := range item.TagLevels {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.LevelNumber.IsNull() && !citem.LevelNumber.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "level-number", strconv.FormatInt(citem.LevelNumber.ValueInt64(), 10))
+					}
 					if !citem.Tag.IsNull() && !citem.Tag.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "tag", strconv.FormatInt(citem.Tag.ValueInt64(), 10))
 					}
@@ -11391,78 +11389,78 @@ func (data *RouterISISAddressFamily) updateFromBodyXML(ctx context.Context, res 
 		} else if data.SegmentRoutingSrv6Locators[i].Metric.IsNull() {
 			data.SegmentRoutingSrv6Locators[i].Metric = types.Int64Null()
 		}
-		for ci := range data.SegmentRoutingSrv6Locators[i].MetricLevels {
-			keys := [...]string{"level-number"}
-			keyValues := [...]string{strconv.FormatInt(data.SegmentRoutingSrv6Locators[i].MetricLevels[ci].LevelNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "metric-levels/metric-level"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.SegmentRoutingSrv6Locators[i].MetricLevels
+			data.SegmentRoutingSrv6Locators[i].MetricLevels = make([]RouterISISAddressFamilySegmentRoutingSrv6LocatorsMetricLevels, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "metric-levels/metric-level").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterISISAddressFamilySegmentRoutingSrv6LocatorsMetricLevels{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "level-number"); cValue.Exists() {
+					citem.LevelNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "metric"); cValue.Exists() {
+					citem.Metric = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.LevelNumber.Equal(citem.LevelNumber) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "level-number"); value.Exists() {
-				data.SegmentRoutingSrv6Locators[i].MetricLevels[ci].LevelNumber = types.Int64Value(value.Int())
-			} else {
-				data.SegmentRoutingSrv6Locators[i].MetricLevels[ci].LevelNumber = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "metric"); value.Exists() {
-				data.SegmentRoutingSrv6Locators[i].MetricLevels[ci].Metric = types.Int64Value(value.Int())
-			} else {
-				data.SegmentRoutingSrv6Locators[i].MetricLevels[ci].Metric = types.Int64Null()
-			}
+				}
+
+				data.SegmentRoutingSrv6Locators[i].MetricLevels = append(data.SegmentRoutingSrv6Locators[i].MetricLevels, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "tag"); value.Exists() {
 			data.SegmentRoutingSrv6Locators[i].Tag = types.Int64Value(value.Int())
 		} else if data.SegmentRoutingSrv6Locators[i].Tag.IsNull() {
 			data.SegmentRoutingSrv6Locators[i].Tag = types.Int64Null()
 		}
-		for ci := range data.SegmentRoutingSrv6Locators[i].TagLevels {
-			keys := [...]string{"level-number"}
-			keyValues := [...]string{strconv.FormatInt(data.SegmentRoutingSrv6Locators[i].TagLevels[ci].LevelNumber.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "tag-levels/tag-level"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.SegmentRoutingSrv6Locators[i].TagLevels
+			data.SegmentRoutingSrv6Locators[i].TagLevels = make([]RouterISISAddressFamilySegmentRoutingSrv6LocatorsTagLevels, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "tag-levels/tag-level").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := RouterISISAddressFamilySegmentRoutingSrv6LocatorsTagLevels{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "level-number"); cValue.Exists() {
+					citem.LevelNumber = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "tag"); cValue.Exists() {
+					citem.Tag = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.LevelNumber.Equal(citem.LevelNumber) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "level-number"); value.Exists() {
-				data.SegmentRoutingSrv6Locators[i].TagLevels[ci].LevelNumber = types.Int64Value(value.Int())
-			} else {
-				data.SegmentRoutingSrv6Locators[i].TagLevels[ci].LevelNumber = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "tag"); value.Exists() {
-				data.SegmentRoutingSrv6Locators[i].TagLevels[ci].Tag = types.Int64Value(value.Int())
-			} else {
-				data.SegmentRoutingSrv6Locators[i].TagLevels[ci].Tag = types.Int64Null()
-			}
+				}
+
+				data.SegmentRoutingSrv6Locators[i].TagLevels = append(data.SegmentRoutingSrv6Locators[i].TagLevels, citem)
+				return true
+			})
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/partition-detect"); value.Exists() {

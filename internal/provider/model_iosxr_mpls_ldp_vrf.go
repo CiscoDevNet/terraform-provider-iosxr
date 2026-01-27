@@ -1771,7 +1771,7 @@ func (data *MPLSLDPVRF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("password.disable"); cValue.Exists() {
 				item.PasswordDisable = types.BoolValue(true)
 			} else {
-				item.PasswordDisable = types.BoolValue(false)
+				item.PasswordDisable = types.BoolNull()
 			}
 			data.Neighbors = append(data.Neighbors, item)
 			return true
@@ -1963,12 +1963,12 @@ func (data *MPLSLDPVRF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv4"); cValue.Exists() {
 				item.AddressFamilyIpv4 = types.BoolValue(true)
 			} else {
-				item.AddressFamilyIpv4 = types.BoolValue(false)
+				item.AddressFamilyIpv4 = types.BoolNull()
 			}
 			if cValue := v.Get("address-family.ipv4.discovery.transport-address.interface"); cValue.Exists() {
 				item.AddressFamilyIpv4DiscoveryTransportAddressInterface = types.BoolValue(true)
 			} else {
-				item.AddressFamilyIpv4DiscoveryTransportAddressInterface = types.BoolValue(false)
+				item.AddressFamilyIpv4DiscoveryTransportAddressInterface = types.BoolNull()
 			}
 			if cValue := v.Get("address-family.ipv4.discovery.transport-address.ip-address"); cValue.Exists() {
 				item.AddressFamilyIpv4DiscoveryTransportAddressIp = types.StringValue(cValue.String())
@@ -1976,12 +1976,12 @@ func (data *MPLSLDPVRF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv6"); cValue.Exists() {
 				item.AddressFamilyIpv6 = types.BoolValue(true)
 			} else {
-				item.AddressFamilyIpv6 = types.BoolValue(false)
+				item.AddressFamilyIpv6 = types.BoolNull()
 			}
 			if cValue := v.Get("address-family.ipv6.discovery.transport-address.interface"); cValue.Exists() {
 				item.AddressFamilyIpv6DiscoveryTransportAddressInterface = types.BoolValue(true)
 			} else {
-				item.AddressFamilyIpv6DiscoveryTransportAddressInterface = types.BoolValue(false)
+				item.AddressFamilyIpv6DiscoveryTransportAddressInterface = types.BoolNull()
 			}
 			if cValue := v.Get("address-family.ipv6.discovery.transport-address.ip-address"); cValue.Exists() {
 				item.AddressFamilyIpv6DiscoveryTransportAddressIp = types.StringValue(cValue.String())

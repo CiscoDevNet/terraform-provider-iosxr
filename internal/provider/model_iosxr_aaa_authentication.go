@@ -886,22 +886,22 @@ func (data *AAAAuthentication) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolValue(false)
+				item.A1Local = types.BoolNull()
 			}
 			if cValue := v.Get("line"); cValue.Exists() {
 				item.A1Line = types.BoolValue(true)
 			} else {
-				item.A1Line = types.BoolValue(false)
+				item.A1Line = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolValue(false)
+				item.A1Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolValue(false)
+				item.A1Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -909,22 +909,22 @@ func (data *AAAAuthentication) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolValue(false)
+				item.A2Local = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.line"); cValue.Exists() {
 				item.A2Line = types.BoolValue(true)
 			} else {
-				item.A2Line = types.BoolValue(false)
+				item.A2Line = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolValue(false)
+				item.A2Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolValue(false)
+				item.A2Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -932,22 +932,22 @@ func (data *AAAAuthentication) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.local"); cValue.Exists() {
 				item.A3Local = types.BoolValue(true)
 			} else {
-				item.A3Local = types.BoolValue(false)
+				item.A3Local = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.line"); cValue.Exists() {
 				item.A3Line = types.BoolValue(true)
 			} else {
-				item.A3Line = types.BoolValue(false)
+				item.A3Line = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolValue(false)
+				item.A3Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolValue(false)
+				item.A3Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -955,22 +955,22 @@ func (data *AAAAuthentication) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.local"); cValue.Exists() {
 				item.A4Local = types.BoolValue(true)
 			} else {
-				item.A4Local = types.BoolValue(false)
+				item.A4Local = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.line"); cValue.Exists() {
 				item.A4Line = types.BoolValue(true)
 			} else {
-				item.A4Line = types.BoolValue(false)
+				item.A4Line = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolValue(false)
+				item.A4Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolValue(false)
+				item.A4Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())

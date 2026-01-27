@@ -925,44 +925,39 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.SegmentListsSrv6ExplicitSegments[i].PathName = types.StringNull()
 		}
-		for ci := range data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments {
-			keys := [...]string{"index"}
-			keyValues := [...]string{strconv.FormatInt(data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].Index.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("segment-list-srv6.srv6-segments.srv6-segment"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments
+			data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments = make([]SegmentRoutingTESegmentListsSrv6ExplicitSegmentsSrv6Segments, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := SegmentRoutingTESegmentListsSrv6ExplicitSegmentsSrv6Segments{}
+				if cValue := cr.Get("index"); cValue.Exists() {
+					citem.Index = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("hop-type"); cValue.Exists() {
+					citem.HopType = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("segment-list-srv6.srv6-segments.srv6-segment").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Index.Equal(citem.Index) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("index"); value.Exists() {
-				data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].Index = types.Int64Value(value.Int())
-			} else if data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].Index.IsNull() {
-				data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].Index = types.Int64Null()
-			}
-			if value := cr.Get("address"); value.Exists() && !data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].Address.IsNull() {
-				data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].Address = types.StringValue(value.String())
-			} else {
-				data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("hop-type"); value.Exists() && !data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].HopType.IsNull() {
-				data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].HopType = types.StringValue(value.String())
-			} else {
-				data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].HopType = types.StringNull()
-			}
+				}
+
+				data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments = append(data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments, citem)
+				return true
+			})
 		}
 		if value := r.Get("segment-list-srv6.segment-list-srv6-topology-check"); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -1011,74 +1006,57 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.SegmentListsSrMplsExplicitSegments[i].PathName = types.StringNull()
 		}
-		for ci := range data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments {
-			keys := [...]string{"segment-index"}
-			keyValues := [...]string{strconv.FormatInt(data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Index.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("segments.segment"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments
+			data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments = make([]SegmentRoutingTESegmentListsSrMplsExplicitSegmentsSrMplsSegments, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := SegmentRoutingTESegmentListsSrMplsExplicitSegmentsSrMplsSegments{}
+				if cValue := cr.Get("segment-index"); cValue.Exists() {
+					citem.Index = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("segment-type"); cValue.Exists() {
+					citem.Type = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("mpls-label"); cValue.Exists() {
+					citem.MplsLabel = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("adjacency-address"); cValue.Exists() {
+					citem.AdjacencyAddress = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("address-type"); cValue.Exists() {
+					citem.AddressType = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("interface-identifier"); cValue.Exists() {
+					citem.InterfaceIdentifier = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("prefix-length"); cValue.Exists() {
+					citem.PrefixLength = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("validate-flag"); cValue.Exists() {
+					citem.ValidateFlag = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("segments.segment").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Index.Equal(citem.Index) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("segment-index"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Index = types.Int64Value(value.Int())
-			} else if data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Index.IsNull() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Index = types.Int64Null()
-			}
-			if value := cr.Get("segment-type"); value.Exists() && !data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Type.IsNull() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Type = types.StringValue(value.String())
-			} else {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Type = types.StringNull()
-			}
-			if value := cr.Get("address"); value.Exists() && !data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Address.IsNull() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Address = types.StringValue(value.String())
-			} else {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Address = types.StringNull()
-			}
-			if value := cr.Get("mpls-label"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].MplsLabel = types.Int64Value(value.Int())
-			} else if data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].MplsLabel.IsNull() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].MplsLabel = types.Int64Null()
-			}
-			if value := cr.Get("adjacency-address"); value.Exists() && !data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].AdjacencyAddress.IsNull() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].AdjacencyAddress = types.StringValue(value.String())
-			} else {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].AdjacencyAddress = types.StringNull()
-			}
-			if value := cr.Get("address-type"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].AddressType = types.Int64Value(value.Int())
-			} else if data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].AddressType.IsNull() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].AddressType = types.Int64Null()
-			}
-			if value := cr.Get("interface-identifier"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].InterfaceIdentifier = types.Int64Value(value.Int())
-			} else if data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].InterfaceIdentifier.IsNull() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].InterfaceIdentifier = types.Int64Null()
-			}
-			if value := cr.Get("prefix-length"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].PrefixLength = types.Int64Value(value.Int())
-			} else if data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].PrefixLength.IsNull() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].PrefixLength = types.Int64Null()
-			}
-			if value := cr.Get("validate-flag"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].ValidateFlag = types.Int64Value(value.Int())
-			} else if data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].ValidateFlag.IsNull() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].ValidateFlag = types.Int64Null()
-			}
+				}
+
+				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments = append(data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments, citem)
+				return true
+			})
 		}
 	}
 	if value := gjson.GetBytes(res, "logging.pcep-peer-status"); value.Exists() {
@@ -1174,44 +1152,39 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.ResourceLists[i].PathName = types.StringNull()
 		}
-		for ci := range data.ResourceLists[i].Resources {
-			keys := [...]string{"resource-index"}
-			keyValues := [...]string{strconv.FormatInt(data.ResourceLists[i].Resources[ci].Index.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get("resources.resource"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.ResourceLists[i].Resources
+			data.ResourceLists[i].Resources = make([]SegmentRoutingTEResourceListsResources, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := SegmentRoutingTEResourceListsResources{}
+				if cValue := cr.Get("resource-index"); cValue.Exists() {
+					citem.Index = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get("resource-type"); cValue.Exists() {
+					citem.Type = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get("address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("resources.resource").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Index.Equal(citem.Index) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("resource-index"); value.Exists() {
-				data.ResourceLists[i].Resources[ci].Index = types.Int64Value(value.Int())
-			} else if data.ResourceLists[i].Resources[ci].Index.IsNull() {
-				data.ResourceLists[i].Resources[ci].Index = types.Int64Null()
-			}
-			if value := cr.Get("resource-type"); value.Exists() && !data.ResourceLists[i].Resources[ci].Type.IsNull() {
-				data.ResourceLists[i].Resources[ci].Type = types.StringValue(value.String())
-			} else {
-				data.ResourceLists[i].Resources[ci].Type = types.StringNull()
-			}
-			if value := cr.Get("address"); value.Exists() && !data.ResourceLists[i].Resources[ci].Address.IsNull() {
-				data.ResourceLists[i].Resources[ci].Address = types.StringValue(value.String())
-			} else {
-				data.ResourceLists[i].Resources[ci].Address = types.StringNull()
-			}
+				}
+
+				data.ResourceLists[i].Resources = append(data.ResourceLists[i].Resources, citem)
+				return true
+			})
 		}
 	}
 	if value := gjson.GetBytes(res, "distribute-link-state"); value.Exists() {
@@ -1282,34 +1255,33 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
-		for ci := range data.Interfaces[i].Affinities {
-			keys := [...]string{"affinity-name"}
-			keyValues := [...]string{data.Interfaces[i].Affinities[ci].AffinityName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("interface-affinities.interface-affinity"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Interfaces[i].Affinities
+			data.Interfaces[i].Affinities = make([]SegmentRoutingTEInterfacesAffinities, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := SegmentRoutingTEInterfacesAffinities{}
+				if cValue := cr.Get("affinity-name"); cValue.Exists() {
+					citem.AffinityName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("interface-affinities.interface-affinity").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AffinityName.ValueString() != citem.AffinityName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("affinity-name"); value.Exists() && !data.Interfaces[i].Affinities[ci].AffinityName.IsNull() {
-				data.Interfaces[i].Affinities[ci].AffinityName = types.StringValue(value.String())
-			} else {
-				data.Interfaces[i].Affinities[ci].AffinityName = types.StringNull()
-			}
+				}
+
+				data.Interfaces[i].Affinities = append(data.Interfaces[i].Affinities, citem)
+				return true
+			})
 		}
 		if value := r.Get("interface-metric"); value.Exists() && !data.Interfaces[i].Metric.IsNull() {
 			data.Interfaces[i].Metric = types.Int64Value(value.Int())
@@ -1887,7 +1859,9 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 			if len(item.Srv6Segments) > 0 {
 				for _, citem := range item.Srv6Segments {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Index.IsNull() && !citem.Index.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "index", strconv.FormatInt(citem.Index.ValueInt64(), 10))
+					}
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
 					}
@@ -1916,7 +1890,9 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 			if len(item.SrMplsSegments) > 0 {
 				for _, citem := range item.SrMplsSegments {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Index.IsNull() && !citem.Index.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "segment-index", strconv.FormatInt(citem.Index.ValueInt64(), 10))
+					}
 					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "segment-type", citem.Type.ValueString())
 					}
@@ -1995,7 +1971,9 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 			if len(item.Resources) > 0 {
 				for _, citem := range item.Resources {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Index.IsNull() && !citem.Index.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "resource-index", strconv.FormatInt(citem.Index.ValueInt64(), 10))
+					}
 					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "resource-type", citem.Type.ValueString())
 					}
@@ -2041,7 +2019,9 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 			if len(item.Affinities) > 0 {
 				for _, citem := range item.Affinities {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.AffinityName.IsNull() && !citem.AffinityName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "affinity-name", citem.AffinityName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "interface-affinities/interface-affinity", ccBody.Res())
 				}
 			}
@@ -2455,44 +2435,42 @@ func (data *SegmentRoutingTE) updateFromBodyXML(ctx context.Context, res xmldot.
 		} else if data.SegmentListsSrv6ExplicitSegments[i].PathName.IsNull() {
 			data.SegmentListsSrv6ExplicitSegments[i].PathName = types.StringNull()
 		}
-		for ci := range data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments {
-			keys := [...]string{"index"}
-			keyValues := [...]string{strconv.FormatInt(data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].Index.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "segment-list-srv6/srv6-segments/srv6-segment"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments
+			data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments = make([]SegmentRoutingTESegmentListsSrv6ExplicitSegmentsSrv6Segments, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "segment-list-srv6/srv6-segments/srv6-segment").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := SegmentRoutingTESegmentListsSrv6ExplicitSegmentsSrv6Segments{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "index"); cValue.Exists() {
+					citem.Index = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "hop-type"); cValue.Exists() {
+					citem.HopType = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Index.Equal(citem.Index) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "index"); value.Exists() {
-				data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].Index = types.Int64Value(value.Int())
-			} else {
-				data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].Index = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].Address = types.StringValue(value.String())
-			} else {
-				data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "hop-type"); value.Exists() {
-				data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].HopType = types.StringValue(value.String())
-			} else {
-				data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments[ci].HopType = types.StringNull()
-			}
+				}
+
+				data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments = append(data.SegmentListsSrv6ExplicitSegments[i].Srv6Segments, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "segment-list-srv6/segment-list-srv6-topology-check"); value.Exists() {
 			data.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck = types.BoolValue(true)
@@ -2532,74 +2510,60 @@ func (data *SegmentRoutingTE) updateFromBodyXML(ctx context.Context, res xmldot.
 		} else if data.SegmentListsSrMplsExplicitSegments[i].PathName.IsNull() {
 			data.SegmentListsSrMplsExplicitSegments[i].PathName = types.StringNull()
 		}
-		for ci := range data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments {
-			keys := [...]string{"segment-index"}
-			keyValues := [...]string{strconv.FormatInt(data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Index.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "segments/segment"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments
+			data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments = make([]SegmentRoutingTESegmentListsSrMplsExplicitSegmentsSrMplsSegments, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "segments/segment").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := SegmentRoutingTESegmentListsSrMplsExplicitSegmentsSrMplsSegments{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "segment-index"); cValue.Exists() {
+					citem.Index = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "segment-type"); cValue.Exists() {
+					citem.Type = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "mpls-label"); cValue.Exists() {
+					citem.MplsLabel = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "adjacency-address"); cValue.Exists() {
+					citem.AdjacencyAddress = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "address-type"); cValue.Exists() {
+					citem.AddressType = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "interface-identifier"); cValue.Exists() {
+					citem.InterfaceIdentifier = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "prefix-length"); cValue.Exists() {
+					citem.PrefixLength = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "validate-flag"); cValue.Exists() {
+					citem.ValidateFlag = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Index.Equal(citem.Index) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "segment-index"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Index = types.Int64Value(value.Int())
-			} else {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Index = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "segment-type"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Type = types.StringValue(value.String())
-			} else {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Type = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Address = types.StringValue(value.String())
-			} else {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "mpls-label"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].MplsLabel = types.Int64Value(value.Int())
-			} else {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].MplsLabel = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "adjacency-address"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].AdjacencyAddress = types.StringValue(value.String())
-			} else {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].AdjacencyAddress = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "address-type"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].AddressType = types.Int64Value(value.Int())
-			} else {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].AddressType = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "interface-identifier"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].InterfaceIdentifier = types.Int64Value(value.Int())
-			} else {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].InterfaceIdentifier = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "prefix-length"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].PrefixLength = types.Int64Value(value.Int())
-			} else {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].PrefixLength = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "validate-flag"); value.Exists() {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].ValidateFlag = types.Int64Value(value.Int())
-			} else {
-				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments[ci].ValidateFlag = types.Int64Null()
-			}
+				}
+
+				data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments = append(data.SegmentListsSrMplsExplicitSegments[i].SrMplsSegments, citem)
+				return true
+			})
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/pcep-peer-status"); value.Exists() {
@@ -2691,44 +2655,42 @@ func (data *SegmentRoutingTE) updateFromBodyXML(ctx context.Context, res xmldot.
 		} else if data.ResourceLists[i].PathName.IsNull() {
 			data.ResourceLists[i].PathName = types.StringNull()
 		}
-		for ci := range data.ResourceLists[i].Resources {
-			keys := [...]string{"resource-index"}
-			keyValues := [...]string{strconv.FormatInt(data.ResourceLists[i].Resources[ci].Index.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "resources/resource"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.ResourceLists[i].Resources
+			data.ResourceLists[i].Resources = make([]SegmentRoutingTEResourceListsResources, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "resources/resource").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := SegmentRoutingTEResourceListsResources{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "resource-index"); cValue.Exists() {
+					citem.Index = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, "resource-type"); cValue.Exists() {
+					citem.Type = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Index.Equal(citem.Index) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "resource-index"); value.Exists() {
-				data.ResourceLists[i].Resources[ci].Index = types.Int64Value(value.Int())
-			} else {
-				data.ResourceLists[i].Resources[ci].Index = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, "resource-type"); value.Exists() {
-				data.ResourceLists[i].Resources[ci].Type = types.StringValue(value.String())
-			} else {
-				data.ResourceLists[i].Resources[ci].Type = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
-				data.ResourceLists[i].Resources[ci].Address = types.StringValue(value.String())
-			} else {
-				data.ResourceLists[i].Resources[ci].Address = types.StringNull()
-			}
+				}
+
+				data.ResourceLists[i].Resources = append(data.ResourceLists[i].Resources, citem)
+				return true
+			})
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/distribute-link-state"); value.Exists() {
@@ -2795,34 +2757,36 @@ func (data *SegmentRoutingTE) updateFromBodyXML(ctx context.Context, res xmldot.
 		} else if data.Interfaces[i].InterfaceName.IsNull() {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
-		for ci := range data.Interfaces[i].Affinities {
-			keys := [...]string{"affinity-name"}
-			keyValues := [...]string{data.Interfaces[i].Affinities[ci].AffinityName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "interface-affinities/interface-affinity"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Interfaces[i].Affinities
+			data.Interfaces[i].Affinities = make([]SegmentRoutingTEInterfacesAffinities, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "interface-affinities/interface-affinity").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := SegmentRoutingTEInterfacesAffinities{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "affinity-name"); cValue.Exists() {
+					citem.AffinityName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.AffinityName.ValueString() != citem.AffinityName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "affinity-name"); value.Exists() {
-				data.Interfaces[i].Affinities[ci].AffinityName = types.StringValue(value.String())
-			} else {
-				data.Interfaces[i].Affinities[ci].AffinityName = types.StringNull()
-			}
+				}
+
+				data.Interfaces[i].Affinities = append(data.Interfaces[i].Affinities, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "interface-metric"); value.Exists() {
 			data.Interfaces[i].Metric = types.Int64Value(value.Int())
@@ -3375,7 +3339,7 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("segment-list-srv6.segment-list-srv6-topology-check"); cValue.Exists() {
 				item.Srv6TopologyCheck = types.BoolValue(true)
 			} else {
-				item.Srv6TopologyCheck = types.BoolValue(false)
+				item.Srv6TopologyCheck = types.BoolNull()
 			}
 			data.SegmentListsSrv6ExplicitSegments = append(data.SegmentListsSrv6ExplicitSegments, item)
 			return true
@@ -3558,7 +3522,7 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication-option.include-tcp-options"); cValue.Exists() {
 				item.TcpAoIncludeTcpOptions = types.BoolValue(cValue.Bool())
 			} else {
-				item.TcpAoIncludeTcpOptions = types.BoolValue(false)
+				item.TcpAoIncludeTcpOptions = types.BoolNull()
 			}
 			data.PcePeersIpv4 = append(data.PcePeersIpv4, item)
 			return true
@@ -3583,7 +3547,7 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication-option.include-tcp-options"); cValue.Exists() {
 				item.TcpAoIncludeTcpOptions = types.BoolValue(cValue.Bool())
 			} else {
-				item.TcpAoIncludeTcpOptions = types.BoolValue(false)
+				item.TcpAoIncludeTcpOptions = types.BoolNull()
 			}
 			data.PcePeersIpv6 = append(data.PcePeersIpv6, item)
 			return true
@@ -3599,22 +3563,22 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("steering.invalidation-drop"); cValue.Exists() {
 				item.SteeringInvalidationDrop = types.BoolValue(true)
 			} else {
-				item.SteeringInvalidationDrop = types.BoolValue(false)
+				item.SteeringInvalidationDrop = types.BoolNull()
 			}
 			if cValue := v.Get("profile-auto-route.include-all"); cValue.Exists() {
 				item.AutoRouteIncludeAllIpv4 = types.BoolValue(true)
 			} else {
-				item.AutoRouteIncludeAllIpv4 = types.BoolValue(false)
+				item.AutoRouteIncludeAllIpv4 = types.BoolNull()
 			}
 			if cValue := v.Get("profile-auto-route.include-ipv6-all"); cValue.Exists() {
 				item.AutoRouteIncludeAllIpv6 = types.BoolValue(true)
 			} else {
-				item.AutoRouteIncludeAllIpv6 = types.BoolValue(false)
+				item.AutoRouteIncludeAllIpv6 = types.BoolNull()
 			}
 			if cValue := v.Get("profile-auto-route.force-sr-include"); cValue.Exists() {
 				item.AutoRouteForceSrInclude = types.BoolValue(true)
 			} else {
-				item.AutoRouteForceSrInclude = types.BoolValue(false)
+				item.AutoRouteForceSrInclude = types.BoolNull()
 			}
 			if cValue := v.Get("profile-auto-route.forward-class"); cValue.Exists() {
 				item.AutoRouteForwardClass = types.Int64Value(cValue.Int())
@@ -3725,7 +3689,7 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("candidate-path-type-all-or-candidate-path-type-local-or-candidate-path-type-bgp-odn-or-candidate-path-type-bgp-srte-or-candidate-path-type-pcep.enable"); cValue.Exists() {
 				item.SourceAddressSelection = types.BoolValue(true)
 			} else {
-				item.SourceAddressSelection = types.BoolValue(false)
+				item.SourceAddressSelection = types.BoolNull()
 			}
 			if cValue := v.Get("candidate-path-type-all-or-candidate-path-type-local-or-candidate-path-type-bgp-odn-or-candidate-path-type-bgp-srte-or-candidate-path-type-pcep.source-address.ip-address-type"); cValue.Exists() {
 				item.SourceAddressType = types.StringValue(cValue.String())

@@ -2085,7 +2085,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBody(ctx context.Context, res gjson.R
 			if cValue := v.Get("usid.allocation.wide-local-id-block"); cValue.Exists() {
 				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 			} else {
-				item.UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+				item.UsidAllocationWideLocalIdBlock = types.BoolNull()
 			}
 			data.Locators = append(data.Locators, item)
 			return true

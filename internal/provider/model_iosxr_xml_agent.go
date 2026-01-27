@@ -881,7 +881,7 @@ func (data *XMLAgent) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
 			} else {
-				item.Shutdown = types.BoolValue(false)
+				item.Shutdown = types.BoolNull()
 			}
 			if cValue := v.Get("ipv4.access-list"); cValue.Exists() {
 				item.Ipv4AccessList = types.StringValue(cValue.String())
@@ -925,7 +925,7 @@ func (data *XMLAgent) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
 			} else {
-				item.Shutdown = types.BoolValue(false)
+				item.Shutdown = types.BoolNull()
 			}
 			if cValue := v.Get("ipv6.access-list"); cValue.Exists() {
 				item.Ipv6AccessList = types.StringValue(cValue.String())

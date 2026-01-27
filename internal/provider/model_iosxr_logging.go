@@ -452,40 +452,40 @@ func (data Logging) toBody(ctx context.Context) string {
 		}
 	}
 	if len(data.SuppressRules) > 0 {
-		body, _ = sjson.Set(body, "", []interface{}{})
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule", []interface{}{})
 		for index, item := range data.SuppressRules {
 			if !item.RuleName.IsNull() && !item.RuleName.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", item.RuleName.ValueString())
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+"", item.RuleName.ValueString())
 			}
 			if !item.AllAlarms.IsNull() && !item.AllAlarms.IsUnknown() {
 				if item.AllAlarms.ValueBool() {
-					body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", map[string]string{})
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+"", map[string]string{})
 				}
 			}
 			if !item.ApplyAllOfRouter.IsNull() && !item.ApplyAllOfRouter.IsUnknown() {
 				if item.ApplyAllOfRouter.ValueBool() {
-					body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", map[string]string{})
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+"", map[string]string{})
 				}
 			}
 			if len(item.Alarms) > 0 {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", []interface{}{})
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+"", []interface{}{})
 				for cindex, citem := range item.Alarms {
 					if !citem.MessageCategory.IsNull() && !citem.MessageCategory.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.MessageCategory.ValueString())
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.MessageCategory.ValueString())
 					}
 					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.GroupName.ValueString())
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.GroupName.ValueString())
 					}
 					if !citem.MessageCode.IsNull() && !citem.MessageCode.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.MessageCode.ValueString())
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.MessageCode.ValueString())
 					}
 				}
 			}
 			if len(item.ApplySourceLocations) > 0 {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", []interface{}{})
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+"", []interface{}{})
 				for cindex, citem := range item.ApplySourceLocations {
 					if !citem.LocationName.IsNull() && !citem.LocationName.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.LocationName.ValueString())
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.LocationName.ValueString())
 					}
 				}
 			}
@@ -849,34 +849,33 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.SourceInterfaces[i].Name = types.StringNull()
 		}
-		for ci := range data.SourceInterfaces[i].Vrfs {
-			keys := [...]string{"vrf-name"}
-			keyValues := [...]string{data.SourceInterfaces[i].Vrfs[ci].Name.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("vrfs.vrf"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.SourceInterfaces[i].Vrfs
+			data.SourceInterfaces[i].Vrfs = make([]LoggingSourceInterfacesVrfs, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := LoggingSourceInterfacesVrfs{}
+				if cValue := cr.Get("vrf-name"); cValue.Exists() {
+					citem.Name = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("vrfs.vrf").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Name.ValueString() != citem.Name.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("vrf-name"); value.Exists() && !data.SourceInterfaces[i].Vrfs[ci].Name.IsNull() {
-				data.SourceInterfaces[i].Vrfs[ci].Name = types.StringValue(value.String())
-			} else {
-				data.SourceInterfaces[i].Vrfs[ci].Name = types.StringNull()
-			}
+				}
+
+				data.SourceInterfaces[i].Vrfs = append(data.SourceInterfaces[i].Vrfs, citem)
+				return true
+			})
 		}
 	}
 	if value := gjson.GetBytes(res, "suppress.duplicates"); value.Exists() {
@@ -919,7 +918,7 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.SuppressRules[i].RuleName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "").ForEach(
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -942,44 +941,45 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.SuppressRules[i].RuleName = types.StringNull()
 		}
-		for ci := range data.SuppressRules[i].Alarms {
-			keys := [...]string{"message-category", "group-name", "message-code"}
-			keyValues := [...]string{data.SuppressRules[i].Alarms[ci].MessageCategory.ValueString(), data.SuppressRules[i].Alarms[ci].GroupName.ValueString(), data.SuppressRules[i].Alarms[ci].MessageCode.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get(""); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.SuppressRules[i].Alarms
+			data.SuppressRules[i].Alarms = make([]LoggingSuppressRulesAlarms, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := LoggingSuppressRulesAlarms{}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.MessageCategory = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.GroupName = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.MessageCode = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.MessageCategory.ValueString() != citem.MessageCategory.ValueString() {
+						match = false
+					}
+					if existingItem.GroupName.ValueString() != citem.GroupName.ValueString() {
+						match = false
+					}
+					if existingItem.MessageCode.ValueString() != citem.MessageCode.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get(""); value.Exists() && !data.SuppressRules[i].Alarms[ci].MessageCategory.IsNull() {
-				data.SuppressRules[i].Alarms[ci].MessageCategory = types.StringValue(value.String())
-			} else {
-				data.SuppressRules[i].Alarms[ci].MessageCategory = types.StringNull()
-			}
-			if value := cr.Get(""); value.Exists() && !data.SuppressRules[i].Alarms[ci].GroupName.IsNull() {
-				data.SuppressRules[i].Alarms[ci].GroupName = types.StringValue(value.String())
-			} else {
-				data.SuppressRules[i].Alarms[ci].GroupName = types.StringNull()
-			}
-			if value := cr.Get(""); value.Exists() && !data.SuppressRules[i].Alarms[ci].MessageCode.IsNull() {
-				data.SuppressRules[i].Alarms[ci].MessageCode = types.StringValue(value.String())
-			} else {
-				data.SuppressRules[i].Alarms[ci].MessageCode = types.StringNull()
-			}
+				}
+
+				data.SuppressRules[i].Alarms = append(data.SuppressRules[i].Alarms, citem)
+				return true
+			})
 		}
 		if value := r.Get(""); value.Exists() {
 			// For presence-based booleans: if state has explicit false, preserve it
@@ -1017,34 +1017,33 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 				data.SuppressRules[i].ApplyAllOfRouter = types.BoolValue(false)
 			}
 		}
-		for ci := range data.SuppressRules[i].ApplySourceLocations {
-			keys := [...]string{"location-name"}
-			keyValues := [...]string{data.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get(""); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.SuppressRules[i].ApplySourceLocations
+			data.SuppressRules[i].ApplySourceLocations = make([]LoggingSuppressRulesApplySourceLocations, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := LoggingSuppressRulesApplySourceLocations{}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.LocationName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.LocationName.ValueString() != citem.LocationName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get(""); value.Exists() && !data.SuppressRules[i].ApplySourceLocations[ci].LocationName.IsNull() {
-				data.SuppressRules[i].ApplySourceLocations[ci].LocationName = types.StringValue(value.String())
-			} else {
-				data.SuppressRules[i].ApplySourceLocations[ci].LocationName = types.StringNull()
-			}
+				}
+
+				data.SuppressRules[i].ApplySourceLocations = append(data.SuppressRules[i].ApplySourceLocations, citem)
+				return true
+			})
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.buffer-size"); value.Exists() && !data.EventsBufferSize.IsNull() {
@@ -1303,7 +1302,9 @@ func (data Logging) toBodyXML(ctx context.Context) string {
 			if len(item.Vrfs) > 0 {
 				for _, citem := range item.Vrfs {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "vrf-name", citem.Name.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "vrfs/vrf", ccBody.Res())
 				}
 			}
@@ -1339,7 +1340,15 @@ func (data Logging) toBodyXML(ctx context.Context) string {
 			if len(item.Alarms) > 0 {
 				for _, citem := range item.Alarms {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.MessageCategory.IsNull() && !citem.MessageCategory.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", citem.MessageCategory.ValueString())
+					}
+					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", citem.GroupName.ValueString())
+					}
+					if !citem.MessageCode.IsNull() && !citem.MessageCode.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", citem.MessageCode.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "", ccBody.Res())
 				}
 			}
@@ -1356,12 +1365,14 @@ func (data Logging) toBodyXML(ctx context.Context) string {
 			if len(item.ApplySourceLocations) > 0 {
 				for _, citem := range item.ApplySourceLocations {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.LocationName.IsNull() && !citem.LocationName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", citem.LocationName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "", ccBody.Res())
 				}
 			}
 			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"", cBody.Res())
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule", cBody.Res())
 		}
 	}
 	if !data.EventsBufferSize.IsNull() && !data.EventsBufferSize.IsUnknown() {
@@ -1734,34 +1745,36 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.SourceInterfaces[i].Name.IsNull() {
 			data.SourceInterfaces[i].Name = types.StringNull()
 		}
-		for ci := range data.SourceInterfaces[i].Vrfs {
-			keys := [...]string{"vrf-name"}
-			keyValues := [...]string{data.SourceInterfaces[i].Vrfs[ci].Name.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "vrfs/vrf"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.SourceInterfaces[i].Vrfs
+			data.SourceInterfaces[i].Vrfs = make([]LoggingSourceInterfacesVrfs, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "vrfs/vrf").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := LoggingSourceInterfacesVrfs{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "vrf-name"); cValue.Exists() {
+					citem.Name = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.Name.ValueString() != citem.Name.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "vrf-name"); value.Exists() {
-				data.SourceInterfaces[i].Vrfs[ci].Name = types.StringValue(value.String())
-			} else {
-				data.SourceInterfaces[i].Vrfs[ci].Name = types.StringNull()
-			}
+				}
+
+				data.SourceInterfaces[i].Vrfs = append(data.SourceInterfaces[i].Vrfs, citem)
+				return true
+			})
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/suppress/duplicates"); value.Exists() {
@@ -1798,7 +1811,7 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.SuppressRules[i].RuleName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1821,44 +1834,48 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.SuppressRules[i].RuleName.IsNull() {
 			data.SuppressRules[i].RuleName = types.StringNull()
 		}
-		for ci := range data.SuppressRules[i].Alarms {
-			keys := [...]string{"", "", ""}
-			keyValues := [...]string{data.SuppressRules[i].Alarms[ci].MessageCategory.ValueString(), data.SuppressRules[i].Alarms[ci].GroupName.ValueString(), data.SuppressRules[i].Alarms[ci].MessageCode.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, ""); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.SuppressRules[i].Alarms
+			data.SuppressRules[i].Alarms = make([]LoggingSuppressRulesAlarms, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := LoggingSuppressRulesAlarms{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.MessageCategory = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.GroupName = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.MessageCode = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.MessageCategory.ValueString() != citem.MessageCategory.ValueString() {
+						match = false
+					}
+					if existingItem.GroupName.ValueString() != citem.GroupName.ValueString() {
+						match = false
+					}
+					if existingItem.MessageCode.ValueString() != citem.MessageCode.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.SuppressRules[i].Alarms[ci].MessageCategory = types.StringValue(value.String())
-			} else {
-				data.SuppressRules[i].Alarms[ci].MessageCategory = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.SuppressRules[i].Alarms[ci].GroupName = types.StringValue(value.String())
-			} else {
-				data.SuppressRules[i].Alarms[ci].GroupName = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.SuppressRules[i].Alarms[ci].MessageCode = types.StringValue(value.String())
-			} else {
-				data.SuppressRules[i].Alarms[ci].MessageCode = types.StringNull()
-			}
+				}
+
+				data.SuppressRules[i].Alarms = append(data.SuppressRules[i].Alarms, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, ""); value.Exists() {
 			data.SuppressRules[i].AllAlarms = types.BoolValue(true)
@@ -1878,34 +1895,36 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				data.SuppressRules[i].ApplyAllOfRouter = types.BoolNull()
 			}
 		}
-		for ci := range data.SuppressRules[i].ApplySourceLocations {
-			keys := [...]string{""}
-			keyValues := [...]string{data.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, ""); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.SuppressRules[i].ApplySourceLocations
+			data.SuppressRules[i].ApplySourceLocations = make([]LoggingSuppressRulesApplySourceLocations, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := LoggingSuppressRulesApplySourceLocations{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.LocationName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.LocationName.ValueString() != citem.LocationName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.SuppressRules[i].ApplySourceLocations[ci].LocationName = types.StringValue(value.String())
-			} else {
-				data.SuppressRules[i].ApplySourceLocations[ci].LocationName = types.StringNull()
-			}
+				}
+
+				data.SuppressRules[i].ApplySourceLocations = append(data.SuppressRules[i].ApplySourceLocations, citem)
+				return true
+			})
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size"); value.Exists() {
@@ -2195,7 +2214,7 @@ func (data *Logging) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "yang"); value.Exists() {
 		data.Yang = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"); value.Exists() {
 		data.SuppressRules = make([]LoggingSuppressRules, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingSuppressRules{}
@@ -2222,12 +2241,12 @@ func (data *Logging) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AllAlarms = types.BoolValue(true)
 			} else {
-				item.AllAlarms = types.BoolValue(false)
+				item.AllAlarms = types.BoolNull()
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.ApplyAllOfRouter = types.BoolValue(true)
 			} else {
-				item.ApplyAllOfRouter = types.BoolValue(false)
+				item.ApplyAllOfRouter = types.BoolNull()
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.ApplySourceLocations = make([]LoggingSuppressRulesApplySourceLocations, 0)
@@ -2500,7 +2519,7 @@ func (data *LoggingData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "yang"); value.Exists() {
 		data.Yang = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"); value.Exists() {
 		data.SuppressRules = make([]LoggingSuppressRules, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingSuppressRules{}
@@ -2801,7 +2820,7 @@ func (data *Logging) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/yang"); value.Exists() {
 		data.Yang = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule"); value.Exists() {
 		data.SuppressRules = make([]LoggingSuppressRules, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := LoggingSuppressRules{}
@@ -3102,7 +3121,7 @@ func (data *LoggingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/yang"); value.Exists() {
 		data.Yang = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule"); value.Exists() {
 		data.SuppressRules = make([]LoggingSuppressRules, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := LoggingSuppressRules{}
@@ -3287,14 +3306,14 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				if !state.SuppressRules[i].ApplyAllOfRouter.IsNull() && data.SuppressRules[j].ApplyAllOfRouter.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/", state.getPath(), keyString))
 				}
 				if !state.SuppressRules[i].AllAlarms.IsNull() && data.SuppressRules[j].AllAlarms.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/", state.getPath(), keyString))
 				}
 				for ci := range state.SuppressRules[i].Alarms {
 					ckeys := [...]string{"", "", ""}
@@ -3335,14 +3354,14 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v", state.getPath(), keyString))
 		}
 	}
 	if !state.Yang.IsNull() && data.Yang.IsNull() {
@@ -3638,14 +3657,14 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context, state *Logging) []
 		if !data.SuppressRules[i].ApplyAllOfRouter.IsNull() && !data.SuppressRules[i].ApplyAllOfRouter.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.SuppressRules) && !state.SuppressRules[i].ApplyAllOfRouter.IsNull() && state.SuppressRules[i].ApplyAllOfRouter.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/", data.getXPath(), keyString))
 			}
 		}
 		// Only delete if state has true and plan has false
 		if !data.SuppressRules[i].AllAlarms.IsNull() && !data.SuppressRules[i].AllAlarms.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.SuppressRules) && !state.SuppressRules[i].AllAlarms.IsNull() && state.SuppressRules[i].AllAlarms.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/", data.getXPath(), keyString))
 			}
 		}
 		for ci := range data.SuppressRules[i].Alarms {
@@ -3775,7 +3794,7 @@ func (data *Logging) getDeletePaths(ctx context.Context) []string {
 	for i := range data.SuppressRules {
 		keyValues := [...]string{data.SuppressRules[i].RuleName.ValueString()}
 
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.Yang.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/yang", data.getPath()))
@@ -4053,16 +4072,16 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 						}
 					}
 					if !found {
-						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v", predicates, cpredicates))
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/%v", predicates, cpredicates))
 					}
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.SuppressRules[i].ApplyAllOfRouter.IsNull() && state.SuppressRules[i].ApplyAllOfRouter.ValueBool() && data.SuppressRules[j].ApplyAllOfRouter.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.SuppressRules[i].AllAlarms.IsNull() && state.SuppressRules[i].AllAlarms.ValueBool() && data.SuppressRules[j].AllAlarms.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/", predicates))
 				}
 				for ci := range state.SuppressRules[i].Alarms {
 					cstateKeys := [...]string{"", "", ""}
@@ -4103,14 +4122,14 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 						}
 					}
 					if !found {
-						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v", predicates, cpredicates))
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/%v", predicates, cpredicates))
 					}
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v", predicates))
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v", predicates))
 		}
 	}
 	if !state.Yang.IsNull() && data.Yang.IsNull() {
@@ -4598,7 +4617,7 @@ func (data *Logging) addDeletePathsXML(ctx context.Context, body string) string 
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
 		}
 
-		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/%v", predicates))
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v", predicates))
 	}
 	if !data.Yang.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/yang")

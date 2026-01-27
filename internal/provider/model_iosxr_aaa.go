@@ -600,152 +600,152 @@ func (data AAA) toBody(ctx context.Context) string {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:server.radius.dynamic-author.server-key.six", data.ServerRadiusDynamicAuthorServerKeyType6.ValueString())
 	}
 	if len(data.RadiusServerGroups) > 0 {
-		body, _ = sjson.Set(body, "", []interface{}{})
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group", []interface{}{})
 		for index, item := range data.RadiusServerGroups {
 			if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", item.GroupName.ValueString())
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", item.GroupName.ValueString())
 			}
 			if !item.LoadBalanceMethodLeastOutstandingBatchSize.IsNull() && !item.LoadBalanceMethodLeastOutstandingBatchSize.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", strconv.FormatInt(item.LoadBalanceMethodLeastOutstandingBatchSize.ValueInt64(), 10))
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", strconv.FormatInt(item.LoadBalanceMethodLeastOutstandingBatchSize.ValueInt64(), 10))
 			}
 			if !item.LoadBalanceMethodLeastOutstanding.IsNull() && !item.LoadBalanceMethodLeastOutstanding.IsUnknown() {
 				if item.LoadBalanceMethodLeastOutstanding.ValueBool() {
-					body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", map[string]string{})
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", map[string]string{})
 				}
 			}
 			if !item.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && !item.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsUnknown() {
 				if item.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
-					body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", map[string]string{})
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", map[string]string{})
 				}
 			}
 			if !item.Deadtime.IsNull() && !item.Deadtime.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", strconv.FormatInt(item.Deadtime.ValueInt64(), 10))
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", strconv.FormatInt(item.Deadtime.ValueInt64(), 10))
 			}
 			if !item.ThrottleAccess.IsNull() && !item.ThrottleAccess.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", strconv.FormatInt(item.ThrottleAccess.ValueInt64(), 10))
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", strconv.FormatInt(item.ThrottleAccess.ValueInt64(), 10))
 			}
 			if !item.ThrottleAccessTimeout.IsNull() && !item.ThrottleAccessTimeout.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", strconv.FormatInt(item.ThrottleAccessTimeout.ValueInt64(), 10))
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", strconv.FormatInt(item.ThrottleAccessTimeout.ValueInt64(), 10))
 			}
 			if !item.ThrottleAccounting.IsNull() && !item.ThrottleAccounting.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", strconv.FormatInt(item.ThrottleAccounting.ValueInt64(), 10))
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", strconv.FormatInt(item.ThrottleAccounting.ValueInt64(), 10))
 			}
 			if !item.Vrf.IsNull() && !item.Vrf.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", item.Vrf.ValueString())
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", item.Vrf.ValueString())
 			}
 			if !item.SourceInterface.IsNull() && !item.SourceInterface.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", item.SourceInterface.ValueString())
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", item.SourceInterface.ValueString())
 			}
 			if !item.AuthorizationRequestAccept.IsNull() && !item.AuthorizationRequestAccept.IsUnknown() {
 				if item.AuthorizationRequestAccept.ValueBool() {
-					body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", map[string]string{})
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", map[string]string{})
 				}
 			}
 			if !item.AuthorizationRequestReject.IsNull() && !item.AuthorizationRequestReject.IsUnknown() {
 				if item.AuthorizationRequestReject.ValueBool() {
-					body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", map[string]string{})
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", map[string]string{})
 				}
 			}
 			if !item.AuthorizationRequestRadiusAttributeList.IsNull() && !item.AuthorizationRequestRadiusAttributeList.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", item.AuthorizationRequestRadiusAttributeList.ValueString())
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", item.AuthorizationRequestRadiusAttributeList.ValueString())
 			}
 			if !item.AuthorizationReplyAccept.IsNull() && !item.AuthorizationReplyAccept.IsUnknown() {
 				if item.AuthorizationReplyAccept.ValueBool() {
-					body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", map[string]string{})
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", map[string]string{})
 				}
 			}
 			if !item.AuthorizationReplyReject.IsNull() && !item.AuthorizationReplyReject.IsUnknown() {
 				if item.AuthorizationReplyReject.ValueBool() {
-					body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", map[string]string{})
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", map[string]string{})
 				}
 			}
 			if !item.AuthorizationReplyRadiusAttributeList.IsNull() && !item.AuthorizationReplyRadiusAttributeList.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", item.AuthorizationReplyRadiusAttributeList.ValueString())
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", item.AuthorizationReplyRadiusAttributeList.ValueString())
 			}
 			if !item.AccountingRequestAccept.IsNull() && !item.AccountingRequestAccept.IsUnknown() {
 				if item.AccountingRequestAccept.ValueBool() {
-					body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", map[string]string{})
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", map[string]string{})
 				}
 			}
 			if !item.AccountingRequestReject.IsNull() && !item.AccountingRequestReject.IsUnknown() {
 				if item.AccountingRequestReject.ValueBool() {
-					body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", map[string]string{})
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", map[string]string{})
 				}
 			}
 			if !item.AccountingRequestRadiusAttributeList.IsNull() && !item.AccountingRequestRadiusAttributeList.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", item.AccountingRequestRadiusAttributeList.ValueString())
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", item.AccountingRequestRadiusAttributeList.ValueString())
 			}
 			if !item.AccountingReplyAccept.IsNull() && !item.AccountingReplyAccept.IsUnknown() {
 				if item.AccountingReplyAccept.ValueBool() {
-					body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", map[string]string{})
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", map[string]string{})
 				}
 			}
 			if !item.AccountingReplyReject.IsNull() && !item.AccountingReplyReject.IsUnknown() {
 				if item.AccountingReplyReject.ValueBool() {
-					body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", map[string]string{})
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", map[string]string{})
 				}
 			}
 			if !item.AccountingReplyRadiusAttributeList.IsNull() && !item.AccountingReplyRadiusAttributeList.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", item.AccountingReplyRadiusAttributeList.ValueString())
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", item.AccountingReplyRadiusAttributeList.ValueString())
 			}
 			if len(item.Servers) > 0 {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", []interface{}{})
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", []interface{}{})
 				for cindex, citem := range item.Servers {
 					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Order.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Order.ValueInt64(), 10))
 					}
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.Address.ValueString())
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.Address.ValueString())
 					}
 					if !citem.AuthPort.IsNull() && !citem.AuthPort.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.AuthPort.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.AuthPort.ValueInt64(), 10))
 					}
 					if !citem.AcctPort.IsNull() && !citem.AcctPort.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.AcctPort.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.AcctPort.ValueInt64(), 10))
 					}
 				}
 			}
 			if len(item.ServerPrivates) > 0 {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", []interface{}{})
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", []interface{}{})
 				for cindex, citem := range item.ServerPrivates {
 					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Order.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Order.ValueInt64(), 10))
 					}
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.Address.ValueString())
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.Address.ValueString())
 					}
 					if !citem.AuthPort.IsNull() && !citem.AuthPort.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.AuthPort.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.AuthPort.ValueInt64(), 10))
 					}
 					if !citem.AcctPort.IsNull() && !citem.AcctPort.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.AcctPort.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.AcctPort.ValueInt64(), 10))
 					}
 					if !citem.KeyType7.IsNull() && !citem.KeyType7.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.KeyType7.ValueString())
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.KeyType7.ValueString())
 					}
 					if !citem.KeyType6.IsNull() && !citem.KeyType6.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.KeyType6.ValueString())
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.KeyType6.ValueString())
 					}
 					if !citem.Timeout.IsNull() && !citem.Timeout.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Timeout.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Timeout.ValueInt64(), 10))
 					}
 					if !citem.Retransmit.IsNull() && !citem.Retransmit.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Retransmit.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Retransmit.ValueInt64(), 10))
 					}
 					if !citem.TestUsername.IsNull() && !citem.TestUsername.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.TestUsername.ValueString())
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.TestUsername.ValueString())
 					}
 					if !citem.IdleTime.IsNull() && !citem.IdleTime.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.IdleTime.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.IdleTime.ValueInt64(), 10))
 					}
 					if !citem.IgnoreAuthPort.IsNull() && !citem.IgnoreAuthPort.IsUnknown() {
 						if citem.IgnoreAuthPort.ValueBool() {
-							body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", map[string]string{})
+							body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", map[string]string{})
 						}
 					}
 					if !citem.IgnoreAcctPort.IsNull() && !citem.IgnoreAcctPort.IsUnknown() {
 						if citem.IgnoreAcctPort.ValueBool() {
-							body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", map[string]string{})
+							body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", map[string]string{})
 						}
 					}
 				}
@@ -770,59 +770,59 @@ func (data AAA) toBody(ctx context.Context) string {
 		}
 	}
 	if len(data.TacacsServerGroups) > 0 {
-		body, _ = sjson.Set(body, "", []interface{}{})
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group", []interface{}{})
 		for index, item := range data.TacacsServerGroups {
 			if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", item.GroupName.ValueString())
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", item.GroupName.ValueString())
 			}
 			if !item.Vrf.IsNull() && !item.Vrf.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", item.Vrf.ValueString())
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", item.Vrf.ValueString())
 			}
 			if !item.HolddownTime.IsNull() && !item.HolddownTime.IsUnknown() {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", strconv.FormatInt(item.HolddownTime.ValueInt64(), 10))
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", strconv.FormatInt(item.HolddownTime.ValueInt64(), 10))
 			}
 			if len(item.Servers) > 0 {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", []interface{}{})
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", []interface{}{})
 				for cindex, citem := range item.Servers {
 					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Order.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Order.ValueInt64(), 10))
 					}
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.Address.ValueString())
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.Address.ValueString())
 					}
 				}
 			}
 			if len(item.ServerPrivates) > 0 {
-				body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+"", []interface{}{})
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"", []interface{}{})
 				for cindex, citem := range item.ServerPrivates {
 					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Order.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Order.ValueInt64(), 10))
 					}
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.Address.ValueString())
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.Address.ValueString())
 					}
 					if !citem.Port.IsNull() && !citem.Port.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Port.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Port.ValueInt64(), 10))
 					}
 					if !citem.KeyType7.IsNull() && !citem.KeyType7.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.KeyType7.ValueString())
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.KeyType7.ValueString())
 					}
 					if !citem.KeyType6.IsNull() && !citem.KeyType6.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.KeyType6.ValueString())
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", citem.KeyType6.ValueString())
 					}
 					if !citem.SingleConnection.IsNull() && !citem.SingleConnection.IsUnknown() {
 						if citem.SingleConnection.ValueBool() {
-							body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", map[string]string{})
+							body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", map[string]string{})
 						}
 					}
 					if !citem.SingleConnectionIdleTimeout.IsNull() && !citem.SingleConnectionIdleTimeout.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.SingleConnectionIdleTimeout.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.SingleConnectionIdleTimeout.ValueInt64(), 10))
 					}
 					if !citem.Timeout.IsNull() && !citem.Timeout.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Timeout.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.Timeout.ValueInt64(), 10))
 					}
 					if !citem.HolddownTime.IsNull() && !citem.HolddownTime.IsUnknown() {
-						body, _ = sjson.Set(body, ""+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.HolddownTime.ValueInt64(), 10))
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+""+"."+strconv.Itoa(cindex)+"."+"", strconv.FormatInt(citem.HolddownTime.ValueInt64(), 10))
 					}
 				}
 			}
@@ -2776,7 +2776,18 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 			if len(item.Servers) > 0 {
 				for _, citem := range item.Servers {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", strconv.FormatInt(citem.Order.ValueInt64(), 10))
+					}
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", citem.Address.ValueString())
+					}
+					if !citem.AuthPort.IsNull() && !citem.AuthPort.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", strconv.FormatInt(citem.AuthPort.ValueInt64(), 10))
+					}
+					if !citem.AcctPort.IsNull() && !citem.AcctPort.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", strconv.FormatInt(citem.AcctPort.ValueInt64(), 10))
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "", ccBody.Res())
 				}
 			}
@@ -2808,7 +2819,18 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 			if len(item.ServerPrivates) > 0 {
 				for _, citem := range item.ServerPrivates {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", strconv.FormatInt(citem.Order.ValueInt64(), 10))
+					}
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", citem.Address.ValueString())
+					}
+					if !citem.AuthPort.IsNull() && !citem.AuthPort.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", strconv.FormatInt(citem.AuthPort.ValueInt64(), 10))
+					}
+					if !citem.AcctPort.IsNull() && !citem.AcctPort.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", strconv.FormatInt(citem.AcctPort.ValueInt64(), 10))
+					}
 					if !citem.KeyType7.IsNull() && !citem.KeyType7.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "", citem.KeyType7.ValueString())
 					}
@@ -2899,7 +2921,7 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 				cBody = helpers.SetFromXPath(cBody, "", item.AccountingReplyRadiusAttributeList.ValueString())
 			}
 			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"", cBody.Res())
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", cBody.Res())
 		}
 	}
 	if !data.ServerRadiusDynamicAuthorPort.IsNull() && !data.ServerRadiusDynamicAuthorPort.IsUnknown() {
@@ -2946,7 +2968,12 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 			if len(item.Servers) > 0 {
 				for _, citem := range item.Servers {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", strconv.FormatInt(citem.Order.ValueInt64(), 10))
+					}
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", citem.Address.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "", ccBody.Res())
 				}
 			}
@@ -2959,7 +2986,15 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 			if len(item.ServerPrivates) > 0 {
 				for _, citem := range item.ServerPrivates {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", strconv.FormatInt(citem.Order.ValueInt64(), 10))
+					}
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", citem.Address.ValueString())
+					}
+					if !citem.Port.IsNull() && !citem.Port.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "", strconv.FormatInt(citem.Port.ValueInt64(), 10))
+					}
 					if !citem.KeyType7.IsNull() && !citem.KeyType7.IsUnknown() {
 						ccBody = helpers.SetFromXPath(ccBody, "", citem.KeyType7.ValueString())
 					}
@@ -2984,7 +3019,7 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 				}
 			}
 			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"", cBody.Res())
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group", cBody.Res())
 		}
 	}
 	if len(data.Usernames) > 0 {
@@ -3072,7 +3107,9 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 			if len(item.UserGroups) > 0 {
 				for _, citem := range item.UserGroups {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "user-group-name", citem.GroupName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "group/user-groups/user-group", ccBody.Res())
 				}
 			}
@@ -4829,7 +4866,9 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 			if len(item.InheritTaskgroups) > 0 {
 				for _, citem := range item.InheritTaskgroups {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "task-group-name", citem.GroupName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "inherit/taskgroup/task-groups/task-group", ccBody.Res())
 				}
 			}
@@ -4900,14 +4939,18 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 			if len(item.Taskgroups) > 0 {
 				for _, citem := range item.Taskgroups {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "task-group-name", citem.GroupName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "taskgroup/task-groups/task-group", ccBody.Res())
 				}
 			}
 			if len(item.InheritUsergroups) > 0 {
 				for _, citem := range item.InheritUsergroups {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "usergroup-name", citem.GroupName.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "inherit/usergroup", ccBody.Res())
 				}
 			}
@@ -4942,7 +4985,7 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.RadiusServerGroups[i].GroupName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "").ForEach(
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4965,49 +5008,51 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.RadiusServerGroups[i].GroupName = types.StringNull()
 		}
-		for ci := range data.RadiusServerGroups[i].Servers {
-			keys := [...]string{"ordering-index", "address", "auth-port", "acct-port"}
-			keyValues := [...]string{strconv.FormatInt(data.RadiusServerGroups[i].Servers[ci].Order.ValueInt64(), 10), data.RadiusServerGroups[i].Servers[ci].Address.ValueString(), strconv.FormatInt(data.RadiusServerGroups[i].Servers[ci].AuthPort.ValueInt64(), 10), strconv.FormatInt(data.RadiusServerGroups[i].Servers[ci].AcctPort.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get(""); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.RadiusServerGroups[i].Servers
+			data.RadiusServerGroups[i].Servers = make([]AAARadiusServerGroupsServers, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := AAARadiusServerGroupsServers{}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.Order = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.AuthPort = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.AcctPort = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Order.Equal(citem.Order) {
+						match = false
+					}
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.AuthPort.Equal(citem.AuthPort) {
+						match = false
+					}
+					if !existingItem.AcctPort.Equal(citem.AcctPort) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get(""); value.Exists() {
-				data.RadiusServerGroups[i].Servers[ci].Order = types.Int64Value(value.Int())
-			} else if data.RadiusServerGroups[i].Servers[ci].Order.IsNull() {
-				data.RadiusServerGroups[i].Servers[ci].Order = types.Int64Null()
-			}
-			if value := cr.Get(""); value.Exists() && !data.RadiusServerGroups[i].Servers[ci].Address.IsNull() {
-				data.RadiusServerGroups[i].Servers[ci].Address = types.StringValue(value.String())
-			} else {
-				data.RadiusServerGroups[i].Servers[ci].Address = types.StringNull()
-			}
-			if value := cr.Get(""); value.Exists() {
-				data.RadiusServerGroups[i].Servers[ci].AuthPort = types.Int64Value(value.Int())
-			} else if data.RadiusServerGroups[i].Servers[ci].AuthPort.IsNull() {
-				data.RadiusServerGroups[i].Servers[ci].AuthPort = types.Int64Null()
-			}
-			if value := cr.Get(""); value.Exists() {
-				data.RadiusServerGroups[i].Servers[ci].AcctPort = types.Int64Value(value.Int())
-			} else if data.RadiusServerGroups[i].Servers[ci].AcctPort.IsNull() {
-				data.RadiusServerGroups[i].Servers[ci].AcctPort = types.Int64Null()
-			}
+				}
+
+				data.RadiusServerGroups[i].Servers = append(data.RadiusServerGroups[i].Servers, citem)
+				return true
+			})
 		}
 		if value := r.Get(""); value.Exists() && !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingBatchSize.IsNull() {
 			data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Value(value.Int())
@@ -5070,99 +5115,79 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.RadiusServerGroups[i].ThrottleAccounting = types.Int64Null()
 		}
-		for ci := range data.RadiusServerGroups[i].ServerPrivates {
-			keys := [...]string{"ordering-index", "address", "auth-port", "acct-port"}
-			keyValues := [...]string{strconv.FormatInt(data.RadiusServerGroups[i].ServerPrivates[ci].Order.ValueInt64(), 10), data.RadiusServerGroups[i].ServerPrivates[ci].Address.ValueString(), strconv.FormatInt(data.RadiusServerGroups[i].ServerPrivates[ci].AuthPort.ValueInt64(), 10), strconv.FormatInt(data.RadiusServerGroups[i].ServerPrivates[ci].AcctPort.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get(""); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.RadiusServerGroups[i].ServerPrivates
+			data.RadiusServerGroups[i].ServerPrivates = make([]AAARadiusServerGroupsServerPrivates, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := AAARadiusServerGroupsServerPrivates{}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.Order = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.AuthPort = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.AcctPort = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.Timeout = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.Retransmit = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.TestUsername = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.IdleTime = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.IgnoreAuthPort = types.BoolValue(true)
+				} else {
+					citem.IgnoreAuthPort = types.BoolValue(false)
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.IgnoreAcctPort = types.BoolValue(true)
+				} else {
+					citem.IgnoreAcctPort = types.BoolValue(false)
+				}
 
-			var cr gjson.Result
-			r.Get("").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Order.Equal(citem.Order) {
+						match = false
+					}
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.AuthPort.Equal(citem.AuthPort) {
+						match = false
+					}
+					if !existingItem.AcctPort.Equal(citem.AcctPort) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.IgnoreAuthPort.ValueBool() && existingItem.IgnoreAuthPort.ValueBool() == false {
+							citem.IgnoreAuthPort = existingItem.IgnoreAuthPort
 						}
-						found = false
+						if !citem.IgnoreAcctPort.ValueBool() && existingItem.IgnoreAcctPort.ValueBool() == false {
+							citem.IgnoreAcctPort = existingItem.IgnoreAcctPort
+						}
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get(""); value.Exists() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Order = types.Int64Value(value.Int())
-			} else if data.RadiusServerGroups[i].ServerPrivates[ci].Order.IsNull() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Order = types.Int64Null()
-			}
-			if value := cr.Get(""); value.Exists() && !data.RadiusServerGroups[i].ServerPrivates[ci].Address.IsNull() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Address = types.StringValue(value.String())
-			} else {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Address = types.StringNull()
-			}
-			if value := cr.Get(""); value.Exists() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].AuthPort = types.Int64Value(value.Int())
-			} else if data.RadiusServerGroups[i].ServerPrivates[ci].AuthPort.IsNull() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].AuthPort = types.Int64Null()
-			}
-			if value := cr.Get(""); value.Exists() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].AcctPort = types.Int64Value(value.Int())
-			} else if data.RadiusServerGroups[i].ServerPrivates[ci].AcctPort.IsNull() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].AcctPort = types.Int64Null()
-			}
-			if value := cr.Get(""); value.Exists() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Timeout = types.Int64Value(value.Int())
-			} else if data.RadiusServerGroups[i].ServerPrivates[ci].Timeout.IsNull() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Timeout = types.Int64Null()
-			}
-			if value := cr.Get(""); value.Exists() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Retransmit = types.Int64Value(value.Int())
-			} else if data.RadiusServerGroups[i].ServerPrivates[ci].Retransmit.IsNull() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Retransmit = types.Int64Null()
-			}
-			if value := cr.Get(""); value.Exists() && !data.RadiusServerGroups[i].ServerPrivates[ci].TestUsername.IsNull() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].TestUsername = types.StringValue(value.String())
-			} else {
-				data.RadiusServerGroups[i].ServerPrivates[ci].TestUsername = types.StringNull()
-			}
-			if value := cr.Get(""); value.Exists() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].IdleTime = types.Int64Value(value.Int())
-			} else if data.RadiusServerGroups[i].ServerPrivates[ci].IdleTime.IsNull() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].IdleTime = types.Int64Null()
-			}
-			if value := cr.Get(""); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() && !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.ValueBool() {
-					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort = types.BoolValue(false)
-				} else if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() {
-					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() {
-					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort = types.BoolNull()
-				} else {
-					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get(""); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() && !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.ValueBool() {
-					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort = types.BoolValue(false)
-				} else if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() {
-					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort = types.BoolValue(true)
-				}
-			} else {
-				// Element doesn't exist on device
-				if data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() {
-					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort = types.BoolNull()
-				} else {
-					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort = types.BoolValue(false)
-				}
-			}
+
+				data.RadiusServerGroups[i].ServerPrivates = append(data.RadiusServerGroups[i].ServerPrivates, citem)
+				return true
+			})
 		}
 		if value := r.Get(""); value.Exists() && !data.RadiusServerGroups[i].Vrf.IsNull() {
 			data.RadiusServerGroups[i].Vrf = types.StringValue(value.String())
@@ -5393,7 +5418,7 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.TacacsServerGroups[i].GroupName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "").ForEach(
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5416,39 +5441,39 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.TacacsServerGroups[i].GroupName = types.StringNull()
 		}
-		for ci := range data.TacacsServerGroups[i].Servers {
-			keys := [...]string{"ordering-index", "address"}
-			keyValues := [...]string{strconv.FormatInt(data.TacacsServerGroups[i].Servers[ci].Order.ValueInt64(), 10), data.TacacsServerGroups[i].Servers[ci].Address.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get(""); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.TacacsServerGroups[i].Servers
+			data.TacacsServerGroups[i].Servers = make([]AAATacacsServerGroupsServers, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := AAATacacsServerGroupsServers{}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.Order = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Order.Equal(citem.Order) {
+						match = false
+					}
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get(""); value.Exists() {
-				data.TacacsServerGroups[i].Servers[ci].Order = types.Int64Value(value.Int())
-			} else if data.TacacsServerGroups[i].Servers[ci].Order.IsNull() {
-				data.TacacsServerGroups[i].Servers[ci].Order = types.Int64Null()
-			}
-			if value := cr.Get(""); value.Exists() && !data.TacacsServerGroups[i].Servers[ci].Address.IsNull() {
-				data.TacacsServerGroups[i].Servers[ci].Address = types.StringValue(value.String())
-			} else {
-				data.TacacsServerGroups[i].Servers[ci].Address = types.StringNull()
-			}
+				}
+
+				data.TacacsServerGroups[i].Servers = append(data.TacacsServerGroups[i].Servers, citem)
+				return true
+			})
 		}
 		if value := r.Get(""); value.Exists() && !data.TacacsServerGroups[i].Vrf.IsNull() {
 			data.TacacsServerGroups[i].Vrf = types.StringValue(value.String())
@@ -5460,74 +5485,62 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.TacacsServerGroups[i].HolddownTime = types.Int64Null()
 		}
-		for ci := range data.TacacsServerGroups[i].ServerPrivates {
-			keys := [...]string{"ordering-index", "address", "port"}
-			keyValues := [...]string{strconv.FormatInt(data.TacacsServerGroups[i].ServerPrivates[ci].Order.ValueInt64(), 10), data.TacacsServerGroups[i].ServerPrivates[ci].Address.ValueString(), strconv.FormatInt(data.TacacsServerGroups[i].ServerPrivates[ci].Port.ValueInt64(), 10)}
+		// Rebuild nested list from device response
+		if value := r.Get(""); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.TacacsServerGroups[i].ServerPrivates
+			data.TacacsServerGroups[i].ServerPrivates = make([]AAATacacsServerGroupsServerPrivates, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := AAATacacsServerGroupsServerPrivates{}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.Order = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.Port = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.SingleConnection = types.BoolValue(true)
+				} else {
+					citem.SingleConnection = types.BoolValue(false)
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.Timeout = types.Int64Value(cValue.Int())
+				}
+				if cValue := cr.Get(""); cValue.Exists() {
+					citem.HolddownTime = types.Int64Value(cValue.Int())
+				}
 
-			var cr gjson.Result
-			r.Get("").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Order.Equal(citem.Order) {
+						match = false
+					}
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Port.Equal(citem.Port) {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
+						if !citem.SingleConnection.ValueBool() && existingItem.SingleConnection.ValueBool() == false {
+							citem.SingleConnection = existingItem.SingleConnection
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get(""); value.Exists() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Order = types.Int64Value(value.Int())
-			} else if data.TacacsServerGroups[i].ServerPrivates[ci].Order.IsNull() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Order = types.Int64Null()
-			}
-			if value := cr.Get(""); value.Exists() && !data.TacacsServerGroups[i].ServerPrivates[ci].Address.IsNull() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Address = types.StringValue(value.String())
-			} else {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Address = types.StringNull()
-			}
-			if value := cr.Get(""); value.Exists() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Port = types.Int64Value(value.Int())
-			} else if data.TacacsServerGroups[i].ServerPrivates[ci].Port.IsNull() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Port = types.Int64Null()
-			}
-			if value := cr.Get(""); value.Exists() {
-				// For presence-based booleans: if state has explicit false, preserve it
-				if !data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() && !data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.ValueBool() {
-					data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection = types.BoolValue(false)
-				} else if !data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() {
-					data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection = types.BoolValue(true)
 				}
-			} else {
-				// Element doesn't exist on device
-				if data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() {
-					data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection = types.BoolNull()
-				} else {
-					data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection = types.BoolValue(false)
-				}
-			}
-			if value := cr.Get(""); value.Exists() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnectionIdleTimeout = types.Int64Value(value.Int())
-			} else if data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnectionIdleTimeout.IsNull() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnectionIdleTimeout = types.Int64Null()
-			}
-			if value := cr.Get(""); value.Exists() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Timeout = types.Int64Value(value.Int())
-			} else if data.TacacsServerGroups[i].ServerPrivates[ci].Timeout.IsNull() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Timeout = types.Int64Null()
-			}
-			if value := cr.Get(""); value.Exists() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].HolddownTime = types.Int64Value(value.Int())
-			} else if data.TacacsServerGroups[i].ServerPrivates[ci].HolddownTime.IsNull() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].HolddownTime = types.Int64Null()
-			}
+
+				data.TacacsServerGroups[i].ServerPrivates = append(data.TacacsServerGroups[i].ServerPrivates, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.Usernames {
@@ -5784,34 +5797,33 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 				data.Usernames[i].GroupReadOnlyTg = types.BoolValue(false)
 			}
 		}
-		for ci := range data.Usernames[i].UserGroups {
-			keys := [...]string{"user-group-name"}
-			keyValues := [...]string{data.Usernames[i].UserGroups[ci].GroupName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("group.user-groups.user-group"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Usernames[i].UserGroups
+			data.Usernames[i].UserGroups = make([]AAAUsernamesUserGroups, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := AAAUsernamesUserGroups{}
+				if cValue := cr.Get("user-group-name"); cValue.Exists() {
+					citem.GroupName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("group.user-groups.user-group").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.GroupName.ValueString() != citem.GroupName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("user-group-name"); value.Exists() && !data.Usernames[i].UserGroups[ci].GroupName.IsNull() {
-				data.Usernames[i].UserGroups[ci].GroupName = types.StringValue(value.String())
-			} else {
-				data.Usernames[i].UserGroups[ci].GroupName = types.StringNull()
-			}
+				}
+
+				data.Usernames[i].UserGroups = append(data.Usernames[i].UserGroups, citem)
+				return true
+			})
 		}
 		if value := r.Get("shell-type"); value.Exists() && !data.Usernames[i].ShellType.IsNull() {
 			data.Usernames[i].ShellType = types.StringValue(value.String())
@@ -12085,34 +12097,33 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 				data.Taskgroups[i].InheritTaskgroupCiscoSupport = types.BoolValue(false)
 			}
 		}
-		for ci := range data.Taskgroups[i].InheritTaskgroups {
-			keys := [...]string{"task-group-name"}
-			keyValues := [...]string{data.Taskgroups[i].InheritTaskgroups[ci].GroupName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("inherit.taskgroup.task-groups.task-group"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Taskgroups[i].InheritTaskgroups
+			data.Taskgroups[i].InheritTaskgroups = make([]AAATaskgroupsInheritTaskgroups, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := AAATaskgroupsInheritTaskgroups{}
+				if cValue := cr.Get("task-group-name"); cValue.Exists() {
+					citem.GroupName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("inherit.taskgroup.task-groups.task-group").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.GroupName.ValueString() != citem.GroupName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("task-group-name"); value.Exists() && !data.Taskgroups[i].InheritTaskgroups[ci].GroupName.IsNull() {
-				data.Taskgroups[i].InheritTaskgroups[ci].GroupName = types.StringValue(value.String())
-			} else {
-				data.Taskgroups[i].InheritTaskgroups[ci].GroupName = types.StringNull()
-			}
+				}
+
+				data.Taskgroups[i].InheritTaskgroups = append(data.Taskgroups[i].InheritTaskgroups, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.Usergroups {
@@ -12328,63 +12339,61 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 				data.Usergroups[i].TaskgroupReadOnly = types.BoolValue(false)
 			}
 		}
-		for ci := range data.Usergroups[i].Taskgroups {
-			keys := [...]string{"task-group-name"}
-			keyValues := [...]string{data.Usergroups[i].Taskgroups[ci].GroupName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("taskgroup.task-groups.task-group"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Usergroups[i].Taskgroups
+			data.Usergroups[i].Taskgroups = make([]AAAUsergroupsTaskgroups, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := AAAUsergroupsTaskgroups{}
+				if cValue := cr.Get("task-group-name"); cValue.Exists() {
+					citem.GroupName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("taskgroup.task-groups.task-group").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.GroupName.ValueString() != citem.GroupName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("task-group-name"); value.Exists() && !data.Usergroups[i].Taskgroups[ci].GroupName.IsNull() {
-				data.Usergroups[i].Taskgroups[ci].GroupName = types.StringValue(value.String())
-			} else {
-				data.Usergroups[i].Taskgroups[ci].GroupName = types.StringNull()
-			}
+				}
+
+				data.Usergroups[i].Taskgroups = append(data.Usergroups[i].Taskgroups, citem)
+				return true
+			})
 		}
-		for ci := range data.Usergroups[i].InheritUsergroups {
-			keys := [...]string{"usergroup-name"}
-			keyValues := [...]string{data.Usergroups[i].InheritUsergroups[ci].GroupName.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("inherit.usergroup"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Usergroups[i].InheritUsergroups
+			data.Usergroups[i].InheritUsergroups = make([]AAAUsergroupsInheritUsergroups, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := AAAUsergroupsInheritUsergroups{}
+				if cValue := cr.Get("usergroup-name"); cValue.Exists() {
+					citem.GroupName = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("inherit.usergroup").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.GroupName.ValueString() != citem.GroupName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("usergroup-name"); value.Exists() && !data.Usergroups[i].InheritUsergroups[ci].GroupName.IsNull() {
-				data.Usergroups[i].InheritUsergroups[ci].GroupName = types.StringValue(value.String())
-			} else {
-				data.Usergroups[i].InheritUsergroups[ci].GroupName = types.StringNull()
-			}
+				}
+
+				data.Usergroups[i].InheritUsergroups = append(data.Usergroups[i].InheritUsergroups, citem)
+				return true
+			})
 		}
 	}
 }
@@ -12409,7 +12418,7 @@ func (data *AAA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.RadiusServerGroups[i].GroupName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -12432,49 +12441,54 @@ func (data *AAA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.RadiusServerGroups[i].GroupName.IsNull() {
 			data.RadiusServerGroups[i].GroupName = types.StringNull()
 		}
-		for ci := range data.RadiusServerGroups[i].Servers {
-			keys := [...]string{"", "", "", ""}
-			keyValues := [...]string{strconv.FormatInt(data.RadiusServerGroups[i].Servers[ci].Order.ValueInt64(), 10), data.RadiusServerGroups[i].Servers[ci].Address.ValueString(), strconv.FormatInt(data.RadiusServerGroups[i].Servers[ci].AuthPort.ValueInt64(), 10), strconv.FormatInt(data.RadiusServerGroups[i].Servers[ci].AcctPort.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, ""); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.RadiusServerGroups[i].Servers
+			data.RadiusServerGroups[i].Servers = make([]AAARadiusServerGroupsServers, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := AAARadiusServerGroupsServers{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.Order = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.AuthPort = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.AcctPort = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Order.Equal(citem.Order) {
+						match = false
+					}
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.AuthPort.Equal(citem.AuthPort) {
+						match = false
+					}
+					if !existingItem.AcctPort.Equal(citem.AcctPort) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.RadiusServerGroups[i].Servers[ci].Order = types.Int64Value(value.Int())
-			} else {
-				data.RadiusServerGroups[i].Servers[ci].Order = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.RadiusServerGroups[i].Servers[ci].Address = types.StringValue(value.String())
-			} else {
-				data.RadiusServerGroups[i].Servers[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.RadiusServerGroups[i].Servers[ci].AuthPort = types.Int64Value(value.Int())
-			} else {
-				data.RadiusServerGroups[i].Servers[ci].AuthPort = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.RadiusServerGroups[i].Servers[ci].AcctPort = types.Int64Value(value.Int())
-			} else {
-				data.RadiusServerGroups[i].Servers[ci].AcctPort = types.Int64Null()
-			}
+				}
+
+				data.RadiusServerGroups[i].Servers = append(data.RadiusServerGroups[i].Servers, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, ""); value.Exists() {
 			data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Value(value.Int())
@@ -12519,89 +12533,84 @@ func (data *AAA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.RadiusServerGroups[i].ThrottleAccounting.IsNull() {
 			data.RadiusServerGroups[i].ThrottleAccounting = types.Int64Null()
 		}
-		for ci := range data.RadiusServerGroups[i].ServerPrivates {
-			keys := [...]string{"", "", "", ""}
-			keyValues := [...]string{strconv.FormatInt(data.RadiusServerGroups[i].ServerPrivates[ci].Order.ValueInt64(), 10), data.RadiusServerGroups[i].ServerPrivates[ci].Address.ValueString(), strconv.FormatInt(data.RadiusServerGroups[i].ServerPrivates[ci].AuthPort.ValueInt64(), 10), strconv.FormatInt(data.RadiusServerGroups[i].ServerPrivates[ci].AcctPort.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, ""); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.RadiusServerGroups[i].ServerPrivates
+			data.RadiusServerGroups[i].ServerPrivates = make([]AAARadiusServerGroupsServerPrivates, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := AAARadiusServerGroupsServerPrivates{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.Order = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.AuthPort = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.AcctPort = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.Timeout = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.Retransmit = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.TestUsername = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.IdleTime = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.IgnoreAuthPort = types.BoolValue(true)
+				} else {
+					citem.IgnoreAuthPort = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.IgnoreAcctPort = types.BoolValue(true)
+				} else {
+					citem.IgnoreAcctPort = types.BoolValue(false)
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Order.Equal(citem.Order) {
+						match = false
+					}
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.AuthPort.Equal(citem.AuthPort) {
+						match = false
+					}
+					if !existingItem.AcctPort.Equal(citem.AcctPort) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.IgnoreAuthPort.ValueBool() && existingItem.IgnoreAuthPort.ValueBool() == false {
+							citem.IgnoreAuthPort = existingItem.IgnoreAuthPort
 						}
-						found = false
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.IgnoreAcctPort.ValueBool() && existingItem.IgnoreAcctPort.ValueBool() == false {
+							citem.IgnoreAcctPort = existingItem.IgnoreAcctPort
+						}
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Order = types.Int64Value(value.Int())
-			} else {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Order = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Address = types.StringValue(value.String())
-			} else {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].AuthPort = types.Int64Value(value.Int())
-			} else {
-				data.RadiusServerGroups[i].ServerPrivates[ci].AuthPort = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].AcctPort = types.Int64Value(value.Int())
-			} else {
-				data.RadiusServerGroups[i].ServerPrivates[ci].AcctPort = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Timeout = types.Int64Value(value.Int())
-			} else {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Timeout = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Retransmit = types.Int64Value(value.Int())
-			} else {
-				data.RadiusServerGroups[i].ServerPrivates[ci].Retransmit = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].TestUsername = types.StringValue(value.String())
-			} else {
-				data.RadiusServerGroups[i].ServerPrivates[ci].TestUsername = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.RadiusServerGroups[i].ServerPrivates[ci].IdleTime = types.Int64Value(value.Int())
-			} else {
-				data.RadiusServerGroups[i].ServerPrivates[ci].IdleTime = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() {
-					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() {
-					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() {
-					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() {
-					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort = types.BoolNull()
-				}
-			}
+
+				data.RadiusServerGroups[i].ServerPrivates = append(data.RadiusServerGroups[i].ServerPrivates, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, ""); value.Exists() {
 			data.RadiusServerGroups[i].Vrf = types.StringValue(value.String())
@@ -12758,7 +12767,7 @@ func (data *AAA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.TacacsServerGroups[i].GroupName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -12781,39 +12790,42 @@ func (data *AAA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.TacacsServerGroups[i].GroupName.IsNull() {
 			data.TacacsServerGroups[i].GroupName = types.StringNull()
 		}
-		for ci := range data.TacacsServerGroups[i].Servers {
-			keys := [...]string{"", ""}
-			keyValues := [...]string{strconv.FormatInt(data.TacacsServerGroups[i].Servers[ci].Order.ValueInt64(), 10), data.TacacsServerGroups[i].Servers[ci].Address.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, ""); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.TacacsServerGroups[i].Servers
+			data.TacacsServerGroups[i].Servers = make([]AAATacacsServerGroupsServers, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := AAATacacsServerGroupsServers{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.Order = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Order.Equal(citem.Order) {
+						match = false
+					}
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.TacacsServerGroups[i].Servers[ci].Order = types.Int64Value(value.Int())
-			} else {
-				data.TacacsServerGroups[i].Servers[ci].Order = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.TacacsServerGroups[i].Servers[ci].Address = types.StringValue(value.String())
-			} else {
-				data.TacacsServerGroups[i].Servers[ci].Address = types.StringNull()
-			}
+				}
+
+				data.TacacsServerGroups[i].Servers = append(data.TacacsServerGroups[i].Servers, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, ""); value.Exists() {
 			data.TacacsServerGroups[i].Vrf = types.StringValue(value.String())
@@ -12825,69 +12837,66 @@ func (data *AAA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.TacacsServerGroups[i].HolddownTime.IsNull() {
 			data.TacacsServerGroups[i].HolddownTime = types.Int64Null()
 		}
-		for ci := range data.TacacsServerGroups[i].ServerPrivates {
-			keys := [...]string{"", "", ""}
-			keyValues := [...]string{strconv.FormatInt(data.TacacsServerGroups[i].ServerPrivates[ci].Order.ValueInt64(), 10), data.TacacsServerGroups[i].ServerPrivates[ci].Address.ValueString(), strconv.FormatInt(data.TacacsServerGroups[i].ServerPrivates[ci].Port.ValueInt64(), 10)}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, ""); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.TacacsServerGroups[i].ServerPrivates
+			data.TacacsServerGroups[i].ServerPrivates = make([]AAATacacsServerGroupsServerPrivates, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := AAATacacsServerGroupsServerPrivates{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.Order = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.Address = types.StringValue(cValue.String())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.Port = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.SingleConnection = types.BoolValue(true)
+				} else {
+					citem.SingleConnection = types.BoolValue(false)
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.Timeout = types.Int64Value(cValue.Int())
+				}
+				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
+					citem.HolddownTime = types.Int64Value(cValue.Int())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if !existingItem.Order.Equal(citem.Order) {
+						match = false
+					}
+					if existingItem.Address.ValueString() != citem.Address.ValueString() {
+						match = false
+					}
+					if !existingItem.Port.Equal(citem.Port) {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
+						// For presence-based boolean, if device doesn't have it and state was false, keep false
+						if !citem.SingleConnection.ValueBool() && existingItem.SingleConnection.ValueBool() == false {
+							citem.SingleConnection = existingItem.SingleConnection
 						}
-						found = false
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Order = types.Int64Value(value.Int())
-			} else {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Order = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Address = types.StringValue(value.String())
-			} else {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Address = types.StringNull()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Port = types.Int64Value(value.Int())
-			} else {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Port = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				if !data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() {
-					data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection = types.BoolValue(true)
 				}
-			} else {
-				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() {
-					data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection = types.BoolNull()
-				}
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnectionIdleTimeout = types.Int64Value(value.Int())
-			} else {
-				data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnectionIdleTimeout = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Timeout = types.Int64Value(value.Int())
-			} else {
-				data.TacacsServerGroups[i].ServerPrivates[ci].Timeout = types.Int64Null()
-			}
-			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
-				data.TacacsServerGroups[i].ServerPrivates[ci].HolddownTime = types.Int64Value(value.Int())
-			} else {
-				data.TacacsServerGroups[i].ServerPrivates[ci].HolddownTime = types.Int64Null()
-			}
+
+				data.TacacsServerGroups[i].ServerPrivates = append(data.TacacsServerGroups[i].ServerPrivates, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.Usernames {
@@ -13036,34 +13045,36 @@ func (data *AAA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				data.Usernames[i].GroupReadOnlyTg = types.BoolNull()
 			}
 		}
-		for ci := range data.Usernames[i].UserGroups {
-			keys := [...]string{"user-group-name"}
-			keyValues := [...]string{data.Usernames[i].UserGroups[ci].GroupName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "group/user-groups/user-group"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Usernames[i].UserGroups
+			data.Usernames[i].UserGroups = make([]AAAUsernamesUserGroups, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "group/user-groups/user-group").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := AAAUsernamesUserGroups{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "user-group-name"); cValue.Exists() {
+					citem.GroupName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.GroupName.ValueString() != citem.GroupName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "user-group-name"); value.Exists() {
-				data.Usernames[i].UserGroups[ci].GroupName = types.StringValue(value.String())
-			} else {
-				data.Usernames[i].UserGroups[ci].GroupName = types.StringNull()
-			}
+				}
+
+				data.Usernames[i].UserGroups = append(data.Usernames[i].UserGroups, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "shell-type"); value.Exists() {
 			data.Usernames[i].ShellType = types.StringValue(value.String())
@@ -16223,34 +16234,36 @@ func (data *AAA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				data.Taskgroups[i].InheritTaskgroupCiscoSupport = types.BoolNull()
 			}
 		}
-		for ci := range data.Taskgroups[i].InheritTaskgroups {
-			keys := [...]string{"task-group-name"}
-			keyValues := [...]string{data.Taskgroups[i].InheritTaskgroups[ci].GroupName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "inherit/taskgroup/task-groups/task-group"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Taskgroups[i].InheritTaskgroups
+			data.Taskgroups[i].InheritTaskgroups = make([]AAATaskgroupsInheritTaskgroups, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "inherit/taskgroup/task-groups/task-group").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := AAATaskgroupsInheritTaskgroups{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "task-group-name"); cValue.Exists() {
+					citem.GroupName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.GroupName.ValueString() != citem.GroupName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "task-group-name"); value.Exists() {
-				data.Taskgroups[i].InheritTaskgroups[ci].GroupName = types.StringValue(value.String())
-			} else {
-				data.Taskgroups[i].InheritTaskgroups[ci].GroupName = types.StringNull()
-			}
+				}
+
+				data.Taskgroups[i].InheritTaskgroups = append(data.Taskgroups[i].InheritTaskgroups, citem)
+				return true
+			})
 		}
 	}
 	for i := range data.Usergroups {
@@ -16376,63 +16389,67 @@ func (data *AAA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				data.Usergroups[i].TaskgroupReadOnly = types.BoolNull()
 			}
 		}
-		for ci := range data.Usergroups[i].Taskgroups {
-			keys := [...]string{"task-group-name"}
-			keyValues := [...]string{data.Usergroups[i].Taskgroups[ci].GroupName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "taskgroup/task-groups/task-group"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Usergroups[i].Taskgroups
+			data.Usergroups[i].Taskgroups = make([]AAAUsergroupsTaskgroups, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "taskgroup/task-groups/task-group").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := AAAUsergroupsTaskgroups{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "task-group-name"); cValue.Exists() {
+					citem.GroupName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.GroupName.ValueString() != citem.GroupName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "task-group-name"); value.Exists() {
-				data.Usergroups[i].Taskgroups[ci].GroupName = types.StringValue(value.String())
-			} else {
-				data.Usergroups[i].Taskgroups[ci].GroupName = types.StringNull()
-			}
+				}
+
+				data.Usergroups[i].Taskgroups = append(data.Usergroups[i].Taskgroups, citem)
+				return true
+			})
 		}
-		for ci := range data.Usergroups[i].InheritUsergroups {
-			keys := [...]string{"usergroup-name"}
-			keyValues := [...]string{data.Usergroups[i].InheritUsergroups[ci].GroupName.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "inherit/usergroup"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Usergroups[i].InheritUsergroups
+			data.Usergroups[i].InheritUsergroups = make([]AAAUsergroupsInheritUsergroups, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "inherit/usergroup").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := AAAUsergroupsInheritUsergroups{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "usergroup-name"); cValue.Exists() {
+					citem.GroupName = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.GroupName.ValueString() != citem.GroupName.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "usergroup-name"); value.Exists() {
-				data.Usergroups[i].InheritUsergroups[ci].GroupName = types.StringValue(value.String())
-			} else {
-				data.Usergroups[i].InheritUsergroups[ci].GroupName = types.StringNull()
-			}
+				}
+
+				data.Usergroups[i].InheritUsergroups = append(data.Usergroups[i].InheritUsergroups, citem)
+				return true
+			})
 		}
 	}
 }
@@ -16452,7 +16469,7 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "banner.login"); value.Exists() {
 		data.BannerLogin = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"); value.Exists() {
 		data.RadiusServerGroups = make([]AAARadiusServerGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAARadiusServerGroups{}
@@ -16485,12 +16502,12 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get(""); cValue.Exists() {
 				item.LoadBalanceMethodLeastOutstanding = types.BoolValue(true)
 			} else {
-				item.LoadBalanceMethodLeastOutstanding = types.BoolValue(false)
+				item.LoadBalanceMethodLeastOutstanding = types.BoolNull()
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(true)
 			} else {
-				item.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(false)
+				item.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolNull()
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.Deadtime = types.Int64Value(cValue.Int())
@@ -16535,12 +16552,12 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get(""); ccValue.Exists() {
 						cItem.IgnoreAuthPort = types.BoolValue(true)
 					} else {
-						cItem.IgnoreAuthPort = types.BoolValue(false)
+						cItem.IgnoreAuthPort = types.BoolNull()
 					}
 					if ccValue := cv.Get(""); ccValue.Exists() {
 						cItem.IgnoreAcctPort = types.BoolValue(true)
 					} else {
-						cItem.IgnoreAcctPort = types.BoolValue(false)
+						cItem.IgnoreAcctPort = types.BoolNull()
 					}
 					item.ServerPrivates = append(item.ServerPrivates, cItem)
 					return true
@@ -16555,12 +16572,12 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AuthorizationRequestAccept = types.BoolValue(true)
 			} else {
-				item.AuthorizationRequestAccept = types.BoolValue(false)
+				item.AuthorizationRequestAccept = types.BoolNull()
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AuthorizationRequestReject = types.BoolValue(true)
 			} else {
-				item.AuthorizationRequestReject = types.BoolValue(false)
+				item.AuthorizationRequestReject = types.BoolNull()
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AuthorizationRequestRadiusAttributeList = types.StringValue(cValue.String())
@@ -16568,12 +16585,12 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AuthorizationReplyAccept = types.BoolValue(true)
 			} else {
-				item.AuthorizationReplyAccept = types.BoolValue(false)
+				item.AuthorizationReplyAccept = types.BoolNull()
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AuthorizationReplyReject = types.BoolValue(true)
 			} else {
-				item.AuthorizationReplyReject = types.BoolValue(false)
+				item.AuthorizationReplyReject = types.BoolNull()
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AuthorizationReplyRadiusAttributeList = types.StringValue(cValue.String())
@@ -16581,12 +16598,12 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AccountingRequestAccept = types.BoolValue(true)
 			} else {
-				item.AccountingRequestAccept = types.BoolValue(false)
+				item.AccountingRequestAccept = types.BoolNull()
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AccountingRequestReject = types.BoolValue(true)
 			} else {
-				item.AccountingRequestReject = types.BoolValue(false)
+				item.AccountingRequestReject = types.BoolNull()
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AccountingRequestRadiusAttributeList = types.StringValue(cValue.String())
@@ -16594,12 +16611,12 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AccountingReplyAccept = types.BoolValue(true)
 			} else {
-				item.AccountingReplyAccept = types.BoolValue(false)
+				item.AccountingReplyAccept = types.BoolNull()
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AccountingReplyReject = types.BoolValue(true)
 			} else {
-				item.AccountingReplyReject = types.BoolValue(false)
+				item.AccountingReplyReject = types.BoolNull()
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AccountingReplyRadiusAttributeList = types.StringValue(cValue.String())
@@ -16630,7 +16647,7 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"); value.Exists() {
 		data.TacacsServerGroups = make([]AAATacacsServerGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAATacacsServerGroups{}
@@ -16673,7 +16690,7 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get(""); ccValue.Exists() {
 						cItem.SingleConnection = types.BoolValue(true)
 					} else {
-						cItem.SingleConnection = types.BoolValue(false)
+						cItem.SingleConnection = types.BoolNull()
 					}
 					if ccValue := cv.Get(""); ccValue.Exists() {
 						cItem.SingleConnectionIdleTimeout = types.Int64Value(ccValue.Int())
@@ -16705,12 +16722,12 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("login-history.enable"); cValue.Exists() {
 				item.LoginHistoryEnable = types.BoolValue(true)
 			} else {
-				item.LoginHistoryEnable = types.BoolValue(false)
+				item.LoginHistoryEnable = types.BoolNull()
 			}
 			if cValue := v.Get("login-history.disable"); cValue.Exists() {
 				item.LoginHistoryDisable = types.BoolValue(true)
 			} else {
-				item.LoginHistoryDisable = types.BoolValue(false)
+				item.LoginHistoryDisable = types.BoolNull()
 			}
 			if cValue := v.Get("policy"); cValue.Exists() {
 				item.Policy = types.StringValue(cValue.String())
@@ -16718,52 +16735,52 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("group.root-lr"); cValue.Exists() {
 				item.GroupRootLr = types.BoolValue(true)
 			} else {
-				item.GroupRootLr = types.BoolValue(false)
+				item.GroupRootLr = types.BoolNull()
 			}
 			if cValue := v.Get("group.netadmin"); cValue.Exists() {
 				item.GroupNetadmin = types.BoolValue(true)
 			} else {
-				item.GroupNetadmin = types.BoolValue(false)
+				item.GroupNetadmin = types.BoolNull()
 			}
 			if cValue := v.Get("group.sysadmin"); cValue.Exists() {
 				item.GroupSysadmin = types.BoolValue(true)
 			} else {
-				item.GroupSysadmin = types.BoolValue(false)
+				item.GroupSysadmin = types.BoolNull()
 			}
 			if cValue := v.Get("group.serviceadmin"); cValue.Exists() {
 				item.GroupServiceadmin = types.BoolValue(true)
 			} else {
-				item.GroupServiceadmin = types.BoolValue(false)
+				item.GroupServiceadmin = types.BoolNull()
 			}
 			if cValue := v.Get("group.operator"); cValue.Exists() {
 				item.GroupOperator = types.BoolValue(true)
 			} else {
-				item.GroupOperator = types.BoolValue(false)
+				item.GroupOperator = types.BoolNull()
 			}
 			if cValue := v.Get("group.cisco-support"); cValue.Exists() {
 				item.GroupCiscoSupport = types.BoolValue(true)
 			} else {
-				item.GroupCiscoSupport = types.BoolValue(false)
+				item.GroupCiscoSupport = types.BoolNull()
 			}
 			if cValue := v.Get("group.maintenance"); cValue.Exists() {
 				item.GroupMaintenance = types.BoolValue(true)
 			} else {
-				item.GroupMaintenance = types.BoolValue(false)
+				item.GroupMaintenance = types.BoolNull()
 			}
 			if cValue := v.Get("group.provisioning"); cValue.Exists() {
 				item.GroupProvisioning = types.BoolValue(true)
 			} else {
-				item.GroupProvisioning = types.BoolValue(false)
+				item.GroupProvisioning = types.BoolNull()
 			}
 			if cValue := v.Get("group.retrieve"); cValue.Exists() {
 				item.GroupRetrieve = types.BoolValue(true)
 			} else {
-				item.GroupRetrieve = types.BoolValue(false)
+				item.GroupRetrieve = types.BoolNull()
 			}
 			if cValue := v.Get("group.read-only-tg"); cValue.Exists() {
 				item.GroupReadOnlyTg = types.BoolValue(true)
 			} else {
-				item.GroupReadOnlyTg = types.BoolValue(false)
+				item.GroupReadOnlyTg = types.BoolNull()
 			}
 			if cValue := v.Get("group.user-groups.user-group"); cValue.Exists() {
 				item.UserGroups = make([]AAAUsernamesUserGroups, 0)
@@ -16799,1732 +16816,1732 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("task.read.bgp"); cValue.Exists() {
 				item.TaskReadBgp = types.BoolValue(true)
 			} else {
-				item.TaskReadBgp = types.BoolValue(false)
+				item.TaskReadBgp = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.ospf"); cValue.Exists() {
 				item.TaskReadOspf = types.BoolValue(true)
 			} else {
-				item.TaskReadOspf = types.BoolValue(false)
+				item.TaskReadOspf = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.hsrp"); cValue.Exists() {
 				item.TaskReadHsrp = types.BoolValue(true)
 			} else {
-				item.TaskReadHsrp = types.BoolValue(false)
+				item.TaskReadHsrp = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.isis"); cValue.Exists() {
 				item.TaskReadIsis = types.BoolValue(true)
 			} else {
-				item.TaskReadIsis = types.BoolValue(false)
+				item.TaskReadIsis = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.route-map"); cValue.Exists() {
 				item.TaskReadRouteMap = types.BoolValue(true)
 			} else {
-				item.TaskReadRouteMap = types.BoolValue(false)
+				item.TaskReadRouteMap = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.route-policy"); cValue.Exists() {
 				item.TaskReadRoutePolicy = types.BoolValue(true)
 			} else {
-				item.TaskReadRoutePolicy = types.BoolValue(false)
+				item.TaskReadRoutePolicy = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.static"); cValue.Exists() {
 				item.TaskReadStatic = types.BoolValue(true)
 			} else {
-				item.TaskReadStatic = types.BoolValue(false)
+				item.TaskReadStatic = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.vrrp"); cValue.Exists() {
 				item.TaskReadVrrp = types.BoolValue(true)
 			} else {
-				item.TaskReadVrrp = types.BoolValue(false)
+				item.TaskReadVrrp = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.cef"); cValue.Exists() {
 				item.TaskReadCef = types.BoolValue(true)
 			} else {
-				item.TaskReadCef = types.BoolValue(false)
+				item.TaskReadCef = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.lpts"); cValue.Exists() {
 				item.TaskReadLpts = types.BoolValue(true)
 			} else {
-				item.TaskReadLpts = types.BoolValue(false)
+				item.TaskReadLpts = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.ipv4"); cValue.Exists() {
 				item.TaskReadIpv4 = types.BoolValue(true)
 			} else {
-				item.TaskReadIpv4 = types.BoolValue(false)
+				item.TaskReadIpv4 = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.rib"); cValue.Exists() {
 				item.TaskReadRib = types.BoolValue(true)
 			} else {
-				item.TaskReadRib = types.BoolValue(false)
+				item.TaskReadRib = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.multicast"); cValue.Exists() {
 				item.TaskReadMulticast = types.BoolValue(true)
 			} else {
-				item.TaskReadMulticast = types.BoolValue(false)
+				item.TaskReadMulticast = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.mpls-te"); cValue.Exists() {
 				item.TaskReadMplsTe = types.BoolValue(true)
 			} else {
-				item.TaskReadMplsTe = types.BoolValue(false)
+				item.TaskReadMplsTe = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.mpls-ldp"); cValue.Exists() {
 				item.TaskReadMplsLdp = types.BoolValue(true)
 			} else {
-				item.TaskReadMplsLdp = types.BoolValue(false)
+				item.TaskReadMplsLdp = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.mpls-static"); cValue.Exists() {
 				item.TaskReadMplsStatic = types.BoolValue(true)
 			} else {
-				item.TaskReadMplsStatic = types.BoolValue(false)
+				item.TaskReadMplsStatic = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.ouni"); cValue.Exists() {
 				item.TaskReadOuni = types.BoolValue(true)
 			} else {
-				item.TaskReadOuni = types.BoolValue(false)
+				item.TaskReadOuni = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.fabric"); cValue.Exists() {
 				item.TaskReadFabric = types.BoolValue(true)
 			} else {
-				item.TaskReadFabric = types.BoolValue(false)
+				item.TaskReadFabric = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.bundle"); cValue.Exists() {
 				item.TaskReadBundle = types.BoolValue(true)
 			} else {
-				item.TaskReadBundle = types.BoolValue(false)
+				item.TaskReadBundle = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.network"); cValue.Exists() {
 				item.TaskReadNetwork = types.BoolValue(true)
 			} else {
-				item.TaskReadNetwork = types.BoolValue(false)
+				item.TaskReadNetwork = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.transport"); cValue.Exists() {
 				item.TaskReadTransport = types.BoolValue(true)
 			} else {
-				item.TaskReadTransport = types.BoolValue(false)
+				item.TaskReadTransport = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.ppp"); cValue.Exists() {
 				item.TaskReadPpp = types.BoolValue(true)
 			} else {
-				item.TaskReadPpp = types.BoolValue(false)
+				item.TaskReadPpp = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.hdlc"); cValue.Exists() {
 				item.TaskReadHdlc = types.BoolValue(true)
 			} else {
-				item.TaskReadHdlc = types.BoolValue(false)
+				item.TaskReadHdlc = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.pos-dpt"); cValue.Exists() {
 				item.TaskReadPosDpt = types.BoolValue(true)
 			} else {
-				item.TaskReadPosDpt = types.BoolValue(false)
+				item.TaskReadPosDpt = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.sonet-sdh"); cValue.Exists() {
 				item.TaskReadSonetSdh = types.BoolValue(true)
 			} else {
-				item.TaskReadSonetSdh = types.BoolValue(false)
+				item.TaskReadSonetSdh = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.dwdm"); cValue.Exists() {
 				item.TaskReadDwdm = types.BoolValue(true)
 			} else {
-				item.TaskReadDwdm = types.BoolValue(false)
+				item.TaskReadDwdm = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.tunnel"); cValue.Exists() {
 				item.TaskReadTunnel = types.BoolValue(true)
 			} else {
-				item.TaskReadTunnel = types.BoolValue(false)
+				item.TaskReadTunnel = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.vlan"); cValue.Exists() {
 				item.TaskReadVlan = types.BoolValue(true)
 			} else {
-				item.TaskReadVlan = types.BoolValue(false)
+				item.TaskReadVlan = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.qos"); cValue.Exists() {
 				item.TaskReadQos = types.BoolValue(true)
 			} else {
-				item.TaskReadQos = types.BoolValue(false)
+				item.TaskReadQos = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.acl"); cValue.Exists() {
 				item.TaskReadAcl = types.BoolValue(true)
 			} else {
-				item.TaskReadAcl = types.BoolValue(false)
+				item.TaskReadAcl = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.aaa"); cValue.Exists() {
 				item.TaskReadAaa = types.BoolValue(true)
 			} else {
-				item.TaskReadAaa = types.BoolValue(false)
+				item.TaskReadAaa = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.crypto"); cValue.Exists() {
 				item.TaskReadCrypto = types.BoolValue(true)
 			} else {
-				item.TaskReadCrypto = types.BoolValue(false)
+				item.TaskReadCrypto = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.snmp"); cValue.Exists() {
 				item.TaskReadSnmp = types.BoolValue(true)
 			} else {
-				item.TaskReadSnmp = types.BoolValue(false)
+				item.TaskReadSnmp = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.config-mgmt"); cValue.Exists() {
 				item.TaskReadConfigMgmt = types.BoolValue(true)
 			} else {
-				item.TaskReadConfigMgmt = types.BoolValue(false)
+				item.TaskReadConfigMgmt = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.config-services"); cValue.Exists() {
 				item.TaskReadConfigServices = types.BoolValue(true)
 			} else {
-				item.TaskReadConfigServices = types.BoolValue(false)
+				item.TaskReadConfigServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.host-services"); cValue.Exists() {
 				item.TaskReadHostServices = types.BoolValue(true)
 			} else {
-				item.TaskReadHostServices = types.BoolValue(false)
+				item.TaskReadHostServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.boot"); cValue.Exists() {
 				item.TaskReadBoot = types.BoolValue(true)
 			} else {
-				item.TaskReadBoot = types.BoolValue(false)
+				item.TaskReadBoot = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.fault-mgr"); cValue.Exists() {
 				item.TaskReadFaultMgr = types.BoolValue(true)
 			} else {
-				item.TaskReadFaultMgr = types.BoolValue(false)
+				item.TaskReadFaultMgr = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.filesystem"); cValue.Exists() {
 				item.TaskReadFilesystem = types.BoolValue(true)
 			} else {
-				item.TaskReadFilesystem = types.BoolValue(false)
+				item.TaskReadFilesystem = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.interface"); cValue.Exists() {
 				item.TaskReadInterface = types.BoolValue(true)
 			} else {
-				item.TaskReadInterface = types.BoolValue(false)
+				item.TaskReadInterface = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.ip-services"); cValue.Exists() {
 				item.TaskReadIpServices = types.BoolValue(true)
 			} else {
-				item.TaskReadIpServices = types.BoolValue(false)
+				item.TaskReadIpServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.pkg-mgmt"); cValue.Exists() {
 				item.TaskReadPkgMgmt = types.BoolValue(true)
 			} else {
-				item.TaskReadPkgMgmt = types.BoolValue(false)
+				item.TaskReadPkgMgmt = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.system"); cValue.Exists() {
 				item.TaskReadSystem = types.BoolValue(true)
 			} else {
-				item.TaskReadSystem = types.BoolValue(false)
+				item.TaskReadSystem = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.tty-access"); cValue.Exists() {
 				item.TaskReadTtyAccess = types.BoolValue(true)
 			} else {
-				item.TaskReadTtyAccess = types.BoolValue(false)
+				item.TaskReadTtyAccess = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.basic-services"); cValue.Exists() {
 				item.TaskReadBasicServices = types.BoolValue(true)
 			} else {
-				item.TaskReadBasicServices = types.BoolValue(false)
+				item.TaskReadBasicServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.cdp"); cValue.Exists() {
 				item.TaskReadCdp = types.BoolValue(true)
 			} else {
-				item.TaskReadCdp = types.BoolValue(false)
+				item.TaskReadCdp = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.diag"); cValue.Exists() {
 				item.TaskReadDiag = types.BoolValue(true)
 			} else {
-				item.TaskReadDiag = types.BoolValue(false)
+				item.TaskReadDiag = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.ext-access"); cValue.Exists() {
 				item.TaskReadExtAccess = types.BoolValue(true)
 			} else {
-				item.TaskReadExtAccess = types.BoolValue(false)
+				item.TaskReadExtAccess = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.bcdl"); cValue.Exists() {
 				item.TaskReadBcdl = types.BoolValue(true)
 			} else {
-				item.TaskReadBcdl = types.BoolValue(false)
+				item.TaskReadBcdl = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.sysmgr"); cValue.Exists() {
 				item.TaskReadSysmgr = types.BoolValue(true)
 			} else {
-				item.TaskReadSysmgr = types.BoolValue(false)
+				item.TaskReadSysmgr = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.logging"); cValue.Exists() {
 				item.TaskReadLogging = types.BoolValue(true)
 			} else {
-				item.TaskReadLogging = types.BoolValue(false)
+				item.TaskReadLogging = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.netflow"); cValue.Exists() {
 				item.TaskReadNetflow = types.BoolValue(true)
 			} else {
-				item.TaskReadNetflow = types.BoolValue(false)
+				item.TaskReadNetflow = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.drivers"); cValue.Exists() {
 				item.TaskReadDrivers = types.BoolValue(true)
 			} else {
-				item.TaskReadDrivers = types.BoolValue(false)
+				item.TaskReadDrivers = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.fr"); cValue.Exists() {
 				item.TaskReadFr = types.BoolValue(true)
 			} else {
-				item.TaskReadFr = types.BoolValue(false)
+				item.TaskReadFr = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.monitor"); cValue.Exists() {
 				item.TaskReadMonitor = types.BoolValue(true)
 			} else {
-				item.TaskReadMonitor = types.BoolValue(false)
+				item.TaskReadMonitor = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.inventory"); cValue.Exists() {
 				item.TaskReadInventory = types.BoolValue(true)
 			} else {
-				item.TaskReadInventory = types.BoolValue(false)
+				item.TaskReadInventory = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.ipv6"); cValue.Exists() {
 				item.TaskReadIpv6 = types.BoolValue(true)
 			} else {
-				item.TaskReadIpv6 = types.BoolValue(false)
+				item.TaskReadIpv6 = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.admin"); cValue.Exists() {
 				item.TaskReadAdmin = types.BoolValue(true)
 			} else {
-				item.TaskReadAdmin = types.BoolValue(false)
+				item.TaskReadAdmin = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.atm"); cValue.Exists() {
 				item.TaskReadAtm = types.BoolValue(true)
 			} else {
-				item.TaskReadAtm = types.BoolValue(false)
+				item.TaskReadAtm = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.bfd"); cValue.Exists() {
 				item.TaskReadBfd = types.BoolValue(true)
 			} else {
-				item.TaskReadBfd = types.BoolValue(false)
+				item.TaskReadBfd = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.rip"); cValue.Exists() {
 				item.TaskReadRip = types.BoolValue(true)
 			} else {
-				item.TaskReadRip = types.BoolValue(false)
+				item.TaskReadRip = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.eigrp"); cValue.Exists() {
 				item.TaskReadEigrp = types.BoolValue(true)
 			} else {
-				item.TaskReadEigrp = types.BoolValue(false)
+				item.TaskReadEigrp = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.sbc"); cValue.Exists() {
 				item.TaskReadSbc = types.BoolValue(true)
 			} else {
-				item.TaskReadSbc = types.BoolValue(false)
+				item.TaskReadSbc = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.firewall"); cValue.Exists() {
 				item.TaskReadFirewall = types.BoolValue(true)
 			} else {
-				item.TaskReadFirewall = types.BoolValue(false)
+				item.TaskReadFirewall = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.l2vpn"); cValue.Exists() {
 				item.TaskReadL2vpn = types.BoolValue(true)
 			} else {
-				item.TaskReadL2vpn = types.BoolValue(false)
+				item.TaskReadL2vpn = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.ethernet-services"); cValue.Exists() {
 				item.TaskReadEthernetServices = types.BoolValue(true)
 			} else {
-				item.TaskReadEthernetServices = types.BoolValue(false)
+				item.TaskReadEthernetServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.eem"); cValue.Exists() {
 				item.TaskReadEem = types.BoolValue(true)
 			} else {
-				item.TaskReadEem = types.BoolValue(false)
+				item.TaskReadEem = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.li"); cValue.Exists() {
 				item.TaskReadLi = types.BoolValue(true)
 			} else {
-				item.TaskReadLi = types.BoolValue(false)
+				item.TaskReadLi = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.ancp"); cValue.Exists() {
 				item.TaskReadAncp = types.BoolValue(true)
 			} else {
-				item.TaskReadAncp = types.BoolValue(false)
+				item.TaskReadAncp = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.cgn"); cValue.Exists() {
 				item.TaskReadCgn = types.BoolValue(true)
 			} else {
-				item.TaskReadCgn = types.BoolValue(false)
+				item.TaskReadCgn = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.call-home"); cValue.Exists() {
 				item.TaskReadCallHome = types.BoolValue(true)
 			} else {
-				item.TaskReadCallHome = types.BoolValue(false)
+				item.TaskReadCallHome = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.rcmd"); cValue.Exists() {
 				item.TaskReadRcmd = types.BoolValue(true)
 			} else {
-				item.TaskReadRcmd = types.BoolValue(false)
+				item.TaskReadRcmd = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.vpdn"); cValue.Exists() {
 				item.TaskReadVpdn = types.BoolValue(true)
 			} else {
-				item.TaskReadVpdn = types.BoolValue(false)
+				item.TaskReadVpdn = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.nps"); cValue.Exists() {
 				item.TaskReadNps = types.BoolValue(true)
 			} else {
-				item.TaskReadNps = types.BoolValue(false)
+				item.TaskReadNps = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.lisp"); cValue.Exists() {
 				item.TaskReadLisp = types.BoolValue(true)
 			} else {
-				item.TaskReadLisp = types.BoolValue(false)
+				item.TaskReadLisp = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.pbr"); cValue.Exists() {
 				item.TaskReadPbr = types.BoolValue(true)
 			} else {
-				item.TaskReadPbr = types.BoolValue(false)
+				item.TaskReadPbr = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.otn"); cValue.Exists() {
 				item.TaskReadOtn = types.BoolValue(true)
 			} else {
-				item.TaskReadOtn = types.BoolValue(false)
+				item.TaskReadOtn = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.nacm"); cValue.Exists() {
 				item.TaskReadNacm = types.BoolValue(true)
 			} else {
-				item.TaskReadNacm = types.BoolValue(false)
+				item.TaskReadNacm = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.plat-mgr"); cValue.Exists() {
 				item.TaskReadPlatMgr = types.BoolValue(true)
 			} else {
-				item.TaskReadPlatMgr = types.BoolValue(false)
+				item.TaskReadPlatMgr = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.cpri"); cValue.Exists() {
 				item.TaskReadCpri = types.BoolValue(true)
 			} else {
-				item.TaskReadCpri = types.BoolValue(false)
+				item.TaskReadCpri = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.lldp"); cValue.Exists() {
 				item.TaskReadLldp = types.BoolValue(true)
 			} else {
-				item.TaskReadLldp = types.BoolValue(false)
+				item.TaskReadLldp = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.l2rib"); cValue.Exists() {
 				item.TaskReadL2rib = types.BoolValue(true)
 			} else {
-				item.TaskReadL2rib = types.BoolValue(false)
+				item.TaskReadL2rib = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.dossier"); cValue.Exists() {
 				item.TaskReadDossier = types.BoolValue(true)
 			} else {
-				item.TaskReadDossier = types.BoolValue(false)
+				item.TaskReadDossier = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.fti"); cValue.Exists() {
 				item.TaskReadFti = types.BoolValue(true)
 			} else {
-				item.TaskReadFti = types.BoolValue(false)
+				item.TaskReadFti = types.BoolNull()
 			}
 			if cValue := v.Get("task.read.fc"); cValue.Exists() {
 				item.TaskReadFc = types.BoolValue(true)
 			} else {
-				item.TaskReadFc = types.BoolValue(false)
+				item.TaskReadFc = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.bgp"); cValue.Exists() {
 				item.TaskWriteBgp = types.BoolValue(true)
 			} else {
-				item.TaskWriteBgp = types.BoolValue(false)
+				item.TaskWriteBgp = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.ospf"); cValue.Exists() {
 				item.TaskWriteOspf = types.BoolValue(true)
 			} else {
-				item.TaskWriteOspf = types.BoolValue(false)
+				item.TaskWriteOspf = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.hsrp"); cValue.Exists() {
 				item.TaskWriteHsrp = types.BoolValue(true)
 			} else {
-				item.TaskWriteHsrp = types.BoolValue(false)
+				item.TaskWriteHsrp = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.isis"); cValue.Exists() {
 				item.TaskWriteIsis = types.BoolValue(true)
 			} else {
-				item.TaskWriteIsis = types.BoolValue(false)
+				item.TaskWriteIsis = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.route-map"); cValue.Exists() {
 				item.TaskWriteRouteMap = types.BoolValue(true)
 			} else {
-				item.TaskWriteRouteMap = types.BoolValue(false)
+				item.TaskWriteRouteMap = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.route-policy"); cValue.Exists() {
 				item.TaskWriteRoutePolicy = types.BoolValue(true)
 			} else {
-				item.TaskWriteRoutePolicy = types.BoolValue(false)
+				item.TaskWriteRoutePolicy = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.static"); cValue.Exists() {
 				item.TaskWriteStatic = types.BoolValue(true)
 			} else {
-				item.TaskWriteStatic = types.BoolValue(false)
+				item.TaskWriteStatic = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.vrrp"); cValue.Exists() {
 				item.TaskWriteVrrp = types.BoolValue(true)
 			} else {
-				item.TaskWriteVrrp = types.BoolValue(false)
+				item.TaskWriteVrrp = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.cef"); cValue.Exists() {
 				item.TaskWriteCef = types.BoolValue(true)
 			} else {
-				item.TaskWriteCef = types.BoolValue(false)
+				item.TaskWriteCef = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.lpts"); cValue.Exists() {
 				item.TaskWriteLpts = types.BoolValue(true)
 			} else {
-				item.TaskWriteLpts = types.BoolValue(false)
+				item.TaskWriteLpts = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.ipv4"); cValue.Exists() {
 				item.TaskWriteIpv4 = types.BoolValue(true)
 			} else {
-				item.TaskWriteIpv4 = types.BoolValue(false)
+				item.TaskWriteIpv4 = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.rib"); cValue.Exists() {
 				item.TaskWriteRib = types.BoolValue(true)
 			} else {
-				item.TaskWriteRib = types.BoolValue(false)
+				item.TaskWriteRib = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.multicast"); cValue.Exists() {
 				item.TaskWriteMulticast = types.BoolValue(true)
 			} else {
-				item.TaskWriteMulticast = types.BoolValue(false)
+				item.TaskWriteMulticast = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.mpls-te"); cValue.Exists() {
 				item.TaskWriteMplsTe = types.BoolValue(true)
 			} else {
-				item.TaskWriteMplsTe = types.BoolValue(false)
+				item.TaskWriteMplsTe = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.mpls-ldp"); cValue.Exists() {
 				item.TaskWriteMplsLdp = types.BoolValue(true)
 			} else {
-				item.TaskWriteMplsLdp = types.BoolValue(false)
+				item.TaskWriteMplsLdp = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.mpls-static"); cValue.Exists() {
 				item.TaskWriteMplsStatic = types.BoolValue(true)
 			} else {
-				item.TaskWriteMplsStatic = types.BoolValue(false)
+				item.TaskWriteMplsStatic = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.ouni"); cValue.Exists() {
 				item.TaskWriteOuni = types.BoolValue(true)
 			} else {
-				item.TaskWriteOuni = types.BoolValue(false)
+				item.TaskWriteOuni = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.fabric"); cValue.Exists() {
 				item.TaskWriteFabric = types.BoolValue(true)
 			} else {
-				item.TaskWriteFabric = types.BoolValue(false)
+				item.TaskWriteFabric = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.bundle"); cValue.Exists() {
 				item.TaskWriteBundle = types.BoolValue(true)
 			} else {
-				item.TaskWriteBundle = types.BoolValue(false)
+				item.TaskWriteBundle = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.network"); cValue.Exists() {
 				item.TaskWriteNetwork = types.BoolValue(true)
 			} else {
-				item.TaskWriteNetwork = types.BoolValue(false)
+				item.TaskWriteNetwork = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.transport"); cValue.Exists() {
 				item.TaskWriteTransport = types.BoolValue(true)
 			} else {
-				item.TaskWriteTransport = types.BoolValue(false)
+				item.TaskWriteTransport = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.ppp"); cValue.Exists() {
 				item.TaskWritePpp = types.BoolValue(true)
 			} else {
-				item.TaskWritePpp = types.BoolValue(false)
+				item.TaskWritePpp = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.hdlc"); cValue.Exists() {
 				item.TaskWriteHdlc = types.BoolValue(true)
 			} else {
-				item.TaskWriteHdlc = types.BoolValue(false)
+				item.TaskWriteHdlc = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.pos-dpt"); cValue.Exists() {
 				item.TaskWritePosDpt = types.BoolValue(true)
 			} else {
-				item.TaskWritePosDpt = types.BoolValue(false)
+				item.TaskWritePosDpt = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.sonet-sdh"); cValue.Exists() {
 				item.TaskWriteSonetSdh = types.BoolValue(true)
 			} else {
-				item.TaskWriteSonetSdh = types.BoolValue(false)
+				item.TaskWriteSonetSdh = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.dwdm"); cValue.Exists() {
 				item.TaskWriteDwdm = types.BoolValue(true)
 			} else {
-				item.TaskWriteDwdm = types.BoolValue(false)
+				item.TaskWriteDwdm = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.tunnel"); cValue.Exists() {
 				item.TaskWriteTunnel = types.BoolValue(true)
 			} else {
-				item.TaskWriteTunnel = types.BoolValue(false)
+				item.TaskWriteTunnel = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.vlan"); cValue.Exists() {
 				item.TaskWriteVlan = types.BoolValue(true)
 			} else {
-				item.TaskWriteVlan = types.BoolValue(false)
+				item.TaskWriteVlan = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.qos"); cValue.Exists() {
 				item.TaskWriteQos = types.BoolValue(true)
 			} else {
-				item.TaskWriteQos = types.BoolValue(false)
+				item.TaskWriteQos = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.acl"); cValue.Exists() {
 				item.TaskWriteAcl = types.BoolValue(true)
 			} else {
-				item.TaskWriteAcl = types.BoolValue(false)
+				item.TaskWriteAcl = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.aaa"); cValue.Exists() {
 				item.TaskWriteAaa = types.BoolValue(true)
 			} else {
-				item.TaskWriteAaa = types.BoolValue(false)
+				item.TaskWriteAaa = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.crypto"); cValue.Exists() {
 				item.TaskWriteCrypto = types.BoolValue(true)
 			} else {
-				item.TaskWriteCrypto = types.BoolValue(false)
+				item.TaskWriteCrypto = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.snmp"); cValue.Exists() {
 				item.TaskWriteSnmp = types.BoolValue(true)
 			} else {
-				item.TaskWriteSnmp = types.BoolValue(false)
+				item.TaskWriteSnmp = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.config-mgmt"); cValue.Exists() {
 				item.TaskWriteConfigMgmt = types.BoolValue(true)
 			} else {
-				item.TaskWriteConfigMgmt = types.BoolValue(false)
+				item.TaskWriteConfigMgmt = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.config-services"); cValue.Exists() {
 				item.TaskWriteConfigServices = types.BoolValue(true)
 			} else {
-				item.TaskWriteConfigServices = types.BoolValue(false)
+				item.TaskWriteConfigServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.host-services"); cValue.Exists() {
 				item.TaskWriteHostServices = types.BoolValue(true)
 			} else {
-				item.TaskWriteHostServices = types.BoolValue(false)
+				item.TaskWriteHostServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.boot"); cValue.Exists() {
 				item.TaskWriteBoot = types.BoolValue(true)
 			} else {
-				item.TaskWriteBoot = types.BoolValue(false)
+				item.TaskWriteBoot = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.fault-mgr"); cValue.Exists() {
 				item.TaskWriteFaultMgr = types.BoolValue(true)
 			} else {
-				item.TaskWriteFaultMgr = types.BoolValue(false)
+				item.TaskWriteFaultMgr = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.filesystem"); cValue.Exists() {
 				item.TaskWriteFilesystem = types.BoolValue(true)
 			} else {
-				item.TaskWriteFilesystem = types.BoolValue(false)
+				item.TaskWriteFilesystem = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.interface"); cValue.Exists() {
 				item.TaskWriteInterface = types.BoolValue(true)
 			} else {
-				item.TaskWriteInterface = types.BoolValue(false)
+				item.TaskWriteInterface = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.ip-services"); cValue.Exists() {
 				item.TaskWriteIpServices = types.BoolValue(true)
 			} else {
-				item.TaskWriteIpServices = types.BoolValue(false)
+				item.TaskWriteIpServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.pkg-mgmt"); cValue.Exists() {
 				item.TaskWritePkgMgmt = types.BoolValue(true)
 			} else {
-				item.TaskWritePkgMgmt = types.BoolValue(false)
+				item.TaskWritePkgMgmt = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.system"); cValue.Exists() {
 				item.TaskWriteSystem = types.BoolValue(true)
 			} else {
-				item.TaskWriteSystem = types.BoolValue(false)
+				item.TaskWriteSystem = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.tty-access"); cValue.Exists() {
 				item.TaskWriteTtyAccess = types.BoolValue(true)
 			} else {
-				item.TaskWriteTtyAccess = types.BoolValue(false)
+				item.TaskWriteTtyAccess = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.basic-services"); cValue.Exists() {
 				item.TaskWriteBasicServices = types.BoolValue(true)
 			} else {
-				item.TaskWriteBasicServices = types.BoolValue(false)
+				item.TaskWriteBasicServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.cdp"); cValue.Exists() {
 				item.TaskWriteCdp = types.BoolValue(true)
 			} else {
-				item.TaskWriteCdp = types.BoolValue(false)
+				item.TaskWriteCdp = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.diag"); cValue.Exists() {
 				item.TaskWriteDiag = types.BoolValue(true)
 			} else {
-				item.TaskWriteDiag = types.BoolValue(false)
+				item.TaskWriteDiag = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.ext-access"); cValue.Exists() {
 				item.TaskWriteExtAccess = types.BoolValue(true)
 			} else {
-				item.TaskWriteExtAccess = types.BoolValue(false)
+				item.TaskWriteExtAccess = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.bcdl"); cValue.Exists() {
 				item.TaskWriteBcdl = types.BoolValue(true)
 			} else {
-				item.TaskWriteBcdl = types.BoolValue(false)
+				item.TaskWriteBcdl = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.sysmgr"); cValue.Exists() {
 				item.TaskWriteSysmgr = types.BoolValue(true)
 			} else {
-				item.TaskWriteSysmgr = types.BoolValue(false)
+				item.TaskWriteSysmgr = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.logging"); cValue.Exists() {
 				item.TaskWriteLogging = types.BoolValue(true)
 			} else {
-				item.TaskWriteLogging = types.BoolValue(false)
+				item.TaskWriteLogging = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.netflow"); cValue.Exists() {
 				item.TaskWriteNetflow = types.BoolValue(true)
 			} else {
-				item.TaskWriteNetflow = types.BoolValue(false)
+				item.TaskWriteNetflow = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.drivers"); cValue.Exists() {
 				item.TaskWriteDrivers = types.BoolValue(true)
 			} else {
-				item.TaskWriteDrivers = types.BoolValue(false)
+				item.TaskWriteDrivers = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.fr"); cValue.Exists() {
 				item.TaskWriteFr = types.BoolValue(true)
 			} else {
-				item.TaskWriteFr = types.BoolValue(false)
+				item.TaskWriteFr = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.monitor"); cValue.Exists() {
 				item.TaskWriteMonitor = types.BoolValue(true)
 			} else {
-				item.TaskWriteMonitor = types.BoolValue(false)
+				item.TaskWriteMonitor = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.inventory"); cValue.Exists() {
 				item.TaskWriteInventory = types.BoolValue(true)
 			} else {
-				item.TaskWriteInventory = types.BoolValue(false)
+				item.TaskWriteInventory = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.ipv6"); cValue.Exists() {
 				item.TaskWriteIpv6 = types.BoolValue(true)
 			} else {
-				item.TaskWriteIpv6 = types.BoolValue(false)
+				item.TaskWriteIpv6 = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.admin"); cValue.Exists() {
 				item.TaskWriteAdmin = types.BoolValue(true)
 			} else {
-				item.TaskWriteAdmin = types.BoolValue(false)
+				item.TaskWriteAdmin = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.atm"); cValue.Exists() {
 				item.TaskWriteAtm = types.BoolValue(true)
 			} else {
-				item.TaskWriteAtm = types.BoolValue(false)
+				item.TaskWriteAtm = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.bfd"); cValue.Exists() {
 				item.TaskWriteBfd = types.BoolValue(true)
 			} else {
-				item.TaskWriteBfd = types.BoolValue(false)
+				item.TaskWriteBfd = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.rip"); cValue.Exists() {
 				item.TaskWriteRip = types.BoolValue(true)
 			} else {
-				item.TaskWriteRip = types.BoolValue(false)
+				item.TaskWriteRip = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.eigrp"); cValue.Exists() {
 				item.TaskWriteEigrp = types.BoolValue(true)
 			} else {
-				item.TaskWriteEigrp = types.BoolValue(false)
+				item.TaskWriteEigrp = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.sbc"); cValue.Exists() {
 				item.TaskWriteSbc = types.BoolValue(true)
 			} else {
-				item.TaskWriteSbc = types.BoolValue(false)
+				item.TaskWriteSbc = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.firewall"); cValue.Exists() {
 				item.TaskWriteFirewall = types.BoolValue(true)
 			} else {
-				item.TaskWriteFirewall = types.BoolValue(false)
+				item.TaskWriteFirewall = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.l2vpn"); cValue.Exists() {
 				item.TaskWriteL2vpn = types.BoolValue(true)
 			} else {
-				item.TaskWriteL2vpn = types.BoolValue(false)
+				item.TaskWriteL2vpn = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.ethernet-services"); cValue.Exists() {
 				item.TaskWriteEthernetServices = types.BoolValue(true)
 			} else {
-				item.TaskWriteEthernetServices = types.BoolValue(false)
+				item.TaskWriteEthernetServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.eem"); cValue.Exists() {
 				item.TaskWriteEem = types.BoolValue(true)
 			} else {
-				item.TaskWriteEem = types.BoolValue(false)
+				item.TaskWriteEem = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.li"); cValue.Exists() {
 				item.TaskWriteLi = types.BoolValue(true)
 			} else {
-				item.TaskWriteLi = types.BoolValue(false)
+				item.TaskWriteLi = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.ancp"); cValue.Exists() {
 				item.TaskWriteAncp = types.BoolValue(true)
 			} else {
-				item.TaskWriteAncp = types.BoolValue(false)
+				item.TaskWriteAncp = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.cgn"); cValue.Exists() {
 				item.TaskWriteCgn = types.BoolValue(true)
 			} else {
-				item.TaskWriteCgn = types.BoolValue(false)
+				item.TaskWriteCgn = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.call-home"); cValue.Exists() {
 				item.TaskWriteCallHome = types.BoolValue(true)
 			} else {
-				item.TaskWriteCallHome = types.BoolValue(false)
+				item.TaskWriteCallHome = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.rcmd"); cValue.Exists() {
 				item.TaskWriteRcmd = types.BoolValue(true)
 			} else {
-				item.TaskWriteRcmd = types.BoolValue(false)
+				item.TaskWriteRcmd = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.vpdn"); cValue.Exists() {
 				item.TaskWriteVpdn = types.BoolValue(true)
 			} else {
-				item.TaskWriteVpdn = types.BoolValue(false)
+				item.TaskWriteVpdn = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.nps"); cValue.Exists() {
 				item.TaskWriteNps = types.BoolValue(true)
 			} else {
-				item.TaskWriteNps = types.BoolValue(false)
+				item.TaskWriteNps = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.lisp"); cValue.Exists() {
 				item.TaskWriteLisp = types.BoolValue(true)
 			} else {
-				item.TaskWriteLisp = types.BoolValue(false)
+				item.TaskWriteLisp = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.pbr"); cValue.Exists() {
 				item.TaskWritePbr = types.BoolValue(true)
 			} else {
-				item.TaskWritePbr = types.BoolValue(false)
+				item.TaskWritePbr = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.otn"); cValue.Exists() {
 				item.TaskWriteOtn = types.BoolValue(true)
 			} else {
-				item.TaskWriteOtn = types.BoolValue(false)
+				item.TaskWriteOtn = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.nacm"); cValue.Exists() {
 				item.TaskWriteNacm = types.BoolValue(true)
 			} else {
-				item.TaskWriteNacm = types.BoolValue(false)
+				item.TaskWriteNacm = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.plat-mgr"); cValue.Exists() {
 				item.TaskWritePlatMgr = types.BoolValue(true)
 			} else {
-				item.TaskWritePlatMgr = types.BoolValue(false)
+				item.TaskWritePlatMgr = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.cpri"); cValue.Exists() {
 				item.TaskWriteCpri = types.BoolValue(true)
 			} else {
-				item.TaskWriteCpri = types.BoolValue(false)
+				item.TaskWriteCpri = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.lldp"); cValue.Exists() {
 				item.TaskWriteLldp = types.BoolValue(true)
 			} else {
-				item.TaskWriteLldp = types.BoolValue(false)
+				item.TaskWriteLldp = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.l2rib"); cValue.Exists() {
 				item.TaskWriteL2rib = types.BoolValue(true)
 			} else {
-				item.TaskWriteL2rib = types.BoolValue(false)
+				item.TaskWriteL2rib = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.dossier"); cValue.Exists() {
 				item.TaskWriteDossier = types.BoolValue(true)
 			} else {
-				item.TaskWriteDossier = types.BoolValue(false)
+				item.TaskWriteDossier = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.fti"); cValue.Exists() {
 				item.TaskWriteFti = types.BoolValue(true)
 			} else {
-				item.TaskWriteFti = types.BoolValue(false)
+				item.TaskWriteFti = types.BoolNull()
 			}
 			if cValue := v.Get("task.write.fc"); cValue.Exists() {
 				item.TaskWriteFc = types.BoolValue(true)
 			} else {
-				item.TaskWriteFc = types.BoolValue(false)
+				item.TaskWriteFc = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.bgp"); cValue.Exists() {
 				item.TaskExecuteBgp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteBgp = types.BoolValue(false)
+				item.TaskExecuteBgp = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.ospf"); cValue.Exists() {
 				item.TaskExecuteOspf = types.BoolValue(true)
 			} else {
-				item.TaskExecuteOspf = types.BoolValue(false)
+				item.TaskExecuteOspf = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.hsrp"); cValue.Exists() {
 				item.TaskExecuteHsrp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteHsrp = types.BoolValue(false)
+				item.TaskExecuteHsrp = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.isis"); cValue.Exists() {
 				item.TaskExecuteIsis = types.BoolValue(true)
 			} else {
-				item.TaskExecuteIsis = types.BoolValue(false)
+				item.TaskExecuteIsis = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.route-map"); cValue.Exists() {
 				item.TaskExecuteRouteMap = types.BoolValue(true)
 			} else {
-				item.TaskExecuteRouteMap = types.BoolValue(false)
+				item.TaskExecuteRouteMap = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.route-policy"); cValue.Exists() {
 				item.TaskExecuteRoutePolicy = types.BoolValue(true)
 			} else {
-				item.TaskExecuteRoutePolicy = types.BoolValue(false)
+				item.TaskExecuteRoutePolicy = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.static"); cValue.Exists() {
 				item.TaskExecuteStatic = types.BoolValue(true)
 			} else {
-				item.TaskExecuteStatic = types.BoolValue(false)
+				item.TaskExecuteStatic = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.vrrp"); cValue.Exists() {
 				item.TaskExecuteVrrp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteVrrp = types.BoolValue(false)
+				item.TaskExecuteVrrp = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.cef"); cValue.Exists() {
 				item.TaskExecuteCef = types.BoolValue(true)
 			} else {
-				item.TaskExecuteCef = types.BoolValue(false)
+				item.TaskExecuteCef = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.lpts"); cValue.Exists() {
 				item.TaskExecuteLpts = types.BoolValue(true)
 			} else {
-				item.TaskExecuteLpts = types.BoolValue(false)
+				item.TaskExecuteLpts = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.ipv4"); cValue.Exists() {
 				item.TaskExecuteIpv4 = types.BoolValue(true)
 			} else {
-				item.TaskExecuteIpv4 = types.BoolValue(false)
+				item.TaskExecuteIpv4 = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.rib"); cValue.Exists() {
 				item.TaskExecuteRib = types.BoolValue(true)
 			} else {
-				item.TaskExecuteRib = types.BoolValue(false)
+				item.TaskExecuteRib = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.multicast"); cValue.Exists() {
 				item.TaskExecuteMulticast = types.BoolValue(true)
 			} else {
-				item.TaskExecuteMulticast = types.BoolValue(false)
+				item.TaskExecuteMulticast = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.mpls-te"); cValue.Exists() {
 				item.TaskExecuteMplsTe = types.BoolValue(true)
 			} else {
-				item.TaskExecuteMplsTe = types.BoolValue(false)
+				item.TaskExecuteMplsTe = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.mpls-ldp"); cValue.Exists() {
 				item.TaskExecuteMplsLdp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteMplsLdp = types.BoolValue(false)
+				item.TaskExecuteMplsLdp = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.mpls-static"); cValue.Exists() {
 				item.TaskExecuteMplsStatic = types.BoolValue(true)
 			} else {
-				item.TaskExecuteMplsStatic = types.BoolValue(false)
+				item.TaskExecuteMplsStatic = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.ouni"); cValue.Exists() {
 				item.TaskExecuteOuni = types.BoolValue(true)
 			} else {
-				item.TaskExecuteOuni = types.BoolValue(false)
+				item.TaskExecuteOuni = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.fabric"); cValue.Exists() {
 				item.TaskExecuteFabric = types.BoolValue(true)
 			} else {
-				item.TaskExecuteFabric = types.BoolValue(false)
+				item.TaskExecuteFabric = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.bundle"); cValue.Exists() {
 				item.TaskExecuteBundle = types.BoolValue(true)
 			} else {
-				item.TaskExecuteBundle = types.BoolValue(false)
+				item.TaskExecuteBundle = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.network"); cValue.Exists() {
 				item.TaskExecuteNetwork = types.BoolValue(true)
 			} else {
-				item.TaskExecuteNetwork = types.BoolValue(false)
+				item.TaskExecuteNetwork = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.transport"); cValue.Exists() {
 				item.TaskExecuteTransport = types.BoolValue(true)
 			} else {
-				item.TaskExecuteTransport = types.BoolValue(false)
+				item.TaskExecuteTransport = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.ppp"); cValue.Exists() {
 				item.TaskExecutePpp = types.BoolValue(true)
 			} else {
-				item.TaskExecutePpp = types.BoolValue(false)
+				item.TaskExecutePpp = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.hdlc"); cValue.Exists() {
 				item.TaskExecuteHdlc = types.BoolValue(true)
 			} else {
-				item.TaskExecuteHdlc = types.BoolValue(false)
+				item.TaskExecuteHdlc = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.pos-dpt"); cValue.Exists() {
 				item.TaskExecutePosDpt = types.BoolValue(true)
 			} else {
-				item.TaskExecutePosDpt = types.BoolValue(false)
+				item.TaskExecutePosDpt = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.sonet-sdh"); cValue.Exists() {
 				item.TaskExecuteSonetSdh = types.BoolValue(true)
 			} else {
-				item.TaskExecuteSonetSdh = types.BoolValue(false)
+				item.TaskExecuteSonetSdh = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.dwdm"); cValue.Exists() {
 				item.TaskExecuteDwdm = types.BoolValue(true)
 			} else {
-				item.TaskExecuteDwdm = types.BoolValue(false)
+				item.TaskExecuteDwdm = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.tunnel"); cValue.Exists() {
 				item.TaskExecuteTunnel = types.BoolValue(true)
 			} else {
-				item.TaskExecuteTunnel = types.BoolValue(false)
+				item.TaskExecuteTunnel = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.vlan"); cValue.Exists() {
 				item.TaskExecuteVlan = types.BoolValue(true)
 			} else {
-				item.TaskExecuteVlan = types.BoolValue(false)
+				item.TaskExecuteVlan = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.qos"); cValue.Exists() {
 				item.TaskExecuteQos = types.BoolValue(true)
 			} else {
-				item.TaskExecuteQos = types.BoolValue(false)
+				item.TaskExecuteQos = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.acl"); cValue.Exists() {
 				item.TaskExecuteAcl = types.BoolValue(true)
 			} else {
-				item.TaskExecuteAcl = types.BoolValue(false)
+				item.TaskExecuteAcl = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.aaa"); cValue.Exists() {
 				item.TaskExecuteAaa = types.BoolValue(true)
 			} else {
-				item.TaskExecuteAaa = types.BoolValue(false)
+				item.TaskExecuteAaa = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.crypto"); cValue.Exists() {
 				item.TaskExecuteCrypto = types.BoolValue(true)
 			} else {
-				item.TaskExecuteCrypto = types.BoolValue(false)
+				item.TaskExecuteCrypto = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.snmp"); cValue.Exists() {
 				item.TaskExecuteSnmp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteSnmp = types.BoolValue(false)
+				item.TaskExecuteSnmp = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.config-mgmt"); cValue.Exists() {
 				item.TaskExecuteConfigMgmt = types.BoolValue(true)
 			} else {
-				item.TaskExecuteConfigMgmt = types.BoolValue(false)
+				item.TaskExecuteConfigMgmt = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.config-services"); cValue.Exists() {
 				item.TaskExecuteConfigServices = types.BoolValue(true)
 			} else {
-				item.TaskExecuteConfigServices = types.BoolValue(false)
+				item.TaskExecuteConfigServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.host-services"); cValue.Exists() {
 				item.TaskExecuteHostServices = types.BoolValue(true)
 			} else {
-				item.TaskExecuteHostServices = types.BoolValue(false)
+				item.TaskExecuteHostServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.boot"); cValue.Exists() {
 				item.TaskExecuteBoot = types.BoolValue(true)
 			} else {
-				item.TaskExecuteBoot = types.BoolValue(false)
+				item.TaskExecuteBoot = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.fault-mgr"); cValue.Exists() {
 				item.TaskExecuteFaultMgr = types.BoolValue(true)
 			} else {
-				item.TaskExecuteFaultMgr = types.BoolValue(false)
+				item.TaskExecuteFaultMgr = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.filesystem"); cValue.Exists() {
 				item.TaskExecuteFilesystem = types.BoolValue(true)
 			} else {
-				item.TaskExecuteFilesystem = types.BoolValue(false)
+				item.TaskExecuteFilesystem = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.interface"); cValue.Exists() {
 				item.TaskExecuteInterface = types.BoolValue(true)
 			} else {
-				item.TaskExecuteInterface = types.BoolValue(false)
+				item.TaskExecuteInterface = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.ip-services"); cValue.Exists() {
 				item.TaskExecuteIpServices = types.BoolValue(true)
 			} else {
-				item.TaskExecuteIpServices = types.BoolValue(false)
+				item.TaskExecuteIpServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.pkg-mgmt"); cValue.Exists() {
 				item.TaskExecutePkgMgmt = types.BoolValue(true)
 			} else {
-				item.TaskExecutePkgMgmt = types.BoolValue(false)
+				item.TaskExecutePkgMgmt = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.system"); cValue.Exists() {
 				item.TaskExecuteSystem = types.BoolValue(true)
 			} else {
-				item.TaskExecuteSystem = types.BoolValue(false)
+				item.TaskExecuteSystem = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.tty-access"); cValue.Exists() {
 				item.TaskExecuteTtyAccess = types.BoolValue(true)
 			} else {
-				item.TaskExecuteTtyAccess = types.BoolValue(false)
+				item.TaskExecuteTtyAccess = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.basic-services"); cValue.Exists() {
 				item.TaskExecuteBasicServices = types.BoolValue(true)
 			} else {
-				item.TaskExecuteBasicServices = types.BoolValue(false)
+				item.TaskExecuteBasicServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.cdp"); cValue.Exists() {
 				item.TaskExecuteCdp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteCdp = types.BoolValue(false)
+				item.TaskExecuteCdp = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.diag"); cValue.Exists() {
 				item.TaskExecuteDiag = types.BoolValue(true)
 			} else {
-				item.TaskExecuteDiag = types.BoolValue(false)
+				item.TaskExecuteDiag = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.ext-access"); cValue.Exists() {
 				item.TaskExecuteExtAccess = types.BoolValue(true)
 			} else {
-				item.TaskExecuteExtAccess = types.BoolValue(false)
+				item.TaskExecuteExtAccess = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.bcdl"); cValue.Exists() {
 				item.TaskExecuteBcdl = types.BoolValue(true)
 			} else {
-				item.TaskExecuteBcdl = types.BoolValue(false)
+				item.TaskExecuteBcdl = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.sysmgr"); cValue.Exists() {
 				item.TaskExecuteSysmgr = types.BoolValue(true)
 			} else {
-				item.TaskExecuteSysmgr = types.BoolValue(false)
+				item.TaskExecuteSysmgr = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.logging"); cValue.Exists() {
 				item.TaskExecuteLogging = types.BoolValue(true)
 			} else {
-				item.TaskExecuteLogging = types.BoolValue(false)
+				item.TaskExecuteLogging = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.netflow"); cValue.Exists() {
 				item.TaskExecuteNetflow = types.BoolValue(true)
 			} else {
-				item.TaskExecuteNetflow = types.BoolValue(false)
+				item.TaskExecuteNetflow = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.drivers"); cValue.Exists() {
 				item.TaskExecuteDrivers = types.BoolValue(true)
 			} else {
-				item.TaskExecuteDrivers = types.BoolValue(false)
+				item.TaskExecuteDrivers = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.fr"); cValue.Exists() {
 				item.TaskExecuteFr = types.BoolValue(true)
 			} else {
-				item.TaskExecuteFr = types.BoolValue(false)
+				item.TaskExecuteFr = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.monitor"); cValue.Exists() {
 				item.TaskExecuteMonitor = types.BoolValue(true)
 			} else {
-				item.TaskExecuteMonitor = types.BoolValue(false)
+				item.TaskExecuteMonitor = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.inventory"); cValue.Exists() {
 				item.TaskExecuteInventory = types.BoolValue(true)
 			} else {
-				item.TaskExecuteInventory = types.BoolValue(false)
+				item.TaskExecuteInventory = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.ipv6"); cValue.Exists() {
 				item.TaskExecuteIpv6 = types.BoolValue(true)
 			} else {
-				item.TaskExecuteIpv6 = types.BoolValue(false)
+				item.TaskExecuteIpv6 = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.admin"); cValue.Exists() {
 				item.TaskExecuteAdmin = types.BoolValue(true)
 			} else {
-				item.TaskExecuteAdmin = types.BoolValue(false)
+				item.TaskExecuteAdmin = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.atm"); cValue.Exists() {
 				item.TaskExecuteAtm = types.BoolValue(true)
 			} else {
-				item.TaskExecuteAtm = types.BoolValue(false)
+				item.TaskExecuteAtm = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.bfd"); cValue.Exists() {
 				item.TaskExecuteBfd = types.BoolValue(true)
 			} else {
-				item.TaskExecuteBfd = types.BoolValue(false)
+				item.TaskExecuteBfd = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.rip"); cValue.Exists() {
 				item.TaskExecuteRip = types.BoolValue(true)
 			} else {
-				item.TaskExecuteRip = types.BoolValue(false)
+				item.TaskExecuteRip = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.eigrp"); cValue.Exists() {
 				item.TaskExecuteEigrp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteEigrp = types.BoolValue(false)
+				item.TaskExecuteEigrp = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.sbc"); cValue.Exists() {
 				item.TaskExecuteSbc = types.BoolValue(true)
 			} else {
-				item.TaskExecuteSbc = types.BoolValue(false)
+				item.TaskExecuteSbc = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.firewall"); cValue.Exists() {
 				item.TaskExecuteFirewall = types.BoolValue(true)
 			} else {
-				item.TaskExecuteFirewall = types.BoolValue(false)
+				item.TaskExecuteFirewall = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.l2vpn"); cValue.Exists() {
 				item.TaskExecuteL2vpn = types.BoolValue(true)
 			} else {
-				item.TaskExecuteL2vpn = types.BoolValue(false)
+				item.TaskExecuteL2vpn = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.ethernet-services"); cValue.Exists() {
 				item.TaskExecuteEthernetServices = types.BoolValue(true)
 			} else {
-				item.TaskExecuteEthernetServices = types.BoolValue(false)
+				item.TaskExecuteEthernetServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.eem"); cValue.Exists() {
 				item.TaskExecuteEem = types.BoolValue(true)
 			} else {
-				item.TaskExecuteEem = types.BoolValue(false)
+				item.TaskExecuteEem = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.li"); cValue.Exists() {
 				item.TaskExecuteLi = types.BoolValue(true)
 			} else {
-				item.TaskExecuteLi = types.BoolValue(false)
+				item.TaskExecuteLi = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.ancp"); cValue.Exists() {
 				item.TaskExecuteAncp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteAncp = types.BoolValue(false)
+				item.TaskExecuteAncp = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.cgn"); cValue.Exists() {
 				item.TaskExecuteCgn = types.BoolValue(true)
 			} else {
-				item.TaskExecuteCgn = types.BoolValue(false)
+				item.TaskExecuteCgn = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.call-home"); cValue.Exists() {
 				item.TaskExecuteCallHome = types.BoolValue(true)
 			} else {
-				item.TaskExecuteCallHome = types.BoolValue(false)
+				item.TaskExecuteCallHome = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.rcmd"); cValue.Exists() {
 				item.TaskExecuteRcmd = types.BoolValue(true)
 			} else {
-				item.TaskExecuteRcmd = types.BoolValue(false)
+				item.TaskExecuteRcmd = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.vpdn"); cValue.Exists() {
 				item.TaskExecuteVpdn = types.BoolValue(true)
 			} else {
-				item.TaskExecuteVpdn = types.BoolValue(false)
+				item.TaskExecuteVpdn = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.nps"); cValue.Exists() {
 				item.TaskExecuteNps = types.BoolValue(true)
 			} else {
-				item.TaskExecuteNps = types.BoolValue(false)
+				item.TaskExecuteNps = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.lisp"); cValue.Exists() {
 				item.TaskExecuteLisp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteLisp = types.BoolValue(false)
+				item.TaskExecuteLisp = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.pbr"); cValue.Exists() {
 				item.TaskExecutePbr = types.BoolValue(true)
 			} else {
-				item.TaskExecutePbr = types.BoolValue(false)
+				item.TaskExecutePbr = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.otn"); cValue.Exists() {
 				item.TaskExecuteOtn = types.BoolValue(true)
 			} else {
-				item.TaskExecuteOtn = types.BoolValue(false)
+				item.TaskExecuteOtn = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.nacm"); cValue.Exists() {
 				item.TaskExecuteNacm = types.BoolValue(true)
 			} else {
-				item.TaskExecuteNacm = types.BoolValue(false)
+				item.TaskExecuteNacm = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.plat-mgr"); cValue.Exists() {
 				item.TaskExecutePlatMgr = types.BoolValue(true)
 			} else {
-				item.TaskExecutePlatMgr = types.BoolValue(false)
+				item.TaskExecutePlatMgr = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.cpri"); cValue.Exists() {
 				item.TaskExecuteCpri = types.BoolValue(true)
 			} else {
-				item.TaskExecuteCpri = types.BoolValue(false)
+				item.TaskExecuteCpri = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.lldp"); cValue.Exists() {
 				item.TaskExecuteLldp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteLldp = types.BoolValue(false)
+				item.TaskExecuteLldp = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.l2rib"); cValue.Exists() {
 				item.TaskExecuteL2rib = types.BoolValue(true)
 			} else {
-				item.TaskExecuteL2rib = types.BoolValue(false)
+				item.TaskExecuteL2rib = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.dossier"); cValue.Exists() {
 				item.TaskExecuteDossier = types.BoolValue(true)
 			} else {
-				item.TaskExecuteDossier = types.BoolValue(false)
+				item.TaskExecuteDossier = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.fti"); cValue.Exists() {
 				item.TaskExecuteFti = types.BoolValue(true)
 			} else {
-				item.TaskExecuteFti = types.BoolValue(false)
+				item.TaskExecuteFti = types.BoolNull()
 			}
 			if cValue := v.Get("task.execute.fc"); cValue.Exists() {
 				item.TaskExecuteFc = types.BoolValue(true)
 			} else {
-				item.TaskExecuteFc = types.BoolValue(false)
+				item.TaskExecuteFc = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.bgp"); cValue.Exists() {
 				item.TaskDebugBgp = types.BoolValue(true)
 			} else {
-				item.TaskDebugBgp = types.BoolValue(false)
+				item.TaskDebugBgp = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.ospf"); cValue.Exists() {
 				item.TaskDebugOspf = types.BoolValue(true)
 			} else {
-				item.TaskDebugOspf = types.BoolValue(false)
+				item.TaskDebugOspf = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.hsrp"); cValue.Exists() {
 				item.TaskDebugHsrp = types.BoolValue(true)
 			} else {
-				item.TaskDebugHsrp = types.BoolValue(false)
+				item.TaskDebugHsrp = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.isis"); cValue.Exists() {
 				item.TaskDebugIsis = types.BoolValue(true)
 			} else {
-				item.TaskDebugIsis = types.BoolValue(false)
+				item.TaskDebugIsis = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.route-map"); cValue.Exists() {
 				item.TaskDebugRouteMap = types.BoolValue(true)
 			} else {
-				item.TaskDebugRouteMap = types.BoolValue(false)
+				item.TaskDebugRouteMap = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.route-policy"); cValue.Exists() {
 				item.TaskDebugRoutePolicy = types.BoolValue(true)
 			} else {
-				item.TaskDebugRoutePolicy = types.BoolValue(false)
+				item.TaskDebugRoutePolicy = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.static"); cValue.Exists() {
 				item.TaskDebugStatic = types.BoolValue(true)
 			} else {
-				item.TaskDebugStatic = types.BoolValue(false)
+				item.TaskDebugStatic = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.vrrp"); cValue.Exists() {
 				item.TaskDebugVrrp = types.BoolValue(true)
 			} else {
-				item.TaskDebugVrrp = types.BoolValue(false)
+				item.TaskDebugVrrp = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.cef"); cValue.Exists() {
 				item.TaskDebugCef = types.BoolValue(true)
 			} else {
-				item.TaskDebugCef = types.BoolValue(false)
+				item.TaskDebugCef = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.lpts"); cValue.Exists() {
 				item.TaskDebugLpts = types.BoolValue(true)
 			} else {
-				item.TaskDebugLpts = types.BoolValue(false)
+				item.TaskDebugLpts = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.ipv4"); cValue.Exists() {
 				item.TaskDebugIpv4 = types.BoolValue(true)
 			} else {
-				item.TaskDebugIpv4 = types.BoolValue(false)
+				item.TaskDebugIpv4 = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.rib"); cValue.Exists() {
 				item.TaskDebugRib = types.BoolValue(true)
 			} else {
-				item.TaskDebugRib = types.BoolValue(false)
+				item.TaskDebugRib = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.multicast"); cValue.Exists() {
 				item.TaskDebugMulticast = types.BoolValue(true)
 			} else {
-				item.TaskDebugMulticast = types.BoolValue(false)
+				item.TaskDebugMulticast = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.mpls-te"); cValue.Exists() {
 				item.TaskDebugMplsTe = types.BoolValue(true)
 			} else {
-				item.TaskDebugMplsTe = types.BoolValue(false)
+				item.TaskDebugMplsTe = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.mpls-ldp"); cValue.Exists() {
 				item.TaskDebugMplsLdp = types.BoolValue(true)
 			} else {
-				item.TaskDebugMplsLdp = types.BoolValue(false)
+				item.TaskDebugMplsLdp = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.mpls-static"); cValue.Exists() {
 				item.TaskDebugMplsStatic = types.BoolValue(true)
 			} else {
-				item.TaskDebugMplsStatic = types.BoolValue(false)
+				item.TaskDebugMplsStatic = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.ouni"); cValue.Exists() {
 				item.TaskDebugOuni = types.BoolValue(true)
 			} else {
-				item.TaskDebugOuni = types.BoolValue(false)
+				item.TaskDebugOuni = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.fabric"); cValue.Exists() {
 				item.TaskDebugFabric = types.BoolValue(true)
 			} else {
-				item.TaskDebugFabric = types.BoolValue(false)
+				item.TaskDebugFabric = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.bundle"); cValue.Exists() {
 				item.TaskDebugBundle = types.BoolValue(true)
 			} else {
-				item.TaskDebugBundle = types.BoolValue(false)
+				item.TaskDebugBundle = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.network"); cValue.Exists() {
 				item.TaskDebugNetwork = types.BoolValue(true)
 			} else {
-				item.TaskDebugNetwork = types.BoolValue(false)
+				item.TaskDebugNetwork = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.transport"); cValue.Exists() {
 				item.TaskDebugTransport = types.BoolValue(true)
 			} else {
-				item.TaskDebugTransport = types.BoolValue(false)
+				item.TaskDebugTransport = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.ppp"); cValue.Exists() {
 				item.TaskDebugPpp = types.BoolValue(true)
 			} else {
-				item.TaskDebugPpp = types.BoolValue(false)
+				item.TaskDebugPpp = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.hdlc"); cValue.Exists() {
 				item.TaskDebugHdlc = types.BoolValue(true)
 			} else {
-				item.TaskDebugHdlc = types.BoolValue(false)
+				item.TaskDebugHdlc = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.pos-dpt"); cValue.Exists() {
 				item.TaskDebugPosDpt = types.BoolValue(true)
 			} else {
-				item.TaskDebugPosDpt = types.BoolValue(false)
+				item.TaskDebugPosDpt = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.sonet-sdh"); cValue.Exists() {
 				item.TaskDebugSonetSdh = types.BoolValue(true)
 			} else {
-				item.TaskDebugSonetSdh = types.BoolValue(false)
+				item.TaskDebugSonetSdh = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.dwdm"); cValue.Exists() {
 				item.TaskDebugDwdm = types.BoolValue(true)
 			} else {
-				item.TaskDebugDwdm = types.BoolValue(false)
+				item.TaskDebugDwdm = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.tunnel"); cValue.Exists() {
 				item.TaskDebugTunnel = types.BoolValue(true)
 			} else {
-				item.TaskDebugTunnel = types.BoolValue(false)
+				item.TaskDebugTunnel = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.vlan"); cValue.Exists() {
 				item.TaskDebugVlan = types.BoolValue(true)
 			} else {
-				item.TaskDebugVlan = types.BoolValue(false)
+				item.TaskDebugVlan = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.qos"); cValue.Exists() {
 				item.TaskDebugQos = types.BoolValue(true)
 			} else {
-				item.TaskDebugQos = types.BoolValue(false)
+				item.TaskDebugQos = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.acl"); cValue.Exists() {
 				item.TaskDebugAcl = types.BoolValue(true)
 			} else {
-				item.TaskDebugAcl = types.BoolValue(false)
+				item.TaskDebugAcl = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.aaa"); cValue.Exists() {
 				item.TaskDebugAaa = types.BoolValue(true)
 			} else {
-				item.TaskDebugAaa = types.BoolValue(false)
+				item.TaskDebugAaa = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.crypto"); cValue.Exists() {
 				item.TaskDebugCrypto = types.BoolValue(true)
 			} else {
-				item.TaskDebugCrypto = types.BoolValue(false)
+				item.TaskDebugCrypto = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.snmp"); cValue.Exists() {
 				item.TaskDebugSnmp = types.BoolValue(true)
 			} else {
-				item.TaskDebugSnmp = types.BoolValue(false)
+				item.TaskDebugSnmp = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.config-mgmt"); cValue.Exists() {
 				item.TaskDebugConfigMgmt = types.BoolValue(true)
 			} else {
-				item.TaskDebugConfigMgmt = types.BoolValue(false)
+				item.TaskDebugConfigMgmt = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.config-services"); cValue.Exists() {
 				item.TaskDebugConfigServices = types.BoolValue(true)
 			} else {
-				item.TaskDebugConfigServices = types.BoolValue(false)
+				item.TaskDebugConfigServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.host-services"); cValue.Exists() {
 				item.TaskDebugHostServices = types.BoolValue(true)
 			} else {
-				item.TaskDebugHostServices = types.BoolValue(false)
+				item.TaskDebugHostServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.boot"); cValue.Exists() {
 				item.TaskDebugBoot = types.BoolValue(true)
 			} else {
-				item.TaskDebugBoot = types.BoolValue(false)
+				item.TaskDebugBoot = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.fault-mgr"); cValue.Exists() {
 				item.TaskDebugFaultMgr = types.BoolValue(true)
 			} else {
-				item.TaskDebugFaultMgr = types.BoolValue(false)
+				item.TaskDebugFaultMgr = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.filesystem"); cValue.Exists() {
 				item.TaskDebugFilesystem = types.BoolValue(true)
 			} else {
-				item.TaskDebugFilesystem = types.BoolValue(false)
+				item.TaskDebugFilesystem = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.interface"); cValue.Exists() {
 				item.TaskDebugInterface = types.BoolValue(true)
 			} else {
-				item.TaskDebugInterface = types.BoolValue(false)
+				item.TaskDebugInterface = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.ip-services"); cValue.Exists() {
 				item.TaskDebugIpServices = types.BoolValue(true)
 			} else {
-				item.TaskDebugIpServices = types.BoolValue(false)
+				item.TaskDebugIpServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.pkg-mgmt"); cValue.Exists() {
 				item.TaskDebugPkgMgmt = types.BoolValue(true)
 			} else {
-				item.TaskDebugPkgMgmt = types.BoolValue(false)
+				item.TaskDebugPkgMgmt = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.system"); cValue.Exists() {
 				item.TaskDebugSystem = types.BoolValue(true)
 			} else {
-				item.TaskDebugSystem = types.BoolValue(false)
+				item.TaskDebugSystem = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.tty-access"); cValue.Exists() {
 				item.TaskDebugTtyAccess = types.BoolValue(true)
 			} else {
-				item.TaskDebugTtyAccess = types.BoolValue(false)
+				item.TaskDebugTtyAccess = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.basic-services"); cValue.Exists() {
 				item.TaskDebugBasicServices = types.BoolValue(true)
 			} else {
-				item.TaskDebugBasicServices = types.BoolValue(false)
+				item.TaskDebugBasicServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.cdp"); cValue.Exists() {
 				item.TaskDebugCdp = types.BoolValue(true)
 			} else {
-				item.TaskDebugCdp = types.BoolValue(false)
+				item.TaskDebugCdp = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.diag"); cValue.Exists() {
 				item.TaskDebugDiag = types.BoolValue(true)
 			} else {
-				item.TaskDebugDiag = types.BoolValue(false)
+				item.TaskDebugDiag = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.ext-access"); cValue.Exists() {
 				item.TaskDebugExtAccess = types.BoolValue(true)
 			} else {
-				item.TaskDebugExtAccess = types.BoolValue(false)
+				item.TaskDebugExtAccess = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.bcdl"); cValue.Exists() {
 				item.TaskDebugBcdl = types.BoolValue(true)
 			} else {
-				item.TaskDebugBcdl = types.BoolValue(false)
+				item.TaskDebugBcdl = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.sysmgr"); cValue.Exists() {
 				item.TaskDebugSysmgr = types.BoolValue(true)
 			} else {
-				item.TaskDebugSysmgr = types.BoolValue(false)
+				item.TaskDebugSysmgr = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.logging"); cValue.Exists() {
 				item.TaskDebugLogging = types.BoolValue(true)
 			} else {
-				item.TaskDebugLogging = types.BoolValue(false)
+				item.TaskDebugLogging = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.netflow"); cValue.Exists() {
 				item.TaskDebugNetflow = types.BoolValue(true)
 			} else {
-				item.TaskDebugNetflow = types.BoolValue(false)
+				item.TaskDebugNetflow = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.drivers"); cValue.Exists() {
 				item.TaskDebugDrivers = types.BoolValue(true)
 			} else {
-				item.TaskDebugDrivers = types.BoolValue(false)
+				item.TaskDebugDrivers = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.fr"); cValue.Exists() {
 				item.TaskDebugFr = types.BoolValue(true)
 			} else {
-				item.TaskDebugFr = types.BoolValue(false)
+				item.TaskDebugFr = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.monitor"); cValue.Exists() {
 				item.TaskDebugMonitor = types.BoolValue(true)
 			} else {
-				item.TaskDebugMonitor = types.BoolValue(false)
+				item.TaskDebugMonitor = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.inventory"); cValue.Exists() {
 				item.TaskDebugInventory = types.BoolValue(true)
 			} else {
-				item.TaskDebugInventory = types.BoolValue(false)
+				item.TaskDebugInventory = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.ipv6"); cValue.Exists() {
 				item.TaskDebugIpv6 = types.BoolValue(true)
 			} else {
-				item.TaskDebugIpv6 = types.BoolValue(false)
+				item.TaskDebugIpv6 = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.admin"); cValue.Exists() {
 				item.TaskDebugAdmin = types.BoolValue(true)
 			} else {
-				item.TaskDebugAdmin = types.BoolValue(false)
+				item.TaskDebugAdmin = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.atm"); cValue.Exists() {
 				item.TaskDebugAtm = types.BoolValue(true)
 			} else {
-				item.TaskDebugAtm = types.BoolValue(false)
+				item.TaskDebugAtm = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.bfd"); cValue.Exists() {
 				item.TaskDebugBfd = types.BoolValue(true)
 			} else {
-				item.TaskDebugBfd = types.BoolValue(false)
+				item.TaskDebugBfd = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.rip"); cValue.Exists() {
 				item.TaskDebugRip = types.BoolValue(true)
 			} else {
-				item.TaskDebugRip = types.BoolValue(false)
+				item.TaskDebugRip = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.eigrp"); cValue.Exists() {
 				item.TaskDebugEigrp = types.BoolValue(true)
 			} else {
-				item.TaskDebugEigrp = types.BoolValue(false)
+				item.TaskDebugEigrp = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.sbc"); cValue.Exists() {
 				item.TaskDebugSbc = types.BoolValue(true)
 			} else {
-				item.TaskDebugSbc = types.BoolValue(false)
+				item.TaskDebugSbc = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.firewall"); cValue.Exists() {
 				item.TaskDebugFirewall = types.BoolValue(true)
 			} else {
-				item.TaskDebugFirewall = types.BoolValue(false)
+				item.TaskDebugFirewall = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.l2vpn"); cValue.Exists() {
 				item.TaskDebugL2vpn = types.BoolValue(true)
 			} else {
-				item.TaskDebugL2vpn = types.BoolValue(false)
+				item.TaskDebugL2vpn = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.ethernet-services"); cValue.Exists() {
 				item.TaskDebugEthernetServices = types.BoolValue(true)
 			} else {
-				item.TaskDebugEthernetServices = types.BoolValue(false)
+				item.TaskDebugEthernetServices = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.eem"); cValue.Exists() {
 				item.TaskDebugEem = types.BoolValue(true)
 			} else {
-				item.TaskDebugEem = types.BoolValue(false)
+				item.TaskDebugEem = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.li"); cValue.Exists() {
 				item.TaskDebugLi = types.BoolValue(true)
 			} else {
-				item.TaskDebugLi = types.BoolValue(false)
+				item.TaskDebugLi = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.ancp"); cValue.Exists() {
 				item.TaskDebugAncp = types.BoolValue(true)
 			} else {
-				item.TaskDebugAncp = types.BoolValue(false)
+				item.TaskDebugAncp = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.cgn"); cValue.Exists() {
 				item.TaskDebugCgn = types.BoolValue(true)
 			} else {
-				item.TaskDebugCgn = types.BoolValue(false)
+				item.TaskDebugCgn = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.call-home"); cValue.Exists() {
 				item.TaskDebugCallHome = types.BoolValue(true)
 			} else {
-				item.TaskDebugCallHome = types.BoolValue(false)
+				item.TaskDebugCallHome = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.rcmd"); cValue.Exists() {
 				item.TaskDebugRcmd = types.BoolValue(true)
 			} else {
-				item.TaskDebugRcmd = types.BoolValue(false)
+				item.TaskDebugRcmd = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.vpdn"); cValue.Exists() {
 				item.TaskDebugVpdn = types.BoolValue(true)
 			} else {
-				item.TaskDebugVpdn = types.BoolValue(false)
+				item.TaskDebugVpdn = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.nps"); cValue.Exists() {
 				item.TaskDebugNps = types.BoolValue(true)
 			} else {
-				item.TaskDebugNps = types.BoolValue(false)
+				item.TaskDebugNps = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.lisp"); cValue.Exists() {
 				item.TaskDebugLisp = types.BoolValue(true)
 			} else {
-				item.TaskDebugLisp = types.BoolValue(false)
+				item.TaskDebugLisp = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.pbr"); cValue.Exists() {
 				item.TaskDebugPbr = types.BoolValue(true)
 			} else {
-				item.TaskDebugPbr = types.BoolValue(false)
+				item.TaskDebugPbr = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.otn"); cValue.Exists() {
 				item.TaskDebugOtn = types.BoolValue(true)
 			} else {
-				item.TaskDebugOtn = types.BoolValue(false)
+				item.TaskDebugOtn = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.nacm"); cValue.Exists() {
 				item.TaskDebugNacm = types.BoolValue(true)
 			} else {
-				item.TaskDebugNacm = types.BoolValue(false)
+				item.TaskDebugNacm = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.plat-mgr"); cValue.Exists() {
 				item.TaskDebugPlatMgr = types.BoolValue(true)
 			} else {
-				item.TaskDebugPlatMgr = types.BoolValue(false)
+				item.TaskDebugPlatMgr = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.cpri"); cValue.Exists() {
 				item.TaskDebugCpri = types.BoolValue(true)
 			} else {
-				item.TaskDebugCpri = types.BoolValue(false)
+				item.TaskDebugCpri = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.lldp"); cValue.Exists() {
 				item.TaskDebugLldp = types.BoolValue(true)
 			} else {
-				item.TaskDebugLldp = types.BoolValue(false)
+				item.TaskDebugLldp = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.l2rib"); cValue.Exists() {
 				item.TaskDebugL2rib = types.BoolValue(true)
 			} else {
-				item.TaskDebugL2rib = types.BoolValue(false)
+				item.TaskDebugL2rib = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.dossier"); cValue.Exists() {
 				item.TaskDebugDossier = types.BoolValue(true)
 			} else {
-				item.TaskDebugDossier = types.BoolValue(false)
+				item.TaskDebugDossier = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.fti"); cValue.Exists() {
 				item.TaskDebugFti = types.BoolValue(true)
 			} else {
-				item.TaskDebugFti = types.BoolValue(false)
+				item.TaskDebugFti = types.BoolNull()
 			}
 			if cValue := v.Get("task.debug.fc"); cValue.Exists() {
 				item.TaskDebugFc = types.BoolValue(true)
 			} else {
-				item.TaskDebugFc = types.BoolValue(false)
+				item.TaskDebugFc = types.BoolNull()
 			}
 			if cValue := v.Get("inherit.taskgroup.root-lr"); cValue.Exists() {
 				item.InheritTaskgroupRootLr = types.BoolValue(true)
 			} else {
-				item.InheritTaskgroupRootLr = types.BoolValue(false)
+				item.InheritTaskgroupRootLr = types.BoolNull()
 			}
 			if cValue := v.Get("inherit.taskgroup.netadmin"); cValue.Exists() {
 				item.InheritTaskgroupNetadmin = types.BoolValue(true)
 			} else {
-				item.InheritTaskgroupNetadmin = types.BoolValue(false)
+				item.InheritTaskgroupNetadmin = types.BoolNull()
 			}
 			if cValue := v.Get("inherit.taskgroup.sysadmin"); cValue.Exists() {
 				item.InheritTaskgroupSysadmin = types.BoolValue(true)
 			} else {
-				item.InheritTaskgroupSysadmin = types.BoolValue(false)
+				item.InheritTaskgroupSysadmin = types.BoolNull()
 			}
 			if cValue := v.Get("inherit.taskgroup.serviceadmin"); cValue.Exists() {
 				item.InheritTaskgroupServiceadmin = types.BoolValue(true)
 			} else {
-				item.InheritTaskgroupServiceadmin = types.BoolValue(false)
+				item.InheritTaskgroupServiceadmin = types.BoolNull()
 			}
 			if cValue := v.Get("inherit.taskgroup.operator"); cValue.Exists() {
 				item.InheritTaskgroupOperator = types.BoolValue(true)
 			} else {
-				item.InheritTaskgroupOperator = types.BoolValue(false)
+				item.InheritTaskgroupOperator = types.BoolNull()
 			}
 			if cValue := v.Get("inherit.taskgroup.cisco-support"); cValue.Exists() {
 				item.InheritTaskgroupCiscoSupport = types.BoolValue(true)
 			} else {
-				item.InheritTaskgroupCiscoSupport = types.BoolValue(false)
+				item.InheritTaskgroupCiscoSupport = types.BoolNull()
 			}
 			if cValue := v.Get("inherit.taskgroup.task-groups.task-group"); cValue.Exists() {
 				item.InheritTaskgroups = make([]AAATaskgroupsInheritTaskgroups, 0)
@@ -18554,52 +18571,52 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("taskgroup.root-lr"); cValue.Exists() {
 				item.TaskgroupRootLr = types.BoolValue(true)
 			} else {
-				item.TaskgroupRootLr = types.BoolValue(false)
+				item.TaskgroupRootLr = types.BoolNull()
 			}
 			if cValue := v.Get("taskgroup.netadmin"); cValue.Exists() {
 				item.TaskgroupNetadmin = types.BoolValue(true)
 			} else {
-				item.TaskgroupNetadmin = types.BoolValue(false)
+				item.TaskgroupNetadmin = types.BoolNull()
 			}
 			if cValue := v.Get("taskgroup.sysadmin"); cValue.Exists() {
 				item.TaskgroupSysadmin = types.BoolValue(true)
 			} else {
-				item.TaskgroupSysadmin = types.BoolValue(false)
+				item.TaskgroupSysadmin = types.BoolNull()
 			}
 			if cValue := v.Get("taskgroup.serviceadmin"); cValue.Exists() {
 				item.TaskgroupServiceadmin = types.BoolValue(true)
 			} else {
-				item.TaskgroupServiceadmin = types.BoolValue(false)
+				item.TaskgroupServiceadmin = types.BoolNull()
 			}
 			if cValue := v.Get("taskgroup.operator"); cValue.Exists() {
 				item.TaskgroupOperator = types.BoolValue(true)
 			} else {
-				item.TaskgroupOperator = types.BoolValue(false)
+				item.TaskgroupOperator = types.BoolNull()
 			}
 			if cValue := v.Get("taskgroup.cisco-support"); cValue.Exists() {
 				item.TaskgroupCiscoSupport = types.BoolValue(true)
 			} else {
-				item.TaskgroupCiscoSupport = types.BoolValue(false)
+				item.TaskgroupCiscoSupport = types.BoolNull()
 			}
 			if cValue := v.Get("taskgroup.maintenance"); cValue.Exists() {
 				item.TaskgroupMaintenance = types.BoolValue(true)
 			} else {
-				item.TaskgroupMaintenance = types.BoolValue(false)
+				item.TaskgroupMaintenance = types.BoolNull()
 			}
 			if cValue := v.Get("taskgroup.provisioning"); cValue.Exists() {
 				item.TaskgroupProvisioning = types.BoolValue(true)
 			} else {
-				item.TaskgroupProvisioning = types.BoolValue(false)
+				item.TaskgroupProvisioning = types.BoolNull()
 			}
 			if cValue := v.Get("taskgroup.retrieve"); cValue.Exists() {
 				item.TaskgroupRetrieve = types.BoolValue(true)
 			} else {
-				item.TaskgroupRetrieve = types.BoolValue(false)
+				item.TaskgroupRetrieve = types.BoolNull()
 			}
 			if cValue := v.Get("taskgroup.read-only-tg"); cValue.Exists() {
 				item.TaskgroupReadOnly = types.BoolValue(true)
 			} else {
-				item.TaskgroupReadOnly = types.BoolValue(false)
+				item.TaskgroupReadOnly = types.BoolNull()
 			}
 			if cValue := v.Get("taskgroup.task-groups.task-group"); cValue.Exists() {
 				item.Taskgroups = make([]AAAUsergroupsTaskgroups, 0)
@@ -18644,7 +18661,7 @@ func (data *AAAData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "banner.login"); value.Exists() {
 		data.BannerLogin = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"); value.Exists() {
 		data.RadiusServerGroups = make([]AAARadiusServerGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAARadiusServerGroups{}
@@ -18840,7 +18857,7 @@ func (data *AAAData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"); value.Exists() {
 		data.TacacsServerGroups = make([]AAATacacsServerGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAATacacsServerGroups{}
@@ -20865,7 +20882,7 @@ func (data *AAA) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/banner/login"); value.Exists() {
 		data.BannerLogin = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group"); value.Exists() {
 		data.RadiusServerGroups = make([]AAARadiusServerGroups, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAARadiusServerGroups{}
@@ -20952,15 +20969,21 @@ func (data *AAA) fromBodyXML(ctx context.Context, res xmldot.Result) {
 						cItem.IdleTime = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, ""); ccValue.Exists() {
+
 						cItem.IgnoreAuthPort = types.BoolValue(true)
+
 					} else {
-						cItem.IgnoreAuthPort = types.BoolNull()
+						cItem.IgnoreAuthPort = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, ""); ccValue.Exists() {
+
 						cItem.IgnoreAcctPort = types.BoolValue(true)
+
 					} else {
-						cItem.IgnoreAcctPort = types.BoolNull()
+						cItem.IgnoreAcctPort = types.BoolValue(false)
 					}
+
 					item.ServerPrivates = append(item.ServerPrivates, cItem)
 					return true
 				})
@@ -21061,7 +21084,7 @@ func (data *AAA) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group"); value.Exists() {
 		data.TacacsServerGroups = make([]AAATacacsServerGroups, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAATacacsServerGroups{}
@@ -21108,10 +21131,13 @@ func (data *AAA) fromBodyXML(ctx context.Context, res xmldot.Result) {
 						cItem.KeyType6 = types.StringValue(ccValue.String())
 					}
 					if ccValue := helpers.GetFromXPath(cv, ""); ccValue.Exists() {
+
 						cItem.SingleConnection = types.BoolValue(true)
+
 					} else {
-						cItem.SingleConnection = types.BoolNull()
+						cItem.SingleConnection = types.BoolValue(false)
 					}
+
 					if ccValue := helpers.GetFromXPath(cv, ""); ccValue.Exists() {
 						cItem.SingleConnectionIdleTimeout = types.Int64Value(ccValue.Int())
 					}
@@ -23086,7 +23112,7 @@ func (data *AAAData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/banner/login"); value.Exists() {
 		data.BannerLogin = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group"); value.Exists() {
 		data.RadiusServerGroups = make([]AAARadiusServerGroups, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAARadiusServerGroups{}
@@ -23280,7 +23306,7 @@ func (data *AAAData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group"); value.Exists() {
 		data.TacacsServerGroups = make([]AAATacacsServerGroups, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAATacacsServerGroups{}
@@ -26702,35 +26728,35 @@ func (data *AAA) getDeletedItems(ctx context.Context, state AAA) []string {
 						}
 						if found {
 							if !state.TacacsServerGroups[i].ServerPrivates[ci].HolddownTime.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].HolddownTime.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v/", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v/", state.getPath(), keyString, ckeyString))
 							}
 							if !state.TacacsServerGroups[i].ServerPrivates[ci].Timeout.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].Timeout.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v/", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v/", state.getPath(), keyString, ckeyString))
 							}
 							if !state.TacacsServerGroups[i].ServerPrivates[ci].SingleConnectionIdleTimeout.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].SingleConnectionIdleTimeout.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v/", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v/", state.getPath(), keyString, ckeyString))
 							}
 							if !state.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].SingleConnection.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v/", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v/", state.getPath(), keyString, ckeyString))
 							}
 							if !state.TacacsServerGroups[i].ServerPrivates[ci].KeyType6.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].KeyType6.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v/", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v/", state.getPath(), keyString, ckeyString))
 							}
 							if !state.TacacsServerGroups[i].ServerPrivates[ci].KeyType7.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].KeyType7.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v/", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v/", state.getPath(), keyString, ckeyString))
 							}
 							break
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				if !state.TacacsServerGroups[i].HolddownTime.IsNull() && data.TacacsServerGroups[j].HolddownTime.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				if !state.TacacsServerGroups[i].Vrf.IsNull() && data.TacacsServerGroups[j].Vrf.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				for ci := range state.TacacsServerGroups[i].Servers {
 					ckeys := [...]string{"", ""}
@@ -26765,14 +26791,14 @@ func (data *AAA) getDeletedItems(ctx context.Context, state AAA) []string {
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.ServerRadiusDynamicAuthorClients {
@@ -26853,46 +26879,46 @@ func (data *AAA) getDeletedItems(ctx context.Context, state AAA) []string {
 			}
 			if found {
 				if !state.RadiusServerGroups[i].AccountingReplyRadiusAttributeList.IsNull() && data.RadiusServerGroups[j].AccountingReplyRadiusAttributeList.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].AccountingReplyReject.IsNull() && data.RadiusServerGroups[j].AccountingReplyReject.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].AccountingReplyAccept.IsNull() && data.RadiusServerGroups[j].AccountingReplyAccept.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].AccountingRequestRadiusAttributeList.IsNull() && data.RadiusServerGroups[j].AccountingRequestRadiusAttributeList.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].AccountingRequestReject.IsNull() && data.RadiusServerGroups[j].AccountingRequestReject.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].AccountingRequestAccept.IsNull() && data.RadiusServerGroups[j].AccountingRequestAccept.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].AuthorizationReplyRadiusAttributeList.IsNull() && data.RadiusServerGroups[j].AuthorizationReplyRadiusAttributeList.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].AuthorizationReplyReject.IsNull() && data.RadiusServerGroups[j].AuthorizationReplyReject.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].AuthorizationReplyAccept.IsNull() && data.RadiusServerGroups[j].AuthorizationReplyAccept.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].AuthorizationRequestRadiusAttributeList.IsNull() && data.RadiusServerGroups[j].AuthorizationRequestRadiusAttributeList.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].AuthorizationRequestReject.IsNull() && data.RadiusServerGroups[j].AuthorizationRequestReject.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].AuthorizationRequestAccept.IsNull() && data.RadiusServerGroups[j].AuthorizationRequestAccept.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].SourceInterface.IsNull() && data.RadiusServerGroups[j].SourceInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].Vrf.IsNull() && data.RadiusServerGroups[j].Vrf.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				for ci := range state.RadiusServerGroups[i].ServerPrivates {
 					ckeys := [...]string{"", "", "", ""}
@@ -26936,56 +26962,56 @@ func (data *AAA) getDeletedItems(ctx context.Context, state AAA) []string {
 						}
 						if found {
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].IgnoreAcctPort.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v/", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", state.getPath(), keyString, ckeyString))
 							}
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].IgnoreAuthPort.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v/", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", state.getPath(), keyString, ckeyString))
 							}
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].IdleTime.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].IdleTime.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v/", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", state.getPath(), keyString, ckeyString))
 							}
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].TestUsername.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].TestUsername.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v/", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", state.getPath(), keyString, ckeyString))
 							}
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].Retransmit.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].Retransmit.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v/", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", state.getPath(), keyString, ckeyString))
 							}
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].Timeout.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].Timeout.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v/", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", state.getPath(), keyString, ckeyString))
 							}
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].KeyType6.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].KeyType6.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v/", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", state.getPath(), keyString, ckeyString))
 							}
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].KeyType7.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].KeyType7.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v/", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", state.getPath(), keyString, ckeyString))
 							}
 							break
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				if !state.RadiusServerGroups[i].ThrottleAccounting.IsNull() && data.RadiusServerGroups[j].ThrottleAccounting.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].ThrottleAccessTimeout.IsNull() && data.RadiusServerGroups[j].ThrottleAccessTimeout.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].ThrottleAccess.IsNull() && data.RadiusServerGroups[j].ThrottleAccess.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].Deadtime.IsNull() && data.RadiusServerGroups[j].Deadtime.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && data.RadiusServerGroups[j].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.IsNull() && data.RadiusServerGroups[j].LoadBalanceMethodLeastOutstanding.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				if !state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingBatchSize.IsNull() && data.RadiusServerGroups[j].LoadBalanceMethodLeastOutstandingBatchSize.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", state.getPath(), keyString))
 				}
 				for ci := range state.RadiusServerGroups[i].Servers {
 					ckeys := [...]string{"", "", "", ""}
@@ -27032,14 +27058,14 @@ func (data *AAA) getDeletedItems(ctx context.Context, state AAA) []string {
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v/%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v", state.getPath(), keyString))
 		}
 	}
 	if !state.BannerLogin.IsNull() && data.BannerLogin.IsNull() {
@@ -29707,7 +29733,7 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context, state *AAA) []string {
 			if !data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() && !data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.ValueBool() {
 				// Check if corresponding state item exists and has true value
 				if state != nil && i < len(state.TacacsServerGroups) && ci < len(state.TacacsServerGroups[i].ServerPrivates) && !state.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() && state.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/%v/", data.getXPath(), keyString, ckeyString))
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v/", data.getXPath(), keyString, ckeyString))
 				}
 			}
 		}
@@ -29745,56 +29771,56 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context, state *AAA) []string {
 		if !data.RadiusServerGroups[i].AccountingReplyReject.IsNull() && !data.RadiusServerGroups[i].AccountingReplyReject.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AccountingReplyReject.IsNull() && state.RadiusServerGroups[i].AccountingReplyReject.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/.", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", data.getXPath(), keyString))
 			}
 		}
 		// Only delete if state has true and plan has false
 		if !data.RadiusServerGroups[i].AccountingReplyAccept.IsNull() && !data.RadiusServerGroups[i].AccountingReplyAccept.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AccountingReplyAccept.IsNull() && state.RadiusServerGroups[i].AccountingReplyAccept.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/.", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", data.getXPath(), keyString))
 			}
 		}
 		// Only delete if state has true and plan has false
 		if !data.RadiusServerGroups[i].AccountingRequestReject.IsNull() && !data.RadiusServerGroups[i].AccountingRequestReject.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AccountingRequestReject.IsNull() && state.RadiusServerGroups[i].AccountingRequestReject.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/.", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", data.getXPath(), keyString))
 			}
 		}
 		// Only delete if state has true and plan has false
 		if !data.RadiusServerGroups[i].AccountingRequestAccept.IsNull() && !data.RadiusServerGroups[i].AccountingRequestAccept.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AccountingRequestAccept.IsNull() && state.RadiusServerGroups[i].AccountingRequestAccept.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/.", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", data.getXPath(), keyString))
 			}
 		}
 		// Only delete if state has true and plan has false
 		if !data.RadiusServerGroups[i].AuthorizationReplyReject.IsNull() && !data.RadiusServerGroups[i].AuthorizationReplyReject.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AuthorizationReplyReject.IsNull() && state.RadiusServerGroups[i].AuthorizationReplyReject.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/.", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", data.getXPath(), keyString))
 			}
 		}
 		// Only delete if state has true and plan has false
 		if !data.RadiusServerGroups[i].AuthorizationReplyAccept.IsNull() && !data.RadiusServerGroups[i].AuthorizationReplyAccept.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AuthorizationReplyAccept.IsNull() && state.RadiusServerGroups[i].AuthorizationReplyAccept.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/.", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", data.getXPath(), keyString))
 			}
 		}
 		// Only delete if state has true and plan has false
 		if !data.RadiusServerGroups[i].AuthorizationRequestReject.IsNull() && !data.RadiusServerGroups[i].AuthorizationRequestReject.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AuthorizationRequestReject.IsNull() && state.RadiusServerGroups[i].AuthorizationRequestReject.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/.", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", data.getXPath(), keyString))
 			}
 		}
 		// Only delete if state has true and plan has false
 		if !data.RadiusServerGroups[i].AuthorizationRequestAccept.IsNull() && !data.RadiusServerGroups[i].AuthorizationRequestAccept.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AuthorizationRequestAccept.IsNull() && state.RadiusServerGroups[i].AuthorizationRequestAccept.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/.", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", data.getXPath(), keyString))
 			}
 		}
 		for ci := range data.RadiusServerGroups[i].ServerPrivates {
@@ -29808,14 +29834,14 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context, state *AAA) []string {
 			if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() && !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.ValueBool() {
 				// Check if corresponding state item exists and has true value
 				if state != nil && i < len(state.RadiusServerGroups) && ci < len(state.RadiusServerGroups[i].ServerPrivates) && !state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() && state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/%v/", data.getXPath(), keyString, ckeyString))
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", data.getXPath(), keyString, ckeyString))
 				}
 			}
 			// Only delete if state has true and plan has false
 			if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() && !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.ValueBool() {
 				// Check if corresponding state item exists and has true value
 				if state != nil && i < len(state.RadiusServerGroups) && ci < len(state.RadiusServerGroups[i].ServerPrivates) && !state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() && state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/%v/", data.getXPath(), keyString, ckeyString))
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", data.getXPath(), keyString, ckeyString))
 				}
 			}
 		}
@@ -29823,14 +29849,14 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context, state *AAA) []string {
 		if !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", data.getXPath(), keyString))
 			}
 		}
 		// Only delete if state has true and plan has false
 		if !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.IsNull() && !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.IsNull() && state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/%v/", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", data.getXPath(), keyString))
 			}
 		}
 		for ci := range data.RadiusServerGroups[i].Servers {
@@ -29869,7 +29895,7 @@ func (data *AAA) getDeletePaths(ctx context.Context) []string {
 	for i := range data.TacacsServerGroups {
 		keyValues := [...]string{data.TacacsServerGroups[i].GroupName.ValueString()}
 
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.ServerRadiusDynamicAuthorClients {
 		keyValues := [...]string{data.ServerRadiusDynamicAuthorClients[i].Address.ValueString(), data.ServerRadiusDynamicAuthorClients[i].Vrf.ValueString()}
@@ -29891,7 +29917,7 @@ func (data *AAA) getDeletePaths(ctx context.Context) []string {
 	for i := range data.RadiusServerGroups {
 		keyValues := [...]string{data.RadiusServerGroups[i].GroupName.ValueString()}
 
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.BannerLogin.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/banner/login", data.getPath()))
@@ -31682,36 +31708,36 @@ func (data *AAA) addDeletedItemsXML(ctx context.Context, state AAA, body string)
 						}
 						if found {
 							if !state.TacacsServerGroups[i].ServerPrivates[ci].HolddownTime.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].HolddownTime.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v/", predicates, cpredicates))
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v/", predicates, cpredicates))
 							}
 							if !state.TacacsServerGroups[i].ServerPrivates[ci].Timeout.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].Timeout.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v/", predicates, cpredicates))
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v/", predicates, cpredicates))
 							}
 							if !state.TacacsServerGroups[i].ServerPrivates[ci].SingleConnectionIdleTimeout.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].SingleConnectionIdleTimeout.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v/", predicates, cpredicates))
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v/", predicates, cpredicates))
 							}
 							// For boolean fields, only delete if state was true (presence container was set)
 							if !state.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() && state.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.ValueBool() && data.TacacsServerGroups[j].ServerPrivates[cj].SingleConnection.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v/", predicates, cpredicates))
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v/", predicates, cpredicates))
 							}
 							if !state.TacacsServerGroups[i].ServerPrivates[ci].KeyType6.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].KeyType6.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v/", predicates, cpredicates))
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v/", predicates, cpredicates))
 							}
 							if !state.TacacsServerGroups[i].ServerPrivates[ci].KeyType7.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].KeyType7.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v/", predicates, cpredicates))
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v/", predicates, cpredicates))
 							}
 							break
 						}
 					}
 					if !found {
-						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v", predicates, cpredicates))
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v", predicates, cpredicates))
 					}
 				}
 				if !state.TacacsServerGroups[i].HolddownTime.IsNull() && data.TacacsServerGroups[j].HolddownTime.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/", predicates))
 				}
 				if !state.TacacsServerGroups[i].Vrf.IsNull() && data.TacacsServerGroups[j].Vrf.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/", predicates))
 				}
 				for ci := range state.TacacsServerGroups[i].Servers {
 					cstateKeys := [...]string{"", ""}
@@ -31746,14 +31772,14 @@ func (data *AAA) addDeletedItemsXML(ctx context.Context, state AAA, body string)
 						}
 					}
 					if !found {
-						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v", predicates, cpredicates))
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/%v", predicates, cpredicates))
 					}
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v", predicates))
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v", predicates))
 		}
 	}
 	for i := range state.ServerRadiusDynamicAuthorClients {
@@ -31851,54 +31877,54 @@ func (data *AAA) addDeletedItemsXML(ctx context.Context, state AAA, body string)
 			}
 			if found {
 				if !state.RadiusServerGroups[i].AccountingReplyRadiusAttributeList.IsNull() && data.RadiusServerGroups[j].AccountingReplyRadiusAttributeList.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.RadiusServerGroups[i].AccountingReplyReject.IsNull() && state.RadiusServerGroups[i].AccountingReplyReject.ValueBool() && data.RadiusServerGroups[j].AccountingReplyReject.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/.", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.RadiusServerGroups[i].AccountingReplyAccept.IsNull() && state.RadiusServerGroups[i].AccountingReplyAccept.ValueBool() && data.RadiusServerGroups[j].AccountingReplyAccept.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/.", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", predicates))
 				}
 				if !state.RadiusServerGroups[i].AccountingRequestRadiusAttributeList.IsNull() && data.RadiusServerGroups[j].AccountingRequestRadiusAttributeList.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.RadiusServerGroups[i].AccountingRequestReject.IsNull() && state.RadiusServerGroups[i].AccountingRequestReject.ValueBool() && data.RadiusServerGroups[j].AccountingRequestReject.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/.", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.RadiusServerGroups[i].AccountingRequestAccept.IsNull() && state.RadiusServerGroups[i].AccountingRequestAccept.ValueBool() && data.RadiusServerGroups[j].AccountingRequestAccept.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/.", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", predicates))
 				}
 				if !state.RadiusServerGroups[i].AuthorizationReplyRadiusAttributeList.IsNull() && data.RadiusServerGroups[j].AuthorizationReplyRadiusAttributeList.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.RadiusServerGroups[i].AuthorizationReplyReject.IsNull() && state.RadiusServerGroups[i].AuthorizationReplyReject.ValueBool() && data.RadiusServerGroups[j].AuthorizationReplyReject.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/.", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.RadiusServerGroups[i].AuthorizationReplyAccept.IsNull() && state.RadiusServerGroups[i].AuthorizationReplyAccept.ValueBool() && data.RadiusServerGroups[j].AuthorizationReplyAccept.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/.", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", predicates))
 				}
 				if !state.RadiusServerGroups[i].AuthorizationRequestRadiusAttributeList.IsNull() && data.RadiusServerGroups[j].AuthorizationRequestRadiusAttributeList.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.RadiusServerGroups[i].AuthorizationRequestReject.IsNull() && state.RadiusServerGroups[i].AuthorizationRequestReject.ValueBool() && data.RadiusServerGroups[j].AuthorizationRequestReject.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/.", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.RadiusServerGroups[i].AuthorizationRequestAccept.IsNull() && state.RadiusServerGroups[i].AuthorizationRequestAccept.ValueBool() && data.RadiusServerGroups[j].AuthorizationRequestAccept.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/.", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/.", predicates))
 				}
 				if !state.RadiusServerGroups[i].SourceInterface.IsNull() && data.RadiusServerGroups[j].SourceInterface.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", predicates))
 				}
 				if !state.RadiusServerGroups[i].Vrf.IsNull() && data.RadiusServerGroups[j].Vrf.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", predicates))
 				}
 				for ci := range state.RadiusServerGroups[i].ServerPrivates {
 					cstateKeys := [...]string{"", "", "", ""}
@@ -31943,59 +31969,59 @@ func (data *AAA) addDeletedItemsXML(ctx context.Context, state AAA, body string)
 						if found {
 							// For boolean fields, only delete if state was true (presence container was set)
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() && state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.ValueBool() && data.RadiusServerGroups[j].ServerPrivates[cj].IgnoreAcctPort.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v/", predicates, cpredicates))
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", predicates, cpredicates))
 							}
 							// For boolean fields, only delete if state was true (presence container was set)
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() && state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.ValueBool() && data.RadiusServerGroups[j].ServerPrivates[cj].IgnoreAuthPort.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v/", predicates, cpredicates))
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", predicates, cpredicates))
 							}
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].IdleTime.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].IdleTime.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v/", predicates, cpredicates))
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", predicates, cpredicates))
 							}
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].TestUsername.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].TestUsername.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v/", predicates, cpredicates))
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", predicates, cpredicates))
 							}
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].Retransmit.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].Retransmit.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v/", predicates, cpredicates))
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", predicates, cpredicates))
 							}
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].Timeout.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].Timeout.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v/", predicates, cpredicates))
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", predicates, cpredicates))
 							}
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].KeyType6.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].KeyType6.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v/", predicates, cpredicates))
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", predicates, cpredicates))
 							}
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].KeyType7.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].KeyType7.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v/", predicates, cpredicates))
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v/", predicates, cpredicates))
 							}
 							break
 						}
 					}
 					if !found {
-						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v", predicates, cpredicates))
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v", predicates, cpredicates))
 					}
 				}
 				if !state.RadiusServerGroups[i].ThrottleAccounting.IsNull() && data.RadiusServerGroups[j].ThrottleAccounting.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", predicates))
 				}
 				if !state.RadiusServerGroups[i].ThrottleAccessTimeout.IsNull() && data.RadiusServerGroups[j].ThrottleAccessTimeout.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", predicates))
 				}
 				if !state.RadiusServerGroups[i].ThrottleAccess.IsNull() && data.RadiusServerGroups[j].ThrottleAccess.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", predicates))
 				}
 				if !state.RadiusServerGroups[i].Deadtime.IsNull() && data.RadiusServerGroups[j].Deadtime.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() && data.RadiusServerGroups[j].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.IsNull() && state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.ValueBool() && data.RadiusServerGroups[j].LoadBalanceMethodLeastOutstanding.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", predicates))
 				}
 				if !state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingBatchSize.IsNull() && data.RadiusServerGroups[j].LoadBalanceMethodLeastOutstandingBatchSize.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/", predicates))
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/", predicates))
 				}
 				for ci := range state.RadiusServerGroups[i].Servers {
 					cstateKeys := [...]string{"", "", "", ""}
@@ -32042,14 +32068,14 @@ func (data *AAA) addDeletedItemsXML(ctx context.Context, state AAA, body string)
 						}
 					}
 					if !found {
-						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v/%v", predicates, cpredicates))
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/%v", predicates, cpredicates))
 					}
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/%v", predicates))
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v", predicates))
 		}
 	}
 	if !state.BannerLogin.IsNull() && data.BannerLogin.IsNull() {
@@ -32116,7 +32142,7 @@ func (data *AAA) addDeletePathsXML(ctx context.Context, body string) string {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
 		}
 
-		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/%v", predicates))
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v", predicates))
 	}
 	for i := range data.ServerRadiusDynamicAuthorClients {
 		keys := [...]string{"address", "vrf"}
@@ -32148,7 +32174,7 @@ func (data *AAA) addDeletePathsXML(ctx context.Context, body string) string {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
 		}
 
-		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/%v", predicates))
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v", predicates))
 	}
 	if !data.BannerLogin.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/banner/login")

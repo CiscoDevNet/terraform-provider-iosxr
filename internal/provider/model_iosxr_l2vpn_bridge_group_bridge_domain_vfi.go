@@ -1098,34 +1098,33 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBody(ctx context.Context,
 		} else {
 			data.Neighbors[i].PwId = types.Int64Null()
 		}
-		for ci := range data.Neighbors[i].StaticMacAddresses {
-			keys := [...]string{"mac-address"}
-			keyValues := [...]string{data.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+		// Rebuild nested list from device response
+		if value := r.Get("static-mac-addresses.static-mac-address"); value.Exists() {
+			// Store existing state items for matching
+			existingItems := data.Neighbors[i].StaticMacAddresses
+			data.Neighbors[i].StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainVFINeighborsStaticMacAddresses, 0)
+			value.ForEach(func(_, cr gjson.Result) bool {
+				citem := L2VPNBridgeGroupBridgeDomainVFINeighborsStaticMacAddresses{}
+				if cValue := cr.Get("mac-address"); cValue.Exists() {
+					citem.MacAddress = types.StringValue(cValue.String())
+				}
 
-			var cr gjson.Result
-			r.Get("static-mac-addresses.static-mac-address").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+				// Match with existing state item by key fields
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.MacAddress.ValueString() != citem.MacAddress.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Preserve false values for presence-based booleans
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("mac-address"); value.Exists() && !data.Neighbors[i].StaticMacAddresses[ci].MacAddress.IsNull() {
-				data.Neighbors[i].StaticMacAddresses[ci].MacAddress = types.StringValue(value.String())
-			} else {
-				data.Neighbors[i].StaticMacAddresses[ci].MacAddress = types.StringNull()
-			}
+				}
+
+				data.Neighbors[i].StaticMacAddresses = append(data.Neighbors[i].StaticMacAddresses, citem)
+				return true
+			})
 		}
 		if value := r.Get("mpls.static.label.local"); value.Exists() && !data.Neighbors[i].MplsStaticLabelLocal.IsNull() {
 			data.Neighbors[i].MplsStaticLabelLocal = types.Int64Value(value.Int())
@@ -1458,7 +1457,9 @@ func (data L2VPNBridgeGroupBridgeDomainVFI) toBodyXML(ctx context.Context) strin
 			if len(item.StaticMacAddresses) > 0 {
 				for _, citem := range item.StaticMacAddresses {
 					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					if !citem.MacAddress.IsNull() && !citem.MacAddress.IsUnknown() {
+						ccBody = helpers.SetFromXPath(ccBody, "mac-address", citem.MacAddress.ValueString())
+					}
 					cBody = helpers.SetRawFromXPath(cBody, "static-mac-addresses/static-mac-address", ccBody.Res())
 				}
 			}
@@ -2060,34 +2061,36 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Conte
 		} else if data.Neighbors[i].PwId.IsNull() {
 			data.Neighbors[i].PwId = types.Int64Null()
 		}
-		for ci := range data.Neighbors[i].StaticMacAddresses {
-			keys := [...]string{"mac-address"}
-			keyValues := [...]string{data.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+		// Rebuild nested list from device XML response
+		if value := helpers.GetFromXPath(r, "static-mac-addresses/static-mac-address"); value.Exists() {
+			// Match existing state items with device response by key fields
+			existingItems := data.Neighbors[i].StaticMacAddresses
+			data.Neighbors[i].StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainVFINeighborsStaticMacAddresses, 0)
 
-			var cr xmldot.Result
-			helpers.GetFromXPath(r, "static-mac-addresses/static-mac-address").ForEach(
-				func(_ int, v xmldot.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
+			value.ForEach(func(_ int, cr xmldot.Result) bool {
+				citem := L2VPNBridgeGroupBridgeDomainVFINeighborsStaticMacAddresses{}
+
+				// First, populate all fields from device
+				if cValue := helpers.GetFromXPath(cr, "mac-address"); cValue.Exists() {
+					citem.MacAddress = types.StringValue(cValue.String())
+				}
+
+				// Try to find matching item in existing state to preserve field states
+				for _, existingItem := range existingItems {
+					match := true
+					if existingItem.MacAddress.ValueString() != citem.MacAddress.ValueString() {
+						match = false
+					}
+
+					if match {
+						// Found matching item - preserve state for fields not in device response
 						break
 					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := helpers.GetFromXPath(cr, "mac-address"); value.Exists() {
-				data.Neighbors[i].StaticMacAddresses[ci].MacAddress = types.StringValue(value.String())
-			} else {
-				data.Neighbors[i].StaticMacAddresses[ci].MacAddress = types.StringNull()
-			}
+				}
+
+				data.Neighbors[i].StaticMacAddresses = append(data.Neighbors[i].StaticMacAddresses, citem)
+				return true
+			})
 		}
 		if value := helpers.GetFromXPath(r, "mpls/static/label/local"); value.Exists() {
 			data.Neighbors[i].MplsStaticLabelLocal = types.Int64Value(value.Int())
@@ -2434,7 +2437,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBody(ctx context.Context, res g
 			if cValue := v.Get("dhcp.ipv4.none"); cValue.Exists() {
 				item.DhcpIpv4None = types.BoolValue(true)
 			} else {
-				item.DhcpIpv4None = types.BoolValue(false)
+				item.DhcpIpv4None = types.BoolNull()
 			}
 			if cValue := v.Get("igmp.snooping.profile"); cValue.Exists() {
 				item.IgmpSnoopingProfile = types.StringValue(cValue.String())

@@ -3213,7 +3213,7 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			data.SlaveIpv4s = append(data.SlaveIpv4s, item)
 			return true
@@ -3229,7 +3229,7 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			data.SlaveIpv6s = append(data.SlaveIpv6s, item)
 			return true
@@ -3245,7 +3245,7 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			data.SlaveEthernets = append(data.SlaveEthernets, item)
 			return true
@@ -3267,17 +3267,17 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolValue(false)
+				item.Multicast = types.BoolNull()
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolValue(false)
+				item.MulticastMixed = types.BoolNull()
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -3285,17 +3285,17 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolValue(false)
+				item.Nanoseconds = types.BoolNull()
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolValue(false)
+				item.Microseconds = types.BoolNull()
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolValue(false)
+				item.Milliseconds = types.BoolNull()
 			}
 			data.MasterIpv4s = append(data.MasterIpv4s, item)
 			return true
@@ -3317,17 +3317,17 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolValue(false)
+				item.Multicast = types.BoolNull()
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolValue(false)
+				item.MulticastMixed = types.BoolNull()
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -3335,17 +3335,17 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolValue(false)
+				item.Nanoseconds = types.BoolNull()
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolValue(false)
+				item.Microseconds = types.BoolNull()
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolValue(false)
+				item.Milliseconds = types.BoolNull()
 			}
 			data.MasterIpv6s = append(data.MasterIpv6s, item)
 			return true
@@ -3367,17 +3367,17 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolValue(false)
+				item.Multicast = types.BoolNull()
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolValue(false)
+				item.MulticastMixed = types.BoolNull()
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolValue(false)
+				item.NonNegotiated = types.BoolNull()
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -3385,17 +3385,17 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolValue(false)
+				item.Nanoseconds = types.BoolNull()
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolValue(false)
+				item.Microseconds = types.BoolNull()
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolValue(false)
+				item.Milliseconds = types.BoolNull()
 			}
 			data.MasterEthernets = append(data.MasterEthernets, item)
 			return true

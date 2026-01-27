@@ -1308,7 +1308,7 @@ func (data *EthernetSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("aggregate.none"); cValue.Exists() {
 				item.AggregateNone = types.BoolValue(true)
 			} else {
-				item.AggregateNone = types.BoolValue(false)
+				item.AggregateNone = types.BoolNull()
 			}
 			if cValue := v.Get("aggregate.bins"); cValue.Exists() {
 				item.AggregateBins = types.Int64Value(cValue.Int())
@@ -1322,7 +1322,7 @@ func (data *EthernetSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("aggregate.usec"); cValue.Exists() {
 				item.AggregateUsec = types.BoolValue(true)
 			} else {
-				item.AggregateUsec = types.BoolValue(false)
+				item.AggregateUsec = types.BoolNull()
 			}
 			if cValue := v.Get("buckets.size"); cValue.Exists() {
 				item.BucketsSize = types.Int64Value(cValue.Int())
@@ -1330,7 +1330,7 @@ func (data *EthernetSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("buckets.probes"); cValue.Exists() {
 				item.BucketsProbes = types.BoolValue(true)
 			} else {
-				item.BucketsProbes = types.BoolValue(false)
+				item.BucketsProbes = types.BoolNull()
 			}
 			if cValue := v.Get("buckets.archive"); cValue.Exists() {
 				item.BucketsArchive = types.Int64Value(cValue.Int())

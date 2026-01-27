@@ -703,7 +703,7 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("format-enable"); cValue.Exists() {
 				item.FormatEnable = types.BoolValue(true)
 			} else {
-				item.FormatEnable = types.BoolValue(false)
+				item.FormatEnable = types.BoolNull()
 			}
 			if cValue := v.Get("usid.local-id-block-ranges.lib-start"); cValue.Exists() {
 				item.UsidLocalIdBlockRangesLibStart = types.Int64Value(cValue.Int())
@@ -725,7 +725,7 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("locator-enable"); cValue.Exists() {
 				item.LocatorEnable = types.BoolValue(true)
 			} else {
-				item.LocatorEnable = types.BoolValue(false)
+				item.LocatorEnable = types.BoolNull()
 			}
 			if cValue := v.Get("name"); cValue.Exists() {
 				item.Name = types.StringValue(cValue.String())
@@ -742,7 +742,7 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("anycast"); cValue.Exists() {
 				item.Anycast = types.BoolValue(true)
 			} else {
-				item.Anycast = types.BoolValue(false)
+				item.Anycast = types.BoolNull()
 			}
 			if cValue := v.Get("algorithm"); cValue.Exists() {
 				item.Algorithm = types.Int64Value(cValue.Int())

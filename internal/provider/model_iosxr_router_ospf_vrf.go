@@ -4272,7 +4272,7 @@ func (data *RouterOSPFVRF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("preserve-med"); cValue.Exists() {
 				item.PreserveMed = types.BoolValue(true)
 			} else {
-				item.PreserveMed = types.BoolValue(false)
+				item.PreserveMed = types.BoolNull()
 			}
 			if cValue := v.Get("metric.default-metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -4280,17 +4280,17 @@ func (data *RouterOSPFVRF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("metric.use-rib-metric"); cValue.Exists() {
 				item.MetricUseRibMetric = types.BoolValue(true)
 			} else {
-				item.MetricUseRibMetric = types.BoolValue(false)
+				item.MetricUseRibMetric = types.BoolNull()
 			}
 			if cValue := v.Get("lsa-type.summary"); cValue.Exists() {
 				item.LsaTypeSummary = types.BoolValue(true)
 			} else {
-				item.LsaTypeSummary = types.BoolValue(false)
+				item.LsaTypeSummary = types.BoolNull()
 			}
 			if cValue := v.Get("nssa-only"); cValue.Exists() {
 				item.NssaOnly = types.BoolValue(true)
 			} else {
-				item.NssaOnly = types.BoolValue(false)
+				item.NssaOnly = types.BoolNull()
 			}
 			data.RedistributeBgp = append(data.RedistributeBgp, item)
 			return true
@@ -4306,17 +4306,17 @@ func (data *RouterOSPFVRF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("level-1"); cValue.Exists() {
 				item.Level1 = types.BoolValue(true)
 			} else {
-				item.Level1 = types.BoolValue(false)
+				item.Level1 = types.BoolNull()
 			}
 			if cValue := v.Get("level-2"); cValue.Exists() {
 				item.Level2 = types.BoolValue(true)
 			} else {
-				item.Level2 = types.BoolValue(false)
+				item.Level2 = types.BoolNull()
 			}
 			if cValue := v.Get("level-1-2"); cValue.Exists() {
 				item.Level12 = types.BoolValue(true)
 			} else {
-				item.Level12 = types.BoolValue(false)
+				item.Level12 = types.BoolNull()
 			}
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
@@ -4333,17 +4333,17 @@ func (data *RouterOSPFVRF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("metric.use-rib-metric"); cValue.Exists() {
 				item.MetricUseRibMetric = types.BoolValue(true)
 			} else {
-				item.MetricUseRibMetric = types.BoolValue(false)
+				item.MetricUseRibMetric = types.BoolNull()
 			}
 			if cValue := v.Get("lsa-type.summary"); cValue.Exists() {
 				item.LsaTypeSummary = types.BoolValue(true)
 			} else {
-				item.LsaTypeSummary = types.BoolValue(false)
+				item.LsaTypeSummary = types.BoolNull()
 			}
 			if cValue := v.Get("nssa-only"); cValue.Exists() {
 				item.NssaOnly = types.BoolValue(true)
 			} else {
-				item.NssaOnly = types.BoolValue(false)
+				item.NssaOnly = types.BoolNull()
 			}
 			data.RedistributeIsis = append(data.RedistributeIsis, item)
 			return true
@@ -4368,37 +4368,37 @@ func (data *RouterOSPFVRF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("match.internal"); cValue.Exists() {
 				item.MatchInternal = types.BoolValue(true)
 			} else {
-				item.MatchInternal = types.BoolValue(false)
+				item.MatchInternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external"); cValue.Exists() {
 				item.MatchExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternal = types.BoolValue(false)
+				item.MatchExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.one"); cValue.Exists() {
 				item.MatchExternalOne = types.BoolValue(true)
 			} else {
-				item.MatchExternalOne = types.BoolValue(false)
+				item.MatchExternalOne = types.BoolNull()
 			}
 			if cValue := v.Get("match.external.two"); cValue.Exists() {
 				item.MatchExternalTwo = types.BoolValue(true)
 			} else {
-				item.MatchExternalTwo = types.BoolValue(false)
+				item.MatchExternalTwo = types.BoolNull()
 			}
 			if cValue := v.Get("match.nssa-external"); cValue.Exists() {
 				item.MatchNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternal = types.BoolValue(false)
+				item.MatchNssaExternal = types.BoolNull()
 			}
 			if cValue := v.Get("match.nssa-external.one"); cValue.Exists() {
 				item.MatchNssaExternalOne = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternalOne = types.BoolValue(false)
+				item.MatchNssaExternalOne = types.BoolNull()
 			}
 			if cValue := v.Get("match.nssa-external.two"); cValue.Exists() {
 				item.MatchNssaExternalTwo = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternalTwo = types.BoolValue(false)
+				item.MatchNssaExternalTwo = types.BoolNull()
 			}
 			if cValue := v.Get("metric.default-metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -4406,17 +4406,17 @@ func (data *RouterOSPFVRF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("metric.use-rib-metric"); cValue.Exists() {
 				item.MetricUseRibMetric = types.BoolValue(true)
 			} else {
-				item.MetricUseRibMetric = types.BoolValue(false)
+				item.MetricUseRibMetric = types.BoolNull()
 			}
 			if cValue := v.Get("lsa-type.summary"); cValue.Exists() {
 				item.LsaTypeSummary = types.BoolValue(true)
 			} else {
-				item.LsaTypeSummary = types.BoolValue(false)
+				item.LsaTypeSummary = types.BoolNull()
 			}
 			if cValue := v.Get("nssa-only"); cValue.Exists() {
 				item.NssaOnly = types.BoolValue(true)
 			} else {
-				item.NssaOnly = types.BoolValue(false)
+				item.NssaOnly = types.BoolNull()
 			}
 			data.RedistributeOspf = append(data.RedistributeOspf, item)
 			return true
@@ -4821,7 +4821,7 @@ func (data *RouterOSPFVRF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("not-advertise"); cValue.Exists() {
 				item.NotAdvertise = types.BoolValue(true)
 			} else {
-				item.NotAdvertise = types.BoolValue(false)
+				item.NotAdvertise = types.BoolNull()
 			}
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())

@@ -2920,7 +2920,7 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.source.any"); cValue.Exists() {
 				item.PermitSourceAny = types.BoolValue(true)
 			} else {
-				item.PermitSourceAny = types.BoolValue(false)
+				item.PermitSourceAny = types.BoolNull()
 			}
 			if cValue := v.Get("permit.source.host"); cValue.Exists() {
 				item.PermitSourceHost = types.StringValue(cValue.String())
@@ -2961,7 +2961,7 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.destination.any"); cValue.Exists() {
 				item.PermitDestinationAny = types.BoolValue(true)
 			} else {
-				item.PermitDestinationAny = types.BoolValue(false)
+				item.PermitDestinationAny = types.BoolNull()
 			}
 			if cValue := v.Get("permit.destination.host"); cValue.Exists() {
 				item.PermitDestinationHost = types.StringValue(cValue.String())
@@ -3101,17 +3101,17 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.capture"); cValue.Exists() {
 				item.PermitCapture = types.BoolValue(true)
 			} else {
-				item.PermitCapture = types.BoolValue(false)
+				item.PermitCapture = types.BoolNull()
 			}
 			if cValue := v.Get("permit.log"); cValue.Exists() {
 				item.PermitLog = types.BoolValue(true)
 			} else {
-				item.PermitLog = types.BoolValue(false)
+				item.PermitLog = types.BoolNull()
 			}
 			if cValue := v.Get("permit.log-input"); cValue.Exists() {
 				item.PermitLogInput = types.BoolValue(true)
 			} else {
-				item.PermitLogInput = types.BoolValue(false)
+				item.PermitLogInput = types.BoolNull()
 			}
 			if cValue := v.Get("permit.set.qos-group"); cValue.Exists() {
 				item.PermitSetQosGroup = types.Int64Value(cValue.Int())
@@ -3152,7 +3152,7 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.source.any"); cValue.Exists() {
 				item.DenySourceAny = types.BoolValue(true)
 			} else {
-				item.DenySourceAny = types.BoolValue(false)
+				item.DenySourceAny = types.BoolNull()
 			}
 			if cValue := v.Get("deny.source.host"); cValue.Exists() {
 				item.DenySourceHost = types.StringValue(cValue.String())
@@ -3193,7 +3193,7 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.destination.any"); cValue.Exists() {
 				item.DenyDestinationAny = types.BoolValue(true)
 			} else {
-				item.DenyDestinationAny = types.BoolValue(false)
+				item.DenyDestinationAny = types.BoolNull()
 			}
 			if cValue := v.Get("deny.destination.host"); cValue.Exists() {
 				item.DenyDestinationHost = types.StringValue(cValue.String())
@@ -3306,17 +3306,17 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.capture"); cValue.Exists() {
 				item.DenyCapture = types.BoolValue(true)
 			} else {
-				item.DenyCapture = types.BoolValue(false)
+				item.DenyCapture = types.BoolNull()
 			}
 			if cValue := v.Get("deny.log"); cValue.Exists() {
 				item.DenyLog = types.BoolValue(true)
 			} else {
-				item.DenyLog = types.BoolValue(false)
+				item.DenyLog = types.BoolNull()
 			}
 			if cValue := v.Get("deny.log-input"); cValue.Exists() {
 				item.DenyLogInput = types.BoolValue(true)
 			} else {
-				item.DenyLogInput = types.BoolValue(false)
+				item.DenyLogInput = types.BoolNull()
 			}
 			if cValue := v.Get("deny.set.qos-group"); cValue.Exists() {
 				item.DenySetQosGroup = types.Int64Value(cValue.Int())
@@ -3327,12 +3327,12 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.icmp-off"); cValue.Exists() {
 				item.DenyIcmpOff = types.BoolValue(true)
 			} else {
-				item.DenyIcmpOff = types.BoolValue(false)
+				item.DenyIcmpOff = types.BoolNull()
 			}
 			if cValue := v.Get("deny.icmp-on"); cValue.Exists() {
 				item.DenyIcmpOn = types.BoolValue(true)
 			} else {
-				item.DenyIcmpOn = types.BoolValue(false)
+				item.DenyIcmpOn = types.BoolNull()
 			}
 			data.Sequences = append(data.Sequences, item)
 			return true

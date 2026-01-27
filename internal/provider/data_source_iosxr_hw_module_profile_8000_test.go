@@ -21,7 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +32,8 @@ import (
 
 func TestAccDataSourceIosxrHWModuleProfile8000(t *testing.T) {
 	if os.Getenv("C8000") == "" {
-		t.Skip("skipping test, set environment variable C8000")
-	}
+        t.Skip("skipping test, set environment variable C8000")
+    }
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_tcam_fib_ipv4_unicast_percent", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_tcam_fib_ipv6_unicast_percent", "50"))
@@ -106,7 +105,7 @@ func TestAccDataSourceIosxrHWModuleProfile8000(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrHWModuleProfile8000Config(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

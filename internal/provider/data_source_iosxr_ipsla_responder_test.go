@@ -21,7 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,25 +32,25 @@ import (
 
 func TestAccDataSourceIosxrIPSLAResponder(t *testing.T) {
 	if os.Getenv("XRV9K") == "" && os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
-		t.Skip("skipping test, set environment variable XRV9K or NCS or C8000")
-	}
+        t.Skip("skipping test, set environment variable XRV9K or NCS or C8000")
+    }
 	var checks []resource.TestCheckFunc
 	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "type_udp_ipv4.0.address", "10.1.1.1"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "type_udp_ipv4.0.ports.0.port_number", "888"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "type_udp_ipv4.0.address", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "type_udp_ipv4.0.ports.0.port_number", "888"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_timeout", "600"))
 	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.session_id", "1"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.local_ipv4_addresses.0.address", "10.1.1.1"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.local_ipv4_addresses.0.local_port", "862"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.local_ipv4_addresses.0.remote_ipv4_addresses.0.address", "10.1.1.2"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.local_ipv4_addresses.0.remote_ipv4_addresses.0.remote_port", "862"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.local_ipv4_addresses.0.remote_ipv4_addresses.0.vrf", "default"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.authentication", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.encryption", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.timeout", "3600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.session_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.local_ipv4_addresses.0.address", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.local_ipv4_addresses.0.local_port", "862"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.local_ipv4_addresses.0.remote_ipv4_addresses.0.address", "10.1.1.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.local_ipv4_addresses.0.remote_ipv4_addresses.0.remote_port", "862"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.local_ipv4_addresses.0.remote_ipv4_addresses.0.vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.authentication", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.encryption", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla_responder.test", "twamp_light_sessions.0.timeout", "3600"))
 	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -59,7 +58,7 @@ func TestAccDataSourceIosxrIPSLAResponder(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrIPSLAResponderConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -77,31 +76,31 @@ func testAccDataSourceIosxrIPSLAResponderConfig() string {
 	config := `resource "iosxr_ipsla_responder" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
 	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
-		config += `	type_udp_ipv4 = [{` + "\n"
-		config += `		address = "10.1.1.1"` + "\n"
-		config += `		ports = [{` + "\n"
-		config += `			port_number = 888` + "\n"
-		config += `		}]` + "\n"
-		config += `	}]` + "\n"
+	config += `	type_udp_ipv4 = [{` + "\n"
+	config += `		address = "10.1.1.1"` + "\n"
+	config += `		ports = [{` + "\n"
+	config += `			port_number = 888` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
 	}
 	config += `	twamp = true` + "\n"
 	config += `	twamp_timeout = 600` + "\n"
 	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
-		config += `	twamp_light_sessions = [{` + "\n"
-		config += `		session_id = 1` + "\n"
-		config += `		local_ipv4_addresses = [{` + "\n"
-		config += `			address = "10.1.1.1"` + "\n"
-		config += `			local_port = 862` + "\n"
-		config += `			remote_ipv4_addresses = [{` + "\n"
-		config += `				address = "10.1.1.2"` + "\n"
-		config += `				remote_port = "862"` + "\n"
-		config += `				vrf = "default"` + "\n"
-		config += `			}]` + "\n"
-		config += `		}]` + "\n"
-		config += `		authentication = true` + "\n"
-		config += `		encryption = true` + "\n"
-		config += `		timeout = 3600` + "\n"
-		config += `	}]` + "\n"
+	config += `	twamp_light_sessions = [{` + "\n"
+	config += `		session_id = 1` + "\n"
+	config += `		local_ipv4_addresses = [{` + "\n"
+	config += `			address = "10.1.1.1"` + "\n"
+	config += `			local_port = 862` + "\n"
+	config += `			remote_ipv4_addresses = [{` + "\n"
+	config += `				address = "10.1.1.2"` + "\n"
+	config += `				remote_port = "862"` + "\n"
+	config += `				vrf = "default"` + "\n"
+	config += `			}]` + "\n"
+	config += `		}]` + "\n"
+	config += `		authentication = true` + "\n"
+	config += `		encryption = true` + "\n"
+	config += `		timeout = 3600` + "\n"
+	config += `	}]` + "\n"
 	}
 	config += `}` + "\n"
 

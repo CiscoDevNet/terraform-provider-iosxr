@@ -23,14 +23,19 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/netascode/go-gnmi"
+	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -47,7 +52,7 @@ func NewPolicyMapQoSDataSource() datasource.DataSource {
 	return &PolicyMapQoSDataSource{}
 }
 
-type PolicyMapQoSDataSource struct {
+type PolicyMapQoSDataSource struct{
 	data *IosxrProviderData
 }
 
@@ -258,11 +263,11 @@ func (d *PolicyMapQoSDataSource) Schema(ctx context.Context, req datasource.Sche
 									"value": schema.StringAttribute{
 										MarkdownDescription: "queue-limit value",
 										Computed:            true,
-									},
+								},
 									"unit": schema.StringAttribute{
 										MarkdownDescription: "queue-limit unit",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -278,19 +283,19 @@ func (d *PolicyMapQoSDataSource) Schema(ctx context.Context, req datasource.Sche
 									"minimum_threshold_value": schema.Int64Attribute{
 										MarkdownDescription: "Minimum threshold",
 										Computed:            true,
-									},
+								},
 									"minimum_threshold_unit": schema.StringAttribute{
 										MarkdownDescription: "threshold unit",
 										Computed:            true,
-									},
+								},
 									"maximum_threshold_value": schema.Int64Attribute{
 										MarkdownDescription: "Maximum threshold",
 										Computed:            true,
-									},
+								},
 									"maximum_threshold_unit": schema.StringAttribute{
 										MarkdownDescription: "threshold unit",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -426,6 +431,7 @@ func (d *PolicyMapQoSDataSource) Read(ctx context.Context, req datasource.ReadRe
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
+
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

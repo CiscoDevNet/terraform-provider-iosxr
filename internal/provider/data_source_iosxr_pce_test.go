@@ -218,8 +218,8 @@ func TestAccDataSourceIosxrPCE(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrPCEPrerequisitesConfig + testAccDataSourceIosxrPCEConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrPCEPrerequisitesConfig+testAccDataSourceIosxrPCEConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

@@ -21,8 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -48,18 +46,18 @@ func TestAccIosxrSegmentRouting(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrSegmentRoutingConfig_all(),
-		Check:  resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:      "iosxr_segment_routing.test",
-		ImportState:       true,
+		ResourceName:  "iosxr_segment_routing.test",
+		ImportState:   true,
 		ImportStateIdFunc: iosxrSegmentRoutingImportStateIdFunc("iosxr_segment_routing.test"),
-		Check:             resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps:                    steps,
+		Steps: steps,
 	})
 }
 
@@ -96,7 +94,7 @@ func testAccIosxrSegmentRoutingConfig_all() string {
 func iosxrSegmentRoutingImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf(""), nil
+		return fmt.Sprintf("", ), nil
 	}
 }
 

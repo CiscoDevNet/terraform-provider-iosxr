@@ -28,132 +28,132 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterISISInterface struct {
-	Device                           types.String                                          `tfsdk:"device"`
-	Id                               types.String                                          `tfsdk:"id"`
-	DeleteMode                       types.String                                          `tfsdk:"delete_mode"`
-	ProcessId                        types.String                                          `tfsdk:"process_id"`
-	InterfaceName                    types.String                                          `tfsdk:"interface_name"`
-	MeshGroup                        types.Int64                                           `tfsdk:"mesh_group"`
-	MeshGroupBlocked                 types.Bool                                            `tfsdk:"mesh_group_blocked"`
-	State                            types.String                                          `tfsdk:"state"`
-	CircuitType                      types.String                                          `tfsdk:"circuit_type"`
-	CsnpInterval                     types.Int64                                           `tfsdk:"csnp_interval"`
-	CsnpIntervalLevels               []RouterISISInterfaceCsnpIntervalLevels               `tfsdk:"csnp_interval_levels"`
-	HelloPadding                     types.String                                          `tfsdk:"hello_padding"`
-	HelloPaddingLevels               []RouterISISInterfaceHelloPaddingLevels               `tfsdk:"hello_padding_levels"`
-	HelloInterval                    types.Int64                                           `tfsdk:"hello_interval"`
-	HelloIntervalLevels              []RouterISISInterfaceHelloIntervalLevels              `tfsdk:"hello_interval_levels"`
-	HelloMultiplier                  types.Int64                                           `tfsdk:"hello_multiplier"`
-	HelloMultiplierLevels            []RouterISISInterfaceHelloMultiplierLevels            `tfsdk:"hello_multiplier_levels"`
-	LspInterval                      types.Int64                                           `tfsdk:"lsp_interval"`
-	LspIntervalLevels                []RouterISISInterfaceLspIntervalLevels                `tfsdk:"lsp_interval_levels"`
-	HelloPasswordAcceptEncrypted     types.String                                          `tfsdk:"hello_password_accept_encrypted"`
-	HelloPasswordAcceptsLevels       []RouterISISInterfaceHelloPasswordAcceptsLevels       `tfsdk:"hello_password_accepts_levels"`
-	HelloPasswordTextEncrypted       types.String                                          `tfsdk:"hello_password_text_encrypted"`
-	HelloPasswordTextSendOnly        types.Bool                                            `tfsdk:"hello_password_text_send_only"`
-	HelloPasswordHmacMd5Encrypted    types.String                                          `tfsdk:"hello_password_hmac_md5_encrypted"`
-	HelloPasswordHmacMd5SendOnly     types.Bool                                            `tfsdk:"hello_password_hmac_md5_send_only"`
-	HelloPasswordKeychainName        types.String                                          `tfsdk:"hello_password_keychain_name"`
-	HelloPasswordKeychainSendOnly    types.Bool                                            `tfsdk:"hello_password_keychain_send_only"`
-	HelloPasswordLevels              []RouterISISInterfaceHelloPasswordLevels              `tfsdk:"hello_password_levels"`
-	RemotePsnpDelay                  types.Int64                                           `tfsdk:"remote_psnp_delay"`
-	Priority                         types.Int64                                           `tfsdk:"priority"`
-	PriorityLevels                   []RouterISISInterfacePriorityLevels                   `tfsdk:"priority_levels"`
-	PointToPoint                     types.Bool                                            `tfsdk:"point_to_point"`
-	RetransmitInterval               types.Int64                                           `tfsdk:"retransmit_interval"`
-	RetransmitIntervalLevels         []RouterISISInterfaceRetransmitIntervalLevels         `tfsdk:"retransmit_interval_levels"`
-	RetransmitThrottleInterval       types.Int64                                           `tfsdk:"retransmit_throttle_interval"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	ProcessId types.String `tfsdk:"process_id"`
+	InterfaceName types.String `tfsdk:"interface_name"`
+	MeshGroup types.Int64 `tfsdk:"mesh_group"`
+	MeshGroupBlocked types.Bool `tfsdk:"mesh_group_blocked"`
+	State types.String `tfsdk:"state"`
+	CircuitType types.String `tfsdk:"circuit_type"`
+	CsnpInterval types.Int64 `tfsdk:"csnp_interval"`
+	CsnpIntervalLevels []RouterISISInterfaceCsnpIntervalLevels `tfsdk:"csnp_interval_levels"`
+	HelloPadding types.String `tfsdk:"hello_padding"`
+	HelloPaddingLevels []RouterISISInterfaceHelloPaddingLevels `tfsdk:"hello_padding_levels"`
+	HelloInterval types.Int64 `tfsdk:"hello_interval"`
+	HelloIntervalLevels []RouterISISInterfaceHelloIntervalLevels `tfsdk:"hello_interval_levels"`
+	HelloMultiplier types.Int64 `tfsdk:"hello_multiplier"`
+	HelloMultiplierLevels []RouterISISInterfaceHelloMultiplierLevels `tfsdk:"hello_multiplier_levels"`
+	LspInterval types.Int64 `tfsdk:"lsp_interval"`
+	LspIntervalLevels []RouterISISInterfaceLspIntervalLevels `tfsdk:"lsp_interval_levels"`
+	HelloPasswordAcceptEncrypted types.String `tfsdk:"hello_password_accept_encrypted"`
+	HelloPasswordAcceptsLevels []RouterISISInterfaceHelloPasswordAcceptsLevels `tfsdk:"hello_password_accepts_levels"`
+	HelloPasswordTextEncrypted types.String `tfsdk:"hello_password_text_encrypted"`
+	HelloPasswordTextSendOnly types.Bool `tfsdk:"hello_password_text_send_only"`
+	HelloPasswordHmacMd5Encrypted types.String `tfsdk:"hello_password_hmac_md5_encrypted"`
+	HelloPasswordHmacMd5SendOnly types.Bool `tfsdk:"hello_password_hmac_md5_send_only"`
+	HelloPasswordKeychainName types.String `tfsdk:"hello_password_keychain_name"`
+	HelloPasswordKeychainSendOnly types.Bool `tfsdk:"hello_password_keychain_send_only"`
+	HelloPasswordLevels []RouterISISInterfaceHelloPasswordLevels `tfsdk:"hello_password_levels"`
+	RemotePsnpDelay types.Int64 `tfsdk:"remote_psnp_delay"`
+	Priority types.Int64 `tfsdk:"priority"`
+	PriorityLevels []RouterISISInterfacePriorityLevels `tfsdk:"priority_levels"`
+	PointToPoint types.Bool `tfsdk:"point_to_point"`
+	RetransmitInterval types.Int64 `tfsdk:"retransmit_interval"`
+	RetransmitIntervalLevels []RouterISISInterfaceRetransmitIntervalLevels `tfsdk:"retransmit_interval_levels"`
+	RetransmitThrottleInterval types.Int64 `tfsdk:"retransmit_throttle_interval"`
 	RetransmitThrottleIntervalLevels []RouterISISInterfaceRetransmitThrottleIntervalLevels `tfsdk:"retransmit_throttle_interval_levels"`
-	LinkDownFastDetect               types.Bool                                            `tfsdk:"link_down_fast_detect"`
-	AffinityFlexAlgos                types.List                                            `tfsdk:"affinity_flex_algos"`
-	AffinityFlexAlgosAnomalies       types.List                                            `tfsdk:"affinity_flex_algos_anomalies"`
-	OverrideMetrics                  types.String                                          `tfsdk:"override_metrics"`
-	DelayNormalizeInterval           types.Int64                                           `tfsdk:"delay_normalize_interval"`
-	DelayNormalizeOffset             types.Int64                                           `tfsdk:"delay_normalize_offset"`
-	MplsLdpSync                      types.Bool                                            `tfsdk:"mpls_ldp_sync"`
-	MplsLdpSyncLevel                 types.Int64                                           `tfsdk:"mpls_ldp_sync_level"`
-	BfdFastDetectIpv4                types.Bool                                            `tfsdk:"bfd_fast_detect_ipv4"`
-	BfdFastDetectIpv6                types.Bool                                            `tfsdk:"bfd_fast_detect_ipv6"`
-	BfdMinimumInterval               types.Int64                                           `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier                    types.Int64                                           `tfsdk:"bfd_multiplier"`
+	LinkDownFastDetect types.Bool `tfsdk:"link_down_fast_detect"`
+	AffinityFlexAlgos types.List `tfsdk:"affinity_flex_algos"`
+	AffinityFlexAlgosAnomalies types.List `tfsdk:"affinity_flex_algos_anomalies"`
+	OverrideMetrics types.String `tfsdk:"override_metrics"`
+	DelayNormalizeInterval types.Int64 `tfsdk:"delay_normalize_interval"`
+	DelayNormalizeOffset types.Int64 `tfsdk:"delay_normalize_offset"`
+	MplsLdpSync types.Bool `tfsdk:"mpls_ldp_sync"`
+	MplsLdpSyncLevel types.Int64 `tfsdk:"mpls_ldp_sync_level"`
+	BfdFastDetectIpv4 types.Bool `tfsdk:"bfd_fast_detect_ipv4"`
+	BfdFastDetectIpv6 types.Bool `tfsdk:"bfd_fast_detect_ipv6"`
+	BfdMinimumInterval types.Int64 `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier types.Int64 `tfsdk:"bfd_multiplier"`
 }
 
 type RouterISISInterfaceData struct {
-	Device                           types.String                                          `tfsdk:"device"`
-	Id                               types.String                                          `tfsdk:"id"`
-	ProcessId                        types.String                                          `tfsdk:"process_id"`
-	InterfaceName                    types.String                                          `tfsdk:"interface_name"`
-	MeshGroup                        types.Int64                                           `tfsdk:"mesh_group"`
-	MeshGroupBlocked                 types.Bool                                            `tfsdk:"mesh_group_blocked"`
-	State                            types.String                                          `tfsdk:"state"`
-	CircuitType                      types.String                                          `tfsdk:"circuit_type"`
-	CsnpInterval                     types.Int64                                           `tfsdk:"csnp_interval"`
-	CsnpIntervalLevels               []RouterISISInterfaceCsnpIntervalLevels               `tfsdk:"csnp_interval_levels"`
-	HelloPadding                     types.String                                          `tfsdk:"hello_padding"`
-	HelloPaddingLevels               []RouterISISInterfaceHelloPaddingLevels               `tfsdk:"hello_padding_levels"`
-	HelloInterval                    types.Int64                                           `tfsdk:"hello_interval"`
-	HelloIntervalLevels              []RouterISISInterfaceHelloIntervalLevels              `tfsdk:"hello_interval_levels"`
-	HelloMultiplier                  types.Int64                                           `tfsdk:"hello_multiplier"`
-	HelloMultiplierLevels            []RouterISISInterfaceHelloMultiplierLevels            `tfsdk:"hello_multiplier_levels"`
-	LspInterval                      types.Int64                                           `tfsdk:"lsp_interval"`
-	LspIntervalLevels                []RouterISISInterfaceLspIntervalLevels                `tfsdk:"lsp_interval_levels"`
-	HelloPasswordAcceptEncrypted     types.String                                          `tfsdk:"hello_password_accept_encrypted"`
-	HelloPasswordAcceptsLevels       []RouterISISInterfaceHelloPasswordAcceptsLevels       `tfsdk:"hello_password_accepts_levels"`
-	HelloPasswordTextEncrypted       types.String                                          `tfsdk:"hello_password_text_encrypted"`
-	HelloPasswordTextSendOnly        types.Bool                                            `tfsdk:"hello_password_text_send_only"`
-	HelloPasswordHmacMd5Encrypted    types.String                                          `tfsdk:"hello_password_hmac_md5_encrypted"`
-	HelloPasswordHmacMd5SendOnly     types.Bool                                            `tfsdk:"hello_password_hmac_md5_send_only"`
-	HelloPasswordKeychainName        types.String                                          `tfsdk:"hello_password_keychain_name"`
-	HelloPasswordKeychainSendOnly    types.Bool                                            `tfsdk:"hello_password_keychain_send_only"`
-	HelloPasswordLevels              []RouterISISInterfaceHelloPasswordLevels              `tfsdk:"hello_password_levels"`
-	RemotePsnpDelay                  types.Int64                                           `tfsdk:"remote_psnp_delay"`
-	Priority                         types.Int64                                           `tfsdk:"priority"`
-	PriorityLevels                   []RouterISISInterfacePriorityLevels                   `tfsdk:"priority_levels"`
-	PointToPoint                     types.Bool                                            `tfsdk:"point_to_point"`
-	RetransmitInterval               types.Int64                                           `tfsdk:"retransmit_interval"`
-	RetransmitIntervalLevels         []RouterISISInterfaceRetransmitIntervalLevels         `tfsdk:"retransmit_interval_levels"`
-	RetransmitThrottleInterval       types.Int64                                           `tfsdk:"retransmit_throttle_interval"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	ProcessId types.String `tfsdk:"process_id"`
+	InterfaceName types.String `tfsdk:"interface_name"`
+	MeshGroup types.Int64 `tfsdk:"mesh_group"`
+	MeshGroupBlocked types.Bool `tfsdk:"mesh_group_blocked"`
+	State types.String `tfsdk:"state"`
+	CircuitType types.String `tfsdk:"circuit_type"`
+	CsnpInterval types.Int64 `tfsdk:"csnp_interval"`
+	CsnpIntervalLevels []RouterISISInterfaceCsnpIntervalLevels `tfsdk:"csnp_interval_levels"`
+	HelloPadding types.String `tfsdk:"hello_padding"`
+	HelloPaddingLevels []RouterISISInterfaceHelloPaddingLevels `tfsdk:"hello_padding_levels"`
+	HelloInterval types.Int64 `tfsdk:"hello_interval"`
+	HelloIntervalLevels []RouterISISInterfaceHelloIntervalLevels `tfsdk:"hello_interval_levels"`
+	HelloMultiplier types.Int64 `tfsdk:"hello_multiplier"`
+	HelloMultiplierLevels []RouterISISInterfaceHelloMultiplierLevels `tfsdk:"hello_multiplier_levels"`
+	LspInterval types.Int64 `tfsdk:"lsp_interval"`
+	LspIntervalLevels []RouterISISInterfaceLspIntervalLevels `tfsdk:"lsp_interval_levels"`
+	HelloPasswordAcceptEncrypted types.String `tfsdk:"hello_password_accept_encrypted"`
+	HelloPasswordAcceptsLevels []RouterISISInterfaceHelloPasswordAcceptsLevels `tfsdk:"hello_password_accepts_levels"`
+	HelloPasswordTextEncrypted types.String `tfsdk:"hello_password_text_encrypted"`
+	HelloPasswordTextSendOnly types.Bool `tfsdk:"hello_password_text_send_only"`
+	HelloPasswordHmacMd5Encrypted types.String `tfsdk:"hello_password_hmac_md5_encrypted"`
+	HelloPasswordHmacMd5SendOnly types.Bool `tfsdk:"hello_password_hmac_md5_send_only"`
+	HelloPasswordKeychainName types.String `tfsdk:"hello_password_keychain_name"`
+	HelloPasswordKeychainSendOnly types.Bool `tfsdk:"hello_password_keychain_send_only"`
+	HelloPasswordLevels []RouterISISInterfaceHelloPasswordLevels `tfsdk:"hello_password_levels"`
+	RemotePsnpDelay types.Int64 `tfsdk:"remote_psnp_delay"`
+	Priority types.Int64 `tfsdk:"priority"`
+	PriorityLevels []RouterISISInterfacePriorityLevels `tfsdk:"priority_levels"`
+	PointToPoint types.Bool `tfsdk:"point_to_point"`
+	RetransmitInterval types.Int64 `tfsdk:"retransmit_interval"`
+	RetransmitIntervalLevels []RouterISISInterfaceRetransmitIntervalLevels `tfsdk:"retransmit_interval_levels"`
+	RetransmitThrottleInterval types.Int64 `tfsdk:"retransmit_throttle_interval"`
 	RetransmitThrottleIntervalLevels []RouterISISInterfaceRetransmitThrottleIntervalLevels `tfsdk:"retransmit_throttle_interval_levels"`
-	LinkDownFastDetect               types.Bool                                            `tfsdk:"link_down_fast_detect"`
-	AffinityFlexAlgos                types.List                                            `tfsdk:"affinity_flex_algos"`
-	AffinityFlexAlgosAnomalies       types.List                                            `tfsdk:"affinity_flex_algos_anomalies"`
-	OverrideMetrics                  types.String                                          `tfsdk:"override_metrics"`
-	DelayNormalizeInterval           types.Int64                                           `tfsdk:"delay_normalize_interval"`
-	DelayNormalizeOffset             types.Int64                                           `tfsdk:"delay_normalize_offset"`
-	MplsLdpSync                      types.Bool                                            `tfsdk:"mpls_ldp_sync"`
-	MplsLdpSyncLevel                 types.Int64                                           `tfsdk:"mpls_ldp_sync_level"`
-	BfdFastDetectIpv4                types.Bool                                            `tfsdk:"bfd_fast_detect_ipv4"`
-	BfdFastDetectIpv6                types.Bool                                            `tfsdk:"bfd_fast_detect_ipv6"`
-	BfdMinimumInterval               types.Int64                                           `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier                    types.Int64                                           `tfsdk:"bfd_multiplier"`
+	LinkDownFastDetect types.Bool `tfsdk:"link_down_fast_detect"`
+	AffinityFlexAlgos types.List `tfsdk:"affinity_flex_algos"`
+	AffinityFlexAlgosAnomalies types.List `tfsdk:"affinity_flex_algos_anomalies"`
+	OverrideMetrics types.String `tfsdk:"override_metrics"`
+	DelayNormalizeInterval types.Int64 `tfsdk:"delay_normalize_interval"`
+	DelayNormalizeOffset types.Int64 `tfsdk:"delay_normalize_offset"`
+	MplsLdpSync types.Bool `tfsdk:"mpls_ldp_sync"`
+	MplsLdpSyncLevel types.Int64 `tfsdk:"mpls_ldp_sync_level"`
+	BfdFastDetectIpv4 types.Bool `tfsdk:"bfd_fast_detect_ipv4"`
+	BfdFastDetectIpv6 types.Bool `tfsdk:"bfd_fast_detect_ipv6"`
+	BfdMinimumInterval types.Int64 `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier types.Int64 `tfsdk:"bfd_multiplier"`
 }
 type RouterISISInterfaceCsnpIntervalLevels struct {
-	LevelNumber  types.Int64 `tfsdk:"level_number"`
+	LevelNumber types.Int64 `tfsdk:"level_number"`
 	CsnpInterval types.Int64 `tfsdk:"csnp_interval"`
 }
 type RouterISISInterfaceHelloPaddingLevels struct {
-	LevelNumber  types.Int64  `tfsdk:"level_number"`
+	LevelNumber types.Int64 `tfsdk:"level_number"`
 	HelloPadding types.String `tfsdk:"hello_padding"`
 }
 type RouterISISInterfaceHelloIntervalLevels struct {
-	LevelNumber   types.Int64 `tfsdk:"level_number"`
+	LevelNumber types.Int64 `tfsdk:"level_number"`
 	HelloInterval types.Int64 `tfsdk:"hello_interval"`
 }
 type RouterISISInterfaceHelloMultiplierLevels struct {
-	LevelNumber     types.Int64 `tfsdk:"level_number"`
+	LevelNumber types.Int64 `tfsdk:"level_number"`
 	HelloMultiplier types.Int64 `tfsdk:"hello_multiplier"`
 }
 type RouterISISInterfaceLspIntervalLevels struct {
@@ -161,28 +161,28 @@ type RouterISISInterfaceLspIntervalLevels struct {
 	LspInterval types.Int64 `tfsdk:"lsp_interval"`
 }
 type RouterISISInterfaceHelloPasswordAcceptsLevels struct {
-	LevelNumber types.Int64  `tfsdk:"level_number"`
-	Encrypted   types.String `tfsdk:"encrypted"`
+	LevelNumber types.Int64 `tfsdk:"level_number"`
+	Encrypted types.String `tfsdk:"encrypted"`
 }
 type RouterISISInterfaceHelloPasswordLevels struct {
-	LevelNumber      types.Int64  `tfsdk:"level_number"`
-	TextEncrypted    types.String `tfsdk:"text_encrypted"`
-	TextSendOnly     types.Bool   `tfsdk:"text_send_only"`
+	LevelNumber types.Int64 `tfsdk:"level_number"`
+	TextEncrypted types.String `tfsdk:"text_encrypted"`
+	TextSendOnly types.Bool `tfsdk:"text_send_only"`
 	HmacMd5Encrypted types.String `tfsdk:"hmac_md5_encrypted"`
-	HmacMd5SendOnly  types.Bool   `tfsdk:"hmac_md5_send_only"`
-	KeychainName     types.String `tfsdk:"keychain_name"`
-	KeychainSendOnly types.Bool   `tfsdk:"keychain_send_only"`
+	HmacMd5SendOnly types.Bool `tfsdk:"hmac_md5_send_only"`
+	KeychainName types.String `tfsdk:"keychain_name"`
+	KeychainSendOnly types.Bool `tfsdk:"keychain_send_only"`
 }
 type RouterISISInterfacePriorityLevels struct {
 	LevelNumber types.Int64 `tfsdk:"level_number"`
-	Priority    types.Int64 `tfsdk:"priority"`
+	Priority types.Int64 `tfsdk:"priority"`
 }
 type RouterISISInterfaceRetransmitIntervalLevels struct {
-	LevelNumber        types.Int64 `tfsdk:"level_number"`
+	LevelNumber types.Int64 `tfsdk:"level_number"`
 	RetransmitInterval types.Int64 `tfsdk:"retransmit_interval"`
 }
 type RouterISISInterfaceRetransmitThrottleIntervalLevels struct {
-	LevelNumber                types.Int64 `tfsdk:"level_number"`
+	LevelNumber types.Int64 `tfsdk:"level_number"`
 	RetransmitThrottleInterval types.Int64 `tfsdk:"retransmit_throttle_interval"`
 }
 
@@ -485,15 +485,14 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 	} else {
 		data.MeshGroup = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mesh-group.blocked"); value.Exists() {
-		if !data.MeshGroupBlocked.IsNull() {
+	if value := gjson.GetBytes(res, "mesh-group.blocked"); !data.MeshGroupBlocked.IsNull() {
+		if value.Exists() {
 			data.MeshGroupBlocked = types.BoolValue(true)
+		} else {
+			data.MeshGroupBlocked = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MeshGroupBlocked.IsNull() {
-			data.MeshGroupBlocked = types.BoolNull()
-		}
+		data.MeshGroupBlocked = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "state"); value.Exists() && !data.State.IsNull() {
 		data.State = types.StringValue(value.String())
@@ -511,8 +510,8 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		data.CsnpInterval = types.Int64Null()
 	}
 	for i := range data.CsnpIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "csnp-interval-levels.csnp-interval-level").ForEach(
@@ -550,8 +549,8 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		data.HelloPadding = types.StringNull()
 	}
 	for i := range data.HelloPaddingLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "hello-padding-levels.hello-padding-level").ForEach(
@@ -589,8 +588,8 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		data.HelloInterval = types.Int64Null()
 	}
 	for i := range data.HelloIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "hello-interval-levels.hello-interval-level").ForEach(
@@ -628,8 +627,8 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		data.HelloMultiplier = types.Int64Null()
 	}
 	for i := range data.HelloMultiplierLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "hello-multiplier-levels.hello-multiplier-level").ForEach(
@@ -667,8 +666,8 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		data.LspInterval = types.Int64Null()
 	}
 	for i := range data.LspIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "lsp-interval-levels.lsp-interval-level").ForEach(
@@ -701,8 +700,8 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		}
 	}
 	for i := range data.HelloPasswordAcceptsLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "hello-password.accepts-levels.accepts-level").ForEach(
@@ -729,44 +728,41 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.HelloPasswordAcceptsLevels[i].LevelNumber = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.text.hello-password-options.send-only"); value.Exists() {
-		if !data.HelloPasswordTextSendOnly.IsNull() {
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.text.hello-password-options.send-only"); !data.HelloPasswordTextSendOnly.IsNull() {
+		if value.Exists() {
 			data.HelloPasswordTextSendOnly = types.BoolValue(true)
+		} else {
+			data.HelloPasswordTextSendOnly = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.HelloPasswordTextSendOnly.IsNull() {
-			data.HelloPasswordTextSendOnly = types.BoolNull()
-		}
+		data.HelloPasswordTextSendOnly = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); value.Exists() {
-		if !data.HelloPasswordHmacMd5SendOnly.IsNull() {
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); !data.HelloPasswordHmacMd5SendOnly.IsNull() {
+		if value.Exists() {
 			data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
+		} else {
+			data.HelloPasswordHmacMd5SendOnly = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.HelloPasswordHmacMd5SendOnly.IsNull() {
-			data.HelloPasswordHmacMd5SendOnly = types.BoolNull()
-		}
+		data.HelloPasswordHmacMd5SendOnly = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.keychain-name"); value.Exists() && !data.HelloPasswordKeychainName.IsNull() {
 		data.HelloPasswordKeychainName = types.StringValue(value.String())
 	} else {
 		data.HelloPasswordKeychainName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.send-only"); value.Exists() {
-		if !data.HelloPasswordKeychainSendOnly.IsNull() {
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.send-only"); !data.HelloPasswordKeychainSendOnly.IsNull() {
+		if value.Exists() {
 			data.HelloPasswordKeychainSendOnly = types.BoolValue(true)
+		} else {
+			data.HelloPasswordKeychainSendOnly = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.HelloPasswordKeychainSendOnly.IsNull() {
-			data.HelloPasswordKeychainSendOnly = types.BoolNull()
-		}
+		data.HelloPasswordKeychainSendOnly = types.BoolNull()
 	}
 	for i := range data.HelloPasswordLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "hello-password-levels.hello-password-level").ForEach(
@@ -792,64 +788,37 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		} else {
 			data.HelloPasswordLevels[i].LevelNumber = types.Int64Null()
 		}
-		if value := r.Get("text.hello-password-options.send-only"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.HelloPasswordLevels[i].TextSendOnly.IsNull() && !data.HelloPasswordLevels[i].TextSendOnly.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.HelloPasswordLevels[i].TextSendOnly = types.BoolValue(false)
-			} else if !data.HelloPasswordLevels[i].TextSendOnly.IsNull() {
+		if value := r.Get("text.hello-password-options.send-only"); !data.HelloPasswordLevels[i].TextSendOnly.IsNull() {
+			if value.Exists() {
 				data.HelloPasswordLevels[i].TextSendOnly = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.HelloPasswordLevels[i].TextSendOnly.IsNull() {
-				data.HelloPasswordLevels[i].TextSendOnly = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.HelloPasswordLevels[i].TextSendOnly = types.BoolValue(false)
 			}
+		} else {
+			data.HelloPasswordLevels[i].TextSendOnly = types.BoolNull()
 		}
-		if value := r.Get("hmac-md5.hello-password-options.send-only"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() && !data.HelloPasswordLevels[i].HmacMd5SendOnly.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.HelloPasswordLevels[i].HmacMd5SendOnly = types.BoolValue(false)
-			} else if !data.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() {
+		if value := r.Get("hmac-md5.hello-password-options.send-only"); !data.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() {
+			if value.Exists() {
 				data.HelloPasswordLevels[i].HmacMd5SendOnly = types.BoolValue(true)
+			} else {
+				data.HelloPasswordLevels[i].HmacMd5SendOnly = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() {
-				data.HelloPasswordLevels[i].HmacMd5SendOnly = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.HelloPasswordLevels[i].HmacMd5SendOnly = types.BoolValue(false)
-			}
+			data.HelloPasswordLevels[i].HmacMd5SendOnly = types.BoolNull()
 		}
 		if value := r.Get("keychain.keychain-name"); value.Exists() && !data.HelloPasswordLevels[i].KeychainName.IsNull() {
 			data.HelloPasswordLevels[i].KeychainName = types.StringValue(value.String())
 		} else {
 			data.HelloPasswordLevels[i].KeychainName = types.StringNull()
 		}
-		if value := r.Get("keychain.send-only"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.HelloPasswordLevels[i].KeychainSendOnly.IsNull() && !data.HelloPasswordLevels[i].KeychainSendOnly.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.HelloPasswordLevels[i].KeychainSendOnly = types.BoolValue(false)
-			} else if !data.HelloPasswordLevels[i].KeychainSendOnly.IsNull() {
+		if value := r.Get("keychain.send-only"); !data.HelloPasswordLevels[i].KeychainSendOnly.IsNull() {
+			if value.Exists() {
 				data.HelloPasswordLevels[i].KeychainSendOnly = types.BoolValue(true)
+			} else {
+				data.HelloPasswordLevels[i].KeychainSendOnly = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.HelloPasswordLevels[i].KeychainSendOnly.IsNull() {
-				data.HelloPasswordLevels[i].KeychainSendOnly = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.HelloPasswordLevels[i].KeychainSendOnly = types.BoolValue(false)
-			}
+			data.HelloPasswordLevels[i].KeychainSendOnly = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "remote-psnp-delay"); value.Exists() && !data.RemotePsnpDelay.IsNull() {
@@ -863,8 +832,8 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		data.Priority = types.Int64Null()
 	}
 	for i := range data.PriorityLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "priority-levels.priority-level").ForEach(
@@ -896,15 +865,14 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.PriorityLevels[i].Priority = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "point-to-point"); value.Exists() {
-		if !data.PointToPoint.IsNull() {
+	if value := gjson.GetBytes(res, "point-to-point"); !data.PointToPoint.IsNull() {
+		if value.Exists() {
 			data.PointToPoint = types.BoolValue(true)
+		} else {
+			data.PointToPoint = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.PointToPoint.IsNull() {
-			data.PointToPoint = types.BoolNull()
-		}
+		data.PointToPoint = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "retransmit-interval"); value.Exists() && !data.RetransmitInterval.IsNull() {
 		data.RetransmitInterval = types.Int64Value(value.Int())
@@ -912,8 +880,8 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		data.RetransmitInterval = types.Int64Null()
 	}
 	for i := range data.RetransmitIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "retransmit-interval-levels.retransmit-interval-level").ForEach(
@@ -951,8 +919,8 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		data.RetransmitThrottleInterval = types.Int64Null()
 	}
 	for i := range data.RetransmitThrottleIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "retransmit-throttle-interval-levels.retransmit-throttle-interval-level").ForEach(
@@ -984,15 +952,14 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.RetransmitThrottleIntervalLevels[i].RetransmitThrottleInterval = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "link-down.fast-detect"); value.Exists() {
-		if !data.LinkDownFastDetect.IsNull() {
+	if value := gjson.GetBytes(res, "link-down.fast-detect"); !data.LinkDownFastDetect.IsNull() {
+		if value.Exists() {
 			data.LinkDownFastDetect = types.BoolValue(true)
+		} else {
+			data.LinkDownFastDetect = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.LinkDownFastDetect.IsNull() {
-			data.LinkDownFastDetect = types.BoolNull()
-		}
+		data.LinkDownFastDetect = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "affinity.flex-algo.flex-algo-argument"); value.Exists() && !data.AffinityFlexAlgos.IsNull() {
 		data.AffinityFlexAlgos = helpers.GetStringList(value.Array())
@@ -1019,40 +986,37 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 	} else {
 		data.DelayNormalizeOffset = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
-		if !data.MplsLdpSync.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.ldp.sync"); !data.MplsLdpSync.IsNull() {
+		if value.Exists() {
 			data.MplsLdpSync = types.BoolValue(true)
+		} else {
+			data.MplsLdpSync = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MplsLdpSync.IsNull() {
-			data.MplsLdpSync = types.BoolNull()
-		}
+		data.MplsLdpSync = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "mpls.ldp.sync.level"); value.Exists() && !data.MplsLdpSyncLevel.IsNull() {
 		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
 	} else {
 		data.MplsLdpSyncLevel = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv4"); value.Exists() {
-		if !data.BfdFastDetectIpv4.IsNull() {
+	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv4"); !data.BfdFastDetectIpv4.IsNull() {
+		if value.Exists() {
 			data.BfdFastDetectIpv4 = types.BoolValue(true)
+		} else {
+			data.BfdFastDetectIpv4 = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.BfdFastDetectIpv4.IsNull() {
-			data.BfdFastDetectIpv4 = types.BoolNull()
-		}
+		data.BfdFastDetectIpv4 = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv6"); value.Exists() {
-		if !data.BfdFastDetectIpv6.IsNull() {
+	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv6"); !data.BfdFastDetectIpv6.IsNull() {
+		if value.Exists() {
 			data.BfdFastDetectIpv6 = types.BoolValue(true)
+		} else {
+			data.BfdFastDetectIpv6 = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.BfdFastDetectIpv6.IsNull() {
-			data.BfdFastDetectIpv6 = types.BoolNull()
-		}
+		data.BfdFastDetectIpv6 = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
@@ -1075,24 +1039,24 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "mesh-group.mesh-group-number"); value.Exists() {
+	if value := res.Get(prefix+"mesh-group.mesh-group-number"); value.Exists() {
 		data.MeshGroup = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "mesh-group.blocked"); value.Exists() {
+	if value := res.Get(prefix+"mesh-group.blocked"); value.Exists() {
 		data.MeshGroupBlocked = types.BoolValue(true)
 	} else {
-		data.MeshGroupBlocked = types.BoolNull()
+		data.MeshGroupBlocked = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "state"); value.Exists() {
+	if value := res.Get(prefix+"state"); value.Exists() {
 		data.State = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "circuit-type"); value.Exists() {
+	if value := res.Get(prefix+"circuit-type"); value.Exists() {
 		data.CircuitType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "csnp-interval"); value.Exists() {
+	if value := res.Get(prefix+"csnp-interval"); value.Exists() {
 		data.CsnpInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "csnp-interval-levels.csnp-interval-level"); value.Exists() {
+	if value := res.Get(prefix+"csnp-interval-levels.csnp-interval-level"); value.Exists() {
 		data.CsnpIntervalLevels = make([]RouterISISInterfaceCsnpIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceCsnpIntervalLevels{}
@@ -1106,10 +1070,10 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "hello-padding"); value.Exists() {
+	if value := res.Get(prefix+"hello-padding"); value.Exists() {
 		data.HelloPadding = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "hello-padding-levels.hello-padding-level"); value.Exists() {
+	if value := res.Get(prefix+"hello-padding-levels.hello-padding-level"); value.Exists() {
 		data.HelloPaddingLevels = make([]RouterISISInterfaceHelloPaddingLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceHelloPaddingLevels{}
@@ -1123,10 +1087,10 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "hello-interval"); value.Exists() {
+	if value := res.Get(prefix+"hello-interval"); value.Exists() {
 		data.HelloInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "hello-interval-levels.hello-interval-level"); value.Exists() {
+	if value := res.Get(prefix+"hello-interval-levels.hello-interval-level"); value.Exists() {
 		data.HelloIntervalLevels = make([]RouterISISInterfaceHelloIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceHelloIntervalLevels{}
@@ -1140,10 +1104,10 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "hello-multiplier"); value.Exists() {
+	if value := res.Get(prefix+"hello-multiplier"); value.Exists() {
 		data.HelloMultiplier = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "hello-multiplier-levels.hello-multiplier-level"); value.Exists() {
+	if value := res.Get(prefix+"hello-multiplier-levels.hello-multiplier-level"); value.Exists() {
 		data.HelloMultiplierLevels = make([]RouterISISInterfaceHelloMultiplierLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceHelloMultiplierLevels{}
@@ -1157,10 +1121,10 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "lsp-interval"); value.Exists() {
+	if value := res.Get(prefix+"lsp-interval"); value.Exists() {
 		data.LspInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-interval-levels.lsp-interval-level"); value.Exists() {
+	if value := res.Get(prefix+"lsp-interval-levels.lsp-interval-level"); value.Exists() {
 		data.LspIntervalLevels = make([]RouterISISInterfaceLspIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceLspIntervalLevels{}
@@ -1174,7 +1138,7 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "hello-password.accepts-levels.accepts-level"); value.Exists() {
+	if value := res.Get(prefix+"hello-password.accepts-levels.accepts-level"); value.Exists() {
 		data.HelloPasswordAcceptsLevels = make([]RouterISISInterfaceHelloPasswordAcceptsLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceHelloPasswordAcceptsLevels{}
@@ -1185,25 +1149,25 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "hello-password.hello-password-options.text.hello-password-options.send-only"); value.Exists() {
+	if value := res.Get(prefix+"hello-password.hello-password-options.text.hello-password-options.send-only"); value.Exists() {
 		data.HelloPasswordTextSendOnly = types.BoolValue(true)
 	} else {
-		data.HelloPasswordTextSendOnly = types.BoolNull()
+		data.HelloPasswordTextSendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); value.Exists() {
+	if value := res.Get(prefix+"hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); value.Exists() {
 		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
 	} else {
-		data.HelloPasswordHmacMd5SendOnly = types.BoolNull()
+		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "hello-password.hello-password-options.keychain.keychain-name"); value.Exists() {
+	if value := res.Get(prefix+"hello-password.hello-password-options.keychain.keychain-name"); value.Exists() {
 		data.HelloPasswordKeychainName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "hello-password.hello-password-options.keychain.send-only"); value.Exists() {
+	if value := res.Get(prefix+"hello-password.hello-password-options.keychain.send-only"); value.Exists() {
 		data.HelloPasswordKeychainSendOnly = types.BoolValue(true)
 	} else {
-		data.HelloPasswordKeychainSendOnly = types.BoolNull()
+		data.HelloPasswordKeychainSendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "hello-password-levels.hello-password-level"); value.Exists() {
+	if value := res.Get(prefix+"hello-password-levels.hello-password-level"); value.Exists() {
 		data.HelloPasswordLevels = make([]RouterISISInterfaceHelloPasswordLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceHelloPasswordLevels{}
@@ -1213,12 +1177,12 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			if cValue := v.Get("text.hello-password-options.send-only"); cValue.Exists() {
 				item.TextSendOnly = types.BoolValue(true)
 			} else {
-				item.TextSendOnly = types.BoolNull()
+				item.TextSendOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("hmac-md5.hello-password-options.send-only"); cValue.Exists() {
 				item.HmacMd5SendOnly = types.BoolValue(true)
 			} else {
-				item.HmacMd5SendOnly = types.BoolNull()
+				item.HmacMd5SendOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("keychain.keychain-name"); cValue.Exists() {
 				item.KeychainName = types.StringValue(cValue.String())
@@ -1226,19 +1190,19 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			if cValue := v.Get("keychain.send-only"); cValue.Exists() {
 				item.KeychainSendOnly = types.BoolValue(true)
 			} else {
-				item.KeychainSendOnly = types.BoolNull()
+				item.KeychainSendOnly = types.BoolValue(false)
 			}
 			data.HelloPasswordLevels = append(data.HelloPasswordLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "remote-psnp-delay"); value.Exists() {
+	if value := res.Get(prefix+"remote-psnp-delay"); value.Exists() {
 		data.RemotePsnpDelay = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "priority"); value.Exists() {
+	if value := res.Get(prefix+"priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "priority-levels.priority-level"); value.Exists() {
+	if value := res.Get(prefix+"priority-levels.priority-level"); value.Exists() {
 		data.PriorityLevels = make([]RouterISISInterfacePriorityLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfacePriorityLevels{}
@@ -1252,15 +1216,15 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "point-to-point"); value.Exists() {
+	if value := res.Get(prefix+"point-to-point"); value.Exists() {
 		data.PointToPoint = types.BoolValue(true)
 	} else {
-		data.PointToPoint = types.BoolNull()
+		data.PointToPoint = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "retransmit-interval"); value.Exists() {
+	if value := res.Get(prefix+"retransmit-interval"); value.Exists() {
 		data.RetransmitInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "retransmit-interval-levels.retransmit-interval-level"); value.Exists() {
+	if value := res.Get(prefix+"retransmit-interval-levels.retransmit-interval-level"); value.Exists() {
 		data.RetransmitIntervalLevels = make([]RouterISISInterfaceRetransmitIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceRetransmitIntervalLevels{}
@@ -1274,10 +1238,10 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "retransmit-throttle-interval"); value.Exists() {
+	if value := res.Get(prefix+"retransmit-throttle-interval"); value.Exists() {
 		data.RetransmitThrottleInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "retransmit-throttle-interval-levels.retransmit-throttle-interval-level"); value.Exists() {
+	if value := res.Get(prefix+"retransmit-throttle-interval-levels.retransmit-throttle-interval-level"); value.Exists() {
 		data.RetransmitThrottleIntervalLevels = make([]RouterISISInterfaceRetransmitThrottleIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceRetransmitThrottleIntervalLevels{}
@@ -1291,52 +1255,52 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "link-down.fast-detect"); value.Exists() {
+	if value := res.Get(prefix+"link-down.fast-detect"); value.Exists() {
 		data.LinkDownFastDetect = types.BoolValue(true)
 	} else {
-		data.LinkDownFastDetect = types.BoolNull()
+		data.LinkDownFastDetect = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "affinity.flex-algo.flex-algo-argument"); value.Exists() {
+	if value := res.Get(prefix+"affinity.flex-algo.flex-algo-argument"); value.Exists() {
 		data.AffinityFlexAlgos = helpers.GetStringList(value.Array())
 	} else {
 		data.AffinityFlexAlgos = types.ListNull(types.StringType)
 	}
-	if value := res.Get(prefix + "affinity.flex-algo.anomaly"); value.Exists() {
+	if value := res.Get(prefix+"affinity.flex-algo.anomaly"); value.Exists() {
 		data.AffinityFlexAlgosAnomalies = helpers.GetStringList(value.Array())
 	} else {
 		data.AffinityFlexAlgosAnomalies = types.ListNull(types.StringType)
 	}
-	if value := res.Get(prefix + "override.metrics"); value.Exists() {
+	if value := res.Get(prefix+"override.metrics"); value.Exists() {
 		data.OverrideMetrics = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "delay.normalize.interval.interval-number"); value.Exists() {
+	if value := res.Get(prefix+"delay.normalize.interval.interval-number"); value.Exists() {
 		data.DelayNormalizeInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "delay.normalize.interval.offset"); value.Exists() {
+	if value := res.Get(prefix+"delay.normalize.interval.offset"); value.Exists() {
 		data.DelayNormalizeOffset = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "mpls.ldp.sync"); value.Exists() {
+	if value := res.Get(prefix+"mpls.ldp.sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
 	} else {
-		data.MplsLdpSync = types.BoolNull()
+		data.MplsLdpSync = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.ldp.sync.level"); value.Exists() {
+	if value := res.Get(prefix+"mpls.ldp.sync.level"); value.Exists() {
 		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd.fast-detect.ipv4"); value.Exists() {
+	if value := res.Get(prefix+"bfd.fast-detect.ipv4"); value.Exists() {
 		data.BfdFastDetectIpv4 = types.BoolValue(true)
 	} else {
-		data.BfdFastDetectIpv4 = types.BoolNull()
+		data.BfdFastDetectIpv4 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "bfd.fast-detect.ipv6"); value.Exists() {
+	if value := res.Get(prefix+"bfd.fast-detect.ipv6"); value.Exists() {
 		data.BfdFastDetectIpv6 = types.BoolValue(true)
 	} else {
-		data.BfdFastDetectIpv6 = types.BoolNull()
+		data.BfdFastDetectIpv6 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "bfd.minimum-interval"); value.Exists() {
+	if value := res.Get(prefix+"bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd.multiplier"); value.Exists() {
+	if value := res.Get(prefix+"bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
 }
@@ -1350,24 +1314,24 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res gjson.Res
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "mesh-group.mesh-group-number"); value.Exists() {
+	if value := res.Get(prefix+"mesh-group.mesh-group-number"); value.Exists() {
 		data.MeshGroup = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "mesh-group.blocked"); value.Exists() {
+	if value := res.Get(prefix+"mesh-group.blocked"); value.Exists() {
 		data.MeshGroupBlocked = types.BoolValue(true)
 	} else {
 		data.MeshGroupBlocked = types.BoolNull()
 	}
-	if value := res.Get(prefix + "state"); value.Exists() {
+	if value := res.Get(prefix+"state"); value.Exists() {
 		data.State = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "circuit-type"); value.Exists() {
+	if value := res.Get(prefix+"circuit-type"); value.Exists() {
 		data.CircuitType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "csnp-interval"); value.Exists() {
+	if value := res.Get(prefix+"csnp-interval"); value.Exists() {
 		data.CsnpInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "csnp-interval-levels.csnp-interval-level"); value.Exists() {
+	if value := res.Get(prefix+"csnp-interval-levels.csnp-interval-level"); value.Exists() {
 		data.CsnpIntervalLevels = make([]RouterISISInterfaceCsnpIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceCsnpIntervalLevels{}
@@ -1381,10 +1345,10 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "hello-padding"); value.Exists() {
+	if value := res.Get(prefix+"hello-padding"); value.Exists() {
 		data.HelloPadding = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "hello-padding-levels.hello-padding-level"); value.Exists() {
+	if value := res.Get(prefix+"hello-padding-levels.hello-padding-level"); value.Exists() {
 		data.HelloPaddingLevels = make([]RouterISISInterfaceHelloPaddingLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceHelloPaddingLevels{}
@@ -1398,10 +1362,10 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "hello-interval"); value.Exists() {
+	if value := res.Get(prefix+"hello-interval"); value.Exists() {
 		data.HelloInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "hello-interval-levels.hello-interval-level"); value.Exists() {
+	if value := res.Get(prefix+"hello-interval-levels.hello-interval-level"); value.Exists() {
 		data.HelloIntervalLevels = make([]RouterISISInterfaceHelloIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceHelloIntervalLevels{}
@@ -1415,10 +1379,10 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "hello-multiplier"); value.Exists() {
+	if value := res.Get(prefix+"hello-multiplier"); value.Exists() {
 		data.HelloMultiplier = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "hello-multiplier-levels.hello-multiplier-level"); value.Exists() {
+	if value := res.Get(prefix+"hello-multiplier-levels.hello-multiplier-level"); value.Exists() {
 		data.HelloMultiplierLevels = make([]RouterISISInterfaceHelloMultiplierLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceHelloMultiplierLevels{}
@@ -1432,10 +1396,10 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "lsp-interval"); value.Exists() {
+	if value := res.Get(prefix+"lsp-interval"); value.Exists() {
 		data.LspInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-interval-levels.lsp-interval-level"); value.Exists() {
+	if value := res.Get(prefix+"lsp-interval-levels.lsp-interval-level"); value.Exists() {
 		data.LspIntervalLevels = make([]RouterISISInterfaceLspIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceLspIntervalLevels{}
@@ -1449,10 +1413,10 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "hello-password.accepts.encrypted"); value.Exists() {
+	if value := res.Get(prefix+"hello-password.accepts.encrypted"); value.Exists() {
 		data.HelloPasswordAcceptEncrypted = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "hello-password.accepts-levels.accepts-level"); value.Exists() {
+	if value := res.Get(prefix+"hello-password.accepts-levels.accepts-level"); value.Exists() {
 		data.HelloPasswordAcceptsLevels = make([]RouterISISInterfaceHelloPasswordAcceptsLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceHelloPasswordAcceptsLevels{}
@@ -1466,31 +1430,31 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "hello-password.hello-password-options.text.hello-password-options.encrypted"); value.Exists() {
+	if value := res.Get(prefix+"hello-password.hello-password-options.text.hello-password-options.encrypted"); value.Exists() {
 		data.HelloPasswordTextEncrypted = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "hello-password.hello-password-options.text.hello-password-options.send-only"); value.Exists() {
+	if value := res.Get(prefix+"hello-password.hello-password-options.text.hello-password-options.send-only"); value.Exists() {
 		data.HelloPasswordTextSendOnly = types.BoolValue(true)
 	} else {
 		data.HelloPasswordTextSendOnly = types.BoolNull()
 	}
-	if value := res.Get(prefix + "hello-password.hello-password-options.hmac-md5.hello-password-options.encrypted"); value.Exists() {
+	if value := res.Get(prefix+"hello-password.hello-password-options.hmac-md5.hello-password-options.encrypted"); value.Exists() {
 		data.HelloPasswordHmacMd5Encrypted = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); value.Exists() {
+	if value := res.Get(prefix+"hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); value.Exists() {
 		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
 	} else {
 		data.HelloPasswordHmacMd5SendOnly = types.BoolNull()
 	}
-	if value := res.Get(prefix + "hello-password.hello-password-options.keychain.keychain-name"); value.Exists() {
+	if value := res.Get(prefix+"hello-password.hello-password-options.keychain.keychain-name"); value.Exists() {
 		data.HelloPasswordKeychainName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "hello-password.hello-password-options.keychain.send-only"); value.Exists() {
+	if value := res.Get(prefix+"hello-password.hello-password-options.keychain.send-only"); value.Exists() {
 		data.HelloPasswordKeychainSendOnly = types.BoolValue(true)
 	} else {
 		data.HelloPasswordKeychainSendOnly = types.BoolNull()
 	}
-	if value := res.Get(prefix + "hello-password-levels.hello-password-level"); value.Exists() {
+	if value := res.Get(prefix+"hello-password-levels.hello-password-level"); value.Exists() {
 		data.HelloPasswordLevels = make([]RouterISISInterfaceHelloPasswordLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceHelloPasswordLevels{}
@@ -1525,13 +1489,13 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "remote-psnp-delay"); value.Exists() {
+	if value := res.Get(prefix+"remote-psnp-delay"); value.Exists() {
 		data.RemotePsnpDelay = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "priority"); value.Exists() {
+	if value := res.Get(prefix+"priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "priority-levels.priority-level"); value.Exists() {
+	if value := res.Get(prefix+"priority-levels.priority-level"); value.Exists() {
 		data.PriorityLevels = make([]RouterISISInterfacePriorityLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfacePriorityLevels{}
@@ -1545,15 +1509,15 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "point-to-point"); value.Exists() {
+	if value := res.Get(prefix+"point-to-point"); value.Exists() {
 		data.PointToPoint = types.BoolValue(true)
 	} else {
 		data.PointToPoint = types.BoolNull()
 	}
-	if value := res.Get(prefix + "retransmit-interval"); value.Exists() {
+	if value := res.Get(prefix+"retransmit-interval"); value.Exists() {
 		data.RetransmitInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "retransmit-interval-levels.retransmit-interval-level"); value.Exists() {
+	if value := res.Get(prefix+"retransmit-interval-levels.retransmit-interval-level"); value.Exists() {
 		data.RetransmitIntervalLevels = make([]RouterISISInterfaceRetransmitIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceRetransmitIntervalLevels{}
@@ -1567,10 +1531,10 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "retransmit-throttle-interval"); value.Exists() {
+	if value := res.Get(prefix+"retransmit-throttle-interval"); value.Exists() {
 		data.RetransmitThrottleInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "retransmit-throttle-interval-levels.retransmit-throttle-interval-level"); value.Exists() {
+	if value := res.Get(prefix+"retransmit-throttle-interval-levels.retransmit-throttle-interval-level"); value.Exists() {
 		data.RetransmitThrottleIntervalLevels = make([]RouterISISInterfaceRetransmitThrottleIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaceRetransmitThrottleIntervalLevels{}
@@ -1584,52 +1548,52 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "link-down.fast-detect"); value.Exists() {
+	if value := res.Get(prefix+"link-down.fast-detect"); value.Exists() {
 		data.LinkDownFastDetect = types.BoolValue(true)
 	} else {
 		data.LinkDownFastDetect = types.BoolNull()
 	}
-	if value := res.Get(prefix + "affinity.flex-algo.flex-algo-argument"); value.Exists() {
+	if value := res.Get(prefix+"affinity.flex-algo.flex-algo-argument"); value.Exists() {
 		data.AffinityFlexAlgos = helpers.GetStringList(value.Array())
 	} else {
 		data.AffinityFlexAlgos = types.ListNull(types.StringType)
 	}
-	if value := res.Get(prefix + "affinity.flex-algo.anomaly"); value.Exists() {
+	if value := res.Get(prefix+"affinity.flex-algo.anomaly"); value.Exists() {
 		data.AffinityFlexAlgosAnomalies = helpers.GetStringList(value.Array())
 	} else {
 		data.AffinityFlexAlgosAnomalies = types.ListNull(types.StringType)
 	}
-	if value := res.Get(prefix + "override.metrics"); value.Exists() {
+	if value := res.Get(prefix+"override.metrics"); value.Exists() {
 		data.OverrideMetrics = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "delay.normalize.interval.interval-number"); value.Exists() {
+	if value := res.Get(prefix+"delay.normalize.interval.interval-number"); value.Exists() {
 		data.DelayNormalizeInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "delay.normalize.interval.offset"); value.Exists() {
+	if value := res.Get(prefix+"delay.normalize.interval.offset"); value.Exists() {
 		data.DelayNormalizeOffset = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "mpls.ldp.sync"); value.Exists() {
+	if value := res.Get(prefix+"mpls.ldp.sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
 	} else {
 		data.MplsLdpSync = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mpls.ldp.sync.level"); value.Exists() {
+	if value := res.Get(prefix+"mpls.ldp.sync.level"); value.Exists() {
 		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd.fast-detect.ipv4"); value.Exists() {
+	if value := res.Get(prefix+"bfd.fast-detect.ipv4"); value.Exists() {
 		data.BfdFastDetectIpv4 = types.BoolValue(true)
 	} else {
 		data.BfdFastDetectIpv4 = types.BoolNull()
 	}
-	if value := res.Get(prefix + "bfd.fast-detect.ipv6"); value.Exists() {
+	if value := res.Get(prefix+"bfd.fast-detect.ipv6"); value.Exists() {
 		data.BfdFastDetectIpv6 = types.BoolValue(true)
 	} else {
 		data.BfdFastDetectIpv6 = types.BoolNull()
 	}
-	if value := res.Get(prefix + "bfd.minimum-interval"); value.Exists() {
+	if value := res.Get(prefix+"bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd.multiplier"); value.Exists() {
+	if value := res.Get(prefix+"bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
 }
@@ -1677,11 +1641,11 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/link-down/fast-detect", state.getPath()))
 	}
 	for i := range state.RetransmitThrottleIntervalLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -1698,10 +1662,10 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 			if state.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64() != data.RetransmitThrottleIntervalLevels[j].LevelNumber.ValueInt64() {
 				found = false
 			}
-			if found {
-				if !state.RetransmitThrottleIntervalLevels[i].RetransmitThrottleInterval.IsNull() && data.RetransmitThrottleIntervalLevels[j].RetransmitThrottleInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/retransmit-throttle-interval-levels/retransmit-throttle-interval-level%v/retransmit-throttle-interval", state.getPath(), keyString))
-				}
+		if found {
+			if !state.RetransmitThrottleIntervalLevels[i].RetransmitThrottleInterval.IsNull() && data.RetransmitThrottleIntervalLevels[j].RetransmitThrottleInterval.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/retransmit-throttle-interval-levels/retransmit-throttle-interval-level%v/retransmit-throttle-interval", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -1713,11 +1677,11 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/retransmit-throttle-interval", state.getPath()))
 	}
 	for i := range state.RetransmitIntervalLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -1734,10 +1698,10 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 			if state.RetransmitIntervalLevels[i].LevelNumber.ValueInt64() != data.RetransmitIntervalLevels[j].LevelNumber.ValueInt64() {
 				found = false
 			}
-			if found {
-				if !state.RetransmitIntervalLevels[i].RetransmitInterval.IsNull() && data.RetransmitIntervalLevels[j].RetransmitInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/retransmit-interval-levels/retransmit-interval-level%v/retransmit-interval", state.getPath(), keyString))
-				}
+		if found {
+			if !state.RetransmitIntervalLevels[i].RetransmitInterval.IsNull() && data.RetransmitIntervalLevels[j].RetransmitInterval.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/retransmit-interval-levels/retransmit-interval-level%v/retransmit-interval", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -1752,11 +1716,11 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/point-to-point", state.getPath()))
 	}
 	for i := range state.PriorityLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.PriorityLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -1773,10 +1737,10 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 			if state.PriorityLevels[i].LevelNumber.ValueInt64() != data.PriorityLevels[j].LevelNumber.ValueInt64() {
 				found = false
 			}
-			if found {
-				if !state.PriorityLevels[i].Priority.IsNull() && data.PriorityLevels[j].Priority.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/priority-levels/priority-level%v/priority", state.getPath(), keyString))
-				}
+		if found {
+			if !state.PriorityLevels[i].Priority.IsNull() && data.PriorityLevels[j].Priority.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/priority-levels/priority-level%v/priority", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -1791,11 +1755,11 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/remote-psnp-delay", state.getPath()))
 	}
 	for i := range state.HelloPasswordLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -1812,25 +1776,25 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 			if state.HelloPasswordLevels[i].LevelNumber.ValueInt64() != data.HelloPasswordLevels[j].LevelNumber.ValueInt64() {
 				found = false
 			}
-			if found {
-				if !state.HelloPasswordLevels[i].KeychainSendOnly.IsNull() && data.HelloPasswordLevels[j].KeychainSendOnly.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/keychain", state.getPath(), keyString))
-				}
-				if !state.HelloPasswordLevels[i].KeychainName.IsNull() && data.HelloPasswordLevels[j].KeychainName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/keychain", state.getPath(), keyString))
-				}
-				if !state.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() && data.HelloPasswordLevels[j].HmacMd5SendOnly.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/hmac-md5/hello-password-options", state.getPath(), keyString))
-				}
-				if !state.HelloPasswordLevels[i].HmacMd5Encrypted.IsNull() && data.HelloPasswordLevels[j].HmacMd5Encrypted.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/hmac-md5/hello-password-options", state.getPath(), keyString))
-				}
-				if !state.HelloPasswordLevels[i].TextSendOnly.IsNull() && data.HelloPasswordLevels[j].TextSendOnly.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/text/hello-password-options", state.getPath(), keyString))
-				}
-				if !state.HelloPasswordLevels[i].TextEncrypted.IsNull() && data.HelloPasswordLevels[j].TextEncrypted.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/text/hello-password-options", state.getPath(), keyString))
-				}
+		if found {
+			if !state.HelloPasswordLevels[i].KeychainSendOnly.IsNull() && data.HelloPasswordLevels[j].KeychainSendOnly.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/keychain", state.getPath(), keyString))
+			}
+			if !state.HelloPasswordLevels[i].KeychainName.IsNull() && data.HelloPasswordLevels[j].KeychainName.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/keychain", state.getPath(), keyString))
+			}
+			if !state.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() && data.HelloPasswordLevels[j].HmacMd5SendOnly.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/hmac-md5/hello-password-options", state.getPath(), keyString))
+			}
+			if !state.HelloPasswordLevels[i].HmacMd5Encrypted.IsNull() && data.HelloPasswordLevels[j].HmacMd5Encrypted.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/hmac-md5/hello-password-options", state.getPath(), keyString))
+			}
+			if !state.HelloPasswordLevels[i].TextSendOnly.IsNull() && data.HelloPasswordLevels[j].TextSendOnly.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/text/hello-password-options", state.getPath(), keyString))
+			}
+			if !state.HelloPasswordLevels[i].TextEncrypted.IsNull() && data.HelloPasswordLevels[j].TextEncrypted.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/text/hello-password-options", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -1857,11 +1821,11 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/hello-password-options/text/hello-password-options", state.getPath()))
 	}
 	for i := range state.HelloPasswordAcceptsLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -1878,10 +1842,10 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 			if state.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64() != data.HelloPasswordAcceptsLevels[j].LevelNumber.ValueInt64() {
 				found = false
 			}
-			if found {
-				if !state.HelloPasswordAcceptsLevels[i].Encrypted.IsNull() && data.HelloPasswordAcceptsLevels[j].Encrypted.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/accepts-levels/accepts-level%v/encrypted", state.getPath(), keyString))
-				}
+		if found {
+			if !state.HelloPasswordAcceptsLevels[i].Encrypted.IsNull() && data.HelloPasswordAcceptsLevels[j].Encrypted.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/accepts-levels/accepts-level%v/encrypted", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -1893,11 +1857,11 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/accepts/encrypted", state.getPath()))
 	}
 	for i := range state.LspIntervalLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -1914,10 +1878,10 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 			if state.LspIntervalLevels[i].LevelNumber.ValueInt64() != data.LspIntervalLevels[j].LevelNumber.ValueInt64() {
 				found = false
 			}
-			if found {
-				if !state.LspIntervalLevels[i].LspInterval.IsNull() && data.LspIntervalLevels[j].LspInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-interval-levels/lsp-interval-level%v/lsp-interval", state.getPath(), keyString))
-				}
+		if found {
+			if !state.LspIntervalLevels[i].LspInterval.IsNull() && data.LspIntervalLevels[j].LspInterval.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-interval-levels/lsp-interval-level%v/lsp-interval", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -1929,11 +1893,11 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-interval", state.getPath()))
 	}
 	for i := range state.HelloMultiplierLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -1950,10 +1914,10 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 			if state.HelloMultiplierLevels[i].LevelNumber.ValueInt64() != data.HelloMultiplierLevels[j].LevelNumber.ValueInt64() {
 				found = false
 			}
-			if found {
-				if !state.HelloMultiplierLevels[i].HelloMultiplier.IsNull() && data.HelloMultiplierLevels[j].HelloMultiplier.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-multiplier-levels/hello-multiplier-level%v/hello-multiplier", state.getPath(), keyString))
-				}
+		if found {
+			if !state.HelloMultiplierLevels[i].HelloMultiplier.IsNull() && data.HelloMultiplierLevels[j].HelloMultiplier.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-multiplier-levels/hello-multiplier-level%v/hello-multiplier", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -1965,11 +1929,11 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-multiplier", state.getPath()))
 	}
 	for i := range state.HelloIntervalLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -1986,10 +1950,10 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 			if state.HelloIntervalLevels[i].LevelNumber.ValueInt64() != data.HelloIntervalLevels[j].LevelNumber.ValueInt64() {
 				found = false
 			}
-			if found {
-				if !state.HelloIntervalLevels[i].HelloInterval.IsNull() && data.HelloIntervalLevels[j].HelloInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-interval-levels/hello-interval-level%v/hello-interval", state.getPath(), keyString))
-				}
+		if found {
+			if !state.HelloIntervalLevels[i].HelloInterval.IsNull() && data.HelloIntervalLevels[j].HelloInterval.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-interval-levels/hello-interval-level%v/hello-interval", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -2001,11 +1965,11 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-interval", state.getPath()))
 	}
 	for i := range state.HelloPaddingLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -2022,10 +1986,10 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 			if state.HelloPaddingLevels[i].LevelNumber.ValueInt64() != data.HelloPaddingLevels[j].LevelNumber.ValueInt64() {
 				found = false
 			}
-			if found {
-				if !state.HelloPaddingLevels[i].HelloPadding.IsNull() && data.HelloPaddingLevels[j].HelloPadding.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-padding-levels/hello-padding-level%v/hello-padding", state.getPath(), keyString))
-				}
+		if found {
+			if !state.HelloPaddingLevels[i].HelloPadding.IsNull() && data.HelloPaddingLevels[j].HelloPadding.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-padding-levels/hello-padding-level%v/hello-padding", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -2037,11 +2001,11 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-padding", state.getPath()))
 	}
 	for i := range state.CsnpIntervalLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -2058,10 +2022,10 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 			if state.CsnpIntervalLevels[i].LevelNumber.ValueInt64() != data.CsnpIntervalLevels[j].LevelNumber.ValueInt64() {
 				found = false
 			}
-			if found {
-				if !state.CsnpIntervalLevels[i].CsnpInterval.IsNull() && data.CsnpIntervalLevels[j].CsnpInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/csnp-interval-levels/csnp-interval-level%v/csnp-interval", state.getPath(), keyString))
-				}
+		if found {
+			if !state.CsnpIntervalLevels[i].CsnpInterval.IsNull() && data.CsnpIntervalLevels[j].CsnpInterval.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/csnp-interval-levels/csnp-interval-level%v/csnp-interval", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -2118,19 +2082,19 @@ func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context, state 
 		}
 	}
 	for i := range data.RetransmitThrottleIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.RetransmitIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -2140,19 +2104,19 @@ func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context, state 
 		}
 	}
 	for i := range data.PriorityLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.HelloPasswordLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.HelloPasswordLevels[i].KeychainSendOnly.IsNull() && !data.HelloPasswordLevels[i].KeychainSendOnly.ValueBool() {
@@ -2195,51 +2159,51 @@ func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context, state 
 		}
 	}
 	for i := range data.HelloPasswordAcceptsLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.LspIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.HelloMultiplierLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.HelloIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.HelloPaddingLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.CsnpIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -2294,7 +2258,7 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/link-down/fast-detect", data.getPath()))
 	}
 	for i := range data.RetransmitThrottleIntervalLevels {
-		keyValues := [...]string{strconv.FormatInt(data.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/retransmit-throttle-interval-levels/retransmit-throttle-interval-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2302,7 +2266,7 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/retransmit-throttle-interval", data.getPath()))
 	}
 	for i := range data.RetransmitIntervalLevels {
-		keyValues := [...]string{strconv.FormatInt(data.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/retransmit-interval-levels/retransmit-interval-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2313,7 +2277,7 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/point-to-point", data.getPath()))
 	}
 	for i := range data.PriorityLevels {
-		keyValues := [...]string{strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority-levels/priority-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2324,7 +2288,7 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/remote-psnp-delay", data.getPath()))
 	}
 	for i := range data.HelloPasswordLevels {
-		keyValues := [...]string{strconv.FormatInt(data.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password-levels/hello-password-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2347,7 +2311,7 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/hello-password-options/text/hello-password-options", data.getPath()))
 	}
 	for i := range data.HelloPasswordAcceptsLevels {
-		keyValues := [...]string{strconv.FormatInt(data.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/accepts-levels/accepts-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2355,7 +2319,7 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/accepts/encrypted", data.getPath()))
 	}
 	for i := range data.LspIntervalLevels {
-		keyValues := [...]string{strconv.FormatInt(data.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-interval-levels/lsp-interval-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2363,7 +2327,7 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-interval", data.getPath()))
 	}
 	for i := range data.HelloMultiplierLevels {
-		keyValues := [...]string{strconv.FormatInt(data.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-multiplier-levels/hello-multiplier-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2371,7 +2335,7 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-multiplier", data.getPath()))
 	}
 	for i := range data.HelloIntervalLevels {
-		keyValues := [...]string{strconv.FormatInt(data.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-interval-levels/hello-interval-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2379,7 +2343,7 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-interval", data.getPath()))
 	}
 	for i := range data.HelloPaddingLevels {
-		keyValues := [...]string{strconv.FormatInt(data.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-padding-levels/hello-padding-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2387,7 +2351,7 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-padding", data.getPath()))
 	}
 	for i := range data.CsnpIntervalLevels {
-		keyValues := [...]string{strconv.FormatInt(data.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/csnp-interval-levels/csnp-interval-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2417,24 +2381,24 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/interface-name", data.InterfaceName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/interface-name", data.InterfaceName.ValueString())
 	}
 	if !data.MeshGroup.IsNull() && !data.MeshGroup.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/mesh-group/mesh-group-number", strconv.FormatInt(data.MeshGroup.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/mesh-group/mesh-group-number", strconv.FormatInt(data.MeshGroup.ValueInt64(), 10))
 	}
 	if !data.MeshGroupBlocked.IsNull() && !data.MeshGroupBlocked.IsUnknown() {
 		if data.MeshGroupBlocked.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mesh-group/blocked", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mesh-group/blocked", "")
 		}
 	}
 	if !data.State.IsNull() && !data.State.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/state", data.State.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/state", data.State.ValueString())
 	}
 	if !data.CircuitType.IsNull() && !data.CircuitType.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/circuit-type", data.CircuitType.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/circuit-type", data.CircuitType.ValueString())
 	}
 	if !data.CsnpInterval.IsNull() && !data.CsnpInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/csnp-interval", strconv.FormatInt(data.CsnpInterval.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/csnp-interval", strconv.FormatInt(data.CsnpInterval.ValueInt64(), 10))
 	}
 	if len(data.CsnpIntervalLevels) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -2451,7 +2415,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.HelloPadding.IsNull() && !data.HelloPadding.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/hello-padding", data.HelloPadding.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/hello-padding", data.HelloPadding.ValueString())
 	}
 	if len(data.HelloPaddingLevels) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -2468,7 +2432,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.HelloInterval.IsNull() && !data.HelloInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/hello-interval", strconv.FormatInt(data.HelloInterval.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/hello-interval", strconv.FormatInt(data.HelloInterval.ValueInt64(), 10))
 	}
 	if len(data.HelloIntervalLevels) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -2485,7 +2449,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.HelloMultiplier.IsNull() && !data.HelloMultiplier.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/hello-multiplier", strconv.FormatInt(data.HelloMultiplier.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/hello-multiplier", strconv.FormatInt(data.HelloMultiplier.ValueInt64(), 10))
 	}
 	if len(data.HelloMultiplierLevels) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -2502,7 +2466,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.LspInterval.IsNull() && !data.LspInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/lsp-interval", strconv.FormatInt(data.LspInterval.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/lsp-interval", strconv.FormatInt(data.LspInterval.ValueInt64(), 10))
 	}
 	if len(data.LspIntervalLevels) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -2519,7 +2483,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.HelloPasswordAcceptEncrypted.IsNull() && !data.HelloPasswordAcceptEncrypted.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/hello-password/accepts/encrypted", data.HelloPasswordAcceptEncrypted.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/hello-password/accepts/encrypted", data.HelloPasswordAcceptEncrypted.ValueString())
 	}
 	if len(data.HelloPasswordAcceptsLevels) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -2536,27 +2500,27 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.HelloPasswordTextEncrypted.IsNull() && !data.HelloPasswordTextEncrypted.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/hello-password/hello-password-options/text/hello-password-options/encrypted", data.HelloPasswordTextEncrypted.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/hello-password/hello-password-options/text/hello-password-options/encrypted", data.HelloPasswordTextEncrypted.ValueString())
 	}
 	if !data.HelloPasswordTextSendOnly.IsNull() && !data.HelloPasswordTextSendOnly.IsUnknown() {
 		if data.HelloPasswordTextSendOnly.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/hello-password/hello-password-options/text/hello-password-options/send-only", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/hello-password/hello-password-options/text/hello-password-options/send-only", "")
 		}
 	}
 	if !data.HelloPasswordHmacMd5Encrypted.IsNull() && !data.HelloPasswordHmacMd5Encrypted.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/hello-password/hello-password-options/hmac-md5/hello-password-options/encrypted", data.HelloPasswordHmacMd5Encrypted.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/hello-password/hello-password-options/hmac-md5/hello-password-options/encrypted", data.HelloPasswordHmacMd5Encrypted.ValueString())
 	}
 	if !data.HelloPasswordHmacMd5SendOnly.IsNull() && !data.HelloPasswordHmacMd5SendOnly.IsUnknown() {
 		if data.HelloPasswordHmacMd5SendOnly.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/hello-password/hello-password-options/hmac-md5/hello-password-options/send-only", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/hello-password/hello-password-options/hmac-md5/hello-password-options/send-only", "")
 		}
 	}
 	if !data.HelloPasswordKeychainName.IsNull() && !data.HelloPasswordKeychainName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/hello-password/hello-password-options/keychain/keychain-name", data.HelloPasswordKeychainName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/hello-password/hello-password-options/keychain/keychain-name", data.HelloPasswordKeychainName.ValueString())
 	}
 	if !data.HelloPasswordKeychainSendOnly.IsNull() && !data.HelloPasswordKeychainSendOnly.IsUnknown() {
 		if data.HelloPasswordKeychainSendOnly.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/hello-password/hello-password-options/keychain/send-only", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/hello-password/hello-password-options/keychain/send-only", "")
 		}
 	}
 	if len(data.HelloPasswordLevels) > 0 {
@@ -2595,10 +2559,10 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.RemotePsnpDelay.IsNull() && !data.RemotePsnpDelay.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/remote-psnp-delay", strconv.FormatInt(data.RemotePsnpDelay.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/remote-psnp-delay", strconv.FormatInt(data.RemotePsnpDelay.ValueInt64(), 10))
 	}
 	if !data.Priority.IsNull() && !data.Priority.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/priority", strconv.FormatInt(data.Priority.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/priority", strconv.FormatInt(data.Priority.ValueInt64(), 10))
 	}
 	if len(data.PriorityLevels) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -2616,11 +2580,11 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 	}
 	if !data.PointToPoint.IsNull() && !data.PointToPoint.IsUnknown() {
 		if data.PointToPoint.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/point-to-point", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/point-to-point", "")
 		}
 	}
 	if !data.RetransmitInterval.IsNull() && !data.RetransmitInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/retransmit-interval", strconv.FormatInt(data.RetransmitInterval.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/retransmit-interval", strconv.FormatInt(data.RetransmitInterval.ValueInt64(), 10))
 	}
 	if len(data.RetransmitIntervalLevels) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -2637,7 +2601,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.RetransmitThrottleInterval.IsNull() && !data.RetransmitThrottleInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/retransmit-throttle-interval", strconv.FormatInt(data.RetransmitThrottleInterval.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/retransmit-throttle-interval", strconv.FormatInt(data.RetransmitThrottleInterval.ValueInt64(), 10))
 	}
 	if len(data.RetransmitThrottleIntervalLevels) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -2655,55 +2619,55 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 	}
 	if !data.LinkDownFastDetect.IsNull() && !data.LinkDownFastDetect.IsUnknown() {
 		if data.LinkDownFastDetect.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/link-down/fast-detect", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/link-down/fast-detect", "")
 		}
 	}
 	if !data.AffinityFlexAlgos.IsNull() && !data.AffinityFlexAlgos.IsUnknown() {
 		var values []string
 		data.AffinityFlexAlgos.ElementsAs(ctx, &values, false)
 		for _, v := range values {
-			body = helpers.AppendFromXPath(body, data.getXPath()+"/affinity/flex-algo/flex-algo-argument", v)
+			body = helpers.AppendFromXPath(body, data.getXPath() + "/affinity/flex-algo/flex-algo-argument", v)
 		}
 	}
 	if !data.AffinityFlexAlgosAnomalies.IsNull() && !data.AffinityFlexAlgosAnomalies.IsUnknown() {
 		var values []string
 		data.AffinityFlexAlgosAnomalies.ElementsAs(ctx, &values, false)
 		for _, v := range values {
-			body = helpers.AppendFromXPath(body, data.getXPath()+"/affinity/flex-algo/anomaly", v)
+			body = helpers.AppendFromXPath(body, data.getXPath() + "/affinity/flex-algo/anomaly", v)
 		}
 	}
 	if !data.OverrideMetrics.IsNull() && !data.OverrideMetrics.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/override/metrics", data.OverrideMetrics.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/override/metrics", data.OverrideMetrics.ValueString())
 	}
 	if !data.DelayNormalizeInterval.IsNull() && !data.DelayNormalizeInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/delay/normalize/interval/interval-number", strconv.FormatInt(data.DelayNormalizeInterval.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/delay/normalize/interval/interval-number", strconv.FormatInt(data.DelayNormalizeInterval.ValueInt64(), 10))
 	}
 	if !data.DelayNormalizeOffset.IsNull() && !data.DelayNormalizeOffset.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/delay/normalize/interval/offset", strconv.FormatInt(data.DelayNormalizeOffset.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/delay/normalize/interval/offset", strconv.FormatInt(data.DelayNormalizeOffset.ValueInt64(), 10))
 	}
 	if !data.MplsLdpSync.IsNull() && !data.MplsLdpSync.IsUnknown() {
 		if data.MplsLdpSync.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mpls/ldp/sync", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mpls/ldp/sync", "")
 		}
 	}
 	if !data.MplsLdpSyncLevel.IsNull() && !data.MplsLdpSyncLevel.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/mpls/ldp/sync/level", strconv.FormatInt(data.MplsLdpSyncLevel.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/mpls/ldp/sync/level", strconv.FormatInt(data.MplsLdpSyncLevel.ValueInt64(), 10))
 	}
 	if !data.BfdFastDetectIpv4.IsNull() && !data.BfdFastDetectIpv4.IsUnknown() {
 		if data.BfdFastDetectIpv4.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/fast-detect/ipv4", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/bfd/fast-detect/ipv4", "")
 		}
 	}
 	if !data.BfdFastDetectIpv6.IsNull() && !data.BfdFastDetectIpv6.IsUnknown() {
 		if data.BfdFastDetectIpv6.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/fast-detect/ipv6", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/bfd/fast-detect/ipv6", "")
 		}
 	}
 	if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bfd/minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
 	}
 	if !data.BfdMultiplier.IsNull() && !data.BfdMultiplier.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bfd/multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -2717,17 +2681,17 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interface-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/interface-name"); value.Exists() {
 		data.InterfaceName = types.StringValue(value.String())
 	} else if data.InterfaceName.IsNull() {
 		data.InterfaceName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mesh-group/mesh-group-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mesh-group/mesh-group-number"); value.Exists() {
 		data.MeshGroup = types.Int64Value(value.Int())
 	} else if data.MeshGroup.IsNull() {
 		data.MeshGroup = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mesh-group/blocked"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mesh-group/blocked"); value.Exists() {
 		data.MeshGroupBlocked = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -2735,27 +2699,27 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.MeshGroupBlocked = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/state"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/state"); value.Exists() {
 		data.State = types.StringValue(value.String())
 	} else if data.State.IsNull() {
 		data.State = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/circuit-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/circuit-type"); value.Exists() {
 		data.CircuitType = types.StringValue(value.String())
 	} else if data.CircuitType.IsNull() {
 		data.CircuitType = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/csnp-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/csnp-interval"); value.Exists() {
 		data.CsnpInterval = types.Int64Value(value.Int())
 	} else if data.CsnpInterval.IsNull() {
 		data.CsnpInterval = types.Int64Null()
 	}
 	for i := range data.CsnpIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/csnp-interval-levels/csnp-interval-level").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/csnp-interval-levels/csnp-interval-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2784,17 +2748,17 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.CsnpIntervalLevels[i].CsnpInterval = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-padding"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-padding"); value.Exists() {
 		data.HelloPadding = types.StringValue(value.String())
 	} else if data.HelloPadding.IsNull() {
 		data.HelloPadding = types.StringNull()
 	}
 	for i := range data.HelloPaddingLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-padding-levels/hello-padding-level").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-padding-levels/hello-padding-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2823,17 +2787,17 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.HelloPaddingLevels[i].HelloPadding = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-interval"); value.Exists() {
 		data.HelloInterval = types.Int64Value(value.Int())
 	} else if data.HelloInterval.IsNull() {
 		data.HelloInterval = types.Int64Null()
 	}
 	for i := range data.HelloIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-interval-levels/hello-interval-level").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-interval-levels/hello-interval-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2862,17 +2826,17 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.HelloIntervalLevels[i].HelloInterval = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-multiplier"); value.Exists() {
 		data.HelloMultiplier = types.Int64Value(value.Int())
 	} else if data.HelloMultiplier.IsNull() {
 		data.HelloMultiplier = types.Int64Null()
 	}
 	for i := range data.HelloMultiplierLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-multiplier-levels/hello-multiplier-level").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-multiplier-levels/hello-multiplier-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2901,17 +2865,17 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.HelloMultiplierLevels[i].HelloMultiplier = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lsp-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/lsp-interval"); value.Exists() {
 		data.LspInterval = types.Int64Value(value.Int())
 	} else if data.LspInterval.IsNull() {
 		data.LspInterval = types.Int64Null()
 	}
 	for i := range data.LspIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/lsp-interval-levels/lsp-interval-level").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/lsp-interval-levels/lsp-interval-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2941,11 +2905,11 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 		}
 	}
 	for i := range data.HelloPasswordAcceptsLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/accepts-levels/accepts-level").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/accepts-levels/accepts-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2969,7 +2933,7 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.HelloPasswordAcceptsLevels[i].LevelNumber = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/text/hello-password-options/send-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/text/hello-password-options/send-only"); value.Exists() {
 		data.HelloPasswordTextSendOnly = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -2977,7 +2941,7 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.HelloPasswordTextSendOnly = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/hmac-md5/hello-password-options/send-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/hmac-md5/hello-password-options/send-only"); value.Exists() {
 		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -2985,12 +2949,12 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.HelloPasswordHmacMd5SendOnly = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/keychain/keychain-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/keychain/keychain-name"); value.Exists() {
 		data.HelloPasswordKeychainName = types.StringValue(value.String())
 	} else if data.HelloPasswordKeychainName.IsNull() {
 		data.HelloPasswordKeychainName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/keychain/send-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/keychain/send-only"); value.Exists() {
 		data.HelloPasswordKeychainSendOnly = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -2999,11 +2963,11 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 		}
 	}
 	for i := range data.HelloPasswordLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password-levels/hello-password-level").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password-levels/hello-password-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3059,22 +3023,22 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remote-psnp-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/remote-psnp-delay"); value.Exists() {
 		data.RemotePsnpDelay = types.Int64Value(value.Int())
 	} else if data.RemotePsnpDelay.IsNull() {
 		data.RemotePsnpDelay = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	} else if data.Priority.IsNull() {
 		data.Priority = types.Int64Null()
 	}
 	for i := range data.PriorityLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority-levels/priority-level").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/priority-levels/priority-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3103,7 +3067,7 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.PriorityLevels[i].Priority = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/point-to-point"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/point-to-point"); value.Exists() {
 		data.PointToPoint = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3111,17 +3075,17 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.PointToPoint = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/retransmit-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/retransmit-interval"); value.Exists() {
 		data.RetransmitInterval = types.Int64Value(value.Int())
 	} else if data.RetransmitInterval.IsNull() {
 		data.RetransmitInterval = types.Int64Null()
 	}
 	for i := range data.RetransmitIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/retransmit-interval-levels/retransmit-interval-level").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/retransmit-interval-levels/retransmit-interval-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3150,17 +3114,17 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.RetransmitIntervalLevels[i].RetransmitInterval = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/retransmit-throttle-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/retransmit-throttle-interval"); value.Exists() {
 		data.RetransmitThrottleInterval = types.Int64Value(value.Int())
 	} else if data.RetransmitThrottleInterval.IsNull() {
 		data.RetransmitThrottleInterval = types.Int64Null()
 	}
 	for i := range data.RetransmitThrottleIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/retransmit-throttle-interval-levels/retransmit-throttle-interval-level").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/retransmit-throttle-interval-levels/retransmit-throttle-interval-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3189,7 +3153,7 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.RetransmitThrottleIntervalLevels[i].RetransmitThrottleInterval = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-down/fast-detect"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/link-down/fast-detect"); value.Exists() {
 		data.LinkDownFastDetect = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3197,32 +3161,32 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.LinkDownFastDetect = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/affinity/flex-algo/flex-algo-argument"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/affinity/flex-algo/flex-algo-argument"); value.Exists() {
 		data.AffinityFlexAlgos = helpers.GetStringListXML(value.Array())
 	} else {
 		data.AffinityFlexAlgos = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/affinity/flex-algo/anomaly"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/affinity/flex-algo/anomaly"); value.Exists() {
 		data.AffinityFlexAlgosAnomalies = helpers.GetStringListXML(value.Array())
 	} else {
 		data.AffinityFlexAlgosAnomalies = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/override/metrics"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/override/metrics"); value.Exists() {
 		data.OverrideMetrics = types.StringValue(value.String())
 	} else if data.OverrideMetrics.IsNull() {
 		data.OverrideMetrics = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/normalize/interval/interval-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/normalize/interval/interval-number"); value.Exists() {
 		data.DelayNormalizeInterval = types.Int64Value(value.Int())
 	} else if data.DelayNormalizeInterval.IsNull() {
 		data.DelayNormalizeInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/normalize/interval/offset"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/normalize/interval/offset"); value.Exists() {
 		data.DelayNormalizeOffset = types.Int64Value(value.Int())
 	} else if data.DelayNormalizeOffset.IsNull() {
 		data.DelayNormalizeOffset = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mpls/ldp/sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3230,12 +3194,12 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.MplsLdpSync = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync/level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mpls/ldp/sync/level"); value.Exists() {
 		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
 	} else if data.MplsLdpSyncLevel.IsNull() {
 		data.MplsLdpSyncLevel = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/fast-detect/ipv4"); value.Exists() {
 		data.BfdFastDetectIpv4 = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3243,7 +3207,7 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.BfdFastDetectIpv4 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/fast-detect/ipv6"); value.Exists() {
 		data.BfdFastDetectIpv6 = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3251,12 +3215,12 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.BfdFastDetectIpv6 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	} else if data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	} else if data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Null()
@@ -3268,313 +3232,24 @@ func (data *RouterISISInterface) updateFromBodyXML(ctx context.Context, res xmld
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterISISInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mesh-group/mesh-group-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mesh-group/mesh-group-number"); value.Exists() {
 		data.MeshGroup = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mesh-group/blocked"); value.Exists() {
-		data.MeshGroupBlocked = types.BoolValue(true)
-	} else {
-		data.MeshGroupBlocked = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/state"); value.Exists() {
-		data.State = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/circuit-type"); value.Exists() {
-		data.CircuitType = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/csnp-interval"); value.Exists() {
-		data.CsnpInterval = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/csnp-interval-levels/csnp-interval-level"); value.Exists() {
-		data.CsnpIntervalLevels = make([]RouterISISInterfaceCsnpIntervalLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceCsnpIntervalLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "csnp-interval"); cValue.Exists() {
-				item.CsnpInterval = types.Int64Value(cValue.Int())
-			}
-			data.CsnpIntervalLevels = append(data.CsnpIntervalLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-padding"); value.Exists() {
-		data.HelloPadding = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-padding-levels/hello-padding-level"); value.Exists() {
-		data.HelloPaddingLevels = make([]RouterISISInterfaceHelloPaddingLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceHelloPaddingLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "hello-padding"); cValue.Exists() {
-				item.HelloPadding = types.StringValue(cValue.String())
-			}
-			data.HelloPaddingLevels = append(data.HelloPaddingLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-interval"); value.Exists() {
-		data.HelloInterval = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-interval-levels/hello-interval-level"); value.Exists() {
-		data.HelloIntervalLevels = make([]RouterISISInterfaceHelloIntervalLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceHelloIntervalLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "hello-interval"); cValue.Exists() {
-				item.HelloInterval = types.Int64Value(cValue.Int())
-			}
-			data.HelloIntervalLevels = append(data.HelloIntervalLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-multiplier"); value.Exists() {
-		data.HelloMultiplier = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-multiplier-levels/hello-multiplier-level"); value.Exists() {
-		data.HelloMultiplierLevels = make([]RouterISISInterfaceHelloMultiplierLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceHelloMultiplierLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "hello-multiplier"); cValue.Exists() {
-				item.HelloMultiplier = types.Int64Value(cValue.Int())
-			}
-			data.HelloMultiplierLevels = append(data.HelloMultiplierLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lsp-interval"); value.Exists() {
-		data.LspInterval = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lsp-interval-levels/lsp-interval-level"); value.Exists() {
-		data.LspIntervalLevels = make([]RouterISISInterfaceLspIntervalLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceLspIntervalLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "lsp-interval"); cValue.Exists() {
-				item.LspInterval = types.Int64Value(cValue.Int())
-			}
-			data.LspIntervalLevels = append(data.LspIntervalLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/accepts/encrypted"); value.Exists() {
-		data.HelloPasswordAcceptEncrypted = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/accepts-levels/accepts-level"); value.Exists() {
-		data.HelloPasswordAcceptsLevels = make([]RouterISISInterfaceHelloPasswordAcceptsLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceHelloPasswordAcceptsLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "encrypted"); cValue.Exists() {
-				item.Encrypted = types.StringValue(cValue.String())
-			}
-			data.HelloPasswordAcceptsLevels = append(data.HelloPasswordAcceptsLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/text/hello-password-options/encrypted"); value.Exists() {
-		data.HelloPasswordTextEncrypted = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/text/hello-password-options/send-only"); value.Exists() {
-		data.HelloPasswordTextSendOnly = types.BoolValue(true)
-	} else {
-		data.HelloPasswordTextSendOnly = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/hmac-md5/hello-password-options/encrypted"); value.Exists() {
-		data.HelloPasswordHmacMd5Encrypted = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/hmac-md5/hello-password-options/send-only"); value.Exists() {
-		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
-	} else {
-		data.HelloPasswordHmacMd5SendOnly = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/keychain/keychain-name"); value.Exists() {
-		data.HelloPasswordKeychainName = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/keychain/send-only"); value.Exists() {
-		data.HelloPasswordKeychainSendOnly = types.BoolValue(true)
-	} else {
-		data.HelloPasswordKeychainSendOnly = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password-levels/hello-password-level"); value.Exists() {
-		data.HelloPasswordLevels = make([]RouterISISInterfaceHelloPasswordLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceHelloPasswordLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "text/hello-password-options/encrypted"); cValue.Exists() {
-				item.TextEncrypted = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "text/hello-password-options/send-only"); cValue.Exists() {
-				item.TextSendOnly = types.BoolValue(true)
-			} else {
-				item.TextSendOnly = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "hmac-md5/hello-password-options/encrypted"); cValue.Exists() {
-				item.HmacMd5Encrypted = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "hmac-md5/hello-password-options/send-only"); cValue.Exists() {
-				item.HmacMd5SendOnly = types.BoolValue(true)
-			} else {
-				item.HmacMd5SendOnly = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "keychain/keychain-name"); cValue.Exists() {
-				item.KeychainName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "keychain/send-only"); cValue.Exists() {
-				item.KeychainSendOnly = types.BoolValue(true)
-			} else {
-				item.KeychainSendOnly = types.BoolNull()
-			}
-			data.HelloPasswordLevels = append(data.HelloPasswordLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remote-psnp-delay"); value.Exists() {
-		data.RemotePsnpDelay = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
-		data.Priority = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority-levels/priority-level"); value.Exists() {
-		data.PriorityLevels = make([]RouterISISInterfacePriorityLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfacePriorityLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "priority"); cValue.Exists() {
-				item.Priority = types.Int64Value(cValue.Int())
-			}
-			data.PriorityLevels = append(data.PriorityLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/point-to-point"); value.Exists() {
-		data.PointToPoint = types.BoolValue(true)
-	} else {
-		data.PointToPoint = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/retransmit-interval"); value.Exists() {
-		data.RetransmitInterval = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/retransmit-interval-levels/retransmit-interval-level"); value.Exists() {
-		data.RetransmitIntervalLevels = make([]RouterISISInterfaceRetransmitIntervalLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceRetransmitIntervalLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "retransmit-interval"); cValue.Exists() {
-				item.RetransmitInterval = types.Int64Value(cValue.Int())
-			}
-			data.RetransmitIntervalLevels = append(data.RetransmitIntervalLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/retransmit-throttle-interval"); value.Exists() {
-		data.RetransmitThrottleInterval = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/retransmit-throttle-interval-levels/retransmit-throttle-interval-level"); value.Exists() {
-		data.RetransmitThrottleIntervalLevels = make([]RouterISISInterfaceRetransmitThrottleIntervalLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceRetransmitThrottleIntervalLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "retransmit-throttle-interval"); cValue.Exists() {
-				item.RetransmitThrottleInterval = types.Int64Value(cValue.Int())
-			}
-			data.RetransmitThrottleIntervalLevels = append(data.RetransmitThrottleIntervalLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-down/fast-detect"); value.Exists() {
-		data.LinkDownFastDetect = types.BoolValue(true)
-	} else {
-		data.LinkDownFastDetect = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/affinity/flex-algo/flex-algo-argument"); value.Exists() {
-		data.AffinityFlexAlgos = helpers.GetStringListXML(value.Array())
-	} else {
-		data.AffinityFlexAlgos = types.ListNull(types.StringType)
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/affinity/flex-algo/anomaly"); value.Exists() {
-		data.AffinityFlexAlgosAnomalies = helpers.GetStringListXML(value.Array())
-	} else {
-		data.AffinityFlexAlgosAnomalies = types.ListNull(types.StringType)
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/override/metrics"); value.Exists() {
-		data.OverrideMetrics = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/normalize/interval/interval-number"); value.Exists() {
-		data.DelayNormalizeInterval = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/normalize/interval/offset"); value.Exists() {
-		data.DelayNormalizeOffset = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync"); value.Exists() {
-		data.MplsLdpSync = types.BoolValue(true)
-	} else {
-		data.MplsLdpSync = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync/level"); value.Exists() {
-		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/ipv4"); value.Exists() {
-		data.BfdFastDetectIpv4 = types.BoolValue(true)
-	} else {
-		data.BfdFastDetectIpv4 = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/ipv6"); value.Exists() {
-		data.BfdFastDetectIpv6 = types.BoolValue(true)
-	} else {
-		data.BfdFastDetectIpv6 = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
-		data.BfdMinimumInterval = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
-		data.BfdMultiplier = types.Int64Value(value.Int())
-	}
-}
-
-// End of section. //template:end fromBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *RouterISISInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mesh-group/mesh-group-number"); value.Exists() {
-		data.MeshGroup = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mesh-group/blocked"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mesh-group/blocked"); value.Exists() {
 		data.MeshGroupBlocked = types.BoolValue(true)
 	} else {
 		data.MeshGroupBlocked = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/state"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/state"); value.Exists() {
 		data.State = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/circuit-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/circuit-type"); value.Exists() {
 		data.CircuitType = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/csnp-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/csnp-interval"); value.Exists() {
 		data.CsnpInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/csnp-interval-levels/csnp-interval-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/csnp-interval-levels/csnp-interval-level"); value.Exists() {
 		data.CsnpIntervalLevels = make([]RouterISISInterfaceCsnpIntervalLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceCsnpIntervalLevels{}
@@ -3588,10 +3263,10 @@ func (data *RouterISISInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-padding"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-padding"); value.Exists() {
 		data.HelloPadding = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-padding-levels/hello-padding-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-padding-levels/hello-padding-level"); value.Exists() {
 		data.HelloPaddingLevels = make([]RouterISISInterfaceHelloPaddingLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceHelloPaddingLevels{}
@@ -3605,10 +3280,10 @@ func (data *RouterISISInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-interval"); value.Exists() {
 		data.HelloInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-interval-levels/hello-interval-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-interval-levels/hello-interval-level"); value.Exists() {
 		data.HelloIntervalLevels = make([]RouterISISInterfaceHelloIntervalLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceHelloIntervalLevels{}
@@ -3622,10 +3297,10 @@ func (data *RouterISISInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-multiplier"); value.Exists() {
 		data.HelloMultiplier = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-multiplier-levels/hello-multiplier-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-multiplier-levels/hello-multiplier-level"); value.Exists() {
 		data.HelloMultiplierLevels = make([]RouterISISInterfaceHelloMultiplierLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceHelloMultiplierLevels{}
@@ -3639,10 +3314,10 @@ func (data *RouterISISInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lsp-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/lsp-interval"); value.Exists() {
 		data.LspInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lsp-interval-levels/lsp-interval-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/lsp-interval-levels/lsp-interval-level"); value.Exists() {
 		data.LspIntervalLevels = make([]RouterISISInterfaceLspIntervalLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceLspIntervalLevels{}
@@ -3656,10 +3331,10 @@ func (data *RouterISISInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/accepts/encrypted"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/accepts/encrypted"); value.Exists() {
 		data.HelloPasswordAcceptEncrypted = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/accepts-levels/accepts-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/accepts-levels/accepts-level"); value.Exists() {
 		data.HelloPasswordAcceptsLevels = make([]RouterISISInterfaceHelloPasswordAcceptsLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceHelloPasswordAcceptsLevels{}
@@ -3673,31 +3348,31 @@ func (data *RouterISISInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/text/hello-password-options/encrypted"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/text/hello-password-options/encrypted"); value.Exists() {
 		data.HelloPasswordTextEncrypted = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/text/hello-password-options/send-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/text/hello-password-options/send-only"); value.Exists() {
 		data.HelloPasswordTextSendOnly = types.BoolValue(true)
 	} else {
 		data.HelloPasswordTextSendOnly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/hmac-md5/hello-password-options/encrypted"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/hmac-md5/hello-password-options/encrypted"); value.Exists() {
 		data.HelloPasswordHmacMd5Encrypted = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/hmac-md5/hello-password-options/send-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/hmac-md5/hello-password-options/send-only"); value.Exists() {
 		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
 	} else {
 		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/keychain/keychain-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/keychain/keychain-name"); value.Exists() {
 		data.HelloPasswordKeychainName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password/hello-password-options/keychain/send-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/keychain/send-only"); value.Exists() {
 		data.HelloPasswordKeychainSendOnly = types.BoolValue(true)
 	} else {
 		data.HelloPasswordKeychainSendOnly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-password-levels/hello-password-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password-levels/hello-password-level"); value.Exists() {
 		data.HelloPasswordLevels = make([]RouterISISInterfaceHelloPasswordLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceHelloPasswordLevels{}
@@ -3732,13 +3407,13 @@ func (data *RouterISISInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remote-psnp-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/remote-psnp-delay"); value.Exists() {
 		data.RemotePsnpDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority-levels/priority-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/priority-levels/priority-level"); value.Exists() {
 		data.PriorityLevels = make([]RouterISISInterfacePriorityLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfacePriorityLevels{}
@@ -3752,15 +3427,15 @@ func (data *RouterISISInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/point-to-point"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/point-to-point"); value.Exists() {
 		data.PointToPoint = types.BoolValue(true)
 	} else {
 		data.PointToPoint = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/retransmit-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/retransmit-interval"); value.Exists() {
 		data.RetransmitInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/retransmit-interval-levels/retransmit-interval-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/retransmit-interval-levels/retransmit-interval-level"); value.Exists() {
 		data.RetransmitIntervalLevels = make([]RouterISISInterfaceRetransmitIntervalLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceRetransmitIntervalLevels{}
@@ -3774,10 +3449,10 @@ func (data *RouterISISInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/retransmit-throttle-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/retransmit-throttle-interval"); value.Exists() {
 		data.RetransmitThrottleInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/retransmit-throttle-interval-levels/retransmit-throttle-interval-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/retransmit-throttle-interval-levels/retransmit-throttle-interval-level"); value.Exists() {
 		data.RetransmitThrottleIntervalLevels = make([]RouterISISInterfaceRetransmitThrottleIntervalLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceRetransmitThrottleIntervalLevels{}
@@ -3791,52 +3466,341 @@ func (data *RouterISISInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-down/fast-detect"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/link-down/fast-detect"); value.Exists() {
 		data.LinkDownFastDetect = types.BoolValue(true)
 	} else {
 		data.LinkDownFastDetect = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/affinity/flex-algo/flex-algo-argument"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/affinity/flex-algo/flex-algo-argument"); value.Exists() {
 		data.AffinityFlexAlgos = helpers.GetStringListXML(value.Array())
 	} else {
 		data.AffinityFlexAlgos = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/affinity/flex-algo/anomaly"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/affinity/flex-algo/anomaly"); value.Exists() {
 		data.AffinityFlexAlgosAnomalies = helpers.GetStringListXML(value.Array())
 	} else {
 		data.AffinityFlexAlgosAnomalies = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/override/metrics"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/override/metrics"); value.Exists() {
 		data.OverrideMetrics = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/normalize/interval/interval-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/normalize/interval/interval-number"); value.Exists() {
 		data.DelayNormalizeInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/normalize/interval/offset"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/normalize/interval/offset"); value.Exists() {
 		data.DelayNormalizeOffset = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mpls/ldp/sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
 	} else {
 		data.MplsLdpSync = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync/level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mpls/ldp/sync/level"); value.Exists() {
 		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/fast-detect/ipv4"); value.Exists() {
 		data.BfdFastDetectIpv4 = types.BoolValue(true)
 	} else {
 		data.BfdFastDetectIpv4 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/fast-detect/ipv6"); value.Exists() {
 		data.BfdFastDetectIpv6 = types.BoolValue(true)
 	} else {
 		data.BfdFastDetectIpv6 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *RouterISISInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mesh-group/mesh-group-number"); value.Exists() {
+		data.MeshGroup = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mesh-group/blocked"); value.Exists() {
+		data.MeshGroupBlocked = types.BoolValue(true)
+	} else {
+		data.MeshGroupBlocked = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/state"); value.Exists() {
+		data.State = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/circuit-type"); value.Exists() {
+		data.CircuitType = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/csnp-interval"); value.Exists() {
+		data.CsnpInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/csnp-interval-levels/csnp-interval-level"); value.Exists() {
+		data.CsnpIntervalLevels = make([]RouterISISInterfaceCsnpIntervalLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceCsnpIntervalLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "csnp-interval"); cValue.Exists() {
+				item.CsnpInterval = types.Int64Value(cValue.Int())
+			}
+			data.CsnpIntervalLevels = append(data.CsnpIntervalLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-padding"); value.Exists() {
+		data.HelloPadding = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-padding-levels/hello-padding-level"); value.Exists() {
+		data.HelloPaddingLevels = make([]RouterISISInterfaceHelloPaddingLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceHelloPaddingLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "hello-padding"); cValue.Exists() {
+				item.HelloPadding = types.StringValue(cValue.String())
+			}
+			data.HelloPaddingLevels = append(data.HelloPaddingLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-interval"); value.Exists() {
+		data.HelloInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-interval-levels/hello-interval-level"); value.Exists() {
+		data.HelloIntervalLevels = make([]RouterISISInterfaceHelloIntervalLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceHelloIntervalLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "hello-interval"); cValue.Exists() {
+				item.HelloInterval = types.Int64Value(cValue.Int())
+			}
+			data.HelloIntervalLevels = append(data.HelloIntervalLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-multiplier"); value.Exists() {
+		data.HelloMultiplier = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-multiplier-levels/hello-multiplier-level"); value.Exists() {
+		data.HelloMultiplierLevels = make([]RouterISISInterfaceHelloMultiplierLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceHelloMultiplierLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "hello-multiplier"); cValue.Exists() {
+				item.HelloMultiplier = types.Int64Value(cValue.Int())
+			}
+			data.HelloMultiplierLevels = append(data.HelloMultiplierLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/lsp-interval"); value.Exists() {
+		data.LspInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/lsp-interval-levels/lsp-interval-level"); value.Exists() {
+		data.LspIntervalLevels = make([]RouterISISInterfaceLspIntervalLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceLspIntervalLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "lsp-interval"); cValue.Exists() {
+				item.LspInterval = types.Int64Value(cValue.Int())
+			}
+			data.LspIntervalLevels = append(data.LspIntervalLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/accepts/encrypted"); value.Exists() {
+		data.HelloPasswordAcceptEncrypted = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/accepts-levels/accepts-level"); value.Exists() {
+		data.HelloPasswordAcceptsLevels = make([]RouterISISInterfaceHelloPasswordAcceptsLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceHelloPasswordAcceptsLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "encrypted"); cValue.Exists() {
+				item.Encrypted = types.StringValue(cValue.String())
+			}
+			data.HelloPasswordAcceptsLevels = append(data.HelloPasswordAcceptsLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/text/hello-password-options/encrypted"); value.Exists() {
+		data.HelloPasswordTextEncrypted = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/text/hello-password-options/send-only"); value.Exists() {
+		data.HelloPasswordTextSendOnly = types.BoolValue(true)
+	} else {
+		data.HelloPasswordTextSendOnly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/hmac-md5/hello-password-options/encrypted"); value.Exists() {
+		data.HelloPasswordHmacMd5Encrypted = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/hmac-md5/hello-password-options/send-only"); value.Exists() {
+		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
+	} else {
+		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/keychain/keychain-name"); value.Exists() {
+		data.HelloPasswordKeychainName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password/hello-password-options/keychain/send-only"); value.Exists() {
+		data.HelloPasswordKeychainSendOnly = types.BoolValue(true)
+	} else {
+		data.HelloPasswordKeychainSendOnly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hello-password-levels/hello-password-level"); value.Exists() {
+		data.HelloPasswordLevels = make([]RouterISISInterfaceHelloPasswordLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceHelloPasswordLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "text/hello-password-options/encrypted"); cValue.Exists() {
+				item.TextEncrypted = types.StringValue(cValue.String())
+			}
+		if cValue := helpers.GetFromXPath(v, "text/hello-password-options/send-only"); cValue.Exists() {
+			item.TextSendOnly = types.BoolValue(true)
+		} else {
+			item.TextSendOnly = types.BoolValue(false)
+		}
+			if cValue := helpers.GetFromXPath(v, "hmac-md5/hello-password-options/encrypted"); cValue.Exists() {
+				item.HmacMd5Encrypted = types.StringValue(cValue.String())
+			}
+		if cValue := helpers.GetFromXPath(v, "hmac-md5/hello-password-options/send-only"); cValue.Exists() {
+			item.HmacMd5SendOnly = types.BoolValue(true)
+		} else {
+			item.HmacMd5SendOnly = types.BoolValue(false)
+		}
+			if cValue := helpers.GetFromXPath(v, "keychain/keychain-name"); cValue.Exists() {
+				item.KeychainName = types.StringValue(cValue.String())
+			}
+		if cValue := helpers.GetFromXPath(v, "keychain/send-only"); cValue.Exists() {
+			item.KeychainSendOnly = types.BoolValue(true)
+		} else {
+			item.KeychainSendOnly = types.BoolValue(false)
+		}
+			data.HelloPasswordLevels = append(data.HelloPasswordLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/remote-psnp-delay"); value.Exists() {
+		data.RemotePsnpDelay = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/priority"); value.Exists() {
+		data.Priority = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/priority-levels/priority-level"); value.Exists() {
+		data.PriorityLevels = make([]RouterISISInterfacePriorityLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfacePriorityLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "priority"); cValue.Exists() {
+				item.Priority = types.Int64Value(cValue.Int())
+			}
+			data.PriorityLevels = append(data.PriorityLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/point-to-point"); value.Exists() {
+		data.PointToPoint = types.BoolValue(true)
+	} else {
+		data.PointToPoint = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/retransmit-interval"); value.Exists() {
+		data.RetransmitInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/retransmit-interval-levels/retransmit-interval-level"); value.Exists() {
+		data.RetransmitIntervalLevels = make([]RouterISISInterfaceRetransmitIntervalLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceRetransmitIntervalLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "retransmit-interval"); cValue.Exists() {
+				item.RetransmitInterval = types.Int64Value(cValue.Int())
+			}
+			data.RetransmitIntervalLevels = append(data.RetransmitIntervalLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/retransmit-throttle-interval"); value.Exists() {
+		data.RetransmitThrottleInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/retransmit-throttle-interval-levels/retransmit-throttle-interval-level"); value.Exists() {
+		data.RetransmitThrottleIntervalLevels = make([]RouterISISInterfaceRetransmitThrottleIntervalLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceRetransmitThrottleIntervalLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "retransmit-throttle-interval"); cValue.Exists() {
+				item.RetransmitThrottleInterval = types.Int64Value(cValue.Int())
+			}
+			data.RetransmitThrottleIntervalLevels = append(data.RetransmitThrottleIntervalLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/link-down/fast-detect"); value.Exists() {
+		data.LinkDownFastDetect = types.BoolValue(true)
+	} else {
+		data.LinkDownFastDetect = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/affinity/flex-algo/flex-algo-argument"); value.Exists() {
+		data.AffinityFlexAlgos = helpers.GetStringListXML(value.Array())
+	} else {
+		data.AffinityFlexAlgos = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/affinity/flex-algo/anomaly"); value.Exists() {
+		data.AffinityFlexAlgosAnomalies = helpers.GetStringListXML(value.Array())
+	} else {
+		data.AffinityFlexAlgosAnomalies = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/override/metrics"); value.Exists() {
+		data.OverrideMetrics = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/normalize/interval/interval-number"); value.Exists() {
+		data.DelayNormalizeInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/normalize/interval/offset"); value.Exists() {
+		data.DelayNormalizeOffset = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mpls/ldp/sync"); value.Exists() {
+		data.MplsLdpSync = types.BoolValue(true)
+	} else {
+		data.MplsLdpSync = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mpls/ldp/sync/level"); value.Exists() {
+		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/fast-detect/ipv4"); value.Exists() {
+		data.BfdFastDetectIpv4 = types.BoolValue(true)
+	} else {
+		data.BfdFastDetectIpv4 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/fast-detect/ipv6"); value.Exists() {
+		data.BfdFastDetectIpv6 = types.BoolValue(true)
+	} else {
+		data.BfdFastDetectIpv6 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
 }
@@ -3850,14 +3814,14 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
-		deletePath := state.getXPath() + "/bfd/multiplier"
+		deletePath := state.getXPath()+"/bfd/multiplier"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
-		deletePath := state.getXPath() + "/bfd/minimum-interval"
+		deletePath := state.getXPath()+"/bfd/minimum-interval"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3865,7 +3829,7 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BfdFastDetectIpv6.IsNull() && state.BfdFastDetectIpv6.ValueBool() && data.BfdFastDetectIpv6.IsNull() {
-		deletePath := state.getXPath() + "/bfd/fast-detect/ipv6"
+		deletePath := state.getXPath()+"/bfd/fast-detect/ipv6"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3873,14 +3837,14 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BfdFastDetectIpv4.IsNull() && state.BfdFastDetectIpv4.ValueBool() && data.BfdFastDetectIpv4.IsNull() {
-		deletePath := state.getXPath() + "/bfd/fast-detect/ipv4"
+		deletePath := state.getXPath()+"/bfd/fast-detect/ipv4"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MplsLdpSyncLevel.IsNull() && data.MplsLdpSyncLevel.IsNull() {
-		deletePath := state.getXPath() + "/mpls/ldp/sync/level"
+		deletePath := state.getXPath()+"/mpls/ldp/sync/level"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3888,28 +3852,28 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MplsLdpSync.IsNull() && state.MplsLdpSync.ValueBool() && data.MplsLdpSync.IsNull() {
-		deletePath := state.getXPath() + "/mpls/ldp/sync"
+		deletePath := state.getXPath()+"/mpls/ldp/sync"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DelayNormalizeOffset.IsNull() && data.DelayNormalizeOffset.IsNull() {
-		deletePath := state.getXPath() + "/delay/normalize/interval/offset"
+		deletePath := state.getXPath()+"/delay/normalize/interval/offset"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DelayNormalizeInterval.IsNull() && data.DelayNormalizeInterval.IsNull() {
-		deletePath := state.getXPath() + "/delay/normalize/interval/interval-number"
+		deletePath := state.getXPath()+"/delay/normalize/interval/interval-number"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.OverrideMetrics.IsNull() && data.OverrideMetrics.IsNull() {
-		deletePath := state.getXPath() + "/override/metrics"
+		deletePath := state.getXPath()+"/override/metrics"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3967,15 +3931,15 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LinkDownFastDetect.IsNull() && state.LinkDownFastDetect.ValueBool() && data.LinkDownFastDetect.IsNull() {
-		deletePath := state.getXPath() + "/link-down/fast-detect"
+		deletePath := state.getXPath()+"/link-down/fast-detect"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.RetransmitThrottleIntervalLevels {
-		stateKeys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -3996,9 +3960,9 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 				found = false
 			}
 			if found {
-				if !state.RetransmitThrottleIntervalLevels[i].RetransmitThrottleInterval.IsNull() && data.RetransmitThrottleIntervalLevels[j].RetransmitThrottleInterval.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/retransmit-throttle-interval-levels/retransmit-throttle-interval-level%v/retransmit-throttle-interval", predicates))
-				}
+			if !state.RetransmitThrottleIntervalLevels[i].RetransmitThrottleInterval.IsNull() && data.RetransmitThrottleIntervalLevels[j].RetransmitThrottleInterval.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/retransmit-throttle-interval-levels/retransmit-throttle-interval-level%v/retransmit-throttle-interval", predicates))
+			}
 				break
 			}
 		}
@@ -4007,15 +3971,15 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 		}
 	}
 	if !state.RetransmitThrottleInterval.IsNull() && data.RetransmitThrottleInterval.IsNull() {
-		deletePath := state.getXPath() + "/retransmit-throttle-interval"
+		deletePath := state.getXPath()+"/retransmit-throttle-interval"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.RetransmitIntervalLevels {
-		stateKeys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4036,9 +4000,9 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 				found = false
 			}
 			if found {
-				if !state.RetransmitIntervalLevels[i].RetransmitInterval.IsNull() && data.RetransmitIntervalLevels[j].RetransmitInterval.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/retransmit-interval-levels/retransmit-interval-level%v/retransmit-interval", predicates))
-				}
+			if !state.RetransmitIntervalLevels[i].RetransmitInterval.IsNull() && data.RetransmitIntervalLevels[j].RetransmitInterval.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/retransmit-interval-levels/retransmit-interval-level%v/retransmit-interval", predicates))
+			}
 				break
 			}
 		}
@@ -4047,7 +4011,7 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 		}
 	}
 	if !state.RetransmitInterval.IsNull() && data.RetransmitInterval.IsNull() {
-		deletePath := state.getXPath() + "/retransmit-interval"
+		deletePath := state.getXPath()+"/retransmit-interval"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -4055,15 +4019,15 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PointToPoint.IsNull() && state.PointToPoint.ValueBool() && data.PointToPoint.IsNull() {
-		deletePath := state.getXPath() + "/point-to-point"
+		deletePath := state.getXPath()+"/point-to-point"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.PriorityLevels {
-		stateKeys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.PriorityLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4084,9 +4048,9 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 				found = false
 			}
 			if found {
-				if !state.PriorityLevels[i].Priority.IsNull() && data.PriorityLevels[j].Priority.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/priority-levels/priority-level%v/priority", predicates))
-				}
+			if !state.PriorityLevels[i].Priority.IsNull() && data.PriorityLevels[j].Priority.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/priority-levels/priority-level%v/priority", predicates))
+			}
 				break
 			}
 		}
@@ -4095,22 +4059,22 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 		}
 	}
 	if !state.Priority.IsNull() && data.Priority.IsNull() {
-		deletePath := state.getXPath() + "/priority"
+		deletePath := state.getXPath()+"/priority"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RemotePsnpDelay.IsNull() && data.RemotePsnpDelay.IsNull() {
-		deletePath := state.getXPath() + "/remote-psnp-delay"
+		deletePath := state.getXPath()+"/remote-psnp-delay"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.HelloPasswordLevels {
-		stateKeys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4131,27 +4095,27 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 				found = false
 			}
 			if found {
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.HelloPasswordLevels[i].KeychainSendOnly.IsNull() && state.HelloPasswordLevels[i].KeychainSendOnly.ValueBool() && data.HelloPasswordLevels[j].KeychainSendOnly.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-password-levels/hello-password-level%v/keychain", predicates))
-				}
-				if !state.HelloPasswordLevels[i].KeychainName.IsNull() && data.HelloPasswordLevels[j].KeychainName.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-password-levels/hello-password-level%v/keychain", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() && state.HelloPasswordLevels[i].HmacMd5SendOnly.ValueBool() && data.HelloPasswordLevels[j].HmacMd5SendOnly.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-password-levels/hello-password-level%v/hmac-md5/hello-password-options", predicates))
-				}
-				if !state.HelloPasswordLevels[i].HmacMd5Encrypted.IsNull() && data.HelloPasswordLevels[j].HmacMd5Encrypted.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-password-levels/hello-password-level%v/hmac-md5/hello-password-options", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.HelloPasswordLevels[i].TextSendOnly.IsNull() && state.HelloPasswordLevels[i].TextSendOnly.ValueBool() && data.HelloPasswordLevels[j].TextSendOnly.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-password-levels/hello-password-level%v/text/hello-password-options", predicates))
-				}
-				if !state.HelloPasswordLevels[i].TextEncrypted.IsNull() && data.HelloPasswordLevels[j].TextEncrypted.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-password-levels/hello-password-level%v/text/hello-password-options", predicates))
-				}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.HelloPasswordLevels[i].KeychainSendOnly.IsNull() && state.HelloPasswordLevels[i].KeychainSendOnly.ValueBool() && data.HelloPasswordLevels[j].KeychainSendOnly.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-password-levels/hello-password-level%v/keychain", predicates))
+			}
+			if !state.HelloPasswordLevels[i].KeychainName.IsNull() && data.HelloPasswordLevels[j].KeychainName.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-password-levels/hello-password-level%v/keychain", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() && state.HelloPasswordLevels[i].HmacMd5SendOnly.ValueBool() && data.HelloPasswordLevels[j].HmacMd5SendOnly.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-password-levels/hello-password-level%v/hmac-md5/hello-password-options", predicates))
+			}
+			if !state.HelloPasswordLevels[i].HmacMd5Encrypted.IsNull() && data.HelloPasswordLevels[j].HmacMd5Encrypted.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-password-levels/hello-password-level%v/hmac-md5/hello-password-options", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.HelloPasswordLevels[i].TextSendOnly.IsNull() && state.HelloPasswordLevels[i].TextSendOnly.ValueBool() && data.HelloPasswordLevels[j].TextSendOnly.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-password-levels/hello-password-level%v/text/hello-password-options", predicates))
+			}
+			if !state.HelloPasswordLevels[i].TextEncrypted.IsNull() && data.HelloPasswordLevels[j].TextEncrypted.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-password-levels/hello-password-level%v/text/hello-password-options", predicates))
+			}
 				break
 			}
 		}
@@ -4162,7 +4126,7 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.HelloPasswordKeychainSendOnly.IsNull() && state.HelloPasswordKeychainSendOnly.ValueBool() && data.HelloPasswordKeychainSendOnly.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/hello-password/hello-password-options/keychain"
+		deletePath := state.getXPath()+"/hello-password/hello-password-options/keychain"
 		predicates := make(map[string]string)
 		if !state.HelloPasswordKeychainName.IsNull() {
 			predicates["keychain-name"] = fmt.Sprintf("%v", state.HelloPasswordKeychainName.ValueString())
@@ -4184,7 +4148,7 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 	}
 	if !state.HelloPasswordKeychainName.IsNull() && data.HelloPasswordKeychainName.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/hello-password/hello-password-options/keychain"
+		deletePath := state.getXPath()+"/hello-password/hello-password-options/keychain"
 		predicates := make(map[string]string)
 		if !state.HelloPasswordKeychainSendOnly.IsNull() {
 			predicates["send-only"] = fmt.Sprintf("%v", state.HelloPasswordKeychainSendOnly.ValueBool())
@@ -4207,7 +4171,7 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.HelloPasswordHmacMd5SendOnly.IsNull() && state.HelloPasswordHmacMd5SendOnly.ValueBool() && data.HelloPasswordHmacMd5SendOnly.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/hello-password/hello-password-options/hmac-md5/hello-password-options"
+		deletePath := state.getXPath()+"/hello-password/hello-password-options/hmac-md5/hello-password-options"
 		predicates := make(map[string]string)
 		if !state.HelloPasswordHmacMd5Encrypted.IsNull() {
 			predicates["encrypted"] = fmt.Sprintf("%v", state.HelloPasswordHmacMd5Encrypted.ValueString())
@@ -4229,7 +4193,7 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 	}
 	if !state.HelloPasswordHmacMd5Encrypted.IsNull() && data.HelloPasswordHmacMd5Encrypted.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/hello-password/hello-password-options/hmac-md5/hello-password-options"
+		deletePath := state.getXPath()+"/hello-password/hello-password-options/hmac-md5/hello-password-options"
 		predicates := make(map[string]string)
 		if !state.HelloPasswordHmacMd5SendOnly.IsNull() {
 			predicates["send-only"] = fmt.Sprintf("%v", state.HelloPasswordHmacMd5SendOnly.ValueBool())
@@ -4252,7 +4216,7 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.HelloPasswordTextSendOnly.IsNull() && state.HelloPasswordTextSendOnly.ValueBool() && data.HelloPasswordTextSendOnly.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/hello-password/hello-password-options/text/hello-password-options"
+		deletePath := state.getXPath()+"/hello-password/hello-password-options/text/hello-password-options"
 		predicates := make(map[string]string)
 		if !state.HelloPasswordTextEncrypted.IsNull() {
 			predicates["encrypted"] = fmt.Sprintf("%v", state.HelloPasswordTextEncrypted.ValueString())
@@ -4274,7 +4238,7 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 	}
 	if !state.HelloPasswordTextEncrypted.IsNull() && data.HelloPasswordTextEncrypted.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/hello-password/hello-password-options/text/hello-password-options"
+		deletePath := state.getXPath()+"/hello-password/hello-password-options/text/hello-password-options"
 		predicates := make(map[string]string)
 		if !state.HelloPasswordTextSendOnly.IsNull() {
 			predicates["send-only"] = fmt.Sprintf("%v", state.HelloPasswordTextSendOnly.ValueBool())
@@ -4295,8 +4259,8 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 		}
 	}
 	for i := range state.HelloPasswordAcceptsLevels {
-		stateKeys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4317,9 +4281,9 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 				found = false
 			}
 			if found {
-				if !state.HelloPasswordAcceptsLevels[i].Encrypted.IsNull() && data.HelloPasswordAcceptsLevels[j].Encrypted.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-password/accepts-levels/accepts-level%v/encrypted", predicates))
-				}
+			if !state.HelloPasswordAcceptsLevels[i].Encrypted.IsNull() && data.HelloPasswordAcceptsLevels[j].Encrypted.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-password/accepts-levels/accepts-level%v/encrypted", predicates))
+			}
 				break
 			}
 		}
@@ -4328,15 +4292,15 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 		}
 	}
 	if !state.HelloPasswordAcceptEncrypted.IsNull() && data.HelloPasswordAcceptEncrypted.IsNull() {
-		deletePath := state.getXPath() + "/hello-password/accepts/encrypted"
+		deletePath := state.getXPath()+"/hello-password/accepts/encrypted"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.LspIntervalLevels {
-		stateKeys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4357,9 +4321,9 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 				found = false
 			}
 			if found {
-				if !state.LspIntervalLevels[i].LspInterval.IsNull() && data.LspIntervalLevels[j].LspInterval.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/lsp-interval-levels/lsp-interval-level%v/lsp-interval", predicates))
-				}
+			if !state.LspIntervalLevels[i].LspInterval.IsNull() && data.LspIntervalLevels[j].LspInterval.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/lsp-interval-levels/lsp-interval-level%v/lsp-interval", predicates))
+			}
 				break
 			}
 		}
@@ -4368,15 +4332,15 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 		}
 	}
 	if !state.LspInterval.IsNull() && data.LspInterval.IsNull() {
-		deletePath := state.getXPath() + "/lsp-interval"
+		deletePath := state.getXPath()+"/lsp-interval"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.HelloMultiplierLevels {
-		stateKeys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4397,9 +4361,9 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 				found = false
 			}
 			if found {
-				if !state.HelloMultiplierLevels[i].HelloMultiplier.IsNull() && data.HelloMultiplierLevels[j].HelloMultiplier.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-multiplier-levels/hello-multiplier-level%v/hello-multiplier", predicates))
-				}
+			if !state.HelloMultiplierLevels[i].HelloMultiplier.IsNull() && data.HelloMultiplierLevels[j].HelloMultiplier.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-multiplier-levels/hello-multiplier-level%v/hello-multiplier", predicates))
+			}
 				break
 			}
 		}
@@ -4408,15 +4372,15 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 		}
 	}
 	if !state.HelloMultiplier.IsNull() && data.HelloMultiplier.IsNull() {
-		deletePath := state.getXPath() + "/hello-multiplier"
+		deletePath := state.getXPath()+"/hello-multiplier"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.HelloIntervalLevels {
-		stateKeys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4437,9 +4401,9 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 				found = false
 			}
 			if found {
-				if !state.HelloIntervalLevels[i].HelloInterval.IsNull() && data.HelloIntervalLevels[j].HelloInterval.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-interval-levels/hello-interval-level%v/hello-interval", predicates))
-				}
+			if !state.HelloIntervalLevels[i].HelloInterval.IsNull() && data.HelloIntervalLevels[j].HelloInterval.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-interval-levels/hello-interval-level%v/hello-interval", predicates))
+			}
 				break
 			}
 		}
@@ -4448,15 +4412,15 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 		}
 	}
 	if !state.HelloInterval.IsNull() && data.HelloInterval.IsNull() {
-		deletePath := state.getXPath() + "/hello-interval"
+		deletePath := state.getXPath()+"/hello-interval"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.HelloPaddingLevels {
-		stateKeys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4477,9 +4441,9 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 				found = false
 			}
 			if found {
-				if !state.HelloPaddingLevels[i].HelloPadding.IsNull() && data.HelloPaddingLevels[j].HelloPadding.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-padding-levels/hello-padding-level%v/hello-padding", predicates))
-				}
+			if !state.HelloPaddingLevels[i].HelloPadding.IsNull() && data.HelloPaddingLevels[j].HelloPadding.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hello-padding-levels/hello-padding-level%v/hello-padding", predicates))
+			}
 				break
 			}
 		}
@@ -4488,15 +4452,15 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 		}
 	}
 	if !state.HelloPadding.IsNull() && data.HelloPadding.IsNull() {
-		deletePath := state.getXPath() + "/hello-padding"
+		deletePath := state.getXPath()+"/hello-padding"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.CsnpIntervalLevels {
-		stateKeys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "level-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4517,9 +4481,9 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 				found = false
 			}
 			if found {
-				if !state.CsnpIntervalLevels[i].CsnpInterval.IsNull() && data.CsnpIntervalLevels[j].CsnpInterval.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/csnp-interval-levels/csnp-interval-level%v/csnp-interval", predicates))
-				}
+			if !state.CsnpIntervalLevels[i].CsnpInterval.IsNull() && data.CsnpIntervalLevels[j].CsnpInterval.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/csnp-interval-levels/csnp-interval-level%v/csnp-interval", predicates))
+			}
 				break
 			}
 		}
@@ -4528,21 +4492,21 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 		}
 	}
 	if !state.CsnpInterval.IsNull() && data.CsnpInterval.IsNull() {
-		deletePath := state.getXPath() + "/csnp-interval"
+		deletePath := state.getXPath()+"/csnp-interval"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.CircuitType.IsNull() && data.CircuitType.IsNull() {
-		deletePath := state.getXPath() + "/circuit-type"
+		deletePath := state.getXPath()+"/circuit-type"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.State.IsNull() && data.State.IsNull() {
-		deletePath := state.getXPath() + "/state"
+		deletePath := state.getXPath()+"/state"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -4550,14 +4514,14 @@ func (data *RouterISISInterface) addDeletedItemsXML(ctx context.Context, state R
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MeshGroupBlocked.IsNull() && state.MeshGroupBlocked.ValueBool() && data.MeshGroupBlocked.IsNull() {
-		deletePath := state.getXPath() + "/mesh-group/blocked"
+		deletePath := state.getXPath()+"/mesh-group/blocked"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MeshGroup.IsNull() && data.MeshGroup.IsNull() {
-		deletePath := state.getXPath() + "/mesh-group/mesh-group-number"
+		deletePath := state.getXPath()+"/mesh-group/mesh-group-number"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -4620,8 +4584,8 @@ func (data *RouterISISInterface) addDeletePathsXML(ctx context.Context, body str
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/link-down/fast-detect")
 	}
 	for i := range data.RetransmitThrottleIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4633,8 +4597,8 @@ func (data *RouterISISInterface) addDeletePathsXML(ctx context.Context, body str
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/retransmit-throttle-interval")
 	}
 	for i := range data.RetransmitIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4649,8 +4613,8 @@ func (data *RouterISISInterface) addDeletePathsXML(ctx context.Context, body str
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/point-to-point")
 	}
 	for i := range data.PriorityLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4665,8 +4629,8 @@ func (data *RouterISISInterface) addDeletePathsXML(ctx context.Context, body str
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/remote-psnp-delay")
 	}
 	for i := range data.HelloPasswordLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4693,8 +4657,8 @@ func (data *RouterISISInterface) addDeletePathsXML(ctx context.Context, body str
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hello-password/hello-password-options/text/hello-password-options")
 	}
 	for i := range data.HelloPasswordAcceptsLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4706,8 +4670,8 @@ func (data *RouterISISInterface) addDeletePathsXML(ctx context.Context, body str
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hello-password/accepts/encrypted")
 	}
 	for i := range data.LspIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4719,8 +4683,8 @@ func (data *RouterISISInterface) addDeletePathsXML(ctx context.Context, body str
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/lsp-interval")
 	}
 	for i := range data.HelloMultiplierLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4732,8 +4696,8 @@ func (data *RouterISISInterface) addDeletePathsXML(ctx context.Context, body str
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hello-multiplier")
 	}
 	for i := range data.HelloIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4745,8 +4709,8 @@ func (data *RouterISISInterface) addDeletePathsXML(ctx context.Context, body str
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hello-interval")
 	}
 	for i := range data.HelloPaddingLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4758,8 +4722,8 @@ func (data *RouterISISInterface) addDeletePathsXML(ctx context.Context, body str
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hello-padding")
 	}
 	for i := range data.CsnpIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keys := [...]string{ "level-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

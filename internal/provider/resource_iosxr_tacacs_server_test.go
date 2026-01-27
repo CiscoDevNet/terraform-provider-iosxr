@@ -21,8 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -35,8 +33,8 @@ import (
 
 func TestAccIosxrTACACSServer(t *testing.T) {
 	if os.Getenv("AAA") == "" {
-		t.Skip("skipping test, set environment variable AAA")
-	}
+        t.Skip("skipping test, set environment variable AAA")
+    }
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_tacacs_server.test", "hosts.0.ordering_index", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_tacacs_server.test", "hosts.0.address", "9.0.1.68"))
@@ -57,18 +55,18 @@ func TestAccIosxrTACACSServer(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrTACACSServerConfig_all(),
-		Check:  resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:      "iosxr_tacacs_server.test",
-		ImportState:       true,
+		ResourceName:  "iosxr_tacacs_server.test",
+		ImportState:   true,
 		ImportStateIdFunc: iosxrTACACSServerImportStateIdFunc("iosxr_tacacs_server.test"),
-		Check:             resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps:                    steps,
+		Steps: steps,
 	})
 }
 
@@ -79,7 +77,7 @@ func TestAccIosxrTACACSServer(t *testing.T) {
 func iosxrTACACSServerImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf(""), nil
+		return fmt.Sprintf("", ), nil
 	}
 }
 

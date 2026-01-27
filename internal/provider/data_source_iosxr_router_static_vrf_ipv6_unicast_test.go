@@ -62,8 +62,8 @@ func TestAccDataSourceIosxrRouterStaticVRFIPv6Unicast(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterStaticVRFIPv6UnicastPrerequisitesConfig + testAccDataSourceIosxrRouterStaticVRFIPv6UnicastConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrRouterStaticVRFIPv6UnicastPrerequisitesConfig+testAccDataSourceIosxrRouterStaticVRFIPv6UnicastConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

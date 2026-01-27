@@ -24,21 +24,28 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -49,7 +56,7 @@ func NewMACSecPolicyResource() resource.Resource {
 	return &MACSecPolicyResource{}
 }
 
-type MACSecPolicyResource struct {
+type MACSecPolicyResource struct{
 	data *IosxrProviderData
 }
 
@@ -100,10 +107,10 @@ func (r *MACSecPolicyResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"cipher_suite": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Cipher-Suite used for encryption").AddStringEnumDescription("GCM-AES-128", "GCM-AES-256", "GCM-AES-XPN-128", "GCM-AES-XPN-256").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Cipher-Suite used for encryption").AddStringEnumDescription("GCM-AES-128", "GCM-AES-256", "GCM-AES-XPN-128", "GCM-AES-XPN-256", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("GCM-AES-128", "GCM-AES-256", "GCM-AES-XPN-128", "GCM-AES-XPN-256"),
+					stringvalidator.OneOf("GCM-AES-128", "GCM-AES-256", "GCM-AES-XPN-128", "GCM-AES-XPN-256", ),
 				},
 			},
 			"window_size": schema.Int64Attribute{
@@ -114,17 +121,17 @@ func (r *MACSecPolicyResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"conf_offset": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("conf-offset used for encryption").AddStringEnumDescription("CONF-OFFSET-0", "CONF-OFFSET-30", "CONF-OFFSET-50").String,
+				MarkdownDescription: helpers.NewAttributeDescription("conf-offset used for encryption").AddStringEnumDescription("CONF-OFFSET-0", "CONF-OFFSET-30", "CONF-OFFSET-50", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("CONF-OFFSET-0", "CONF-OFFSET-30", "CONF-OFFSET-50"),
+					stringvalidator.OneOf("CONF-OFFSET-0", "CONF-OFFSET-30", "CONF-OFFSET-50", ),
 				},
 			},
 			"security_policy": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Must Secure/Should Secure for Data encryption").AddStringEnumDescription("must-secure", "should-secure").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Must Secure/Should Secure for Data encryption").AddStringEnumDescription("must-secure", "should-secure", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("must-secure", "should-secure"),
+					stringvalidator.OneOf("must-secure", "should-secure", ),
 				},
 			},
 			"vlan_tags_in_clear": schema.Int64Attribute{
@@ -135,10 +142,10 @@ func (r *MACSecPolicyResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"policy_exception": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("macsec policy exception to allow packets in clear text").AddStringEnumDescription("lacp-in-clear").String,
+				MarkdownDescription: helpers.NewAttributeDescription("macsec policy exception to allow packets in clear text").AddStringEnumDescription("lacp-in-clear", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("lacp-in-clear"),
+					stringvalidator.OneOf("lacp-in-clear", ),
 				},
 			},
 			"sak_rekey_interval_seconds": schema.Int64Attribute{
@@ -181,10 +188,10 @@ func (r *MACSecPolicyResource) Schema(ctx context.Context, req resource.SchemaRe
 				Optional:            true,
 			},
 			"max_an": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Sets supported AN range from 0 to max-an Default: 3, supported AN 0,1,2,3").AddStringEnumDescription("1").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Sets supported AN range from 0 to max-an Default: 3, supported AN 0,1,2,3").AddStringEnumDescription("1", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("1"),
+					stringvalidator.OneOf("1", ),
 				},
 			},
 			"allow_lacp_in_clear": schema.BoolAttribute{
@@ -258,14 +265,14 @@ func (r *MACSecPolicyResource) Create(ctx context.Context, req resource.CreateRe
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			var ops []gnmi.SetOperation
+		var ops []gnmi.SetOperation
 
-			// Create object
-			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -486,11 +493,11 @@ func (r *MACSecPolicyResource) Update(ctx context.Context, req resource.UpdateRe
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			// Combine update and delete operations into a single transaction
-			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-				resp.Diagnostics.AddError("Client Error", err.Error())
-				return
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
 			}
 		}
 	}

@@ -21,7 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -52,8 +51,8 @@ func TestAccDataSourceIosxrPerformanceMeasurementInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrPerformanceMeasurementInterfacePrerequisitesConfig + testAccDataSourceIosxrPerformanceMeasurementInterfaceConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrPerformanceMeasurementInterfacePrerequisitesConfig+testAccDataSourceIosxrPerformanceMeasurementInterfaceConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

@@ -89,7 +89,7 @@ func TestAccDataSourceIosxrRouterStaticIPv6Multicast(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrRouterStaticIPv6MulticastConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

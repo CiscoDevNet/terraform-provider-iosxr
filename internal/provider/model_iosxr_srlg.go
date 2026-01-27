@@ -24,81 +24,82 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type SRLG struct {
-	Device           types.String           `tfsdk:"device"`
-	Id               types.String           `tfsdk:"id"`
-	DeleteMode       types.String           `tfsdk:"delete_mode"`
-	Names            []SRLGNames            `tfsdk:"names"`
-	Interfaces       []SRLGInterfaces       `tfsdk:"interfaces"`
-	Groups           []SRLGGroups           `tfsdk:"groups"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	Names []SRLGNames `tfsdk:"names"`
+	Interfaces []SRLGInterfaces `tfsdk:"interfaces"`
+	Groups []SRLGGroups `tfsdk:"groups"`
 	InheritLocations []SRLGInheritLocations `tfsdk:"inherit_locations"`
 }
 
 type SRLGData struct {
-	Device           types.String           `tfsdk:"device"`
-	Id               types.String           `tfsdk:"id"`
-	Names            []SRLGNames            `tfsdk:"names"`
-	Interfaces       []SRLGInterfaces       `tfsdk:"interfaces"`
-	Groups           []SRLGGroups           `tfsdk:"groups"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	Names []SRLGNames `tfsdk:"names"`
+	Interfaces []SRLGInterfaces `tfsdk:"interfaces"`
+	Groups []SRLGGroups `tfsdk:"groups"`
 	InheritLocations []SRLGInheritLocations `tfsdk:"inherit_locations"`
 }
 type SRLGNames struct {
-	SrlgName    types.String `tfsdk:"srlg_name"`
-	Value       types.Int64  `tfsdk:"value"`
+	SrlgName types.String `tfsdk:"srlg_name"`
+	Value types.Int64 `tfsdk:"value"`
 	Description types.String `tfsdk:"description"`
 }
 type SRLGInterfaces struct {
-	InterfaceName          types.String            `tfsdk:"interface_name"`
-	IncludeOptical         types.Bool              `tfsdk:"include_optical"`
-	IncludeOpticalPriority types.String            `tfsdk:"include_optical_priority"`
-	Indexes                []SRLGInterfacesIndexes `tfsdk:"indexes"`
-	Names                  []SRLGInterfacesNames   `tfsdk:"names"`
-	Groups                 []SRLGInterfacesGroups  `tfsdk:"groups"`
+	InterfaceName types.String `tfsdk:"interface_name"`
+	IncludeOptical types.Bool `tfsdk:"include_optical"`
+	IncludeOpticalPriority types.String `tfsdk:"include_optical_priority"`
+	Indexes []SRLGInterfacesIndexes `tfsdk:"indexes"`
+	Names []SRLGInterfacesNames `tfsdk:"names"`
+	Groups []SRLGInterfacesGroups `tfsdk:"groups"`
 }
 type SRLGGroups struct {
-	GroupName types.String        `tfsdk:"group_name"`
-	Indexes   []SRLGGroupsIndexes `tfsdk:"indexes"`
+	GroupName types.String `tfsdk:"group_name"`
+	Indexes []SRLGGroupsIndexes `tfsdk:"indexes"`
 }
 type SRLGInheritLocations struct {
-	LocationName types.String                  `tfsdk:"location_name"`
-	Indexes      []SRLGInheritLocationsIndexes `tfsdk:"indexes"`
+	LocationName types.String `tfsdk:"location_name"`
+	Indexes []SRLGInheritLocationsIndexes `tfsdk:"indexes"`
 }
 type SRLGInterfacesIndexes struct {
-	IndexNumber types.Int64  `tfsdk:"index_number"`
-	Value       types.Int64  `tfsdk:"value"`
-	Priority    types.String `tfsdk:"priority"`
+	IndexNumber types.Int64 `tfsdk:"index_number"`
+	Value types.Int64 `tfsdk:"value"`
+	Priority types.String `tfsdk:"priority"`
 }
 type SRLGInterfacesNames struct {
 	SrlgName types.String `tfsdk:"srlg_name"`
 }
 type SRLGInterfacesGroups struct {
-	IndexNumber types.Int64  `tfsdk:"index_number"`
-	GroupName   types.String `tfsdk:"group_name"`
+	IndexNumber types.Int64 `tfsdk:"index_number"`
+	GroupName types.String `tfsdk:"group_name"`
 }
 type SRLGGroupsIndexes struct {
-	IndexNumber types.Int64  `tfsdk:"index_number"`
-	Value       types.Int64  `tfsdk:"value"`
-	Priority    types.String `tfsdk:"priority"`
+	IndexNumber types.Int64 `tfsdk:"index_number"`
+	Value types.Int64 `tfsdk:"value"`
+	Priority types.String `tfsdk:"priority"`
 }
 type SRLGInheritLocationsIndexes struct {
-	IndexNumber types.Int64  `tfsdk:"index_number"`
-	Value       types.Int64  `tfsdk:"value"`
-	Priority    types.String `tfsdk:"priority"`
+	IndexNumber types.Int64 `tfsdk:"index_number"`
+	Value types.Int64 `tfsdk:"value"`
+	Priority types.String `tfsdk:"priority"`
 }
 
 // End of section. //template:end types
@@ -246,8 +247,8 @@ func (data SRLG) toBody(ctx context.Context) string {
 
 func (data *SRLG) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Names {
-		keys := [...]string{"srlg-name"}
-		keyValues := [...]string{data.Names[i].SrlgName.ValueString()}
+		keys := [...]string{ "srlg-name",  }
+		keyValues := [...]string{ data.Names[i].SrlgName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "names.name").ForEach(
@@ -285,8 +286,8 @@ func (data *SRLG) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.Interfaces[i].InterfaceName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "interfaces.interface").ForEach(
@@ -312,126 +313,126 @@ func (data *SRLG) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
-		if value := r.Get("include-optical"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].IncludeOptical.IsNull() && !data.Interfaces[i].IncludeOptical.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].IncludeOptical = types.BoolValue(false)
-			} else if !data.Interfaces[i].IncludeOptical.IsNull() {
+		if value := r.Get("include-optical"); !data.Interfaces[i].IncludeOptical.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].IncludeOptical = types.BoolValue(true)
+			} else {
+				data.Interfaces[i].IncludeOptical = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].IncludeOptical.IsNull() {
-				data.Interfaces[i].IncludeOptical = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Interfaces[i].IncludeOptical = types.BoolValue(false)
-			}
+			data.Interfaces[i].IncludeOptical = types.BoolNull()
 		}
 		if value := r.Get("include-optical.priority"); value.Exists() && !data.Interfaces[i].IncludeOpticalPriority.IsNull() {
 			data.Interfaces[i].IncludeOpticalPriority = types.StringValue(value.String())
 		} else {
 			data.Interfaces[i].IncludeOpticalPriority = types.StringNull()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("indexes.index"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.Interfaces[i].Indexes
-			data.Interfaces[i].Indexes = make([]SRLGInterfacesIndexes, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := SRLGInterfacesIndexes{}
-				if cValue := cr.Get("index-number"); cValue.Exists() {
-					citem.IndexNumber = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("value"); cValue.Exists() {
-					citem.Value = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("priority"); cValue.Exists() {
-					citem.Priority = types.StringValue(cValue.String())
-				}
+		for ci := range data.Interfaces[i].Indexes {
+			keys := [...]string{ "index-number",  }
+			keyValues := [...]string{ strconv.FormatInt(data.Interfaces[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.IndexNumber.Equal(citem.IndexNumber) {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("indexes.index").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Interfaces[i].Indexes = append(data.Interfaces[i].Indexes, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("index-number"); value.Exists() && !data.Interfaces[i].Indexes[ci].IndexNumber.IsNull() {
+				data.Interfaces[i].Indexes[ci].IndexNumber = types.Int64Value(value.Int())
+			} else {
+				data.Interfaces[i].Indexes[ci].IndexNumber = types.Int64Null()
+			}
+			if value := cr.Get("value"); value.Exists() && !data.Interfaces[i].Indexes[ci].Value.IsNull() {
+				data.Interfaces[i].Indexes[ci].Value = types.Int64Value(value.Int())
+			} else {
+				data.Interfaces[i].Indexes[ci].Value = types.Int64Null()
+			}
+			if value := cr.Get("priority"); value.Exists() && !data.Interfaces[i].Indexes[ci].Priority.IsNull() {
+				data.Interfaces[i].Indexes[ci].Priority = types.StringValue(value.String())
+			} else {
+				data.Interfaces[i].Indexes[ci].Priority = types.StringNull()
+			}
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("names.name"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.Interfaces[i].Names
-			data.Interfaces[i].Names = make([]SRLGInterfacesNames, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := SRLGInterfacesNames{}
-				if cValue := cr.Get("srlg-name"); cValue.Exists() {
-					citem.SrlgName = types.StringValue(cValue.String())
-				}
+		for ci := range data.Interfaces[i].Names {
+			keys := [...]string{ "srlg-name",  }
+			keyValues := [...]string{ data.Interfaces[i].Names[ci].SrlgName.ValueString(),  }
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.SrlgName.ValueString() != citem.SrlgName.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("names.name").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Interfaces[i].Names = append(data.Interfaces[i].Names, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("srlg-name"); value.Exists() && !data.Interfaces[i].Names[ci].SrlgName.IsNull() {
+				data.Interfaces[i].Names[ci].SrlgName = types.StringValue(value.String())
+			} else {
+				data.Interfaces[i].Names[ci].SrlgName = types.StringNull()
+			}
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("groups.group"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.Interfaces[i].Groups
-			data.Interfaces[i].Groups = make([]SRLGInterfacesGroups, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := SRLGInterfacesGroups{}
-				if cValue := cr.Get("index-number"); cValue.Exists() {
-					citem.IndexNumber = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("group-name"); cValue.Exists() {
-					citem.GroupName = types.StringValue(cValue.String())
-				}
+		for ci := range data.Interfaces[i].Groups {
+			keys := [...]string{ "index-number",  }
+			keyValues := [...]string{ strconv.FormatInt(data.Interfaces[i].Groups[ci].IndexNumber.ValueInt64(), 10),  }
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.IndexNumber.Equal(citem.IndexNumber) {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("groups.group").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Interfaces[i].Groups = append(data.Interfaces[i].Groups, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("index-number"); value.Exists() && !data.Interfaces[i].Groups[ci].IndexNumber.IsNull() {
+				data.Interfaces[i].Groups[ci].IndexNumber = types.Int64Value(value.Int())
+			} else {
+				data.Interfaces[i].Groups[ci].IndexNumber = types.Int64Null()
+			}
+			if value := cr.Get("group-name"); value.Exists() && !data.Interfaces[i].Groups[ci].GroupName.IsNull() {
+				data.Interfaces[i].Groups[ci].GroupName = types.StringValue(value.String())
+			} else {
+				data.Interfaces[i].Groups[ci].GroupName = types.StringNull()
+			}
 		}
 	}
 	for i := range data.Groups {
-		keys := [...]string{"group-name"}
-		keyValues := [...]string{data.Groups[i].GroupName.ValueString()}
+		keys := [...]string{ "group-name",  }
+		keyValues := [...]string{ data.Groups[i].GroupName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "groups.group").ForEach(
@@ -457,44 +458,49 @@ func (data *SRLG) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Groups[i].GroupName = types.StringNull()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("indexes.index"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.Groups[i].Indexes
-			data.Groups[i].Indexes = make([]SRLGGroupsIndexes, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := SRLGGroupsIndexes{}
-				if cValue := cr.Get("index-number"); cValue.Exists() {
-					citem.IndexNumber = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("value"); cValue.Exists() {
-					citem.Value = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("priority"); cValue.Exists() {
-					citem.Priority = types.StringValue(cValue.String())
-				}
+		for ci := range data.Groups[i].Indexes {
+			keys := [...]string{ "index-number",  }
+			keyValues := [...]string{ strconv.FormatInt(data.Groups[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.IndexNumber.Equal(citem.IndexNumber) {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("indexes.index").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Groups[i].Indexes = append(data.Groups[i].Indexes, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("index-number"); value.Exists() && !data.Groups[i].Indexes[ci].IndexNumber.IsNull() {
+				data.Groups[i].Indexes[ci].IndexNumber = types.Int64Value(value.Int())
+			} else {
+				data.Groups[i].Indexes[ci].IndexNumber = types.Int64Null()
+			}
+			if value := cr.Get("value"); value.Exists() && !data.Groups[i].Indexes[ci].Value.IsNull() {
+				data.Groups[i].Indexes[ci].Value = types.Int64Value(value.Int())
+			} else {
+				data.Groups[i].Indexes[ci].Value = types.Int64Null()
+			}
+			if value := cr.Get("priority"); value.Exists() && !data.Groups[i].Indexes[ci].Priority.IsNull() {
+				data.Groups[i].Indexes[ci].Priority = types.StringValue(value.String())
+			} else {
+				data.Groups[i].Indexes[ci].Priority = types.StringNull()
+			}
 		}
 	}
 	for i := range data.InheritLocations {
-		keys := [...]string{"location-name"}
-		keyValues := [...]string{data.InheritLocations[i].LocationName.ValueString()}
+		keys := [...]string{ "location-name",  }
+		keyValues := [...]string{ data.InheritLocations[i].LocationName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "inherit-locations.inherit-location").ForEach(
@@ -520,39 +526,44 @@ func (data *SRLG) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.InheritLocations[i].LocationName = types.StringNull()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("indexes.index"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.InheritLocations[i].Indexes
-			data.InheritLocations[i].Indexes = make([]SRLGInheritLocationsIndexes, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := SRLGInheritLocationsIndexes{}
-				if cValue := cr.Get("index-number"); cValue.Exists() {
-					citem.IndexNumber = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("value"); cValue.Exists() {
-					citem.Value = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("priority"); cValue.Exists() {
-					citem.Priority = types.StringValue(cValue.String())
-				}
+		for ci := range data.InheritLocations[i].Indexes {
+			keys := [...]string{ "index-number",  }
+			keyValues := [...]string{ strconv.FormatInt(data.InheritLocations[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.IndexNumber.Equal(citem.IndexNumber) {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("indexes.index").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.InheritLocations[i].Indexes = append(data.InheritLocations[i].Indexes, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("index-number"); value.Exists() && !data.InheritLocations[i].Indexes[ci].IndexNumber.IsNull() {
+				data.InheritLocations[i].Indexes[ci].IndexNumber = types.Int64Value(value.Int())
+			} else {
+				data.InheritLocations[i].Indexes[ci].IndexNumber = types.Int64Null()
+			}
+			if value := cr.Get("value"); value.Exists() && !data.InheritLocations[i].Indexes[ci].Value.IsNull() {
+				data.InheritLocations[i].Indexes[ci].Value = types.Int64Value(value.Int())
+			} else {
+				data.InheritLocations[i].Indexes[ci].Value = types.Int64Null()
+			}
+			if value := cr.Get("priority"); value.Exists() && !data.InheritLocations[i].Indexes[ci].Priority.IsNull() {
+				data.InheritLocations[i].Indexes[ci].Priority = types.StringValue(value.String())
+			} else {
+				data.InheritLocations[i].Indexes[ci].Priority = types.StringNull()
+			}
 		}
 	}
 }
@@ -698,11 +709,11 @@ func (data SRLG) toBodyXML(ctx context.Context) string {
 
 func (data *SRLG) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	for i := range data.Names {
-		keys := [...]string{"srlg-name"}
-		keyValues := [...]string{data.Names[i].SrlgName.ValueString()}
+		keys := [...]string{ "srlg-name",  }
+		keyValues := [...]string{ data.Names[i].SrlgName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/names/name").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/names/name").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -737,11 +748,11 @@ func (data *SRLG) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.Interfaces[i].InterfaceName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -778,115 +789,115 @@ func (data *SRLG) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.Interfaces[i].IncludeOpticalPriority.IsNull() {
 			data.Interfaces[i].IncludeOpticalPriority = types.StringNull()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "indexes/index"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.Interfaces[i].Indexes
-			data.Interfaces[i].Indexes = make([]SRLGInterfacesIndexes, 0)
+		for ci := range data.Interfaces[i].Indexes {
+			keys := [...]string{ "index-number",  }
+			keyValues := [...]string{ strconv.FormatInt(data.Interfaces[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := SRLGInterfacesIndexes{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "index-number"); cValue.Exists() {
-					citem.IndexNumber = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "value"); cValue.Exists() {
-					citem.Value = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "priority"); cValue.Exists() {
-					citem.Priority = types.StringValue(cValue.String())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.IndexNumber.Equal(citem.IndexNumber) {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "indexes/index").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Interfaces[i].Indexes = append(data.Interfaces[i].Indexes, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "index-number"); value.Exists() {
+				data.Interfaces[i].Indexes[ci].IndexNumber = types.Int64Value(value.Int())
+			} else {
+				data.Interfaces[i].Indexes[ci].IndexNumber = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "value"); value.Exists() {
+				data.Interfaces[i].Indexes[ci].Value = types.Int64Value(value.Int())
+			} else {
+				data.Interfaces[i].Indexes[ci].Value = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "priority"); value.Exists() {
+				data.Interfaces[i].Indexes[ci].Priority = types.StringValue(value.String())
+			} else {
+				data.Interfaces[i].Indexes[ci].Priority = types.StringNull()
+			}
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "names/name"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.Interfaces[i].Names
-			data.Interfaces[i].Names = make([]SRLGInterfacesNames, 0)
+		for ci := range data.Interfaces[i].Names {
+			keys := [...]string{ "srlg-name",  }
+			keyValues := [...]string{ data.Interfaces[i].Names[ci].SrlgName.ValueString(),  }
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := SRLGInterfacesNames{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "srlg-name"); cValue.Exists() {
-					citem.SrlgName = types.StringValue(cValue.String())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.SrlgName.ValueString() != citem.SrlgName.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "names/name").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Interfaces[i].Names = append(data.Interfaces[i].Names, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "srlg-name"); value.Exists() {
+				data.Interfaces[i].Names[ci].SrlgName = types.StringValue(value.String())
+			} else {
+				data.Interfaces[i].Names[ci].SrlgName = types.StringNull()
+			}
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "groups/group"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.Interfaces[i].Groups
-			data.Interfaces[i].Groups = make([]SRLGInterfacesGroups, 0)
+		for ci := range data.Interfaces[i].Groups {
+			keys := [...]string{ "index-number",  }
+			keyValues := [...]string{ strconv.FormatInt(data.Interfaces[i].Groups[ci].IndexNumber.ValueInt64(), 10),  }
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := SRLGInterfacesGroups{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "index-number"); cValue.Exists() {
-					citem.IndexNumber = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "group-name"); cValue.Exists() {
-					citem.GroupName = types.StringValue(cValue.String())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.IndexNumber.Equal(citem.IndexNumber) {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "groups/group").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Interfaces[i].Groups = append(data.Interfaces[i].Groups, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "index-number"); value.Exists() {
+				data.Interfaces[i].Groups[ci].IndexNumber = types.Int64Value(value.Int())
+			} else {
+				data.Interfaces[i].Groups[ci].IndexNumber = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "group-name"); value.Exists() {
+				data.Interfaces[i].Groups[ci].GroupName = types.StringValue(value.String())
+			} else {
+				data.Interfaces[i].Groups[ci].GroupName = types.StringNull()
+			}
 		}
 	}
 	for i := range data.Groups {
-		keys := [...]string{"group-name"}
-		keyValues := [...]string{data.Groups[i].GroupName.ValueString()}
+		keys := [...]string{ "group-name",  }
+		keyValues := [...]string{ data.Groups[i].GroupName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/groups/group").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/groups/group").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -909,50 +920,52 @@ func (data *SRLG) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.Groups[i].GroupName.IsNull() {
 			data.Groups[i].GroupName = types.StringNull()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "indexes/index"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.Groups[i].Indexes
-			data.Groups[i].Indexes = make([]SRLGGroupsIndexes, 0)
+		for ci := range data.Groups[i].Indexes {
+			keys := [...]string{ "index-number",  }
+			keyValues := [...]string{ strconv.FormatInt(data.Groups[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := SRLGGroupsIndexes{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "index-number"); cValue.Exists() {
-					citem.IndexNumber = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "value"); cValue.Exists() {
-					citem.Value = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "priority"); cValue.Exists() {
-					citem.Priority = types.StringValue(cValue.String())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.IndexNumber.Equal(citem.IndexNumber) {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "indexes/index").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Groups[i].Indexes = append(data.Groups[i].Indexes, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "index-number"); value.Exists() {
+				data.Groups[i].Indexes[ci].IndexNumber = types.Int64Value(value.Int())
+			} else {
+				data.Groups[i].Indexes[ci].IndexNumber = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "value"); value.Exists() {
+				data.Groups[i].Indexes[ci].Value = types.Int64Value(value.Int())
+			} else {
+				data.Groups[i].Indexes[ci].Value = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "priority"); value.Exists() {
+				data.Groups[i].Indexes[ci].Priority = types.StringValue(value.String())
+			} else {
+				data.Groups[i].Indexes[ci].Priority = types.StringNull()
+			}
 		}
 	}
 	for i := range data.InheritLocations {
-		keys := [...]string{"location-name"}
-		keyValues := [...]string{data.InheritLocations[i].LocationName.ValueString()}
+		keys := [...]string{ "location-name",  }
+		keyValues := [...]string{ data.InheritLocations[i].LocationName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/inherit-locations/inherit-location").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/inherit-locations/inherit-location").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -975,42 +988,44 @@ func (data *SRLG) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.InheritLocations[i].LocationName.IsNull() {
 			data.InheritLocations[i].LocationName = types.StringNull()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "indexes/index"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.InheritLocations[i].Indexes
-			data.InheritLocations[i].Indexes = make([]SRLGInheritLocationsIndexes, 0)
+		for ci := range data.InheritLocations[i].Indexes {
+			keys := [...]string{ "index-number",  }
+			keyValues := [...]string{ strconv.FormatInt(data.InheritLocations[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := SRLGInheritLocationsIndexes{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "index-number"); cValue.Exists() {
-					citem.IndexNumber = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "value"); cValue.Exists() {
-					citem.Value = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "priority"); cValue.Exists() {
-					citem.Priority = types.StringValue(cValue.String())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.IndexNumber.Equal(citem.IndexNumber) {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "indexes/index").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.InheritLocations[i].Indexes = append(data.InheritLocations[i].Indexes, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "index-number"); value.Exists() {
+				data.InheritLocations[i].Indexes[ci].IndexNumber = types.Int64Value(value.Int())
+			} else {
+				data.InheritLocations[i].Indexes[ci].IndexNumber = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "value"); value.Exists() {
+				data.InheritLocations[i].Indexes[ci].Value = types.Int64Value(value.Int())
+			} else {
+				data.InheritLocations[i].Indexes[ci].Value = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "priority"); value.Exists() {
+				data.InheritLocations[i].Indexes[ci].Priority = types.StringValue(value.String())
+			} else {
+				data.InheritLocations[i].Indexes[ci].Priority = types.StringNull()
+			}
 		}
 	}
 }
@@ -1023,7 +1038,7 @@ func (data *SRLG) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "names.name"); value.Exists() {
+	if value := res.Get(prefix+"names.name"); value.Exists() {
 		data.Names = make([]SRLGNames, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SRLGNames{}
@@ -1040,7 +1055,7 @@ func (data *SRLG) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]SRLGInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SRLGInterfaces{}
@@ -1050,7 +1065,7 @@ func (data *SRLG) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("include-optical"); cValue.Exists() {
 				item.IncludeOptical = types.BoolValue(true)
 			} else {
-				item.IncludeOptical = types.BoolNull()
+				item.IncludeOptical = types.BoolValue(false)
 			}
 			if cValue := v.Get("include-optical.priority"); cValue.Exists() {
 				item.IncludeOpticalPriority = types.StringValue(cValue.String())
@@ -1059,19 +1074,19 @@ func (data *SRLG) fromBody(ctx context.Context, res gjson.Result) {
 				item.Indexes = make([]SRLGInterfacesIndexes, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := SRLGInterfacesIndexes{}
-					if ccValue := cv.Get("index-number"); ccValue.Exists() {
-						cItem.IndexNumber = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("value"); ccValue.Exists() {
-						cItem.Value = types.Int64Value(ccValue.Int())
-					}
+				if ccValue := cv.Get("index-number"); ccValue.Exists() {
+					cItem.IndexNumber = types.Int64Value(ccValue.Int())
+				}
+				if ccValue := cv.Get("value"); ccValue.Exists() {
+					cItem.Value = types.Int64Value(ccValue.Int())
+				}
 					if ccValue := cv.Get("priority"); ccValue.Exists() {
 						cItem.Priority = types.StringValue(ccValue.String())
 					}
-					item.Indexes = append(item.Indexes, cItem)
-					return true
-				})
-			}
+				item.Indexes = append(item.Indexes, cItem)
+				return true
+			})
+		}
 			if cValue := v.Get("names.name"); cValue.Exists() {
 				item.Names = make([]SRLGInterfacesNames, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
@@ -1079,29 +1094,29 @@ func (data *SRLG) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("srlg-name"); ccValue.Exists() {
 						cItem.SrlgName = types.StringValue(ccValue.String())
 					}
-					item.Names = append(item.Names, cItem)
-					return true
-				})
-			}
+				item.Names = append(item.Names, cItem)
+				return true
+			})
+		}
 			if cValue := v.Get("groups.group"); cValue.Exists() {
 				item.Groups = make([]SRLGInterfacesGroups, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := SRLGInterfacesGroups{}
-					if ccValue := cv.Get("index-number"); ccValue.Exists() {
-						cItem.IndexNumber = types.Int64Value(ccValue.Int())
-					}
+				if ccValue := cv.Get("index-number"); ccValue.Exists() {
+					cItem.IndexNumber = types.Int64Value(ccValue.Int())
+				}
 					if ccValue := cv.Get("group-name"); ccValue.Exists() {
 						cItem.GroupName = types.StringValue(ccValue.String())
 					}
-					item.Groups = append(item.Groups, cItem)
-					return true
-				})
-			}
+				item.Groups = append(item.Groups, cItem)
+				return true
+			})
+		}
 			data.Interfaces = append(data.Interfaces, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "groups.group"); value.Exists() {
+	if value := res.Get(prefix+"groups.group"); value.Exists() {
 		data.Groups = make([]SRLGGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SRLGGroups{}
@@ -1112,24 +1127,24 @@ func (data *SRLG) fromBody(ctx context.Context, res gjson.Result) {
 				item.Indexes = make([]SRLGGroupsIndexes, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := SRLGGroupsIndexes{}
-					if ccValue := cv.Get("index-number"); ccValue.Exists() {
-						cItem.IndexNumber = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("value"); ccValue.Exists() {
-						cItem.Value = types.Int64Value(ccValue.Int())
-					}
+				if ccValue := cv.Get("index-number"); ccValue.Exists() {
+					cItem.IndexNumber = types.Int64Value(ccValue.Int())
+				}
+				if ccValue := cv.Get("value"); ccValue.Exists() {
+					cItem.Value = types.Int64Value(ccValue.Int())
+				}
 					if ccValue := cv.Get("priority"); ccValue.Exists() {
 						cItem.Priority = types.StringValue(ccValue.String())
 					}
-					item.Indexes = append(item.Indexes, cItem)
-					return true
-				})
-			}
+				item.Indexes = append(item.Indexes, cItem)
+				return true
+			})
+		}
 			data.Groups = append(data.Groups, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "inherit-locations.inherit-location"); value.Exists() {
+	if value := res.Get(prefix+"inherit-locations.inherit-location"); value.Exists() {
 		data.InheritLocations = make([]SRLGInheritLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SRLGInheritLocations{}
@@ -1140,19 +1155,19 @@ func (data *SRLG) fromBody(ctx context.Context, res gjson.Result) {
 				item.Indexes = make([]SRLGInheritLocationsIndexes, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := SRLGInheritLocationsIndexes{}
-					if ccValue := cv.Get("index-number"); ccValue.Exists() {
-						cItem.IndexNumber = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("value"); ccValue.Exists() {
-						cItem.Value = types.Int64Value(ccValue.Int())
-					}
+				if ccValue := cv.Get("index-number"); ccValue.Exists() {
+					cItem.IndexNumber = types.Int64Value(ccValue.Int())
+				}
+				if ccValue := cv.Get("value"); ccValue.Exists() {
+					cItem.Value = types.Int64Value(ccValue.Int())
+				}
 					if ccValue := cv.Get("priority"); ccValue.Exists() {
 						cItem.Priority = types.StringValue(ccValue.String())
 					}
-					item.Indexes = append(item.Indexes, cItem)
-					return true
-				})
-			}
+				item.Indexes = append(item.Indexes, cItem)
+				return true
+			})
+		}
 			data.InheritLocations = append(data.InheritLocations, item)
 			return true
 		})
@@ -1167,7 +1182,7 @@ func (data *SRLGData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "names.name"); value.Exists() {
+	if value := res.Get(prefix+"names.name"); value.Exists() {
 		data.Names = make([]SRLGNames, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SRLGNames{}
@@ -1184,7 +1199,7 @@ func (data *SRLGData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]SRLGInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SRLGInterfaces{}
@@ -1245,7 +1260,7 @@ func (data *SRLGData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "groups.group"); value.Exists() {
+	if value := res.Get(prefix+"groups.group"); value.Exists() {
 		data.Groups = make([]SRLGGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SRLGGroups{}
@@ -1273,7 +1288,7 @@ func (data *SRLGData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "inherit-locations.inherit-location"); value.Exists() {
+	if value := res.Get(prefix+"inherit-locations.inherit-location"); value.Exists() {
 		data.InheritLocations = make([]SRLGInheritLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SRLGInheritLocations{}
@@ -1307,7 +1322,7 @@ func (data *SRLGData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *SRLG) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/names/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/names/name"); value.Exists() {
 		data.Names = make([]SRLGNames, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := SRLGNames{}
@@ -1324,147 +1339,7 @@ func (data *SRLG) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface"); value.Exists() {
-		data.Interfaces = make([]SRLGInterfaces, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := SRLGInterfaces{}
-			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "include-optical"); cValue.Exists() {
-				item.IncludeOptical = types.BoolValue(true)
-			} else {
-				item.IncludeOptical = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "include-optical/priority"); cValue.Exists() {
-				item.IncludeOpticalPriority = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "indexes/index"); cValue.Exists() {
-				item.Indexes = make([]SRLGInterfacesIndexes, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := SRLGInterfacesIndexes{}
-					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
-						cItem.IndexNumber = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "value"); ccValue.Exists() {
-						cItem.Value = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "priority"); ccValue.Exists() {
-						cItem.Priority = types.StringValue(ccValue.String())
-					}
-					item.Indexes = append(item.Indexes, cItem)
-					return true
-				})
-			}
-			if cValue := helpers.GetFromXPath(v, "names/name"); cValue.Exists() {
-				item.Names = make([]SRLGInterfacesNames, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := SRLGInterfacesNames{}
-					if ccValue := helpers.GetFromXPath(cv, "srlg-name"); ccValue.Exists() {
-						cItem.SrlgName = types.StringValue(ccValue.String())
-					}
-					item.Names = append(item.Names, cItem)
-					return true
-				})
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group"); cValue.Exists() {
-				item.Groups = make([]SRLGInterfacesGroups, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := SRLGInterfacesGroups{}
-					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
-						cItem.IndexNumber = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "group-name"); ccValue.Exists() {
-						cItem.GroupName = types.StringValue(ccValue.String())
-					}
-					item.Groups = append(item.Groups, cItem)
-					return true
-				})
-			}
-			data.Interfaces = append(data.Interfaces, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/groups/group"); value.Exists() {
-		data.Groups = make([]SRLGGroups, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := SRLGGroups{}
-			if cValue := helpers.GetFromXPath(v, "group-name"); cValue.Exists() {
-				item.GroupName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "indexes/index"); cValue.Exists() {
-				item.Indexes = make([]SRLGGroupsIndexes, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := SRLGGroupsIndexes{}
-					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
-						cItem.IndexNumber = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "value"); ccValue.Exists() {
-						cItem.Value = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "priority"); ccValue.Exists() {
-						cItem.Priority = types.StringValue(ccValue.String())
-					}
-					item.Indexes = append(item.Indexes, cItem)
-					return true
-				})
-			}
-			data.Groups = append(data.Groups, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/inherit-locations/inherit-location"); value.Exists() {
-		data.InheritLocations = make([]SRLGInheritLocations, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := SRLGInheritLocations{}
-			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
-				item.LocationName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "indexes/index"); cValue.Exists() {
-				item.Indexes = make([]SRLGInheritLocationsIndexes, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := SRLGInheritLocationsIndexes{}
-					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
-						cItem.IndexNumber = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "value"); ccValue.Exists() {
-						cItem.Value = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "priority"); ccValue.Exists() {
-						cItem.Priority = types.StringValue(ccValue.String())
-					}
-					item.Indexes = append(item.Indexes, cItem)
-					return true
-				})
-			}
-			data.InheritLocations = append(data.InheritLocations, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *SRLGData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/names/name"); value.Exists() {
-		data.Names = make([]SRLGNames, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := SRLGNames{}
-			if cValue := helpers.GetFromXPath(v, "srlg-name"); cValue.Exists() {
-				item.SrlgName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "value"); cValue.Exists() {
-				item.Value = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "description"); cValue.Exists() {
-				item.Description = types.StringValue(cValue.String())
-			}
-			data.Names = append(data.Names, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/interfaces/interface"); value.Exists() {
 		data.Interfaces = make([]SRLGInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := SRLGInterfaces{}
@@ -1525,7 +1400,7 @@ func (data *SRLGData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/groups/group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/groups/group"); value.Exists() {
 		data.Groups = make([]SRLGGroups, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := SRLGGroups{}
@@ -1553,7 +1428,147 @@ func (data *SRLGData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/inherit-locations/inherit-location"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/inherit-locations/inherit-location"); value.Exists() {
+		data.InheritLocations = make([]SRLGInheritLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SRLGInheritLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "indexes/index"); cValue.Exists() {
+				item.Indexes = make([]SRLGInheritLocationsIndexes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGInheritLocationsIndexes{}
+					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
+						cItem.IndexNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "value"); ccValue.Exists() {
+						cItem.Value = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "priority"); ccValue.Exists() {
+						cItem.Priority = types.StringValue(ccValue.String())
+					}
+					item.Indexes = append(item.Indexes, cItem)
+					return true
+				})
+			}
+			data.InheritLocations = append(data.InheritLocations, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *SRLGData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/names/name"); value.Exists() {
+		data.Names = make([]SRLGNames, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SRLGNames{}
+			if cValue := helpers.GetFromXPath(v, "srlg-name"); cValue.Exists() {
+				item.SrlgName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "value"); cValue.Exists() {
+				item.Value = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "description"); cValue.Exists() {
+				item.Description = types.StringValue(cValue.String())
+			}
+			data.Names = append(data.Names, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/interfaces/interface"); value.Exists() {
+		data.Interfaces = make([]SRLGInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SRLGInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+		if cValue := helpers.GetFromXPath(v, "include-optical"); cValue.Exists() {
+			item.IncludeOptical = types.BoolValue(true)
+		} else {
+			item.IncludeOptical = types.BoolValue(false)
+		}
+			if cValue := helpers.GetFromXPath(v, "include-optical/priority"); cValue.Exists() {
+				item.IncludeOpticalPriority = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "indexes/index"); cValue.Exists() {
+				item.Indexes = make([]SRLGInterfacesIndexes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGInterfacesIndexes{}
+					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
+						cItem.IndexNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "value"); ccValue.Exists() {
+						cItem.Value = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "priority"); ccValue.Exists() {
+						cItem.Priority = types.StringValue(ccValue.String())
+					}
+					item.Indexes = append(item.Indexes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "names/name"); cValue.Exists() {
+				item.Names = make([]SRLGInterfacesNames, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGInterfacesNames{}
+					if ccValue := helpers.GetFromXPath(cv, "srlg-name"); ccValue.Exists() {
+						cItem.SrlgName = types.StringValue(ccValue.String())
+					}
+					item.Names = append(item.Names, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group"); cValue.Exists() {
+				item.Groups = make([]SRLGInterfacesGroups, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGInterfacesGroups{}
+					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
+						cItem.IndexNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "group-name"); ccValue.Exists() {
+						cItem.GroupName = types.StringValue(ccValue.String())
+					}
+					item.Groups = append(item.Groups, cItem)
+					return true
+				})
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/groups/group"); value.Exists() {
+		data.Groups = make([]SRLGGroups, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SRLGGroups{}
+			if cValue := helpers.GetFromXPath(v, "group-name"); cValue.Exists() {
+				item.GroupName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "indexes/index"); cValue.Exists() {
+				item.Indexes = make([]SRLGGroupsIndexes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGGroupsIndexes{}
+					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
+						cItem.IndexNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "value"); ccValue.Exists() {
+						cItem.Value = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "priority"); ccValue.Exists() {
+						cItem.Priority = types.StringValue(ccValue.String())
+					}
+					item.Indexes = append(item.Indexes, cItem)
+					return true
+				})
+			}
+			data.Groups = append(data.Groups, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/inherit-locations/inherit-location"); value.Exists() {
 		data.InheritLocations = make([]SRLGInheritLocations, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := SRLGInheritLocations{}
@@ -1589,11 +1604,11 @@ func (data *SRLGData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.InheritLocations {
-		keys := [...]string{"location-name"}
-		stateKeyValues := [...]string{state.InheritLocations[i].LocationName.ValueString()}
+		keys := [...]string{ "location-name",  }
+		stateKeyValues := [...]string{ state.InheritLocations[i].LocationName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -1610,13 +1625,13 @@ func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG) []string {
 			if state.InheritLocations[i].LocationName.ValueString() != data.InheritLocations[j].LocationName.ValueString() {
 				found = false
 			}
-			if found {
+		if found {
 				for ci := range state.InheritLocations[i].Indexes {
-					ckeys := [...]string{"index-number"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.InheritLocations[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+					ckeys := [...]string{ "index-number",  }
+					cstateKeyValues := [...]string{ strconv.FormatInt(state.InheritLocations[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
 					}
 
 					cemptyKeys := true
@@ -1633,20 +1648,20 @@ func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG) []string {
 						if state.InheritLocations[i].Indexes[ci].IndexNumber.ValueInt64() != data.InheritLocations[j].Indexes[cj].IndexNumber.ValueInt64() {
 							found = false
 						}
-						if found {
-							if !state.InheritLocations[i].Indexes[ci].Priority.IsNull() && data.InheritLocations[j].Indexes[cj].Priority.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/inherit-locations/inherit-location%v/indexes/index%v/priority", state.getPath(), keyString, ckeyString))
-							}
-							if !state.InheritLocations[i].Indexes[ci].Value.IsNull() && data.InheritLocations[j].Indexes[cj].Value.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/inherit-locations/inherit-location%v/indexes/index%v/value", state.getPath(), keyString, ckeyString))
-							}
-							break
+					if found {
+						if !state.InheritLocations[i].Indexes[ci].Priority.IsNull() && data.InheritLocations[j].Indexes[cj].Priority.IsNull() {
+							deletedItems = append(deletedItems, fmt.Sprintf("%v/inherit-locations/inherit-location%v/indexes/index%v/priority", state.getPath(), keyString, ckeyString))
 						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/inherit-locations/inherit-location%v/indexes/index%v", state.getPath(), keyString, ckeyString))
+						if !state.InheritLocations[i].Indexes[ci].Value.IsNull() && data.InheritLocations[j].Indexes[cj].Value.IsNull() {
+							deletedItems = append(deletedItems, fmt.Sprintf("%v/inherit-locations/inherit-location%v/indexes/index%v/value", state.getPath(), keyString, ckeyString))
+						}
+						break
 					}
 				}
+				if !found {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/inherit-locations/inherit-location%v/indexes/index%v", state.getPath(), keyString, ckeyString))
+				}
+			}
 				break
 			}
 		}
@@ -1655,11 +1670,11 @@ func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG) []string {
 		}
 	}
 	for i := range state.Groups {
-		keys := [...]string{"group-name"}
-		stateKeyValues := [...]string{state.Groups[i].GroupName.ValueString()}
+		keys := [...]string{ "group-name",  }
+		stateKeyValues := [...]string{ state.Groups[i].GroupName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -1676,13 +1691,13 @@ func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG) []string {
 			if state.Groups[i].GroupName.ValueString() != data.Groups[j].GroupName.ValueString() {
 				found = false
 			}
-			if found {
+		if found {
 				for ci := range state.Groups[i].Indexes {
-					ckeys := [...]string{"index-number"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.Groups[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+					ckeys := [...]string{ "index-number",  }
+					cstateKeyValues := [...]string{ strconv.FormatInt(state.Groups[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
 					}
 
 					cemptyKeys := true
@@ -1699,20 +1714,20 @@ func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG) []string {
 						if state.Groups[i].Indexes[ci].IndexNumber.ValueInt64() != data.Groups[j].Indexes[cj].IndexNumber.ValueInt64() {
 							found = false
 						}
-						if found {
-							if !state.Groups[i].Indexes[ci].Priority.IsNull() && data.Groups[j].Indexes[cj].Priority.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/groups/group%v/indexes/index%v/priority", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Groups[i].Indexes[ci].Value.IsNull() && data.Groups[j].Indexes[cj].Value.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/groups/group%v/indexes/index%v/value", state.getPath(), keyString, ckeyString))
-							}
-							break
+					if found {
+						if !state.Groups[i].Indexes[ci].Priority.IsNull() && data.Groups[j].Indexes[cj].Priority.IsNull() {
+							deletedItems = append(deletedItems, fmt.Sprintf("%v/groups/group%v/indexes/index%v/priority", state.getPath(), keyString, ckeyString))
 						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/groups/group%v/indexes/index%v", state.getPath(), keyString, ckeyString))
+						if !state.Groups[i].Indexes[ci].Value.IsNull() && data.Groups[j].Indexes[cj].Value.IsNull() {
+							deletedItems = append(deletedItems, fmt.Sprintf("%v/groups/group%v/indexes/index%v/value", state.getPath(), keyString, ckeyString))
+						}
+						break
 					}
 				}
+				if !found {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/groups/group%v/indexes/index%v", state.getPath(), keyString, ckeyString))
+				}
+			}
 				break
 			}
 		}
@@ -1721,11 +1736,11 @@ func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG) []string {
 		}
 	}
 	for i := range state.Interfaces {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.Interfaces[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -1742,13 +1757,13 @@ func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG) []string {
 			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
 				found = false
 			}
-			if found {
+		if found {
 				for ci := range state.Interfaces[i].Groups {
-					ckeys := [...]string{"index-number"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.Interfaces[i].Groups[ci].IndexNumber.ValueInt64(), 10)}
+					ckeys := [...]string{ "index-number",  }
+					cstateKeyValues := [...]string{ strconv.FormatInt(state.Interfaces[i].Groups[ci].IndexNumber.ValueInt64(), 10),  }
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
 					}
 
 					cemptyKeys := true
@@ -1765,23 +1780,23 @@ func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG) []string {
 						if state.Interfaces[i].Groups[ci].IndexNumber.ValueInt64() != data.Interfaces[j].Groups[cj].IndexNumber.ValueInt64() {
 							found = false
 						}
-						if found {
-							if !state.Interfaces[i].Groups[ci].GroupName.IsNull() && data.Interfaces[j].Groups[cj].GroupName.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/groups/group%v/group-name", state.getPath(), keyString, ckeyString))
-							}
-							break
+					if found {
+						if !state.Interfaces[i].Groups[ci].GroupName.IsNull() && data.Interfaces[j].Groups[cj].GroupName.IsNull() {
+							deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/groups/group%v/group-name", state.getPath(), keyString, ckeyString))
 						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/groups/group%v", state.getPath(), keyString, ckeyString))
+						break
 					}
 				}
+				if !found {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/groups/group%v", state.getPath(), keyString, ckeyString))
+				}
+			}
 				for ci := range state.Interfaces[i].Names {
-					ckeys := [...]string{"srlg-name"}
-					cstateKeyValues := [...]string{state.Interfaces[i].Names[ci].SrlgName.ValueString()}
+					ckeys := [...]string{ "srlg-name",  }
+					cstateKeyValues := [...]string{ state.Interfaces[i].Names[ci].SrlgName.ValueString(),  }
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
 					}
 
 					cemptyKeys := true
@@ -1798,20 +1813,20 @@ func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG) []string {
 						if state.Interfaces[i].Names[ci].SrlgName.ValueString() != data.Interfaces[j].Names[cj].SrlgName.ValueString() {
 							found = false
 						}
-						if found {
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/names/name%v", state.getPath(), keyString, ckeyString))
+					if found {
+						break
 					}
 				}
+				if !found {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/names/name%v", state.getPath(), keyString, ckeyString))
+				}
+			}
 				for ci := range state.Interfaces[i].Indexes {
-					ckeys := [...]string{"index-number"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.Interfaces[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+					ckeys := [...]string{ "index-number",  }
+					cstateKeyValues := [...]string{ strconv.FormatInt(state.Interfaces[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
 					}
 
 					cemptyKeys := true
@@ -1828,26 +1843,26 @@ func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG) []string {
 						if state.Interfaces[i].Indexes[ci].IndexNumber.ValueInt64() != data.Interfaces[j].Indexes[cj].IndexNumber.ValueInt64() {
 							found = false
 						}
-						if found {
-							if !state.Interfaces[i].Indexes[ci].Priority.IsNull() && data.Interfaces[j].Indexes[cj].Priority.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/indexes/index%v/priority", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Interfaces[i].Indexes[ci].Value.IsNull() && data.Interfaces[j].Indexes[cj].Value.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/indexes/index%v/value", state.getPath(), keyString, ckeyString))
-							}
-							break
+					if found {
+						if !state.Interfaces[i].Indexes[ci].Priority.IsNull() && data.Interfaces[j].Indexes[cj].Priority.IsNull() {
+							deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/indexes/index%v/priority", state.getPath(), keyString, ckeyString))
 						}
+						if !state.Interfaces[i].Indexes[ci].Value.IsNull() && data.Interfaces[j].Indexes[cj].Value.IsNull() {
+							deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/indexes/index%v/value", state.getPath(), keyString, ckeyString))
+						}
+						break
 					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/indexes/index%v", state.getPath(), keyString, ckeyString))
-					}
 				}
-				if !state.Interfaces[i].IncludeOpticalPriority.IsNull() && data.Interfaces[j].IncludeOpticalPriority.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/include-optical/priority", state.getPath(), keyString))
+				if !found {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/indexes/index%v", state.getPath(), keyString, ckeyString))
 				}
-				if !state.Interfaces[i].IncludeOptical.IsNull() && data.Interfaces[j].IncludeOptical.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/include-optical", state.getPath(), keyString))
-				}
+			}
+			if !state.Interfaces[i].IncludeOpticalPriority.IsNull() && data.Interfaces[j].IncludeOpticalPriority.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/include-optical/priority", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].IncludeOptical.IsNull() && data.Interfaces[j].IncludeOptical.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/include-optical", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -1856,11 +1871,11 @@ func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG) []string {
 		}
 	}
 	for i := range state.Names {
-		keys := [...]string{"srlg-name"}
-		stateKeyValues := [...]string{state.Names[i].SrlgName.ValueString()}
+		keys := [...]string{ "srlg-name",  }
+		stateKeyValues := [...]string{ state.Names[i].SrlgName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -1877,13 +1892,13 @@ func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG) []string {
 			if state.Names[i].SrlgName.ValueString() != data.Names[j].SrlgName.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.Names[i].Description.IsNull() && data.Names[j].Description.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/description", state.getPath(), keyString))
-				}
-				if !state.Names[i].Value.IsNull() && data.Names[j].Value.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/value", state.getPath(), keyString))
-				}
+		if found {
+			if !state.Names[i].Description.IsNull() && data.Names[j].Description.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/description", state.getPath(), keyString))
+			}
+			if !state.Names[i].Value.IsNull() && data.Names[j].Value.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/value", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -1900,66 +1915,66 @@ func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG) []string {
 func (data *SRLG) getEmptyLeafsDelete(ctx context.Context, state *SRLG) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.InheritLocations {
-		keys := [...]string{"location-name"}
-		keyValues := [...]string{data.InheritLocations[i].LocationName.ValueString()}
+		keys := [...]string{ "location-name",  }
+		keyValues := [...]string{ data.InheritLocations[i].LocationName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		for ci := range data.InheritLocations[i].Indexes {
-			ckeys := [...]string{"index-number"}
-			ckeyValues := [...]string{strconv.FormatInt(data.InheritLocations[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+			ckeys := [...]string{ "index-number",  }
+			ckeyValues := [...]string{ strconv.FormatInt(data.InheritLocations[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
 			}
 		}
 	}
 	for i := range data.Groups {
-		keys := [...]string{"group-name"}
-		keyValues := [...]string{data.Groups[i].GroupName.ValueString()}
+		keys := [...]string{ "group-name",  }
+		keyValues := [...]string{ data.Groups[i].GroupName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		for ci := range data.Groups[i].Indexes {
-			ckeys := [...]string{"index-number"}
-			ckeyValues := [...]string{strconv.FormatInt(data.Groups[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+			ckeys := [...]string{ "index-number",  }
+			ckeyValues := [...]string{ strconv.FormatInt(data.Groups[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
 			}
 		}
 	}
 	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.Interfaces[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		for ci := range data.Interfaces[i].Groups {
-			ckeys := [...]string{"index-number"}
-			ckeyValues := [...]string{strconv.FormatInt(data.Interfaces[i].Groups[ci].IndexNumber.ValueInt64(), 10)}
+			ckeys := [...]string{ "index-number",  }
+			ckeyValues := [...]string{ strconv.FormatInt(data.Interfaces[i].Groups[ci].IndexNumber.ValueInt64(), 10),  }
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
 			}
 		}
 		for ci := range data.Interfaces[i].Names {
-			ckeys := [...]string{"srlg-name"}
-			ckeyValues := [...]string{data.Interfaces[i].Names[ci].SrlgName.ValueString()}
+			ckeys := [...]string{ "srlg-name",  }
+			ckeyValues := [...]string{ data.Interfaces[i].Names[ci].SrlgName.ValueString(),  }
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
 			}
 		}
 		for ci := range data.Interfaces[i].Indexes {
-			ckeys := [...]string{"index-number"}
-			ckeyValues := [...]string{strconv.FormatInt(data.Interfaces[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+			ckeys := [...]string{ "index-number",  }
+			ckeyValues := [...]string{ strconv.FormatInt(data.Interfaces[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
 			}
 		}
 		// Only delete if state has true and plan has false
@@ -1971,11 +1986,11 @@ func (data *SRLG) getEmptyLeafsDelete(ctx context.Context, state *SRLG) []string
 		}
 	}
 	for i := range data.Names {
-		keys := [...]string{"srlg-name"}
-		keyValues := [...]string{data.Names[i].SrlgName.ValueString()}
+		keys := [...]string{ "srlg-name",  }
+		keyValues := [...]string{ data.Names[i].SrlgName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	return emptyLeafsDelete
@@ -1987,22 +2002,22 @@ func (data *SRLG) getEmptyLeafsDelete(ctx context.Context, state *SRLG) []string
 func (data *SRLG) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.InheritLocations {
-		keyValues := [...]string{data.InheritLocations[i].LocationName.ValueString()}
+		keyValues := [...]string{ data.InheritLocations[i].LocationName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/inherit-locations/inherit-location=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Groups {
-		keyValues := [...]string{data.Groups[i].GroupName.ValueString()}
+		keyValues := [...]string{ data.Groups[i].GroupName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/groups/group=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Interfaces {
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keyValues := [...]string{ data.Interfaces[i].InterfaceName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Names {
-		keyValues := [...]string{data.Names[i].SrlgName.ValueString()}
+		keyValues := [...]string{ data.Names[i].SrlgName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/names/name=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2018,8 +2033,8 @@ func (data *SRLG) addDeletedItemsXML(ctx context.Context, state SRLG, body strin
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.InheritLocations {
-		stateKeys := [...]string{"location-name"}
-		stateKeyValues := [...]string{state.InheritLocations[i].LocationName.ValueString()}
+		stateKeys := [...]string{ "location-name",  }
+		stateKeyValues := [...]string{ state.InheritLocations[i].LocationName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2040,9 +2055,9 @@ func (data *SRLG) addDeletedItemsXML(ctx context.Context, state SRLG, body strin
 				found = false
 			}
 			if found {
-				for ci := range state.InheritLocations[i].Indexes {
-					cstateKeys := [...]string{"index-number"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.InheritLocations[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+			for ci := range state.InheritLocations[i].Indexes {
+					cstateKeys := [...]string{ "index-number",  }
+					cstateKeyValues := [...]string{ strconv.FormatInt(state.InheritLocations[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -2084,8 +2099,8 @@ func (data *SRLG) addDeletedItemsXML(ctx context.Context, state SRLG, body strin
 		}
 	}
 	for i := range state.Groups {
-		stateKeys := [...]string{"group-name"}
-		stateKeyValues := [...]string{state.Groups[i].GroupName.ValueString()}
+		stateKeys := [...]string{ "group-name",  }
+		stateKeyValues := [...]string{ state.Groups[i].GroupName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2106,9 +2121,9 @@ func (data *SRLG) addDeletedItemsXML(ctx context.Context, state SRLG, body strin
 				found = false
 			}
 			if found {
-				for ci := range state.Groups[i].Indexes {
-					cstateKeys := [...]string{"index-number"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.Groups[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+			for ci := range state.Groups[i].Indexes {
+					cstateKeys := [...]string{ "index-number",  }
+					cstateKeyValues := [...]string{ strconv.FormatInt(state.Groups[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -2150,8 +2165,8 @@ func (data *SRLG) addDeletedItemsXML(ctx context.Context, state SRLG, body strin
 		}
 	}
 	for i := range state.Interfaces {
-		stateKeys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		stateKeys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.Interfaces[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2172,9 +2187,9 @@ func (data *SRLG) addDeletedItemsXML(ctx context.Context, state SRLG, body strin
 				found = false
 			}
 			if found {
-				for ci := range state.Interfaces[i].Groups {
-					cstateKeys := [...]string{"index-number"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.Interfaces[i].Groups[ci].IndexNumber.ValueInt64(), 10)}
+			for ci := range state.Interfaces[i].Groups {
+					cstateKeys := [...]string{ "index-number",  }
+					cstateKeyValues := [...]string{ strconv.FormatInt(state.Interfaces[i].Groups[ci].IndexNumber.ValueInt64(), 10),  }
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -2205,9 +2220,9 @@ func (data *SRLG) addDeletedItemsXML(ctx context.Context, state SRLG, body strin
 						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/groups/group%v", predicates, cpredicates))
 					}
 				}
-				for ci := range state.Interfaces[i].Names {
-					cstateKeys := [...]string{"srlg-name"}
-					cstateKeyValues := [...]string{state.Interfaces[i].Names[ci].SrlgName.ValueString()}
+			for ci := range state.Interfaces[i].Names {
+					cstateKeys := [...]string{ "srlg-name",  }
+					cstateKeyValues := [...]string{ state.Interfaces[i].Names[ci].SrlgName.ValueString(),  }
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -2235,9 +2250,9 @@ func (data *SRLG) addDeletedItemsXML(ctx context.Context, state SRLG, body strin
 						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/names/name%v", predicates, cpredicates))
 					}
 				}
-				for ci := range state.Interfaces[i].Indexes {
-					cstateKeys := [...]string{"index-number"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.Interfaces[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+			for ci := range state.Interfaces[i].Indexes {
+					cstateKeys := [...]string{ "index-number",  }
+					cstateKeyValues := [...]string{ strconv.FormatInt(state.Interfaces[i].Indexes[ci].IndexNumber.ValueInt64(), 10),  }
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -2271,13 +2286,13 @@ func (data *SRLG) addDeletedItemsXML(ctx context.Context, state SRLG, body strin
 						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/indexes/index%v", predicates, cpredicates))
 					}
 				}
-				if !state.Interfaces[i].IncludeOpticalPriority.IsNull() && data.Interfaces[j].IncludeOpticalPriority.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/include-optical/priority", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].IncludeOptical.IsNull() && state.Interfaces[i].IncludeOptical.ValueBool() && data.Interfaces[j].IncludeOptical.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/include-optical", predicates))
-				}
+			if !state.Interfaces[i].IncludeOpticalPriority.IsNull() && data.Interfaces[j].IncludeOpticalPriority.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/include-optical/priority", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].IncludeOptical.IsNull() && state.Interfaces[i].IncludeOptical.ValueBool() && data.Interfaces[j].IncludeOptical.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/include-optical", predicates))
+			}
 				break
 			}
 		}
@@ -2286,8 +2301,8 @@ func (data *SRLG) addDeletedItemsXML(ctx context.Context, state SRLG, body strin
 		}
 	}
 	for i := range state.Names {
-		stateKeys := [...]string{"srlg-name"}
-		stateKeyValues := [...]string{state.Names[i].SrlgName.ValueString()}
+		stateKeys := [...]string{ "srlg-name",  }
+		stateKeyValues := [...]string{ state.Names[i].SrlgName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2308,12 +2323,12 @@ func (data *SRLG) addDeletedItemsXML(ctx context.Context, state SRLG, body strin
 				found = false
 			}
 			if found {
-				if !state.Names[i].Description.IsNull() && data.Names[j].Description.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/description", predicates))
-				}
-				if !state.Names[i].Value.IsNull() && data.Names[j].Value.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/value", predicates))
-				}
+			if !state.Names[i].Description.IsNull() && data.Names[j].Description.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/description", predicates))
+			}
+			if !state.Names[i].Value.IsNull() && data.Names[j].Value.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/value", predicates))
+			}
 				break
 			}
 		}
@@ -2333,8 +2348,8 @@ func (data *SRLG) addDeletedItemsXML(ctx context.Context, state SRLG, body strin
 func (data *SRLG) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.InheritLocations {
-		keys := [...]string{"location-name"}
-		keyValues := [...]string{data.InheritLocations[i].LocationName.ValueString()}
+		keys := [...]string{ "location-name",  }
+		keyValues := [...]string{ data.InheritLocations[i].LocationName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -2343,8 +2358,8 @@ func (data *SRLG) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/inherit-locations/inherit-location%v", predicates))
 	}
 	for i := range data.Groups {
-		keys := [...]string{"group-name"}
-		keyValues := [...]string{data.Groups[i].GroupName.ValueString()}
+		keys := [...]string{ "group-name",  }
+		keyValues := [...]string{ data.Groups[i].GroupName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -2353,8 +2368,8 @@ func (data *SRLG) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/groups/group%v", predicates))
 	}
 	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.Interfaces[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -2363,8 +2378,8 @@ func (data *SRLG) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/interfaces/interface%v", predicates))
 	}
 	for i := range data.Names {
-		keys := [...]string{"srlg-name"}
-		keyValues := [...]string{data.Names[i].SrlgName.ValueString()}
+		keys := [...]string{ "srlg-name",  }
+		keyValues := [...]string{ data.Names[i].SrlgName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

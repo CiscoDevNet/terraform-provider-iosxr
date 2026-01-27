@@ -24,22 +24,28 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -50,7 +56,7 @@ func NewSegmentRoutingV6Resource() resource.Resource {
 	return &SegmentRoutingV6Resource{}
 }
 
-type SegmentRoutingV6Resource struct {
+type SegmentRoutingV6Resource struct{
 	data *IosxrProviderData
 }
 
@@ -161,10 +167,10 @@ func (r *SegmentRoutingV6Resource) Schema(ctx context.Context, req resource.Sche
 							},
 						},
 						"micro_segment_behavior": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify Locator's behavior").AddStringEnumDescription("unode-psp-usd", "unode-shift-only").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Specify Locator's behavior").AddStringEnumDescription("unode-psp-usd", "unode-shift-only", ).String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("unode-psp-usd", "unode-shift-only"),
+								stringvalidator.OneOf("unode-psp-usd", "unode-shift-only", ),
 							},
 						},
 						"prefix": schema.StringAttribute{
@@ -193,10 +199,10 @@ func (r *SegmentRoutingV6Resource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"encapsulation_traffic_class_option": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Config option").AddStringEnumDescription("propagate", "propagate-disable", "value").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Config option").AddStringEnumDescription("propagate", "propagate-disable", "value", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("propagate", "propagate-disable", "value"),
+					stringvalidator.OneOf("propagate", "propagate-disable", "value", ),
 				},
 			},
 			"encapsulation_traffic_class_value": schema.Int64Attribute{
@@ -207,10 +213,10 @@ func (r *SegmentRoutingV6Resource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"encapsulation_hop_limit_option": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Hop-Limit config option").AddStringEnumDescription("count", "propagate", "propagate-disable").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Hop-Limit config option").AddStringEnumDescription("count", "propagate", "propagate-disable", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("count", "propagate", "propagate-disable"),
+					stringvalidator.OneOf("count", "propagate", "propagate-disable", ),
 				},
 			},
 			"encapsulation_hop_limit_value": schema.Int64Attribute{
@@ -260,14 +266,14 @@ func (r *SegmentRoutingV6Resource) Create(ctx context.Context, req resource.Crea
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			var ops []gnmi.SetOperation
+		var ops []gnmi.SetOperation
 
-			// Create object
-			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -488,11 +494,11 @@ func (r *SegmentRoutingV6Resource) Update(ctx context.Context, req resource.Upda
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			// Combine update and delete operations into a single transaction
-			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-				resp.Diagnostics.AddError("Client Error", err.Error())
-				return
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
 			}
 		}
 	}

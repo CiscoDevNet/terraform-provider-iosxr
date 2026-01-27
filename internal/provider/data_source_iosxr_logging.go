@@ -23,14 +23,19 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/netascode/go-gnmi"
+	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -47,7 +52,7 @@ func NewLoggingDataSource() datasource.DataSource {
 	return &LoggingDataSource{}
 }
 
-type LoggingDataSource struct {
+type LoggingDataSource struct{
 	data *IosxrProviderData
 }
 
@@ -298,7 +303,7 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									"name": schema.StringAttribute{
 										MarkdownDescription: "Set VRF option",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -338,15 +343,15 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									"message_category": schema.StringAttribute{
 										MarkdownDescription: "Message category of the suppressed message",
 										Computed:            true,
-									},
+								},
 									"group_name": schema.StringAttribute{
 										MarkdownDescription: "Group name of suppressed message",
 										Computed:            true,
-									},
+								},
 									"message_code": schema.StringAttribute{
 										MarkdownDescription: "Message code of suppressed message",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -366,7 +371,7 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									"location_name": schema.StringAttribute{
 										MarkdownDescription: "Location name",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -486,6 +491,7 @@ func (d *LoggingDataSource) Read(ctx context.Context, req datasource.ReadRequest
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
+
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

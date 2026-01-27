@@ -21,7 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -64,8 +63,8 @@ func TestAccDataSourceIosxrL2VPNPWClass(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrL2VPNPWClassPrerequisitesConfig + testAccDataSourceIosxrL2VPNPWClassConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrL2VPNPWClassPrerequisitesConfig+testAccDataSourceIosxrL2VPNPWClassConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

@@ -21,8 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -41,23 +39,23 @@ func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrSNMPServerVRFHostPrerequisitesConfig + testAccIosxrSNMPServerVRFHostConfig_minimum(),
+			Config: testAccIosxrSNMPServerVRFHostPrerequisitesConfig+testAccIosxrSNMPServerVRFHostConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrSNMPServerVRFHostPrerequisitesConfig + testAccIosxrSNMPServerVRFHostConfig_all(),
-		Check:  resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrSNMPServerVRFHostPrerequisitesConfig+testAccIosxrSNMPServerVRFHostConfig_all(),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:      "iosxr_snmp_server_vrf_host.test",
-		ImportState:       true,
+		ResourceName:  "iosxr_snmp_server_vrf_host.test",
+		ImportState:   true,
 		ImportStateIdFunc: iosxrSNMPServerVRFHostImportStateIdFunc("iosxr_snmp_server_vrf_host.test"),
-		Check:             resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps:                    steps,
+		Steps: steps,
 	})
 }
 
@@ -112,7 +110,7 @@ func iosxrSNMPServerVRFHostImportStateIdFunc(resourceName string) resource.Impor
 		VrfName := primary.Attributes["vrf_name"]
 		Address := primary.Attributes["address"]
 
-		return fmt.Sprintf("%s,%s", VrfName, Address), nil
+		return fmt.Sprintf("%s,%s", VrfName,Address), nil
 	}
 }
 

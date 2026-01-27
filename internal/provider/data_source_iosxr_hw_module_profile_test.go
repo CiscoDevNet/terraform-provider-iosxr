@@ -21,7 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +32,8 @@ import (
 
 func TestAccDataSourceIosxrHWModuleProfile(t *testing.T) {
 	if os.Getenv("NCS") == "" {
-		t.Skip("skipping test, set environment variable NCS")
-	}
+        t.Skip("skipping test, set environment variable NCS")
+    }
 	var checks []resource.TestCheckFunc
 	if os.Getenv("NCS") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "profile_load_balance_algorithm_hash_polynomial_index", "5"))
@@ -43,8 +42,8 @@ func TestAccDataSourceIosxrHWModuleProfile(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "profile_qos_max_classmap_size", "8"))
 	}
 	if os.Getenv("NCS") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "profile_qos_max_classmap_size_locations.0.location_name", "0/0/CPU0"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "profile_qos_max_classmap_size_locations.0.max_classmap_size", "8"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "profile_qos_max_classmap_size_locations.0.location_name", "0/0/CPU0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "profile_qos_max_classmap_size_locations.0.max_classmap_size", "8"))
 	}
 	if os.Getenv("NCS") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "profile_qos_qosg_dscp_mark_enable_first", "0"))
@@ -95,16 +94,16 @@ func TestAccDataSourceIosxrHWModuleProfile(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "profile_qos_nif_hp_fifo_reserve_percent", "10"))
 	}
 	if os.Getenv("NCS") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "profile_qos_nif_hp_fifo_reserve_locations.0.location_name", "0/0/CPU0"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "profile_qos_nif_hp_fifo_reserve_locations.0.percent", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "profile_qos_nif_hp_fifo_reserve_locations.0.location_name", "0/0/CPU0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "profile_qos_nif_hp_fifo_reserve_locations.0.percent", "10"))
 	}
 	if os.Getenv("NCS") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "netflow_ipfix315_enable_locations.0.location_name", "0/0/CPU0"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "netflow_ipfix315_enable_locations.0.location_name2", "0/0/CPU0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "netflow_ipfix315_enable_locations.0.location_name", "0/0/CPU0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "netflow_ipfix315_enable_locations.0.location_name2", "0/0/CPU0"))
 	}
 	if os.Getenv("NCS") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "netflow_sflow_enable_locations.0.location_name", "0/0/CPU0"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "netflow_sflow_enable_locations.0.location_name2", "0/0/CPU0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "netflow_sflow_enable_locations.0.location_name", "0/0/CPU0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "netflow_sflow_enable_locations.0.location_name2", "0/0/CPU0"))
 	}
 	if os.Getenv("NCS") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "stats_tx_scale_enhanced_ingress_sr", "true"))
@@ -136,7 +135,7 @@ func TestAccDataSourceIosxrHWModuleProfile(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrHWModuleProfileConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -160,10 +159,10 @@ func testAccDataSourceIosxrHWModuleProfileConfig() string {
 		config += `	profile_qos_max_classmap_size = "8"` + "\n"
 	}
 	if os.Getenv("NCS") != "" {
-		config += `	profile_qos_max_classmap_size_locations = [{` + "\n"
-		config += `		location_name = "0/0/CPU0"` + "\n"
-		config += `		max_classmap_size = "8"` + "\n"
-		config += `	}]` + "\n"
+	config += `	profile_qos_max_classmap_size_locations = [{` + "\n"
+	config += `		location_name = "0/0/CPU0"` + "\n"
+	config += `		max_classmap_size = "8"` + "\n"
+	config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" {
 		config += `	profile_qos_qosg_dscp_mark_enable_first = 0` + "\n"
@@ -214,22 +213,22 @@ func testAccDataSourceIosxrHWModuleProfileConfig() string {
 		config += `	profile_qos_nif_hp_fifo_reserve_percent = 10` + "\n"
 	}
 	if os.Getenv("NCS") != "" {
-		config += `	profile_qos_nif_hp_fifo_reserve_locations = [{` + "\n"
-		config += `		location_name = "0/0/CPU0"` + "\n"
-		config += `		percent = 10` + "\n"
-		config += `	}]` + "\n"
+	config += `	profile_qos_nif_hp_fifo_reserve_locations = [{` + "\n"
+	config += `		location_name = "0/0/CPU0"` + "\n"
+	config += `		percent = 10` + "\n"
+	config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" {
-		config += `	netflow_ipfix315_enable_locations = [{` + "\n"
-		config += `		location_name = "0/0/CPU0"` + "\n"
-		config += `		location_name2 = "0/0/CPU0"` + "\n"
-		config += `	}]` + "\n"
+	config += `	netflow_ipfix315_enable_locations = [{` + "\n"
+	config += `		location_name = "0/0/CPU0"` + "\n"
+	config += `		location_name2 = "0/0/CPU0"` + "\n"
+	config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" {
-		config += `	netflow_sflow_enable_locations = [{` + "\n"
-		config += `		location_name = "0/0/CPU0"` + "\n"
-		config += `		location_name2 = "0/0/CPU0"` + "\n"
-		config += `	}]` + "\n"
+	config += `	netflow_sflow_enable_locations = [{` + "\n"
+	config += `		location_name = "0/0/CPU0"` + "\n"
+	config += `		location_name2 = "0/0/CPU0"` + "\n"
+	config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" {
 		config += `	stats_tx_scale_enhanced_ingress_sr = true` + "\n"

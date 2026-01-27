@@ -21,8 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -35,8 +33,8 @@ import (
 
 func TestAccIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
 	if os.Getenv("XRD") == "" && os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
-		t.Skip("skipping test, set environment variable XRD or NCS or C8000")
-	}
+        t.Skip("skipping test, set environment variable XRD or NCS or C8000")
+    }
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_bridge_group_bridge_domain.test", "bridge_domain_name", "BD123"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_bridge_group_bridge_domain.test", "mtu", "1500"))
@@ -168,23 +166,23 @@ func TestAccIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig + testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_minimum(),
+			Config: testAccIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig+testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig + testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_all(),
-		Check:  resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig+testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_all(),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:      "iosxr_l2vpn_bridge_group_bridge_domain.test",
-		ImportState:       true,
+		ResourceName:  "iosxr_l2vpn_bridge_group_bridge_domain.test",
+		ImportState:   true,
 		ImportStateIdFunc: iosxrL2VPNBridgeGroupBridgeDomainImportStateIdFunc("iosxr_l2vpn_bridge_group_bridge_domain.test"),
-		Check:             resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps:                    steps,
+		Steps: steps,
 	})
 }
 
@@ -361,7 +359,7 @@ func iosxrL2VPNBridgeGroupBridgeDomainImportStateIdFunc(resourceName string) res
 		BridgeGroupName := primary.Attributes["bridge_group_name"]
 		BridgeDomainName := primary.Attributes["bridge_domain_name"]
 
-		return fmt.Sprintf("%s,%s", BridgeGroupName, BridgeDomainName), nil
+		return fmt.Sprintf("%s,%s", BridgeGroupName,BridgeDomainName), nil
 	}
 }
 

@@ -23,14 +23,19 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/netascode/go-gnmi"
+	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -47,7 +52,7 @@ func NewIPSLAResponderDataSource() datasource.DataSource {
 	return &IPSLAResponderDataSource{}
 }
 
-type IPSLAResponderDataSource struct {
+type IPSLAResponderDataSource struct{
 	data *IosxrProviderData
 }
 
@@ -86,7 +91,7 @@ func (d *IPSLAResponderDataSource) Schema(ctx context.Context, req datasource.Sc
 									"port_number": schema.Int64Attribute{
 										MarkdownDescription: "Permanent port on responder",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -118,11 +123,11 @@ func (d *IPSLAResponderDataSource) Schema(ctx context.Context, req datasource.Sc
 									"address": schema.StringAttribute{
 										MarkdownDescription: "Enter IPv4 address of the local interface",
 										Computed:            true,
-									},
+								},
 									"local_port": schema.Int64Attribute{
 										MarkdownDescription: "Local UDP port",
 										Computed:            true,
-									},
+								},
 									"remote_ipv4_addresses": schema.ListNestedAttribute{
 										MarkdownDescription: "Enter IPv4 address of the remote interface",
 										Computed:            true,
@@ -131,18 +136,18 @@ func (d *IPSLAResponderDataSource) Schema(ctx context.Context, req datasource.Sc
 												"address": schema.StringAttribute{
 													MarkdownDescription: "Enter IPv4 address of the remote interface",
 													Computed:            true,
-												},
+											},
 												"remote_port": schema.StringAttribute{
 													MarkdownDescription: "Remote UDP port",
 													Computed:            true,
-												},
+											},
 												"vrf": schema.StringAttribute{
 													MarkdownDescription: "VRF name for local-ip",
 													Computed:            true,
-												},
+											},
 											},
 										},
-									},
+								},
 								},
 							},
 						},
@@ -154,11 +159,11 @@ func (d *IPSLAResponderDataSource) Schema(ctx context.Context, req datasource.Sc
 									"address": schema.StringAttribute{
 										MarkdownDescription: "Enter IPv6 address of the local interface",
 										Computed:            true,
-									},
+								},
 									"local_port": schema.Int64Attribute{
 										MarkdownDescription: "Local UDP port",
 										Computed:            true,
-									},
+								},
 									"remote_ipv6_addresses": schema.ListNestedAttribute{
 										MarkdownDescription: "Enter IPv6 address of the remote interface",
 										Computed:            true,
@@ -167,18 +172,18 @@ func (d *IPSLAResponderDataSource) Schema(ctx context.Context, req datasource.Sc
 												"address": schema.StringAttribute{
 													MarkdownDescription: "Enter IPv6 address of the remote interface",
 													Computed:            true,
-												},
+											},
 												"remote_port": schema.StringAttribute{
 													MarkdownDescription: "Remote UDP port",
 													Computed:            true,
-												},
+											},
 												"vrf": schema.StringAttribute{
 													MarkdownDescription: "VRF name for local-ip",
 													Computed:            true,
-												},
+											},
 											},
 										},
-									},
+								},
 								},
 							},
 						},
@@ -274,6 +279,7 @@ func (d *IPSLAResponderDataSource) Read(ctx context.Context, req datasource.Read
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
+
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

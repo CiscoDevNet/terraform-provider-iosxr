@@ -24,22 +24,28 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -50,7 +56,7 @@ func NewInterfaceEthernetSubinterfaceResource() resource.Resource {
 	return &InterfaceEthernetSubinterfaceResource{}
 }
 
-type InterfaceEthernetSubinterfaceResource struct {
+type InterfaceEthernetSubinterfaceResource struct{
 	data *IosxrProviderData
 }
 
@@ -83,10 +89,10 @@ func (r *InterfaceEthernetSubinterfaceResource) Schema(ctx context.Context, req 
 				},
 			},
 			"type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Interface type").AddStringEnumDescription("FastEthernet", "GigabitEthernet", "TenGigE", "TwentyFiveGigE", "FortyGigE", "FiftyGigE", "HundredGigE", "TwoHundredGigE", "FourHundredGigE", "EightHundredGigE").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Interface type").AddStringEnumDescription("FastEthernet", "GigabitEthernet", "TenGigE", "TwentyFiveGigE", "FortyGigE", "FiftyGigE", "HundredGigE", "TwoHundredGigE", "FourHundredGigE", "EightHundredGigE", ).String,
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("FastEthernet", "GigabitEthernet", "TenGigE", "TwentyFiveGigE", "FortyGigE", "FiftyGigE", "HundredGigE", "TwoHundredGigE", "FourHundredGigE", "EightHundredGigE"),
+					stringvalidator.OneOf("FastEthernet", "GigabitEthernet", "TenGigE", "TwentyFiveGigE", "FortyGigE", "FiftyGigE", "HundredGigE", "TwoHundredGigE", "FourHundredGigE", "EightHundredGigE", ),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -376,10 +382,10 @@ func (r *InterfaceEthernetSubinterfaceResource) Schema(ctx context.Context, req 
 				Optional:            true,
 			},
 			"ipv4_verify_unicast_source_reachable_via_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Source reachable type").AddStringEnumDescription("any", "rx").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Source reachable type").AddStringEnumDescription("any", "rx", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("any", "rx"),
+					stringvalidator.OneOf("any", "rx", ),
 				},
 			},
 			"ipv4_verify_unicast_source_reachable_via_allow_self_ping": schema.BoolAttribute{
@@ -437,10 +443,10 @@ func (r *InterfaceEthernetSubinterfaceResource) Schema(ctx context.Context, req 
 				},
 			},
 			"ipv6_verify_unicast_source_reachable_via_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Source reachable type").AddStringEnumDescription("any", "rx").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Source reachable type").AddStringEnumDescription("any", "rx", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("any", "rx"),
+					stringvalidator.OneOf("any", "rx", ),
 				},
 			},
 			"ipv6_verify_unicast_source_reachable_via_allow_self_ping": schema.BoolAttribute{
@@ -787,10 +793,10 @@ func (r *InterfaceEthernetSubinterfaceResource) Schema(ctx context.Context, req 
 				},
 			},
 			"ethernet_cfm_ais_transmission_up_interval": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify the AIS transmission interval").AddStringEnumDescription("1s", "1m").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the AIS transmission interval").AddStringEnumDescription("1s", "1m", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("1s", "1m"),
+					stringvalidator.OneOf("1s", "1m", ),
 				},
 			},
 			"ethernet_cfm_ais_transmission_up_cos": schema.Int64Attribute{
@@ -1126,10 +1132,10 @@ func (r *InterfaceEthernetSubinterfaceResource) Schema(ctx context.Context, req 
 							},
 						},
 						"mirror_interval": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable mirroring of every Nth packet").AddStringEnumDescription("128", "16", "16K", "1K", "2", "256", "2K", "32", "4", "4K", "512", "64", "8", "8K").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Enable mirroring of every Nth packet").AddStringEnumDescription("128", "16", "16K", "1K", "2", "256", "2K", "32", "4", "4K", "512", "64", "8", "8K", ).String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("128", "16", "16K", "1K", "2", "256", "2K", "32", "4", "4K", "512", "64", "8", "8K"),
+								stringvalidator.OneOf("128", "16", "16K", "1K", "2", "256", "2K", "32", "4", "4K", "512", "64", "8", "8K", ),
 							},
 						},
 					},
@@ -1168,17 +1174,17 @@ func (r *InterfaceEthernetSubinterfaceResource) Schema(ctx context.Context, req 
 				Optional:            true,
 			},
 			"ptp_announce_interval": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages once every one or more seconds").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages once every one or more seconds").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8"),
+					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8", ),
 				},
 			},
 			"ptp_announce_frequency": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages one or more times a second").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages one or more times a second").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8"),
+					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8", ),
 				},
 			},
 			"ptp_announce_timeout": schema.Int64Attribute{
@@ -1196,17 +1202,17 @@ func (r *InterfaceEthernetSubinterfaceResource) Schema(ctx context.Context, req 
 				},
 			},
 			"ptp_sync_interval": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages once every one or more seconds").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages once every one or more seconds").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8"),
+					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8", ),
 				},
 			},
 			"ptp_sync_frequency": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages one or more times a second").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages one or more times a second").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8"),
+					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8", ),
 				},
 			},
 			"ptp_sync_grant_duration": schema.Int64Attribute{
@@ -1224,17 +1230,17 @@ func (r *InterfaceEthernetSubinterfaceResource) Schema(ctx context.Context, req 
 				},
 			},
 			"ptp_delay_request_interval": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages once every one or more seconds").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages once every one or more seconds").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8"),
+					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8", ),
 				},
 			},
 			"ptp_delay_request_frequency": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages one or more times a second").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages one or more times a second").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8"),
+					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8", ),
 				},
 			},
 			"ptp_cos": schema.Int64Attribute{
@@ -1814,14 +1820,14 @@ func (r *InterfaceEthernetSubinterfaceResource) Create(ctx context.Context, req 
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			var ops []gnmi.SetOperation
+		var ops []gnmi.SetOperation
 
-			// Create object
-			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -2042,11 +2048,11 @@ func (r *InterfaceEthernetSubinterfaceResource) Update(ctx context.Context, req 
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			// Combine update and delete operations into a single transaction
-			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-				resp.Diagnostics.AddError("Client Error", err.Error())
-				return
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
 			}
 		}
 	}

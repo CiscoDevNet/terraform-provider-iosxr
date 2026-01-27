@@ -23,14 +23,19 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/netascode/go-gnmi"
+	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -47,7 +52,7 @@ func NewL2VPNXconnectGroupDataSource() datasource.DataSource {
 	return &L2VPNXconnectGroupDataSource{}
 }
 
-type L2VPNXconnectGroupDataSource struct {
+type L2VPNXconnectGroupDataSource struct{
 	data *IosxrProviderData
 }
 
@@ -94,7 +99,7 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"interface_name": schema.StringAttribute{
 										MarkdownDescription: "Specify (sub-)interface name to cross connect",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -114,7 +119,7 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"interface_name": schema.StringAttribute{
 										MarkdownDescription: "Specify the attachment circuit",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -126,19 +131,19 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"address": schema.StringAttribute{
 										MarkdownDescription: "IPv4",
 										Computed:            true,
-									},
+								},
 									"pw_id": schema.Int64Attribute{
 										MarkdownDescription: "Specify the pseudowire id",
 										Computed:            true,
-									},
+								},
 									"pw_class": schema.StringAttribute{
 										MarkdownDescription: "PW class template name to use for this XC",
 										Computed:            true,
-									},
+								},
 									"bandwidth": schema.Int64Attribute{
 										MarkdownDescription: "bandwidth",
 										Computed:            true,
-									},
+								},
 									"backup_neighbors": schema.ListNestedAttribute{
 										MarkdownDescription: "Specify the peer to cross connect",
 										Computed:            true,
@@ -147,38 +152,38 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 												"address": schema.StringAttribute{
 													MarkdownDescription: "Specify the peer to cross connect",
 													Computed:            true,
-												},
+											},
 												"pw_id": schema.Int64Attribute{
 													MarkdownDescription: "Specify the pseudowire id",
 													Computed:            true,
-												},
+											},
 												"pw_class": schema.StringAttribute{
 													MarkdownDescription: "PW class template name to use for the backup PW",
 													Computed:            true,
-												},
+											},
 												"mpls_static_label_local": schema.Int64Attribute{
 													MarkdownDescription: "Local pseudowire label",
 													Computed:            true,
-												},
+											},
 												"mpls_static_label_remote": schema.Int64Attribute{
 													MarkdownDescription: "Remote pseudowire label",
 													Computed:            true,
-												},
+											},
 											},
 										},
-									},
+								},
 									"mpls_static_label_local": schema.Int64Attribute{
 										MarkdownDescription: "Local pseudowire label",
 										Computed:            true,
-									},
+								},
 									"mpls_static_label_remote": schema.Int64Attribute{
 										MarkdownDescription: "Remote pseudowire label",
 										Computed:            true,
-									},
+								},
 									"tag_impose_vlan": schema.Int64Attribute{
 										MarkdownDescription: "vlan tagged mode",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -190,15 +195,15 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"address": schema.StringAttribute{
 										MarkdownDescription: "IPv6",
 										Computed:            true,
-									},
+								},
 									"pw_id": schema.Int64Attribute{
 										MarkdownDescription: "Specify the pseudowire id",
 										Computed:            true,
-									},
+								},
 									"pw_class": schema.StringAttribute{
 										MarkdownDescription: "PW class template name to use for this XC",
 										Computed:            true,
-									},
+								},
 									"backup_neighbors": schema.ListNestedAttribute{
 										MarkdownDescription: "Specify the peer to cross connect",
 										Computed:            true,
@@ -207,42 +212,42 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 												"address": schema.StringAttribute{
 													MarkdownDescription: "Specify the peer to cross connect",
 													Computed:            true,
-												},
+											},
 												"pw_id": schema.Int64Attribute{
 													MarkdownDescription: "Specify the pseudowire id",
 													Computed:            true,
-												},
+											},
 												"pw_class": schema.StringAttribute{
 													MarkdownDescription: "PW class template name to use for the backup PW",
 													Computed:            true,
-												},
+											},
 												"mpls_static_label_local": schema.Int64Attribute{
 													MarkdownDescription: "Local pseudowire label",
 													Computed:            true,
-												},
+											},
 												"mpls_static_label_remote": schema.Int64Attribute{
 													MarkdownDescription: "Remote pseudowire label",
 													Computed:            true,
-												},
+											},
 											},
 										},
-									},
+								},
 									"mpls_static_label_local": schema.Int64Attribute{
 										MarkdownDescription: "Local pseudowire label",
 										Computed:            true,
-									},
+								},
 									"mpls_static_label_remote": schema.Int64Attribute{
 										MarkdownDescription: "Remote pseudowire label",
 										Computed:            true,
-									},
+								},
 									"tag_impose_vlan": schema.Int64Attribute{
 										MarkdownDescription: "vlan tagged mode",
 										Computed:            true,
-									},
+								},
 									"source_ipv6_address": schema.StringAttribute{
 										MarkdownDescription: "Source IPv6 address of PW",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -254,19 +259,19 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"vpn_id": schema.Int64Attribute{
 										MarkdownDescription: "Ethernet VPN Identifier",
 										Computed:            true,
-									},
+								},
 									"remote_ac_id": schema.Int64Attribute{
 										MarkdownDescription: "Specify remote attachment circuit identifier",
 										Computed:            true,
-									},
+								},
 									"source": schema.Int64Attribute{
 										MarkdownDescription: "Specify source attachment circuit identifier",
 										Computed:            true,
-									},
+								},
 									"pw_class": schema.StringAttribute{
 										MarkdownDescription: "PW class template name to use",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -278,15 +283,15 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"vpn_id": schema.Int64Attribute{
 										MarkdownDescription: "Ethernet VPN Identifier",
 										Computed:            true,
-									},
+								},
 									"service_id": schema.Int64Attribute{
 										MarkdownDescription: "Specify service ID (used as local and remote ac-id)",
 										Computed:            true,
-									},
+								},
 									"pw_class": schema.StringAttribute{
 										MarkdownDescription: "PW class template name to use",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -298,19 +303,19 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"vpn_id": schema.Int64Attribute{
 										MarkdownDescription: "Ethernet VPN Identifier",
 										Computed:            true,
-									},
+								},
 									"remote_ac_id": schema.Int64Attribute{
 										MarkdownDescription: "Specify remote attachment circuit identifier",
 										Computed:            true,
-									},
+								},
 									"source": schema.Int64Attribute{
 										MarkdownDescription: "Specify source attachment circuit identifier",
 										Computed:            true,
-									},
+								},
 									"segment_routing_srv6_locator": schema.StringAttribute{
 										MarkdownDescription: "PW locator to use for EVPN SID allocation",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -322,15 +327,15 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"vpn_id": schema.Int64Attribute{
 										MarkdownDescription: "Ethernet VPN Identifier",
 										Computed:            true,
-									},
+								},
 									"service_id": schema.Int64Attribute{
 										MarkdownDescription: "Specify service ID (used as local and remote ac-id)",
 										Computed:            true,
-									},
+								},
 									"segment_routing_srv6_locator": schema.StringAttribute{
 										MarkdownDescription: "PW locator to use for EVPN SID allocation",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -410,11 +415,11 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"two_byte_as_number": schema.Int64Attribute{
 										MarkdownDescription: "Two Byte AS Number",
 										Computed:            true,
-									},
+								},
 									"assigned_number": schema.Int64Attribute{
 										MarkdownDescription: "AS:nn (hex or decimal format)",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -426,11 +431,11 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"four_byte_as_number": schema.Int64Attribute{
 										MarkdownDescription: "Four Byte AS number",
 										Computed:            true,
-									},
+								},
 									"assigned_number": schema.Int64Attribute{
 										MarkdownDescription: "AS:nn (hex or decimal format)",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -442,11 +447,11 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"ipv4_address": schema.StringAttribute{
 										MarkdownDescription: "IP address",
 										Computed:            true,
-									},
+								},
 									"assigned_number": schema.Int64Attribute{
 										MarkdownDescription: "IP-address:nn (hex or decimal format)",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -458,11 +463,11 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"two_byte_as_number": schema.Int64Attribute{
 										MarkdownDescription: "Two Byte AS Number",
 										Computed:            true,
-									},
+								},
 									"assigned_number": schema.Int64Attribute{
 										MarkdownDescription: "AS:nn (hex or decimal format)",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -474,11 +479,11 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"four_byte_as_number": schema.Int64Attribute{
 										MarkdownDescription: "Four Byte AS number",
 										Computed:            true,
-									},
+								},
 									"assigned_number": schema.Int64Attribute{
 										MarkdownDescription: "AS:nn (hex or decimal format)",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -490,11 +495,11 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"ipv4_address": schema.StringAttribute{
 										MarkdownDescription: "IP address",
 										Computed:            true,
-									},
+								},
 									"assigned_number": schema.Int64Attribute{
 										MarkdownDescription: "IP-address:nn (hex or decimal format)",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -506,11 +511,11 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"two_byte_as_number": schema.Int64Attribute{
 										MarkdownDescription: "Two Byte AS Number",
 										Computed:            true,
-									},
+								},
 									"assigned_number": schema.Int64Attribute{
 										MarkdownDescription: "AS:nn (hex or decimal format)",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -522,11 +527,11 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"four_byte_as_number": schema.Int64Attribute{
 										MarkdownDescription: "Four Byte AS number",
 										Computed:            true,
-									},
+								},
 									"assigned_number": schema.Int64Attribute{
 										MarkdownDescription: "AS:nn (hex or decimal format)",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -538,11 +543,11 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"ipv4_address": schema.StringAttribute{
 										MarkdownDescription: "IP address",
 										Computed:            true,
-									},
+								},
 									"assigned_number": schema.Int64Attribute{
 										MarkdownDescription: "IP-address:nn (hex or decimal format)",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -554,7 +559,7 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									"local_ce_id_value": schema.Int64Attribute{
 										MarkdownDescription: "Local Customer Edge Identifier (CE ID)",
 										Computed:            true,
-									},
+								},
 									"interfaces": schema.ListNestedAttribute{
 										MarkdownDescription: "Specify the attachment circuit",
 										Computed:            true,
@@ -563,7 +568,7 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 												"interface_name": schema.StringAttribute{
 													MarkdownDescription: "Specify the attachment circuit",
 													Computed:            true,
-												},
+											},
 												"remote_ce_ids": schema.ListNestedAttribute{
 													MarkdownDescription: "Remote Customer Edge Identifier",
 													Computed:            true,
@@ -572,17 +577,17 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 															"remote_ce_id_value": schema.Int64Attribute{
 																MarkdownDescription: "Remote Customer Edge Identifier",
 																Computed:            true,
-															},
+														},
 														},
 													},
-												},
+											},
 											},
 										},
-									},
+								},
 									"vpws_seamless_integration": schema.BoolAttribute{
 										MarkdownDescription: "EVPN-VPWS Seamless Integration with BGP-AD VPWS",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -686,6 +691,7 @@ func (d *L2VPNXconnectGroupDataSource) Read(ctx context.Context, req datasource.
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
+
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

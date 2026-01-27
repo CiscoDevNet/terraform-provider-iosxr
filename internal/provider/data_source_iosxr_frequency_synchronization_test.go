@@ -21,7 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +32,8 @@ import (
 
 func TestAccDataSourceIosxrFrequencySynchronization(t *testing.T) {
 	if os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
-		t.Skip("skipping test, set environment variable NCS or C8000")
-	}
+        t.Skip("skipping test, set environment variable NCS or C8000")
+    }
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_frequency_synchronization.test", "quality_itu_t_option_one", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_frequency_synchronization.test", "clock_interface_timing_mode_system", "true"))
@@ -47,7 +46,7 @@ func TestAccDataSourceIosxrFrequencySynchronization(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrFrequencySynchronizationConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

@@ -24,21 +24,28 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -49,7 +56,7 @@ func NewPCEResource() resource.Resource {
 	return &PCEResource{}
 }
 
-type PCEResource struct {
+type PCEResource struct{
 	data *IosxrProviderData
 }
 
@@ -191,10 +198,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Optional:            true,
 						},
 						"link_disjoint_lsp_one_pcc_address_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("ipv4", "ipv6"),
+								stringvalidator.OneOf("ipv4", "ipv6", ),
 							},
 						},
 						"link_disjoint_lsp_one_pcc_ip_address": schema.StringAttribute{
@@ -221,10 +228,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							},
 						},
 						"link_disjoint_lsp_two_pcc_address_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("ipv4", "ipv6"),
+								stringvalidator.OneOf("ipv4", "ipv6", ),
 							},
 						},
 						"link_disjoint_lsp_two_pcc_ip_address": schema.StringAttribute{
@@ -263,10 +270,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										Optional:            true,
 									},
 									"lsp_one_pcc_address_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4", "ipv6"),
+											stringvalidator.OneOf("ipv4", "ipv6", ),
 										},
 									},
 									"lsp_one_pcc_ip_address": schema.StringAttribute{
@@ -293,10 +300,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										},
 									},
 									"lsp_two_pcc_address_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4", "ipv6"),
+											stringvalidator.OneOf("ipv4", "ipv6", ),
 										},
 									},
 									"lsp_two_pcc_ip_address": schema.StringAttribute{
@@ -330,10 +337,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Optional:            true,
 						},
 						"node_disjoint_lsp_one_pcc_address_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("ipv4", "ipv6"),
+								stringvalidator.OneOf("ipv4", "ipv6", ),
 							},
 						},
 						"node_disjoint_lsp_one_pcc_ip_address": schema.StringAttribute{
@@ -360,10 +367,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							},
 						},
 						"node_disjoint_lsp_two_pcc_address_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("ipv4", "ipv6"),
+								stringvalidator.OneOf("ipv4", "ipv6", ),
 							},
 						},
 						"node_disjoint_lsp_two_pcc_ip_address": schema.StringAttribute{
@@ -402,10 +409,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										Optional:            true,
 									},
 									"lsp_one_pcc_address_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4", "ipv6"),
+											stringvalidator.OneOf("ipv4", "ipv6", ),
 										},
 									},
 									"lsp_one_pcc_ip_address": schema.StringAttribute{
@@ -432,10 +439,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										},
 									},
 									"lsp_two_pcc_address_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4", "ipv6"),
+											stringvalidator.OneOf("ipv4", "ipv6", ),
 										},
 									},
 									"lsp_two_pcc_ip_address": schema.StringAttribute{
@@ -469,10 +476,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Optional:            true,
 						},
 						"srlg_disjoint_lsp_one_pcc_address_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("ipv4", "ipv6"),
+								stringvalidator.OneOf("ipv4", "ipv6", ),
 							},
 						},
 						"srlg_disjoint_lsp_one_pcc_ip_address": schema.StringAttribute{
@@ -499,10 +506,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							},
 						},
 						"srlg_disjoint_lsp_two_pcc_address_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("ipv4", "ipv6"),
+								stringvalidator.OneOf("ipv4", "ipv6", ),
 							},
 						},
 						"srlg_disjoint_lsp_two_pcc_ip_address": schema.StringAttribute{
@@ -541,10 +548,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										Optional:            true,
 									},
 									"lsp_one_pcc_address_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4", "ipv6"),
+											stringvalidator.OneOf("ipv4", "ipv6", ),
 										},
 									},
 									"lsp_one_pcc_ip_address": schema.StringAttribute{
@@ -571,10 +578,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										},
 									},
 									"lsp_two_pcc_address_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4", "ipv6"),
+											stringvalidator.OneOf("ipv4", "ipv6", ),
 										},
 									},
 									"lsp_two_pcc_ip_address": schema.StringAttribute{
@@ -608,10 +615,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Optional:            true,
 						},
 						"srlg_node_disjoint_lsp_one_pcc_address_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("ipv4", "ipv6"),
+								stringvalidator.OneOf("ipv4", "ipv6", ),
 							},
 						},
 						"srlg_node_disjoint_lsp_one_pcc_ip_address": schema.StringAttribute{
@@ -638,10 +645,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							},
 						},
 						"srlg_node_disjoint_lsp_two_pcc_address_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("ipv4", "ipv6"),
+								stringvalidator.OneOf("ipv4", "ipv6", ),
 							},
 						},
 						"srlg_node_disjoint_lsp_two_pcc_ip_address": schema.StringAttribute{
@@ -680,10 +687,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										Optional:            true,
 									},
 									"lsp_one_pcc_address_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4", "ipv6"),
+											stringvalidator.OneOf("ipv4", "ipv6", ),
 										},
 									},
 									"lsp_one_pcc_ip_address": schema.StringAttribute{
@@ -710,10 +717,10 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										},
 									},
 									"lsp_two_pcc_address_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6", ).String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4", "ipv6"),
+											stringvalidator.OneOf("ipv4", "ipv6", ),
 										},
 									},
 									"lsp_two_pcc_ip_address": schema.StringAttribute{
@@ -1097,122 +1104,122 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"preference_id": schema.Int64Attribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Policy path-option preference entry").AddIntegerRangeDescription(1, 65535).String,
-													Required:            true,
-													Validators: []validator.Int64{
-														int64validator.Between(1, 65535),
-													},
+											"preference_id": schema.Int64Attribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Policy path-option preference entry").AddIntegerRangeDescription(1, 65535).String,
+												Required:            true,
+												Validators: []validator.Int64{
+													int64validator.Between(1, 65535),
 												},
-												"dynamic_mpls": schema.BoolAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("MPLS path type").String,
-													Optional:            true,
+											},
+											"dynamic_mpls": schema.BoolAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("MPLS path type").String,
+												Optional:            true,
+											},
+											"dynamic_metric_type_te": schema.BoolAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("TE metric type").String,
+												Optional:            true,
+											},
+											"dynamic_metric_type_igp": schema.BoolAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("IGP metric type").String,
+												Optional:            true,
+											},
+											"dynamic_metric_type_latency": schema.BoolAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Latency metric type").String,
+												Optional:            true,
+											},
+											"dynamic_metric_type_hopcount": schema.BoolAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Hopcount metric type").String,
+												Optional:            true,
+											},
+											"dynamic_metric_sid_limit": schema.Int64Attribute{
+												MarkdownDescription: helpers.NewAttributeDescription("SID limit").AddIntegerRangeDescription(1, 255).String,
+												Optional:            true,
+												Validators: []validator.Int64{
+													int64validator.Between(1, 255),
 												},
-												"dynamic_metric_type_te": schema.BoolAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("TE metric type").String,
-													Optional:            true,
-												},
-												"dynamic_metric_type_igp": schema.BoolAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("IGP metric type").String,
-													Optional:            true,
-												},
-												"dynamic_metric_type_latency": schema.BoolAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Latency metric type").String,
-													Optional:            true,
-												},
-												"dynamic_metric_type_hopcount": schema.BoolAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Hopcount metric type").String,
-													Optional:            true,
-												},
-												"dynamic_metric_sid_limit": schema.Int64Attribute{
-													MarkdownDescription: helpers.NewAttributeDescription("SID limit").AddIntegerRangeDescription(1, 255).String,
-													Optional:            true,
-													Validators: []validator.Int64{
-														int64validator.Between(1, 255),
-													},
-												},
-												"explicit_segment_list_names": schema.ListNestedAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Identifying name for Segment-list").String,
-													Optional:            true,
-													NestedObject: schema.NestedAttributeObject{
-														Attributes: map[string]schema.Attribute{
-															"segment_list_name": schema.StringAttribute{
-																MarkdownDescription: helpers.NewAttributeDescription("Identifying name for Segment-list").String,
-																Required:            true,
-															},
+											},
+											"explicit_segment_list_names": schema.ListNestedAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Identifying name for Segment-list").String,
+												Optional:            true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"segment_list_name": schema.StringAttribute{
+															MarkdownDescription: helpers.NewAttributeDescription("Identifying name for Segment-list").String,
+															Required:            true,
 														},
 													},
 												},
-												"constraints_segments_sid_algorithm": schema.Int64Attribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Prefix-SID algorithm").AddIntegerRangeDescription(128, 255).String,
-													Optional:            true,
-													Validators: []validator.Int64{
-														int64validator.Between(128, 255),
-													},
-												},
-												"constraints_segments_protection_protected_preferred": schema.BoolAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Protected adj-SID preferred (default)").String,
-													Optional:            true,
-												},
-												"constraints_segments_protection_protected_only": schema.BoolAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Protected adj-SID only").String,
-													Optional:            true,
-												},
-												"constraints_segments_protection_unprotected_only": schema.BoolAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Unprotected adj-SID only").String,
-													Optional:            true,
-												},
-												"constraints_segments_protection_unprotected_preferred": schema.BoolAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Unprotected adj-SID preferred").String,
-													Optional:            true,
+											},
+											"constraints_segments_sid_algorithm": schema.Int64Attribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Prefix-SID algorithm").AddIntegerRangeDescription(128, 255).String,
+												Optional:            true,
+												Validators: []validator.Int64{
+													int64validator.Between(128, 255),
 												},
 											},
+											"constraints_segments_protection_protected_preferred": schema.BoolAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Protected adj-SID preferred (default)").String,
+												Optional:            true,
+											},
+											"constraints_segments_protection_protected_only": schema.BoolAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Protected adj-SID only").String,
+												Optional:            true,
+											},
+											"constraints_segments_protection_unprotected_only": schema.BoolAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Unprotected adj-SID only").String,
+												Optional:            true,
+											},
+											"constraints_segments_protection_unprotected_preferred": schema.BoolAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Unprotected adj-SID preferred").String,
+												Optional:            true,
+											},
 										},
+									},
 									},
 									"candidate_paths_affinity_include_any_colors": schema.ListNestedAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"affinity_color_name": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
-													Required:            true,
-													Validators: []validator.String{
-														stringvalidator.LengthBetween(1, 32),
-													},
+											"affinity_color_name": schema.StringAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+												Required:            true,
+												Validators: []validator.String{
+													stringvalidator.LengthBetween(1, 32),
 												},
 											},
 										},
+									},
 									},
 									"candidate_paths_affinity_include_all_colors": schema.ListNestedAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"affinity_color_name": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
-													Required:            true,
-													Validators: []validator.String{
-														stringvalidator.LengthBetween(1, 32),
-													},
+											"affinity_color_name": schema.StringAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+												Required:            true,
+												Validators: []validator.String{
+													stringvalidator.LengthBetween(1, 32),
 												},
 											},
 										},
+									},
 									},
 									"candidate_paths_affinity_exclude_colors": schema.ListNestedAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"affinity_color_name": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
-													Required:            true,
-													Validators: []validator.String{
-														stringvalidator.LengthBetween(1, 32),
-													},
+											"affinity_color_name": schema.StringAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+												Required:            true,
+												Validators: []validator.String{
+													stringvalidator.LengthBetween(1, 32),
 												},
 											},
 										},
+									},
 									},
 									"color": schema.Int64Attribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Specify color for policy").AddIntegerRangeDescription(1, 4294967295).String,
@@ -1555,14 +1562,14 @@ func (r *PCEResource) Create(ctx context.Context, req resource.CreateRequest, re
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			var ops []gnmi.SetOperation
+		var ops []gnmi.SetOperation
 
-			// Create object
-			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -1783,11 +1790,11 @@ func (r *PCEResource) Update(ctx context.Context, req resource.UpdateRequest, re
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			// Combine update and delete operations into a single transaction
-			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-				resp.Diagnostics.AddError("Client Error", err.Error())
-				return
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
 			}
 		}
 	}

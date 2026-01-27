@@ -24,21 +24,28 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -49,7 +56,7 @@ func NewMPLSLDPInterfaceResource() resource.Resource {
 	return &MPLSLDPInterfaceResource{}
 }
 
-type MPLSLDPInterfaceResource struct {
+type MPLSLDPInterfaceResource struct{
 	data *IosxrProviderData
 }
 
@@ -106,10 +113,10 @@ func (r *MPLSLDPInterfaceResource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"discovery_hello_dual_stack_tlv": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Change AF preference in Dual Stack TLV").AddStringEnumDescription("ipv4", "ipv6").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Change AF preference in Dual Stack TLV").AddStringEnumDescription("ipv4", "ipv6", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("ipv4", "ipv6"),
+					stringvalidator.OneOf("ipv4", "ipv6", ),
 				},
 			},
 			"discovery_quick_start_disable": schema.BoolAttribute{
@@ -133,10 +140,10 @@ func (r *MPLSLDPInterfaceResource) Schema(ctx context.Context, req resource.Sche
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"af_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure Address Family and its parameters").AddStringEnumDescription("ipv4", "ipv6").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Configure Address Family and its parameters").AddStringEnumDescription("ipv4", "ipv6", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("ipv4", "ipv6"),
+								stringvalidator.OneOf("ipv4", "ipv6", ),
 							},
 						},
 						"discovery_transport_address_interface": schema.BoolAttribute{
@@ -194,14 +201,14 @@ func (r *MPLSLDPInterfaceResource) Create(ctx context.Context, req resource.Crea
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			var ops []gnmi.SetOperation
+		var ops []gnmi.SetOperation
 
-			// Create object
-			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -422,11 +429,11 @@ func (r *MPLSLDPInterfaceResource) Update(ctx context.Context, req resource.Upda
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			// Combine update and delete operations into a single transaction
-			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-				resp.Diagnostics.AddError("Client Error", err.Error())
-				return
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
 			}
 		}
 	}

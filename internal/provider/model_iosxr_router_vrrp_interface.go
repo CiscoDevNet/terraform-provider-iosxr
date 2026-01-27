@@ -23,41 +23,44 @@ package provider
 import (
 	"context"
 	"fmt"
+	"reflect"
+	"sort"
 	"strconv"
+	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterVRRPInterface struct {
-	Device             types.String `tfsdk:"device"`
-	Id                 types.String `tfsdk:"id"`
-	DeleteMode         types.String `tfsdk:"delete_mode"`
-	InterfaceName      types.String `tfsdk:"interface_name"`
-	MacRefresh         types.Int64  `tfsdk:"mac_refresh"`
-	DelayMinimum       types.Int64  `tfsdk:"delay_minimum"`
-	DelayReload        types.Int64  `tfsdk:"delay_reload"`
-	BfdMinimumInterval types.Int64  `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier      types.Int64  `tfsdk:"bfd_multiplier"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	InterfaceName types.String `tfsdk:"interface_name"`
+	MacRefresh types.Int64 `tfsdk:"mac_refresh"`
+	DelayMinimum types.Int64 `tfsdk:"delay_minimum"`
+	DelayReload types.Int64 `tfsdk:"delay_reload"`
+	BfdMinimumInterval types.Int64 `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier types.Int64 `tfsdk:"bfd_multiplier"`
 }
 
 type RouterVRRPInterfaceData struct {
-	Device             types.String `tfsdk:"device"`
-	Id                 types.String `tfsdk:"id"`
-	InterfaceName      types.String `tfsdk:"interface_name"`
-	MacRefresh         types.Int64  `tfsdk:"mac_refresh"`
-	DelayMinimum       types.Int64  `tfsdk:"delay_minimum"`
-	DelayReload        types.Int64  `tfsdk:"delay_reload"`
-	BfdMinimumInterval types.Int64  `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier      types.Int64  `tfsdk:"bfd_multiplier"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	InterfaceName types.String `tfsdk:"interface_name"`
+	MacRefresh types.Int64 `tfsdk:"mac_refresh"`
+	DelayMinimum types.Int64 `tfsdk:"delay_minimum"`
+	DelayReload types.Int64 `tfsdk:"delay_reload"`
+	BfdMinimumInterval types.Int64 `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier types.Int64 `tfsdk:"bfd_multiplier"`
 }
 
 // End of section. //template:end types
@@ -119,22 +122,22 @@ func (data RouterVRRPInterface) toBody(ctx context.Context) string {
 func (data RouterVRRPInterface) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/interface-name", data.InterfaceName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/interface-name", data.InterfaceName.ValueString())
 	}
 	if !data.MacRefresh.IsNull() && !data.MacRefresh.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/mac-refresh", strconv.FormatInt(data.MacRefresh.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/mac-refresh", strconv.FormatInt(data.MacRefresh.ValueInt64(), 10))
 	}
 	if !data.DelayMinimum.IsNull() && !data.DelayMinimum.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/delay/minimum", strconv.FormatInt(data.DelayMinimum.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/delay/minimum", strconv.FormatInt(data.DelayMinimum.ValueInt64(), 10))
 	}
 	if !data.DelayReload.IsNull() && !data.DelayReload.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/delay/reload", strconv.FormatInt(data.DelayReload.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/delay/reload", strconv.FormatInt(data.DelayReload.ValueInt64(), 10))
 	}
 	if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bfd/minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
 	}
 	if !data.BfdMultiplier.IsNull() && !data.BfdMultiplier.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bfd/multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -180,32 +183,32 @@ func (data *RouterVRRPInterface) updateFromBody(ctx context.Context, res []byte)
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RouterVRRPInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interface-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/interface-name"); value.Exists() {
 		data.InterfaceName = types.StringValue(value.String())
 	} else if data.InterfaceName.IsNull() {
 		data.InterfaceName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac-refresh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac-refresh"); value.Exists() {
 		data.MacRefresh = types.Int64Value(value.Int())
 	} else if data.MacRefresh.IsNull() {
 		data.MacRefresh = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/minimum"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/minimum"); value.Exists() {
 		data.DelayMinimum = types.Int64Value(value.Int())
 	} else if data.DelayMinimum.IsNull() {
 		data.DelayMinimum = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/reload"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/reload"); value.Exists() {
 		data.DelayReload = types.Int64Value(value.Int())
 	} else if data.DelayReload.IsNull() {
 		data.DelayReload = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	} else if data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	} else if data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Null()
@@ -220,19 +223,19 @@ func (data *RouterVRRPInterface) fromBody(ctx context.Context, res gjson.Result)
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "mac-refresh"); value.Exists() {
+	if value := res.Get(prefix+"mac-refresh"); value.Exists() {
 		data.MacRefresh = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "delay.minimum"); value.Exists() {
+	if value := res.Get(prefix+"delay.minimum"); value.Exists() {
 		data.DelayMinimum = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "delay.reload"); value.Exists() {
+	if value := res.Get(prefix+"delay.reload"); value.Exists() {
 		data.DelayReload = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd.minimum-interval"); value.Exists() {
+	if value := res.Get(prefix+"bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd.multiplier"); value.Exists() {
+	if value := res.Get(prefix+"bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
 }
@@ -245,19 +248,19 @@ func (data *RouterVRRPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "mac-refresh"); value.Exists() {
+	if value := res.Get(prefix+"mac-refresh"); value.Exists() {
 		data.MacRefresh = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "delay.minimum"); value.Exists() {
+	if value := res.Get(prefix+"delay.minimum"); value.Exists() {
 		data.DelayMinimum = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "delay.reload"); value.Exists() {
+	if value := res.Get(prefix+"delay.reload"); value.Exists() {
 		data.DelayReload = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd.minimum-interval"); value.Exists() {
+	if value := res.Get(prefix+"bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd.multiplier"); value.Exists() {
+	if value := res.Get(prefix+"bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
 }
@@ -266,19 +269,19 @@ func (data *RouterVRRPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterVRRPInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac-refresh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac-refresh"); value.Exists() {
 		data.MacRefresh = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/minimum"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/minimum"); value.Exists() {
 		data.DelayMinimum = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/reload"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/reload"); value.Exists() {
 		data.DelayReload = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
 }
@@ -287,19 +290,19 @@ func (data *RouterVRRPInterface) fromBodyXML(ctx context.Context, res xmldot.Res
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RouterVRRPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac-refresh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac-refresh"); value.Exists() {
 		data.MacRefresh = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/minimum"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/minimum"); value.Exists() {
 		data.DelayMinimum = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/reload"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/reload"); value.Exists() {
 		data.DelayReload = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
 }
@@ -367,35 +370,35 @@ func (data *RouterVRRPInterface) addDeletedItemsXML(ctx context.Context, state R
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
-		deletePath := state.getXPath() + "/bfd/multiplier"
+		deletePath := state.getXPath()+"/bfd/multiplier"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
-		deletePath := state.getXPath() + "/bfd/minimum-interval"
+		deletePath := state.getXPath()+"/bfd/minimum-interval"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DelayReload.IsNull() && data.DelayReload.IsNull() {
-		deletePath := state.getXPath() + "/delay/reload"
+		deletePath := state.getXPath()+"/delay/reload"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DelayMinimum.IsNull() && data.DelayMinimum.IsNull() {
-		deletePath := state.getXPath() + "/delay/minimum"
+		deletePath := state.getXPath()+"/delay/minimum"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MacRefresh.IsNull() && data.MacRefresh.IsNull() {
-		deletePath := state.getXPath() + "/mac-refresh"
+		deletePath := state.getXPath()+"/mac-refresh"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true

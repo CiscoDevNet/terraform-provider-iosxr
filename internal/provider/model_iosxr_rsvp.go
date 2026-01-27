@@ -28,103 +28,103 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type RSVP struct {
-	Device                                         types.String    `tfsdk:"device"`
-	Id                                             types.String    `tfsdk:"id"`
-	DeleteMode                                     types.String    `tfsdk:"delete_mode"`
-	SignallingGracefulRestart                      types.Bool      `tfsdk:"signalling_graceful_restart"`
-	SignallingGracefulRestartLspCtype              types.Bool      `tfsdk:"signalling_graceful_restart_lsp_ctype"`
-	SignallingGracefulRestartRecoveryTime          types.Int64     `tfsdk:"signalling_graceful_restart_recovery_time"`
-	SignallingGracefulRestartRestartTime           types.Int64     `tfsdk:"signalling_graceful_restart_restart_time"`
-	SignallingHelloGracefulRestartRefreshInterval  types.Int64     `tfsdk:"signalling_hello_graceful_restart_refresh_interval"`
-	SignallingHelloGracefulRestartRefreshMisses    types.Int64     `tfsdk:"signalling_hello_graceful_restart_refresh_misses"`
-	SignallingEventPerPulse                        types.Int64     `tfsdk:"signalling_event_per_pulse"`
-	SignallingPrefixFilteringAcl                   types.String    `tfsdk:"signalling_prefix_filtering_acl"`
-	SignallingPrefixFilteringDefaultDenyActionDrop types.Bool      `tfsdk:"signalling_prefix_filtering_default_deny_action_drop"`
-	SignallingMessageBundleDisable                 types.Bool      `tfsdk:"signalling_message_bundle_disable"`
-	SignallingNodeidSubobjectDisable               types.Bool      `tfsdk:"signalling_nodeid_subobject_disable"`
-	SignallingPatherrStateRemovalDisable           types.Bool      `tfsdk:"signalling_patherr_state_removal_disable"`
-	SignallingChecksumDisable                      types.Bool      `tfsdk:"signalling_checksum_disable"`
-	SignallingOobVrf                               types.String    `tfsdk:"signalling_oob_vrf"`
-	AuthenticationKeyChain                         types.String    `tfsdk:"authentication_key_chain"`
-	AuthenticationWindowSize                       types.Int64     `tfsdk:"authentication_window_size"`
-	AuthenticationLifeTime                         types.Int64     `tfsdk:"authentication_life_time"`
-	AuthenticationRetransmit                       types.Int64     `tfsdk:"authentication_retransmit"`
-	Neighbors                                      []RSVPNeighbors `tfsdk:"neighbors"`
-	BandwidthMamPercentageMaxReservableBandwidth   types.Int64     `tfsdk:"bandwidth_mam_percentage_max_reservable_bandwidth"`
-	BandwidthMamPercentageMaxReservableBc0         types.Int64     `tfsdk:"bandwidth_mam_percentage_max_reservable_bc0"`
-	BandwidthMamPercentageMaxReservableBc1         types.Int64     `tfsdk:"bandwidth_mam_percentage_max_reservable_bc1"`
-	BandwidthRdmPercentageMaxReservableBc0         types.Int64     `tfsdk:"bandwidth_rdm_percentage_max_reservable_bc0"`
-	BandwidthRdmPercentageMaxReservableBc1         types.Int64     `tfsdk:"bandwidth_rdm_percentage_max_reservable_bc1"`
-	LatencyThreshold                               types.Int64     `tfsdk:"latency_threshold"`
-	LoggingEventsNsr                               types.Bool      `tfsdk:"logging_events_nsr"`
-	LoggingEventsIssu                              types.Bool      `tfsdk:"logging_events_issu"`
-	LtraceBufferMultiplier                         types.Int64     `tfsdk:"ltrace_buffer_multiplier"`
-	LtraceBufferMultiplierRare                     types.Bool      `tfsdk:"ltrace_buffer_multiplier_rare"`
-	LtraceBufferMultiplierCommon                   types.Bool      `tfsdk:"ltrace_buffer_multiplier_common"`
-	LtraceBufferMultiplierSig                      types.Bool      `tfsdk:"ltrace_buffer_multiplier_sig"`
-	LtraceBufferMultiplierSigErr                   types.Bool      `tfsdk:"ltrace_buffer_multiplier_sig_err"`
-	LtraceBufferMultiplierIntf                     types.Bool      `tfsdk:"ltrace_buffer_multiplier_intf"`
-	LtraceBufferMultiplierDbgErr                   types.Bool      `tfsdk:"ltrace_buffer_multiplier_dbg_err"`
-	LtraceBufferMultiplierSync                     types.Bool      `tfsdk:"ltrace_buffer_multiplier_sync"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	SignallingGracefulRestart types.Bool `tfsdk:"signalling_graceful_restart"`
+	SignallingGracefulRestartLspCtype types.Bool `tfsdk:"signalling_graceful_restart_lsp_ctype"`
+	SignallingGracefulRestartRecoveryTime types.Int64 `tfsdk:"signalling_graceful_restart_recovery_time"`
+	SignallingGracefulRestartRestartTime types.Int64 `tfsdk:"signalling_graceful_restart_restart_time"`
+	SignallingHelloGracefulRestartRefreshInterval types.Int64 `tfsdk:"signalling_hello_graceful_restart_refresh_interval"`
+	SignallingHelloGracefulRestartRefreshMisses types.Int64 `tfsdk:"signalling_hello_graceful_restart_refresh_misses"`
+	SignallingEventPerPulse types.Int64 `tfsdk:"signalling_event_per_pulse"`
+	SignallingPrefixFilteringAcl types.String `tfsdk:"signalling_prefix_filtering_acl"`
+	SignallingPrefixFilteringDefaultDenyActionDrop types.Bool `tfsdk:"signalling_prefix_filtering_default_deny_action_drop"`
+	SignallingMessageBundleDisable types.Bool `tfsdk:"signalling_message_bundle_disable"`
+	SignallingNodeidSubobjectDisable types.Bool `tfsdk:"signalling_nodeid_subobject_disable"`
+	SignallingPatherrStateRemovalDisable types.Bool `tfsdk:"signalling_patherr_state_removal_disable"`
+	SignallingChecksumDisable types.Bool `tfsdk:"signalling_checksum_disable"`
+	SignallingOobVrf types.String `tfsdk:"signalling_oob_vrf"`
+	AuthenticationKeyChain types.String `tfsdk:"authentication_key_chain"`
+	AuthenticationWindowSize types.Int64 `tfsdk:"authentication_window_size"`
+	AuthenticationLifeTime types.Int64 `tfsdk:"authentication_life_time"`
+	AuthenticationRetransmit types.Int64 `tfsdk:"authentication_retransmit"`
+	Neighbors []RSVPNeighbors `tfsdk:"neighbors"`
+	BandwidthMamPercentageMaxReservableBandwidth types.Int64 `tfsdk:"bandwidth_mam_percentage_max_reservable_bandwidth"`
+	BandwidthMamPercentageMaxReservableBc0 types.Int64 `tfsdk:"bandwidth_mam_percentage_max_reservable_bc0"`
+	BandwidthMamPercentageMaxReservableBc1 types.Int64 `tfsdk:"bandwidth_mam_percentage_max_reservable_bc1"`
+	BandwidthRdmPercentageMaxReservableBc0 types.Int64 `tfsdk:"bandwidth_rdm_percentage_max_reservable_bc0"`
+	BandwidthRdmPercentageMaxReservableBc1 types.Int64 `tfsdk:"bandwidth_rdm_percentage_max_reservable_bc1"`
+	LatencyThreshold types.Int64 `tfsdk:"latency_threshold"`
+	LoggingEventsNsr types.Bool `tfsdk:"logging_events_nsr"`
+	LoggingEventsIssu types.Bool `tfsdk:"logging_events_issu"`
+	LtraceBufferMultiplier types.Int64 `tfsdk:"ltrace_buffer_multiplier"`
+	LtraceBufferMultiplierRare types.Bool `tfsdk:"ltrace_buffer_multiplier_rare"`
+	LtraceBufferMultiplierCommon types.Bool `tfsdk:"ltrace_buffer_multiplier_common"`
+	LtraceBufferMultiplierSig types.Bool `tfsdk:"ltrace_buffer_multiplier_sig"`
+	LtraceBufferMultiplierSigErr types.Bool `tfsdk:"ltrace_buffer_multiplier_sig_err"`
+	LtraceBufferMultiplierIntf types.Bool `tfsdk:"ltrace_buffer_multiplier_intf"`
+	LtraceBufferMultiplierDbgErr types.Bool `tfsdk:"ltrace_buffer_multiplier_dbg_err"`
+	LtraceBufferMultiplierSync types.Bool `tfsdk:"ltrace_buffer_multiplier_sync"`
 }
 
 type RSVPData struct {
-	Device                                         types.String    `tfsdk:"device"`
-	Id                                             types.String    `tfsdk:"id"`
-	SignallingGracefulRestart                      types.Bool      `tfsdk:"signalling_graceful_restart"`
-	SignallingGracefulRestartLspCtype              types.Bool      `tfsdk:"signalling_graceful_restart_lsp_ctype"`
-	SignallingGracefulRestartRecoveryTime          types.Int64     `tfsdk:"signalling_graceful_restart_recovery_time"`
-	SignallingGracefulRestartRestartTime           types.Int64     `tfsdk:"signalling_graceful_restart_restart_time"`
-	SignallingHelloGracefulRestartRefreshInterval  types.Int64     `tfsdk:"signalling_hello_graceful_restart_refresh_interval"`
-	SignallingHelloGracefulRestartRefreshMisses    types.Int64     `tfsdk:"signalling_hello_graceful_restart_refresh_misses"`
-	SignallingEventPerPulse                        types.Int64     `tfsdk:"signalling_event_per_pulse"`
-	SignallingPrefixFilteringAcl                   types.String    `tfsdk:"signalling_prefix_filtering_acl"`
-	SignallingPrefixFilteringDefaultDenyActionDrop types.Bool      `tfsdk:"signalling_prefix_filtering_default_deny_action_drop"`
-	SignallingMessageBundleDisable                 types.Bool      `tfsdk:"signalling_message_bundle_disable"`
-	SignallingNodeidSubobjectDisable               types.Bool      `tfsdk:"signalling_nodeid_subobject_disable"`
-	SignallingPatherrStateRemovalDisable           types.Bool      `tfsdk:"signalling_patherr_state_removal_disable"`
-	SignallingChecksumDisable                      types.Bool      `tfsdk:"signalling_checksum_disable"`
-	SignallingOobVrf                               types.String    `tfsdk:"signalling_oob_vrf"`
-	AuthenticationKeyChain                         types.String    `tfsdk:"authentication_key_chain"`
-	AuthenticationWindowSize                       types.Int64     `tfsdk:"authentication_window_size"`
-	AuthenticationLifeTime                         types.Int64     `tfsdk:"authentication_life_time"`
-	AuthenticationRetransmit                       types.Int64     `tfsdk:"authentication_retransmit"`
-	Neighbors                                      []RSVPNeighbors `tfsdk:"neighbors"`
-	BandwidthMamPercentageMaxReservableBandwidth   types.Int64     `tfsdk:"bandwidth_mam_percentage_max_reservable_bandwidth"`
-	BandwidthMamPercentageMaxReservableBc0         types.Int64     `tfsdk:"bandwidth_mam_percentage_max_reservable_bc0"`
-	BandwidthMamPercentageMaxReservableBc1         types.Int64     `tfsdk:"bandwidth_mam_percentage_max_reservable_bc1"`
-	BandwidthRdmPercentageMaxReservableBc0         types.Int64     `tfsdk:"bandwidth_rdm_percentage_max_reservable_bc0"`
-	BandwidthRdmPercentageMaxReservableBc1         types.Int64     `tfsdk:"bandwidth_rdm_percentage_max_reservable_bc1"`
-	LatencyThreshold                               types.Int64     `tfsdk:"latency_threshold"`
-	LoggingEventsNsr                               types.Bool      `tfsdk:"logging_events_nsr"`
-	LoggingEventsIssu                              types.Bool      `tfsdk:"logging_events_issu"`
-	LtraceBufferMultiplier                         types.Int64     `tfsdk:"ltrace_buffer_multiplier"`
-	LtraceBufferMultiplierRare                     types.Bool      `tfsdk:"ltrace_buffer_multiplier_rare"`
-	LtraceBufferMultiplierCommon                   types.Bool      `tfsdk:"ltrace_buffer_multiplier_common"`
-	LtraceBufferMultiplierSig                      types.Bool      `tfsdk:"ltrace_buffer_multiplier_sig"`
-	LtraceBufferMultiplierSigErr                   types.Bool      `tfsdk:"ltrace_buffer_multiplier_sig_err"`
-	LtraceBufferMultiplierIntf                     types.Bool      `tfsdk:"ltrace_buffer_multiplier_intf"`
-	LtraceBufferMultiplierDbgErr                   types.Bool      `tfsdk:"ltrace_buffer_multiplier_dbg_err"`
-	LtraceBufferMultiplierSync                     types.Bool      `tfsdk:"ltrace_buffer_multiplier_sync"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	SignallingGracefulRestart types.Bool `tfsdk:"signalling_graceful_restart"`
+	SignallingGracefulRestartLspCtype types.Bool `tfsdk:"signalling_graceful_restart_lsp_ctype"`
+	SignallingGracefulRestartRecoveryTime types.Int64 `tfsdk:"signalling_graceful_restart_recovery_time"`
+	SignallingGracefulRestartRestartTime types.Int64 `tfsdk:"signalling_graceful_restart_restart_time"`
+	SignallingHelloGracefulRestartRefreshInterval types.Int64 `tfsdk:"signalling_hello_graceful_restart_refresh_interval"`
+	SignallingHelloGracefulRestartRefreshMisses types.Int64 `tfsdk:"signalling_hello_graceful_restart_refresh_misses"`
+	SignallingEventPerPulse types.Int64 `tfsdk:"signalling_event_per_pulse"`
+	SignallingPrefixFilteringAcl types.String `tfsdk:"signalling_prefix_filtering_acl"`
+	SignallingPrefixFilteringDefaultDenyActionDrop types.Bool `tfsdk:"signalling_prefix_filtering_default_deny_action_drop"`
+	SignallingMessageBundleDisable types.Bool `tfsdk:"signalling_message_bundle_disable"`
+	SignallingNodeidSubobjectDisable types.Bool `tfsdk:"signalling_nodeid_subobject_disable"`
+	SignallingPatherrStateRemovalDisable types.Bool `tfsdk:"signalling_patherr_state_removal_disable"`
+	SignallingChecksumDisable types.Bool `tfsdk:"signalling_checksum_disable"`
+	SignallingOobVrf types.String `tfsdk:"signalling_oob_vrf"`
+	AuthenticationKeyChain types.String `tfsdk:"authentication_key_chain"`
+	AuthenticationWindowSize types.Int64 `tfsdk:"authentication_window_size"`
+	AuthenticationLifeTime types.Int64 `tfsdk:"authentication_life_time"`
+	AuthenticationRetransmit types.Int64 `tfsdk:"authentication_retransmit"`
+	Neighbors []RSVPNeighbors `tfsdk:"neighbors"`
+	BandwidthMamPercentageMaxReservableBandwidth types.Int64 `tfsdk:"bandwidth_mam_percentage_max_reservable_bandwidth"`
+	BandwidthMamPercentageMaxReservableBc0 types.Int64 `tfsdk:"bandwidth_mam_percentage_max_reservable_bc0"`
+	BandwidthMamPercentageMaxReservableBc1 types.Int64 `tfsdk:"bandwidth_mam_percentage_max_reservable_bc1"`
+	BandwidthRdmPercentageMaxReservableBc0 types.Int64 `tfsdk:"bandwidth_rdm_percentage_max_reservable_bc0"`
+	BandwidthRdmPercentageMaxReservableBc1 types.Int64 `tfsdk:"bandwidth_rdm_percentage_max_reservable_bc1"`
+	LatencyThreshold types.Int64 `tfsdk:"latency_threshold"`
+	LoggingEventsNsr types.Bool `tfsdk:"logging_events_nsr"`
+	LoggingEventsIssu types.Bool `tfsdk:"logging_events_issu"`
+	LtraceBufferMultiplier types.Int64 `tfsdk:"ltrace_buffer_multiplier"`
+	LtraceBufferMultiplierRare types.Bool `tfsdk:"ltrace_buffer_multiplier_rare"`
+	LtraceBufferMultiplierCommon types.Bool `tfsdk:"ltrace_buffer_multiplier_common"`
+	LtraceBufferMultiplierSig types.Bool `tfsdk:"ltrace_buffer_multiplier_sig"`
+	LtraceBufferMultiplierSigErr types.Bool `tfsdk:"ltrace_buffer_multiplier_sig_err"`
+	LtraceBufferMultiplierIntf types.Bool `tfsdk:"ltrace_buffer_multiplier_intf"`
+	LtraceBufferMultiplierDbgErr types.Bool `tfsdk:"ltrace_buffer_multiplier_dbg_err"`
+	LtraceBufferMultiplierSync types.Bool `tfsdk:"ltrace_buffer_multiplier_sync"`
 }
 type RSVPNeighbors struct {
-	Address                  types.String `tfsdk:"address"`
-	AuthenticationKeyChain   types.String `tfsdk:"authentication_key_chain"`
-	AuthenticationWindowSize types.Int64  `tfsdk:"authentication_window_size"`
-	AuthenticationLifeTime   types.Int64  `tfsdk:"authentication_life_time"`
+	Address types.String `tfsdk:"address"`
+	AuthenticationKeyChain types.String `tfsdk:"authentication_key_chain"`
+	AuthenticationWindowSize types.Int64 `tfsdk:"authentication_window_size"`
+	AuthenticationLifeTime types.Int64 `tfsdk:"authentication_life_time"`
 }
 
 // End of section. //template:end types
@@ -315,25 +315,23 @@ func (data RSVP) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RSVP) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "signalling.graceful-restart"); value.Exists() {
-		if !data.SignallingGracefulRestart.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.graceful-restart"); !data.SignallingGracefulRestart.IsNull() {
+		if value.Exists() {
 			data.SignallingGracefulRestart = types.BoolValue(true)
+		} else {
+			data.SignallingGracefulRestart = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.SignallingGracefulRestart.IsNull() {
-			data.SignallingGracefulRestart = types.BoolNull()
-		}
+		data.SignallingGracefulRestart = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "signalling.graceful-restart-lsp-type"); value.Exists() {
-		if !data.SignallingGracefulRestartLspCtype.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.graceful-restart-lsp-type"); !data.SignallingGracefulRestartLspCtype.IsNull() {
+		if value.Exists() {
 			data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
+		} else {
+			data.SignallingGracefulRestartLspCtype = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.SignallingGracefulRestartLspCtype.IsNull() {
-			data.SignallingGracefulRestartLspCtype = types.BoolNull()
-		}
+		data.SignallingGracefulRestartLspCtype = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "signalling.graceful-restart-recovery-time"); value.Exists() && !data.SignallingGracefulRestartRecoveryTime.IsNull() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
@@ -365,55 +363,50 @@ func (data *RSVP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.SignallingPrefixFilteringAcl = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "signalling.prefix-filtering.default-deny-action.drop"); value.Exists() {
-		if !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.prefix-filtering.default-deny-action.drop"); !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
+		if value.Exists() {
 			data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
+		} else {
+			data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
-			data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolNull()
-		}
+		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "signalling.message-bundle.disable"); value.Exists() {
-		if !data.SignallingMessageBundleDisable.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.message-bundle.disable"); !data.SignallingMessageBundleDisable.IsNull() {
+		if value.Exists() {
 			data.SignallingMessageBundleDisable = types.BoolValue(true)
+		} else {
+			data.SignallingMessageBundleDisable = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.SignallingMessageBundleDisable.IsNull() {
-			data.SignallingMessageBundleDisable = types.BoolNull()
-		}
+		data.SignallingMessageBundleDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "signalling.nodeid-subobject.disable"); value.Exists() {
-		if !data.SignallingNodeidSubobjectDisable.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.nodeid-subobject.disable"); !data.SignallingNodeidSubobjectDisable.IsNull() {
+		if value.Exists() {
 			data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
+		} else {
+			data.SignallingNodeidSubobjectDisable = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.SignallingNodeidSubobjectDisable.IsNull() {
-			data.SignallingNodeidSubobjectDisable = types.BoolNull()
-		}
+		data.SignallingNodeidSubobjectDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "signalling.patherr.state-removal.disable"); value.Exists() {
-		if !data.SignallingPatherrStateRemovalDisable.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.patherr.state-removal.disable"); !data.SignallingPatherrStateRemovalDisable.IsNull() {
+		if value.Exists() {
 			data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
+		} else {
+			data.SignallingPatherrStateRemovalDisable = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.SignallingPatherrStateRemovalDisable.IsNull() {
-			data.SignallingPatherrStateRemovalDisable = types.BoolNull()
-		}
+		data.SignallingPatherrStateRemovalDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "signalling.checksum.disable"); value.Exists() {
-		if !data.SignallingChecksumDisable.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.checksum.disable"); !data.SignallingChecksumDisable.IsNull() {
+		if value.Exists() {
 			data.SignallingChecksumDisable = types.BoolValue(true)
+		} else {
+			data.SignallingChecksumDisable = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.SignallingChecksumDisable.IsNull() {
-			data.SignallingChecksumDisable = types.BoolNull()
-		}
+		data.SignallingChecksumDisable = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "signalling.out-of-band.vrf"); value.Exists() && !data.SignallingOobVrf.IsNull() {
 		data.SignallingOobVrf = types.StringValue(value.String())
@@ -441,8 +434,8 @@ func (data *RSVP) updateFromBody(ctx context.Context, res []byte) {
 		data.AuthenticationRetransmit = types.Int64Null()
 	}
 	for i := range data.Neighbors {
-		keys := [...]string{"neighbor-address"}
-		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
+		keys := [...]string{ "neighbor-address",  }
+		keyValues := [...]string{ data.Neighbors[i].Address.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "neighbors.neighbor").ForEach(
@@ -514,100 +507,91 @@ func (data *RSVP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.LatencyThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "logging.events.nsr"); value.Exists() {
-		if !data.LoggingEventsNsr.IsNull() {
+	if value := gjson.GetBytes(res, "logging.events.nsr"); !data.LoggingEventsNsr.IsNull() {
+		if value.Exists() {
 			data.LoggingEventsNsr = types.BoolValue(true)
+		} else {
+			data.LoggingEventsNsr = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.LoggingEventsNsr.IsNull() {
-			data.LoggingEventsNsr = types.BoolNull()
-		}
+		data.LoggingEventsNsr = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "logging.events.issu"); value.Exists() {
-		if !data.LoggingEventsIssu.IsNull() {
+	if value := gjson.GetBytes(res, "logging.events.issu"); !data.LoggingEventsIssu.IsNull() {
+		if value.Exists() {
 			data.LoggingEventsIssu = types.BoolValue(true)
+		} else {
+			data.LoggingEventsIssu = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.LoggingEventsIssu.IsNull() {
-			data.LoggingEventsIssu = types.BoolNull()
-		}
+		data.LoggingEventsIssu = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.multiplier-factor"); value.Exists() && !data.LtraceBufferMultiplier.IsNull() {
 		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
 	} else {
 		data.LtraceBufferMultiplier = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.rare"); value.Exists() {
-		if !data.LtraceBufferMultiplierRare.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.rare"); !data.LtraceBufferMultiplierRare.IsNull() {
+		if value.Exists() {
 			data.LtraceBufferMultiplierRare = types.BoolValue(true)
+		} else {
+			data.LtraceBufferMultiplierRare = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.LtraceBufferMultiplierRare.IsNull() {
-			data.LtraceBufferMultiplierRare = types.BoolNull()
-		}
+		data.LtraceBufferMultiplierRare = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.common"); value.Exists() {
-		if !data.LtraceBufferMultiplierCommon.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.common"); !data.LtraceBufferMultiplierCommon.IsNull() {
+		if value.Exists() {
 			data.LtraceBufferMultiplierCommon = types.BoolValue(true)
+		} else {
+			data.LtraceBufferMultiplierCommon = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.LtraceBufferMultiplierCommon.IsNull() {
-			data.LtraceBufferMultiplierCommon = types.BoolNull()
-		}
+		data.LtraceBufferMultiplierCommon = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sig"); value.Exists() {
-		if !data.LtraceBufferMultiplierSig.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sig"); !data.LtraceBufferMultiplierSig.IsNull() {
+		if value.Exists() {
 			data.LtraceBufferMultiplierSig = types.BoolValue(true)
+		} else {
+			data.LtraceBufferMultiplierSig = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.LtraceBufferMultiplierSig.IsNull() {
-			data.LtraceBufferMultiplierSig = types.BoolNull()
-		}
+		data.LtraceBufferMultiplierSig = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sig-err"); value.Exists() {
-		if !data.LtraceBufferMultiplierSigErr.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sig-err"); !data.LtraceBufferMultiplierSigErr.IsNull() {
+		if value.Exists() {
 			data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
+		} else {
+			data.LtraceBufferMultiplierSigErr = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.LtraceBufferMultiplierSigErr.IsNull() {
-			data.LtraceBufferMultiplierSigErr = types.BoolNull()
-		}
+		data.LtraceBufferMultiplierSigErr = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.intf"); value.Exists() {
-		if !data.LtraceBufferMultiplierIntf.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.intf"); !data.LtraceBufferMultiplierIntf.IsNull() {
+		if value.Exists() {
 			data.LtraceBufferMultiplierIntf = types.BoolValue(true)
+		} else {
+			data.LtraceBufferMultiplierIntf = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.LtraceBufferMultiplierIntf.IsNull() {
-			data.LtraceBufferMultiplierIntf = types.BoolNull()
-		}
+		data.LtraceBufferMultiplierIntf = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.dbg-err"); value.Exists() {
-		if !data.LtraceBufferMultiplierDbgErr.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.dbg-err"); !data.LtraceBufferMultiplierDbgErr.IsNull() {
+		if value.Exists() {
 			data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
+		} else {
+			data.LtraceBufferMultiplierDbgErr = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.LtraceBufferMultiplierDbgErr.IsNull() {
-			data.LtraceBufferMultiplierDbgErr = types.BoolNull()
-		}
+		data.LtraceBufferMultiplierDbgErr = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sync"); value.Exists() {
-		if !data.LtraceBufferMultiplierSync.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sync"); !data.LtraceBufferMultiplierSync.IsNull() {
+		if value.Exists() {
 			data.LtraceBufferMultiplierSync = types.BoolValue(true)
+		} else {
+			data.LtraceBufferMultiplierSync = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.LtraceBufferMultiplierSync.IsNull() {
-			data.LtraceBufferMultiplierSync = types.BoolNull()
-		}
+		data.LtraceBufferMultiplierSync = types.BoolNull()
 	}
 }
 
@@ -618,71 +602,71 @@ func (data RSVP) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.SignallingGracefulRestart.IsNull() && !data.SignallingGracefulRestart.IsUnknown() {
 		if data.SignallingGracefulRestart.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/graceful-restart", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/signalling/graceful-restart", "")
 		}
 	}
 	if !data.SignallingGracefulRestartLspCtype.IsNull() && !data.SignallingGracefulRestartLspCtype.IsUnknown() {
 		if data.SignallingGracefulRestartLspCtype.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/graceful-restart-lsp-type", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/signalling/graceful-restart-lsp-type", "")
 		}
 	}
 	if !data.SignallingGracefulRestartRecoveryTime.IsNull() && !data.SignallingGracefulRestartRecoveryTime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/graceful-restart-recovery-time", strconv.FormatInt(data.SignallingGracefulRestartRecoveryTime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/signalling/graceful-restart-recovery-time", strconv.FormatInt(data.SignallingGracefulRestartRecoveryTime.ValueInt64(), 10))
 	}
 	if !data.SignallingGracefulRestartRestartTime.IsNull() && !data.SignallingGracefulRestartRestartTime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/graceful-restart-restart-time", strconv.FormatInt(data.SignallingGracefulRestartRestartTime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/signalling/graceful-restart-restart-time", strconv.FormatInt(data.SignallingGracefulRestartRestartTime.ValueInt64(), 10))
 	}
 	if !data.SignallingHelloGracefulRestartRefreshInterval.IsNull() && !data.SignallingHelloGracefulRestartRefreshInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/hello/graceful-restart/refresh/interval", strconv.FormatInt(data.SignallingHelloGracefulRestartRefreshInterval.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/signalling/hello/graceful-restart/refresh/interval", strconv.FormatInt(data.SignallingHelloGracefulRestartRefreshInterval.ValueInt64(), 10))
 	}
 	if !data.SignallingHelloGracefulRestartRefreshMisses.IsNull() && !data.SignallingHelloGracefulRestartRefreshMisses.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/hello/graceful-restart/refresh/misses", strconv.FormatInt(data.SignallingHelloGracefulRestartRefreshMisses.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/signalling/hello/graceful-restart/refresh/misses", strconv.FormatInt(data.SignallingHelloGracefulRestartRefreshMisses.ValueInt64(), 10))
 	}
 	if !data.SignallingEventPerPulse.IsNull() && !data.SignallingEventPerPulse.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/event-per-pulse", strconv.FormatInt(data.SignallingEventPerPulse.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/signalling/event-per-pulse", strconv.FormatInt(data.SignallingEventPerPulse.ValueInt64(), 10))
 	}
 	if !data.SignallingPrefixFilteringAcl.IsNull() && !data.SignallingPrefixFilteringAcl.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/prefix-filtering/access-list", data.SignallingPrefixFilteringAcl.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/signalling/prefix-filtering/access-list", data.SignallingPrefixFilteringAcl.ValueString())
 	}
 	if !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() && !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsUnknown() {
 		if data.SignallingPrefixFilteringDefaultDenyActionDrop.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/prefix-filtering/default-deny-action/drop", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/signalling/prefix-filtering/default-deny-action/drop", "")
 		}
 	}
 	if !data.SignallingMessageBundleDisable.IsNull() && !data.SignallingMessageBundleDisable.IsUnknown() {
 		if data.SignallingMessageBundleDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/message-bundle/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/signalling/message-bundle/disable", "")
 		}
 	}
 	if !data.SignallingNodeidSubobjectDisable.IsNull() && !data.SignallingNodeidSubobjectDisable.IsUnknown() {
 		if data.SignallingNodeidSubobjectDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/nodeid-subobject/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/signalling/nodeid-subobject/disable", "")
 		}
 	}
 	if !data.SignallingPatherrStateRemovalDisable.IsNull() && !data.SignallingPatherrStateRemovalDisable.IsUnknown() {
 		if data.SignallingPatherrStateRemovalDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/patherr/state-removal/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/signalling/patherr/state-removal/disable", "")
 		}
 	}
 	if !data.SignallingChecksumDisable.IsNull() && !data.SignallingChecksumDisable.IsUnknown() {
 		if data.SignallingChecksumDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/checksum/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/signalling/checksum/disable", "")
 		}
 	}
 	if !data.SignallingOobVrf.IsNull() && !data.SignallingOobVrf.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/out-of-band/vrf", data.SignallingOobVrf.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/signalling/out-of-band/vrf", data.SignallingOobVrf.ValueString())
 	}
 	if !data.AuthenticationKeyChain.IsNull() && !data.AuthenticationKeyChain.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/authentication/key-source/key-chain", data.AuthenticationKeyChain.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/authentication/key-source/key-chain", data.AuthenticationKeyChain.ValueString())
 	}
 	if !data.AuthenticationWindowSize.IsNull() && !data.AuthenticationWindowSize.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/authentication/window-size", strconv.FormatInt(data.AuthenticationWindowSize.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/authentication/window-size", strconv.FormatInt(data.AuthenticationWindowSize.ValueInt64(), 10))
 	}
 	if !data.AuthenticationLifeTime.IsNull() && !data.AuthenticationLifeTime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/authentication/life-time", strconv.FormatInt(data.AuthenticationLifeTime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/authentication/life-time", strconv.FormatInt(data.AuthenticationLifeTime.ValueInt64(), 10))
 	}
 	if !data.AuthenticationRetransmit.IsNull() && !data.AuthenticationRetransmit.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/authentication/retransmit", strconv.FormatInt(data.AuthenticationRetransmit.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/authentication/retransmit", strconv.FormatInt(data.AuthenticationRetransmit.ValueInt64(), 10))
 	}
 	if len(data.Neighbors) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -705,69 +689,69 @@ func (data RSVP) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.BandwidthMamPercentageMaxReservableBandwidth.IsNull() && !data.BandwidthMamPercentageMaxReservableBandwidth.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth", strconv.FormatInt(data.BandwidthMamPercentageMaxReservableBandwidth.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth", strconv.FormatInt(data.BandwidthMamPercentageMaxReservableBandwidth.ValueInt64(), 10))
 	}
 	if !data.BandwidthMamPercentageMaxReservableBc0.IsNull() && !data.BandwidthMamPercentageMaxReservableBc0.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc0", strconv.FormatInt(data.BandwidthMamPercentageMaxReservableBc0.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bandwidth/mam/percentage/max-reservable/bc0", strconv.FormatInt(data.BandwidthMamPercentageMaxReservableBc0.ValueInt64(), 10))
 	}
 	if !data.BandwidthMamPercentageMaxReservableBc1.IsNull() && !data.BandwidthMamPercentageMaxReservableBc1.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc1", strconv.FormatInt(data.BandwidthMamPercentageMaxReservableBc1.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bandwidth/mam/percentage/max-reservable/bc1", strconv.FormatInt(data.BandwidthMamPercentageMaxReservableBc1.ValueInt64(), 10))
 	}
 	if !data.BandwidthRdmPercentageMaxReservableBc0.IsNull() && !data.BandwidthRdmPercentageMaxReservableBc0.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc0", strconv.FormatInt(data.BandwidthRdmPercentageMaxReservableBc0.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bandwidth/rdm/percentage/max-reservable-bc0/bc0", strconv.FormatInt(data.BandwidthRdmPercentageMaxReservableBc0.ValueInt64(), 10))
 	}
 	if !data.BandwidthRdmPercentageMaxReservableBc1.IsNull() && !data.BandwidthRdmPercentageMaxReservableBc1.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc1", strconv.FormatInt(data.BandwidthRdmPercentageMaxReservableBc1.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bandwidth/rdm/percentage/max-reservable-bc0/bc1", strconv.FormatInt(data.BandwidthRdmPercentageMaxReservableBc1.ValueInt64(), 10))
 	}
 	if !data.LatencyThreshold.IsNull() && !data.LatencyThreshold.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/latency/threshold", strconv.FormatInt(data.LatencyThreshold.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/latency/threshold", strconv.FormatInt(data.LatencyThreshold.ValueInt64(), 10))
 	}
 	if !data.LoggingEventsNsr.IsNull() && !data.LoggingEventsNsr.IsUnknown() {
 		if data.LoggingEventsNsr.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/logging/events/nsr", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/logging/events/nsr", "")
 		}
 	}
 	if !data.LoggingEventsIssu.IsNull() && !data.LoggingEventsIssu.IsUnknown() {
 		if data.LoggingEventsIssu.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/logging/events/issu", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/logging/events/issu", "")
 		}
 	}
 	if !data.LtraceBufferMultiplier.IsNull() && !data.LtraceBufferMultiplier.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/ltrace-buffer/multiplier/multiplier-factor", strconv.FormatInt(data.LtraceBufferMultiplier.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/ltrace-buffer/multiplier/multiplier-factor", strconv.FormatInt(data.LtraceBufferMultiplier.ValueInt64(), 10))
 	}
 	if !data.LtraceBufferMultiplierRare.IsNull() && !data.LtraceBufferMultiplierRare.IsUnknown() {
 		if data.LtraceBufferMultiplierRare.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/ltrace-buffer/multiplier/rare", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/ltrace-buffer/multiplier/rare", "")
 		}
 	}
 	if !data.LtraceBufferMultiplierCommon.IsNull() && !data.LtraceBufferMultiplierCommon.IsUnknown() {
 		if data.LtraceBufferMultiplierCommon.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/ltrace-buffer/multiplier/common", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/ltrace-buffer/multiplier/common", "")
 		}
 	}
 	if !data.LtraceBufferMultiplierSig.IsNull() && !data.LtraceBufferMultiplierSig.IsUnknown() {
 		if data.LtraceBufferMultiplierSig.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/ltrace-buffer/multiplier/sig", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/ltrace-buffer/multiplier/sig", "")
 		}
 	}
 	if !data.LtraceBufferMultiplierSigErr.IsNull() && !data.LtraceBufferMultiplierSigErr.IsUnknown() {
 		if data.LtraceBufferMultiplierSigErr.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/ltrace-buffer/multiplier/sig-err", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/ltrace-buffer/multiplier/sig-err", "")
 		}
 	}
 	if !data.LtraceBufferMultiplierIntf.IsNull() && !data.LtraceBufferMultiplierIntf.IsUnknown() {
 		if data.LtraceBufferMultiplierIntf.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/ltrace-buffer/multiplier/intf", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/ltrace-buffer/multiplier/intf", "")
 		}
 	}
 	if !data.LtraceBufferMultiplierDbgErr.IsNull() && !data.LtraceBufferMultiplierDbgErr.IsUnknown() {
 		if data.LtraceBufferMultiplierDbgErr.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/ltrace-buffer/multiplier/dbg-err", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/ltrace-buffer/multiplier/dbg-err", "")
 		}
 	}
 	if !data.LtraceBufferMultiplierSync.IsNull() && !data.LtraceBufferMultiplierSync.IsUnknown() {
 		if data.LtraceBufferMultiplierSync.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/ltrace-buffer/multiplier/sync", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/ltrace-buffer/multiplier/sync", "")
 		}
 	}
 	bodyString, err := body.String()
@@ -781,7 +765,7 @@ func (data RSVP) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/graceful-restart"); value.Exists() {
 		data.SignallingGracefulRestart = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -789,7 +773,7 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.SignallingGracefulRestart = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-lsp-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/graceful-restart-lsp-type"); value.Exists() {
 		data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -797,37 +781,37 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.SignallingGracefulRestartLspCtype = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-recovery-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/graceful-restart-recovery-time"); value.Exists() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
 	} else if data.SignallingGracefulRestartRecoveryTime.IsNull() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-restart-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/graceful-restart-restart-time"); value.Exists() {
 		data.SignallingGracefulRestartRestartTime = types.Int64Value(value.Int())
 	} else if data.SignallingGracefulRestartRestartTime.IsNull() {
 		data.SignallingGracefulRestartRestartTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/hello/graceful-restart/refresh/interval"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Value(value.Int())
 	} else if data.SignallingHelloGracefulRestartRefreshInterval.IsNull() {
 		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/misses"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/hello/graceful-restart/refresh/misses"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Value(value.Int())
 	} else if data.SignallingHelloGracefulRestartRefreshMisses.IsNull() {
 		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/event-per-pulse"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/event-per-pulse"); value.Exists() {
 		data.SignallingEventPerPulse = types.Int64Value(value.Int())
 	} else if data.SignallingEventPerPulse.IsNull() {
 		data.SignallingEventPerPulse = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/prefix-filtering/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/prefix-filtering/access-list"); value.Exists() {
 		data.SignallingPrefixFilteringAcl = types.StringValue(value.String())
 	} else if data.SignallingPrefixFilteringAcl.IsNull() {
 		data.SignallingPrefixFilteringAcl = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/prefix-filtering/default-deny-action/drop"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/prefix-filtering/default-deny-action/drop"); value.Exists() {
 		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -835,7 +819,7 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/message-bundle/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/message-bundle/disable"); value.Exists() {
 		data.SignallingMessageBundleDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -843,7 +827,7 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.SignallingMessageBundleDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/nodeid-subobject/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/nodeid-subobject/disable"); value.Exists() {
 		data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -851,7 +835,7 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.SignallingNodeidSubobjectDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/patherr/state-removal/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/patherr/state-removal/disable"); value.Exists() {
 		data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -859,7 +843,7 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.SignallingPatherrStateRemovalDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/checksum/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/checksum/disable"); value.Exists() {
 		data.SignallingChecksumDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -867,37 +851,37 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.SignallingChecksumDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/out-of-band/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/out-of-band/vrf"); value.Exists() {
 		data.SignallingOobVrf = types.StringValue(value.String())
 	} else if data.SignallingOobVrf.IsNull() {
 		data.SignallingOobVrf = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/key-source/key-chain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/authentication/key-source/key-chain"); value.Exists() {
 		data.AuthenticationKeyChain = types.StringValue(value.String())
 	} else if data.AuthenticationKeyChain.IsNull() {
 		data.AuthenticationKeyChain = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/window-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/authentication/window-size"); value.Exists() {
 		data.AuthenticationWindowSize = types.Int64Value(value.Int())
 	} else if data.AuthenticationWindowSize.IsNull() {
 		data.AuthenticationWindowSize = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/life-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/authentication/life-time"); value.Exists() {
 		data.AuthenticationLifeTime = types.Int64Value(value.Int())
 	} else if data.AuthenticationLifeTime.IsNull() {
 		data.AuthenticationLifeTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/retransmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/authentication/retransmit"); value.Exists() {
 		data.AuthenticationRetransmit = types.Int64Value(value.Int())
 	} else if data.AuthenticationRetransmit.IsNull() {
 		data.AuthenticationRetransmit = types.Int64Null()
 	}
 	for i := range data.Neighbors {
-		keys := [...]string{"neighbor-address"}
-		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
+		keys := [...]string{ "neighbor-address",  }
+		keyValues := [...]string{ data.Neighbors[i].Address.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/neighbor").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbors/neighbor").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -936,37 +920,37 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Neighbors[i].AuthenticationLifeTime = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Value(value.Int())
 	} else if data.BandwidthMamPercentageMaxReservableBandwidth.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/mam/percentage/max-reservable/bc0"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	} else if data.BandwidthMamPercentageMaxReservableBc0.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/mam/percentage/max-reservable/bc1"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	} else if data.BandwidthMamPercentageMaxReservableBc1.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/rdm/percentage/max-reservable-bc0/bc0"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	} else if data.BandwidthRdmPercentageMaxReservableBc0.IsNull() {
 		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/rdm/percentage/max-reservable-bc0/bc1"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	} else if data.BandwidthRdmPercentageMaxReservableBc1.IsNull() {
 		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/latency/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/latency/threshold"); value.Exists() {
 		data.LatencyThreshold = types.Int64Value(value.Int())
 	} else if data.LatencyThreshold.IsNull() {
 		data.LatencyThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/nsr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/events/nsr"); value.Exists() {
 		data.LoggingEventsNsr = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -974,7 +958,7 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LoggingEventsNsr = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/issu"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/events/issu"); value.Exists() {
 		data.LoggingEventsIssu = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -982,12 +966,12 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LoggingEventsIssu = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/multiplier-factor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/multiplier-factor"); value.Exists() {
 		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
 	} else if data.LtraceBufferMultiplier.IsNull() {
 		data.LtraceBufferMultiplier = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/rare"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/rare"); value.Exists() {
 		data.LtraceBufferMultiplierRare = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -995,7 +979,7 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LtraceBufferMultiplierRare = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/common"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/common"); value.Exists() {
 		data.LtraceBufferMultiplierCommon = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1003,7 +987,7 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LtraceBufferMultiplierCommon = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sig"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/sig"); value.Exists() {
 		data.LtraceBufferMultiplierSig = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1011,7 +995,7 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LtraceBufferMultiplierSig = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sig-err"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/sig-err"); value.Exists() {
 		data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1019,7 +1003,7 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LtraceBufferMultiplierSigErr = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/intf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/intf"); value.Exists() {
 		data.LtraceBufferMultiplierIntf = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1027,7 +1011,7 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LtraceBufferMultiplierIntf = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/dbg-err"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/dbg-err"); value.Exists() {
 		data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1035,7 +1019,7 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LtraceBufferMultiplierDbgErr = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/sync"); value.Exists() {
 		data.LtraceBufferMultiplierSync = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1053,75 +1037,75 @@ func (data *RSVP) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "signalling.graceful-restart"); value.Exists() {
+	if value := res.Get(prefix+"signalling.graceful-restart"); value.Exists() {
 		data.SignallingGracefulRestart = types.BoolValue(true)
 	} else {
-		data.SignallingGracefulRestart = types.BoolNull()
+		data.SignallingGracefulRestart = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "signalling.graceful-restart-lsp-type"); value.Exists() {
+	if value := res.Get(prefix+"signalling.graceful-restart-lsp-type"); value.Exists() {
 		data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
 	} else {
-		data.SignallingGracefulRestartLspCtype = types.BoolNull()
+		data.SignallingGracefulRestartLspCtype = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "signalling.graceful-restart-recovery-time"); value.Exists() {
+	if value := res.Get(prefix+"signalling.graceful-restart-recovery-time"); value.Exists() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "signalling.graceful-restart-restart-time"); value.Exists() {
+	if value := res.Get(prefix+"signalling.graceful-restart-restart-time"); value.Exists() {
 		data.SignallingGracefulRestartRestartTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "signalling.hello.graceful-restart.refresh.interval"); value.Exists() {
+	if value := res.Get(prefix+"signalling.hello.graceful-restart.refresh.interval"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "signalling.hello.graceful-restart.refresh.misses"); value.Exists() {
+	if value := res.Get(prefix+"signalling.hello.graceful-restart.refresh.misses"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "signalling.event-per-pulse"); value.Exists() {
+	if value := res.Get(prefix+"signalling.event-per-pulse"); value.Exists() {
 		data.SignallingEventPerPulse = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "signalling.prefix-filtering.access-list"); value.Exists() {
+	if value := res.Get(prefix+"signalling.prefix-filtering.access-list"); value.Exists() {
 		data.SignallingPrefixFilteringAcl = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "signalling.prefix-filtering.default-deny-action.drop"); value.Exists() {
+	if value := res.Get(prefix+"signalling.prefix-filtering.default-deny-action.drop"); value.Exists() {
 		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
 	} else {
-		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolNull()
+		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "signalling.message-bundle.disable"); value.Exists() {
+	if value := res.Get(prefix+"signalling.message-bundle.disable"); value.Exists() {
 		data.SignallingMessageBundleDisable = types.BoolValue(true)
 	} else {
-		data.SignallingMessageBundleDisable = types.BoolNull()
+		data.SignallingMessageBundleDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "signalling.nodeid-subobject.disable"); value.Exists() {
+	if value := res.Get(prefix+"signalling.nodeid-subobject.disable"); value.Exists() {
 		data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
 	} else {
-		data.SignallingNodeidSubobjectDisable = types.BoolNull()
+		data.SignallingNodeidSubobjectDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "signalling.patherr.state-removal.disable"); value.Exists() {
+	if value := res.Get(prefix+"signalling.patherr.state-removal.disable"); value.Exists() {
 		data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
 	} else {
-		data.SignallingPatherrStateRemovalDisable = types.BoolNull()
+		data.SignallingPatherrStateRemovalDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "signalling.checksum.disable"); value.Exists() {
+	if value := res.Get(prefix+"signalling.checksum.disable"); value.Exists() {
 		data.SignallingChecksumDisable = types.BoolValue(true)
 	} else {
-		data.SignallingChecksumDisable = types.BoolNull()
+		data.SignallingChecksumDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "signalling.out-of-band.vrf"); value.Exists() {
+	if value := res.Get(prefix+"signalling.out-of-band.vrf"); value.Exists() {
 		data.SignallingOobVrf = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "authentication.key-source.key-chain"); value.Exists() {
+	if value := res.Get(prefix+"authentication.key-source.key-chain"); value.Exists() {
 		data.AuthenticationKeyChain = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "authentication.window-size"); value.Exists() {
+	if value := res.Get(prefix+"authentication.window-size"); value.Exists() {
 		data.AuthenticationWindowSize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "authentication.life-time"); value.Exists() {
+	if value := res.Get(prefix+"authentication.life-time"); value.Exists() {
 		data.AuthenticationLifeTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "authentication.retransmit"); value.Exists() {
+	if value := res.Get(prefix+"authentication.retransmit"); value.Exists() {
 		data.AuthenticationRetransmit = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "neighbors.neighbor"); value.Exists() {
+	if value := res.Get(prefix+"neighbors.neighbor"); value.Exists() {
 		data.Neighbors = make([]RSVPNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RSVPNeighbors{}
@@ -1141,71 +1125,71 @@ func (data *RSVP) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable.max-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix+"bandwidth.mam.percentage.max-reservable.max-reservable-bandwidth"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable.bc0"); value.Exists() {
+	if value := res.Get(prefix+"bandwidth.mam.percentage.max-reservable.bc0"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable.bc1"); value.Exists() {
+	if value := res.Get(prefix+"bandwidth.mam.percentage.max-reservable.bc1"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bandwidth.rdm.percentage.max-reservable-bc0.bc0"); value.Exists() {
+	if value := res.Get(prefix+"bandwidth.rdm.percentage.max-reservable-bc0.bc0"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bandwidth.rdm.percentage.max-reservable-bc0.bc1"); value.Exists() {
+	if value := res.Get(prefix+"bandwidth.rdm.percentage.max-reservable-bc0.bc1"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "latency.threshold"); value.Exists() {
+	if value := res.Get(prefix+"latency.threshold"); value.Exists() {
 		data.LatencyThreshold = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "logging.events.nsr"); value.Exists() {
+	if value := res.Get(prefix+"logging.events.nsr"); value.Exists() {
 		data.LoggingEventsNsr = types.BoolValue(true)
 	} else {
-		data.LoggingEventsNsr = types.BoolNull()
+		data.LoggingEventsNsr = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "logging.events.issu"); value.Exists() {
+	if value := res.Get(prefix+"logging.events.issu"); value.Exists() {
 		data.LoggingEventsIssu = types.BoolValue(true)
 	} else {
-		data.LoggingEventsIssu = types.BoolNull()
+		data.LoggingEventsIssu = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.multiplier-factor"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.multiplier-factor"); value.Exists() {
 		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.rare"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.rare"); value.Exists() {
 		data.LtraceBufferMultiplierRare = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierRare = types.BoolNull()
+		data.LtraceBufferMultiplierRare = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.common"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.common"); value.Exists() {
 		data.LtraceBufferMultiplierCommon = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierCommon = types.BoolNull()
+		data.LtraceBufferMultiplierCommon = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.sig"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.sig"); value.Exists() {
 		data.LtraceBufferMultiplierSig = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierSig = types.BoolNull()
+		data.LtraceBufferMultiplierSig = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.sig-err"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.sig-err"); value.Exists() {
 		data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierSigErr = types.BoolNull()
+		data.LtraceBufferMultiplierSigErr = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.intf"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.intf"); value.Exists() {
 		data.LtraceBufferMultiplierIntf = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierIntf = types.BoolNull()
+		data.LtraceBufferMultiplierIntf = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.dbg-err"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.dbg-err"); value.Exists() {
 		data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierDbgErr = types.BoolNull()
+		data.LtraceBufferMultiplierDbgErr = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.sync"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.sync"); value.Exists() {
 		data.LtraceBufferMultiplierSync = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierSync = types.BoolNull()
+		data.LtraceBufferMultiplierSync = types.BoolValue(false)
 	}
 }
 
@@ -1217,75 +1201,75 @@ func (data *RSVPData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "signalling.graceful-restart"); value.Exists() {
+	if value := res.Get(prefix+"signalling.graceful-restart"); value.Exists() {
 		data.SignallingGracefulRestart = types.BoolValue(true)
 	} else {
 		data.SignallingGracefulRestart = types.BoolNull()
 	}
-	if value := res.Get(prefix + "signalling.graceful-restart-lsp-type"); value.Exists() {
+	if value := res.Get(prefix+"signalling.graceful-restart-lsp-type"); value.Exists() {
 		data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
 	} else {
 		data.SignallingGracefulRestartLspCtype = types.BoolNull()
 	}
-	if value := res.Get(prefix + "signalling.graceful-restart-recovery-time"); value.Exists() {
+	if value := res.Get(prefix+"signalling.graceful-restart-recovery-time"); value.Exists() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "signalling.graceful-restart-restart-time"); value.Exists() {
+	if value := res.Get(prefix+"signalling.graceful-restart-restart-time"); value.Exists() {
 		data.SignallingGracefulRestartRestartTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "signalling.hello.graceful-restart.refresh.interval"); value.Exists() {
+	if value := res.Get(prefix+"signalling.hello.graceful-restart.refresh.interval"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "signalling.hello.graceful-restart.refresh.misses"); value.Exists() {
+	if value := res.Get(prefix+"signalling.hello.graceful-restart.refresh.misses"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "signalling.event-per-pulse"); value.Exists() {
+	if value := res.Get(prefix+"signalling.event-per-pulse"); value.Exists() {
 		data.SignallingEventPerPulse = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "signalling.prefix-filtering.access-list"); value.Exists() {
+	if value := res.Get(prefix+"signalling.prefix-filtering.access-list"); value.Exists() {
 		data.SignallingPrefixFilteringAcl = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "signalling.prefix-filtering.default-deny-action.drop"); value.Exists() {
+	if value := res.Get(prefix+"signalling.prefix-filtering.default-deny-action.drop"); value.Exists() {
 		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
 	} else {
 		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolNull()
 	}
-	if value := res.Get(prefix + "signalling.message-bundle.disable"); value.Exists() {
+	if value := res.Get(prefix+"signalling.message-bundle.disable"); value.Exists() {
 		data.SignallingMessageBundleDisable = types.BoolValue(true)
 	} else {
 		data.SignallingMessageBundleDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix + "signalling.nodeid-subobject.disable"); value.Exists() {
+	if value := res.Get(prefix+"signalling.nodeid-subobject.disable"); value.Exists() {
 		data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
 	} else {
 		data.SignallingNodeidSubobjectDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix + "signalling.patherr.state-removal.disable"); value.Exists() {
+	if value := res.Get(prefix+"signalling.patherr.state-removal.disable"); value.Exists() {
 		data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
 	} else {
 		data.SignallingPatherrStateRemovalDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix + "signalling.checksum.disable"); value.Exists() {
+	if value := res.Get(prefix+"signalling.checksum.disable"); value.Exists() {
 		data.SignallingChecksumDisable = types.BoolValue(true)
 	} else {
 		data.SignallingChecksumDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix + "signalling.out-of-band.vrf"); value.Exists() {
+	if value := res.Get(prefix+"signalling.out-of-band.vrf"); value.Exists() {
 		data.SignallingOobVrf = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "authentication.key-source.key-chain"); value.Exists() {
+	if value := res.Get(prefix+"authentication.key-source.key-chain"); value.Exists() {
 		data.AuthenticationKeyChain = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "authentication.window-size"); value.Exists() {
+	if value := res.Get(prefix+"authentication.window-size"); value.Exists() {
 		data.AuthenticationWindowSize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "authentication.life-time"); value.Exists() {
+	if value := res.Get(prefix+"authentication.life-time"); value.Exists() {
 		data.AuthenticationLifeTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "authentication.retransmit"); value.Exists() {
+	if value := res.Get(prefix+"authentication.retransmit"); value.Exists() {
 		data.AuthenticationRetransmit = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "neighbors.neighbor"); value.Exists() {
+	if value := res.Get(prefix+"neighbors.neighbor"); value.Exists() {
 		data.Neighbors = make([]RSVPNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RSVPNeighbors{}
@@ -1305,68 +1289,68 @@ func (data *RSVPData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable.max-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix+"bandwidth.mam.percentage.max-reservable.max-reservable-bandwidth"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable.bc0"); value.Exists() {
+	if value := res.Get(prefix+"bandwidth.mam.percentage.max-reservable.bc0"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable.bc1"); value.Exists() {
+	if value := res.Get(prefix+"bandwidth.mam.percentage.max-reservable.bc1"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bandwidth.rdm.percentage.max-reservable-bc0.bc0"); value.Exists() {
+	if value := res.Get(prefix+"bandwidth.rdm.percentage.max-reservable-bc0.bc0"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bandwidth.rdm.percentage.max-reservable-bc0.bc1"); value.Exists() {
+	if value := res.Get(prefix+"bandwidth.rdm.percentage.max-reservable-bc0.bc1"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "latency.threshold"); value.Exists() {
+	if value := res.Get(prefix+"latency.threshold"); value.Exists() {
 		data.LatencyThreshold = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "logging.events.nsr"); value.Exists() {
+	if value := res.Get(prefix+"logging.events.nsr"); value.Exists() {
 		data.LoggingEventsNsr = types.BoolValue(true)
 	} else {
 		data.LoggingEventsNsr = types.BoolNull()
 	}
-	if value := res.Get(prefix + "logging.events.issu"); value.Exists() {
+	if value := res.Get(prefix+"logging.events.issu"); value.Exists() {
 		data.LoggingEventsIssu = types.BoolValue(true)
 	} else {
 		data.LoggingEventsIssu = types.BoolNull()
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.multiplier-factor"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.multiplier-factor"); value.Exists() {
 		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.rare"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.rare"); value.Exists() {
 		data.LtraceBufferMultiplierRare = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierRare = types.BoolNull()
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.common"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.common"); value.Exists() {
 		data.LtraceBufferMultiplierCommon = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierCommon = types.BoolNull()
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.sig"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.sig"); value.Exists() {
 		data.LtraceBufferMultiplierSig = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierSig = types.BoolNull()
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.sig-err"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.sig-err"); value.Exists() {
 		data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierSigErr = types.BoolNull()
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.intf"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.intf"); value.Exists() {
 		data.LtraceBufferMultiplierIntf = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierIntf = types.BoolNull()
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.dbg-err"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.dbg-err"); value.Exists() {
 		data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierDbgErr = types.BoolNull()
 	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.sync"); value.Exists() {
+	if value := res.Get(prefix+"ltrace-buffer.multiplier.sync"); value.Exists() {
 		data.LtraceBufferMultiplierSync = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierSync = types.BoolNull()
@@ -1377,75 +1361,75 @@ func (data *RSVPData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RSVP) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/graceful-restart"); value.Exists() {
 		data.SignallingGracefulRestart = types.BoolValue(true)
 	} else {
-		data.SignallingGracefulRestart = types.BoolNull()
+		data.SignallingGracefulRestart = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-lsp-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/graceful-restart-lsp-type"); value.Exists() {
 		data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
 	} else {
-		data.SignallingGracefulRestartLspCtype = types.BoolNull()
+		data.SignallingGracefulRestartLspCtype = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-recovery-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/graceful-restart-recovery-time"); value.Exists() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-restart-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/graceful-restart-restart-time"); value.Exists() {
 		data.SignallingGracefulRestartRestartTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/hello/graceful-restart/refresh/interval"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/misses"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/hello/graceful-restart/refresh/misses"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/event-per-pulse"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/event-per-pulse"); value.Exists() {
 		data.SignallingEventPerPulse = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/prefix-filtering/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/prefix-filtering/access-list"); value.Exists() {
 		data.SignallingPrefixFilteringAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/prefix-filtering/default-deny-action/drop"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/prefix-filtering/default-deny-action/drop"); value.Exists() {
 		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
 	} else {
-		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolNull()
+		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/message-bundle/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/message-bundle/disable"); value.Exists() {
 		data.SignallingMessageBundleDisable = types.BoolValue(true)
 	} else {
-		data.SignallingMessageBundleDisable = types.BoolNull()
+		data.SignallingMessageBundleDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/nodeid-subobject/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/nodeid-subobject/disable"); value.Exists() {
 		data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
 	} else {
-		data.SignallingNodeidSubobjectDisable = types.BoolNull()
+		data.SignallingNodeidSubobjectDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/patherr/state-removal/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/patherr/state-removal/disable"); value.Exists() {
 		data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
 	} else {
-		data.SignallingPatherrStateRemovalDisable = types.BoolNull()
+		data.SignallingPatherrStateRemovalDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/checksum/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/checksum/disable"); value.Exists() {
 		data.SignallingChecksumDisable = types.BoolValue(true)
 	} else {
-		data.SignallingChecksumDisable = types.BoolNull()
+		data.SignallingChecksumDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/out-of-band/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/out-of-band/vrf"); value.Exists() {
 		data.SignallingOobVrf = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/key-source/key-chain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/authentication/key-source/key-chain"); value.Exists() {
 		data.AuthenticationKeyChain = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/window-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/authentication/window-size"); value.Exists() {
 		data.AuthenticationWindowSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/life-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/authentication/life-time"); value.Exists() {
 		data.AuthenticationLifeTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/retransmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/authentication/retransmit"); value.Exists() {
 		data.AuthenticationRetransmit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbors/neighbor"); value.Exists() {
 		data.Neighbors = make([]RSVPNeighbors, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RSVPNeighbors{}
@@ -1465,71 +1449,71 @@ func (data *RSVP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/mam/percentage/max-reservable/bc0"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/mam/percentage/max-reservable/bc1"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/rdm/percentage/max-reservable-bc0/bc0"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/rdm/percentage/max-reservable-bc0/bc1"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/latency/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/latency/threshold"); value.Exists() {
 		data.LatencyThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/nsr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/events/nsr"); value.Exists() {
 		data.LoggingEventsNsr = types.BoolValue(true)
 	} else {
-		data.LoggingEventsNsr = types.BoolNull()
+		data.LoggingEventsNsr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/issu"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/events/issu"); value.Exists() {
 		data.LoggingEventsIssu = types.BoolValue(true)
 	} else {
-		data.LoggingEventsIssu = types.BoolNull()
+		data.LoggingEventsIssu = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/multiplier-factor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/multiplier-factor"); value.Exists() {
 		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/rare"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/rare"); value.Exists() {
 		data.LtraceBufferMultiplierRare = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierRare = types.BoolNull()
+		data.LtraceBufferMultiplierRare = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/common"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/common"); value.Exists() {
 		data.LtraceBufferMultiplierCommon = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierCommon = types.BoolNull()
+		data.LtraceBufferMultiplierCommon = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sig"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/sig"); value.Exists() {
 		data.LtraceBufferMultiplierSig = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierSig = types.BoolNull()
+		data.LtraceBufferMultiplierSig = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sig-err"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/sig-err"); value.Exists() {
 		data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierSigErr = types.BoolNull()
+		data.LtraceBufferMultiplierSigErr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/intf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/intf"); value.Exists() {
 		data.LtraceBufferMultiplierIntf = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierIntf = types.BoolNull()
+		data.LtraceBufferMultiplierIntf = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/dbg-err"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/dbg-err"); value.Exists() {
 		data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierDbgErr = types.BoolNull()
+		data.LtraceBufferMultiplierDbgErr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/sync"); value.Exists() {
 		data.LtraceBufferMultiplierSync = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierSync = types.BoolNull()
+		data.LtraceBufferMultiplierSync = types.BoolValue(false)
 	}
 }
 
@@ -1537,75 +1521,75 @@ func (data *RSVP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RSVPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/graceful-restart"); value.Exists() {
 		data.SignallingGracefulRestart = types.BoolValue(true)
 	} else {
 		data.SignallingGracefulRestart = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-lsp-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/graceful-restart-lsp-type"); value.Exists() {
 		data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
 	} else {
 		data.SignallingGracefulRestartLspCtype = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-recovery-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/graceful-restart-recovery-time"); value.Exists() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-restart-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/graceful-restart-restart-time"); value.Exists() {
 		data.SignallingGracefulRestartRestartTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/hello/graceful-restart/refresh/interval"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/misses"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/hello/graceful-restart/refresh/misses"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/event-per-pulse"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/event-per-pulse"); value.Exists() {
 		data.SignallingEventPerPulse = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/prefix-filtering/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/prefix-filtering/access-list"); value.Exists() {
 		data.SignallingPrefixFilteringAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/prefix-filtering/default-deny-action/drop"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/prefix-filtering/default-deny-action/drop"); value.Exists() {
 		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
 	} else {
 		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/message-bundle/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/message-bundle/disable"); value.Exists() {
 		data.SignallingMessageBundleDisable = types.BoolValue(true)
 	} else {
 		data.SignallingMessageBundleDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/nodeid-subobject/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/nodeid-subobject/disable"); value.Exists() {
 		data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
 	} else {
 		data.SignallingNodeidSubobjectDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/patherr/state-removal/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/patherr/state-removal/disable"); value.Exists() {
 		data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
 	} else {
 		data.SignallingPatherrStateRemovalDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/checksum/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/checksum/disable"); value.Exists() {
 		data.SignallingChecksumDisable = types.BoolValue(true)
 	} else {
 		data.SignallingChecksumDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/out-of-band/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/signalling/out-of-band/vrf"); value.Exists() {
 		data.SignallingOobVrf = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/key-source/key-chain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/authentication/key-source/key-chain"); value.Exists() {
 		data.AuthenticationKeyChain = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/window-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/authentication/window-size"); value.Exists() {
 		data.AuthenticationWindowSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/life-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/authentication/life-time"); value.Exists() {
 		data.AuthenticationLifeTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/retransmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/authentication/retransmit"); value.Exists() {
 		data.AuthenticationRetransmit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbors/neighbor"); value.Exists() {
 		data.Neighbors = make([]RSVPNeighbors, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RSVPNeighbors{}
@@ -1625,68 +1609,68 @@ func (data *RSVPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/mam/percentage/max-reservable/bc0"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/mam/percentage/max-reservable/bc1"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/rdm/percentage/max-reservable-bc0/bc0"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bandwidth/rdm/percentage/max-reservable-bc0/bc1"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/latency/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/latency/threshold"); value.Exists() {
 		data.LatencyThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/nsr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/events/nsr"); value.Exists() {
 		data.LoggingEventsNsr = types.BoolValue(true)
 	} else {
 		data.LoggingEventsNsr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/issu"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/events/issu"); value.Exists() {
 		data.LoggingEventsIssu = types.BoolValue(true)
 	} else {
 		data.LoggingEventsIssu = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/multiplier-factor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/multiplier-factor"); value.Exists() {
 		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/rare"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/rare"); value.Exists() {
 		data.LtraceBufferMultiplierRare = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierRare = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/common"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/common"); value.Exists() {
 		data.LtraceBufferMultiplierCommon = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierCommon = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sig"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/sig"); value.Exists() {
 		data.LtraceBufferMultiplierSig = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierSig = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sig-err"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/sig-err"); value.Exists() {
 		data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierSigErr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/intf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/intf"); value.Exists() {
 		data.LtraceBufferMultiplierIntf = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierIntf = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/dbg-err"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/dbg-err"); value.Exists() {
 		data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierDbgErr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ltrace-buffer/multiplier/sync"); value.Exists() {
 		data.LtraceBufferMultiplierSync = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierSync = types.BoolValue(false)
@@ -1747,11 +1731,11 @@ func (data *RSVP) getDeletedItems(ctx context.Context, state RSVP) []string {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bandwidth/mam/percentage/max-reservable", state.getPath()))
 	}
 	for i := range state.Neighbors {
-		keys := [...]string{"neighbor-address"}
-		stateKeyValues := [...]string{state.Neighbors[i].Address.ValueString()}
+		keys := [...]string{ "neighbor-address",  }
+		stateKeyValues := [...]string{ state.Neighbors[i].Address.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -1768,16 +1752,16 @@ func (data *RSVP) getDeletedItems(ctx context.Context, state RSVP) []string {
 			if state.Neighbors[i].Address.ValueString() != data.Neighbors[j].Address.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.Neighbors[i].AuthenticationLifeTime.IsNull() && data.Neighbors[j].AuthenticationLifeTime.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/authentication/life-time", state.getPath(), keyString))
-				}
-				if !state.Neighbors[i].AuthenticationWindowSize.IsNull() && data.Neighbors[j].AuthenticationWindowSize.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/authentication/window-size", state.getPath(), keyString))
-				}
-				if !state.Neighbors[i].AuthenticationKeyChain.IsNull() && data.Neighbors[j].AuthenticationKeyChain.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/authentication/key-source/key-chain", state.getPath(), keyString))
-				}
+		if found {
+			if !state.Neighbors[i].AuthenticationLifeTime.IsNull() && data.Neighbors[j].AuthenticationLifeTime.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/authentication/life-time", state.getPath(), keyString))
+			}
+			if !state.Neighbors[i].AuthenticationWindowSize.IsNull() && data.Neighbors[j].AuthenticationWindowSize.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/authentication/window-size", state.getPath(), keyString))
+			}
+			if !state.Neighbors[i].AuthenticationKeyChain.IsNull() && data.Neighbors[j].AuthenticationKeyChain.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/authentication/key-source/key-chain", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -1902,11 +1886,11 @@ func (data *RSVP) getEmptyLeafsDelete(ctx context.Context, state *RSVP) []string
 		}
 	}
 	for i := range data.Neighbors {
-		keys := [...]string{"neighbor-address"}
-		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
+		keys := [...]string{ "neighbor-address",  }
+		keyValues := [...]string{ data.Neighbors[i].Address.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -2008,7 +1992,7 @@ func (data *RSVP) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bandwidth/mam/percentage/max-reservable", data.getPath()))
 	}
 	for i := range data.Neighbors {
-		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
+		keyValues := [...]string{ data.Neighbors[i].Address.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbors/neighbor=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2080,7 +2064,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LtraceBufferMultiplierSync.IsNull() && state.LtraceBufferMultiplierSync.ValueBool() && data.LtraceBufferMultiplierSync.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/ltrace-buffer/multiplier"
+		deletePath := state.getXPath()+"/ltrace-buffer/multiplier"
 		predicates := make(map[string]string)
 		if !state.LtraceBufferMultiplier.IsNull() {
 			predicates["multiplier-factor"] = fmt.Sprintf("%v", state.LtraceBufferMultiplier.ValueInt64())
@@ -2121,7 +2105,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LtraceBufferMultiplierDbgErr.IsNull() && state.LtraceBufferMultiplierDbgErr.ValueBool() && data.LtraceBufferMultiplierDbgErr.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/ltrace-buffer/multiplier"
+		deletePath := state.getXPath()+"/ltrace-buffer/multiplier"
 		predicates := make(map[string]string)
 		if !state.LtraceBufferMultiplier.IsNull() {
 			predicates["multiplier-factor"] = fmt.Sprintf("%v", state.LtraceBufferMultiplier.ValueInt64())
@@ -2162,7 +2146,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LtraceBufferMultiplierIntf.IsNull() && state.LtraceBufferMultiplierIntf.ValueBool() && data.LtraceBufferMultiplierIntf.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/ltrace-buffer/multiplier"
+		deletePath := state.getXPath()+"/ltrace-buffer/multiplier"
 		predicates := make(map[string]string)
 		if !state.LtraceBufferMultiplier.IsNull() {
 			predicates["multiplier-factor"] = fmt.Sprintf("%v", state.LtraceBufferMultiplier.ValueInt64())
@@ -2203,7 +2187,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LtraceBufferMultiplierSigErr.IsNull() && state.LtraceBufferMultiplierSigErr.ValueBool() && data.LtraceBufferMultiplierSigErr.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/ltrace-buffer/multiplier"
+		deletePath := state.getXPath()+"/ltrace-buffer/multiplier"
 		predicates := make(map[string]string)
 		if !state.LtraceBufferMultiplier.IsNull() {
 			predicates["multiplier-factor"] = fmt.Sprintf("%v", state.LtraceBufferMultiplier.ValueInt64())
@@ -2244,7 +2228,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LtraceBufferMultiplierSig.IsNull() && state.LtraceBufferMultiplierSig.ValueBool() && data.LtraceBufferMultiplierSig.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/ltrace-buffer/multiplier"
+		deletePath := state.getXPath()+"/ltrace-buffer/multiplier"
 		predicates := make(map[string]string)
 		if !state.LtraceBufferMultiplier.IsNull() {
 			predicates["multiplier-factor"] = fmt.Sprintf("%v", state.LtraceBufferMultiplier.ValueInt64())
@@ -2285,7 +2269,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LtraceBufferMultiplierCommon.IsNull() && state.LtraceBufferMultiplierCommon.ValueBool() && data.LtraceBufferMultiplierCommon.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/ltrace-buffer/multiplier"
+		deletePath := state.getXPath()+"/ltrace-buffer/multiplier"
 		predicates := make(map[string]string)
 		if !state.LtraceBufferMultiplier.IsNull() {
 			predicates["multiplier-factor"] = fmt.Sprintf("%v", state.LtraceBufferMultiplier.ValueInt64())
@@ -2326,7 +2310,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LtraceBufferMultiplierRare.IsNull() && state.LtraceBufferMultiplierRare.ValueBool() && data.LtraceBufferMultiplierRare.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/ltrace-buffer/multiplier"
+		deletePath := state.getXPath()+"/ltrace-buffer/multiplier"
 		predicates := make(map[string]string)
 		if !state.LtraceBufferMultiplier.IsNull() {
 			predicates["multiplier-factor"] = fmt.Sprintf("%v", state.LtraceBufferMultiplier.ValueInt64())
@@ -2366,7 +2350,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	if !state.LtraceBufferMultiplier.IsNull() && data.LtraceBufferMultiplier.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/ltrace-buffer/multiplier"
+		deletePath := state.getXPath()+"/ltrace-buffer/multiplier"
 		predicates := make(map[string]string)
 		if !state.LtraceBufferMultiplierRare.IsNull() {
 			predicates["rare"] = fmt.Sprintf("%v", state.LtraceBufferMultiplierRare.ValueBool())
@@ -2406,7 +2390,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingEventsIssu.IsNull() && state.LoggingEventsIssu.ValueBool() && data.LoggingEventsIssu.IsNull() {
-		deletePath := state.getXPath() + "/logging/events/issu"
+		deletePath := state.getXPath()+"/logging/events/issu"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2414,14 +2398,14 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingEventsNsr.IsNull() && state.LoggingEventsNsr.ValueBool() && data.LoggingEventsNsr.IsNull() {
-		deletePath := state.getXPath() + "/logging/events/nsr"
+		deletePath := state.getXPath()+"/logging/events/nsr"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.LatencyThreshold.IsNull() && data.LatencyThreshold.IsNull() {
-		deletePath := state.getXPath() + "/latency/threshold"
+		deletePath := state.getXPath()+"/latency/threshold"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2429,7 +2413,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	if !state.BandwidthRdmPercentageMaxReservableBc1.IsNull() && data.BandwidthRdmPercentageMaxReservableBc1.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/bandwidth/rdm/percentage/max-reservable-bc0"
+		deletePath := state.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0"
 		predicates := make(map[string]string)
 		if !state.BandwidthRdmPercentageMaxReservableBc0.IsNull() {
 			predicates["bc0"] = fmt.Sprintf("%v", state.BandwidthRdmPercentageMaxReservableBc0.ValueInt64())
@@ -2451,7 +2435,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	if !state.BandwidthRdmPercentageMaxReservableBc0.IsNull() && data.BandwidthRdmPercentageMaxReservableBc0.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/bandwidth/rdm/percentage/max-reservable-bc0"
+		deletePath := state.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0"
 		predicates := make(map[string]string)
 		if !state.BandwidthRdmPercentageMaxReservableBc1.IsNull() {
 			predicates["bc1"] = fmt.Sprintf("%v", state.BandwidthRdmPercentageMaxReservableBc1.ValueInt64())
@@ -2473,7 +2457,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	if !state.BandwidthMamPercentageMaxReservableBc1.IsNull() && data.BandwidthMamPercentageMaxReservableBc1.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/bandwidth/mam/percentage/max-reservable"
+		deletePath := state.getXPath()+"/bandwidth/mam/percentage/max-reservable"
 		predicates := make(map[string]string)
 		if !state.BandwidthMamPercentageMaxReservableBandwidth.IsNull() {
 			predicates["max-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthMamPercentageMaxReservableBandwidth.ValueInt64())
@@ -2498,7 +2482,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	if !state.BandwidthMamPercentageMaxReservableBc0.IsNull() && data.BandwidthMamPercentageMaxReservableBc0.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/bandwidth/mam/percentage/max-reservable"
+		deletePath := state.getXPath()+"/bandwidth/mam/percentage/max-reservable"
 		predicates := make(map[string]string)
 		if !state.BandwidthMamPercentageMaxReservableBandwidth.IsNull() {
 			predicates["max-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthMamPercentageMaxReservableBandwidth.ValueInt64())
@@ -2523,7 +2507,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	if !state.BandwidthMamPercentageMaxReservableBandwidth.IsNull() && data.BandwidthMamPercentageMaxReservableBandwidth.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/bandwidth/mam/percentage/max-reservable"
+		deletePath := state.getXPath()+"/bandwidth/mam/percentage/max-reservable"
 		predicates := make(map[string]string)
 		if !state.BandwidthMamPercentageMaxReservableBc0.IsNull() {
 			predicates["bc0"] = fmt.Sprintf("%v", state.BandwidthMamPercentageMaxReservableBc0.ValueInt64())
@@ -2547,8 +2531,8 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 		}
 	}
 	for i := range state.Neighbors {
-		stateKeys := [...]string{"neighbor-address"}
-		stateKeyValues := [...]string{state.Neighbors[i].Address.ValueString()}
+		stateKeys := [...]string{ "neighbor-address",  }
+		stateKeyValues := [...]string{ state.Neighbors[i].Address.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2569,15 +2553,15 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 				found = false
 			}
 			if found {
-				if !state.Neighbors[i].AuthenticationLifeTime.IsNull() && data.Neighbors[j].AuthenticationLifeTime.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/authentication/life-time", predicates))
-				}
-				if !state.Neighbors[i].AuthenticationWindowSize.IsNull() && data.Neighbors[j].AuthenticationWindowSize.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/authentication/window-size", predicates))
-				}
-				if !state.Neighbors[i].AuthenticationKeyChain.IsNull() && data.Neighbors[j].AuthenticationKeyChain.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/authentication/key-source/key-chain", predicates))
-				}
+			if !state.Neighbors[i].AuthenticationLifeTime.IsNull() && data.Neighbors[j].AuthenticationLifeTime.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/authentication/life-time", predicates))
+			}
+			if !state.Neighbors[i].AuthenticationWindowSize.IsNull() && data.Neighbors[j].AuthenticationWindowSize.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/authentication/window-size", predicates))
+			}
+			if !state.Neighbors[i].AuthenticationKeyChain.IsNull() && data.Neighbors[j].AuthenticationKeyChain.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/authentication/key-source/key-chain", predicates))
+			}
 				break
 			}
 		}
@@ -2586,35 +2570,35 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 		}
 	}
 	if !state.AuthenticationRetransmit.IsNull() && data.AuthenticationRetransmit.IsNull() {
-		deletePath := state.getXPath() + "/authentication/retransmit"
+		deletePath := state.getXPath()+"/authentication/retransmit"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AuthenticationLifeTime.IsNull() && data.AuthenticationLifeTime.IsNull() {
-		deletePath := state.getXPath() + "/authentication/life-time"
+		deletePath := state.getXPath()+"/authentication/life-time"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AuthenticationWindowSize.IsNull() && data.AuthenticationWindowSize.IsNull() {
-		deletePath := state.getXPath() + "/authentication/window-size"
+		deletePath := state.getXPath()+"/authentication/window-size"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AuthenticationKeyChain.IsNull() && data.AuthenticationKeyChain.IsNull() {
-		deletePath := state.getXPath() + "/authentication/key-source/key-chain"
+		deletePath := state.getXPath()+"/authentication/key-source/key-chain"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SignallingOobVrf.IsNull() && data.SignallingOobVrf.IsNull() {
-		deletePath := state.getXPath() + "/signalling/out-of-band/vrf"
+		deletePath := state.getXPath()+"/signalling/out-of-band/vrf"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2622,7 +2606,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SignallingChecksumDisable.IsNull() && state.SignallingChecksumDisable.ValueBool() && data.SignallingChecksumDisable.IsNull() {
-		deletePath := state.getXPath() + "/signalling/checksum/disable"
+		deletePath := state.getXPath()+"/signalling/checksum/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2630,7 +2614,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SignallingPatherrStateRemovalDisable.IsNull() && state.SignallingPatherrStateRemovalDisable.ValueBool() && data.SignallingPatherrStateRemovalDisable.IsNull() {
-		deletePath := state.getXPath() + "/signalling/patherr/state-removal/disable"
+		deletePath := state.getXPath()+"/signalling/patherr/state-removal/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2638,7 +2622,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SignallingNodeidSubobjectDisable.IsNull() && state.SignallingNodeidSubobjectDisable.ValueBool() && data.SignallingNodeidSubobjectDisable.IsNull() {
-		deletePath := state.getXPath() + "/signalling/nodeid-subobject/disable"
+		deletePath := state.getXPath()+"/signalling/nodeid-subobject/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2646,7 +2630,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SignallingMessageBundleDisable.IsNull() && state.SignallingMessageBundleDisable.ValueBool() && data.SignallingMessageBundleDisable.IsNull() {
-		deletePath := state.getXPath() + "/signalling/message-bundle/disable"
+		deletePath := state.getXPath()+"/signalling/message-bundle/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2654,49 +2638,49 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() && state.SignallingPrefixFilteringDefaultDenyActionDrop.ValueBool() && data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
-		deletePath := state.getXPath() + "/signalling/prefix-filtering/default-deny-action/drop"
+		deletePath := state.getXPath()+"/signalling/prefix-filtering/default-deny-action/drop"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SignallingPrefixFilteringAcl.IsNull() && data.SignallingPrefixFilteringAcl.IsNull() {
-		deletePath := state.getXPath() + "/signalling/prefix-filtering/access-list"
+		deletePath := state.getXPath()+"/signalling/prefix-filtering/access-list"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SignallingEventPerPulse.IsNull() && data.SignallingEventPerPulse.IsNull() {
-		deletePath := state.getXPath() + "/signalling/event-per-pulse"
+		deletePath := state.getXPath()+"/signalling/event-per-pulse"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SignallingHelloGracefulRestartRefreshMisses.IsNull() && data.SignallingHelloGracefulRestartRefreshMisses.IsNull() {
-		deletePath := state.getXPath() + "/signalling/hello/graceful-restart/refresh/misses"
+		deletePath := state.getXPath()+"/signalling/hello/graceful-restart/refresh/misses"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SignallingHelloGracefulRestartRefreshInterval.IsNull() && data.SignallingHelloGracefulRestartRefreshInterval.IsNull() {
-		deletePath := state.getXPath() + "/signalling/hello/graceful-restart/refresh/interval"
+		deletePath := state.getXPath()+"/signalling/hello/graceful-restart/refresh/interval"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SignallingGracefulRestartRestartTime.IsNull() && data.SignallingGracefulRestartRestartTime.IsNull() {
-		deletePath := state.getXPath() + "/signalling/graceful-restart-restart-time"
+		deletePath := state.getXPath()+"/signalling/graceful-restart-restart-time"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SignallingGracefulRestartRecoveryTime.IsNull() && data.SignallingGracefulRestartRecoveryTime.IsNull() {
-		deletePath := state.getXPath() + "/signalling/graceful-restart-recovery-time"
+		deletePath := state.getXPath()+"/signalling/graceful-restart-recovery-time"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2704,7 +2688,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SignallingGracefulRestartLspCtype.IsNull() && state.SignallingGracefulRestartLspCtype.ValueBool() && data.SignallingGracefulRestartLspCtype.IsNull() {
-		deletePath := state.getXPath() + "/signalling/graceful-restart-lsp-type"
+		deletePath := state.getXPath()+"/signalling/graceful-restart-lsp-type"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2712,7 +2696,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SignallingGracefulRestart.IsNull() && state.SignallingGracefulRestart.ValueBool() && data.SignallingGracefulRestart.IsNull() {
-		deletePath := state.getXPath() + "/signalling/graceful-restart"
+		deletePath := state.getXPath()+"/signalling/graceful-restart"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2778,8 +2762,8 @@ func (data *RSVP) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/mam/percentage/max-reservable")
 	}
 	for i := range data.Neighbors {
-		keys := [...]string{"neighbor-address"}
-		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
+		keys := [...]string{ "neighbor-address",  }
+		keyValues := [...]string{ data.Neighbors[i].Address.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

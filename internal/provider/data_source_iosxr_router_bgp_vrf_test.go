@@ -141,8 +141,8 @@ func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterBGPVRFPrerequisitesConfig + testAccDataSourceIosxrRouterBGPVRFConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrRouterBGPVRFPrerequisitesConfig+testAccDataSourceIosxrRouterBGPVRFConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

@@ -24,21 +24,28 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -49,7 +56,7 @@ func NewRouterISISInterfaceResource() resource.Resource {
 	return &RouterISISInterfaceResource{}
 }
 
-type RouterISISInterfaceResource struct {
+type RouterISISInterfaceResource struct{
 	data *IosxrProviderData
 }
 
@@ -114,17 +121,17 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Do not establish adjacencies over this interface").AddStringEnumDescription("passive", "shutdown", "suppressed").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Do not establish adjacencies over this interface").AddStringEnumDescription("passive", "shutdown", "suppressed", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("passive", "shutdown", "suppressed"),
+					stringvalidator.OneOf("passive", "shutdown", "suppressed", ),
 				},
 			},
 			"circuit_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure circuit type for interface").AddStringEnumDescription("level-1", "level-1-2", "level-2-only").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure circuit type for interface").AddStringEnumDescription("level-1", "level-1-2", "level-2-only", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("level-1", "level-1-2", "level-2-only"),
+					stringvalidator.OneOf("level-1", "level-1-2", "level-2-only", ),
 				},
 			},
 			"csnp_interval": schema.Int64Attribute{
@@ -157,10 +164,10 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 				},
 			},
 			"hello_padding": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Add padding to IS-IS hello packets").AddStringEnumDescription("adaptive", "always", "disable", "sometimes").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Add padding to IS-IS hello packets").AddStringEnumDescription("adaptive", "always", "disable", "sometimes", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("adaptive", "always", "disable", "sometimes"),
+					stringvalidator.OneOf("adaptive", "always", "disable", "sometimes", ),
 				},
 			},
 			"hello_padding_levels": schema.ListNestedAttribute{
@@ -176,10 +183,10 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 							},
 						},
 						"hello_padding": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("hello-padding").AddStringEnumDescription("adaptive", "always", "disable", "sometimes").String,
+							MarkdownDescription: helpers.NewAttributeDescription("hello-padding").AddStringEnumDescription("adaptive", "always", "disable", "sometimes", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("adaptive", "always", "disable", "sometimes"),
+								stringvalidator.OneOf("adaptive", "always", "disable", "sometimes", ),
 							},
 						},
 					},
@@ -502,10 +509,10 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"override_metrics": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Override the configured link metrics").AddStringEnumDescription("disabled", "high", "maximum").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Override the configured link metrics").AddStringEnumDescription("disabled", "high", "maximum", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("disabled", "high", "maximum"),
+					stringvalidator.OneOf("disabled", "high", "maximum", ),
 				},
 			},
 			"delay_normalize_interval": schema.Int64Attribute{
@@ -591,14 +598,14 @@ func (r *RouterISISInterfaceResource) Create(ctx context.Context, req resource.C
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			var ops []gnmi.SetOperation
+		var ops []gnmi.SetOperation
 
-			// Create object
-			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -819,11 +826,11 @@ func (r *RouterISISInterfaceResource) Update(ctx context.Context, req resource.U
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			// Combine update and delete operations into a single transaction
-			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-				resp.Diagnostics.AddError("Client Error", err.Error())
-				return
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
 			}
 		}
 	}

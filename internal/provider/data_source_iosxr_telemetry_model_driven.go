@@ -23,14 +23,19 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/netascode/go-gnmi"
+	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -47,7 +52,7 @@ func NewTelemetryModelDrivenDataSource() datasource.DataSource {
 	return &TelemetryModelDrivenDataSource{}
 }
 
-type TelemetryModelDrivenDataSource struct {
+type TelemetryModelDrivenDataSource struct{
 	data *IosxrProviderData
 }
 
@@ -134,47 +139,47 @@ func (d *TelemetryModelDrivenDataSource) Schema(ctx context.Context, req datasou
 									"af_name": schema.StringAttribute{
 										MarkdownDescription: "af-name",
 										Computed:            true,
-									},
+								},
 									"address": schema.StringAttribute{
 										MarkdownDescription: "destination-address",
 										Computed:            true,
-									},
+								},
 									"port": schema.Int64Attribute{
 										MarkdownDescription: "Destination Port configuration",
 										Computed:            true,
-									},
+								},
 									"encoding": schema.StringAttribute{
 										MarkdownDescription: "Transport protocol encoding",
 										Computed:            true,
-									},
+								},
 									"protocol_grpc": schema.BoolAttribute{
 										MarkdownDescription: "gRPC",
 										Computed:            true,
-									},
+								},
 									"protocol_grpc_no_tls": schema.BoolAttribute{
 										MarkdownDescription: "No TLS",
 										Computed:            true,
-									},
+								},
 									"protocol_grpc_tls_hostname": schema.StringAttribute{
 										MarkdownDescription: "TLS hostname",
 										Computed:            true,
-									},
+								},
 									"protocol_grpc_gzip": schema.BoolAttribute{
 										MarkdownDescription: "gRPC gzip message compression",
 										Computed:            true,
-									},
+								},
 									"protocol_tcp": schema.BoolAttribute{
 										MarkdownDescription: "TCP",
 										Computed:            true,
-									},
+								},
 									"protocol_udp": schema.BoolAttribute{
 										MarkdownDescription: "UDP",
 										Computed:            true,
-									},
+								},
 									"protocol_udp_packetsize": schema.Int64Attribute{
 										MarkdownDescription: "UDP packet size",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -186,47 +191,47 @@ func (d *TelemetryModelDrivenDataSource) Schema(ctx context.Context, req datasou
 									"address": schema.StringAttribute{
 										MarkdownDescription: "IPv4/IPv6 address or domain name",
 										Computed:            true,
-									},
+								},
 									"port": schema.Int64Attribute{
 										MarkdownDescription: "Destination port",
 										Computed:            true,
-									},
+								},
 									"address_family": schema.StringAttribute{
 										MarkdownDescription: "Specify the desired address family for the returned addresses from DNS. Only applicable to FQDN",
 										Computed:            true,
-									},
+								},
 									"encoding": schema.StringAttribute{
 										MarkdownDescription: "Transport protocol encoding",
 										Computed:            true,
-									},
+								},
 									"protocol_grpc": schema.BoolAttribute{
 										MarkdownDescription: "gRPC",
 										Computed:            true,
-									},
+								},
 									"protocol_grpc_no_tls": schema.BoolAttribute{
 										MarkdownDescription: "No TLS",
 										Computed:            true,
-									},
+								},
 									"protocol_grpc_tls_hostname": schema.StringAttribute{
 										MarkdownDescription: "TLS hostname",
 										Computed:            true,
-									},
+								},
 									"protocol_grpc_gzip": schema.BoolAttribute{
 										MarkdownDescription: "gRPC gzip message compression",
 										Computed:            true,
-									},
+								},
 									"protocol_tcp": schema.BoolAttribute{
 										MarkdownDescription: "TCP",
 										Computed:            true,
-									},
+								},
 									"protocol_udp": schema.BoolAttribute{
 										MarkdownDescription: "UDP",
 										Computed:            true,
-									},
+								},
 									"protocol_udp_packetsize": schema.Int64Attribute{
 										MarkdownDescription: "UDP packet size",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -258,27 +263,27 @@ func (d *TelemetryModelDrivenDataSource) Schema(ctx context.Context, req datasou
 									"name": schema.StringAttribute{
 										MarkdownDescription: "Available Sensor Groups",
 										Computed:            true,
-									},
+								},
 									"mode": schema.StringAttribute{
 										MarkdownDescription: "Subscription mode",
 										Computed:            true,
-									},
+								},
 									"heartbeat_always": schema.BoolAttribute{
 										MarkdownDescription: "Send heartbeat even if events have occurred within interval",
 										Computed:            true,
-									},
+								},
 									"heartbeat_interval": schema.Int64Attribute{
 										MarkdownDescription: "Send subscription data per heartbeat interval when no events have occurred within interval",
 										Computed:            true,
-									},
+								},
 									"strict_timer": schema.BoolAttribute{
 										MarkdownDescription: "use strict timer, default is relative timer",
 										Computed:            true,
-									},
+								},
 									"sample_interval": schema.Int64Attribute{
 										MarkdownDescription: "Sample interval",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -290,7 +295,7 @@ func (d *TelemetryModelDrivenDataSource) Schema(ctx context.Context, req datasou
 									"name": schema.StringAttribute{
 										MarkdownDescription: "Available Destination Group Ids",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -322,7 +327,7 @@ func (d *TelemetryModelDrivenDataSource) Schema(ctx context.Context, req datasou
 									"name": schema.StringAttribute{
 										MarkdownDescription: "Sensor Path",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -406,6 +411,7 @@ func (d *TelemetryModelDrivenDataSource) Read(ctx context.Context, req datasourc
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
+
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

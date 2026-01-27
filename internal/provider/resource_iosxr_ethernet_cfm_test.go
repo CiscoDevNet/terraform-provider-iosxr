@@ -21,8 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -35,8 +33,8 @@ import (
 
 func TestAccIosxrEthernetCFM(t *testing.T) {
 	if os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
-		t.Skip("skipping test, set environment variable NCS or C8000")
-	}
+        t.Skip("skipping test, set environment variable NCS or C8000")
+    }
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ethernet_cfm.test", "traceroute_cache_hold_time", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ethernet_cfm.test", "traceroute_cache_size", "3000"))
@@ -77,18 +75,18 @@ func TestAccIosxrEthernetCFM(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrEthernetCFMConfig_all(),
-		Check:  resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:      "iosxr_ethernet_cfm.test",
-		ImportState:       true,
+		ResourceName:  "iosxr_ethernet_cfm.test",
+		ImportState:   true,
 		ImportStateIdFunc: iosxrEthernetCFMImportStateIdFunc("iosxr_ethernet_cfm.test"),
-		Check:             resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps:                    steps,
+		Steps: steps,
 	})
 }
 
@@ -99,7 +97,7 @@ func TestAccIosxrEthernetCFM(t *testing.T) {
 func iosxrEthernetCFMImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf(""), nil
+		return fmt.Sprintf("", ), nil
 	}
 }
 

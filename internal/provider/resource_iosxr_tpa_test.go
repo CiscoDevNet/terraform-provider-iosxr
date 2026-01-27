@@ -21,8 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -35,8 +33,8 @@ import (
 
 func TestAccIosxrTPA(t *testing.T) {
 	if os.Getenv("TPA") == "" {
-		t.Skip("skipping test, set environment variable TPA")
-	}
+        t.Skip("skipping test, set environment variable TPA")
+    }
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_tpa.test", "statistics_update_frequency", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_tpa.test", "statistics_max_lpts_events", "10000000"))
@@ -61,18 +59,18 @@ func TestAccIosxrTPA(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrTPAConfig_all(),
-		Check:  resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:      "iosxr_tpa.test",
-		ImportState:       true,
+		ResourceName:  "iosxr_tpa.test",
+		ImportState:   true,
 		ImportStateIdFunc: iosxrTPAImportStateIdFunc("iosxr_tpa.test"),
-		Check:             resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps:                    steps,
+		Steps: steps,
 	})
 }
 
@@ -83,7 +81,7 @@ func TestAccIosxrTPA(t *testing.T) {
 func iosxrTPAImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf(""), nil
+		return fmt.Sprintf("", ), nil
 	}
 }
 

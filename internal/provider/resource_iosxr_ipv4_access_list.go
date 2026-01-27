@@ -24,21 +24,28 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -49,7 +56,7 @@ func NewIPv4AccessListResource() resource.Resource {
 	return &IPv4AccessListResource{}
 }
 
-type IPv4AccessListResource struct {
+type IPv4AccessListResource struct{
 	data *IosxrProviderData
 }
 
@@ -124,10 +131,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Optional:            true,
 						},
 						"permit_fragment_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Fragment type for a packet").AddStringEnumDescription("dont-fragment", "dont-fragment first-fragment", "dont-fragment is-fragment", "dont-fragment last-fragment", "first-fragment", "is-fragment", "last-fragment").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Fragment type for a packet").AddStringEnumDescription("dont-fragment", "dont-fragment first-fragment", "dont-fragment is-fragment", "dont-fragment last-fragment", "first-fragment", "is-fragment", "last-fragment", ).String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("dont-fragment", "dont-fragment first-fragment", "dont-fragment is-fragment", "dont-fragment last-fragment", "first-fragment", "is-fragment", "last-fragment"),
+								stringvalidator.OneOf("dont-fragment", "dont-fragment first-fragment", "dont-fragment is-fragment", "dont-fragment last-fragment", "first-fragment", "is-fragment", "last-fragment", ),
 							},
 						},
 						"permit_source_address": schema.StringAttribute{
@@ -275,10 +282,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Optional:            true,
 						},
 						"permit_icmp_message_type_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("ICMP message type").AddStringEnumDescription("AdministrativelyProhibited", "AlternateAddress", "ConversionError", "DODHostProhibited", "DODNetProhibited", "Echo", "EchoReply", "GeneralParameterProblem", "HostIsolated", "HostPrecedenceUnreachable", "HostRedirect", "HostTOSRedirect", "HostTOSUnreachable", "HostUnknown", "HostUnreachable", "InformationReply", "InformationRequest", "MaskReply", "MaskRequest", "MobileRedirect", "NetTOSRedirect", "NetTOSUnreachable", "NetworkRedirect", "NetworkUnknown", "NetworkUnreachable", "NoRoomForOption", "OptionMissing", "PacketTooBig", "ParameterProblem", "PortUnreachable", "PrecedenceUnreachable", "ProtocolUnreachable", "ReassemblyTimeout", "Redirect", "RouterAdvertisement", "RouterSolicitation", "SourceQuench", "SourceRouteFailed", "TTLExceeded", "TimeExceeded", "TimestampReply", "TimestampRequest", "Traceroute", "Unreachable").String,
+							MarkdownDescription: helpers.NewAttributeDescription("ICMP message type").AddStringEnumDescription("AdministrativelyProhibited", "AlternateAddress", "ConversionError", "DODHostProhibited", "DODNetProhibited", "Echo", "EchoReply", "GeneralParameterProblem", "HostIsolated", "HostPrecedenceUnreachable", "HostRedirect", "HostTOSRedirect", "HostTOSUnreachable", "HostUnknown", "HostUnreachable", "InformationReply", "InformationRequest", "MaskReply", "MaskRequest", "MobileRedirect", "NetTOSRedirect", "NetTOSUnreachable", "NetworkRedirect", "NetworkUnknown", "NetworkUnreachable", "NoRoomForOption", "OptionMissing", "PacketTooBig", "ParameterProblem", "PortUnreachable", "PrecedenceUnreachable", "ProtocolUnreachable", "ReassemblyTimeout", "Redirect", "RouterAdvertisement", "RouterSolicitation", "SourceQuench", "SourceRouteFailed", "TTLExceeded", "TimeExceeded", "TimestampReply", "TimestampRequest", "Traceroute", "Unreachable", ).String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("AdministrativelyProhibited", "AlternateAddress", "ConversionError", "DODHostProhibited", "DODNetProhibited", "Echo", "EchoReply", "GeneralParameterProblem", "HostIsolated", "HostPrecedenceUnreachable", "HostRedirect", "HostTOSRedirect", "HostTOSUnreachable", "HostUnknown", "HostUnreachable", "InformationReply", "InformationRequest", "MaskReply", "MaskRequest", "MobileRedirect", "NetTOSRedirect", "NetTOSUnreachable", "NetworkRedirect", "NetworkUnknown", "NetworkUnreachable", "NoRoomForOption", "OptionMissing", "PacketTooBig", "ParameterProblem", "PortUnreachable", "PrecedenceUnreachable", "ProtocolUnreachable", "ReassemblyTimeout", "Redirect", "RouterAdvertisement", "RouterSolicitation", "SourceQuench", "SourceRouteFailed", "TTLExceeded", "TimeExceeded", "TimestampReply", "TimestampRequest", "Traceroute", "Unreachable"),
+								stringvalidator.OneOf("AdministrativelyProhibited", "AlternateAddress", "ConversionError", "DODHostProhibited", "DODNetProhibited", "Echo", "EchoReply", "GeneralParameterProblem", "HostIsolated", "HostPrecedenceUnreachable", "HostRedirect", "HostTOSRedirect", "HostTOSUnreachable", "HostUnknown", "HostUnreachable", "InformationReply", "InformationRequest", "MaskReply", "MaskRequest", "MobileRedirect", "NetTOSRedirect", "NetTOSUnreachable", "NetworkRedirect", "NetworkUnknown", "NetworkUnreachable", "NoRoomForOption", "OptionMissing", "PacketTooBig", "ParameterProblem", "PortUnreachable", "PrecedenceUnreachable", "ProtocolUnreachable", "ReassemblyTimeout", "Redirect", "RouterAdvertisement", "RouterSolicitation", "SourceQuench", "SourceRouteFailed", "TTLExceeded", "TimeExceeded", "TimestampReply", "TimestampRequest", "Traceroute", "Unreachable", ),
 							},
 						},
 						"permit_icmp_message_type": schema.Int64Attribute{
@@ -486,10 +493,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"permit_police_priority": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Set Priority option on this entry").AddStringEnumDescription("critical", "high", "low", "medium").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Set Priority option on this entry").AddStringEnumDescription("critical", "high", "low", "medium", ).String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("critical", "high", "low", "medium"),
+								stringvalidator.OneOf("critical", "high", "low", "medium", ),
 							},
 						},
 						"permit_default": schema.BoolAttribute{
@@ -605,10 +612,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Optional:            true,
 						},
 						"deny_fragment_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Fragment type for a packet").AddStringEnumDescription("dont-fragment", "dont-fragment first-fragment", "dont-fragment is-fragment", "dont-fragment last-fragment", "first-fragment", "is-fragment", "last-fragment").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Fragment type for a packet").AddStringEnumDescription("dont-fragment", "dont-fragment first-fragment", "dont-fragment is-fragment", "dont-fragment last-fragment", "first-fragment", "is-fragment", "last-fragment", ).String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("dont-fragment", "dont-fragment first-fragment", "dont-fragment is-fragment", "dont-fragment last-fragment", "first-fragment", "is-fragment", "last-fragment"),
+								stringvalidator.OneOf("dont-fragment", "dont-fragment first-fragment", "dont-fragment is-fragment", "dont-fragment last-fragment", "first-fragment", "is-fragment", "last-fragment", ),
 							},
 						},
 						"deny_counter": schema.StringAttribute{
@@ -771,10 +778,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Optional:            true,
 						},
 						"deny_icmp_message_type_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("ICMP message type").AddStringEnumDescription("AdministrativelyProhibited", "AlternateAddress", "ConversionError", "DODHostProhibited", "DODNetProhibited", "Echo", "EchoReply", "GeneralParameterProblem", "HostIsolated", "HostPrecedenceUnreachable", "HostRedirect", "HostTOSRedirect", "HostTOSUnreachable", "HostUnknown", "HostUnreachable", "InformationReply", "InformationRequest", "MaskReply", "MaskRequest", "MobileRedirect", "NetTOSRedirect", "NetTOSUnreachable", "NetworkRedirect", "NetworkUnknown", "NetworkUnreachable", "NoRoomForOption", "OptionMissing", "PacketTooBig", "ParameterProblem", "PortUnreachable", "PrecedenceUnreachable", "ProtocolUnreachable", "ReassemblyTimeout", "Redirect", "RouterAdvertisement", "RouterSolicitation", "SourceQuench", "SourceRouteFailed", "TTLExceeded", "TimeExceeded", "TimestampReply", "TimestampRequest", "Traceroute", "Unreachable").String,
+							MarkdownDescription: helpers.NewAttributeDescription("ICMP message type").AddStringEnumDescription("AdministrativelyProhibited", "AlternateAddress", "ConversionError", "DODHostProhibited", "DODNetProhibited", "Echo", "EchoReply", "GeneralParameterProblem", "HostIsolated", "HostPrecedenceUnreachable", "HostRedirect", "HostTOSRedirect", "HostTOSUnreachable", "HostUnknown", "HostUnreachable", "InformationReply", "InformationRequest", "MaskReply", "MaskRequest", "MobileRedirect", "NetTOSRedirect", "NetTOSUnreachable", "NetworkRedirect", "NetworkUnknown", "NetworkUnreachable", "NoRoomForOption", "OptionMissing", "PacketTooBig", "ParameterProblem", "PortUnreachable", "PrecedenceUnreachable", "ProtocolUnreachable", "ReassemblyTimeout", "Redirect", "RouterAdvertisement", "RouterSolicitation", "SourceQuench", "SourceRouteFailed", "TTLExceeded", "TimeExceeded", "TimestampReply", "TimestampRequest", "Traceroute", "Unreachable", ).String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("AdministrativelyProhibited", "AlternateAddress", "ConversionError", "DODHostProhibited", "DODNetProhibited", "Echo", "EchoReply", "GeneralParameterProblem", "HostIsolated", "HostPrecedenceUnreachable", "HostRedirect", "HostTOSRedirect", "HostTOSUnreachable", "HostUnknown", "HostUnreachable", "InformationReply", "InformationRequest", "MaskReply", "MaskRequest", "MobileRedirect", "NetTOSRedirect", "NetTOSUnreachable", "NetworkRedirect", "NetworkUnknown", "NetworkUnreachable", "NoRoomForOption", "OptionMissing", "PacketTooBig", "ParameterProblem", "PortUnreachable", "PrecedenceUnreachable", "ProtocolUnreachable", "ReassemblyTimeout", "Redirect", "RouterAdvertisement", "RouterSolicitation", "SourceQuench", "SourceRouteFailed", "TTLExceeded", "TimeExceeded", "TimestampReply", "TimestampRequest", "Traceroute", "Unreachable"),
+								stringvalidator.OneOf("AdministrativelyProhibited", "AlternateAddress", "ConversionError", "DODHostProhibited", "DODNetProhibited", "Echo", "EchoReply", "GeneralParameterProblem", "HostIsolated", "HostPrecedenceUnreachable", "HostRedirect", "HostTOSRedirect", "HostTOSUnreachable", "HostUnknown", "HostUnreachable", "InformationReply", "InformationRequest", "MaskReply", "MaskRequest", "MobileRedirect", "NetTOSRedirect", "NetTOSUnreachable", "NetworkRedirect", "NetworkUnknown", "NetworkUnreachable", "NoRoomForOption", "OptionMissing", "PacketTooBig", "ParameterProblem", "PortUnreachable", "PrecedenceUnreachable", "ProtocolUnreachable", "ReassemblyTimeout", "Redirect", "RouterAdvertisement", "RouterSolicitation", "SourceQuench", "SourceRouteFailed", "TTLExceeded", "TimeExceeded", "TimestampReply", "TimestampRequest", "Traceroute", "Unreachable", ),
 							},
 						},
 						"deny_icmp_message_type": schema.Int64Attribute{
@@ -982,10 +989,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"deny_police_priority": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Set Priority option on this entry").AddStringEnumDescription("critical", "high", "low", "medium").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Set Priority option on this entry").AddStringEnumDescription("critical", "high", "low", "medium", ).String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("critical", "high", "low", "medium"),
+								stringvalidator.OneOf("critical", "high", "low", "medium", ),
 							},
 						},
 						"deny_default": schema.BoolAttribute{
@@ -1128,14 +1135,14 @@ func (r *IPv4AccessListResource) Create(ctx context.Context, req resource.Create
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			var ops []gnmi.SetOperation
+		var ops []gnmi.SetOperation
 
-			// Create object
-			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -1356,11 +1363,11 @@ func (r *IPv4AccessListResource) Update(ctx context.Context, req resource.Update
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			// Combine update and delete operations into a single transaction
-			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-				resp.Diagnostics.AddError("Client Error", err.Error())
-				return
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
 			}
 		}
 	}

@@ -24,112 +24,113 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type EVPNVNI struct {
-	Device                                types.String                                   `tfsdk:"device"`
-	Id                                    types.String                                   `tfsdk:"id"`
-	DeleteMode                            types.String                                   `tfsdk:"delete_mode"`
-	VniId                                 types.Int64                                    `tfsdk:"vni_id"`
-	Description                           types.String                                   `tfsdk:"description"`
-	BgpRdTwoByteAsNumber                  types.Int64                                    `tfsdk:"bgp_rd_two_byte_as_number"`
-	BgpRdTwoByteAsIndex                   types.Int64                                    `tfsdk:"bgp_rd_two_byte_as_index"`
-	BgpRdFourByteAsNumber                 types.Int64                                    `tfsdk:"bgp_rd_four_byte_as_number"`
-	BgpRdFourByteAsIndex                  types.Int64                                    `tfsdk:"bgp_rd_four_byte_as_index"`
-	BgpRdIpv4Address                      types.String                                   `tfsdk:"bgp_rd_ipv4_address"`
-	BgpRdIpv4AddressIndex                 types.Int64                                    `tfsdk:"bgp_rd_ipv4_address_index"`
-	BgpRouteTargetTwoByteAsFormat         []EVPNVNIBgpRouteTargetTwoByteAsFormat         `tfsdk:"bgp_route_target_two_byte_as_format"`
-	BgpRouteTargetFourByteAsFormat        []EVPNVNIBgpRouteTargetFourByteAsFormat        `tfsdk:"bgp_route_target_four_byte_as_format"`
-	BgpRouteTargetIpv4AddressFormat       []EVPNVNIBgpRouteTargetIpv4AddressFormat       `tfsdk:"bgp_route_target_ipv4_address_format"`
-	BgpRouteTargetImportTwoByteAsFormat   []EVPNVNIBgpRouteTargetImportTwoByteAsFormat   `tfsdk:"bgp_route_target_import_two_byte_as_format"`
-	BgpRouteTargetImportFourByteAsFormat  []EVPNVNIBgpRouteTargetImportFourByteAsFormat  `tfsdk:"bgp_route_target_import_four_byte_as_format"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	VniId types.Int64 `tfsdk:"vni_id"`
+	Description types.String `tfsdk:"description"`
+	BgpRdTwoByteAsNumber types.Int64 `tfsdk:"bgp_rd_two_byte_as_number"`
+	BgpRdTwoByteAsIndex types.Int64 `tfsdk:"bgp_rd_two_byte_as_index"`
+	BgpRdFourByteAsNumber types.Int64 `tfsdk:"bgp_rd_four_byte_as_number"`
+	BgpRdFourByteAsIndex types.Int64 `tfsdk:"bgp_rd_four_byte_as_index"`
+	BgpRdIpv4Address types.String `tfsdk:"bgp_rd_ipv4_address"`
+	BgpRdIpv4AddressIndex types.Int64 `tfsdk:"bgp_rd_ipv4_address_index"`
+	BgpRouteTargetTwoByteAsFormat []EVPNVNIBgpRouteTargetTwoByteAsFormat `tfsdk:"bgp_route_target_two_byte_as_format"`
+	BgpRouteTargetFourByteAsFormat []EVPNVNIBgpRouteTargetFourByteAsFormat `tfsdk:"bgp_route_target_four_byte_as_format"`
+	BgpRouteTargetIpv4AddressFormat []EVPNVNIBgpRouteTargetIpv4AddressFormat `tfsdk:"bgp_route_target_ipv4_address_format"`
+	BgpRouteTargetImportTwoByteAsFormat []EVPNVNIBgpRouteTargetImportTwoByteAsFormat `tfsdk:"bgp_route_target_import_two_byte_as_format"`
+	BgpRouteTargetImportFourByteAsFormat []EVPNVNIBgpRouteTargetImportFourByteAsFormat `tfsdk:"bgp_route_target_import_four_byte_as_format"`
 	BgpRouteTargetImportIpv4AddressFormat []EVPNVNIBgpRouteTargetImportIpv4AddressFormat `tfsdk:"bgp_route_target_import_ipv4_address_format"`
-	BgpRouteTargetExportTwoByteAsFormat   []EVPNVNIBgpRouteTargetExportTwoByteAsFormat   `tfsdk:"bgp_route_target_export_two_byte_as_format"`
-	BgpRouteTargetExportFourByteAsFormat  []EVPNVNIBgpRouteTargetExportFourByteAsFormat  `tfsdk:"bgp_route_target_export_four_byte_as_format"`
+	BgpRouteTargetExportTwoByteAsFormat []EVPNVNIBgpRouteTargetExportTwoByteAsFormat `tfsdk:"bgp_route_target_export_two_byte_as_format"`
+	BgpRouteTargetExportFourByteAsFormat []EVPNVNIBgpRouteTargetExportFourByteAsFormat `tfsdk:"bgp_route_target_export_four_byte_as_format"`
 	BgpRouteTargetExportIpv4AddressFormat []EVPNVNIBgpRouteTargetExportIpv4AddressFormat `tfsdk:"bgp_route_target_export_ipv4_address_format"`
-	PreferredNexthopLowestIp              types.Bool                                     `tfsdk:"preferred_nexthop_lowest_ip"`
-	PreferredNexthopHighestIp             types.Bool                                     `tfsdk:"preferred_nexthop_highest_ip"`
-	PreferredNexthopModulo                types.Bool                                     `tfsdk:"preferred_nexthop_modulo"`
-	AdvertiseMac                          types.Bool                                     `tfsdk:"advertise_mac"`
-	UnknownUnicastSuppression             types.Bool                                     `tfsdk:"unknown_unicast_suppression"`
-	ReOriginationDisable                  types.Bool                                     `tfsdk:"re_origination_disable"`
+	PreferredNexthopLowestIp types.Bool `tfsdk:"preferred_nexthop_lowest_ip"`
+	PreferredNexthopHighestIp types.Bool `tfsdk:"preferred_nexthop_highest_ip"`
+	PreferredNexthopModulo types.Bool `tfsdk:"preferred_nexthop_modulo"`
+	AdvertiseMac types.Bool `tfsdk:"advertise_mac"`
+	UnknownUnicastSuppression types.Bool `tfsdk:"unknown_unicast_suppression"`
+	ReOriginationDisable types.Bool `tfsdk:"re_origination_disable"`
 }
 
 type EVPNVNIData struct {
-	Device                                types.String                                   `tfsdk:"device"`
-	Id                                    types.String                                   `tfsdk:"id"`
-	VniId                                 types.Int64                                    `tfsdk:"vni_id"`
-	Description                           types.String                                   `tfsdk:"description"`
-	BgpRdTwoByteAsNumber                  types.Int64                                    `tfsdk:"bgp_rd_two_byte_as_number"`
-	BgpRdTwoByteAsIndex                   types.Int64                                    `tfsdk:"bgp_rd_two_byte_as_index"`
-	BgpRdFourByteAsNumber                 types.Int64                                    `tfsdk:"bgp_rd_four_byte_as_number"`
-	BgpRdFourByteAsIndex                  types.Int64                                    `tfsdk:"bgp_rd_four_byte_as_index"`
-	BgpRdIpv4Address                      types.String                                   `tfsdk:"bgp_rd_ipv4_address"`
-	BgpRdIpv4AddressIndex                 types.Int64                                    `tfsdk:"bgp_rd_ipv4_address_index"`
-	BgpRouteTargetTwoByteAsFormat         []EVPNVNIBgpRouteTargetTwoByteAsFormat         `tfsdk:"bgp_route_target_two_byte_as_format"`
-	BgpRouteTargetFourByteAsFormat        []EVPNVNIBgpRouteTargetFourByteAsFormat        `tfsdk:"bgp_route_target_four_byte_as_format"`
-	BgpRouteTargetIpv4AddressFormat       []EVPNVNIBgpRouteTargetIpv4AddressFormat       `tfsdk:"bgp_route_target_ipv4_address_format"`
-	BgpRouteTargetImportTwoByteAsFormat   []EVPNVNIBgpRouteTargetImportTwoByteAsFormat   `tfsdk:"bgp_route_target_import_two_byte_as_format"`
-	BgpRouteTargetImportFourByteAsFormat  []EVPNVNIBgpRouteTargetImportFourByteAsFormat  `tfsdk:"bgp_route_target_import_four_byte_as_format"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	VniId types.Int64 `tfsdk:"vni_id"`
+	Description types.String `tfsdk:"description"`
+	BgpRdTwoByteAsNumber types.Int64 `tfsdk:"bgp_rd_two_byte_as_number"`
+	BgpRdTwoByteAsIndex types.Int64 `tfsdk:"bgp_rd_two_byte_as_index"`
+	BgpRdFourByteAsNumber types.Int64 `tfsdk:"bgp_rd_four_byte_as_number"`
+	BgpRdFourByteAsIndex types.Int64 `tfsdk:"bgp_rd_four_byte_as_index"`
+	BgpRdIpv4Address types.String `tfsdk:"bgp_rd_ipv4_address"`
+	BgpRdIpv4AddressIndex types.Int64 `tfsdk:"bgp_rd_ipv4_address_index"`
+	BgpRouteTargetTwoByteAsFormat []EVPNVNIBgpRouteTargetTwoByteAsFormat `tfsdk:"bgp_route_target_two_byte_as_format"`
+	BgpRouteTargetFourByteAsFormat []EVPNVNIBgpRouteTargetFourByteAsFormat `tfsdk:"bgp_route_target_four_byte_as_format"`
+	BgpRouteTargetIpv4AddressFormat []EVPNVNIBgpRouteTargetIpv4AddressFormat `tfsdk:"bgp_route_target_ipv4_address_format"`
+	BgpRouteTargetImportTwoByteAsFormat []EVPNVNIBgpRouteTargetImportTwoByteAsFormat `tfsdk:"bgp_route_target_import_two_byte_as_format"`
+	BgpRouteTargetImportFourByteAsFormat []EVPNVNIBgpRouteTargetImportFourByteAsFormat `tfsdk:"bgp_route_target_import_four_byte_as_format"`
 	BgpRouteTargetImportIpv4AddressFormat []EVPNVNIBgpRouteTargetImportIpv4AddressFormat `tfsdk:"bgp_route_target_import_ipv4_address_format"`
-	BgpRouteTargetExportTwoByteAsFormat   []EVPNVNIBgpRouteTargetExportTwoByteAsFormat   `tfsdk:"bgp_route_target_export_two_byte_as_format"`
-	BgpRouteTargetExportFourByteAsFormat  []EVPNVNIBgpRouteTargetExportFourByteAsFormat  `tfsdk:"bgp_route_target_export_four_byte_as_format"`
+	BgpRouteTargetExportTwoByteAsFormat []EVPNVNIBgpRouteTargetExportTwoByteAsFormat `tfsdk:"bgp_route_target_export_two_byte_as_format"`
+	BgpRouteTargetExportFourByteAsFormat []EVPNVNIBgpRouteTargetExportFourByteAsFormat `tfsdk:"bgp_route_target_export_four_byte_as_format"`
 	BgpRouteTargetExportIpv4AddressFormat []EVPNVNIBgpRouteTargetExportIpv4AddressFormat `tfsdk:"bgp_route_target_export_ipv4_address_format"`
-	PreferredNexthopLowestIp              types.Bool                                     `tfsdk:"preferred_nexthop_lowest_ip"`
-	PreferredNexthopHighestIp             types.Bool                                     `tfsdk:"preferred_nexthop_highest_ip"`
-	PreferredNexthopModulo                types.Bool                                     `tfsdk:"preferred_nexthop_modulo"`
-	AdvertiseMac                          types.Bool                                     `tfsdk:"advertise_mac"`
-	UnknownUnicastSuppression             types.Bool                                     `tfsdk:"unknown_unicast_suppression"`
-	ReOriginationDisable                  types.Bool                                     `tfsdk:"re_origination_disable"`
+	PreferredNexthopLowestIp types.Bool `tfsdk:"preferred_nexthop_lowest_ip"`
+	PreferredNexthopHighestIp types.Bool `tfsdk:"preferred_nexthop_highest_ip"`
+	PreferredNexthopModulo types.Bool `tfsdk:"preferred_nexthop_modulo"`
+	AdvertiseMac types.Bool `tfsdk:"advertise_mac"`
+	UnknownUnicastSuppression types.Bool `tfsdk:"unknown_unicast_suppression"`
+	ReOriginationDisable types.Bool `tfsdk:"re_origination_disable"`
 }
 type EVPNVNIBgpRouteTargetTwoByteAsFormat struct {
-	AsNumber       types.Int64 `tfsdk:"as_number"`
+	AsNumber types.Int64 `tfsdk:"as_number"`
 	AssignedNumber types.Int64 `tfsdk:"assigned_number"`
 }
 type EVPNVNIBgpRouteTargetFourByteAsFormat struct {
-	AsNumber       types.Int64 `tfsdk:"as_number"`
+	AsNumber types.Int64 `tfsdk:"as_number"`
 	AssignedNumber types.Int64 `tfsdk:"assigned_number"`
 }
 type EVPNVNIBgpRouteTargetIpv4AddressFormat struct {
-	Ipv4Address    types.String `tfsdk:"ipv4_address"`
-	AssignedNumber types.Int64  `tfsdk:"assigned_number"`
+	Ipv4Address types.String `tfsdk:"ipv4_address"`
+	AssignedNumber types.Int64 `tfsdk:"assigned_number"`
 }
 type EVPNVNIBgpRouteTargetImportTwoByteAsFormat struct {
-	AsNumber       types.Int64 `tfsdk:"as_number"`
+	AsNumber types.Int64 `tfsdk:"as_number"`
 	AssignedNumber types.Int64 `tfsdk:"assigned_number"`
 }
 type EVPNVNIBgpRouteTargetImportFourByteAsFormat struct {
-	AsNumber       types.Int64 `tfsdk:"as_number"`
+	AsNumber types.Int64 `tfsdk:"as_number"`
 	AssignedNumber types.Int64 `tfsdk:"assigned_number"`
 }
 type EVPNVNIBgpRouteTargetImportIpv4AddressFormat struct {
-	Ipv4Address    types.String `tfsdk:"ipv4_address"`
-	AssignedNumber types.Int64  `tfsdk:"assigned_number"`
+	Ipv4Address types.String `tfsdk:"ipv4_address"`
+	AssignedNumber types.Int64 `tfsdk:"assigned_number"`
 }
 type EVPNVNIBgpRouteTargetExportTwoByteAsFormat struct {
-	AsNumber       types.Int64 `tfsdk:"as_number"`
+	AsNumber types.Int64 `tfsdk:"as_number"`
 	AssignedNumber types.Int64 `tfsdk:"assigned_number"`
 }
 type EVPNVNIBgpRouteTargetExportFourByteAsFormat struct {
-	AsNumber       types.Int64 `tfsdk:"as_number"`
+	AsNumber types.Int64 `tfsdk:"as_number"`
 	AssignedNumber types.Int64 `tfsdk:"assigned_number"`
 }
 type EVPNVNIBgpRouteTargetExportIpv4AddressFormat struct {
-	Ipv4Address    types.String `tfsdk:"ipv4_address"`
-	AssignedNumber types.Int64  `tfsdk:"assigned_number"`
+	Ipv4Address types.String `tfsdk:"ipv4_address"`
+	AssignedNumber types.Int64 `tfsdk:"assigned_number"`
 }
 
 // End of section. //template:end types
@@ -326,28 +327,28 @@ func (data EVPNVNI) toBody(ctx context.Context) string {
 func (data EVPNVNI) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.VniId.IsNull() && !data.VniId.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/vni-id", strconv.FormatInt(data.VniId.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/vni-id", strconv.FormatInt(data.VniId.ValueInt64(), 10))
 	}
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/description", data.Description.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/description", data.Description.ValueString())
 	}
 	if !data.BgpRdTwoByteAsNumber.IsNull() && !data.BgpRdTwoByteAsNumber.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/two-byte-as-number", strconv.FormatInt(data.BgpRdTwoByteAsNumber.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/rd/two-byte-as-number", strconv.FormatInt(data.BgpRdTwoByteAsNumber.ValueInt64(), 10))
 	}
 	if !data.BgpRdTwoByteAsIndex.IsNull() && !data.BgpRdTwoByteAsIndex.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/two-byte-as-assigned-number", strconv.FormatInt(data.BgpRdTwoByteAsIndex.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/rd/two-byte-as-assigned-number", strconv.FormatInt(data.BgpRdTwoByteAsIndex.ValueInt64(), 10))
 	}
 	if !data.BgpRdFourByteAsNumber.IsNull() && !data.BgpRdFourByteAsNumber.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/four-byte-as-number", strconv.FormatInt(data.BgpRdFourByteAsNumber.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/rd/four-byte-as-number", strconv.FormatInt(data.BgpRdFourByteAsNumber.ValueInt64(), 10))
 	}
 	if !data.BgpRdFourByteAsIndex.IsNull() && !data.BgpRdFourByteAsIndex.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/four-byte-as-assigned-number", strconv.FormatInt(data.BgpRdFourByteAsIndex.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/rd/four-byte-as-assigned-number", strconv.FormatInt(data.BgpRdFourByteAsIndex.ValueInt64(), 10))
 	}
 	if !data.BgpRdIpv4Address.IsNull() && !data.BgpRdIpv4Address.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/ipv4-address", data.BgpRdIpv4Address.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/rd/ipv4-address", data.BgpRdIpv4Address.ValueString())
 	}
 	if !data.BgpRdIpv4AddressIndex.IsNull() && !data.BgpRdIpv4AddressIndex.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/ipv4-address-assigned-number", strconv.FormatInt(data.BgpRdIpv4AddressIndex.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/rd/ipv4-address-assigned-number", strconv.FormatInt(data.BgpRdIpv4AddressIndex.ValueInt64(), 10))
 	}
 	if len(data.BgpRouteTargetTwoByteAsFormat) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -477,32 +478,32 @@ func (data EVPNVNI) toBodyXML(ctx context.Context) string {
 	}
 	if !data.PreferredNexthopLowestIp.IsNull() && !data.PreferredNexthopLowestIp.IsUnknown() {
 		if data.PreferredNexthopLowestIp.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/preferred-nexthop/lowest-ip", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/preferred-nexthop/lowest-ip", "")
 		}
 	}
 	if !data.PreferredNexthopHighestIp.IsNull() && !data.PreferredNexthopHighestIp.IsUnknown() {
 		if data.PreferredNexthopHighestIp.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/preferred-nexthop/highest-ip", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/preferred-nexthop/highest-ip", "")
 		}
 	}
 	if !data.PreferredNexthopModulo.IsNull() && !data.PreferredNexthopModulo.IsUnknown() {
 		if data.PreferredNexthopModulo.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/preferred-nexthop/modulo", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/preferred-nexthop/modulo", "")
 		}
 	}
 	if !data.AdvertiseMac.IsNull() && !data.AdvertiseMac.IsUnknown() {
 		if data.AdvertiseMac.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/advertise-mac", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/advertise-mac", "")
 		}
 	}
 	if !data.UnknownUnicastSuppression.IsNull() && !data.UnknownUnicastSuppression.IsUnknown() {
 		if data.UnknownUnicastSuppression.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/unknown-unicast-suppression", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/unknown-unicast-suppression", "")
 		}
 	}
 	if !data.ReOriginationDisable.IsNull() && !data.ReOriginationDisable.IsUnknown() {
 		if data.ReOriginationDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/re-origination-disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/re-origination-disable", "")
 		}
 	}
 	bodyString, err := body.String()
@@ -553,8 +554,8 @@ func (data *EVPNVNI) updateFromBody(ctx context.Context, res []byte) {
 		data.BgpRdIpv4AddressIndex = types.Int64Null()
 	}
 	for i := range data.BgpRouteTargetTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt").ForEach(
@@ -587,8 +588,8 @@ func (data *EVPNVNI) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.BgpRouteTargetFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "bgp.route-target.four-byte-as-rts.four-byte-as-rt").ForEach(
@@ -621,8 +622,8 @@ func (data *EVPNVNI) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.BgpRouteTargetIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		keyValues := [...]string{ data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "bgp.route-target.ipv4-address-rts.ipv4-address-rt").ForEach(
@@ -655,8 +656,8 @@ func (data *EVPNVNI) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "bgp.route-target.import.two-byte-as-rts.two-byte-as-rt").ForEach(
@@ -689,8 +690,8 @@ func (data *EVPNVNI) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.BgpRouteTargetImportFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "bgp.route-target.import.four-byte-as-rts.four-byte-as-rt").ForEach(
@@ -723,8 +724,8 @@ func (data *EVPNVNI) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.BgpRouteTargetImportIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		keyValues := [...]string{data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		keyValues := [...]string{ data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "bgp.route-target.import.ipv4-address-rts.ipv4-address-rt").ForEach(
@@ -757,8 +758,8 @@ func (data *EVPNVNI) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.BgpRouteTargetExportTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt").ForEach(
@@ -791,8 +792,8 @@ func (data *EVPNVNI) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.BgpRouteTargetExportFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "bgp.route-target.export.four-byte-as-rts.four-byte-as-rt").ForEach(
@@ -825,8 +826,8 @@ func (data *EVPNVNI) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		keyValues := [...]string{data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		keyValues := [...]string{ data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "bgp.route-target.export.ipv4-address-rts.ipv4-address-rt").ForEach(
@@ -858,65 +859,59 @@ func (data *EVPNVNI) updateFromBody(ctx context.Context, res []byte) {
 			data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "preferred-nexthop.lowest-ip"); value.Exists() {
-		if !data.PreferredNexthopLowestIp.IsNull() {
+	if value := gjson.GetBytes(res, "preferred-nexthop.lowest-ip"); !data.PreferredNexthopLowestIp.IsNull() {
+		if value.Exists() {
 			data.PreferredNexthopLowestIp = types.BoolValue(true)
+		} else {
+			data.PreferredNexthopLowestIp = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.PreferredNexthopLowestIp.IsNull() {
-			data.PreferredNexthopLowestIp = types.BoolNull()
-		}
+		data.PreferredNexthopLowestIp = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "preferred-nexthop.highest-ip"); value.Exists() {
-		if !data.PreferredNexthopHighestIp.IsNull() {
+	if value := gjson.GetBytes(res, "preferred-nexthop.highest-ip"); !data.PreferredNexthopHighestIp.IsNull() {
+		if value.Exists() {
 			data.PreferredNexthopHighestIp = types.BoolValue(true)
+		} else {
+			data.PreferredNexthopHighestIp = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.PreferredNexthopHighestIp.IsNull() {
-			data.PreferredNexthopHighestIp = types.BoolNull()
-		}
+		data.PreferredNexthopHighestIp = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "preferred-nexthop.modulo"); value.Exists() {
-		if !data.PreferredNexthopModulo.IsNull() {
+	if value := gjson.GetBytes(res, "preferred-nexthop.modulo"); !data.PreferredNexthopModulo.IsNull() {
+		if value.Exists() {
 			data.PreferredNexthopModulo = types.BoolValue(true)
+		} else {
+			data.PreferredNexthopModulo = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.PreferredNexthopModulo.IsNull() {
-			data.PreferredNexthopModulo = types.BoolNull()
-		}
+		data.PreferredNexthopModulo = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "advertise-mac"); value.Exists() {
-		if !data.AdvertiseMac.IsNull() {
+	if value := gjson.GetBytes(res, "advertise-mac"); !data.AdvertiseMac.IsNull() {
+		if value.Exists() {
 			data.AdvertiseMac = types.BoolValue(true)
+		} else {
+			data.AdvertiseMac = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.AdvertiseMac.IsNull() {
-			data.AdvertiseMac = types.BoolNull()
-		}
+		data.AdvertiseMac = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "unknown-unicast-suppression"); value.Exists() {
-		if !data.UnknownUnicastSuppression.IsNull() {
+	if value := gjson.GetBytes(res, "unknown-unicast-suppression"); !data.UnknownUnicastSuppression.IsNull() {
+		if value.Exists() {
 			data.UnknownUnicastSuppression = types.BoolValue(true)
+		} else {
+			data.UnknownUnicastSuppression = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.UnknownUnicastSuppression.IsNull() {
-			data.UnknownUnicastSuppression = types.BoolNull()
-		}
+		data.UnknownUnicastSuppression = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "re-origination-disable"); value.Exists() {
-		if !data.ReOriginationDisable.IsNull() {
+	if value := gjson.GetBytes(res, "re-origination-disable"); !data.ReOriginationDisable.IsNull() {
+		if value.Exists() {
 			data.ReOriginationDisable = types.BoolValue(true)
+		} else {
+			data.ReOriginationDisable = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.ReOriginationDisable.IsNull() {
-			data.ReOriginationDisable = types.BoolNull()
-		}
+		data.ReOriginationDisable = types.BoolNull()
 	}
 }
 
@@ -925,52 +920,52 @@ func (data *EVPNVNI) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vni-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/vni-id"); value.Exists() {
 		data.VniId = types.Int64Value(value.Int())
 	} else if data.VniId.IsNull() {
 		data.VniId = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	} else if data.BgpRdTwoByteAsNumber.IsNull() {
 		data.BgpRdTwoByteAsNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	} else if data.BgpRdTwoByteAsIndex.IsNull() {
 		data.BgpRdTwoByteAsIndex = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/four-byte-as-number"); value.Exists() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	} else if data.BgpRdFourByteAsNumber.IsNull() {
 		data.BgpRdFourByteAsNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	} else if data.BgpRdFourByteAsIndex.IsNull() {
 		data.BgpRdFourByteAsIndex = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/ipv4-address"); value.Exists() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	} else if data.BgpRdIpv4Address.IsNull() {
 		data.BgpRdIpv4Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
 		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	} else if data.BgpRdIpv4AddressIndex.IsNull() {
 		data.BgpRdIpv4AddressIndex = types.Int64Null()
 	}
 	for i := range data.BgpRouteTargetTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1000,11 +995,11 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.BgpRouteTargetFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/four-byte-as-rts/four-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1034,11 +1029,11 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.BgpRouteTargetIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		keyValues := [...]string{ data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/ipv4-address-rts/ipv4-address-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1068,11 +1063,11 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1102,11 +1097,11 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.BgpRouteTargetImportFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1136,11 +1131,11 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.BgpRouteTargetImportIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		keyValues := [...]string{data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		keyValues := [...]string{ data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1170,11 +1165,11 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.BgpRouteTargetExportTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1204,11 +1199,11 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.BgpRouteTargetExportFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1238,11 +1233,11 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		keyValues := [...]string{data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		keyValues := [...]string{ data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1271,7 +1266,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/preferred-nexthop/lowest-ip"); value.Exists() {
 		data.PreferredNexthopLowestIp = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1279,7 +1274,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.PreferredNexthopLowestIp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/preferred-nexthop/highest-ip"); value.Exists() {
 		data.PreferredNexthopHighestIp = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1287,7 +1282,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.PreferredNexthopHighestIp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/preferred-nexthop/modulo"); value.Exists() {
 		data.PreferredNexthopModulo = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1295,7 +1290,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.PreferredNexthopModulo = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1303,7 +1298,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.AdvertiseMac = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1311,7 +1306,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.UnknownUnicastSuppression = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/re-origination-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/re-origination-disable"); value.Exists() {
 		data.ReOriginationDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1330,28 +1325,28 @@ func (data *EVPNVNI) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "description"); value.Exists() {
+	if value := res.Get(prefix+"description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "bgp.rd.two-byte-as-number"); value.Exists() {
+	if value := res.Get(prefix+"bgp.rd.two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bgp.rd.two-byte-as-assigned-number"); value.Exists() {
+	if value := res.Get(prefix+"bgp.rd.two-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bgp.rd.four-byte-as-number"); value.Exists() {
+	if value := res.Get(prefix+"bgp.rd.four-byte-as-number"); value.Exists() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bgp.rd.four-byte-as-assigned-number"); value.Exists() {
+	if value := res.Get(prefix+"bgp.rd.four-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bgp.rd.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix+"bgp.rd.ipv4-address"); value.Exists() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "bgp.rd.ipv4-address-assigned-number"); value.Exists() {
+	if value := res.Get(prefix+"bgp.rd.ipv4-address-assigned-number"); value.Exists() {
 		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetTwoByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetTwoByteAsFormat{}
@@ -1365,7 +1360,7 @@ func (data *EVPNVNI) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetFourByteAsFormat = make([]EVPNVNIBgpRouteTargetFourByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetFourByteAsFormat{}
@@ -1379,7 +1374,7 @@ func (data *EVPNVNI) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetIpv4AddressFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetIpv4AddressFormat{}
@@ -1393,7 +1388,7 @@ func (data *EVPNVNI) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportTwoByteAsFormat{}
@@ -1407,7 +1402,7 @@ func (data *EVPNVNI) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.import.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.import.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportFourByteAsFormat = make([]EVPNVNIBgpRouteTargetImportFourByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportFourByteAsFormat{}
@@ -1421,7 +1416,7 @@ func (data *EVPNVNI) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.import.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.import.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetImportIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetImportIpv4AddressFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportIpv4AddressFormat{}
@@ -1435,7 +1430,7 @@ func (data *EVPNVNI) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetExportTwoByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportTwoByteAsFormat{}
@@ -1449,7 +1444,7 @@ func (data *EVPNVNI) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.export.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.export.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportFourByteAsFormat = make([]EVPNVNIBgpRouteTargetExportFourByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportFourByteAsFormat{}
@@ -1463,7 +1458,7 @@ func (data *EVPNVNI) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetExportIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetExportIpv4AddressFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportIpv4AddressFormat{}
@@ -1477,35 +1472,35 @@ func (data *EVPNVNI) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "preferred-nexthop.lowest-ip"); value.Exists() {
+	if value := res.Get(prefix+"preferred-nexthop.lowest-ip"); value.Exists() {
 		data.PreferredNexthopLowestIp = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopLowestIp = types.BoolNull()
+		data.PreferredNexthopLowestIp = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "preferred-nexthop.highest-ip"); value.Exists() {
+	if value := res.Get(prefix+"preferred-nexthop.highest-ip"); value.Exists() {
 		data.PreferredNexthopHighestIp = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopHighestIp = types.BoolNull()
+		data.PreferredNexthopHighestIp = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "preferred-nexthop.modulo"); value.Exists() {
+	if value := res.Get(prefix+"preferred-nexthop.modulo"); value.Exists() {
 		data.PreferredNexthopModulo = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopModulo = types.BoolNull()
+		data.PreferredNexthopModulo = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "advertise-mac"); value.Exists() {
+	if value := res.Get(prefix+"advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
-		data.AdvertiseMac = types.BoolNull()
+		data.AdvertiseMac = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "unknown-unicast-suppression"); value.Exists() {
+	if value := res.Get(prefix+"unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
 	} else {
-		data.UnknownUnicastSuppression = types.BoolNull()
+		data.UnknownUnicastSuppression = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "re-origination-disable"); value.Exists() {
+	if value := res.Get(prefix+"re-origination-disable"); value.Exists() {
 		data.ReOriginationDisable = types.BoolValue(true)
 	} else {
-		data.ReOriginationDisable = types.BoolNull()
+		data.ReOriginationDisable = types.BoolValue(false)
 	}
 }
 
@@ -1518,28 +1513,28 @@ func (data *EVPNVNIData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "description"); value.Exists() {
+	if value := res.Get(prefix+"description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "bgp.rd.two-byte-as-number"); value.Exists() {
+	if value := res.Get(prefix+"bgp.rd.two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bgp.rd.two-byte-as-assigned-number"); value.Exists() {
+	if value := res.Get(prefix+"bgp.rd.two-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bgp.rd.four-byte-as-number"); value.Exists() {
+	if value := res.Get(prefix+"bgp.rd.four-byte-as-number"); value.Exists() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bgp.rd.four-byte-as-assigned-number"); value.Exists() {
+	if value := res.Get(prefix+"bgp.rd.four-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bgp.rd.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix+"bgp.rd.ipv4-address"); value.Exists() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "bgp.rd.ipv4-address-assigned-number"); value.Exists() {
+	if value := res.Get(prefix+"bgp.rd.ipv4-address-assigned-number"); value.Exists() {
 		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetTwoByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetTwoByteAsFormat{}
@@ -1553,7 +1548,7 @@ func (data *EVPNVNIData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetFourByteAsFormat = make([]EVPNVNIBgpRouteTargetFourByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetFourByteAsFormat{}
@@ -1567,7 +1562,7 @@ func (data *EVPNVNIData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetIpv4AddressFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetIpv4AddressFormat{}
@@ -1581,7 +1576,7 @@ func (data *EVPNVNIData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportTwoByteAsFormat{}
@@ -1595,7 +1590,7 @@ func (data *EVPNVNIData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.import.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.import.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportFourByteAsFormat = make([]EVPNVNIBgpRouteTargetImportFourByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportFourByteAsFormat{}
@@ -1609,7 +1604,7 @@ func (data *EVPNVNIData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.import.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.import.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetImportIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetImportIpv4AddressFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportIpv4AddressFormat{}
@@ -1623,7 +1618,7 @@ func (data *EVPNVNIData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetExportTwoByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportTwoByteAsFormat{}
@@ -1637,7 +1632,7 @@ func (data *EVPNVNIData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.export.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.export.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportFourByteAsFormat = make([]EVPNVNIBgpRouteTargetExportFourByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportFourByteAsFormat{}
@@ -1651,7 +1646,7 @@ func (data *EVPNVNIData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+	if value := res.Get(prefix+"bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetExportIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetExportIpv4AddressFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportIpv4AddressFormat{}
@@ -1665,32 +1660,32 @@ func (data *EVPNVNIData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "preferred-nexthop.lowest-ip"); value.Exists() {
+	if value := res.Get(prefix+"preferred-nexthop.lowest-ip"); value.Exists() {
 		data.PreferredNexthopLowestIp = types.BoolValue(true)
 	} else {
 		data.PreferredNexthopLowestIp = types.BoolNull()
 	}
-	if value := res.Get(prefix + "preferred-nexthop.highest-ip"); value.Exists() {
+	if value := res.Get(prefix+"preferred-nexthop.highest-ip"); value.Exists() {
 		data.PreferredNexthopHighestIp = types.BoolValue(true)
 	} else {
 		data.PreferredNexthopHighestIp = types.BoolNull()
 	}
-	if value := res.Get(prefix + "preferred-nexthop.modulo"); value.Exists() {
+	if value := res.Get(prefix+"preferred-nexthop.modulo"); value.Exists() {
 		data.PreferredNexthopModulo = types.BoolValue(true)
 	} else {
 		data.PreferredNexthopModulo = types.BoolNull()
 	}
-	if value := res.Get(prefix + "advertise-mac"); value.Exists() {
+	if value := res.Get(prefix+"advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
 		data.AdvertiseMac = types.BoolNull()
 	}
-	if value := res.Get(prefix + "unknown-unicast-suppression"); value.Exists() {
+	if value := res.Get(prefix+"unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
 	} else {
 		data.UnknownUnicastSuppression = types.BoolNull()
 	}
-	if value := res.Get(prefix + "re-origination-disable"); value.Exists() {
+	if value := res.Get(prefix+"re-origination-disable"); value.Exists() {
 		data.ReOriginationDisable = types.BoolValue(true)
 	} else {
 		data.ReOriginationDisable = types.BoolNull()
@@ -1702,28 +1697,28 @@ func (data *EVPNVNIData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/four-byte-as-number"); value.Exists() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/ipv4-address"); value.Exists() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
 		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetTwoByteAsFormat{}
@@ -1737,7 +1732,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetFourByteAsFormat = make([]EVPNVNIBgpRouteTargetFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetFourByteAsFormat{}
@@ -1751,7 +1746,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetIpv4AddressFormat{}
@@ -1765,7 +1760,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportTwoByteAsFormat{}
@@ -1779,7 +1774,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportFourByteAsFormat = make([]EVPNVNIBgpRouteTargetImportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportFourByteAsFormat{}
@@ -1793,7 +1788,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetImportIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetImportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportIpv4AddressFormat{}
@@ -1807,7 +1802,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetExportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportTwoByteAsFormat{}
@@ -1821,7 +1816,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportFourByteAsFormat = make([]EVPNVNIBgpRouteTargetExportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportFourByteAsFormat{}
@@ -1835,7 +1830,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetExportIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetExportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportIpv4AddressFormat{}
@@ -1849,35 +1844,35 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/preferred-nexthop/lowest-ip"); value.Exists() {
 		data.PreferredNexthopLowestIp = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopLowestIp = types.BoolNull()
+		data.PreferredNexthopLowestIp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/preferred-nexthop/highest-ip"); value.Exists() {
 		data.PreferredNexthopHighestIp = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopHighestIp = types.BoolNull()
+		data.PreferredNexthopHighestIp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/preferred-nexthop/modulo"); value.Exists() {
 		data.PreferredNexthopModulo = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopModulo = types.BoolNull()
+		data.PreferredNexthopModulo = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
-		data.AdvertiseMac = types.BoolNull()
+		data.AdvertiseMac = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
 	} else {
-		data.UnknownUnicastSuppression = types.BoolNull()
+		data.UnknownUnicastSuppression = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/re-origination-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/re-origination-disable"); value.Exists() {
 		data.ReOriginationDisable = types.BoolValue(true)
 	} else {
-		data.ReOriginationDisable = types.BoolNull()
+		data.ReOriginationDisable = types.BoolValue(false)
 	}
 }
 
@@ -1886,28 +1881,28 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/four-byte-as-number"); value.Exists() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/ipv4-address"); value.Exists() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
 		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetTwoByteAsFormat{}
@@ -1921,7 +1916,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetFourByteAsFormat = make([]EVPNVNIBgpRouteTargetFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetFourByteAsFormat{}
@@ -1935,7 +1930,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetIpv4AddressFormat{}
@@ -1949,7 +1944,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportTwoByteAsFormat{}
@@ -1963,7 +1958,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportFourByteAsFormat = make([]EVPNVNIBgpRouteTargetImportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportFourByteAsFormat{}
@@ -1977,7 +1972,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetImportIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetImportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportIpv4AddressFormat{}
@@ -1991,7 +1986,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetExportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportTwoByteAsFormat{}
@@ -2005,7 +2000,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportFourByteAsFormat = make([]EVPNVNIBgpRouteTargetExportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportFourByteAsFormat{}
@@ -2019,7 +2014,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetExportIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetExportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportIpv4AddressFormat{}
@@ -2033,32 +2028,32 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/preferred-nexthop/lowest-ip"); value.Exists() {
 		data.PreferredNexthopLowestIp = types.BoolValue(true)
 	} else {
 		data.PreferredNexthopLowestIp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/preferred-nexthop/highest-ip"); value.Exists() {
 		data.PreferredNexthopHighestIp = types.BoolValue(true)
 	} else {
 		data.PreferredNexthopHighestIp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/preferred-nexthop/modulo"); value.Exists() {
 		data.PreferredNexthopModulo = types.BoolValue(true)
 	} else {
 		data.PreferredNexthopModulo = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
 		data.AdvertiseMac = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
 	} else {
 		data.UnknownUnicastSuppression = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/re-origination-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/re-origination-disable"); value.Exists() {
 		data.ReOriginationDisable = types.BoolValue(true)
 	} else {
 		data.ReOriginationDisable = types.BoolValue(false)
@@ -2090,11 +2085,11 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/preferred-nexthop/lowest-ip", state.getPath()))
 	}
 	for i := range state.BgpRouteTargetExportIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		stateKeyValues := [...]string{state.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		stateKeyValues := [...]string{ state.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -2117,7 +2112,7 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 			if state.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetExportIpv4AddressFormat[j].AssignedNumber.ValueInt64() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -2126,11 +2121,11 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 		}
 	}
 	for i := range state.BgpRouteTargetExportFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -2153,7 +2148,7 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 			if state.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetExportFourByteAsFormat[j].AssignedNumber.ValueInt64() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -2162,11 +2157,11 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 		}
 	}
 	for i := range state.BgpRouteTargetExportTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -2189,7 +2184,7 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 			if state.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetExportTwoByteAsFormat[j].AssignedNumber.ValueInt64() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -2198,11 +2193,11 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 		}
 	}
 	for i := range state.BgpRouteTargetImportIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		stateKeyValues := [...]string{state.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		stateKeyValues := [...]string{ state.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -2225,7 +2220,7 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 			if state.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetImportIpv4AddressFormat[j].AssignedNumber.ValueInt64() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -2234,11 +2229,11 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 		}
 	}
 	for i := range state.BgpRouteTargetImportFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -2261,7 +2256,7 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 			if state.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetImportFourByteAsFormat[j].AssignedNumber.ValueInt64() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -2270,11 +2265,11 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 		}
 	}
 	for i := range state.BgpRouteTargetImportTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -2297,7 +2292,7 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 			if state.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetImportTwoByteAsFormat[j].AssignedNumber.ValueInt64() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -2306,11 +2301,11 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 		}
 	}
 	for i := range state.BgpRouteTargetIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		stateKeyValues := [...]string{state.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		stateKeyValues := [...]string{ state.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -2333,7 +2328,7 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 			if state.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetIpv4AddressFormat[j].AssignedNumber.ValueInt64() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -2342,11 +2337,11 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 		}
 	}
 	for i := range state.BgpRouteTargetFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -2369,7 +2364,7 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 			if state.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetFourByteAsFormat[j].AssignedNumber.ValueInt64() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -2378,11 +2373,11 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 		}
 	}
 	for i := range state.BgpRouteTargetTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -2405,7 +2400,7 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI) []strin
 			if state.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetTwoByteAsFormat[j].AssignedNumber.ValueInt64() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -2480,75 +2475,75 @@ func (data *EVPNVNI) getEmptyLeafsDelete(ctx context.Context, state *EVPNVNI) []
 		}
 	}
 	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		keyValues := [...]string{data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		keyValues := [...]string{ data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.BgpRouteTargetExportFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.BgpRouteTargetExportTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.BgpRouteTargetImportIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		keyValues := [...]string{data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		keyValues := [...]string{ data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.BgpRouteTargetImportFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.BgpRouteTargetIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		keyValues := [...]string{ data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.BgpRouteTargetFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.BgpRouteTargetTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	return emptyLeafsDelete
@@ -2579,47 +2574,47 @@ func (data *EVPNVNI) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/preferred-nexthop/lowest-ip", data.getPath()))
 	}
 	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
-		keyValues := [...]string{data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BgpRouteTargetExportFourByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BgpRouteTargetExportTwoByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BgpRouteTargetImportIpv4AddressFormat {
-		keyValues := [...]string{data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BgpRouteTargetImportFourByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BgpRouteTargetIpv4AddressFormat {
-		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BgpRouteTargetFourByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BgpRouteTargetTwoByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2658,7 +2653,7 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ReOriginationDisable.IsNull() && state.ReOriginationDisable.ValueBool() && data.ReOriginationDisable.IsNull() {
-		deletePath := state.getXPath() + "/re-origination-disable"
+		deletePath := state.getXPath()+"/re-origination-disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2666,7 +2661,7 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.UnknownUnicastSuppression.IsNull() && state.UnknownUnicastSuppression.ValueBool() && data.UnknownUnicastSuppression.IsNull() {
-		deletePath := state.getXPath() + "/unknown-unicast-suppression"
+		deletePath := state.getXPath()+"/unknown-unicast-suppression"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2674,7 +2669,7 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AdvertiseMac.IsNull() && state.AdvertiseMac.ValueBool() && data.AdvertiseMac.IsNull() {
-		deletePath := state.getXPath() + "/advertise-mac"
+		deletePath := state.getXPath()+"/advertise-mac"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2682,7 +2677,7 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PreferredNexthopModulo.IsNull() && state.PreferredNexthopModulo.ValueBool() && data.PreferredNexthopModulo.IsNull() {
-		deletePath := state.getXPath() + "/preferred-nexthop/modulo"
+		deletePath := state.getXPath()+"/preferred-nexthop/modulo"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2690,7 +2685,7 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PreferredNexthopHighestIp.IsNull() && state.PreferredNexthopHighestIp.ValueBool() && data.PreferredNexthopHighestIp.IsNull() {
-		deletePath := state.getXPath() + "/preferred-nexthop/highest-ip"
+		deletePath := state.getXPath()+"/preferred-nexthop/highest-ip"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2698,15 +2693,15 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PreferredNexthopLowestIp.IsNull() && state.PreferredNexthopLowestIp.ValueBool() && data.PreferredNexthopLowestIp.IsNull() {
-		deletePath := state.getXPath() + "/preferred-nexthop/lowest-ip"
+		deletePath := state.getXPath()+"/preferred-nexthop/lowest-ip"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.BgpRouteTargetExportIpv4AddressFormat {
-		stateKeys := [...]string{"ipv4-address", "assigned-number"}
-		stateKeyValues := [...]string{state.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "ipv4-address", "assigned-number",  }
+		stateKeyValues := [...]string{ state.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2741,8 +2736,8 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 		}
 	}
 	for i := range state.BgpRouteTargetExportFourByteAsFormat {
-		stateKeys := [...]string{"four-byte-as-number", "assigned-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2777,8 +2772,8 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 		}
 	}
 	for i := range state.BgpRouteTargetExportTwoByteAsFormat {
-		stateKeys := [...]string{"two-byte-as-number", "assigned-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2813,8 +2808,8 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 		}
 	}
 	for i := range state.BgpRouteTargetImportIpv4AddressFormat {
-		stateKeys := [...]string{"ipv4-address", "assigned-number"}
-		stateKeyValues := [...]string{state.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "ipv4-address", "assigned-number",  }
+		stateKeyValues := [...]string{ state.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2849,8 +2844,8 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 		}
 	}
 	for i := range state.BgpRouteTargetImportFourByteAsFormat {
-		stateKeys := [...]string{"four-byte-as-number", "assigned-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2885,8 +2880,8 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 		}
 	}
 	for i := range state.BgpRouteTargetImportTwoByteAsFormat {
-		stateKeys := [...]string{"two-byte-as-number", "assigned-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2921,8 +2916,8 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 		}
 	}
 	for i := range state.BgpRouteTargetIpv4AddressFormat {
-		stateKeys := [...]string{"ipv4-address", "assigned-number"}
-		stateKeyValues := [...]string{state.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "ipv4-address", "assigned-number",  }
+		stateKeyValues := [...]string{ state.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2957,8 +2952,8 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 		}
 	}
 	for i := range state.BgpRouteTargetFourByteAsFormat {
-		stateKeys := [...]string{"four-byte-as-number", "assigned-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2993,8 +2988,8 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 		}
 	}
 	for i := range state.BgpRouteTargetTwoByteAsFormat {
-		stateKeys := [...]string{"two-byte-as-number", "assigned-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		stateKeys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -3029,49 +3024,49 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 		}
 	}
 	if !state.BgpRdIpv4AddressIndex.IsNull() && data.BgpRdIpv4AddressIndex.IsNull() {
-		deletePath := state.getXPath() + "/bgp/rd/ipv4-address-assigned-number"
+		deletePath := state.getXPath()+"/bgp/rd/ipv4-address-assigned-number"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpRdIpv4Address.IsNull() && data.BgpRdIpv4Address.IsNull() {
-		deletePath := state.getXPath() + "/bgp/rd/ipv4-address"
+		deletePath := state.getXPath()+"/bgp/rd/ipv4-address"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpRdFourByteAsIndex.IsNull() && data.BgpRdFourByteAsIndex.IsNull() {
-		deletePath := state.getXPath() + "/bgp/rd/four-byte-as-assigned-number"
+		deletePath := state.getXPath()+"/bgp/rd/four-byte-as-assigned-number"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpRdFourByteAsNumber.IsNull() && data.BgpRdFourByteAsNumber.IsNull() {
-		deletePath := state.getXPath() + "/bgp/rd/four-byte-as-number"
+		deletePath := state.getXPath()+"/bgp/rd/four-byte-as-number"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpRdTwoByteAsIndex.IsNull() && data.BgpRdTwoByteAsIndex.IsNull() {
-		deletePath := state.getXPath() + "/bgp/rd/two-byte-as-assigned-number"
+		deletePath := state.getXPath()+"/bgp/rd/two-byte-as-assigned-number"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpRdTwoByteAsNumber.IsNull() && data.BgpRdTwoByteAsNumber.IsNull() {
-		deletePath := state.getXPath() + "/bgp/rd/two-byte-as-number"
+		deletePath := state.getXPath()+"/bgp/rd/two-byte-as-number"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Description.IsNull() && data.Description.IsNull() {
-		deletePath := state.getXPath() + "/description"
+		deletePath := state.getXPath()+"/description"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3108,8 +3103,8 @@ func (data *EVPNVNI) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/preferred-nexthop/lowest-ip")
 	}
 	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		keyValues := [...]string{data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		keyValues := [...]string{ data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -3118,8 +3113,8 @@ func (data *EVPNVNI) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt%v", predicates))
 	}
 	for i := range data.BgpRouteTargetExportFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -3128,8 +3123,8 @@ func (data *EVPNVNI) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt%v", predicates))
 	}
 	for i := range data.BgpRouteTargetExportTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -3138,8 +3133,8 @@ func (data *EVPNVNI) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", predicates))
 	}
 	for i := range data.BgpRouteTargetImportIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		keyValues := [...]string{data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		keyValues := [...]string{ data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -3148,8 +3143,8 @@ func (data *EVPNVNI) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt%v", predicates))
 	}
 	for i := range data.BgpRouteTargetImportFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -3158,8 +3153,8 @@ func (data *EVPNVNI) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt%v", predicates))
 	}
 	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -3168,8 +3163,8 @@ func (data *EVPNVNI) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", predicates))
 	}
 	for i := range data.BgpRouteTargetIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
-		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "ipv4-address", "assigned-number",  }
+		keyValues := [...]string{ data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -3178,8 +3173,8 @@ func (data *EVPNVNI) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt%v", predicates))
 	}
 	for i := range data.BgpRouteTargetFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "four-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -3188,8 +3183,8 @@ func (data *EVPNVNI) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt%v", predicates))
 	}
 	for i := range data.BgpRouteTargetTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keys := [...]string{ "two-byte-as-number", "assigned-number",  }
+		keyValues := [...]string{ strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

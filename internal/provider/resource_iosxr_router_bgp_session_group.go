@@ -24,21 +24,28 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -49,7 +56,7 @@ func NewRouterBGPSessionGroupResource() resource.Resource {
 	return &RouterBGPSessionGroupResource{}
 }
 
-type RouterBGPSessionGroupResource struct {
+type RouterBGPSessionGroupResource struct{
 	data *IosxrProviderData
 }
 
@@ -134,24 +141,24 @@ func (r *RouterBGPSessionGroupResource) Schema(ctx context.Context, req resource
 				Optional:            true,
 			},
 			"as_path_loopcheck_out": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("For outbound updates").AddStringEnumDescription("disable", "enable").String,
+				MarkdownDescription: helpers.NewAttributeDescription("For outbound updates").AddStringEnumDescription("disable", "enable", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
+					stringvalidator.OneOf("disable", "enable", ),
 				},
 			},
 			"dampening": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("(Deprecated in 7.11.1) Enable route-flap-damping").AddStringEnumDescription("disable", "enable").String,
+				MarkdownDescription: helpers.NewAttributeDescription("(Deprecated in 7.11.1) Enable route-flap-damping").AddStringEnumDescription("disable", "enable", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
+					stringvalidator.OneOf("disable", "enable", ),
 				},
 			},
 			"as_override": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("(Deprecated in 7.11.1) Override matching AS-number while sending update").AddStringEnumDescription("disable", "enable").String,
+				MarkdownDescription: helpers.NewAttributeDescription("(Deprecated in 7.11.1) Override matching AS-number while sending update").AddStringEnumDescription("disable", "enable", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
+					stringvalidator.OneOf("disable", "enable", ),
 				},
 			},
 			"use_session_group": schema.StringAttribute{
@@ -494,10 +501,10 @@ func (r *RouterBGPSessionGroupResource) Schema(ctx context.Context, req resource
 				Optional:            true,
 			},
 			"session_open_mode": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Establish BGP session using this TCP open mode").AddStringEnumDescription("active-only", "both", "passive-only").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Establish BGP session using this TCP open mode").AddStringEnumDescription("active-only", "both", "passive-only", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("active-only", "both", "passive-only"),
+					stringvalidator.OneOf("active-only", "both", "passive-only", ),
 				},
 			},
 			"dscp": schema.StringAttribute{
@@ -579,10 +586,10 @@ func (r *RouterBGPSessionGroupResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"enforce_first_as": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("enforce-first-as").AddStringEnumDescription("disable", "enable").String,
+				MarkdownDescription: helpers.NewAttributeDescription("enforce-first-as").AddStringEnumDescription("disable", "enable", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
+					stringvalidator.OneOf("disable", "enable", ),
 				},
 			},
 			"cluster_id_32bit_format": schema.Int64Attribute{
@@ -645,10 +652,10 @@ func (r *RouterBGPSessionGroupResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"ao_key_chain_include_tcp_options": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Include/Exclude other TCP options in the header").AddStringEnumDescription("disable", "enable").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Include/Exclude other TCP options in the header").AddStringEnumDescription("disable", "enable", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
+					stringvalidator.OneOf("disable", "enable", ),
 				},
 			},
 			"ao_key_chain_accept_mismatch": schema.BoolAttribute{
@@ -660,17 +667,17 @@ func (r *RouterBGPSessionGroupResource) Schema(ctx context.Context, req resource
 				Optional:            true,
 			},
 			"default_policy_action_in": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Default action if route does not satisfy inbound route-policy").AddStringEnumDescription("accept", "reject").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Default action if route does not satisfy inbound route-policy").AddStringEnumDescription("accept", "reject", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("accept", "reject"),
+					stringvalidator.OneOf("accept", "reject", ),
 				},
 			},
 			"default_policy_action_out": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Default action if route does not satisfy outbound route-policy").AddStringEnumDescription("accept", "reject").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Default action if route does not satisfy outbound route-policy").AddStringEnumDescription("accept", "reject", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("accept", "reject"),
+					stringvalidator.OneOf("accept", "reject", ),
 				},
 			},
 			"fast_fallover": schema.BoolAttribute{
@@ -690,17 +697,17 @@ func (r *RouterBGPSessionGroupResource) Schema(ctx context.Context, req resource
 				Optional:            true,
 			},
 			"update_in_error_handling_avoid_reset": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Avoid neighbor reset during inbound update message error handling").AddStringEnumDescription("disable", "enable").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Avoid neighbor reset during inbound update message error handling").AddStringEnumDescription("disable", "enable", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
+					stringvalidator.OneOf("disable", "enable", ),
 				},
 			},
 			"update_in_error_handling_treat_as_withdraw": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("(Deprecated in 7.11.1) Treat NLRIs as withdraws during inbound update message error handling").AddStringEnumDescription("disable", "enable").String,
+				MarkdownDescription: helpers.NewAttributeDescription("(Deprecated in 7.11.1) Treat NLRIs as withdraws during inbound update message error handling").AddStringEnumDescription("disable", "enable", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
+					stringvalidator.OneOf("disable", "enable", ),
 				},
 			},
 		},
@@ -739,14 +746,14 @@ func (r *RouterBGPSessionGroupResource) Create(ctx context.Context, req resource
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			var ops []gnmi.SetOperation
+		var ops []gnmi.SetOperation
 
-			// Create object
-			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -967,11 +974,11 @@ func (r *RouterBGPSessionGroupResource) Update(ctx context.Context, req resource
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			// Combine update and delete operations into a single transaction
-			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-				resp.Diagnostics.AddError("Client Error", err.Error())
-				return
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
 			}
 		}
 	}

@@ -21,7 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -59,18 +58,18 @@ func TestAccDataSourceIosxrPolicyMapQoS(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.random_detect_default", "true"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.random_detect.0.minimum_threshold_value", "100"))
-		}
-		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.random_detect.0.minimum_threshold_unit", "ms"))
-		}
-		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.random_detect.0.maximum_threshold_value", "200"))
-		}
-		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.random_detect.0.maximum_threshold_unit", "ms"))
-		}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.random_detect.0.minimum_threshold_value", "100"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.random_detect.0.minimum_threshold_unit", "ms"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.random_detect.0.maximum_threshold_value", "200"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.random_detect.0.maximum_threshold_unit", "ms"))
+	}
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.service_policy_name", "CHILD_POLICY"))
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
@@ -86,7 +85,7 @@ func TestAccDataSourceIosxrPolicyMapQoS(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrPolicyMapQoSConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -132,20 +131,20 @@ func testAccDataSourceIosxrPolicyMapQoSConfig() string {
 		config += `		random_detect_default = true` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		config += `		random_detect = [{` + "\n"
-		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-			config += `			minimum_threshold_value = 100` + "\n"
-		}
-		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-			config += `			minimum_threshold_unit = "ms"` + "\n"
-		}
-		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-			config += `			maximum_threshold_value = 200` + "\n"
-		}
-		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-			config += `			maximum_threshold_unit = "ms"` + "\n"
-		}
-		config += `		}]` + "\n"
+	config += `		random_detect = [{` + "\n"
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `			minimum_threshold_value = 100` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `			minimum_threshold_unit = "ms"` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `			maximum_threshold_value = 200` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `			maximum_threshold_unit = "ms"` + "\n"
+	}
+	config += `		}]` + "\n"
 	}
 	config += `		service_policy_name = "CHILD_POLICY"` + "\n"
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {

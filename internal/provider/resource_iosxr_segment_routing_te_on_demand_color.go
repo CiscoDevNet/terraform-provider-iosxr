@@ -27,20 +27,25 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -51,7 +56,7 @@ func NewSegmentRoutingTEOnDemandColorResource() resource.Resource {
 	return &SegmentRoutingTEOnDemandColorResource{}
 }
 
-type SegmentRoutingTEOnDemandColorResource struct {
+type SegmentRoutingTEOnDemandColorResource struct{
 	data *IosxrProviderData
 }
 
@@ -98,17 +103,17 @@ func (r *SegmentRoutingTEOnDemandColorResource) Schema(ctx context.Context, req 
 				Optional:            true,
 			},
 			"dynamic_metric_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Metric Type").AddStringEnumDescription("hopcount", "igp", "latency", "te").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Metric Type").AddStringEnumDescription("hopcount", "igp", "latency", "te", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("hopcount", "igp", "latency", "te"),
+					stringvalidator.OneOf("hopcount", "igp", "latency", "te", ),
 				},
 			},
 			"dynamic_metric_margin_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Metric margin type").AddStringEnumDescription("absolute", "relative").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Metric margin type").AddStringEnumDescription("absolute", "relative", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("absolute", "relative"),
+					stringvalidator.OneOf("absolute", "relative", ),
 				},
 			},
 			"dynamic_metric_margin_absolute": schema.Int64Attribute{
@@ -137,10 +142,10 @@ func (r *SegmentRoutingTEOnDemandColorResource) Schema(ctx context.Context, req 
 				},
 			},
 			"dynamic_disjoint_path_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Disjointness Type").AddStringEnumDescription("link", "node", "srlg", "srlg-node").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Disjointness Type").AddStringEnumDescription("link", "node", "srlg", "srlg-node", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("link", "node", "srlg", "srlg-node"),
+					stringvalidator.OneOf("link", "node", "srlg", "srlg-node", ),
 				},
 			},
 			"dynamic_disjoint_path_sub_id": schema.Int64Attribute{
@@ -164,10 +169,10 @@ func (r *SegmentRoutingTEOnDemandColorResource) Schema(ctx context.Context, req 
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"affinity_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Affinity rule type").AddStringEnumDescription("affinity-exclude-any", "affinity-include-all", "affinity-include-any").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity rule type").AddStringEnumDescription("affinity-exclude-any", "affinity-include-all", "affinity-include-any", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("affinity-exclude-any", "affinity-include-all", "affinity-include-any"),
+								stringvalidator.OneOf("affinity-exclude-any", "affinity-include-all", "affinity-include-any", ),
 							},
 						},
 						"affinities": schema.ListNestedAttribute{
@@ -195,17 +200,17 @@ func (r *SegmentRoutingTEOnDemandColorResource) Schema(ctx context.Context, req 
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Scope of the bound").AddStringEnumDescription("bound-scope-cumulative", "bound-scope-link", "bound-scope-none").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Scope of the bound").AddStringEnumDescription("bound-scope-cumulative", "bound-scope-link", "bound-scope-none", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("bound-scope-cumulative", "bound-scope-link", "bound-scope-none"),
+								stringvalidator.OneOf("bound-scope-cumulative", "bound-scope-link", "bound-scope-none", ),
 							},
 						},
 						"metric_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Metric type to bound").AddStringEnumDescription("hopcount", "igp", "latency", "te").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Metric type to bound").AddStringEnumDescription("hopcount", "igp", "latency", "te", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("hopcount", "igp", "latency", "te"),
+								stringvalidator.OneOf("hopcount", "igp", "latency", "te", ),
 							},
 						},
 						"value": schema.Int64Attribute{
@@ -219,10 +224,10 @@ func (r *SegmentRoutingTEOnDemandColorResource) Schema(ctx context.Context, req 
 				},
 			},
 			"constraint_segments_protection_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Protection Type").AddStringEnumDescription("protected-only", "protected-preferred", "unprotected-only", "unprotected-preferred").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Protection Type").AddStringEnumDescription("protected-only", "protected-preferred", "unprotected-only", "unprotected-preferred", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("protected-only", "protected-preferred", "unprotected-only", "unprotected-preferred"),
+					stringvalidator.OneOf("protected-only", "protected-preferred", "unprotected-only", "unprotected-preferred", ),
 				},
 			},
 			"constraint_segments_sid_algorithm": schema.Int64Attribute{
@@ -287,10 +292,10 @@ func (r *SegmentRoutingTEOnDemandColorResource) Schema(ctx context.Context, req 
 				Optional:            true,
 			},
 			"performance_measurement_liveness_invalidation_action": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Action to be taken when PM liveness session is invalidated").AddStringEnumDescription("invalid-ation-action-down", "invalid-ation-action-none").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Action to be taken when PM liveness session is invalidated").AddStringEnumDescription("invalid-ation-action-down", "invalid-ation-action-none", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("invalid-ation-action-down", "invalid-ation-action-none"),
+					stringvalidator.OneOf("invalid-ation-action-down", "invalid-ation-action-none", ),
 				},
 			},
 			"performance_measurement_reverse_path_segment_list": schema.StringAttribute{
@@ -371,10 +376,10 @@ func (r *SegmentRoutingTEOnDemandColorResource) Schema(ctx context.Context, req 
 				},
 			},
 			"bfd_invalidation_action": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Action to be taken when BFD session is invalidated").AddStringEnumDescription("invalid-ation-action-down", "invalid-ation-action-none").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Action to be taken when BFD session is invalidated").AddStringEnumDescription("invalid-ation-action-down", "invalid-ation-action-none", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("invalid-ation-action-down", "invalid-ation-action-none"),
+					stringvalidator.OneOf("invalid-ation-action-down", "invalid-ation-action-none", ),
 				},
 			},
 			"bfd_reverse_path_binding_label": schema.Int64Attribute{
@@ -397,10 +402,10 @@ func (r *SegmentRoutingTEOnDemandColorResource) Schema(ctx context.Context, req 
 				},
 			},
 			"source_address_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IP address type").AddStringEnumDescription("end-point-type-ipv4", "end-point-type-ipv6").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IP address type").AddStringEnumDescription("end-point-type-ipv4", "end-point-type-ipv6", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("end-point-type-ipv4", "end-point-type-ipv6"),
+					stringvalidator.OneOf("end-point-type-ipv4", "end-point-type-ipv6", ),
 				},
 			},
 			"source_address": schema.StringAttribute{
@@ -415,10 +420,10 @@ func (r *SegmentRoutingTEOnDemandColorResource) Schema(ctx context.Context, req 
 				},
 			},
 			"effective_metric_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Metric type, advertised to other protocols").AddStringEnumDescription("default", "hopcount", "igp", "latency", "te").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Metric type, advertised to other protocols").AddStringEnumDescription("default", "hopcount", "igp", "latency", "te", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("default", "hopcount", "igp", "latency", "te"),
+					stringvalidator.OneOf("default", "hopcount", "igp", "latency", "te", ),
 				},
 			},
 			"srv6_locator_name": schema.StringAttribute{
@@ -430,17 +435,17 @@ func (r *SegmentRoutingTEOnDemandColorResource) Schema(ctx context.Context, req 
 				},
 			},
 			"srv6_locator_binding_sid_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Binding Segment ID type").AddStringEnumDescription("srv6-dynamic").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Binding Segment ID type").AddStringEnumDescription("srv6-dynamic", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("srv6-dynamic"),
+					stringvalidator.OneOf("srv6-dynamic", ),
 				},
 			},
 			"srv6_locator_behavior": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-encaps-reduced", "ub6-insert-reduced").String,
+				MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-encaps-reduced", "ub6-insert-reduced", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced"),
+					stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced", ),
 				},
 			},
 		},
@@ -479,14 +484,14 @@ func (r *SegmentRoutingTEOnDemandColorResource) Create(ctx context.Context, req 
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			var ops []gnmi.SetOperation
+		var ops []gnmi.SetOperation
 
-			// Create object
-			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -707,11 +712,11 @@ func (r *SegmentRoutingTEOnDemandColorResource) Update(ctx context.Context, req 
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			// Combine update and delete operations into a single transaction
-			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-				resp.Diagnostics.AddError("Client Error", err.Error())
-				return
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
 			}
 		}
 	}

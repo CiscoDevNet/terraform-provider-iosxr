@@ -24,21 +24,28 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -49,7 +56,7 @@ func NewEthernetCFMResource() resource.Resource {
 	return &EthernetCFMResource{}
 }
 
-type EthernetCFMResource struct {
+type EthernetCFMResource struct{
 	data *IosxrProviderData
 }
 
@@ -296,10 +303,10 @@ func (r *EthernetCFMResource) Schema(ctx context.Context, req resource.SchemaReq
 										},
 									},
 									"tags": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("The number of tags to use when sending CFM packets from up MEPs in this service").AddStringEnumDescription("1").String,
+										MarkdownDescription: helpers.NewAttributeDescription("The number of tags to use when sending CFM packets from up MEPs in this service").AddStringEnumDescription("1", ).String,
 										Optional:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("1"),
+											stringvalidator.OneOf("1", ),
 										},
 									},
 									"mip_auto_create_all": schema.BoolAttribute{
@@ -323,10 +330,10 @@ func (r *EthernetCFMResource) Schema(ctx context.Context, req resource.SchemaReq
 										Optional:            true,
 									},
 									"continuity_check_interval": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("The number of tags to use when sending CFM packets from up MEPs in this service").AddStringEnumDescription("100ms", "10m", "10ms", "10s", "1m", "1s", "3.3ms").String,
+										MarkdownDescription: helpers.NewAttributeDescription("The number of tags to use when sending CFM packets from up MEPs in this service").AddStringEnumDescription("100ms", "10m", "10ms", "10s", "1m", "1s", "3.3ms", ).String,
 										Optional:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("100ms", "10m", "10ms", "10s", "1m", "1s", "3.3ms"),
+											stringvalidator.OneOf("100ms", "10m", "10ms", "10s", "1m", "1s", "3.3ms", ),
 										},
 									},
 									"continuity_check_interval_loss_threshold": schema.Int64Attribute{
@@ -355,10 +362,10 @@ func (r *EthernetCFMResource) Schema(ctx context.Context, req resource.SchemaReq
 										},
 									},
 									"ais_transmission_interval": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Specify the AIS transmission interval").AddStringEnumDescription("1m", "1s").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Specify the AIS transmission interval").AddStringEnumDescription("1m", "1s", ).String,
 										Optional:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("1m", "1s"),
+											stringvalidator.OneOf("1m", "1s", ),
 										},
 									},
 									"ais_transmission_cos": schema.Int64Attribute{
@@ -397,22 +404,22 @@ func (r *EthernetCFMResource) Schema(ctx context.Context, req resource.SchemaReq
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"mep_id": schema.Int64Attribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Specify crosscheck config for a given MEP ID").AddIntegerRangeDescription(1, 8191).String,
-													Required:            true,
-													Validators: []validator.Int64{
-														int64validator.Between(1, 8191),
-													},
+											"mep_id": schema.Int64Attribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Specify crosscheck config for a given MEP ID").AddIntegerRangeDescription(1, 8191).String,
+												Required:            true,
+												Validators: []validator.Int64{
+													int64validator.Between(1, 8191),
 												},
-												"mac_address": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Expected MAC Address for the specified MEP").String,
-													Optional:            true,
-													Validators: []validator.String{
-														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
-													},
+											},
+											"mac_address": schema.StringAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Expected MAC Address for the specified MEP").String,
+												Optional:            true,
+												Validators: []validator.String{
+													stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
 												},
 											},
 										},
+									},
 									},
 									"mep_crosscheck_auto": schema.BoolAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Treat all remote MEPs for which CCMs are received as cross-check MEPs").String,
@@ -516,14 +523,14 @@ func (r *EthernetCFMResource) Create(ctx context.Context, req resource.CreateReq
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			var ops []gnmi.SetOperation
+		var ops []gnmi.SetOperation
 
-			// Create object
-			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -744,11 +751,11 @@ func (r *EthernetCFMResource) Update(ctx context.Context, req resource.UpdateReq
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			// Combine update and delete operations into a single transaction
-			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-				resp.Diagnostics.AddError("Client Error", err.Error())
-				return
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
 			}
 		}
 	}

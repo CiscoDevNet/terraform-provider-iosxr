@@ -60,8 +60,8 @@ func TestAccDataSourceIosxrMPLSLDPAddressFamily(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrMPLSLDPAddressFamilyPrerequisitesConfig + testAccDataSourceIosxrMPLSLDPAddressFamilyConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrMPLSLDPAddressFamilyPrerequisitesConfig+testAccDataSourceIosxrMPLSLDPAddressFamilyConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

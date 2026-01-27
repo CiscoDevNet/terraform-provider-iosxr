@@ -23,14 +23,19 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/netascode/go-gnmi"
+	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -47,7 +52,7 @@ func NewL2VPNDataSource() datasource.DataSource {
 	return &L2VPNDataSource{}
 }
 
-type L2VPNDataSource struct {
+type L2VPNDataSource struct{
 	data *IosxrProviderData
 }
 
@@ -94,23 +99,23 @@ func (d *L2VPNDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									"interface_name": schema.StringAttribute{
 										MarkdownDescription: "Interface name",
 										Computed:            true,
-									},
+								},
 									"primary_vlan": schema.StringAttribute{
 										MarkdownDescription: "Assign primary VLANs",
 										Computed:            true,
-									},
+								},
 									"secondary_vlan": schema.StringAttribute{
 										MarkdownDescription: "Assign secondary VLANs",
 										Computed:            true,
-									},
+								},
 									"mac_flush_stp_tcn": schema.BoolAttribute{
 										MarkdownDescription: "STP topology change notification",
 										Computed:            true,
-									},
+								},
 									"recovery_delay": schema.Int64Attribute{
 										MarkdownDescription: "Specify delay before recovery reversion after failure clears",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -138,7 +143,7 @@ func (d *L2VPNDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									"interface_name": schema.StringAttribute{
 										MarkdownDescription: "Specify sub-interface name to attach to flexible xconnect service",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -150,11 +155,11 @@ func (d *L2VPNDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									"vpn_id": schema.Int64Attribute{
 										MarkdownDescription: "Ethernet VPN Identifier",
 										Computed:            true,
-									},
+								},
 									"remote_ac_id": schema.Int64Attribute{
 										MarkdownDescription: "Specify remote attachment circuit identifier",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -178,7 +183,7 @@ func (d *L2VPNDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									"interface_name": schema.StringAttribute{
 										MarkdownDescription: "Specify sub-interface name to attach to flexible xconnect service",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -370,6 +375,7 @@ func (d *L2VPNDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
+
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

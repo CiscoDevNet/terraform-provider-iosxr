@@ -21,8 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -35,8 +33,8 @@ import (
 
 func TestAccIosxrCDP(t *testing.T) {
 	if os.Getenv("XRV9K") == "" && os.Getenv("XRD") == "" && os.Getenv("NCS") == "" {
-		t.Skip("skipping test, set environment variable XRV9K or XRD or NCS")
-	}
+        t.Skip("skipping test, set environment variable XRV9K or XRD or NCS")
+    }
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cdp.test", "enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cdp.test", "holdtime", "12"))
@@ -51,18 +49,18 @@ func TestAccIosxrCDP(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrCDPConfig_all(),
-		Check:  resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:      "iosxr_cdp.test",
-		ImportState:       true,
+		ResourceName:  "iosxr_cdp.test",
+		ImportState:   true,
 		ImportStateIdFunc: iosxrCDPImportStateIdFunc("iosxr_cdp.test"),
-		Check:             resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps:                    steps,
+		Steps: steps,
 	})
 }
 
@@ -98,7 +96,7 @@ func testAccIosxrCDPConfig_all() string {
 func iosxrCDPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf(""), nil
+		return fmt.Sprintf("", ), nil
 	}
 }
 

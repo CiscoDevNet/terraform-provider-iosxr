@@ -21,8 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -65,23 +63,23 @@ func TestAccIosxrRouterStaticVRFIPv6Unicast(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterStaticVRFIPv6UnicastPrerequisitesConfig + testAccIosxrRouterStaticVRFIPv6UnicastConfig_minimum(),
+			Config: testAccIosxrRouterStaticVRFIPv6UnicastPrerequisitesConfig+testAccIosxrRouterStaticVRFIPv6UnicastConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterStaticVRFIPv6UnicastPrerequisitesConfig + testAccIosxrRouterStaticVRFIPv6UnicastConfig_all(),
-		Check:  resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrRouterStaticVRFIPv6UnicastPrerequisitesConfig+testAccIosxrRouterStaticVRFIPv6UnicastConfig_all(),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:      "iosxr_router_static_vrf_ipv6_unicast.test",
-		ImportState:       true,
+		ResourceName:  "iosxr_router_static_vrf_ipv6_unicast.test",
+		ImportState:   true,
 		ImportStateIdFunc: iosxrRouterStaticVRFIPv6UnicastImportStateIdFunc("iosxr_router_static_vrf_ipv6_unicast.test"),
-		Check:             resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps:                    steps,
+		Steps: steps,
 	})
 }
 
@@ -161,7 +159,7 @@ func iosxrRouterStaticVRFIPv6UnicastImportStateIdFunc(resourceName string) resou
 		PrefixAddress := primary.Attributes["prefix_address"]
 		PrefixLength := primary.Attributes["prefix_length"]
 
-		return fmt.Sprintf("%s,%s,%s", VrfName, PrefixAddress, PrefixLength), nil
+		return fmt.Sprintf("%s,%s,%s", VrfName,PrefixAddress,PrefixLength), nil
 	}
 }
 

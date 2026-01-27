@@ -55,8 +55,8 @@ func TestAccDataSourceIosxrRouterMLDVRFInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterMLDVRFInterfacePrerequisitesConfig + testAccDataSourceIosxrRouterMLDVRFInterfaceConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrRouterMLDVRFInterfacePrerequisitesConfig+testAccDataSourceIosxrRouterMLDVRFInterfaceConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

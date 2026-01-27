@@ -24,144 +24,145 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type Track struct {
-	Device                                       types.String                           `tfsdk:"device"`
-	Id                                           types.String                           `tfsdk:"id"`
-	DeleteMode                                   types.String                           `tfsdk:"delete_mode"`
-	TrackName                                    types.String                           `tfsdk:"track_name"`
-	DelayUp                                      types.Int64                            `tfsdk:"delay_up"`
-	DelayDown                                    types.Int64                            `tfsdk:"delay_down"`
-	RouteIpv4Address                             types.String                           `tfsdk:"route_ipv4_address"`
-	RouteIpv4Mask                                types.String                           `tfsdk:"route_ipv4_mask"`
-	RouteAddressPrefix                           types.String                           `tfsdk:"route_address_prefix"`
-	RouteAddressPrefixLength                     types.Int64                            `tfsdk:"route_address_prefix_length"`
-	RouteVrf                                     types.String                           `tfsdk:"route_vrf"`
-	LineProtocolState                            types.String                           `tfsdk:"line_protocol_state"`
-	Rtr                                          types.Int64                            `tfsdk:"rtr"`
-	BooleanAndList                               []TrackBooleanAndList                  `tfsdk:"boolean_and_list"`
-	BooleanOrList                                []TrackBooleanOrList                   `tfsdk:"boolean_or_list"`
-	ThresholdPercentage                          []TrackThresholdPercentage             `tfsdk:"threshold_percentage"`
-	ThresholdPercentageUp                        types.Int64                            `tfsdk:"threshold_percentage_up"`
-	ThresholdPercentageDown                      types.Int64                            `tfsdk:"threshold_percentage_down"`
-	ThresholdWeight                              []TrackThresholdWeight                 `tfsdk:"threshold_weight"`
-	ThresholdWeightUp                            types.Int64                            `tfsdk:"threshold_weight_up"`
-	ThresholdWeightDown                          types.Int64                            `tfsdk:"threshold_weight_down"`
-	LineProtocolWeightUp                         types.Int64                            `tfsdk:"line_protocol_weight_up"`
-	LineProtocolWeightDown                       types.Int64                            `tfsdk:"line_protocol_weight_down"`
-	LineProtocolWeight                           []TrackLineProtocolWeight              `tfsdk:"line_protocol_weight"`
-	LineProtocolPercentageUp                     types.Int64                            `tfsdk:"line_protocol_percentage_up"`
-	LineProtocolPercentageDown                   types.Int64                            `tfsdk:"line_protocol_percentage_down"`
-	LineProtocolPercentage                       []TrackLineProtocolPercentage          `tfsdk:"line_protocol_percentage"`
-	LineProtocolBooleanAnd                       []TrackLineProtocolBooleanAnd          `tfsdk:"line_protocol_boolean_and"`
-	LineProtocolBooleanOr                        []TrackLineProtocolBooleanOr           `tfsdk:"line_protocol_boolean_or"`
-	BfdRate                                      types.Int64                            `tfsdk:"bfd_rate"`
-	BfdDebounce                                  types.Int64                            `tfsdk:"bfd_debounce"`
-	BfdInterface                                 types.String                           `tfsdk:"bfd_interface"`
-	BfdDestinationAddress                        types.String                           `tfsdk:"bfd_destination_address"`
-	BgpNeighborIpv4UnicastAddress                types.String                           `tfsdk:"bgp_neighbor_ipv4_unicast_address"`
-	BgpNeighborIpv4UnicastVrfName                types.String                           `tfsdk:"bgp_neighbor_ipv4_unicast_vrf_name"`
-	BgpNeighborIpv4UnicastDisableFibCheck        types.Bool                             `tfsdk:"bgp_neighbor_ipv4_unicast_disable_fib_check"`
-	BgpNeighborIpv4LabeledUnicastAddress         types.String                           `tfsdk:"bgp_neighbor_ipv4_labeled_unicast_address"`
-	BgpNeighborIpv4LabeledUnicastVrfName         types.String                           `tfsdk:"bgp_neighbor_ipv4_labeled_unicast_vrf_name"`
-	BgpNeighborIpv4LabeledUnicastDisableFibCheck types.Bool                             `tfsdk:"bgp_neighbor_ipv4_labeled_unicast_disable_fib_check"`
-	BgpNeighborIpv6UnicastAddress                types.String                           `tfsdk:"bgp_neighbor_ipv6_unicast_address"`
-	BgpNeighborIpv6UnicastVrfName                types.String                           `tfsdk:"bgp_neighbor_ipv6_unicast_vrf_name"`
-	BgpNeighborIpv6UnicastDisableFibCheck        types.Bool                             `tfsdk:"bgp_neighbor_ipv6_unicast_disable_fib_check"`
-	BgpNeighborIpv6LabeledUnicastAddress         types.String                           `tfsdk:"bgp_neighbor_ipv6_labeled_unicast_address"`
-	BgpNeighborIpv6LabeledUnicastDisableFibCheck types.Bool                             `tfsdk:"bgp_neighbor_ipv6_labeled_unicast_disable_fib_check"`
-	BgpNeighborVpnv4UnicastAddress               types.String                           `tfsdk:"bgp_neighbor_vpnv4_unicast_address"`
-	BgpNeighborVpnv4UnicastDisableFibCheck       types.Bool                             `tfsdk:"bgp_neighbor_vpnv4_unicast_disable_fib_check"`
-	BgpNeighborVpnv6UnicastAddress               types.String                           `tfsdk:"bgp_neighbor_vpnv6_unicast_address"`
-	BgpNeighborVpnv6UnicastDisableFibCheck       types.Bool                             `tfsdk:"bgp_neighbor_vpnv6_unicast_disable_fib_check"`
-	TrackDownErrorDisableInterfaces              []TrackTrackDownErrorDisableInterfaces `tfsdk:"track_down_error_disable_interfaces"`
-	TrackUpErrorDisableInterfaces                []TrackTrackUpErrorDisableInterfaces   `tfsdk:"track_up_error_disable_interfaces"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	TrackName types.String `tfsdk:"track_name"`
+	DelayUp types.Int64 `tfsdk:"delay_up"`
+	DelayDown types.Int64 `tfsdk:"delay_down"`
+	RouteIpv4Address types.String `tfsdk:"route_ipv4_address"`
+	RouteIpv4Mask types.String `tfsdk:"route_ipv4_mask"`
+	RouteAddressPrefix types.String `tfsdk:"route_address_prefix"`
+	RouteAddressPrefixLength types.Int64 `tfsdk:"route_address_prefix_length"`
+	RouteVrf types.String `tfsdk:"route_vrf"`
+	LineProtocolState types.String `tfsdk:"line_protocol_state"`
+	Rtr types.Int64 `tfsdk:"rtr"`
+	BooleanAndList []TrackBooleanAndList `tfsdk:"boolean_and_list"`
+	BooleanOrList []TrackBooleanOrList `tfsdk:"boolean_or_list"`
+	ThresholdPercentage []TrackThresholdPercentage `tfsdk:"threshold_percentage"`
+	ThresholdPercentageUp types.Int64 `tfsdk:"threshold_percentage_up"`
+	ThresholdPercentageDown types.Int64 `tfsdk:"threshold_percentage_down"`
+	ThresholdWeight []TrackThresholdWeight `tfsdk:"threshold_weight"`
+	ThresholdWeightUp types.Int64 `tfsdk:"threshold_weight_up"`
+	ThresholdWeightDown types.Int64 `tfsdk:"threshold_weight_down"`
+	LineProtocolWeightUp types.Int64 `tfsdk:"line_protocol_weight_up"`
+	LineProtocolWeightDown types.Int64 `tfsdk:"line_protocol_weight_down"`
+	LineProtocolWeight []TrackLineProtocolWeight `tfsdk:"line_protocol_weight"`
+	LineProtocolPercentageUp types.Int64 `tfsdk:"line_protocol_percentage_up"`
+	LineProtocolPercentageDown types.Int64 `tfsdk:"line_protocol_percentage_down"`
+	LineProtocolPercentage []TrackLineProtocolPercentage `tfsdk:"line_protocol_percentage"`
+	LineProtocolBooleanAnd []TrackLineProtocolBooleanAnd `tfsdk:"line_protocol_boolean_and"`
+	LineProtocolBooleanOr []TrackLineProtocolBooleanOr `tfsdk:"line_protocol_boolean_or"`
+	BfdRate types.Int64 `tfsdk:"bfd_rate"`
+	BfdDebounce types.Int64 `tfsdk:"bfd_debounce"`
+	BfdInterface types.String `tfsdk:"bfd_interface"`
+	BfdDestinationAddress types.String `tfsdk:"bfd_destination_address"`
+	BgpNeighborIpv4UnicastAddress types.String `tfsdk:"bgp_neighbor_ipv4_unicast_address"`
+	BgpNeighborIpv4UnicastVrfName types.String `tfsdk:"bgp_neighbor_ipv4_unicast_vrf_name"`
+	BgpNeighborIpv4UnicastDisableFibCheck types.Bool `tfsdk:"bgp_neighbor_ipv4_unicast_disable_fib_check"`
+	BgpNeighborIpv4LabeledUnicastAddress types.String `tfsdk:"bgp_neighbor_ipv4_labeled_unicast_address"`
+	BgpNeighborIpv4LabeledUnicastVrfName types.String `tfsdk:"bgp_neighbor_ipv4_labeled_unicast_vrf_name"`
+	BgpNeighborIpv4LabeledUnicastDisableFibCheck types.Bool `tfsdk:"bgp_neighbor_ipv4_labeled_unicast_disable_fib_check"`
+	BgpNeighborIpv6UnicastAddress types.String `tfsdk:"bgp_neighbor_ipv6_unicast_address"`
+	BgpNeighborIpv6UnicastVrfName types.String `tfsdk:"bgp_neighbor_ipv6_unicast_vrf_name"`
+	BgpNeighborIpv6UnicastDisableFibCheck types.Bool `tfsdk:"bgp_neighbor_ipv6_unicast_disable_fib_check"`
+	BgpNeighborIpv6LabeledUnicastAddress types.String `tfsdk:"bgp_neighbor_ipv6_labeled_unicast_address"`
+	BgpNeighborIpv6LabeledUnicastDisableFibCheck types.Bool `tfsdk:"bgp_neighbor_ipv6_labeled_unicast_disable_fib_check"`
+	BgpNeighborVpnv4UnicastAddress types.String `tfsdk:"bgp_neighbor_vpnv4_unicast_address"`
+	BgpNeighborVpnv4UnicastDisableFibCheck types.Bool `tfsdk:"bgp_neighbor_vpnv4_unicast_disable_fib_check"`
+	BgpNeighborVpnv6UnicastAddress types.String `tfsdk:"bgp_neighbor_vpnv6_unicast_address"`
+	BgpNeighborVpnv6UnicastDisableFibCheck types.Bool `tfsdk:"bgp_neighbor_vpnv6_unicast_disable_fib_check"`
+	TrackDownErrorDisableInterfaces []TrackTrackDownErrorDisableInterfaces `tfsdk:"track_down_error_disable_interfaces"`
+	TrackUpErrorDisableInterfaces []TrackTrackUpErrorDisableInterfaces `tfsdk:"track_up_error_disable_interfaces"`
 }
 
 type TrackData struct {
-	Device                                       types.String                           `tfsdk:"device"`
-	Id                                           types.String                           `tfsdk:"id"`
-	TrackName                                    types.String                           `tfsdk:"track_name"`
-	DelayUp                                      types.Int64                            `tfsdk:"delay_up"`
-	DelayDown                                    types.Int64                            `tfsdk:"delay_down"`
-	RouteIpv4Address                             types.String                           `tfsdk:"route_ipv4_address"`
-	RouteIpv4Mask                                types.String                           `tfsdk:"route_ipv4_mask"`
-	RouteAddressPrefix                           types.String                           `tfsdk:"route_address_prefix"`
-	RouteAddressPrefixLength                     types.Int64                            `tfsdk:"route_address_prefix_length"`
-	RouteVrf                                     types.String                           `tfsdk:"route_vrf"`
-	LineProtocolState                            types.String                           `tfsdk:"line_protocol_state"`
-	Rtr                                          types.Int64                            `tfsdk:"rtr"`
-	BooleanAndList                               []TrackBooleanAndList                  `tfsdk:"boolean_and_list"`
-	BooleanOrList                                []TrackBooleanOrList                   `tfsdk:"boolean_or_list"`
-	ThresholdPercentage                          []TrackThresholdPercentage             `tfsdk:"threshold_percentage"`
-	ThresholdPercentageUp                        types.Int64                            `tfsdk:"threshold_percentage_up"`
-	ThresholdPercentageDown                      types.Int64                            `tfsdk:"threshold_percentage_down"`
-	ThresholdWeight                              []TrackThresholdWeight                 `tfsdk:"threshold_weight"`
-	ThresholdWeightUp                            types.Int64                            `tfsdk:"threshold_weight_up"`
-	ThresholdWeightDown                          types.Int64                            `tfsdk:"threshold_weight_down"`
-	LineProtocolWeightUp                         types.Int64                            `tfsdk:"line_protocol_weight_up"`
-	LineProtocolWeightDown                       types.Int64                            `tfsdk:"line_protocol_weight_down"`
-	LineProtocolWeight                           []TrackLineProtocolWeight              `tfsdk:"line_protocol_weight"`
-	LineProtocolPercentageUp                     types.Int64                            `tfsdk:"line_protocol_percentage_up"`
-	LineProtocolPercentageDown                   types.Int64                            `tfsdk:"line_protocol_percentage_down"`
-	LineProtocolPercentage                       []TrackLineProtocolPercentage          `tfsdk:"line_protocol_percentage"`
-	LineProtocolBooleanAnd                       []TrackLineProtocolBooleanAnd          `tfsdk:"line_protocol_boolean_and"`
-	LineProtocolBooleanOr                        []TrackLineProtocolBooleanOr           `tfsdk:"line_protocol_boolean_or"`
-	BfdRate                                      types.Int64                            `tfsdk:"bfd_rate"`
-	BfdDebounce                                  types.Int64                            `tfsdk:"bfd_debounce"`
-	BfdInterface                                 types.String                           `tfsdk:"bfd_interface"`
-	BfdDestinationAddress                        types.String                           `tfsdk:"bfd_destination_address"`
-	BgpNeighborIpv4UnicastAddress                types.String                           `tfsdk:"bgp_neighbor_ipv4_unicast_address"`
-	BgpNeighborIpv4UnicastVrfName                types.String                           `tfsdk:"bgp_neighbor_ipv4_unicast_vrf_name"`
-	BgpNeighborIpv4UnicastDisableFibCheck        types.Bool                             `tfsdk:"bgp_neighbor_ipv4_unicast_disable_fib_check"`
-	BgpNeighborIpv4LabeledUnicastAddress         types.String                           `tfsdk:"bgp_neighbor_ipv4_labeled_unicast_address"`
-	BgpNeighborIpv4LabeledUnicastVrfName         types.String                           `tfsdk:"bgp_neighbor_ipv4_labeled_unicast_vrf_name"`
-	BgpNeighborIpv4LabeledUnicastDisableFibCheck types.Bool                             `tfsdk:"bgp_neighbor_ipv4_labeled_unicast_disable_fib_check"`
-	BgpNeighborIpv6UnicastAddress                types.String                           `tfsdk:"bgp_neighbor_ipv6_unicast_address"`
-	BgpNeighborIpv6UnicastVrfName                types.String                           `tfsdk:"bgp_neighbor_ipv6_unicast_vrf_name"`
-	BgpNeighborIpv6UnicastDisableFibCheck        types.Bool                             `tfsdk:"bgp_neighbor_ipv6_unicast_disable_fib_check"`
-	BgpNeighborIpv6LabeledUnicastAddress         types.String                           `tfsdk:"bgp_neighbor_ipv6_labeled_unicast_address"`
-	BgpNeighborIpv6LabeledUnicastDisableFibCheck types.Bool                             `tfsdk:"bgp_neighbor_ipv6_labeled_unicast_disable_fib_check"`
-	BgpNeighborVpnv4UnicastAddress               types.String                           `tfsdk:"bgp_neighbor_vpnv4_unicast_address"`
-	BgpNeighborVpnv4UnicastDisableFibCheck       types.Bool                             `tfsdk:"bgp_neighbor_vpnv4_unicast_disable_fib_check"`
-	BgpNeighborVpnv6UnicastAddress               types.String                           `tfsdk:"bgp_neighbor_vpnv6_unicast_address"`
-	BgpNeighborVpnv6UnicastDisableFibCheck       types.Bool                             `tfsdk:"bgp_neighbor_vpnv6_unicast_disable_fib_check"`
-	TrackDownErrorDisableInterfaces              []TrackTrackDownErrorDisableInterfaces `tfsdk:"track_down_error_disable_interfaces"`
-	TrackUpErrorDisableInterfaces                []TrackTrackUpErrorDisableInterfaces   `tfsdk:"track_up_error_disable_interfaces"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	TrackName types.String `tfsdk:"track_name"`
+	DelayUp types.Int64 `tfsdk:"delay_up"`
+	DelayDown types.Int64 `tfsdk:"delay_down"`
+	RouteIpv4Address types.String `tfsdk:"route_ipv4_address"`
+	RouteIpv4Mask types.String `tfsdk:"route_ipv4_mask"`
+	RouteAddressPrefix types.String `tfsdk:"route_address_prefix"`
+	RouteAddressPrefixLength types.Int64 `tfsdk:"route_address_prefix_length"`
+	RouteVrf types.String `tfsdk:"route_vrf"`
+	LineProtocolState types.String `tfsdk:"line_protocol_state"`
+	Rtr types.Int64 `tfsdk:"rtr"`
+	BooleanAndList []TrackBooleanAndList `tfsdk:"boolean_and_list"`
+	BooleanOrList []TrackBooleanOrList `tfsdk:"boolean_or_list"`
+	ThresholdPercentage []TrackThresholdPercentage `tfsdk:"threshold_percentage"`
+	ThresholdPercentageUp types.Int64 `tfsdk:"threshold_percentage_up"`
+	ThresholdPercentageDown types.Int64 `tfsdk:"threshold_percentage_down"`
+	ThresholdWeight []TrackThresholdWeight `tfsdk:"threshold_weight"`
+	ThresholdWeightUp types.Int64 `tfsdk:"threshold_weight_up"`
+	ThresholdWeightDown types.Int64 `tfsdk:"threshold_weight_down"`
+	LineProtocolWeightUp types.Int64 `tfsdk:"line_protocol_weight_up"`
+	LineProtocolWeightDown types.Int64 `tfsdk:"line_protocol_weight_down"`
+	LineProtocolWeight []TrackLineProtocolWeight `tfsdk:"line_protocol_weight"`
+	LineProtocolPercentageUp types.Int64 `tfsdk:"line_protocol_percentage_up"`
+	LineProtocolPercentageDown types.Int64 `tfsdk:"line_protocol_percentage_down"`
+	LineProtocolPercentage []TrackLineProtocolPercentage `tfsdk:"line_protocol_percentage"`
+	LineProtocolBooleanAnd []TrackLineProtocolBooleanAnd `tfsdk:"line_protocol_boolean_and"`
+	LineProtocolBooleanOr []TrackLineProtocolBooleanOr `tfsdk:"line_protocol_boolean_or"`
+	BfdRate types.Int64 `tfsdk:"bfd_rate"`
+	BfdDebounce types.Int64 `tfsdk:"bfd_debounce"`
+	BfdInterface types.String `tfsdk:"bfd_interface"`
+	BfdDestinationAddress types.String `tfsdk:"bfd_destination_address"`
+	BgpNeighborIpv4UnicastAddress types.String `tfsdk:"bgp_neighbor_ipv4_unicast_address"`
+	BgpNeighborIpv4UnicastVrfName types.String `tfsdk:"bgp_neighbor_ipv4_unicast_vrf_name"`
+	BgpNeighborIpv4UnicastDisableFibCheck types.Bool `tfsdk:"bgp_neighbor_ipv4_unicast_disable_fib_check"`
+	BgpNeighborIpv4LabeledUnicastAddress types.String `tfsdk:"bgp_neighbor_ipv4_labeled_unicast_address"`
+	BgpNeighborIpv4LabeledUnicastVrfName types.String `tfsdk:"bgp_neighbor_ipv4_labeled_unicast_vrf_name"`
+	BgpNeighborIpv4LabeledUnicastDisableFibCheck types.Bool `tfsdk:"bgp_neighbor_ipv4_labeled_unicast_disable_fib_check"`
+	BgpNeighborIpv6UnicastAddress types.String `tfsdk:"bgp_neighbor_ipv6_unicast_address"`
+	BgpNeighborIpv6UnicastVrfName types.String `tfsdk:"bgp_neighbor_ipv6_unicast_vrf_name"`
+	BgpNeighborIpv6UnicastDisableFibCheck types.Bool `tfsdk:"bgp_neighbor_ipv6_unicast_disable_fib_check"`
+	BgpNeighborIpv6LabeledUnicastAddress types.String `tfsdk:"bgp_neighbor_ipv6_labeled_unicast_address"`
+	BgpNeighborIpv6LabeledUnicastDisableFibCheck types.Bool `tfsdk:"bgp_neighbor_ipv6_labeled_unicast_disable_fib_check"`
+	BgpNeighborVpnv4UnicastAddress types.String `tfsdk:"bgp_neighbor_vpnv4_unicast_address"`
+	BgpNeighborVpnv4UnicastDisableFibCheck types.Bool `tfsdk:"bgp_neighbor_vpnv4_unicast_disable_fib_check"`
+	BgpNeighborVpnv6UnicastAddress types.String `tfsdk:"bgp_neighbor_vpnv6_unicast_address"`
+	BgpNeighborVpnv6UnicastDisableFibCheck types.Bool `tfsdk:"bgp_neighbor_vpnv6_unicast_disable_fib_check"`
+	TrackDownErrorDisableInterfaces []TrackTrackDownErrorDisableInterfaces `tfsdk:"track_down_error_disable_interfaces"`
+	TrackUpErrorDisableInterfaces []TrackTrackUpErrorDisableInterfaces `tfsdk:"track_up_error_disable_interfaces"`
 }
 type TrackBooleanAndList struct {
 	ObjectName types.String `tfsdk:"object_name"`
-	Not        types.Bool   `tfsdk:"not"`
+	Not types.Bool `tfsdk:"not"`
 }
 type TrackBooleanOrList struct {
 	ObjectName types.String `tfsdk:"object_name"`
-	Not        types.Bool   `tfsdk:"not"`
+	Not types.Bool `tfsdk:"not"`
 }
 type TrackThresholdPercentage struct {
 	ObjectName types.String `tfsdk:"object_name"`
-	Weight     types.Int64  `tfsdk:"weight"`
+	Weight types.Int64 `tfsdk:"weight"`
 }
 type TrackThresholdWeight struct {
 	ObjectName types.String `tfsdk:"object_name"`
-	Weight     types.Int64  `tfsdk:"weight"`
+	Weight types.Int64 `tfsdk:"weight"`
 }
 type TrackLineProtocolWeight struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
-	Weight        types.Int64  `tfsdk:"weight"`
+	Weight types.Int64 `tfsdk:"weight"`
 }
 type TrackLineProtocolPercentage struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
@@ -174,11 +175,11 @@ type TrackLineProtocolBooleanOr struct {
 }
 type TrackTrackDownErrorDisableInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
-	AutoRecover   types.Bool   `tfsdk:"auto_recover"`
+	AutoRecover types.Bool `tfsdk:"auto_recover"`
 }
 type TrackTrackUpErrorDisableInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
-	AutoRecover   types.Bool   `tfsdk:"auto_recover"`
+	AutoRecover types.Bool `tfsdk:"auto_recover"`
 }
 
 // End of section. //template:end types
@@ -498,8 +499,8 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 		data.Rtr = types.Int64Null()
 	}
 	for i := range data.BooleanAndList {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.BooleanAndList[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.BooleanAndList[i].ObjectName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "type.list.boolean.and.objects.object").ForEach(
@@ -525,28 +526,19 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.BooleanAndList[i].ObjectName = types.StringNull()
 		}
-		if value := r.Get("not"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.BooleanAndList[i].Not.IsNull() && !data.BooleanAndList[i].Not.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.BooleanAndList[i].Not = types.BoolValue(false)
-			} else if !data.BooleanAndList[i].Not.IsNull() {
+		if value := r.Get("not"); !data.BooleanAndList[i].Not.IsNull() {
+			if value.Exists() {
 				data.BooleanAndList[i].Not = types.BoolValue(true)
+			} else {
+				data.BooleanAndList[i].Not = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.BooleanAndList[i].Not.IsNull() {
-				data.BooleanAndList[i].Not = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.BooleanAndList[i].Not = types.BoolValue(false)
-			}
+			data.BooleanAndList[i].Not = types.BoolNull()
 		}
 	}
 	for i := range data.BooleanOrList {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.BooleanOrList[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.BooleanOrList[i].ObjectName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "type.list.boolean.or.objects.object").ForEach(
@@ -572,28 +564,19 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.BooleanOrList[i].ObjectName = types.StringNull()
 		}
-		if value := r.Get("not"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.BooleanOrList[i].Not.IsNull() && !data.BooleanOrList[i].Not.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.BooleanOrList[i].Not = types.BoolValue(false)
-			} else if !data.BooleanOrList[i].Not.IsNull() {
+		if value := r.Get("not"); !data.BooleanOrList[i].Not.IsNull() {
+			if value.Exists() {
 				data.BooleanOrList[i].Not = types.BoolValue(true)
+			} else {
+				data.BooleanOrList[i].Not = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.BooleanOrList[i].Not.IsNull() {
-				data.BooleanOrList[i].Not = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.BooleanOrList[i].Not = types.BoolValue(false)
-			}
+			data.BooleanOrList[i].Not = types.BoolNull()
 		}
 	}
 	for i := range data.ThresholdPercentage {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.ThresholdPercentage[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.ThresholdPercentage[i].ObjectName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "type.list.threshold.percentage.objects.object").ForEach(
@@ -636,8 +619,8 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 		data.ThresholdPercentageDown = types.Int64Null()
 	}
 	for i := range data.ThresholdWeight {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.ThresholdWeight[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.ThresholdWeight[i].ObjectName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "type.list.threshold.weight.objects.object").ForEach(
@@ -690,8 +673,8 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 		data.LineProtocolWeightDown = types.Int64Null()
 	}
 	for i := range data.LineProtocolWeight {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolWeight[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolWeight[i].InterfaceName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "type.list.line-protocol.state.threshold.weight.interfaces.interface").ForEach(
@@ -734,8 +717,8 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 		data.LineProtocolPercentageDown = types.Int64Null()
 	}
 	for i := range data.LineProtocolPercentage {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolPercentage[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolPercentage[i].InterfaceName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "type.list.line-protocol.state.threshold.percentage.interfaces.interface").ForEach(
@@ -763,8 +746,8 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.LineProtocolBooleanAnd {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolBooleanAnd[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolBooleanAnd[i].InterfaceName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "type.list.line-protocol.state.boolean.and.interfaces.interface").ForEach(
@@ -792,8 +775,8 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.LineProtocolBooleanOr {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolBooleanOr[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolBooleanOr[i].InterfaceName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "type.list.line-protocol.state.boolean.or.interfaces.interface").ForEach(
@@ -850,15 +833,14 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BgpNeighborIpv4UnicastVrfName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.disable.fib-check"); value.Exists() {
-		if !data.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() {
+	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.disable.fib-check"); !data.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() {
+		if value.Exists() {
 			data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(true)
+		} else {
+			data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() {
-			data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolNull()
-		}
+		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.neighbor"); value.Exists() && !data.BgpNeighborIpv4LabeledUnicastAddress.IsNull() {
 		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringValue(value.String())
@@ -870,15 +852,14 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BgpNeighborIpv4LabeledUnicastVrfName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.disable.fib-check"); value.Exists() {
-		if !data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() {
+	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.disable.fib-check"); !data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() {
+		if value.Exists() {
 			data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(true)
+		} else {
+			data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() {
-			data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolNull()
-		}
+		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.neighbor"); value.Exists() && !data.BgpNeighborIpv6UnicastAddress.IsNull() {
 		data.BgpNeighborIpv6UnicastAddress = types.StringValue(value.String())
@@ -890,64 +871,60 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BgpNeighborIpv6UnicastVrfName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.disable.fib-check"); value.Exists() {
-		if !data.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() {
+	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.disable.fib-check"); !data.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() {
+		if value.Exists() {
 			data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(true)
+		} else {
+			data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() {
-			data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolNull()
-		}
+		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.neighbor"); value.Exists() && !data.BgpNeighborIpv6LabeledUnicastAddress.IsNull() {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringValue(value.String())
 	} else {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.disable.fib-check"); value.Exists() {
-		if !data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() {
+	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.disable.fib-check"); !data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() {
+		if value.Exists() {
 			data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(true)
+		} else {
+			data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() {
-			data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolNull()
-		}
+		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.neighbor"); value.Exists() && !data.BgpNeighborVpnv4UnicastAddress.IsNull() {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringValue(value.String())
 	} else {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.disable.fib-check"); value.Exists() {
-		if !data.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() {
+	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.disable.fib-check"); !data.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() {
+		if value.Exists() {
 			data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(true)
+		} else {
+			data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() {
-			data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolNull()
-		}
+		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.neighbor"); value.Exists() && !data.BgpNeighborVpnv6UnicastAddress.IsNull() {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringValue(value.String())
 	} else {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.disable.fib-check"); value.Exists() {
-		if !data.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() {
+	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.disable.fib-check"); !data.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() {
+		if value.Exists() {
 			data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(true)
+		} else {
+			data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() {
-			data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolNull()
-		}
+		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolNull()
 	}
 	for i := range data.TrackDownErrorDisableInterfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "action.track-down.error-disable.interfaces.interface").ForEach(
@@ -973,28 +950,19 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.TrackDownErrorDisableInterfaces[i].InterfaceName = types.StringNull()
 		}
-		if value := r.Get("auto-recover"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() && !data.TrackDownErrorDisableInterfaces[i].AutoRecover.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.TrackDownErrorDisableInterfaces[i].AutoRecover = types.BoolValue(false)
-			} else if !data.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() {
+		if value := r.Get("auto-recover"); !data.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() {
+			if value.Exists() {
 				data.TrackDownErrorDisableInterfaces[i].AutoRecover = types.BoolValue(true)
+			} else {
+				data.TrackDownErrorDisableInterfaces[i].AutoRecover = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() {
-				data.TrackDownErrorDisableInterfaces[i].AutoRecover = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.TrackDownErrorDisableInterfaces[i].AutoRecover = types.BoolValue(false)
-			}
+			data.TrackDownErrorDisableInterfaces[i].AutoRecover = types.BoolNull()
 		}
 	}
 	for i := range data.TrackUpErrorDisableInterfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "action.track-up.error-disable.interfaces.interface").ForEach(
@@ -1020,23 +988,14 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.TrackUpErrorDisableInterfaces[i].InterfaceName = types.StringNull()
 		}
-		if value := r.Get("auto-recover"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() && !data.TrackUpErrorDisableInterfaces[i].AutoRecover.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.TrackUpErrorDisableInterfaces[i].AutoRecover = types.BoolValue(false)
-			} else if !data.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() {
+		if value := r.Get("auto-recover"); !data.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() {
+			if value.Exists() {
 				data.TrackUpErrorDisableInterfaces[i].AutoRecover = types.BoolValue(true)
+			} else {
+				data.TrackUpErrorDisableInterfaces[i].AutoRecover = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() {
-				data.TrackUpErrorDisableInterfaces[i].AutoRecover = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.TrackUpErrorDisableInterfaces[i].AutoRecover = types.BoolValue(false)
-			}
+			data.TrackUpErrorDisableInterfaces[i].AutoRecover = types.BoolNull()
 		}
 	}
 }
@@ -1047,34 +1006,34 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 func (data Track) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.TrackName.IsNull() && !data.TrackName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/track-name", data.TrackName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/track-name", data.TrackName.ValueString())
 	}
 	if !data.DelayUp.IsNull() && !data.DelayUp.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/delay/up", strconv.FormatInt(data.DelayUp.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/delay/up", strconv.FormatInt(data.DelayUp.ValueInt64(), 10))
 	}
 	if !data.DelayDown.IsNull() && !data.DelayDown.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/delay/down", strconv.FormatInt(data.DelayDown.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/delay/down", strconv.FormatInt(data.DelayDown.ValueInt64(), 10))
 	}
 	if !data.RouteIpv4Address.IsNull() && !data.RouteIpv4Address.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/route/reachability/route/ipv4/address", data.RouteIpv4Address.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/route/reachability/route/ipv4/address", data.RouteIpv4Address.ValueString())
 	}
 	if !data.RouteIpv4Mask.IsNull() && !data.RouteIpv4Mask.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/route/reachability/route/ipv4/mask", data.RouteIpv4Mask.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/route/reachability/route/ipv4/mask", data.RouteIpv4Mask.ValueString())
 	}
 	if !data.RouteAddressPrefix.IsNull() && !data.RouteAddressPrefix.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/route/reachability/route/address-prefix", data.RouteAddressPrefix.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/route/reachability/route/address-prefix", data.RouteAddressPrefix.ValueString())
 	}
 	if !data.RouteAddressPrefixLength.IsNull() && !data.RouteAddressPrefixLength.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/route/reachability/route/address-prefix-length", strconv.FormatInt(data.RouteAddressPrefixLength.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/route/reachability/route/address-prefix-length", strconv.FormatInt(data.RouteAddressPrefixLength.ValueInt64(), 10))
 	}
 	if !data.RouteVrf.IsNull() && !data.RouteVrf.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/route/reachability/vrf", data.RouteVrf.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/route/reachability/vrf", data.RouteVrf.ValueString())
 	}
 	if !data.LineProtocolState.IsNull() && !data.LineProtocolState.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/line-protocol/state/interface", data.LineProtocolState.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/line-protocol/state/interface", data.LineProtocolState.ValueString())
 	}
 	if !data.Rtr.IsNull() && !data.Rtr.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/rtr", strconv.FormatInt(data.Rtr.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/rtr", strconv.FormatInt(data.Rtr.ValueInt64(), 10))
 	}
 	if len(data.BooleanAndList) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -1123,10 +1082,10 @@ func (data Track) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.ThresholdPercentageUp.IsNull() && !data.ThresholdPercentageUp.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/up", strconv.FormatInt(data.ThresholdPercentageUp.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/list/threshold/percentage/threshold/percentage/up", strconv.FormatInt(data.ThresholdPercentageUp.ValueInt64(), 10))
 	}
 	if !data.ThresholdPercentageDown.IsNull() && !data.ThresholdPercentageDown.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/down", strconv.FormatInt(data.ThresholdPercentageDown.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/list/threshold/percentage/threshold/percentage/down", strconv.FormatInt(data.ThresholdPercentageDown.ValueInt64(), 10))
 	}
 	if len(data.ThresholdWeight) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -1143,16 +1102,16 @@ func (data Track) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.ThresholdWeightUp.IsNull() && !data.ThresholdWeightUp.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/list/threshold/weight/threshold/weight/up", strconv.FormatInt(data.ThresholdWeightUp.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/list/threshold/weight/threshold/weight/up", strconv.FormatInt(data.ThresholdWeightUp.ValueInt64(), 10))
 	}
 	if !data.ThresholdWeightDown.IsNull() && !data.ThresholdWeightDown.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/list/threshold/weight/threshold/weight/down", strconv.FormatInt(data.ThresholdWeightDown.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/list/threshold/weight/threshold/weight/down", strconv.FormatInt(data.ThresholdWeightDown.ValueInt64(), 10))
 	}
 	if !data.LineProtocolWeightUp.IsNull() && !data.LineProtocolWeightUp.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/up", strconv.FormatInt(data.LineProtocolWeightUp.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/list/line-protocol/state/threshold/weight/threshold/weight/up", strconv.FormatInt(data.LineProtocolWeightUp.ValueInt64(), 10))
 	}
 	if !data.LineProtocolWeightDown.IsNull() && !data.LineProtocolWeightDown.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/down", strconv.FormatInt(data.LineProtocolWeightDown.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/list/line-protocol/state/threshold/weight/threshold/weight/down", strconv.FormatInt(data.LineProtocolWeightDown.ValueInt64(), 10))
 	}
 	if len(data.LineProtocolWeight) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -1169,10 +1128,10 @@ func (data Track) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.LineProtocolPercentageUp.IsNull() && !data.LineProtocolPercentageUp.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up", strconv.FormatInt(data.LineProtocolPercentageUp.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up", strconv.FormatInt(data.LineProtocolPercentageUp.ValueInt64(), 10))
 	}
 	if !data.LineProtocolPercentageDown.IsNull() && !data.LineProtocolPercentageDown.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down", strconv.FormatInt(data.LineProtocolPercentageDown.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down", strconv.FormatInt(data.LineProtocolPercentageDown.ValueInt64(), 10))
 	}
 	if len(data.LineProtocolPercentage) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -1208,72 +1167,72 @@ func (data Track) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.BfdRate.IsNull() && !data.BfdRate.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/bfdrtr/rate", strconv.FormatInt(data.BfdRate.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/bfdrtr/rate", strconv.FormatInt(data.BfdRate.ValueInt64(), 10))
 	}
 	if !data.BfdDebounce.IsNull() && !data.BfdDebounce.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/bfdrtr/debounce", strconv.FormatInt(data.BfdDebounce.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/bfdrtr/debounce", strconv.FormatInt(data.BfdDebounce.ValueInt64(), 10))
 	}
 	if !data.BfdInterface.IsNull() && !data.BfdInterface.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/bfdrtr/interface", data.BfdInterface.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/bfdrtr/interface", data.BfdInterface.ValueString())
 	}
 	if !data.BfdDestinationAddress.IsNull() && !data.BfdDestinationAddress.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/bfdrtr/destaddress", data.BfdDestinationAddress.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/bfdrtr/destaddress", data.BfdDestinationAddress.ValueString())
 	}
 	if !data.BgpNeighborIpv4UnicastAddress.IsNull() && !data.BgpNeighborIpv4UnicastAddress.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor", data.BgpNeighborIpv4UnicastAddress.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor", data.BgpNeighborIpv4UnicastAddress.ValueString())
 	}
 	if !data.BgpNeighborIpv4UnicastVrfName.IsNull() && !data.BgpNeighborIpv4UnicastVrfName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf", data.BgpNeighborIpv4UnicastVrfName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf", data.BgpNeighborIpv4UnicastVrfName.ValueString())
 	}
 	if !data.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() && !data.BgpNeighborIpv4UnicastDisableFibCheck.IsUnknown() {
 		if data.BgpNeighborIpv4UnicastDisableFibCheck.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check", "")
 		}
 	}
 	if !data.BgpNeighborIpv4LabeledUnicastAddress.IsNull() && !data.BgpNeighborIpv4LabeledUnicastAddress.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor", data.BgpNeighborIpv4LabeledUnicastAddress.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor", data.BgpNeighborIpv4LabeledUnicastAddress.ValueString())
 	}
 	if !data.BgpNeighborIpv4LabeledUnicastVrfName.IsNull() && !data.BgpNeighborIpv4LabeledUnicastVrfName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf", data.BgpNeighborIpv4LabeledUnicastVrfName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf", data.BgpNeighborIpv4LabeledUnicastVrfName.ValueString())
 	}
 	if !data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() && !data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsUnknown() {
 		if data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check", "")
 		}
 	}
 	if !data.BgpNeighborIpv6UnicastAddress.IsNull() && !data.BgpNeighborIpv6UnicastAddress.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor", data.BgpNeighborIpv6UnicastAddress.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor", data.BgpNeighborIpv6UnicastAddress.ValueString())
 	}
 	if !data.BgpNeighborIpv6UnicastVrfName.IsNull() && !data.BgpNeighborIpv6UnicastVrfName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf", data.BgpNeighborIpv6UnicastVrfName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf", data.BgpNeighborIpv6UnicastVrfName.ValueString())
 	}
 	if !data.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() && !data.BgpNeighborIpv6UnicastDisableFibCheck.IsUnknown() {
 		if data.BgpNeighborIpv6UnicastDisableFibCheck.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check", "")
 		}
 	}
 	if !data.BgpNeighborIpv6LabeledUnicastAddress.IsNull() && !data.BgpNeighborIpv6LabeledUnicastAddress.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor", data.BgpNeighborIpv6LabeledUnicastAddress.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor", data.BgpNeighborIpv6LabeledUnicastAddress.ValueString())
 	}
 	if !data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() && !data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsUnknown() {
 		if data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check", "")
 		}
 	}
 	if !data.BgpNeighborVpnv4UnicastAddress.IsNull() && !data.BgpNeighborVpnv4UnicastAddress.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor", data.BgpNeighborVpnv4UnicastAddress.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor", data.BgpNeighborVpnv4UnicastAddress.ValueString())
 	}
 	if !data.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() && !data.BgpNeighborVpnv4UnicastDisableFibCheck.IsUnknown() {
 		if data.BgpNeighborVpnv4UnicastDisableFibCheck.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check", "")
 		}
 	}
 	if !data.BgpNeighborVpnv6UnicastAddress.IsNull() && !data.BgpNeighborVpnv6UnicastAddress.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor", data.BgpNeighborVpnv6UnicastAddress.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor", data.BgpNeighborVpnv6UnicastAddress.ValueString())
 	}
 	if !data.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() && !data.BgpNeighborVpnv6UnicastDisableFibCheck.IsUnknown() {
 		if data.BgpNeighborVpnv6UnicastDisableFibCheck.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check", "")
 		}
 	}
 	if len(data.TrackDownErrorDisableInterfaces) > 0 {
@@ -1319,62 +1278,62 @@ func (data Track) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/track-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/track-name"); value.Exists() {
 		data.TrackName = types.StringValue(value.String())
 	} else if data.TrackName.IsNull() {
 		data.TrackName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/up"); value.Exists() {
 		data.DelayUp = types.Int64Value(value.Int())
 	} else if data.DelayUp.IsNull() {
 		data.DelayUp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/down"); value.Exists() {
 		data.DelayDown = types.Int64Value(value.Int())
 	} else if data.DelayDown.IsNull() {
 		data.DelayDown = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/ipv4/address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/route/ipv4/address"); value.Exists() {
 		data.RouteIpv4Address = types.StringValue(value.String())
 	} else if data.RouteIpv4Address.IsNull() {
 		data.RouteIpv4Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/ipv4/mask"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/route/ipv4/mask"); value.Exists() {
 		data.RouteIpv4Mask = types.StringValue(value.String())
 	} else if data.RouteIpv4Mask.IsNull() {
 		data.RouteIpv4Mask = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/address-prefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/route/address-prefix"); value.Exists() {
 		data.RouteAddressPrefix = types.StringValue(value.String())
 	} else if data.RouteAddressPrefix.IsNull() {
 		data.RouteAddressPrefix = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/address-prefix-length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/route/address-prefix-length"); value.Exists() {
 		data.RouteAddressPrefixLength = types.Int64Value(value.Int())
 	} else if data.RouteAddressPrefixLength.IsNull() {
 		data.RouteAddressPrefixLength = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/vrf"); value.Exists() {
 		data.RouteVrf = types.StringValue(value.String())
 	} else if data.RouteVrf.IsNull() {
 		data.RouteVrf = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/line-protocol/state/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/line-protocol/state/interface"); value.Exists() {
 		data.LineProtocolState = types.StringValue(value.String())
 	} else if data.LineProtocolState.IsNull() {
 		data.LineProtocolState = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/rtr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/rtr"); value.Exists() {
 		data.Rtr = types.Int64Value(value.Int())
 	} else if data.Rtr.IsNull() {
 		data.Rtr = types.Int64Null()
 	}
 	for i := range data.BooleanAndList {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.BooleanAndList[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.BooleanAndList[i].ObjectName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/boolean/and/objects/object").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/boolean/and/objects/object").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1408,11 +1367,11 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.BooleanOrList {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.BooleanOrList[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.BooleanOrList[i].ObjectName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/boolean/or/objects/object").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/boolean/or/objects/object").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1446,11 +1405,11 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.ThresholdPercentage {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.ThresholdPercentage[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.ThresholdPercentage[i].ObjectName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/objects/object").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/percentage/objects/object").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1479,22 +1438,22 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ThresholdPercentage[i].Weight = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/percentage/threshold/percentage/up"); value.Exists() {
 		data.ThresholdPercentageUp = types.Int64Value(value.Int())
 	} else if data.ThresholdPercentageUp.IsNull() {
 		data.ThresholdPercentageUp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/percentage/threshold/percentage/down"); value.Exists() {
 		data.ThresholdPercentageDown = types.Int64Value(value.Int())
 	} else if data.ThresholdPercentageDown.IsNull() {
 		data.ThresholdPercentageDown = types.Int64Null()
 	}
 	for i := range data.ThresholdWeight {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.ThresholdWeight[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.ThresholdWeight[i].ObjectName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/objects/object").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/weight/objects/object").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1523,32 +1482,32 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ThresholdWeight[i].Weight = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/weight/threshold/weight/up"); value.Exists() {
 		data.ThresholdWeightUp = types.Int64Value(value.Int())
 	} else if data.ThresholdWeightUp.IsNull() {
 		data.ThresholdWeightUp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/weight/threshold/weight/down"); value.Exists() {
 		data.ThresholdWeightDown = types.Int64Value(value.Int())
 	} else if data.ThresholdWeightDown.IsNull() {
 		data.ThresholdWeightDown = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/weight/threshold/weight/up"); value.Exists() {
 		data.LineProtocolWeightUp = types.Int64Value(value.Int())
 	} else if data.LineProtocolWeightUp.IsNull() {
 		data.LineProtocolWeightUp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/weight/threshold/weight/down"); value.Exists() {
 		data.LineProtocolWeightDown = types.Int64Value(value.Int())
 	} else if data.LineProtocolWeightDown.IsNull() {
 		data.LineProtocolWeightDown = types.Int64Null()
 	}
 	for i := range data.LineProtocolWeight {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolWeight[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolWeight[i].InterfaceName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/weight/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1577,22 +1536,22 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LineProtocolWeight[i].Weight = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"); value.Exists() {
 		data.LineProtocolPercentageUp = types.Int64Value(value.Int())
 	} else if data.LineProtocolPercentageUp.IsNull() {
 		data.LineProtocolPercentageUp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"); value.Exists() {
 		data.LineProtocolPercentageDown = types.Int64Value(value.Int())
 	} else if data.LineProtocolPercentageDown.IsNull() {
 		data.LineProtocolPercentageDown = types.Int64Null()
 	}
 	for i := range data.LineProtocolPercentage {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolPercentage[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolPercentage[i].InterfaceName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/percentage/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1617,11 +1576,11 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.LineProtocolBooleanAnd {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolBooleanAnd[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolBooleanAnd[i].InterfaceName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/boolean/and/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/boolean/and/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1646,11 +1605,11 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.LineProtocolBooleanOr {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolBooleanOr[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolBooleanOr[i].InterfaceName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/boolean/or/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/boolean/or/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1674,37 +1633,37 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LineProtocolBooleanOr[i].InterfaceName = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bfdrtr/rate"); value.Exists() {
 		data.BfdRate = types.Int64Value(value.Int())
 	} else if data.BfdRate.IsNull() {
 		data.BfdRate = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/debounce"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bfdrtr/debounce"); value.Exists() {
 		data.BfdDebounce = types.Int64Value(value.Int())
 	} else if data.BfdDebounce.IsNull() {
 		data.BfdDebounce = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bfdrtr/interface"); value.Exists() {
 		data.BfdInterface = types.StringValue(value.String())
 	} else if data.BfdInterface.IsNull() {
 		data.BfdInterface = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/destaddress"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bfdrtr/destaddress"); value.Exists() {
 		data.BfdDestinationAddress = types.StringValue(value.String())
 	} else if data.BfdDestinationAddress.IsNull() {
 		data.BfdDestinationAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv4UnicastAddress = types.StringValue(value.String())
 	} else if data.BgpNeighborIpv4UnicastAddress.IsNull() {
 		data.BgpNeighborIpv4UnicastAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"); value.Exists() {
 		data.BgpNeighborIpv4UnicastVrfName = types.StringValue(value.String())
 	} else if data.BgpNeighborIpv4UnicastVrfName.IsNull() {
 		data.BgpNeighborIpv4UnicastVrfName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1712,17 +1671,17 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringValue(value.String())
 	} else if data.BgpNeighborIpv4LabeledUnicastAddress.IsNull() {
 		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastVrfName = types.StringValue(value.String())
 	} else if data.BgpNeighborIpv4LabeledUnicastVrfName.IsNull() {
 		data.BgpNeighborIpv4LabeledUnicastVrfName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1730,17 +1689,17 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv6UnicastAddress = types.StringValue(value.String())
 	} else if data.BgpNeighborIpv6UnicastAddress.IsNull() {
 		data.BgpNeighborIpv6UnicastAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"); value.Exists() {
 		data.BgpNeighborIpv6UnicastVrfName = types.StringValue(value.String())
 	} else if data.BgpNeighborIpv6UnicastVrfName.IsNull() {
 		data.BgpNeighborIpv6UnicastVrfName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1748,12 +1707,12 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringValue(value.String())
 	} else if data.BgpNeighborIpv6LabeledUnicastAddress.IsNull() {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1761,12 +1720,12 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringValue(value.String())
 	} else if data.BgpNeighborVpnv4UnicastAddress.IsNull() {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1774,12 +1733,12 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringValue(value.String())
 	} else if data.BgpNeighborVpnv6UnicastAddress.IsNull() {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1788,11 +1747,11 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.TrackDownErrorDisableInterfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/action/track-down/error-disable/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/action/track-down/error-disable/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1826,11 +1785,11 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.TrackUpErrorDisableInterfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/action/track-up/error-disable/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/action/track-up/error-disable/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1873,34 +1832,34 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "delay.up"); value.Exists() {
+	if value := res.Get(prefix+"delay.up"); value.Exists() {
 		data.DelayUp = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "delay.down"); value.Exists() {
+	if value := res.Get(prefix+"delay.down"); value.Exists() {
 		data.DelayDown = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.route.reachability.route.ipv4.address"); value.Exists() {
+	if value := res.Get(prefix+"type.route.reachability.route.ipv4.address"); value.Exists() {
 		data.RouteIpv4Address = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.route.reachability.route.ipv4.mask"); value.Exists() {
+	if value := res.Get(prefix+"type.route.reachability.route.ipv4.mask"); value.Exists() {
 		data.RouteIpv4Mask = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.route.reachability.route.address-prefix"); value.Exists() {
+	if value := res.Get(prefix+"type.route.reachability.route.address-prefix"); value.Exists() {
 		data.RouteAddressPrefix = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.route.reachability.route.address-prefix-length"); value.Exists() {
+	if value := res.Get(prefix+"type.route.reachability.route.address-prefix-length"); value.Exists() {
 		data.RouteAddressPrefixLength = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.route.reachability.vrf"); value.Exists() {
+	if value := res.Get(prefix+"type.route.reachability.vrf"); value.Exists() {
 		data.RouteVrf = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.line-protocol.state.interface"); value.Exists() {
+	if value := res.Get(prefix+"type.line-protocol.state.interface"); value.Exists() {
 		data.LineProtocolState = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.rtr"); value.Exists() {
+	if value := res.Get(prefix+"type.rtr"); value.Exists() {
 		data.Rtr = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.boolean.and.objects.object"); value.Exists() {
+	if value := res.Get(prefix+"type.list.boolean.and.objects.object"); value.Exists() {
 		data.BooleanAndList = make([]TrackBooleanAndList, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackBooleanAndList{}
@@ -1910,13 +1869,13 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("not"); cValue.Exists() {
 				item.Not = types.BoolValue(true)
 			} else {
-				item.Not = types.BoolNull()
+				item.Not = types.BoolValue(false)
 			}
 			data.BooleanAndList = append(data.BooleanAndList, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.list.boolean.or.objects.object"); value.Exists() {
+	if value := res.Get(prefix+"type.list.boolean.or.objects.object"); value.Exists() {
 		data.BooleanOrList = make([]TrackBooleanOrList, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackBooleanOrList{}
@@ -1926,13 +1885,13 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("not"); cValue.Exists() {
 				item.Not = types.BoolValue(true)
 			} else {
-				item.Not = types.BoolNull()
+				item.Not = types.BoolValue(false)
 			}
 			data.BooleanOrList = append(data.BooleanOrList, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.list.threshold.percentage.objects.object"); value.Exists() {
+	if value := res.Get(prefix+"type.list.threshold.percentage.objects.object"); value.Exists() {
 		data.ThresholdPercentage = make([]TrackThresholdPercentage, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackThresholdPercentage{}
@@ -1946,13 +1905,13 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.list.threshold.percentage.threshold.percentage.up"); value.Exists() {
+	if value := res.Get(prefix+"type.list.threshold.percentage.threshold.percentage.up"); value.Exists() {
 		data.ThresholdPercentageUp = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.threshold.percentage.threshold.percentage.down"); value.Exists() {
+	if value := res.Get(prefix+"type.list.threshold.percentage.threshold.percentage.down"); value.Exists() {
 		data.ThresholdPercentageDown = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.threshold.weight.objects.object"); value.Exists() {
+	if value := res.Get(prefix+"type.list.threshold.weight.objects.object"); value.Exists() {
 		data.ThresholdWeight = make([]TrackThresholdWeight, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackThresholdWeight{}
@@ -1966,19 +1925,19 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.list.threshold.weight.threshold.weight.up"); value.Exists() {
+	if value := res.Get(prefix+"type.list.threshold.weight.threshold.weight.up"); value.Exists() {
 		data.ThresholdWeightUp = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.threshold.weight.threshold.weight.down"); value.Exists() {
+	if value := res.Get(prefix+"type.list.threshold.weight.threshold.weight.down"); value.Exists() {
 		data.ThresholdWeightDown = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.threshold.weight.threshold.weight.up"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.threshold.weight.threshold.weight.up"); value.Exists() {
 		data.LineProtocolWeightUp = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.threshold.weight.threshold.weight.down"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.threshold.weight.threshold.weight.down"); value.Exists() {
 		data.LineProtocolWeightDown = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.threshold.weight.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.threshold.weight.interfaces.interface"); value.Exists() {
 		data.LineProtocolWeight = make([]TrackLineProtocolWeight, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackLineProtocolWeight{}
@@ -1992,13 +1951,13 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.threshold.percentage.threshold.percentage.up"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.threshold.percentage.threshold.percentage.up"); value.Exists() {
 		data.LineProtocolPercentageUp = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.threshold.percentage.threshold.percentage.down"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.threshold.percentage.threshold.percentage.down"); value.Exists() {
 		data.LineProtocolPercentageDown = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.threshold.percentage.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.threshold.percentage.interfaces.interface"); value.Exists() {
 		data.LineProtocolPercentage = make([]TrackLineProtocolPercentage, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackLineProtocolPercentage{}
@@ -2009,7 +1968,7 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.boolean.and.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.boolean.and.interfaces.interface"); value.Exists() {
 		data.LineProtocolBooleanAnd = make([]TrackLineProtocolBooleanAnd, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackLineProtocolBooleanAnd{}
@@ -2020,7 +1979,7 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.boolean.or.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.boolean.or.interfaces.interface"); value.Exists() {
 		data.LineProtocolBooleanOr = make([]TrackLineProtocolBooleanOr, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackLineProtocolBooleanOr{}
@@ -2031,76 +1990,76 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.bfdrtr.rate"); value.Exists() {
+	if value := res.Get(prefix+"type.bfdrtr.rate"); value.Exists() {
 		data.BfdRate = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.bfdrtr.debounce"); value.Exists() {
+	if value := res.Get(prefix+"type.bfdrtr.debounce"); value.Exists() {
 		data.BfdDebounce = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.bfdrtr.interface"); value.Exists() {
+	if value := res.Get(prefix+"type.bfdrtr.interface"); value.Exists() {
 		data.BfdInterface = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bfdrtr.destaddress"); value.Exists() {
+	if value := res.Get(prefix+"type.bfdrtr.destaddress"); value.Exists() {
 		data.BfdDestinationAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.neighbor"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.neighbor"); value.Exists() {
 		data.BgpNeighborIpv4UnicastAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.vrf"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.vrf"); value.Exists() {
 		data.BgpNeighborIpv4UnicastVrfName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.disable.fib-check"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.neighbor"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.neighbor"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.vrf"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.vrf"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastVrfName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.disable.fib-check"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.neighbor"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.neighbor"); value.Exists() {
 		data.BgpNeighborIpv6UnicastAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.vrf"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.vrf"); value.Exists() {
 		data.BgpNeighborIpv6UnicastVrfName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.disable.fib-check"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.neighbor"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.neighbor"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.disable.fib-check"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.neighbor"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.neighbor"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.disable.fib-check"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.neighbor"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.neighbor"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.disable.fib-check"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "action.track-down.error-disable.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"action.track-down.error-disable.interfaces.interface"); value.Exists() {
 		data.TrackDownErrorDisableInterfaces = make([]TrackTrackDownErrorDisableInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackTrackDownErrorDisableInterfaces{}
@@ -2110,13 +2069,13 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("auto-recover"); cValue.Exists() {
 				item.AutoRecover = types.BoolValue(true)
 			} else {
-				item.AutoRecover = types.BoolNull()
+				item.AutoRecover = types.BoolValue(false)
 			}
 			data.TrackDownErrorDisableInterfaces = append(data.TrackDownErrorDisableInterfaces, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "action.track-up.error-disable.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"action.track-up.error-disable.interfaces.interface"); value.Exists() {
 		data.TrackUpErrorDisableInterfaces = make([]TrackTrackUpErrorDisableInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackTrackUpErrorDisableInterfaces{}
@@ -2126,7 +2085,7 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("auto-recover"); cValue.Exists() {
 				item.AutoRecover = types.BoolValue(true)
 			} else {
-				item.AutoRecover = types.BoolNull()
+				item.AutoRecover = types.BoolValue(false)
 			}
 			data.TrackUpErrorDisableInterfaces = append(data.TrackUpErrorDisableInterfaces, item)
 			return true
@@ -2142,34 +2101,34 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "delay.up"); value.Exists() {
+	if value := res.Get(prefix+"delay.up"); value.Exists() {
 		data.DelayUp = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "delay.down"); value.Exists() {
+	if value := res.Get(prefix+"delay.down"); value.Exists() {
 		data.DelayDown = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.route.reachability.route.ipv4.address"); value.Exists() {
+	if value := res.Get(prefix+"type.route.reachability.route.ipv4.address"); value.Exists() {
 		data.RouteIpv4Address = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.route.reachability.route.ipv4.mask"); value.Exists() {
+	if value := res.Get(prefix+"type.route.reachability.route.ipv4.mask"); value.Exists() {
 		data.RouteIpv4Mask = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.route.reachability.route.address-prefix"); value.Exists() {
+	if value := res.Get(prefix+"type.route.reachability.route.address-prefix"); value.Exists() {
 		data.RouteAddressPrefix = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.route.reachability.route.address-prefix-length"); value.Exists() {
+	if value := res.Get(prefix+"type.route.reachability.route.address-prefix-length"); value.Exists() {
 		data.RouteAddressPrefixLength = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.route.reachability.vrf"); value.Exists() {
+	if value := res.Get(prefix+"type.route.reachability.vrf"); value.Exists() {
 		data.RouteVrf = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.line-protocol.state.interface"); value.Exists() {
+	if value := res.Get(prefix+"type.line-protocol.state.interface"); value.Exists() {
 		data.LineProtocolState = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.rtr"); value.Exists() {
+	if value := res.Get(prefix+"type.rtr"); value.Exists() {
 		data.Rtr = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.boolean.and.objects.object"); value.Exists() {
+	if value := res.Get(prefix+"type.list.boolean.and.objects.object"); value.Exists() {
 		data.BooleanAndList = make([]TrackBooleanAndList, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackBooleanAndList{}
@@ -2185,7 +2144,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.list.boolean.or.objects.object"); value.Exists() {
+	if value := res.Get(prefix+"type.list.boolean.or.objects.object"); value.Exists() {
 		data.BooleanOrList = make([]TrackBooleanOrList, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackBooleanOrList{}
@@ -2201,7 +2160,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.list.threshold.percentage.objects.object"); value.Exists() {
+	if value := res.Get(prefix+"type.list.threshold.percentage.objects.object"); value.Exists() {
 		data.ThresholdPercentage = make([]TrackThresholdPercentage, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackThresholdPercentage{}
@@ -2215,13 +2174,13 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.list.threshold.percentage.threshold.percentage.up"); value.Exists() {
+	if value := res.Get(prefix+"type.list.threshold.percentage.threshold.percentage.up"); value.Exists() {
 		data.ThresholdPercentageUp = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.threshold.percentage.threshold.percentage.down"); value.Exists() {
+	if value := res.Get(prefix+"type.list.threshold.percentage.threshold.percentage.down"); value.Exists() {
 		data.ThresholdPercentageDown = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.threshold.weight.objects.object"); value.Exists() {
+	if value := res.Get(prefix+"type.list.threshold.weight.objects.object"); value.Exists() {
 		data.ThresholdWeight = make([]TrackThresholdWeight, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackThresholdWeight{}
@@ -2235,19 +2194,19 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.list.threshold.weight.threshold.weight.up"); value.Exists() {
+	if value := res.Get(prefix+"type.list.threshold.weight.threshold.weight.up"); value.Exists() {
 		data.ThresholdWeightUp = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.threshold.weight.threshold.weight.down"); value.Exists() {
+	if value := res.Get(prefix+"type.list.threshold.weight.threshold.weight.down"); value.Exists() {
 		data.ThresholdWeightDown = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.threshold.weight.threshold.weight.up"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.threshold.weight.threshold.weight.up"); value.Exists() {
 		data.LineProtocolWeightUp = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.threshold.weight.threshold.weight.down"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.threshold.weight.threshold.weight.down"); value.Exists() {
 		data.LineProtocolWeightDown = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.threshold.weight.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.threshold.weight.interfaces.interface"); value.Exists() {
 		data.LineProtocolWeight = make([]TrackLineProtocolWeight, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackLineProtocolWeight{}
@@ -2261,13 +2220,13 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.threshold.percentage.threshold.percentage.up"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.threshold.percentage.threshold.percentage.up"); value.Exists() {
 		data.LineProtocolPercentageUp = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.threshold.percentage.threshold.percentage.down"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.threshold.percentage.threshold.percentage.down"); value.Exists() {
 		data.LineProtocolPercentageDown = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.threshold.percentage.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.threshold.percentage.interfaces.interface"); value.Exists() {
 		data.LineProtocolPercentage = make([]TrackLineProtocolPercentage, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackLineProtocolPercentage{}
@@ -2278,7 +2237,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.boolean.and.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.boolean.and.interfaces.interface"); value.Exists() {
 		data.LineProtocolBooleanAnd = make([]TrackLineProtocolBooleanAnd, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackLineProtocolBooleanAnd{}
@@ -2289,7 +2248,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.list.line-protocol.state.boolean.or.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"type.list.line-protocol.state.boolean.or.interfaces.interface"); value.Exists() {
 		data.LineProtocolBooleanOr = make([]TrackLineProtocolBooleanOr, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackLineProtocolBooleanOr{}
@@ -2300,76 +2259,76 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "type.bfdrtr.rate"); value.Exists() {
+	if value := res.Get(prefix+"type.bfdrtr.rate"); value.Exists() {
 		data.BfdRate = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.bfdrtr.debounce"); value.Exists() {
+	if value := res.Get(prefix+"type.bfdrtr.debounce"); value.Exists() {
 		data.BfdDebounce = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "type.bfdrtr.interface"); value.Exists() {
+	if value := res.Get(prefix+"type.bfdrtr.interface"); value.Exists() {
 		data.BfdInterface = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bfdrtr.destaddress"); value.Exists() {
+	if value := res.Get(prefix+"type.bfdrtr.destaddress"); value.Exists() {
 		data.BfdDestinationAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.neighbor"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.neighbor"); value.Exists() {
 		data.BgpNeighborIpv4UnicastAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.vrf"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.vrf"); value.Exists() {
 		data.BgpNeighborIpv4UnicastVrfName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.disable.fib-check"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolNull()
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.neighbor"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.neighbor"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.vrf"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.vrf"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastVrfName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.disable.fib-check"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolNull()
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.neighbor"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.neighbor"); value.Exists() {
 		data.BgpNeighborIpv6UnicastAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.vrf"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.vrf"); value.Exists() {
 		data.BgpNeighborIpv6UnicastVrfName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.disable.fib-check"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolNull()
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.neighbor"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.neighbor"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.disable.fib-check"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolNull()
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.neighbor"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.neighbor"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.disable.fib-check"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolNull()
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.neighbor"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.neighbor"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.disable.fib-check"); value.Exists() {
+	if value := res.Get(prefix+"type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolNull()
 	}
-	if value := res.Get(prefix + "action.track-down.error-disable.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"action.track-down.error-disable.interfaces.interface"); value.Exists() {
 		data.TrackDownErrorDisableInterfaces = make([]TrackTrackDownErrorDisableInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackTrackDownErrorDisableInterfaces{}
@@ -2385,7 +2344,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "action.track-up.error-disable.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"action.track-up.error-disable.interfaces.interface"); value.Exists() {
 		data.TrackUpErrorDisableInterfaces = make([]TrackTrackUpErrorDisableInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TrackTrackUpErrorDisableInterfaces{}
@@ -2407,34 +2366,34 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *Track) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/up"); value.Exists() {
 		data.DelayUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/down"); value.Exists() {
 		data.DelayDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/ipv4/address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/route/ipv4/address"); value.Exists() {
 		data.RouteIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/ipv4/mask"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/route/ipv4/mask"); value.Exists() {
 		data.RouteIpv4Mask = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/address-prefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/route/address-prefix"); value.Exists() {
 		data.RouteAddressPrefix = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/address-prefix-length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/route/address-prefix-length"); value.Exists() {
 		data.RouteAddressPrefixLength = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/vrf"); value.Exists() {
 		data.RouteVrf = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/line-protocol/state/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/line-protocol/state/interface"); value.Exists() {
 		data.LineProtocolState = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/rtr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/rtr"); value.Exists() {
 		data.Rtr = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/boolean/and/objects/object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/boolean/and/objects/object"); value.Exists() {
 		data.BooleanAndList = make([]TrackBooleanAndList, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackBooleanAndList{}
@@ -2444,13 +2403,13 @@ func (data *Track) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "not"); cValue.Exists() {
 				item.Not = types.BoolValue(true)
 			} else {
-				item.Not = types.BoolNull()
+				item.Not = types.BoolValue(false)
 			}
 			data.BooleanAndList = append(data.BooleanAndList, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/boolean/or/objects/object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/boolean/or/objects/object"); value.Exists() {
 		data.BooleanOrList = make([]TrackBooleanOrList, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackBooleanOrList{}
@@ -2460,13 +2419,13 @@ func (data *Track) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "not"); cValue.Exists() {
 				item.Not = types.BoolValue(true)
 			} else {
-				item.Not = types.BoolNull()
+				item.Not = types.BoolValue(false)
 			}
 			data.BooleanOrList = append(data.BooleanOrList, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/objects/object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/percentage/objects/object"); value.Exists() {
 		data.ThresholdPercentage = make([]TrackThresholdPercentage, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackThresholdPercentage{}
@@ -2480,13 +2439,13 @@ func (data *Track) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/percentage/threshold/percentage/up"); value.Exists() {
 		data.ThresholdPercentageUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/percentage/threshold/percentage/down"); value.Exists() {
 		data.ThresholdPercentageDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/objects/object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/weight/objects/object"); value.Exists() {
 		data.ThresholdWeight = make([]TrackThresholdWeight, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackThresholdWeight{}
@@ -2500,19 +2459,19 @@ func (data *Track) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/weight/threshold/weight/up"); value.Exists() {
 		data.ThresholdWeightUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/weight/threshold/weight/down"); value.Exists() {
 		data.ThresholdWeightDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/weight/threshold/weight/up"); value.Exists() {
 		data.LineProtocolWeightUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/weight/threshold/weight/down"); value.Exists() {
 		data.LineProtocolWeightDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/weight/interfaces/interface"); value.Exists() {
 		data.LineProtocolWeight = make([]TrackLineProtocolWeight, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackLineProtocolWeight{}
@@ -2526,13 +2485,13 @@ func (data *Track) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"); value.Exists() {
 		data.LineProtocolPercentageUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"); value.Exists() {
 		data.LineProtocolPercentageDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/percentage/interfaces/interface"); value.Exists() {
 		data.LineProtocolPercentage = make([]TrackLineProtocolPercentage, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackLineProtocolPercentage{}
@@ -2543,7 +2502,7 @@ func (data *Track) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/boolean/and/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/boolean/and/interfaces/interface"); value.Exists() {
 		data.LineProtocolBooleanAnd = make([]TrackLineProtocolBooleanAnd, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackLineProtocolBooleanAnd{}
@@ -2554,7 +2513,7 @@ func (data *Track) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/boolean/or/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/boolean/or/interfaces/interface"); value.Exists() {
 		data.LineProtocolBooleanOr = make([]TrackLineProtocolBooleanOr, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackLineProtocolBooleanOr{}
@@ -2565,76 +2524,76 @@ func (data *Track) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bfdrtr/rate"); value.Exists() {
 		data.BfdRate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/debounce"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bfdrtr/debounce"); value.Exists() {
 		data.BfdDebounce = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bfdrtr/interface"); value.Exists() {
 		data.BfdInterface = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/destaddress"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bfdrtr/destaddress"); value.Exists() {
 		data.BfdDestinationAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv4UnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"); value.Exists() {
 		data.BgpNeighborIpv4UnicastVrfName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastVrfName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv6UnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"); value.Exists() {
 		data.BgpNeighborIpv6UnicastVrfName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/action/track-down/error-disable/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/action/track-down/error-disable/interfaces/interface"); value.Exists() {
 		data.TrackDownErrorDisableInterfaces = make([]TrackTrackDownErrorDisableInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackTrackDownErrorDisableInterfaces{}
@@ -2644,13 +2603,13 @@ func (data *Track) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "auto-recover"); cValue.Exists() {
 				item.AutoRecover = types.BoolValue(true)
 			} else {
-				item.AutoRecover = types.BoolNull()
+				item.AutoRecover = types.BoolValue(false)
 			}
 			data.TrackDownErrorDisableInterfaces = append(data.TrackDownErrorDisableInterfaces, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/action/track-up/error-disable/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/action/track-up/error-disable/interfaces/interface"); value.Exists() {
 		data.TrackUpErrorDisableInterfaces = make([]TrackTrackUpErrorDisableInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackTrackUpErrorDisableInterfaces{}
@@ -2660,7 +2619,7 @@ func (data *Track) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "auto-recover"); cValue.Exists() {
 				item.AutoRecover = types.BoolValue(true)
 			} else {
-				item.AutoRecover = types.BoolNull()
+				item.AutoRecover = types.BoolValue(false)
 			}
 			data.TrackUpErrorDisableInterfaces = append(data.TrackUpErrorDisableInterfaces, item)
 			return true
@@ -2672,66 +2631,66 @@ func (data *Track) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/up"); value.Exists() {
 		data.DelayUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/delay/down"); value.Exists() {
 		data.DelayDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/ipv4/address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/route/ipv4/address"); value.Exists() {
 		data.RouteIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/ipv4/mask"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/route/ipv4/mask"); value.Exists() {
 		data.RouteIpv4Mask = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/address-prefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/route/address-prefix"); value.Exists() {
 		data.RouteAddressPrefix = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/address-prefix-length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/route/address-prefix-length"); value.Exists() {
 		data.RouteAddressPrefixLength = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/route/reachability/vrf"); value.Exists() {
 		data.RouteVrf = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/line-protocol/state/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/line-protocol/state/interface"); value.Exists() {
 		data.LineProtocolState = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/rtr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/rtr"); value.Exists() {
 		data.Rtr = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/boolean/and/objects/object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/boolean/and/objects/object"); value.Exists() {
 		data.BooleanAndList = make([]TrackBooleanAndList, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackBooleanAndList{}
 			if cValue := helpers.GetFromXPath(v, "object-name"); cValue.Exists() {
 				item.ObjectName = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "not"); cValue.Exists() {
-				item.Not = types.BoolValue(true)
-			} else {
-				item.Not = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "not"); cValue.Exists() {
+			item.Not = types.BoolValue(true)
+		} else {
+			item.Not = types.BoolValue(false)
+		}
 			data.BooleanAndList = append(data.BooleanAndList, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/boolean/or/objects/object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/boolean/or/objects/object"); value.Exists() {
 		data.BooleanOrList = make([]TrackBooleanOrList, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackBooleanOrList{}
 			if cValue := helpers.GetFromXPath(v, "object-name"); cValue.Exists() {
 				item.ObjectName = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "not"); cValue.Exists() {
-				item.Not = types.BoolValue(true)
-			} else {
-				item.Not = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "not"); cValue.Exists() {
+			item.Not = types.BoolValue(true)
+		} else {
+			item.Not = types.BoolValue(false)
+		}
 			data.BooleanOrList = append(data.BooleanOrList, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/objects/object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/percentage/objects/object"); value.Exists() {
 		data.ThresholdPercentage = make([]TrackThresholdPercentage, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackThresholdPercentage{}
@@ -2745,13 +2704,13 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/percentage/threshold/percentage/up"); value.Exists() {
 		data.ThresholdPercentageUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/percentage/threshold/percentage/down"); value.Exists() {
 		data.ThresholdPercentageDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/objects/object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/weight/objects/object"); value.Exists() {
 		data.ThresholdWeight = make([]TrackThresholdWeight, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackThresholdWeight{}
@@ -2765,19 +2724,19 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/weight/threshold/weight/up"); value.Exists() {
 		data.ThresholdWeightUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/threshold/weight/threshold/weight/down"); value.Exists() {
 		data.ThresholdWeightDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/weight/threshold/weight/up"); value.Exists() {
 		data.LineProtocolWeightUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/weight/threshold/weight/down"); value.Exists() {
 		data.LineProtocolWeightDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/weight/interfaces/interface"); value.Exists() {
 		data.LineProtocolWeight = make([]TrackLineProtocolWeight, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackLineProtocolWeight{}
@@ -2791,13 +2750,13 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"); value.Exists() {
 		data.LineProtocolPercentageUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"); value.Exists() {
 		data.LineProtocolPercentageDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/threshold/percentage/interfaces/interface"); value.Exists() {
 		data.LineProtocolPercentage = make([]TrackLineProtocolPercentage, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackLineProtocolPercentage{}
@@ -2808,7 +2767,7 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/boolean/and/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/boolean/and/interfaces/interface"); value.Exists() {
 		data.LineProtocolBooleanAnd = make([]TrackLineProtocolBooleanAnd, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackLineProtocolBooleanAnd{}
@@ -2819,7 +2778,7 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/boolean/or/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/list/line-protocol/state/boolean/or/interfaces/interface"); value.Exists() {
 		data.LineProtocolBooleanOr = make([]TrackLineProtocolBooleanOr, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackLineProtocolBooleanOr{}
@@ -2830,103 +2789,103 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bfdrtr/rate"); value.Exists() {
 		data.BfdRate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/debounce"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bfdrtr/debounce"); value.Exists() {
 		data.BfdDebounce = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bfdrtr/interface"); value.Exists() {
 		data.BfdInterface = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/destaddress"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bfdrtr/destaddress"); value.Exists() {
 		data.BfdDestinationAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv4UnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"); value.Exists() {
 		data.BgpNeighborIpv4UnicastVrfName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastVrfName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv6UnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"); value.Exists() {
 		data.BgpNeighborIpv6UnicastVrfName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/action/track-down/error-disable/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/action/track-down/error-disable/interfaces/interface"); value.Exists() {
 		data.TrackDownErrorDisableInterfaces = make([]TrackTrackDownErrorDisableInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackTrackDownErrorDisableInterfaces{}
 			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
 				item.InterfaceName = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "auto-recover"); cValue.Exists() {
-				item.AutoRecover = types.BoolValue(true)
-			} else {
-				item.AutoRecover = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "auto-recover"); cValue.Exists() {
+			item.AutoRecover = types.BoolValue(true)
+		} else {
+			item.AutoRecover = types.BoolValue(false)
+		}
 			data.TrackDownErrorDisableInterfaces = append(data.TrackDownErrorDisableInterfaces, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/action/track-up/error-disable/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/action/track-up/error-disable/interfaces/interface"); value.Exists() {
 		data.TrackUpErrorDisableInterfaces = make([]TrackTrackUpErrorDisableInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackTrackUpErrorDisableInterfaces{}
 			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
 				item.InterfaceName = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "auto-recover"); cValue.Exists() {
-				item.AutoRecover = types.BoolValue(true)
-			} else {
-				item.AutoRecover = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "auto-recover"); cValue.Exists() {
+			item.AutoRecover = types.BoolValue(true)
+		} else {
+			item.AutoRecover = types.BoolValue(false)
+		}
 			data.TrackUpErrorDisableInterfaces = append(data.TrackUpErrorDisableInterfaces, item)
 			return true
 		})
@@ -2939,11 +2898,11 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.TrackUpErrorDisableInterfaces {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -2960,10 +2919,10 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 			if state.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString() != data.TrackUpErrorDisableInterfaces[j].InterfaceName.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() && data.TrackUpErrorDisableInterfaces[j].AutoRecover.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/action/track-up/error-disable/interfaces/interface%v/auto-recover", state.getPath(), keyString))
-				}
+		if found {
+			if !state.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() && data.TrackUpErrorDisableInterfaces[j].AutoRecover.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/action/track-up/error-disable/interfaces/interface%v/auto-recover", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -2972,11 +2931,11 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 		}
 	}
 	for i := range state.TrackDownErrorDisableInterfaces {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -2993,10 +2952,10 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 			if state.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString() != data.TrackDownErrorDisableInterfaces[j].InterfaceName.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() && data.TrackDownErrorDisableInterfaces[j].AutoRecover.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/action/track-down/error-disable/interfaces/interface%v/auto-recover", state.getPath(), keyString))
-				}
+		if found {
+			if !state.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() && data.TrackDownErrorDisableInterfaces[j].AutoRecover.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/action/track-down/error-disable/interfaces/interface%v/auto-recover", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -3062,11 +3021,11 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/type/bfdrtr/rate", state.getPath()))
 	}
 	for i := range state.LineProtocolBooleanOr {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.LineProtocolBooleanOr[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.LineProtocolBooleanOr[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -3083,7 +3042,7 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 			if state.LineProtocolBooleanOr[i].InterfaceName.ValueString() != data.LineProtocolBooleanOr[j].InterfaceName.ValueString() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -3092,11 +3051,11 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 		}
 	}
 	for i := range state.LineProtocolBooleanAnd {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.LineProtocolBooleanAnd[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.LineProtocolBooleanAnd[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -3113,7 +3072,7 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 			if state.LineProtocolBooleanAnd[i].InterfaceName.ValueString() != data.LineProtocolBooleanAnd[j].InterfaceName.ValueString() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -3122,11 +3081,11 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 		}
 	}
 	for i := range state.LineProtocolPercentage {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.LineProtocolPercentage[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.LineProtocolPercentage[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -3143,7 +3102,7 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 			if state.LineProtocolPercentage[i].InterfaceName.ValueString() != data.LineProtocolPercentage[j].InterfaceName.ValueString() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -3158,11 +3117,11 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up", state.getPath()))
 	}
 	for i := range state.LineProtocolWeight {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.LineProtocolWeight[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.LineProtocolWeight[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -3179,10 +3138,10 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 			if state.LineProtocolWeight[i].InterfaceName.ValueString() != data.LineProtocolWeight[j].InterfaceName.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.LineProtocolWeight[i].Weight.IsNull() && data.LineProtocolWeight[j].Weight.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/type/list/line-protocol/state/threshold/weight/interfaces/interface%v/weight", state.getPath(), keyString))
-				}
+		if found {
+			if !state.LineProtocolWeight[i].Weight.IsNull() && data.LineProtocolWeight[j].Weight.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/type/list/line-protocol/state/threshold/weight/interfaces/interface%v/weight", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -3203,11 +3162,11 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/type/list/threshold/weight/threshold/weight/up", state.getPath()))
 	}
 	for i := range state.ThresholdWeight {
-		keys := [...]string{"object-name"}
-		stateKeyValues := [...]string{state.ThresholdWeight[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		stateKeyValues := [...]string{ state.ThresholdWeight[i].ObjectName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -3224,10 +3183,10 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 			if state.ThresholdWeight[i].ObjectName.ValueString() != data.ThresholdWeight[j].ObjectName.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.ThresholdWeight[i].Weight.IsNull() && data.ThresholdWeight[j].Weight.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/type/list/threshold/weight/objects/object%v/weight", state.getPath(), keyString))
-				}
+		if found {
+			if !state.ThresholdWeight[i].Weight.IsNull() && data.ThresholdWeight[j].Weight.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/type/list/threshold/weight/objects/object%v/weight", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -3242,11 +3201,11 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/type/list/threshold/percentage/threshold/percentage/up", state.getPath()))
 	}
 	for i := range state.ThresholdPercentage {
-		keys := [...]string{"object-name"}
-		stateKeyValues := [...]string{state.ThresholdPercentage[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		stateKeyValues := [...]string{ state.ThresholdPercentage[i].ObjectName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -3263,10 +3222,10 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 			if state.ThresholdPercentage[i].ObjectName.ValueString() != data.ThresholdPercentage[j].ObjectName.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.ThresholdPercentage[i].Weight.IsNull() && data.ThresholdPercentage[j].Weight.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/type/list/threshold/percentage/objects/object%v/weight", state.getPath(), keyString))
-				}
+		if found {
+			if !state.ThresholdPercentage[i].Weight.IsNull() && data.ThresholdPercentage[j].Weight.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/type/list/threshold/percentage/objects/object%v/weight", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -3275,11 +3234,11 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 		}
 	}
 	for i := range state.BooleanOrList {
-		keys := [...]string{"object-name"}
-		stateKeyValues := [...]string{state.BooleanOrList[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		stateKeyValues := [...]string{ state.BooleanOrList[i].ObjectName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -3296,10 +3255,10 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 			if state.BooleanOrList[i].ObjectName.ValueString() != data.BooleanOrList[j].ObjectName.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.BooleanOrList[i].Not.IsNull() && data.BooleanOrList[j].Not.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/type/list/boolean/or/objects/object%v/not", state.getPath(), keyString))
-				}
+		if found {
+			if !state.BooleanOrList[i].Not.IsNull() && data.BooleanOrList[j].Not.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/type/list/boolean/or/objects/object%v/not", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -3308,11 +3267,11 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 		}
 	}
 	for i := range state.BooleanAndList {
-		keys := [...]string{"object-name"}
-		stateKeyValues := [...]string{state.BooleanAndList[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		stateKeyValues := [...]string{ state.BooleanAndList[i].ObjectName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -3329,10 +3288,10 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 			if state.BooleanAndList[i].ObjectName.ValueString() != data.BooleanAndList[j].ObjectName.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.BooleanAndList[i].Not.IsNull() && data.BooleanAndList[j].Not.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/type/list/boolean/and/objects/object%v/not", state.getPath(), keyString))
-				}
+		if found {
+			if !state.BooleanAndList[i].Not.IsNull() && data.BooleanAndList[j].Not.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/type/list/boolean/and/objects/object%v/not", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -3376,11 +3335,11 @@ func (data *Track) getDeletedItems(ctx context.Context, state Track) []string {
 func (data *Track) getEmptyLeafsDelete(ctx context.Context, state *Track) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.TrackUpErrorDisableInterfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() && !data.TrackUpErrorDisableInterfaces[i].AutoRecover.ValueBool() {
@@ -3391,11 +3350,11 @@ func (data *Track) getEmptyLeafsDelete(ctx context.Context, state *Track) []stri
 		}
 	}
 	for i := range data.TrackDownErrorDisableInterfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() && !data.TrackDownErrorDisableInterfaces[i].AutoRecover.ValueBool() {
@@ -3442,59 +3401,59 @@ func (data *Track) getEmptyLeafsDelete(ctx context.Context, state *Track) []stri
 		}
 	}
 	for i := range data.LineProtocolBooleanOr {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolBooleanOr[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolBooleanOr[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.LineProtocolBooleanAnd {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolBooleanAnd[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolBooleanAnd[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.LineProtocolPercentage {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolPercentage[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolPercentage[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.LineProtocolWeight {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolWeight[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolWeight[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.ThresholdWeight {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.ThresholdWeight[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.ThresholdWeight[i].ObjectName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.ThresholdPercentage {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.ThresholdPercentage[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.ThresholdPercentage[i].ObjectName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.BooleanOrList {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.BooleanOrList[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.BooleanOrList[i].ObjectName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.BooleanOrList[i].Not.IsNull() && !data.BooleanOrList[i].Not.ValueBool() {
@@ -3505,11 +3464,11 @@ func (data *Track) getEmptyLeafsDelete(ctx context.Context, state *Track) []stri
 		}
 	}
 	for i := range data.BooleanAndList {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.BooleanAndList[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.BooleanAndList[i].ObjectName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.BooleanAndList[i].Not.IsNull() && !data.BooleanAndList[i].Not.ValueBool() {
@@ -3528,12 +3487,12 @@ func (data *Track) getEmptyLeafsDelete(ctx context.Context, state *Track) []stri
 func (data *Track) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.TrackUpErrorDisableInterfaces {
-		keyValues := [...]string{data.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString()}
+		keyValues := [...]string{ data.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/action/track-up/error-disable/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.TrackDownErrorDisableInterfaces {
-		keyValues := [...]string{data.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString()}
+		keyValues := [...]string{ data.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/action/track-down/error-disable/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -3595,17 +3554,17 @@ func (data *Track) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/bfdrtr/rate", data.getPath()))
 	}
 	for i := range data.LineProtocolBooleanOr {
-		keyValues := [...]string{data.LineProtocolBooleanOr[i].InterfaceName.ValueString()}
+		keyValues := [...]string{ data.LineProtocolBooleanOr[i].InterfaceName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/boolean/or/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.LineProtocolBooleanAnd {
-		keyValues := [...]string{data.LineProtocolBooleanAnd[i].InterfaceName.ValueString()}
+		keyValues := [...]string{ data.LineProtocolBooleanAnd[i].InterfaceName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/boolean/and/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.LineProtocolPercentage {
-		keyValues := [...]string{data.LineProtocolPercentage[i].InterfaceName.ValueString()}
+		keyValues := [...]string{ data.LineProtocolPercentage[i].InterfaceName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/threshold/percentage/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -3616,7 +3575,7 @@ func (data *Track) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up", data.getPath()))
 	}
 	for i := range data.LineProtocolWeight {
-		keyValues := [...]string{data.LineProtocolWeight[i].InterfaceName.ValueString()}
+		keyValues := [...]string{ data.LineProtocolWeight[i].InterfaceName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/threshold/weight/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -3633,7 +3592,7 @@ func (data *Track) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/threshold/weight/threshold/weight/up", data.getPath()))
 	}
 	for i := range data.ThresholdWeight {
-		keyValues := [...]string{data.ThresholdWeight[i].ObjectName.ValueString()}
+		keyValues := [...]string{ data.ThresholdWeight[i].ObjectName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/threshold/weight/objects/object=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -3644,17 +3603,17 @@ func (data *Track) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/threshold/percentage/threshold/percentage/up", data.getPath()))
 	}
 	for i := range data.ThresholdPercentage {
-		keyValues := [...]string{data.ThresholdPercentage[i].ObjectName.ValueString()}
+		keyValues := [...]string{ data.ThresholdPercentage[i].ObjectName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/threshold/percentage/objects/object=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BooleanOrList {
-		keyValues := [...]string{data.BooleanOrList[i].ObjectName.ValueString()}
+		keyValues := [...]string{ data.BooleanOrList[i].ObjectName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/boolean/or/objects/object=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BooleanAndList {
-		keyValues := [...]string{data.BooleanAndList[i].ObjectName.ValueString()}
+		keyValues := [...]string{ data.BooleanAndList[i].ObjectName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/boolean/and/objects/object=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -3697,8 +3656,8 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.TrackUpErrorDisableInterfaces {
-		stateKeys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString()}
+		stateKeys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -3719,10 +3678,10 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 				found = false
 			}
 			if found {
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() && state.TrackUpErrorDisableInterfaces[i].AutoRecover.ValueBool() && data.TrackUpErrorDisableInterfaces[j].AutoRecover.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/action/track-up/error-disable/interfaces/interface%v/auto-recover", predicates))
-				}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() && state.TrackUpErrorDisableInterfaces[i].AutoRecover.ValueBool() && data.TrackUpErrorDisableInterfaces[j].AutoRecover.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/action/track-up/error-disable/interfaces/interface%v/auto-recover", predicates))
+			}
 				break
 			}
 		}
@@ -3731,8 +3690,8 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 		}
 	}
 	for i := range state.TrackDownErrorDisableInterfaces {
-		stateKeys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString()}
+		stateKeys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -3753,10 +3712,10 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 				found = false
 			}
 			if found {
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() && state.TrackDownErrorDisableInterfaces[i].AutoRecover.ValueBool() && data.TrackDownErrorDisableInterfaces[j].AutoRecover.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/action/track-down/error-disable/interfaces/interface%v/auto-recover", predicates))
-				}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() && state.TrackDownErrorDisableInterfaces[i].AutoRecover.ValueBool() && data.TrackDownErrorDisableInterfaces[j].AutoRecover.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/action/track-down/error-disable/interfaces/interface%v/auto-recover", predicates))
+			}
 				break
 			}
 		}
@@ -3766,14 +3725,14 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() && state.BgpNeighborVpnv6UnicastDisableFibCheck.ValueBool() && data.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborVpnv6UnicastAddress.IsNull() && data.BgpNeighborVpnv6UnicastAddress.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3781,14 +3740,14 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() && state.BgpNeighborVpnv4UnicastDisableFibCheck.ValueBool() && data.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborVpnv4UnicastAddress.IsNull() && data.BgpNeighborVpnv4UnicastAddress.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3796,14 +3755,14 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() && state.BgpNeighborIpv6LabeledUnicastDisableFibCheck.ValueBool() && data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborIpv6LabeledUnicastAddress.IsNull() && data.BgpNeighborIpv6LabeledUnicastAddress.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3811,21 +3770,21 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() && state.BgpNeighborIpv6UnicastDisableFibCheck.ValueBool() && data.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborIpv6UnicastVrfName.IsNull() && data.BgpNeighborIpv6UnicastVrfName.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborIpv6UnicastAddress.IsNull() && data.BgpNeighborIpv6UnicastAddress.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3833,21 +3792,21 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() && state.BgpNeighborIpv4LabeledUnicastDisableFibCheck.ValueBool() && data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborIpv4LabeledUnicastVrfName.IsNull() && data.BgpNeighborIpv4LabeledUnicastVrfName.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborIpv4LabeledUnicastAddress.IsNull() && data.BgpNeighborIpv4LabeledUnicastAddress.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3855,57 +3814,57 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() && state.BgpNeighborIpv4UnicastDisableFibCheck.ValueBool() && data.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborIpv4UnicastVrfName.IsNull() && data.BgpNeighborIpv4UnicastVrfName.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborIpv4UnicastAddress.IsNull() && data.BgpNeighborIpv4UnicastAddress.IsNull() {
-		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"
+		deletePath := state.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdDestinationAddress.IsNull() && data.BfdDestinationAddress.IsNull() {
-		deletePath := state.getXPath() + "/type/bfdrtr/destaddress"
+		deletePath := state.getXPath()+"/type/bfdrtr/destaddress"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdInterface.IsNull() && data.BfdInterface.IsNull() {
-		deletePath := state.getXPath() + "/type/bfdrtr/interface"
+		deletePath := state.getXPath()+"/type/bfdrtr/interface"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdDebounce.IsNull() && data.BfdDebounce.IsNull() {
-		deletePath := state.getXPath() + "/type/bfdrtr/debounce"
+		deletePath := state.getXPath()+"/type/bfdrtr/debounce"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdRate.IsNull() && data.BfdRate.IsNull() {
-		deletePath := state.getXPath() + "/type/bfdrtr/rate"
+		deletePath := state.getXPath()+"/type/bfdrtr/rate"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.LineProtocolBooleanOr {
-		stateKeys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.LineProtocolBooleanOr[i].InterfaceName.ValueString()}
+		stateKeys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.LineProtocolBooleanOr[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -3934,8 +3893,8 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 		}
 	}
 	for i := range state.LineProtocolBooleanAnd {
-		stateKeys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.LineProtocolBooleanAnd[i].InterfaceName.ValueString()}
+		stateKeys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.LineProtocolBooleanAnd[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -3964,8 +3923,8 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 		}
 	}
 	for i := range state.LineProtocolPercentage {
-		stateKeys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.LineProtocolPercentage[i].InterfaceName.ValueString()}
+		stateKeys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.LineProtocolPercentage[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -3994,22 +3953,22 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 		}
 	}
 	if !state.LineProtocolPercentageDown.IsNull() && data.LineProtocolPercentageDown.IsNull() {
-		deletePath := state.getXPath() + "/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"
+		deletePath := state.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.LineProtocolPercentageUp.IsNull() && data.LineProtocolPercentageUp.IsNull() {
-		deletePath := state.getXPath() + "/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"
+		deletePath := state.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.LineProtocolWeight {
-		stateKeys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.LineProtocolWeight[i].InterfaceName.ValueString()}
+		stateKeys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.LineProtocolWeight[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4030,9 +3989,9 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 				found = false
 			}
 			if found {
-				if !state.LineProtocolWeight[i].Weight.IsNull() && data.LineProtocolWeight[j].Weight.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface%v/weight", predicates))
-				}
+			if !state.LineProtocolWeight[i].Weight.IsNull() && data.LineProtocolWeight[j].Weight.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface%v/weight", predicates))
+			}
 				break
 			}
 		}
@@ -4041,36 +4000,36 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 		}
 	}
 	if !state.LineProtocolWeightDown.IsNull() && data.LineProtocolWeightDown.IsNull() {
-		deletePath := state.getXPath() + "/type/list/line-protocol/state/threshold/weight/threshold/weight/down"
+		deletePath := state.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/down"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.LineProtocolWeightUp.IsNull() && data.LineProtocolWeightUp.IsNull() {
-		deletePath := state.getXPath() + "/type/list/line-protocol/state/threshold/weight/threshold/weight/up"
+		deletePath := state.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/up"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ThresholdWeightDown.IsNull() && data.ThresholdWeightDown.IsNull() {
-		deletePath := state.getXPath() + "/type/list/threshold/weight/threshold/weight/down"
+		deletePath := state.getXPath()+"/type/list/threshold/weight/threshold/weight/down"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ThresholdWeightUp.IsNull() && data.ThresholdWeightUp.IsNull() {
-		deletePath := state.getXPath() + "/type/list/threshold/weight/threshold/weight/up"
+		deletePath := state.getXPath()+"/type/list/threshold/weight/threshold/weight/up"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.ThresholdWeight {
-		stateKeys := [...]string{"object-name"}
-		stateKeyValues := [...]string{state.ThresholdWeight[i].ObjectName.ValueString()}
+		stateKeys := [...]string{ "object-name",  }
+		stateKeyValues := [...]string{ state.ThresholdWeight[i].ObjectName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4091,9 +4050,9 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 				found = false
 			}
 			if found {
-				if !state.ThresholdWeight[i].Weight.IsNull() && data.ThresholdWeight[j].Weight.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/threshold/weight/objects/object%v/weight", predicates))
-				}
+			if !state.ThresholdWeight[i].Weight.IsNull() && data.ThresholdWeight[j].Weight.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/threshold/weight/objects/object%v/weight", predicates))
+			}
 				break
 			}
 		}
@@ -4102,22 +4061,22 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 		}
 	}
 	if !state.ThresholdPercentageDown.IsNull() && data.ThresholdPercentageDown.IsNull() {
-		deletePath := state.getXPath() + "/type/list/threshold/percentage/threshold/percentage/down"
+		deletePath := state.getXPath()+"/type/list/threshold/percentage/threshold/percentage/down"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ThresholdPercentageUp.IsNull() && data.ThresholdPercentageUp.IsNull() {
-		deletePath := state.getXPath() + "/type/list/threshold/percentage/threshold/percentage/up"
+		deletePath := state.getXPath()+"/type/list/threshold/percentage/threshold/percentage/up"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.ThresholdPercentage {
-		stateKeys := [...]string{"object-name"}
-		stateKeyValues := [...]string{state.ThresholdPercentage[i].ObjectName.ValueString()}
+		stateKeys := [...]string{ "object-name",  }
+		stateKeyValues := [...]string{ state.ThresholdPercentage[i].ObjectName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4138,9 +4097,9 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 				found = false
 			}
 			if found {
-				if !state.ThresholdPercentage[i].Weight.IsNull() && data.ThresholdPercentage[j].Weight.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/threshold/percentage/objects/object%v/weight", predicates))
-				}
+			if !state.ThresholdPercentage[i].Weight.IsNull() && data.ThresholdPercentage[j].Weight.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/threshold/percentage/objects/object%v/weight", predicates))
+			}
 				break
 			}
 		}
@@ -4149,8 +4108,8 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 		}
 	}
 	for i := range state.BooleanOrList {
-		stateKeys := [...]string{"object-name"}
-		stateKeyValues := [...]string{state.BooleanOrList[i].ObjectName.ValueString()}
+		stateKeys := [...]string{ "object-name",  }
+		stateKeyValues := [...]string{ state.BooleanOrList[i].ObjectName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4171,10 +4130,10 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 				found = false
 			}
 			if found {
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.BooleanOrList[i].Not.IsNull() && state.BooleanOrList[i].Not.ValueBool() && data.BooleanOrList[j].Not.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/boolean/or/objects/object%v/not", predicates))
-				}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.BooleanOrList[i].Not.IsNull() && state.BooleanOrList[i].Not.ValueBool() && data.BooleanOrList[j].Not.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/boolean/or/objects/object%v/not", predicates))
+			}
 				break
 			}
 		}
@@ -4183,8 +4142,8 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 		}
 	}
 	for i := range state.BooleanAndList {
-		stateKeys := [...]string{"object-name"}
-		stateKeyValues := [...]string{state.BooleanAndList[i].ObjectName.ValueString()}
+		stateKeys := [...]string{ "object-name",  }
+		stateKeyValues := [...]string{ state.BooleanAndList[i].ObjectName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4205,10 +4164,10 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 				found = false
 			}
 			if found {
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.BooleanAndList[i].Not.IsNull() && state.BooleanAndList[i].Not.ValueBool() && data.BooleanAndList[j].Not.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/boolean/and/objects/object%v/not", predicates))
-				}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.BooleanAndList[i].Not.IsNull() && state.BooleanAndList[i].Not.ValueBool() && data.BooleanAndList[j].Not.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/boolean/and/objects/object%v/not", predicates))
+			}
 				break
 			}
 		}
@@ -4217,63 +4176,63 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 		}
 	}
 	if !state.Rtr.IsNull() && data.Rtr.IsNull() {
-		deletePath := state.getXPath() + "/type/rtr"
+		deletePath := state.getXPath()+"/type/rtr"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.LineProtocolState.IsNull() && data.LineProtocolState.IsNull() {
-		deletePath := state.getXPath() + "/type/line-protocol/state/interface"
+		deletePath := state.getXPath()+"/type/line-protocol/state/interface"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RouteVrf.IsNull() && data.RouteVrf.IsNull() {
-		deletePath := state.getXPath() + "/type/route/reachability/vrf"
+		deletePath := state.getXPath()+"/type/route/reachability/vrf"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RouteAddressPrefixLength.IsNull() && data.RouteAddressPrefixLength.IsNull() {
-		deletePath := state.getXPath() + "/type/route/reachability/route/address-prefix-length"
+		deletePath := state.getXPath()+"/type/route/reachability/route/address-prefix-length"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RouteAddressPrefix.IsNull() && data.RouteAddressPrefix.IsNull() {
-		deletePath := state.getXPath() + "/type/route/reachability/route/address-prefix"
+		deletePath := state.getXPath()+"/type/route/reachability/route/address-prefix"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RouteIpv4Mask.IsNull() && data.RouteIpv4Mask.IsNull() {
-		deletePath := state.getXPath() + "/type/route/reachability/route/ipv4/mask"
+		deletePath := state.getXPath()+"/type/route/reachability/route/ipv4/mask"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RouteIpv4Address.IsNull() && data.RouteIpv4Address.IsNull() {
-		deletePath := state.getXPath() + "/type/route/reachability/route/ipv4/address"
+		deletePath := state.getXPath()+"/type/route/reachability/route/ipv4/address"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DelayDown.IsNull() && data.DelayDown.IsNull() {
-		deletePath := state.getXPath() + "/delay/down"
+		deletePath := state.getXPath()+"/delay/down"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DelayUp.IsNull() && data.DelayUp.IsNull() {
-		deletePath := state.getXPath() + "/delay/up"
+		deletePath := state.getXPath()+"/delay/up"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -4291,8 +4250,8 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 func (data *Track) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.TrackUpErrorDisableInterfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4301,8 +4260,8 @@ func (data *Track) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/action/track-up/error-disable/interfaces/interface%v", predicates))
 	}
 	for i := range data.TrackDownErrorDisableInterfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4368,8 +4327,8 @@ func (data *Track) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/type/bfdrtr/rate")
 	}
 	for i := range data.LineProtocolBooleanOr {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolBooleanOr[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolBooleanOr[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4378,8 +4337,8 @@ func (data *Track) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/type/list/line-protocol/state/boolean/or/interfaces/interface%v", predicates))
 	}
 	for i := range data.LineProtocolBooleanAnd {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolBooleanAnd[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolBooleanAnd[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4388,8 +4347,8 @@ func (data *Track) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/type/list/line-protocol/state/boolean/and/interfaces/interface%v", predicates))
 	}
 	for i := range data.LineProtocolPercentage {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolPercentage[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolPercentage[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4404,8 +4363,8 @@ func (data *Track) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up")
 	}
 	for i := range data.LineProtocolWeight {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.LineProtocolWeight[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.LineProtocolWeight[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4426,8 +4385,8 @@ func (data *Track) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/type/list/threshold/weight/threshold/weight/up")
 	}
 	for i := range data.ThresholdWeight {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.ThresholdWeight[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.ThresholdWeight[i].ObjectName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4442,8 +4401,8 @@ func (data *Track) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/up")
 	}
 	for i := range data.ThresholdPercentage {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.ThresholdPercentage[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.ThresholdPercentage[i].ObjectName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4452,8 +4411,8 @@ func (data *Track) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/type/list/threshold/percentage/objects/object%v", predicates))
 	}
 	for i := range data.BooleanOrList {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.BooleanOrList[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.BooleanOrList[i].ObjectName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4462,8 +4421,8 @@ func (data *Track) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/type/list/boolean/or/objects/object%v", predicates))
 	}
 	for i := range data.BooleanAndList {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.BooleanAndList[i].ObjectName.ValueString()}
+		keys := [...]string{ "object-name",  }
+		keyValues := [...]string{ data.BooleanAndList[i].ObjectName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

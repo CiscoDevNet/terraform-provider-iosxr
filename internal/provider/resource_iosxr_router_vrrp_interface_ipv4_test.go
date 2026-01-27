@@ -21,8 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -55,23 +53,23 @@ func TestAccIosxrRouterVRRPInterfaceIPv4(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig + testAccIosxrRouterVRRPInterfaceIPv4Config_minimum(),
+			Config: testAccIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig+testAccIosxrRouterVRRPInterfaceIPv4Config_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig + testAccIosxrRouterVRRPInterfaceIPv4Config_all(),
-		Check:  resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig+testAccIosxrRouterVRRPInterfaceIPv4Config_all(),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:      "iosxr_router_vrrp_interface_ipv4.test",
-		ImportState:       true,
+		ResourceName:  "iosxr_router_vrrp_interface_ipv4.test",
+		ImportState:   true,
 		ImportStateIdFunc: iosxrRouterVRRPInterfaceIPv4ImportStateIdFunc("iosxr_router_vrrp_interface_ipv4.test"),
-		Check:             resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps:                    steps,
+		Steps: steps,
 	})
 }
 
@@ -135,7 +133,7 @@ func iosxrRouterVRRPInterfaceIPv4ImportStateIdFunc(resourceName string) resource
 		VrrpId := primary.Attributes["vrrp_id"]
 		Version := primary.Attributes["version"]
 
-		return fmt.Sprintf("%s,%s,%s", InterfaceName, VrrpId, Version), nil
+		return fmt.Sprintf("%s,%s,%s", InterfaceName,VrrpId,Version), nil
 	}
 }
 

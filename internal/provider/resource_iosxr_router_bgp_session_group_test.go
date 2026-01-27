@@ -21,8 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -83,23 +81,23 @@ func TestAccIosxrRouterBGPSessionGroup(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterBGPSessionGroupPrerequisitesConfig + testAccIosxrRouterBGPSessionGroupConfig_minimum(),
+			Config: testAccIosxrRouterBGPSessionGroupPrerequisitesConfig+testAccIosxrRouterBGPSessionGroupConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterBGPSessionGroupPrerequisitesConfig + testAccIosxrRouterBGPSessionGroupConfig_all(),
-		Check:  resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrRouterBGPSessionGroupPrerequisitesConfig+testAccIosxrRouterBGPSessionGroupConfig_all(),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:      "iosxr_router_bgp_session_group.test",
-		ImportState:       true,
+		ResourceName:  "iosxr_router_bgp_session_group.test",
+		ImportState:   true,
 		ImportStateIdFunc: iosxrRouterBGPSessionGroupImportStateIdFunc("iosxr_router_bgp_session_group.test"),
-		Check:             resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps:                    steps,
+		Steps: steps,
 	})
 }
 
@@ -113,7 +111,7 @@ func iosxrRouterBGPSessionGroupImportStateIdFunc(resourceName string) resource.I
 		AsNumber := primary.Attributes["as_number"]
 		Name := primary.Attributes["name"]
 
-		return fmt.Sprintf("%s,%s", AsNumber, Name), nil
+		return fmt.Sprintf("%s,%s", AsNumber,Name), nil
 	}
 }
 

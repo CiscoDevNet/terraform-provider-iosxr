@@ -23,15 +23,19 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/netascode/go-gnmi"
+	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -48,7 +52,7 @@ func NewRouterISISDataSource() datasource.DataSource {
 	return &RouterISISDataSource{}
 }
 
-type RouterISISDataSource struct {
+type RouterISISDataSource struct{
 	data *IosxrProviderData
 }
 
@@ -761,11 +765,11 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 									"local_end_point": schema.StringAttribute{
 										MarkdownDescription: "IPv4 address of local end-point of the link",
 										Computed:            true,
-									},
+								},
 									"remote_end_point": schema.StringAttribute{
 										MarkdownDescription: "IPv4 address of remote end-point of the link",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -880,19 +884,19 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 									"af_name": schema.StringAttribute{
 										MarkdownDescription: "af-name",
 										Computed:            true,
-									},
+								},
 									"saf_name": schema.StringAttribute{
 										MarkdownDescription: "saf-name",
 										Computed:            true,
-									},
+								},
 									"maximum_paths": schema.Int64Attribute{
 										MarkdownDescription: "Number of paths",
 										Computed:            true,
-									},
+								},
 									"maximum_paths_route_policy": schema.StringAttribute{
 										MarkdownDescription: "Filter routes based on a route policy",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -976,6 +980,7 @@ func (d *RouterISISDataSource) Read(ctx context.Context, req datasource.ReadRequ
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
+
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

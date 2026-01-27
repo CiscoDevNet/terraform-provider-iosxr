@@ -24,39 +24,40 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type TFTPClient struct {
-	Device     types.String           `tfsdk:"device"`
-	Id         types.String           `tfsdk:"id"`
-	DeleteMode types.String           `tfsdk:"delete_mode"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
 	ClientVrfs []TFTPClientClientVrfs `tfsdk:"client_vrfs"`
 }
 
 type TFTPClientData struct {
-	Device     types.String           `tfsdk:"device"`
-	Id         types.String           `tfsdk:"id"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
 	ClientVrfs []TFTPClientClientVrfs `tfsdk:"client_vrfs"`
 }
 type TFTPClientClientVrfs struct {
-	VrfName         types.String `tfsdk:"vrf_name"`
+	VrfName types.String `tfsdk:"vrf_name"`
 	SourceInterface types.String `tfsdk:"source_interface"`
-	Retries         types.Int64  `tfsdk:"retries"`
-	Timeout         types.Int64  `tfsdk:"timeout"`
-	Dscp            types.String `tfsdk:"dscp"`
+	Retries types.Int64 `tfsdk:"retries"`
+	Timeout types.Int64 `tfsdk:"timeout"`
+	Dscp types.String `tfsdk:"dscp"`
 }
 
 // End of section. //template:end types
@@ -117,8 +118,8 @@ func (data TFTPClient) toBody(ctx context.Context) string {
 
 func (data *TFTPClient) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.ClientVrfs {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
+		keys := [...]string{ "vrf-name",  }
+		keyValues := [...]string{ data.ClientVrfs[i].VrfName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "client.vrfs.vrf").ForEach(
@@ -207,11 +208,11 @@ func (data TFTPClient) toBodyXML(ctx context.Context) string {
 
 func (data *TFTPClient) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	for i := range data.ClientVrfs {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
+		keys := [...]string{ "vrf-name",  }
+		keyValues := [...]string{ data.ClientVrfs[i].VrfName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/client/vrfs/vrf").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/client/vrfs/vrf").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -265,7 +266,7 @@ func (data *TFTPClient) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "client.vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix+"client.vrfs.vrf"); value.Exists() {
 		data.ClientVrfs = make([]TFTPClientClientVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TFTPClientClientVrfs{}
@@ -298,7 +299,7 @@ func (data *TFTPClientData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "client.vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix+"client.vrfs.vrf"); value.Exists() {
 		data.ClientVrfs = make([]TFTPClientClientVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TFTPClientClientVrfs{}
@@ -327,7 +328,7 @@ func (data *TFTPClientData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *TFTPClient) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/client/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/client/vrfs/vrf"); value.Exists() {
 		data.ClientVrfs = make([]TFTPClientClientVrfs, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TFTPClientClientVrfs{}
@@ -356,7 +357,7 @@ func (data *TFTPClient) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *TFTPClientData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/client/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/client/vrfs/vrf"); value.Exists() {
 		data.ClientVrfs = make([]TFTPClientClientVrfs, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TFTPClientClientVrfs{}
@@ -387,11 +388,11 @@ func (data *TFTPClientData) fromBodyXML(ctx context.Context, res xmldot.Result) 
 func (data *TFTPClient) getDeletedItems(ctx context.Context, state TFTPClient) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.ClientVrfs {
-		keys := [...]string{"vrf-name"}
-		stateKeyValues := [...]string{state.ClientVrfs[i].VrfName.ValueString()}
+		keys := [...]string{ "vrf-name",  }
+		stateKeyValues := [...]string{ state.ClientVrfs[i].VrfName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -408,19 +409,19 @@ func (data *TFTPClient) getDeletedItems(ctx context.Context, state TFTPClient) [
 			if state.ClientVrfs[i].VrfName.ValueString() != data.ClientVrfs[j].VrfName.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.ClientVrfs[i].Dscp.IsNull() && data.ClientVrfs[j].Dscp.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/dscp", state.getPath(), keyString))
-				}
-				if !state.ClientVrfs[i].Timeout.IsNull() && data.ClientVrfs[j].Timeout.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/timeout", state.getPath(), keyString))
-				}
-				if !state.ClientVrfs[i].Retries.IsNull() && data.ClientVrfs[j].Retries.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/retries", state.getPath(), keyString))
-				}
-				if !state.ClientVrfs[i].SourceInterface.IsNull() && data.ClientVrfs[j].SourceInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/source-interface", state.getPath(), keyString))
-				}
+		if found {
+			if !state.ClientVrfs[i].Dscp.IsNull() && data.ClientVrfs[j].Dscp.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/dscp", state.getPath(), keyString))
+			}
+			if !state.ClientVrfs[i].Timeout.IsNull() && data.ClientVrfs[j].Timeout.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/timeout", state.getPath(), keyString))
+			}
+			if !state.ClientVrfs[i].Retries.IsNull() && data.ClientVrfs[j].Retries.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/retries", state.getPath(), keyString))
+			}
+			if !state.ClientVrfs[i].SourceInterface.IsNull() && data.ClientVrfs[j].SourceInterface.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/source-interface", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -437,11 +438,11 @@ func (data *TFTPClient) getDeletedItems(ctx context.Context, state TFTPClient) [
 func (data *TFTPClient) getEmptyLeafsDelete(ctx context.Context, state *TFTPClient) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.ClientVrfs {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
+		keys := [...]string{ "vrf-name",  }
+		keyValues := [...]string{ data.ClientVrfs[i].VrfName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	return emptyLeafsDelete
@@ -453,7 +454,7 @@ func (data *TFTPClient) getEmptyLeafsDelete(ctx context.Context, state *TFTPClie
 func (data *TFTPClient) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.ClientVrfs {
-		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
+		keyValues := [...]string{ data.ClientVrfs[i].VrfName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/client/vrfs/vrf=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -469,8 +470,8 @@ func (data *TFTPClient) addDeletedItemsXML(ctx context.Context, state TFTPClient
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.ClientVrfs {
-		stateKeys := [...]string{"vrf-name"}
-		stateKeyValues := [...]string{state.ClientVrfs[i].VrfName.ValueString()}
+		stateKeys := [...]string{ "vrf-name",  }
+		stateKeyValues := [...]string{ state.ClientVrfs[i].VrfName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -491,18 +492,18 @@ func (data *TFTPClient) addDeletedItemsXML(ctx context.Context, state TFTPClient
 				found = false
 			}
 			if found {
-				if !state.ClientVrfs[i].Dscp.IsNull() && data.ClientVrfs[j].Dscp.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/dscp", predicates))
-				}
-				if !state.ClientVrfs[i].Timeout.IsNull() && data.ClientVrfs[j].Timeout.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/timeout", predicates))
-				}
-				if !state.ClientVrfs[i].Retries.IsNull() && data.ClientVrfs[j].Retries.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/retries", predicates))
-				}
-				if !state.ClientVrfs[i].SourceInterface.IsNull() && data.ClientVrfs[j].SourceInterface.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/source-interface", predicates))
-				}
+			if !state.ClientVrfs[i].Dscp.IsNull() && data.ClientVrfs[j].Dscp.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/dscp", predicates))
+			}
+			if !state.ClientVrfs[i].Timeout.IsNull() && data.ClientVrfs[j].Timeout.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/timeout", predicates))
+			}
+			if !state.ClientVrfs[i].Retries.IsNull() && data.ClientVrfs[j].Retries.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/retries", predicates))
+			}
+			if !state.ClientVrfs[i].SourceInterface.IsNull() && data.ClientVrfs[j].SourceInterface.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/source-interface", predicates))
+			}
 				break
 			}
 		}
@@ -522,8 +523,8 @@ func (data *TFTPClient) addDeletedItemsXML(ctx context.Context, state TFTPClient
 func (data *TFTPClient) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.ClientVrfs {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
+		keys := [...]string{ "vrf-name",  }
+		keyValues := [...]string{ data.ClientVrfs[i].VrfName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

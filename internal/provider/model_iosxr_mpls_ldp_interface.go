@@ -24,53 +24,54 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type MPLSLDPInterface struct {
-	Device                         types.String                    `tfsdk:"device"`
-	Id                             types.String                    `tfsdk:"id"`
-	DeleteMode                     types.String                    `tfsdk:"delete_mode"`
-	InterfaceName                  types.String                    `tfsdk:"interface_name"`
-	DiscoveryHelloHoldtime         types.Int64                     `tfsdk:"discovery_hello_holdtime"`
-	DiscoveryHelloInterval         types.Int64                     `tfsdk:"discovery_hello_interval"`
-	DiscoveryHelloDualStackTlv     types.String                    `tfsdk:"discovery_hello_dual_stack_tlv"`
-	DiscoveryQuickStartDisable     types.Bool                      `tfsdk:"discovery_quick_start_disable"`
-	IgpSyncDelayOnSessionUp        types.Int64                     `tfsdk:"igp_sync_delay_on_session_up"`
-	IgpSyncDelayOnSessionUpDisable types.Bool                      `tfsdk:"igp_sync_delay_on_session_up_disable"`
-	AddressFamily                  []MPLSLDPInterfaceAddressFamily `tfsdk:"address_family"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	InterfaceName types.String `tfsdk:"interface_name"`
+	DiscoveryHelloHoldtime types.Int64 `tfsdk:"discovery_hello_holdtime"`
+	DiscoveryHelloInterval types.Int64 `tfsdk:"discovery_hello_interval"`
+	DiscoveryHelloDualStackTlv types.String `tfsdk:"discovery_hello_dual_stack_tlv"`
+	DiscoveryQuickStartDisable types.Bool `tfsdk:"discovery_quick_start_disable"`
+	IgpSyncDelayOnSessionUp types.Int64 `tfsdk:"igp_sync_delay_on_session_up"`
+	IgpSyncDelayOnSessionUpDisable types.Bool `tfsdk:"igp_sync_delay_on_session_up_disable"`
+	AddressFamily []MPLSLDPInterfaceAddressFamily `tfsdk:"address_family"`
 }
 
 type MPLSLDPInterfaceData struct {
-	Device                         types.String                    `tfsdk:"device"`
-	Id                             types.String                    `tfsdk:"id"`
-	InterfaceName                  types.String                    `tfsdk:"interface_name"`
-	DiscoveryHelloHoldtime         types.Int64                     `tfsdk:"discovery_hello_holdtime"`
-	DiscoveryHelloInterval         types.Int64                     `tfsdk:"discovery_hello_interval"`
-	DiscoveryHelloDualStackTlv     types.String                    `tfsdk:"discovery_hello_dual_stack_tlv"`
-	DiscoveryQuickStartDisable     types.Bool                      `tfsdk:"discovery_quick_start_disable"`
-	IgpSyncDelayOnSessionUp        types.Int64                     `tfsdk:"igp_sync_delay_on_session_up"`
-	IgpSyncDelayOnSessionUpDisable types.Bool                      `tfsdk:"igp_sync_delay_on_session_up_disable"`
-	AddressFamily                  []MPLSLDPInterfaceAddressFamily `tfsdk:"address_family"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	InterfaceName types.String `tfsdk:"interface_name"`
+	DiscoveryHelloHoldtime types.Int64 `tfsdk:"discovery_hello_holdtime"`
+	DiscoveryHelloInterval types.Int64 `tfsdk:"discovery_hello_interval"`
+	DiscoveryHelloDualStackTlv types.String `tfsdk:"discovery_hello_dual_stack_tlv"`
+	DiscoveryQuickStartDisable types.Bool `tfsdk:"discovery_quick_start_disable"`
+	IgpSyncDelayOnSessionUp types.Int64 `tfsdk:"igp_sync_delay_on_session_up"`
+	IgpSyncDelayOnSessionUpDisable types.Bool `tfsdk:"igp_sync_delay_on_session_up_disable"`
+	AddressFamily []MPLSLDPInterfaceAddressFamily `tfsdk:"address_family"`
 }
 type MPLSLDPInterfaceAddressFamily struct {
-	AfName                             types.String `tfsdk:"af_name"`
-	DiscoveryTransportAddressInterface types.Bool   `tfsdk:"discovery_transport_address_interface"`
-	DiscoveryTransportAddressIp        types.String `tfsdk:"discovery_transport_address_ip"`
-	IgpAutoConfigDisable               types.Bool   `tfsdk:"igp_auto_config_disable"`
-	MldpDisable                        types.Bool   `tfsdk:"mldp_disable"`
+	AfName types.String `tfsdk:"af_name"`
+	DiscoveryTransportAddressInterface types.Bool `tfsdk:"discovery_transport_address_interface"`
+	DiscoveryTransportAddressIp types.String `tfsdk:"discovery_transport_address_ip"`
+	IgpAutoConfigDisable types.Bool `tfsdk:"igp_auto_config_disable"`
+	MldpDisable types.Bool `tfsdk:"mldp_disable"`
 }
 
 // End of section. //template:end types
@@ -178,34 +179,32 @@ func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.DiscoveryHelloDualStackTlv = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "discovery.quick-start.disable"); value.Exists() {
-		if !data.DiscoveryQuickStartDisable.IsNull() {
+	if value := gjson.GetBytes(res, "discovery.quick-start.disable"); !data.DiscoveryQuickStartDisable.IsNull() {
+		if value.Exists() {
 			data.DiscoveryQuickStartDisable = types.BoolValue(true)
+		} else {
+			data.DiscoveryQuickStartDisable = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.DiscoveryQuickStartDisable.IsNull() {
-			data.DiscoveryQuickStartDisable = types.BoolNull()
-		}
+		data.DiscoveryQuickStartDisable = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "igp.sync.delay.on-session-up.interface-sync-up-delay"); value.Exists() && !data.IgpSyncDelayOnSessionUp.IsNull() {
 		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
 	} else {
 		data.IgpSyncDelayOnSessionUp = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "igp.sync.delay.on-session-up.disable"); value.Exists() {
-		if !data.IgpSyncDelayOnSessionUpDisable.IsNull() {
+	if value := gjson.GetBytes(res, "igp.sync.delay.on-session-up.disable"); !data.IgpSyncDelayOnSessionUpDisable.IsNull() {
+		if value.Exists() {
 			data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(true)
+		} else {
+			data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.IgpSyncDelayOnSessionUpDisable.IsNull() {
-			data.IgpSyncDelayOnSessionUpDisable = types.BoolNull()
-		}
+		data.IgpSyncDelayOnSessionUpDisable = types.BoolNull()
 	}
 	for i := range data.AddressFamily {
-		keys := [...]string{"af-name"}
-		keyValues := [...]string{data.AddressFamily[i].AfName.ValueString()}
+		keys := [...]string{ "af-name",  }
+		keyValues := [...]string{ data.AddressFamily[i].AfName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-families.address-family").ForEach(
@@ -231,64 +230,37 @@ func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.AddressFamily[i].AfName = types.StringNull()
 		}
-		if value := r.Get("discovery.transport-address.interface"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && !data.AddressFamily[i].DiscoveryTransportAddressInterface.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.AddressFamily[i].DiscoveryTransportAddressInterface = types.BoolValue(false)
-			} else if !data.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() {
+		if value := r.Get("discovery.transport-address.interface"); !data.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() {
+			if value.Exists() {
 				data.AddressFamily[i].DiscoveryTransportAddressInterface = types.BoolValue(true)
+			} else {
+				data.AddressFamily[i].DiscoveryTransportAddressInterface = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() {
-				data.AddressFamily[i].DiscoveryTransportAddressInterface = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.AddressFamily[i].DiscoveryTransportAddressInterface = types.BoolValue(false)
-			}
+			data.AddressFamily[i].DiscoveryTransportAddressInterface = types.BoolNull()
 		}
 		if value := r.Get("discovery.transport-address.ip-address"); value.Exists() && !data.AddressFamily[i].DiscoveryTransportAddressIp.IsNull() {
 			data.AddressFamily[i].DiscoveryTransportAddressIp = types.StringValue(value.String())
 		} else {
 			data.AddressFamily[i].DiscoveryTransportAddressIp = types.StringNull()
 		}
-		if value := r.Get("igp.auto-config.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.AddressFamily[i].IgpAutoConfigDisable.IsNull() && !data.AddressFamily[i].IgpAutoConfigDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.AddressFamily[i].IgpAutoConfigDisable = types.BoolValue(false)
-			} else if !data.AddressFamily[i].IgpAutoConfigDisable.IsNull() {
+		if value := r.Get("igp.auto-config.disable"); !data.AddressFamily[i].IgpAutoConfigDisable.IsNull() {
+			if value.Exists() {
 				data.AddressFamily[i].IgpAutoConfigDisable = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.AddressFamily[i].IgpAutoConfigDisable.IsNull() {
-				data.AddressFamily[i].IgpAutoConfigDisable = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.AddressFamily[i].IgpAutoConfigDisable = types.BoolValue(false)
 			}
+		} else {
+			data.AddressFamily[i].IgpAutoConfigDisable = types.BoolNull()
 		}
-		if value := r.Get("mldp.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.AddressFamily[i].MldpDisable.IsNull() && !data.AddressFamily[i].MldpDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.AddressFamily[i].MldpDisable = types.BoolValue(false)
-			} else if !data.AddressFamily[i].MldpDisable.IsNull() {
+		if value := r.Get("mldp.disable"); !data.AddressFamily[i].MldpDisable.IsNull() {
+			if value.Exists() {
 				data.AddressFamily[i].MldpDisable = types.BoolValue(true)
+			} else {
+				data.AddressFamily[i].MldpDisable = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.AddressFamily[i].MldpDisable.IsNull() {
-				data.AddressFamily[i].MldpDisable = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.AddressFamily[i].MldpDisable = types.BoolValue(false)
-			}
+			data.AddressFamily[i].MldpDisable = types.BoolNull()
 		}
 	}
 }
@@ -299,28 +271,28 @@ func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res []byte) {
 func (data MPLSLDPInterface) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/interface-name", data.InterfaceName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/interface-name", data.InterfaceName.ValueString())
 	}
 	if !data.DiscoveryHelloHoldtime.IsNull() && !data.DiscoveryHelloHoldtime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/discovery/hello/holdtime", strconv.FormatInt(data.DiscoveryHelloHoldtime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/discovery/hello/holdtime", strconv.FormatInt(data.DiscoveryHelloHoldtime.ValueInt64(), 10))
 	}
 	if !data.DiscoveryHelloInterval.IsNull() && !data.DiscoveryHelloInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/discovery/hello/interval", strconv.FormatInt(data.DiscoveryHelloInterval.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/discovery/hello/interval", strconv.FormatInt(data.DiscoveryHelloInterval.ValueInt64(), 10))
 	}
 	if !data.DiscoveryHelloDualStackTlv.IsNull() && !data.DiscoveryHelloDualStackTlv.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/discovery/hello/dual-stack-tlv", data.DiscoveryHelloDualStackTlv.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/discovery/hello/dual-stack-tlv", data.DiscoveryHelloDualStackTlv.ValueString())
 	}
 	if !data.DiscoveryQuickStartDisable.IsNull() && !data.DiscoveryQuickStartDisable.IsUnknown() {
 		if data.DiscoveryQuickStartDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/discovery/quick-start/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/discovery/quick-start/disable", "")
 		}
 	}
 	if !data.IgpSyncDelayOnSessionUp.IsNull() && !data.IgpSyncDelayOnSessionUp.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/igp/sync/delay/on-session-up/interface-sync-up-delay", strconv.FormatInt(data.IgpSyncDelayOnSessionUp.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/igp/sync/delay/on-session-up/interface-sync-up-delay", strconv.FormatInt(data.IgpSyncDelayOnSessionUp.ValueInt64(), 10))
 	}
 	if !data.IgpSyncDelayOnSessionUpDisable.IsNull() && !data.IgpSyncDelayOnSessionUpDisable.IsUnknown() {
 		if data.IgpSyncDelayOnSessionUpDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/igp/sync/delay/on-session-up/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/igp/sync/delay/on-session-up/disable", "")
 		}
 	}
 	if len(data.AddressFamily) > 0 {
@@ -363,27 +335,27 @@ func (data MPLSLDPInterface) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *MPLSLDPInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interface-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/interface-name"); value.Exists() {
 		data.InterfaceName = types.StringValue(value.String())
 	} else if data.InterfaceName.IsNull() {
 		data.InterfaceName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/hello/holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/hello/holdtime"); value.Exists() {
 		data.DiscoveryHelloHoldtime = types.Int64Value(value.Int())
 	} else if data.DiscoveryHelloHoldtime.IsNull() {
 		data.DiscoveryHelloHoldtime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/hello/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/hello/interval"); value.Exists() {
 		data.DiscoveryHelloInterval = types.Int64Value(value.Int())
 	} else if data.DiscoveryHelloInterval.IsNull() {
 		data.DiscoveryHelloInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/hello/dual-stack-tlv"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/hello/dual-stack-tlv"); value.Exists() {
 		data.DiscoveryHelloDualStackTlv = types.StringValue(value.String())
 	} else if data.DiscoveryHelloDualStackTlv.IsNull() {
 		data.DiscoveryHelloDualStackTlv = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/quick-start/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/quick-start/disable"); value.Exists() {
 		data.DiscoveryQuickStartDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -391,12 +363,12 @@ func (data *MPLSLDPInterface) updateFromBodyXML(ctx context.Context, res xmldot.
 			data.DiscoveryQuickStartDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/igp/sync/delay/on-session-up/interface-sync-up-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/igp/sync/delay/on-session-up/interface-sync-up-delay"); value.Exists() {
 		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
 	} else if data.IgpSyncDelayOnSessionUp.IsNull() {
 		data.IgpSyncDelayOnSessionUp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/igp/sync/delay/on-session-up/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/igp/sync/delay/on-session-up/disable"); value.Exists() {
 		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -405,11 +377,11 @@ func (data *MPLSLDPInterface) updateFromBodyXML(ctx context.Context, res xmldot.
 		}
 	}
 	for i := range data.AddressFamily {
-		keys := [...]string{"af-name"}
-		keyValues := [...]string{data.AddressFamily[i].AfName.ValueString()}
+		keys := [...]string{ "af-name",  }
+		keyValues := [...]string{ data.AddressFamily[i].AfName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/address-families/address-family").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/address-families/address-family").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -475,29 +447,29 @@ func (data *MPLSLDPInterface) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "discovery.hello.holdtime"); value.Exists() {
+	if value := res.Get(prefix+"discovery.hello.holdtime"); value.Exists() {
 		data.DiscoveryHelloHoldtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "discovery.hello.interval"); value.Exists() {
+	if value := res.Get(prefix+"discovery.hello.interval"); value.Exists() {
 		data.DiscoveryHelloInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "discovery.hello.dual-stack-tlv"); value.Exists() {
+	if value := res.Get(prefix+"discovery.hello.dual-stack-tlv"); value.Exists() {
 		data.DiscoveryHelloDualStackTlv = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "discovery.quick-start.disable"); value.Exists() {
+	if value := res.Get(prefix+"discovery.quick-start.disable"); value.Exists() {
 		data.DiscoveryQuickStartDisable = types.BoolValue(true)
 	} else {
-		data.DiscoveryQuickStartDisable = types.BoolNull()
+		data.DiscoveryQuickStartDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "igp.sync.delay.on-session-up.interface-sync-up-delay"); value.Exists() {
+	if value := res.Get(prefix+"igp.sync.delay.on-session-up.interface-sync-up-delay"); value.Exists() {
 		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "igp.sync.delay.on-session-up.disable"); value.Exists() {
+	if value := res.Get(prefix+"igp.sync.delay.on-session-up.disable"); value.Exists() {
 		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(true)
 	} else {
-		data.IgpSyncDelayOnSessionUpDisable = types.BoolNull()
+		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "address-families.address-family"); value.Exists() {
+	if value := res.Get(prefix+"address-families.address-family"); value.Exists() {
 		data.AddressFamily = make([]MPLSLDPInterfaceAddressFamily, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPInterfaceAddressFamily{}
@@ -507,7 +479,7 @@ func (data *MPLSLDPInterface) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("discovery.transport-address.interface"); cValue.Exists() {
 				item.DiscoveryTransportAddressInterface = types.BoolValue(true)
 			} else {
-				item.DiscoveryTransportAddressInterface = types.BoolNull()
+				item.DiscoveryTransportAddressInterface = types.BoolValue(false)
 			}
 			if cValue := v.Get("discovery.transport-address.ip-address"); cValue.Exists() {
 				item.DiscoveryTransportAddressIp = types.StringValue(cValue.String())
@@ -515,12 +487,12 @@ func (data *MPLSLDPInterface) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("igp.auto-config.disable"); cValue.Exists() {
 				item.IgpAutoConfigDisable = types.BoolValue(true)
 			} else {
-				item.IgpAutoConfigDisable = types.BoolNull()
+				item.IgpAutoConfigDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mldp.disable"); cValue.Exists() {
 				item.MldpDisable = types.BoolValue(true)
 			} else {
-				item.MldpDisable = types.BoolNull()
+				item.MldpDisable = types.BoolValue(false)
 			}
 			data.AddressFamily = append(data.AddressFamily, item)
 			return true
@@ -536,29 +508,29 @@ func (data *MPLSLDPInterfaceData) fromBody(ctx context.Context, res gjson.Result
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "discovery.hello.holdtime"); value.Exists() {
+	if value := res.Get(prefix+"discovery.hello.holdtime"); value.Exists() {
 		data.DiscoveryHelloHoldtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "discovery.hello.interval"); value.Exists() {
+	if value := res.Get(prefix+"discovery.hello.interval"); value.Exists() {
 		data.DiscoveryHelloInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "discovery.hello.dual-stack-tlv"); value.Exists() {
+	if value := res.Get(prefix+"discovery.hello.dual-stack-tlv"); value.Exists() {
 		data.DiscoveryHelloDualStackTlv = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "discovery.quick-start.disable"); value.Exists() {
+	if value := res.Get(prefix+"discovery.quick-start.disable"); value.Exists() {
 		data.DiscoveryQuickStartDisable = types.BoolValue(true)
 	} else {
 		data.DiscoveryQuickStartDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix + "igp.sync.delay.on-session-up.interface-sync-up-delay"); value.Exists() {
+	if value := res.Get(prefix+"igp.sync.delay.on-session-up.interface-sync-up-delay"); value.Exists() {
 		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "igp.sync.delay.on-session-up.disable"); value.Exists() {
+	if value := res.Get(prefix+"igp.sync.delay.on-session-up.disable"); value.Exists() {
 		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(true)
 	} else {
 		data.IgpSyncDelayOnSessionUpDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix + "address-families.address-family"); value.Exists() {
+	if value := res.Get(prefix+"address-families.address-family"); value.Exists() {
 		data.AddressFamily = make([]MPLSLDPInterfaceAddressFamily, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPInterfaceAddressFamily{}
@@ -593,86 +565,29 @@ func (data *MPLSLDPInterfaceData) fromBody(ctx context.Context, res gjson.Result
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *MPLSLDPInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/hello/holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/hello/holdtime"); value.Exists() {
 		data.DiscoveryHelloHoldtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/hello/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/hello/interval"); value.Exists() {
 		data.DiscoveryHelloInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/hello/dual-stack-tlv"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/hello/dual-stack-tlv"); value.Exists() {
 		data.DiscoveryHelloDualStackTlv = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/quick-start/disable"); value.Exists() {
-		data.DiscoveryQuickStartDisable = types.BoolValue(true)
-	} else {
-		data.DiscoveryQuickStartDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/igp/sync/delay/on-session-up/interface-sync-up-delay"); value.Exists() {
-		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/igp/sync/delay/on-session-up/disable"); value.Exists() {
-		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(true)
-	} else {
-		data.IgpSyncDelayOnSessionUpDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address-families/address-family"); value.Exists() {
-		data.AddressFamily = make([]MPLSLDPInterfaceAddressFamily, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := MPLSLDPInterfaceAddressFamily{}
-			if cValue := helpers.GetFromXPath(v, "af-name"); cValue.Exists() {
-				item.AfName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "discovery/transport-address/interface"); cValue.Exists() {
-				item.DiscoveryTransportAddressInterface = types.BoolValue(true)
-			} else {
-				item.DiscoveryTransportAddressInterface = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "discovery/transport-address/ip-address"); cValue.Exists() {
-				item.DiscoveryTransportAddressIp = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "igp/auto-config/disable"); cValue.Exists() {
-				item.IgpAutoConfigDisable = types.BoolValue(true)
-			} else {
-				item.IgpAutoConfigDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mldp/disable"); cValue.Exists() {
-				item.MldpDisable = types.BoolValue(true)
-			} else {
-				item.MldpDisable = types.BoolNull()
-			}
-			data.AddressFamily = append(data.AddressFamily, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *MPLSLDPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/hello/holdtime"); value.Exists() {
-		data.DiscoveryHelloHoldtime = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/hello/interval"); value.Exists() {
-		data.DiscoveryHelloInterval = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/hello/dual-stack-tlv"); value.Exists() {
-		data.DiscoveryHelloDualStackTlv = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/quick-start/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/quick-start/disable"); value.Exists() {
 		data.DiscoveryQuickStartDisable = types.BoolValue(true)
 	} else {
 		data.DiscoveryQuickStartDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/igp/sync/delay/on-session-up/interface-sync-up-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/igp/sync/delay/on-session-up/interface-sync-up-delay"); value.Exists() {
 		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/igp/sync/delay/on-session-up/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/igp/sync/delay/on-session-up/disable"); value.Exists() {
 		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(true)
 	} else {
 		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address-families/address-family"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/address-families/address-family"); value.Exists() {
 		data.AddressFamily = make([]MPLSLDPInterfaceAddressFamily, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPInterfaceAddressFamily{}
@@ -703,17 +618,74 @@ func (data *MPLSLDPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Re
 	}
 }
 
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *MPLSLDPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/hello/holdtime"); value.Exists() {
+		data.DiscoveryHelloHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/hello/interval"); value.Exists() {
+		data.DiscoveryHelloInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/hello/dual-stack-tlv"); value.Exists() {
+		data.DiscoveryHelloDualStackTlv = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/quick-start/disable"); value.Exists() {
+		data.DiscoveryQuickStartDisable = types.BoolValue(true)
+	} else {
+		data.DiscoveryQuickStartDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/igp/sync/delay/on-session-up/interface-sync-up-delay"); value.Exists() {
+		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/igp/sync/delay/on-session-up/disable"); value.Exists() {
+		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(true)
+	} else {
+		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/address-families/address-family"); value.Exists() {
+		data.AddressFamily = make([]MPLSLDPInterfaceAddressFamily, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := MPLSLDPInterfaceAddressFamily{}
+			if cValue := helpers.GetFromXPath(v, "af-name"); cValue.Exists() {
+				item.AfName = types.StringValue(cValue.String())
+			}
+		if cValue := helpers.GetFromXPath(v, "discovery/transport-address/interface"); cValue.Exists() {
+			item.DiscoveryTransportAddressInterface = types.BoolValue(true)
+		} else {
+			item.DiscoveryTransportAddressInterface = types.BoolValue(false)
+		}
+			if cValue := helpers.GetFromXPath(v, "discovery/transport-address/ip-address"); cValue.Exists() {
+				item.DiscoveryTransportAddressIp = types.StringValue(cValue.String())
+			}
+		if cValue := helpers.GetFromXPath(v, "igp/auto-config/disable"); cValue.Exists() {
+			item.IgpAutoConfigDisable = types.BoolValue(true)
+		} else {
+			item.IgpAutoConfigDisable = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mldp/disable"); cValue.Exists() {
+			item.MldpDisable = types.BoolValue(true)
+		} else {
+			item.MldpDisable = types.BoolValue(false)
+		}
+			data.AddressFamily = append(data.AddressFamily, item)
+			return true
+		})
+	}
+}
+
 // End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *MPLSLDPInterface) getDeletedItems(ctx context.Context, state MPLSLDPInterface) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.AddressFamily {
-		keys := [...]string{"af-name"}
-		stateKeyValues := [...]string{state.AddressFamily[i].AfName.ValueString()}
+		keys := [...]string{ "af-name",  }
+		stateKeyValues := [...]string{ state.AddressFamily[i].AfName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -730,19 +702,19 @@ func (data *MPLSLDPInterface) getDeletedItems(ctx context.Context, state MPLSLDP
 			if state.AddressFamily[i].AfName.ValueString() != data.AddressFamily[j].AfName.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.AddressFamily[i].MldpDisable.IsNull() && data.AddressFamily[j].MldpDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/mldp/disable", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].IgpAutoConfigDisable.IsNull() && data.AddressFamily[j].IgpAutoConfigDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/igp/auto-config/disable", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].DiscoveryTransportAddressIp.IsNull() && data.AddressFamily[j].DiscoveryTransportAddressIp.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/discovery/transport-address/ip-address", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && data.AddressFamily[j].DiscoveryTransportAddressInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/discovery/transport-address/interface", state.getPath(), keyString))
-				}
+		if found {
+			if !state.AddressFamily[i].MldpDisable.IsNull() && data.AddressFamily[j].MldpDisable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/mldp/disable", state.getPath(), keyString))
+			}
+			if !state.AddressFamily[i].IgpAutoConfigDisable.IsNull() && data.AddressFamily[j].IgpAutoConfigDisable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/igp/auto-config/disable", state.getPath(), keyString))
+			}
+			if !state.AddressFamily[i].DiscoveryTransportAddressIp.IsNull() && data.AddressFamily[j].DiscoveryTransportAddressIp.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/discovery/transport-address/ip-address", state.getPath(), keyString))
+			}
+			if !state.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && data.AddressFamily[j].DiscoveryTransportAddressInterface.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/discovery/transport-address/interface", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -777,11 +749,11 @@ func (data *MPLSLDPInterface) getDeletedItems(ctx context.Context, state MPLSLDP
 func (data *MPLSLDPInterface) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDPInterface) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.AddressFamily {
-		keys := [...]string{"af-name"}
-		keyValues := [...]string{data.AddressFamily[i].AfName.ValueString()}
+		keys := [...]string{ "af-name",  }
+		keyValues := [...]string{ data.AddressFamily[i].AfName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.AddressFamily[i].MldpDisable.IsNull() && !data.AddressFamily[i].MldpDisable.ValueBool() {
@@ -826,7 +798,7 @@ func (data *MPLSLDPInterface) getEmptyLeafsDelete(ctx context.Context, state *MP
 func (data *MPLSLDPInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.AddressFamily {
-		keyValues := [...]string{data.AddressFamily[i].AfName.ValueString()}
+		keyValues := [...]string{ data.AddressFamily[i].AfName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-families/address-family=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -860,8 +832,8 @@ func (data *MPLSLDPInterface) addDeletedItemsXML(ctx context.Context, state MPLS
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.AddressFamily {
-		stateKeys := [...]string{"af-name"}
-		stateKeyValues := [...]string{state.AddressFamily[i].AfName.ValueString()}
+		stateKeys := [...]string{ "af-name",  }
+		stateKeyValues := [...]string{ state.AddressFamily[i].AfName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -882,21 +854,21 @@ func (data *MPLSLDPInterface) addDeletedItemsXML(ctx context.Context, state MPLS
 				found = false
 			}
 			if found {
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.AddressFamily[i].MldpDisable.IsNull() && state.AddressFamily[i].MldpDisable.ValueBool() && data.AddressFamily[j].MldpDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/mldp/disable", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.AddressFamily[i].IgpAutoConfigDisable.IsNull() && state.AddressFamily[i].IgpAutoConfigDisable.ValueBool() && data.AddressFamily[j].IgpAutoConfigDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/igp/auto-config/disable", predicates))
-				}
-				if !state.AddressFamily[i].DiscoveryTransportAddressIp.IsNull() && data.AddressFamily[j].DiscoveryTransportAddressIp.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/discovery/transport-address/ip-address", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && state.AddressFamily[i].DiscoveryTransportAddressInterface.ValueBool() && data.AddressFamily[j].DiscoveryTransportAddressInterface.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/discovery/transport-address/interface", predicates))
-				}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.AddressFamily[i].MldpDisable.IsNull() && state.AddressFamily[i].MldpDisable.ValueBool() && data.AddressFamily[j].MldpDisable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/mldp/disable", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.AddressFamily[i].IgpAutoConfigDisable.IsNull() && state.AddressFamily[i].IgpAutoConfigDisable.ValueBool() && data.AddressFamily[j].IgpAutoConfigDisable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/igp/auto-config/disable", predicates))
+			}
+			if !state.AddressFamily[i].DiscoveryTransportAddressIp.IsNull() && data.AddressFamily[j].DiscoveryTransportAddressIp.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/discovery/transport-address/ip-address", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && state.AddressFamily[i].DiscoveryTransportAddressInterface.ValueBool() && data.AddressFamily[j].DiscoveryTransportAddressInterface.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/discovery/transport-address/interface", predicates))
+			}
 				break
 			}
 		}
@@ -906,14 +878,14 @@ func (data *MPLSLDPInterface) addDeletedItemsXML(ctx context.Context, state MPLS
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.IgpSyncDelayOnSessionUpDisable.IsNull() && state.IgpSyncDelayOnSessionUpDisable.ValueBool() && data.IgpSyncDelayOnSessionUpDisable.IsNull() {
-		deletePath := state.getXPath() + "/igp/sync/delay/on-session-up/disable"
+		deletePath := state.getXPath()+"/igp/sync/delay/on-session-up/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.IgpSyncDelayOnSessionUp.IsNull() && data.IgpSyncDelayOnSessionUp.IsNull() {
-		deletePath := state.getXPath() + "/igp/sync/delay/on-session-up/interface-sync-up-delay"
+		deletePath := state.getXPath()+"/igp/sync/delay/on-session-up/interface-sync-up-delay"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -921,28 +893,28 @@ func (data *MPLSLDPInterface) addDeletedItemsXML(ctx context.Context, state MPLS
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DiscoveryQuickStartDisable.IsNull() && state.DiscoveryQuickStartDisable.ValueBool() && data.DiscoveryQuickStartDisable.IsNull() {
-		deletePath := state.getXPath() + "/discovery/quick-start/disable"
+		deletePath := state.getXPath()+"/discovery/quick-start/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DiscoveryHelloDualStackTlv.IsNull() && data.DiscoveryHelloDualStackTlv.IsNull() {
-		deletePath := state.getXPath() + "/discovery/hello/dual-stack-tlv"
+		deletePath := state.getXPath()+"/discovery/hello/dual-stack-tlv"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DiscoveryHelloInterval.IsNull() && data.DiscoveryHelloInterval.IsNull() {
-		deletePath := state.getXPath() + "/discovery/hello/interval"
+		deletePath := state.getXPath()+"/discovery/hello/interval"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DiscoveryHelloHoldtime.IsNull() && data.DiscoveryHelloHoldtime.IsNull() {
-		deletePath := state.getXPath() + "/discovery/hello/holdtime"
+		deletePath := state.getXPath()+"/discovery/hello/holdtime"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -960,8 +932,8 @@ func (data *MPLSLDPInterface) addDeletedItemsXML(ctx context.Context, state MPLS
 func (data *MPLSLDPInterface) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.AddressFamily {
-		keys := [...]string{"af-name"}
-		keyValues := [...]string{data.AddressFamily[i].AfName.ValueString()}
+		keys := [...]string{ "af-name",  }
+		keyValues := [...]string{ data.AddressFamily[i].AfName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

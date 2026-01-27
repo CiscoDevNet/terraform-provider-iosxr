@@ -23,15 +23,18 @@ package provider
 import (
 	"context"
 	"fmt"
+	"reflect"
+	"sort"
 	"strconv"
+	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
@@ -40,17 +43,17 @@ import (
 type FlowSamplerMap struct {
 	Device types.String `tfsdk:"device"`
 	Id     types.String `tfsdk:"id"`
-	Name   types.String `tfsdk:"name"`
-	Random types.Int64  `tfsdk:"random"`
-	OutOf  types.Int64  `tfsdk:"out_of"`
+	Name types.String `tfsdk:"name"`
+	Random types.Int64 `tfsdk:"random"`
+	OutOf types.Int64 `tfsdk:"out_of"`
 }
 
 type FlowSamplerMapData struct {
 	Device types.String `tfsdk:"device"`
 	Id     types.String `tfsdk:"id"`
-	Name   types.String `tfsdk:"name"`
-	Random types.Int64  `tfsdk:"random"`
-	OutOf  types.Int64  `tfsdk:"out_of"`
+	Name types.String `tfsdk:"name"`
+	Random types.Int64 `tfsdk:"random"`
+	OutOf types.Int64 `tfsdk:"out_of"`
 }
 
 // End of section. //template:end types
@@ -103,13 +106,13 @@ func (data FlowSamplerMap) toBody(ctx context.Context) string {
 func (data FlowSamplerMap) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.Name.IsNull() && !data.Name.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/sampler-map-name", data.Name.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/sampler-map-name", data.Name.ValueString())
 	}
 	if !data.Random.IsNull() && !data.Random.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/random", strconv.FormatInt(data.Random.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/random", strconv.FormatInt(data.Random.ValueInt64(), 10))
 	}
 	if !data.OutOf.IsNull() && !data.OutOf.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/out-of", strconv.FormatInt(data.OutOf.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/out-of", strconv.FormatInt(data.OutOf.ValueInt64(), 10))
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -140,17 +143,17 @@ func (data *FlowSamplerMap) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *FlowSamplerMap) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sampler-map-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/sampler-map-name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	} else if data.Name.IsNull() {
 		data.Name = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/random"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/random"); value.Exists() {
 		data.Random = types.Int64Value(value.Int())
 	} else if data.Random.IsNull() {
 		data.Random = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/out-of"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/out-of"); value.Exists() {
 		data.OutOf = types.Int64Value(value.Int())
 	} else if data.OutOf.IsNull() {
 		data.OutOf = types.Int64Null()
@@ -166,10 +169,10 @@ func (data *FlowSamplerMap) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "random"); value.Exists() {
+	if value := res.Get(prefix+"random"); value.Exists() {
 		data.Random = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "out-of"); value.Exists() {
+	if value := res.Get(prefix+"out-of"); value.Exists() {
 		data.OutOf = types.Int64Value(value.Int())
 	}
 }
@@ -183,10 +186,10 @@ func (data *FlowSamplerMapData) fromBody(ctx context.Context, res gjson.Result) 
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "random"); value.Exists() {
+	if value := res.Get(prefix+"random"); value.Exists() {
 		data.Random = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "out-of"); value.Exists() {
+	if value := res.Get(prefix+"out-of"); value.Exists() {
 		data.OutOf = types.Int64Value(value.Int())
 	}
 }
@@ -196,10 +199,10 @@ func (data *FlowSamplerMapData) fromBody(ctx context.Context, res gjson.Result) 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *FlowSamplerMap) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/random"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/random"); value.Exists() {
 		data.Random = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/out-of"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/out-of"); value.Exists() {
 		data.OutOf = types.Int64Value(value.Int())
 	}
 }
@@ -209,10 +212,10 @@ func (data *FlowSamplerMap) fromBodyXML(ctx context.Context, res xmldot.Result) 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *FlowSamplerMapData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/random"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/random"); value.Exists() {
 		data.Random = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/out-of"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/out-of"); value.Exists() {
 		data.OutOf = types.Int64Value(value.Int())
 	}
 }
@@ -266,14 +269,14 @@ func (data *FlowSamplerMap) addDeletedItemsXML(ctx context.Context, state FlowSa
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.OutOf.IsNull() && data.OutOf.IsNull() {
-		deletePath := state.getXPath() + "/out-of"
+		deletePath := state.getXPath()+"/out-of"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Random.IsNull() && data.Random.IsNull() {
-		deletePath := state.getXPath() + "/random"
+		deletePath := state.getXPath()+"/random"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true

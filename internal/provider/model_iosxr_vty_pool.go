@@ -28,46 +28,46 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type VTYPool struct {
-	Device              types.String   `tfsdk:"device"`
-	Id                  types.String   `tfsdk:"id"`
-	DeleteMode          types.String   `tfsdk:"delete_mode"`
-	DefaultFirstVty     types.Int64    `tfsdk:"default_first_vty"`
-	DefaultLastVty      types.Int64    `tfsdk:"default_last_vty"`
-	DefaultLineTemplate types.String   `tfsdk:"default_line_template"`
-	EemFirstVty         types.Int64    `tfsdk:"eem_first_vty"`
-	EemLastVty          types.Int64    `tfsdk:"eem_last_vty"`
-	EemLineTemplate     types.String   `tfsdk:"eem_line_template"`
-	Pools               []VTYPoolPools `tfsdk:"pools"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	DefaultFirstVty types.Int64 `tfsdk:"default_first_vty"`
+	DefaultLastVty types.Int64 `tfsdk:"default_last_vty"`
+	DefaultLineTemplate types.String `tfsdk:"default_line_template"`
+	EemFirstVty types.Int64 `tfsdk:"eem_first_vty"`
+	EemLastVty types.Int64 `tfsdk:"eem_last_vty"`
+	EemLineTemplate types.String `tfsdk:"eem_line_template"`
+	Pools []VTYPoolPools `tfsdk:"pools"`
 }
 
 type VTYPoolData struct {
-	Device              types.String   `tfsdk:"device"`
-	Id                  types.String   `tfsdk:"id"`
-	DefaultFirstVty     types.Int64    `tfsdk:"default_first_vty"`
-	DefaultLastVty      types.Int64    `tfsdk:"default_last_vty"`
-	DefaultLineTemplate types.String   `tfsdk:"default_line_template"`
-	EemFirstVty         types.Int64    `tfsdk:"eem_first_vty"`
-	EemLastVty          types.Int64    `tfsdk:"eem_last_vty"`
-	EemLineTemplate     types.String   `tfsdk:"eem_line_template"`
-	Pools               []VTYPoolPools `tfsdk:"pools"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DefaultFirstVty types.Int64 `tfsdk:"default_first_vty"`
+	DefaultLastVty types.Int64 `tfsdk:"default_last_vty"`
+	DefaultLineTemplate types.String `tfsdk:"default_line_template"`
+	EemFirstVty types.Int64 `tfsdk:"eem_first_vty"`
+	EemLastVty types.Int64 `tfsdk:"eem_last_vty"`
+	EemLineTemplate types.String `tfsdk:"eem_line_template"`
+	Pools []VTYPoolPools `tfsdk:"pools"`
 }
 type VTYPoolPools struct {
-	PoolName     types.String `tfsdk:"pool_name"`
-	FirstVty     types.String `tfsdk:"first_vty"`
-	LastVty      types.String `tfsdk:"last_vty"`
+	PoolName types.String `tfsdk:"pool_name"`
+	FirstVty types.String `tfsdk:"first_vty"`
+	LastVty types.String `tfsdk:"last_vty"`
 	LineTemplate types.String `tfsdk:"line_template"`
 }
 
@@ -174,8 +174,8 @@ func (data *VTYPool) updateFromBody(ctx context.Context, res []byte) {
 		data.EemLineTemplate = types.StringNull()
 	}
 	for i := range data.Pools {
-		keys := [...]string{"pool-name"}
-		keyValues := [...]string{data.Pools[i].PoolName.ValueString()}
+		keys := [...]string{ "pool-name",  }
+		keyValues := [...]string{ data.Pools[i].PoolName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "pools.pool").ForEach(
@@ -225,22 +225,22 @@ func (data *VTYPool) updateFromBody(ctx context.Context, res []byte) {
 func (data VTYPool) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.DefaultFirstVty.IsNull() && !data.DefaultFirstVty.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/default/first-vty-number", strconv.FormatInt(data.DefaultFirstVty.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/default/first-vty-number", strconv.FormatInt(data.DefaultFirstVty.ValueInt64(), 10))
 	}
 	if !data.DefaultLastVty.IsNull() && !data.DefaultLastVty.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/default/last-vty-number", strconv.FormatInt(data.DefaultLastVty.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/default/last-vty-number", strconv.FormatInt(data.DefaultLastVty.ValueInt64(), 10))
 	}
 	if !data.DefaultLineTemplate.IsNull() && !data.DefaultLineTemplate.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/default/line-template", data.DefaultLineTemplate.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/default/line-template", data.DefaultLineTemplate.ValueString())
 	}
 	if !data.EemFirstVty.IsNull() && !data.EemFirstVty.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/eem/first-vty-number", strconv.FormatInt(data.EemFirstVty.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/eem/first-vty-number", strconv.FormatInt(data.EemFirstVty.ValueInt64(), 10))
 	}
 	if !data.EemLastVty.IsNull() && !data.EemLastVty.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/eem/last-vty-number", strconv.FormatInt(data.EemLastVty.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/eem/last-vty-number", strconv.FormatInt(data.EemLastVty.ValueInt64(), 10))
 	}
 	if !data.EemLineTemplate.IsNull() && !data.EemLineTemplate.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/eem/line-template", data.EemLineTemplate.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/eem/line-template", data.EemLineTemplate.ValueString())
 	}
 	if len(data.Pools) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -273,42 +273,42 @@ func (data VTYPool) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *VTYPool) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/first-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default/first-vty-number"); value.Exists() {
 		data.DefaultFirstVty = types.Int64Value(value.Int())
 	} else if data.DefaultFirstVty.IsNull() {
 		data.DefaultFirstVty = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/last-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default/last-vty-number"); value.Exists() {
 		data.DefaultLastVty = types.Int64Value(value.Int())
 	} else if data.DefaultLastVty.IsNull() {
 		data.DefaultLastVty = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/line-template"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default/line-template"); value.Exists() {
 		data.DefaultLineTemplate = types.StringValue(value.String())
 	} else if data.DefaultLineTemplate.IsNull() {
 		data.DefaultLineTemplate = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/first-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/eem/first-vty-number"); value.Exists() {
 		data.EemFirstVty = types.Int64Value(value.Int())
 	} else if data.EemFirstVty.IsNull() {
 		data.EemFirstVty = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/last-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/eem/last-vty-number"); value.Exists() {
 		data.EemLastVty = types.Int64Value(value.Int())
 	} else if data.EemLastVty.IsNull() {
 		data.EemLastVty = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/line-template"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/eem/line-template"); value.Exists() {
 		data.EemLineTemplate = types.StringValue(value.String())
 	} else if data.EemLineTemplate.IsNull() {
 		data.EemLineTemplate = types.StringNull()
 	}
 	for i := range data.Pools {
-		keys := [...]string{"pool-name"}
-		keyValues := [...]string{data.Pools[i].PoolName.ValueString()}
+		keys := [...]string{ "pool-name",  }
+		keyValues := [...]string{ data.Pools[i].PoolName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/pools/pool").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/pools/pool").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -357,25 +357,25 @@ func (data *VTYPool) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "default.first-vty-number"); value.Exists() {
+	if value := res.Get(prefix+"default.first-vty-number"); value.Exists() {
 		data.DefaultFirstVty = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "default.last-vty-number"); value.Exists() {
+	if value := res.Get(prefix+"default.last-vty-number"); value.Exists() {
 		data.DefaultLastVty = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "default.line-template"); value.Exists() {
+	if value := res.Get(prefix+"default.line-template"); value.Exists() {
 		data.DefaultLineTemplate = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "eem.first-vty-number"); value.Exists() {
+	if value := res.Get(prefix+"eem.first-vty-number"); value.Exists() {
 		data.EemFirstVty = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "eem.last-vty-number"); value.Exists() {
+	if value := res.Get(prefix+"eem.last-vty-number"); value.Exists() {
 		data.EemLastVty = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "eem.line-template"); value.Exists() {
+	if value := res.Get(prefix+"eem.line-template"); value.Exists() {
 		data.EemLineTemplate = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "pools.pool"); value.Exists() {
+	if value := res.Get(prefix+"pools.pool"); value.Exists() {
 		data.Pools = make([]VTYPoolPools, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := VTYPoolPools{}
@@ -405,25 +405,25 @@ func (data *VTYPoolData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "default.first-vty-number"); value.Exists() {
+	if value := res.Get(prefix+"default.first-vty-number"); value.Exists() {
 		data.DefaultFirstVty = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "default.last-vty-number"); value.Exists() {
+	if value := res.Get(prefix+"default.last-vty-number"); value.Exists() {
 		data.DefaultLastVty = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "default.line-template"); value.Exists() {
+	if value := res.Get(prefix+"default.line-template"); value.Exists() {
 		data.DefaultLineTemplate = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "eem.first-vty-number"); value.Exists() {
+	if value := res.Get(prefix+"eem.first-vty-number"); value.Exists() {
 		data.EemFirstVty = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "eem.last-vty-number"); value.Exists() {
+	if value := res.Get(prefix+"eem.last-vty-number"); value.Exists() {
 		data.EemLastVty = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "eem.line-template"); value.Exists() {
+	if value := res.Get(prefix+"eem.line-template"); value.Exists() {
 		data.EemLineTemplate = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "pools.pool"); value.Exists() {
+	if value := res.Get(prefix+"pools.pool"); value.Exists() {
 		data.Pools = make([]VTYPoolPools, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := VTYPoolPools{}
@@ -449,25 +449,25 @@ func (data *VTYPoolData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *VTYPool) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/first-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default/first-vty-number"); value.Exists() {
 		data.DefaultFirstVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/last-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default/last-vty-number"); value.Exists() {
 		data.DefaultLastVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/line-template"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default/line-template"); value.Exists() {
 		data.DefaultLineTemplate = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/first-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/eem/first-vty-number"); value.Exists() {
 		data.EemFirstVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/last-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/eem/last-vty-number"); value.Exists() {
 		data.EemLastVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/line-template"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/eem/line-template"); value.Exists() {
 		data.EemLineTemplate = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pools/pool"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pools/pool"); value.Exists() {
 		data.Pools = make([]VTYPoolPools, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := VTYPoolPools{}
@@ -493,25 +493,25 @@ func (data *VTYPool) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *VTYPoolData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/first-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default/first-vty-number"); value.Exists() {
 		data.DefaultFirstVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/last-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default/last-vty-number"); value.Exists() {
 		data.DefaultLastVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/line-template"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default/line-template"); value.Exists() {
 		data.DefaultLineTemplate = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/first-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/eem/first-vty-number"); value.Exists() {
 		data.EemFirstVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/last-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/eem/last-vty-number"); value.Exists() {
 		data.EemLastVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/line-template"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/eem/line-template"); value.Exists() {
 		data.EemLineTemplate = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pools/pool"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pools/pool"); value.Exists() {
 		data.Pools = make([]VTYPoolPools, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := VTYPoolPools{}
@@ -539,11 +539,11 @@ func (data *VTYPoolData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 func (data *VTYPool) getDeletedItems(ctx context.Context, state VTYPool) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.Pools {
-		keys := [...]string{"pool-name"}
-		stateKeyValues := [...]string{state.Pools[i].PoolName.ValueString()}
+		keys := [...]string{ "pool-name",  }
+		stateKeyValues := [...]string{ state.Pools[i].PoolName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -560,16 +560,16 @@ func (data *VTYPool) getDeletedItems(ctx context.Context, state VTYPool) []strin
 			if state.Pools[i].PoolName.ValueString() != data.Pools[j].PoolName.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.Pools[i].LineTemplate.IsNull() && data.Pools[j].LineTemplate.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/pools/pool%v/line-template", state.getPath(), keyString))
-				}
-				if !state.Pools[i].LastVty.IsNull() && data.Pools[j].LastVty.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/pools/pool%v/last-vty-number", state.getPath(), keyString))
-				}
-				if !state.Pools[i].FirstVty.IsNull() && data.Pools[j].FirstVty.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/pools/pool%v/first-vty-number", state.getPath(), keyString))
-				}
+		if found {
+			if !state.Pools[i].LineTemplate.IsNull() && data.Pools[j].LineTemplate.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/pools/pool%v/line-template", state.getPath(), keyString))
+			}
+			if !state.Pools[i].LastVty.IsNull() && data.Pools[j].LastVty.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/pools/pool%v/last-vty-number", state.getPath(), keyString))
+			}
+			if !state.Pools[i].FirstVty.IsNull() && data.Pools[j].FirstVty.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/pools/pool%v/first-vty-number", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -604,11 +604,11 @@ func (data *VTYPool) getDeletedItems(ctx context.Context, state VTYPool) []strin
 func (data *VTYPool) getEmptyLeafsDelete(ctx context.Context, state *VTYPool) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Pools {
-		keys := [...]string{"pool-name"}
-		keyValues := [...]string{data.Pools[i].PoolName.ValueString()}
+		keys := [...]string{ "pool-name",  }
+		keyValues := [...]string{ data.Pools[i].PoolName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	return emptyLeafsDelete
@@ -620,7 +620,7 @@ func (data *VTYPool) getEmptyLeafsDelete(ctx context.Context, state *VTYPool) []
 func (data *VTYPool) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Pools {
-		keyValues := [...]string{data.Pools[i].PoolName.ValueString()}
+		keyValues := [...]string{ data.Pools[i].PoolName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/pools/pool=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -654,8 +654,8 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.Pools {
-		stateKeys := [...]string{"pool-name"}
-		stateKeyValues := [...]string{state.Pools[i].PoolName.ValueString()}
+		stateKeys := [...]string{ "pool-name",  }
+		stateKeyValues := [...]string{ state.Pools[i].PoolName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -676,15 +676,15 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 				found = false
 			}
 			if found {
-				if !state.Pools[i].LineTemplate.IsNull() && data.Pools[j].LineTemplate.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/pools/pool%v/line-template", predicates))
-				}
-				if !state.Pools[i].LastVty.IsNull() && data.Pools[j].LastVty.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/pools/pool%v/last-vty-number", predicates))
-				}
-				if !state.Pools[i].FirstVty.IsNull() && data.Pools[j].FirstVty.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/pools/pool%v/first-vty-number", predicates))
-				}
+			if !state.Pools[i].LineTemplate.IsNull() && data.Pools[j].LineTemplate.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/pools/pool%v/line-template", predicates))
+			}
+			if !state.Pools[i].LastVty.IsNull() && data.Pools[j].LastVty.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/pools/pool%v/last-vty-number", predicates))
+			}
+			if !state.Pools[i].FirstVty.IsNull() && data.Pools[j].FirstVty.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/pools/pool%v/first-vty-number", predicates))
+			}
 				break
 			}
 		}
@@ -694,7 +694,7 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 	}
 	if !state.EemLineTemplate.IsNull() && data.EemLineTemplate.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/eem"
+		deletePath := state.getXPath()+"/eem"
 		predicates := make(map[string]string)
 		if !state.EemFirstVty.IsNull() {
 			predicates["first-vty-number"] = fmt.Sprintf("%v", state.EemFirstVty.ValueInt64())
@@ -719,7 +719,7 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 	}
 	if !state.EemLastVty.IsNull() && data.EemLastVty.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/eem"
+		deletePath := state.getXPath()+"/eem"
 		predicates := make(map[string]string)
 		if !state.EemFirstVty.IsNull() {
 			predicates["first-vty-number"] = fmt.Sprintf("%v", state.EemFirstVty.ValueInt64())
@@ -744,7 +744,7 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 	}
 	if !state.EemFirstVty.IsNull() && data.EemFirstVty.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/eem"
+		deletePath := state.getXPath()+"/eem"
 		predicates := make(map[string]string)
 		if !state.EemLastVty.IsNull() {
 			predicates["last-vty-number"] = fmt.Sprintf("%v", state.EemLastVty.ValueInt64())
@@ -769,7 +769,7 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 	}
 	if !state.DefaultLineTemplate.IsNull() && data.DefaultLineTemplate.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/default"
+		deletePath := state.getXPath()+"/default"
 		predicates := make(map[string]string)
 		if !state.DefaultFirstVty.IsNull() {
 			predicates["first-vty-number"] = fmt.Sprintf("%v", state.DefaultFirstVty.ValueInt64())
@@ -794,7 +794,7 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 	}
 	if !state.DefaultLastVty.IsNull() && data.DefaultLastVty.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/default"
+		deletePath := state.getXPath()+"/default"
 		predicates := make(map[string]string)
 		if !state.DefaultFirstVty.IsNull() {
 			predicates["first-vty-number"] = fmt.Sprintf("%v", state.DefaultFirstVty.ValueInt64())
@@ -819,7 +819,7 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 	}
 	if !state.DefaultFirstVty.IsNull() && data.DefaultFirstVty.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/default"
+		deletePath := state.getXPath()+"/default"
 		predicates := make(map[string]string)
 		if !state.DefaultLastVty.IsNull() {
 			predicates["last-vty-number"] = fmt.Sprintf("%v", state.DefaultLastVty.ValueInt64())
@@ -854,8 +854,8 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 func (data *VTYPool) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.Pools {
-		keys := [...]string{"pool-name"}
-		keyValues := [...]string{data.Pools[i].PoolName.ValueString()}
+		keys := [...]string{ "pool-name",  }
+		keyValues := [...]string{ data.Pools[i].PoolName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

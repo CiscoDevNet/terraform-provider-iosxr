@@ -23,14 +23,19 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/netascode/go-gnmi"
+	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -47,7 +52,7 @@ func NewRouterStaticVRFIPv6MulticastDataSource() datasource.DataSource {
 	return &RouterStaticVRFIPv6MulticastDataSource{}
 }
 
-type RouterStaticVRFIPv6MulticastDataSource struct {
+type RouterStaticVRFIPv6MulticastDataSource struct{
 	data *IosxrProviderData
 }
 
@@ -246,31 +251,31 @@ func (d *RouterStaticVRFIPv6MulticastDataSource) Schema(ctx context.Context, req
 									"interface_name": schema.StringAttribute{
 										MarkdownDescription: "Forwarding interface",
 										Computed:            true,
-									},
+								},
 									"description": schema.StringAttribute{
 										MarkdownDescription: "description of the static route",
 										Computed:            true,
-									},
+								},
 									"tag": schema.Int64Attribute{
 										MarkdownDescription: "Set tag for this route",
 										Computed:            true,
-									},
+								},
 									"distance_metric": schema.Int64Attribute{
 										MarkdownDescription: "Distance metric for this route",
 										Computed:            true,
-									},
+								},
 									"permanent": schema.BoolAttribute{
 										MarkdownDescription: "Permanent route",
 										Computed:            true,
-									},
+								},
 									"track": schema.StringAttribute{
 										MarkdownDescription: "Enable object tracking for static route",
 										Computed:            true,
-									},
+								},
 									"metric": schema.Int64Attribute{
 										MarkdownDescription: "Set metric for this route",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -282,43 +287,43 @@ func (d *RouterStaticVRFIPv6MulticastDataSource) Schema(ctx context.Context, req
 									"interface_name": schema.StringAttribute{
 										MarkdownDescription: "Forwarding interface",
 										Computed:            true,
-									},
+								},
 									"address": schema.StringAttribute{
 										MarkdownDescription: "Forwarding router's address",
 										Computed:            true,
-									},
+								},
 									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
 										MarkdownDescription: "Hello interval",
 										Computed:            true,
-									},
+								},
 									"bfd_fast_detect_multiplier": schema.Int64Attribute{
 										MarkdownDescription: "Detect multiplier",
 										Computed:            true,
-									},
+								},
 									"description": schema.StringAttribute{
 										MarkdownDescription: "description of the static route",
 										Computed:            true,
-									},
+								},
 									"tag": schema.Int64Attribute{
 										MarkdownDescription: "Set tag for this route",
 										Computed:            true,
-									},
+								},
 									"distance_metric": schema.Int64Attribute{
 										MarkdownDescription: "Distance metric for this route",
 										Computed:            true,
-									},
+								},
 									"permanent": schema.BoolAttribute{
 										MarkdownDescription: "Permanent route",
 										Computed:            true,
-									},
+								},
 									"track": schema.StringAttribute{
 										MarkdownDescription: "Enable object tracking for static route",
 										Computed:            true,
-									},
+								},
 									"metric": schema.Int64Attribute{
 										MarkdownDescription: "Set metric for this route",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -330,31 +335,31 @@ func (d *RouterStaticVRFIPv6MulticastDataSource) Schema(ctx context.Context, req
 									"address": schema.StringAttribute{
 										MarkdownDescription: "Forwarding router's address",
 										Computed:            true,
-									},
+								},
 									"description": schema.StringAttribute{
 										MarkdownDescription: "description of the static route",
 										Computed:            true,
-									},
+								},
 									"tag": schema.Int64Attribute{
 										MarkdownDescription: "Set tag for this route",
 										Computed:            true,
-									},
+								},
 									"distance_metric": schema.Int64Attribute{
 										MarkdownDescription: "Distance metric for this route",
 										Computed:            true,
-									},
+								},
 									"permanent": schema.BoolAttribute{
 										MarkdownDescription: "Permanent route",
 										Computed:            true,
-									},
+								},
 									"track": schema.StringAttribute{
 										MarkdownDescription: "Enable object tracking for static route",
 										Computed:            true,
-									},
+								},
 									"metric": schema.Int64Attribute{
 										MarkdownDescription: "Set metric for this route",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -366,31 +371,31 @@ func (d *RouterStaticVRFIPv6MulticastDataSource) Schema(ctx context.Context, req
 									"sr_policy_name": schema.StringAttribute{
 										MarkdownDescription: "segment routing policy",
 										Computed:            true,
-									},
+								},
 									"description": schema.StringAttribute{
 										MarkdownDescription: "description of the static route",
 										Computed:            true,
-									},
+								},
 									"tag": schema.Int64Attribute{
 										MarkdownDescription: "Set tag for this route",
 										Computed:            true,
-									},
+								},
 									"distance_metric": schema.Int64Attribute{
 										MarkdownDescription: "Distance metric for this route",
 										Computed:            true,
-									},
+								},
 									"permanent": schema.BoolAttribute{
 										MarkdownDescription: "Permanent route",
 										Computed:            true,
-									},
+								},
 									"track": schema.StringAttribute{
 										MarkdownDescription: "Enable object tracking for static route",
 										Computed:            true,
-									},
+								},
 									"metric": schema.Int64Attribute{
 										MarkdownDescription: "Set metric for this route",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -474,6 +479,7 @@ func (d *RouterStaticVRFIPv6MulticastDataSource) Read(ctx context.Context, req d
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
+
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

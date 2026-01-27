@@ -21,8 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -35,8 +33,8 @@ import (
 
 func TestAccIosxrFrequencySynchronization(t *testing.T) {
 	if os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
-		t.Skip("skipping test, set environment variable NCS or C8000")
-	}
+        t.Skip("skipping test, set environment variable NCS or C8000")
+    }
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_frequency_synchronization.test", "quality_itu_t_option_one", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_frequency_synchronization.test", "clock_interface_timing_mode_system", "true"))
@@ -51,18 +49,18 @@ func TestAccIosxrFrequencySynchronization(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrFrequencySynchronizationConfig_all(),
-		Check:  resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:      "iosxr_frequency_synchronization.test",
-		ImportState:       true,
+		ResourceName:  "iosxr_frequency_synchronization.test",
+		ImportState:   true,
 		ImportStateIdFunc: iosxrFrequencySynchronizationImportStateIdFunc("iosxr_frequency_synchronization.test"),
-		Check:             resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps:                    steps,
+		Steps: steps,
 	})
 }
 
@@ -73,7 +71,7 @@ func TestAccIosxrFrequencySynchronization(t *testing.T) {
 func iosxrFrequencySynchronizationImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf(""), nil
+		return fmt.Sprintf("", ), nil
 	}
 }
 

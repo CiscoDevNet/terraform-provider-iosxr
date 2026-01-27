@@ -58,8 +58,8 @@ func TestAccDataSourceIosxrMPLSLDPMLDP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrMPLSLDPMLDPPrerequisitesConfig + testAccDataSourceIosxrMPLSLDPMLDPConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrMPLSLDPMLDPPrerequisitesConfig+testAccDataSourceIosxrMPLSLDPMLDPConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

@@ -24,23 +24,28 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -51,7 +56,7 @@ func NewSegmentRoutingTEResource() resource.Resource {
 	return &SegmentRoutingTEResource{}
 }
 
-type SegmentRoutingTEResource struct {
+type SegmentRoutingTEResource struct{
 	data *IosxrProviderData
 }
 
@@ -118,10 +123,10 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"metric_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("MetricType").AddStringEnumDescription("default", "hopcount", "igp", "latency", "te").String,
+							MarkdownDescription: helpers.NewAttributeDescription("MetricType").AddStringEnumDescription("default", "hopcount", "igp", "latency", "te", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("default", "hopcount", "igp", "latency", "te"),
+								stringvalidator.OneOf("default", "hopcount", "igp", "latency", "te", ),
 							},
 						},
 						"admin_distance": schema.Int64Attribute{
@@ -181,10 +186,10 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 				Optional:            true,
 			},
 			"segment_lists_srv6_sid_format": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Segment-lists configuration").AddStringEnumDescription("micro-sid").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Segment-lists configuration").AddStringEnumDescription("micro-sid", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("micro-sid"),
+					stringvalidator.OneOf("micro-sid", ),
 				},
 			},
 			"segment_lists_srv6_explicit_segments": schema.ListNestedAttribute{
@@ -222,13 +227,13 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 										},
 									},
 									"hop_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("SRv6 hop type").AddStringEnumDescription("srv6sid").AddDefaultValueDescription("srv6sid").String,
+										MarkdownDescription: helpers.NewAttributeDescription("SRv6 hop type").AddStringEnumDescription("srv6sid", ).AddDefaultValueDescription("srv6sid").String,
 										Optional:            true,
 										Computed:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("srv6sid"),
+											stringvalidator.OneOf("srv6sid", ),
 										},
-										Default: stringdefault.StaticString("srv6sid"),
+										Default:             stringdefault.StaticString("srv6sid"),
 									},
 								},
 							},
@@ -266,10 +271,10 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 										},
 									},
 									"type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Segment/hop type").AddStringEnumDescription("ip-adjacency-address", "ipv4-address", "mpls-label").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Segment/hop type").AddStringEnumDescription("ip-adjacency-address", "ipv4-address", "mpls-label", ).String,
 										Optional:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("ip-adjacency-address", "ipv4-address", "mpls-label"),
+											stringvalidator.OneOf("ip-adjacency-address", "ipv4-address", "mpls-label", ),
 										},
 									},
 									"address": schema.StringAttribute{
@@ -417,10 +422,10 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 										},
 									},
 									"type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Resource type").AddStringEnumDescription("ipv4-address").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Resource type").AddStringEnumDescription("ipv4-address", ).String,
 										Optional:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4-address"),
+											stringvalidator.OneOf("ipv4-address", ),
 										},
 									},
 									"address": schema.StringAttribute{
@@ -460,17 +465,17 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"binding_sid_rules_explicit": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Binding sid explicit rule").AddStringEnumDescription("enforce-srlb", "fallback-dynamic").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Binding sid explicit rule").AddStringEnumDescription("enforce-srlb", "fallback-dynamic", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("enforce-srlb", "fallback-dynamic"),
+					stringvalidator.OneOf("enforce-srlb", "fallback-dynamic", ),
 				},
 			},
 			"binding_sid_rules_dynamic": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Binding SID dynamic rule. Applicable for SR-MPLS and SRv6 policies").AddStringEnumDescription("disable").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Binding SID dynamic rule. Applicable for SR-MPLS and SRv6 policies").AddStringEnumDescription("disable", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("disable"),
+					stringvalidator.OneOf("disable", ),
 				},
 			},
 			"interfaces": schema.ListNestedAttribute{
@@ -639,10 +644,10 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 							},
 						},
 						"auto_route_metric_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Metric type").AddStringEnumDescription("constant", "relative").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Metric type").AddStringEnumDescription("constant", "relative", ).String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("constant", "relative"),
+								stringvalidator.OneOf("constant", "relative", ),
 							},
 						},
 						"auto_route_metric_relative_value": schema.Int64Attribute{
@@ -758,10 +763,10 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 							},
 						},
 						"protocol": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IGP protocol").AddStringEnumDescription("ospf").String,
+							MarkdownDescription: helpers.NewAttributeDescription("IGP protocol").AddStringEnumDescription("ospf", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("ospf"),
+								stringvalidator.OneOf("ospf", ),
 							},
 						},
 					},
@@ -800,10 +805,10 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"path_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Candidate-path type").AddStringEnumDescription("candidate-path-type-all", "candidate-path-type-bgp-odn", "candidate-path-type-bgp-srte", "candidate-path-type-local", "candidate-path-type-pcep").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Candidate-path type").AddStringEnumDescription("candidate-path-type-all", "candidate-path-type-bgp-odn", "candidate-path-type-bgp-srte", "candidate-path-type-local", "candidate-path-type-pcep", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("candidate-path-type-all", "candidate-path-type-bgp-odn", "candidate-path-type-bgp-srte", "candidate-path-type-local", "candidate-path-type-pcep"),
+								stringvalidator.OneOf("candidate-path-type-all", "candidate-path-type-bgp-odn", "candidate-path-type-bgp-srte", "candidate-path-type-local", "candidate-path-type-pcep", ),
 							},
 						},
 						"source_address_selection": schema.BoolAttribute{
@@ -813,10 +818,10 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 							Default:             booldefault.StaticBool(true),
 						},
 						"source_address_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IP address type").AddStringEnumDescription("end-point-type-ipv4", "end-point-type-ipv6").String,
+							MarkdownDescription: helpers.NewAttributeDescription("IP address type").AddStringEnumDescription("end-point-type-ipv4", "end-point-type-ipv6", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("end-point-type-ipv4", "end-point-type-ipv6"),
+								stringvalidator.OneOf("end-point-type-ipv4", "end-point-type-ipv6", ),
 							},
 						},
 						"source_address": schema.StringAttribute{
@@ -835,17 +840,17 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"srv6_locator_binding_sid_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Binding Segment ID type").AddStringEnumDescription("srv6-dynamic").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Binding Segment ID type").AddStringEnumDescription("srv6-dynamic", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("srv6-dynamic"),
+					stringvalidator.OneOf("srv6-dynamic", ),
 				},
 			},
 			"srv6_locator_behavior": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-encaps-reduced", "ub6-insert-reduced").String,
+				MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-encaps-reduced", "ub6-insert-reduced", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced"),
+					stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced", ),
 				},
 			},
 			"srv6_maximum_sid_depth": schema.Int64Attribute{
@@ -891,14 +896,14 @@ func (r *SegmentRoutingTEResource) Create(ctx context.Context, req resource.Crea
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			var ops []gnmi.SetOperation
+		var ops []gnmi.SetOperation
 
-			// Create object
-			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -1119,11 +1124,11 @@ func (r *SegmentRoutingTEResource) Update(ctx context.Context, req resource.Upda
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			// Combine update and delete operations into a single transaction
-			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-				resp.Diagnostics.AddError("Client Error", err.Error())
-				return
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
 			}
 		}
 	}

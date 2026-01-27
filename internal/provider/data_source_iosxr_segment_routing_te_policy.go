@@ -23,14 +23,19 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/netascode/go-gnmi"
+	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -47,7 +52,7 @@ func NewSegmentRoutingTEPolicyDataSource() datasource.DataSource {
 	return &SegmentRoutingTEPolicyDataSource{}
 }
 
-type SegmentRoutingTEPolicyDataSource struct {
+type SegmentRoutingTEPolicyDataSource struct{
 	data *IosxrProviderData
 }
 
@@ -234,7 +239,7 @@ func (d *SegmentRoutingTEPolicyDataSource) Schema(ctx context.Context, req datas
 									"affinity_type": schema.StringAttribute{
 										MarkdownDescription: "Affinity rule type",
 										Computed:            true,
-									},
+								},
 									"affinities": schema.ListNestedAttribute{
 										MarkdownDescription: "Affinity rule name",
 										Computed:            true,
@@ -243,10 +248,10 @@ func (d *SegmentRoutingTEPolicyDataSource) Schema(ctx context.Context, req datas
 												"affinity_name": schema.StringAttribute{
 													MarkdownDescription: "Affinity name",
 													Computed:            true,
-												},
+											},
 											},
 										},
-									},
+								},
 								},
 							},
 						},
@@ -258,15 +263,15 @@ func (d *SegmentRoutingTEPolicyDataSource) Schema(ctx context.Context, req datas
 									"type": schema.StringAttribute{
 										MarkdownDescription: "Scope of the bound",
 										Computed:            true,
-									},
+								},
 									"metric_type": schema.StringAttribute{
 										MarkdownDescription: "Metric type to bound",
 										Computed:            true,
-									},
+								},
 									"value": schema.Int64Attribute{
 										MarkdownDescription: "Metric Bound Value",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -286,55 +291,55 @@ func (d *SegmentRoutingTEPolicyDataSource) Schema(ctx context.Context, req datas
 									"type": schema.StringAttribute{
 										MarkdownDescription: "Path-option type",
 										Computed:            true,
-									},
+								},
 									"hop_type": schema.StringAttribute{
 										MarkdownDescription: "Type of dynamic path to be computed",
 										Computed:            true,
-									},
+								},
 									"segment_list_name": schema.StringAttribute{
 										MarkdownDescription: "Segment-list name",
 										Computed:            true,
-									},
+								},
 									"sticky": schema.BoolAttribute{
 										MarkdownDescription: "Disable dynamic reroute configuration",
 										Computed:            true,
-									},
+								},
 									"metric_sid_limit": schema.Int64Attribute{
 										MarkdownDescription: "Maximum number of SIDs",
 										Computed:            true,
-									},
+								},
 									"metric_type": schema.StringAttribute{
 										MarkdownDescription: "Metric type",
 										Computed:            true,
-									},
+								},
 									"metric_margin_type": schema.StringAttribute{
 										MarkdownDescription: "Metric margin type",
 										Computed:            true,
-									},
+								},
 									"metric_margin_relative": schema.Int64Attribute{
 										MarkdownDescription: "Relative metric value",
 										Computed:            true,
-									},
+								},
 									"metric_margin_absolute": schema.Int64Attribute{
 										MarkdownDescription: "Absolute metric value",
 										Computed:            true,
-									},
+								},
 									"anycast": schema.BoolAttribute{
 										MarkdownDescription: "Anycast Prefix SID Inclusion",
 										Computed:            true,
-									},
+								},
 									"pcep": schema.BoolAttribute{
 										MarkdownDescription: "Path Computation Element Protocol",
 										Computed:            true,
-									},
+								},
 									"reverse_path_segment_list": schema.StringAttribute{
 										MarkdownDescription: "Reverse Path Segment-list name",
 										Computed:            true,
-									},
+								},
 									"weight": schema.Int64Attribute{
 										MarkdownDescription: "Path-option weight",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -358,11 +363,11 @@ func (d *SegmentRoutingTEPolicyDataSource) Schema(ctx context.Context, req datas
 									"forward_class": schema.Int64Attribute{
 										MarkdownDescription: "ForwardClass",
 										Computed:            true,
-									},
+								},
 									"color": schema.Int64Attribute{
 										MarkdownDescription: "Color",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -542,6 +547,7 @@ func (d *SegmentRoutingTEPolicyDataSource) Read(ctx context.Context, req datasou
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
+
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

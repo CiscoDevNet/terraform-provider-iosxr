@@ -21,7 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +32,8 @@ import (
 
 func TestAccDataSourceIosxrSSH(t *testing.T) {
 	if os.Getenv("SSH") == "" {
-		t.Skip("skipping test, set environment variable SSH")
-	}
+        t.Skip("skipping test, set environment variable SSH")
+    }
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "timeout", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_vrfs.0.vrf_name", "VRF1"))
@@ -94,7 +93,7 @@ func TestAccDataSourceIosxrSSH(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrSSHConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

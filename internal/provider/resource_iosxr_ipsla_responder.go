@@ -24,21 +24,28 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -49,7 +56,7 @@ func NewIPSLAResponderResource() resource.Resource {
 	return &IPSLAResponderResource{}
 }
 
-type IPSLAResponderResource struct {
+type IPSLAResponderResource struct{
 	data *IosxrProviderData
 }
 
@@ -156,20 +163,20 @@ func (r *IPSLAResponderResource) Schema(ctx context.Context, req resource.Schema
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"address": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Enter IPv4 address of the remote interface").String,
-													Required:            true,
-												},
-												"remote_port": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Remote UDP port").String,
-													Required:            true,
-												},
-												"vrf": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("VRF name for local-ip").String,
-													Required:            true,
-												},
+											"address": schema.StringAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Enter IPv4 address of the remote interface").String,
+												Required:            true,
+											},
+											"remote_port": schema.StringAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Remote UDP port").String,
+												Required:            true,
+											},
+											"vrf": schema.StringAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("VRF name for local-ip").String,
+												Required:            true,
 											},
 										},
+									},
 									},
 								},
 							},
@@ -195,20 +202,20 @@ func (r *IPSLAResponderResource) Schema(ctx context.Context, req resource.Schema
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"address": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Enter IPv6 address of the remote interface").String,
-													Required:            true,
-												},
-												"remote_port": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Remote UDP port").String,
-													Required:            true,
-												},
-												"vrf": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("VRF name for local-ip").String,
-													Required:            true,
-												},
+											"address": schema.StringAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Enter IPv6 address of the remote interface").String,
+												Required:            true,
+											},
+											"remote_port": schema.StringAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Remote UDP port").String,
+												Required:            true,
+											},
+											"vrf": schema.StringAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("VRF name for local-ip").String,
+												Required:            true,
 											},
 										},
+									},
 									},
 								},
 							},
@@ -267,14 +274,14 @@ func (r *IPSLAResponderResource) Create(ctx context.Context, req resource.Create
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			var ops []gnmi.SetOperation
+		var ops []gnmi.SetOperation
 
-			// Create object
-			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -495,11 +502,11 @@ func (r *IPSLAResponderResource) Update(ctx context.Context, req resource.Update
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			// Combine update and delete operations into a single transaction
-			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-				resp.Diagnostics.AddError("Client Error", err.Error())
-				return
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
 			}
 		}
 	}

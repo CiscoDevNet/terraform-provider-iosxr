@@ -24,36 +24,37 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type TACACSSourceInterface struct {
-	Device           types.String                            `tfsdk:"device"`
-	Id               types.String                            `tfsdk:"id"`
-	SourceInterface  types.String                            `tfsdk:"source_interface"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	SourceInterface types.String `tfsdk:"source_interface"`
 	SourceInterfaces []TACACSSourceInterfaceSourceInterfaces `tfsdk:"source_interfaces"`
 }
 
 type TACACSSourceInterfaceData struct {
-	Device           types.String                            `tfsdk:"device"`
-	Id               types.String                            `tfsdk:"id"`
-	SourceInterface  types.String                            `tfsdk:"source_interface"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	SourceInterface types.String `tfsdk:"source_interface"`
 	SourceInterfaces []TACACSSourceInterfaceSourceInterfaces `tfsdk:"source_interfaces"`
 }
 type TACACSSourceInterfaceSourceInterfaces struct {
-	Vrf       types.String `tfsdk:"vrf"`
+	Vrf types.String `tfsdk:"vrf"`
 	Interface types.String `tfsdk:"interface"`
 }
 
@@ -114,8 +115,8 @@ func (data *TACACSSourceInterface) updateFromBody(ctx context.Context, res []byt
 		data.SourceInterface = types.StringNull()
 	}
 	for i := range data.SourceInterfaces {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.SourceInterfaces[i].Vrf.ValueString()}
+		keys := [...]string{ "vrf-name",  }
+		keyValues := [...]string{ data.SourceInterfaces[i].Vrf.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "vrfs.vrf").ForEach(
@@ -155,7 +156,7 @@ func (data *TACACSSourceInterface) updateFromBody(ctx context.Context, res []byt
 func (data TACACSSourceInterface) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.SourceInterface.IsNull() && !data.SourceInterface.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/source-interface", data.SourceInterface.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/source-interface", data.SourceInterface.ValueString())
 	}
 	if len(data.SourceInterfaces) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -182,17 +183,17 @@ func (data TACACSSourceInterface) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *TACACSSourceInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	} else if data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringNull()
 	}
 	for i := range data.SourceInterfaces {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.SourceInterfaces[i].Vrf.ValueString()}
+		keys := [...]string{ "vrf-name",  }
+		keyValues := [...]string{ data.SourceInterfaces[i].Vrf.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/vrfs/vrf").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -231,10 +232,10 @@ func (data *TACACSSourceInterface) fromBody(ctx context.Context, res gjson.Resul
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "source-interface"); value.Exists() {
+	if value := res.Get(prefix+"source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix+"vrfs.vrf"); value.Exists() {
 		data.SourceInterfaces = make([]TACACSSourceInterfaceSourceInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TACACSSourceInterfaceSourceInterfaces{}
@@ -258,10 +259,10 @@ func (data *TACACSSourceInterfaceData) fromBody(ctx context.Context, res gjson.R
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "source-interface"); value.Exists() {
+	if value := res.Get(prefix+"source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix+"vrfs.vrf"); value.Exists() {
 		data.SourceInterfaces = make([]TACACSSourceInterfaceSourceInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TACACSSourceInterfaceSourceInterfaces{}
@@ -281,10 +282,10 @@ func (data *TACACSSourceInterfaceData) fromBody(ctx context.Context, res gjson.R
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *TACACSSourceInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/vrfs/vrf"); value.Exists() {
 		data.SourceInterfaces = make([]TACACSSourceInterfaceSourceInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TACACSSourceInterfaceSourceInterfaces{}
@@ -304,10 +305,10 @@ func (data *TACACSSourceInterface) fromBodyXML(ctx context.Context, res xmldot.R
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *TACACSSourceInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/vrfs/vrf"); value.Exists() {
 		data.SourceInterfaces = make([]TACACSSourceInterfaceSourceInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TACACSSourceInterfaceSourceInterfaces{}
@@ -329,11 +330,11 @@ func (data *TACACSSourceInterfaceData) fromBodyXML(ctx context.Context, res xmld
 func (data *TACACSSourceInterface) getDeletedItems(ctx context.Context, state TACACSSourceInterface) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.SourceInterfaces {
-		keys := [...]string{"vrf-name"}
-		stateKeyValues := [...]string{state.SourceInterfaces[i].Vrf.ValueString()}
+		keys := [...]string{ "vrf-name",  }
+		stateKeyValues := [...]string{ state.SourceInterfaces[i].Vrf.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -350,10 +351,10 @@ func (data *TACACSSourceInterface) getDeletedItems(ctx context.Context, state TA
 			if state.SourceInterfaces[i].Vrf.ValueString() != data.SourceInterfaces[j].Vrf.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.SourceInterfaces[i].Interface.IsNull() && data.SourceInterfaces[j].Interface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/source-interface", state.getPath(), keyString))
-				}
+		if found {
+			if !state.SourceInterfaces[i].Interface.IsNull() && data.SourceInterfaces[j].Interface.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/source-interface", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -373,11 +374,11 @@ func (data *TACACSSourceInterface) getDeletedItems(ctx context.Context, state TA
 func (data *TACACSSourceInterface) getEmptyLeafsDelete(ctx context.Context, state *TACACSSourceInterface) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.SourceInterfaces {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.SourceInterfaces[i].Vrf.ValueString()}
+		keys := [...]string{ "vrf-name",  }
+		keyValues := [...]string{ data.SourceInterfaces[i].Vrf.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	return emptyLeafsDelete
@@ -389,7 +390,7 @@ func (data *TACACSSourceInterface) getEmptyLeafsDelete(ctx context.Context, stat
 func (data *TACACSSourceInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.SourceInterfaces {
-		keyValues := [...]string{data.SourceInterfaces[i].Vrf.ValueString()}
+		keyValues := [...]string{ data.SourceInterfaces[i].Vrf.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -408,8 +409,8 @@ func (data *TACACSSourceInterface) addDeletedItemsXML(ctx context.Context, state
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.SourceInterfaces {
-		stateKeys := [...]string{"vrf-name"}
-		stateKeyValues := [...]string{state.SourceInterfaces[i].Vrf.ValueString()}
+		stateKeys := [...]string{ "vrf-name",  }
+		stateKeyValues := [...]string{ state.SourceInterfaces[i].Vrf.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -430,9 +431,9 @@ func (data *TACACSSourceInterface) addDeletedItemsXML(ctx context.Context, state
 				found = false
 			}
 			if found {
-				if !state.SourceInterfaces[i].Interface.IsNull() && data.SourceInterfaces[j].Interface.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/source-interface", predicates))
-				}
+			if !state.SourceInterfaces[i].Interface.IsNull() && data.SourceInterfaces[j].Interface.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/source-interface", predicates))
+			}
 				break
 			}
 		}
@@ -441,7 +442,7 @@ func (data *TACACSSourceInterface) addDeletedItemsXML(ctx context.Context, state
 		}
 	}
 	if !state.SourceInterface.IsNull() && data.SourceInterface.IsNull() {
-		deletePath := state.getXPath() + "/source-interface"
+		deletePath := state.getXPath()+"/source-interface"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -459,8 +460,8 @@ func (data *TACACSSourceInterface) addDeletedItemsXML(ctx context.Context, state
 func (data *TACACSSourceInterface) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.SourceInterfaces {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.SourceInterfaces[i].Vrf.ValueString()}
+		keys := [...]string{ "vrf-name",  }
+		keyValues := [...]string{ data.SourceInterfaces[i].Vrf.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

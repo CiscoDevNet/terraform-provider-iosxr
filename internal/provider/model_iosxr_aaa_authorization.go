@@ -24,112 +24,113 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type AAAAuthorization struct {
-	Device       types.String                   `tfsdk:"device"`
-	Id           types.String                   `tfsdk:"id"`
-	DeleteMode   types.String                   `tfsdk:"delete_mode"`
-	Exec         []AAAAuthorizationExec         `tfsdk:"exec"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	Exec []AAAAuthorizationExec `tfsdk:"exec"`
 	Eventmanager []AAAAuthorizationEventmanager `tfsdk:"eventmanager"`
-	Commands     []AAAAuthorizationCommands     `tfsdk:"commands"`
-	Network      []AAAAuthorizationNetwork      `tfsdk:"network"`
+	Commands []AAAAuthorizationCommands `tfsdk:"commands"`
+	Network []AAAAuthorizationNetwork `tfsdk:"network"`
 }
 
 type AAAAuthorizationData struct {
-	Device       types.String                   `tfsdk:"device"`
-	Id           types.String                   `tfsdk:"id"`
-	Exec         []AAAAuthorizationExec         `tfsdk:"exec"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	Exec []AAAAuthorizationExec `tfsdk:"exec"`
 	Eventmanager []AAAAuthorizationEventmanager `tfsdk:"eventmanager"`
-	Commands     []AAAAuthorizationCommands     `tfsdk:"commands"`
-	Network      []AAAAuthorizationNetwork      `tfsdk:"network"`
+	Commands []AAAAuthorizationCommands `tfsdk:"commands"`
+	Network []AAAAuthorizationNetwork `tfsdk:"network"`
 }
 type AAAAuthorizationExec struct {
-	List     types.String `tfsdk:"list"`
-	A1Local  types.Bool   `tfsdk:"a1_local"`
-	A1None   types.Bool   `tfsdk:"a1_none"`
-	A1Tacacs types.Bool   `tfsdk:"a1_tacacs"`
-	A1Radius types.Bool   `tfsdk:"a1_radius"`
-	A1Group  types.String `tfsdk:"a1_group"`
-	A2Local  types.Bool   `tfsdk:"a2_local"`
-	A2None   types.Bool   `tfsdk:"a2_none"`
-	A2Tacacs types.Bool   `tfsdk:"a2_tacacs"`
-	A2Radius types.Bool   `tfsdk:"a2_radius"`
-	A2Group  types.String `tfsdk:"a2_group"`
-	A3Local  types.Bool   `tfsdk:"a3_local"`
-	A3None   types.Bool   `tfsdk:"a3_none"`
-	A3Tacacs types.Bool   `tfsdk:"a3_tacacs"`
-	A3Radius types.Bool   `tfsdk:"a3_radius"`
-	A3Group  types.String `tfsdk:"a3_group"`
-	A4Local  types.Bool   `tfsdk:"a4_local"`
-	A4None   types.Bool   `tfsdk:"a4_none"`
-	A4Tacacs types.Bool   `tfsdk:"a4_tacacs"`
-	A4Radius types.Bool   `tfsdk:"a4_radius"`
-	A4Group  types.String `tfsdk:"a4_group"`
+	List types.String `tfsdk:"list"`
+	A1Local types.Bool `tfsdk:"a1_local"`
+	A1None types.Bool `tfsdk:"a1_none"`
+	A1Tacacs types.Bool `tfsdk:"a1_tacacs"`
+	A1Radius types.Bool `tfsdk:"a1_radius"`
+	A1Group types.String `tfsdk:"a1_group"`
+	A2Local types.Bool `tfsdk:"a2_local"`
+	A2None types.Bool `tfsdk:"a2_none"`
+	A2Tacacs types.Bool `tfsdk:"a2_tacacs"`
+	A2Radius types.Bool `tfsdk:"a2_radius"`
+	A2Group types.String `tfsdk:"a2_group"`
+	A3Local types.Bool `tfsdk:"a3_local"`
+	A3None types.Bool `tfsdk:"a3_none"`
+	A3Tacacs types.Bool `tfsdk:"a3_tacacs"`
+	A3Radius types.Bool `tfsdk:"a3_radius"`
+	A3Group types.String `tfsdk:"a3_group"`
+	A4Local types.Bool `tfsdk:"a4_local"`
+	A4None types.Bool `tfsdk:"a4_none"`
+	A4Tacacs types.Bool `tfsdk:"a4_tacacs"`
+	A4Radius types.Bool `tfsdk:"a4_radius"`
+	A4Group types.String `tfsdk:"a4_group"`
 }
 type AAAAuthorizationEventmanager struct {
-	List     types.String `tfsdk:"list"`
-	A1Local  types.Bool   `tfsdk:"a1_local"`
-	A1Tacacs types.Bool   `tfsdk:"a1_tacacs"`
-	A1Group  types.String `tfsdk:"a1_group"`
-	A2Local  types.Bool   `tfsdk:"a2_local"`
-	A2Tacacs types.Bool   `tfsdk:"a2_tacacs"`
-	A2Group  types.String `tfsdk:"a2_group"`
+	List types.String `tfsdk:"list"`
+	A1Local types.Bool `tfsdk:"a1_local"`
+	A1Tacacs types.Bool `tfsdk:"a1_tacacs"`
+	A1Group types.String `tfsdk:"a1_group"`
+	A2Local types.Bool `tfsdk:"a2_local"`
+	A2Tacacs types.Bool `tfsdk:"a2_tacacs"`
+	A2Group types.String `tfsdk:"a2_group"`
 }
 type AAAAuthorizationCommands struct {
-	List     types.String `tfsdk:"list"`
-	A1Local  types.Bool   `tfsdk:"a1_local"`
-	A1None   types.Bool   `tfsdk:"a1_none"`
-	A1Tacacs types.Bool   `tfsdk:"a1_tacacs"`
-	A1Group  types.String `tfsdk:"a1_group"`
-	A2Local  types.Bool   `tfsdk:"a2_local"`
-	A2None   types.Bool   `tfsdk:"a2_none"`
-	A2Tacacs types.Bool   `tfsdk:"a2_tacacs"`
-	A2Group  types.String `tfsdk:"a2_group"`
-	A3Local  types.Bool   `tfsdk:"a3_local"`
-	A3None   types.Bool   `tfsdk:"a3_none"`
-	A3Tacacs types.Bool   `tfsdk:"a3_tacacs"`
-	A3Group  types.String `tfsdk:"a3_group"`
-	A4Local  types.Bool   `tfsdk:"a4_local"`
-	A4None   types.Bool   `tfsdk:"a4_none"`
-	A4Tacacs types.Bool   `tfsdk:"a4_tacacs"`
-	A4Group  types.String `tfsdk:"a4_group"`
+	List types.String `tfsdk:"list"`
+	A1Local types.Bool `tfsdk:"a1_local"`
+	A1None types.Bool `tfsdk:"a1_none"`
+	A1Tacacs types.Bool `tfsdk:"a1_tacacs"`
+	A1Group types.String `tfsdk:"a1_group"`
+	A2Local types.Bool `tfsdk:"a2_local"`
+	A2None types.Bool `tfsdk:"a2_none"`
+	A2Tacacs types.Bool `tfsdk:"a2_tacacs"`
+	A2Group types.String `tfsdk:"a2_group"`
+	A3Local types.Bool `tfsdk:"a3_local"`
+	A3None types.Bool `tfsdk:"a3_none"`
+	A3Tacacs types.Bool `tfsdk:"a3_tacacs"`
+	A3Group types.String `tfsdk:"a3_group"`
+	A4Local types.Bool `tfsdk:"a4_local"`
+	A4None types.Bool `tfsdk:"a4_none"`
+	A4Tacacs types.Bool `tfsdk:"a4_tacacs"`
+	A4Group types.String `tfsdk:"a4_group"`
 }
 type AAAAuthorizationNetwork struct {
-	List     types.String `tfsdk:"list"`
-	A1Local  types.Bool   `tfsdk:"a1_local"`
-	A1None   types.Bool   `tfsdk:"a1_none"`
-	A1Tacacs types.Bool   `tfsdk:"a1_tacacs"`
-	A1Radius types.Bool   `tfsdk:"a1_radius"`
-	A1Group  types.String `tfsdk:"a1_group"`
-	A2Local  types.Bool   `tfsdk:"a2_local"`
-	A2None   types.Bool   `tfsdk:"a2_none"`
-	A2Tacacs types.Bool   `tfsdk:"a2_tacacs"`
-	A2Radius types.Bool   `tfsdk:"a2_radius"`
-	A2Group  types.String `tfsdk:"a2_group"`
-	A3Local  types.Bool   `tfsdk:"a3_local"`
-	A3None   types.Bool   `tfsdk:"a3_none"`
-	A3Tacacs types.Bool   `tfsdk:"a3_tacacs"`
-	A3Radius types.Bool   `tfsdk:"a3_radius"`
-	A3Group  types.String `tfsdk:"a3_group"`
-	A4Local  types.Bool   `tfsdk:"a4_local"`
-	A4None   types.Bool   `tfsdk:"a4_none"`
-	A4Tacacs types.Bool   `tfsdk:"a4_tacacs"`
-	A4Radius types.Bool   `tfsdk:"a4_radius"`
-	A4Group  types.String `tfsdk:"a4_group"`
+	List types.String `tfsdk:"list"`
+	A1Local types.Bool `tfsdk:"a1_local"`
+	A1None types.Bool `tfsdk:"a1_none"`
+	A1Tacacs types.Bool `tfsdk:"a1_tacacs"`
+	A1Radius types.Bool `tfsdk:"a1_radius"`
+	A1Group types.String `tfsdk:"a1_group"`
+	A2Local types.Bool `tfsdk:"a2_local"`
+	A2None types.Bool `tfsdk:"a2_none"`
+	A2Tacacs types.Bool `tfsdk:"a2_tacacs"`
+	A2Radius types.Bool `tfsdk:"a2_radius"`
+	A2Group types.String `tfsdk:"a2_group"`
+	A3Local types.Bool `tfsdk:"a3_local"`
+	A3None types.Bool `tfsdk:"a3_none"`
+	A3Tacacs types.Bool `tfsdk:"a3_tacacs"`
+	A3Radius types.Bool `tfsdk:"a3_radius"`
+	A3Group types.String `tfsdk:"a3_group"`
+	A4Local types.Bool `tfsdk:"a4_local"`
+	A4None types.Bool `tfsdk:"a4_none"`
+	A4Tacacs types.Bool `tfsdk:"a4_tacacs"`
+	A4Radius types.Bool `tfsdk:"a4_radius"`
+	A4Group types.String `tfsdk:"a4_group"`
 }
 
 // End of section. //template:end types
@@ -823,8 +824,8 @@ func (data AAAAuthorization) toBodyXML(ctx context.Context) string {
 
 func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Exec {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Exec[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Exec[i].List.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "exec.authorization-list").ForEach(
@@ -850,308 +851,164 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Exec[i].List = types.StringNull()
 		}
-		if value := r.Get("local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A1Local.IsNull() && !data.Exec[i].A1Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A1Local = types.BoolValue(false)
-			} else if !data.Exec[i].A1Local.IsNull() {
+		if value := r.Get("local"); !data.Exec[i].A1Local.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A1Local = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A1Local.IsNull() {
-				data.Exec[i].A1Local = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Exec[i].A1Local = types.BoolValue(false)
 			}
+		} else {
+			data.Exec[i].A1Local = types.BoolNull()
 		}
-		if value := r.Get("none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A1None.IsNull() && !data.Exec[i].A1None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A1None = types.BoolValue(false)
-			} else if !data.Exec[i].A1None.IsNull() {
+		if value := r.Get("none"); !data.Exec[i].A1None.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A1None = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A1None.IsNull() {
-				data.Exec[i].A1None = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Exec[i].A1None = types.BoolValue(false)
 			}
+		} else {
+			data.Exec[i].A1None = types.BoolNull()
 		}
-		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A1Tacacs.IsNull() && !data.Exec[i].A1Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A1Tacacs = types.BoolValue(false)
-			} else if !data.Exec[i].A1Tacacs.IsNull() {
+		if value := r.Get("groups.group-1.tacacs"); !data.Exec[i].A1Tacacs.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A1Tacacs = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A1Tacacs.IsNull() {
-				data.Exec[i].A1Tacacs = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Exec[i].A1Tacacs = types.BoolValue(false)
 			}
+		} else {
+			data.Exec[i].A1Tacacs = types.BoolNull()
 		}
-		if value := r.Get("groups.group-1.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A1Radius.IsNull() && !data.Exec[i].A1Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A1Radius = types.BoolValue(false)
-			} else if !data.Exec[i].A1Radius.IsNull() {
+		if value := r.Get("groups.group-1.radius"); !data.Exec[i].A1Radius.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A1Radius = types.BoolValue(true)
+			} else {
+				data.Exec[i].A1Radius = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A1Radius.IsNull() {
-				data.Exec[i].A1Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A1Radius = types.BoolValue(false)
-			}
+			data.Exec[i].A1Radius = types.BoolNull()
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Exec[i].A1Group.IsNull() {
 			data.Exec[i].A1Group = types.StringValue(value.String())
 		} else {
 			data.Exec[i].A1Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-2.local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A2Local.IsNull() && !data.Exec[i].A2Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A2Local = types.BoolValue(false)
-			} else if !data.Exec[i].A2Local.IsNull() {
+		if value := r.Get("groups.group-2.local"); !data.Exec[i].A2Local.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A2Local = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A2Local.IsNull() {
-				data.Exec[i].A2Local = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Exec[i].A2Local = types.BoolValue(false)
 			}
+		} else {
+			data.Exec[i].A2Local = types.BoolNull()
 		}
-		if value := r.Get("groups.group-2.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A2None.IsNull() && !data.Exec[i].A2None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A2None = types.BoolValue(false)
-			} else if !data.Exec[i].A2None.IsNull() {
+		if value := r.Get("groups.group-2.none"); !data.Exec[i].A2None.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A2None = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A2None.IsNull() {
-				data.Exec[i].A2None = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Exec[i].A2None = types.BoolValue(false)
 			}
+		} else {
+			data.Exec[i].A2None = types.BoolNull()
 		}
-		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A2Tacacs.IsNull() && !data.Exec[i].A2Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A2Tacacs = types.BoolValue(false)
-			} else if !data.Exec[i].A2Tacacs.IsNull() {
+		if value := r.Get("groups.group-2.tacacs"); !data.Exec[i].A2Tacacs.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A2Tacacs = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A2Tacacs.IsNull() {
-				data.Exec[i].A2Tacacs = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Exec[i].A2Tacacs = types.BoolValue(false)
 			}
+		} else {
+			data.Exec[i].A2Tacacs = types.BoolNull()
 		}
-		if value := r.Get("groups.group-2.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A2Radius.IsNull() && !data.Exec[i].A2Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A2Radius = types.BoolValue(false)
-			} else if !data.Exec[i].A2Radius.IsNull() {
+		if value := r.Get("groups.group-2.radius"); !data.Exec[i].A2Radius.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A2Radius = types.BoolValue(true)
+			} else {
+				data.Exec[i].A2Radius = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A2Radius.IsNull() {
-				data.Exec[i].A2Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A2Radius = types.BoolValue(false)
-			}
+			data.Exec[i].A2Radius = types.BoolNull()
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Exec[i].A2Group.IsNull() {
 			data.Exec[i].A2Group = types.StringValue(value.String())
 		} else {
 			data.Exec[i].A2Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-3.local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A3Local.IsNull() && !data.Exec[i].A3Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A3Local = types.BoolValue(false)
-			} else if !data.Exec[i].A3Local.IsNull() {
+		if value := r.Get("groups.group-3.local"); !data.Exec[i].A3Local.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A3Local = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A3Local.IsNull() {
-				data.Exec[i].A3Local = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Exec[i].A3Local = types.BoolValue(false)
 			}
+		} else {
+			data.Exec[i].A3Local = types.BoolNull()
 		}
-		if value := r.Get("groups.group-3.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A3None.IsNull() && !data.Exec[i].A3None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A3None = types.BoolValue(false)
-			} else if !data.Exec[i].A3None.IsNull() {
+		if value := r.Get("groups.group-3.none"); !data.Exec[i].A3None.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A3None = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A3None.IsNull() {
-				data.Exec[i].A3None = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Exec[i].A3None = types.BoolValue(false)
 			}
+		} else {
+			data.Exec[i].A3None = types.BoolNull()
 		}
-		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A3Tacacs.IsNull() && !data.Exec[i].A3Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A3Tacacs = types.BoolValue(false)
-			} else if !data.Exec[i].A3Tacacs.IsNull() {
+		if value := r.Get("groups.group-3.tacacs"); !data.Exec[i].A3Tacacs.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A3Tacacs = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A3Tacacs.IsNull() {
-				data.Exec[i].A3Tacacs = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Exec[i].A3Tacacs = types.BoolValue(false)
 			}
+		} else {
+			data.Exec[i].A3Tacacs = types.BoolNull()
 		}
-		if value := r.Get("groups.group-3.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A3Radius.IsNull() && !data.Exec[i].A3Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A3Radius = types.BoolValue(false)
-			} else if !data.Exec[i].A3Radius.IsNull() {
+		if value := r.Get("groups.group-3.radius"); !data.Exec[i].A3Radius.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A3Radius = types.BoolValue(true)
+			} else {
+				data.Exec[i].A3Radius = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A3Radius.IsNull() {
-				data.Exec[i].A3Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A3Radius = types.BoolValue(false)
-			}
+			data.Exec[i].A3Radius = types.BoolNull()
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.Exec[i].A3Group.IsNull() {
 			data.Exec[i].A3Group = types.StringValue(value.String())
 		} else {
 			data.Exec[i].A3Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-4.local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A4Local.IsNull() && !data.Exec[i].A4Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A4Local = types.BoolValue(false)
-			} else if !data.Exec[i].A4Local.IsNull() {
+		if value := r.Get("groups.group-4.local"); !data.Exec[i].A4Local.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A4Local = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A4Local.IsNull() {
-				data.Exec[i].A4Local = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Exec[i].A4Local = types.BoolValue(false)
 			}
+		} else {
+			data.Exec[i].A4Local = types.BoolNull()
 		}
-		if value := r.Get("groups.group-4.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A4None.IsNull() && !data.Exec[i].A4None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A4None = types.BoolValue(false)
-			} else if !data.Exec[i].A4None.IsNull() {
+		if value := r.Get("groups.group-4.none"); !data.Exec[i].A4None.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A4None = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A4None.IsNull() {
-				data.Exec[i].A4None = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Exec[i].A4None = types.BoolValue(false)
 			}
+		} else {
+			data.Exec[i].A4None = types.BoolNull()
 		}
-		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A4Tacacs.IsNull() && !data.Exec[i].A4Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A4Tacacs = types.BoolValue(false)
-			} else if !data.Exec[i].A4Tacacs.IsNull() {
+		if value := r.Get("groups.group-4.tacacs"); !data.Exec[i].A4Tacacs.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A4Tacacs = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A4Tacacs.IsNull() {
-				data.Exec[i].A4Tacacs = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Exec[i].A4Tacacs = types.BoolValue(false)
 			}
+		} else {
+			data.Exec[i].A4Tacacs = types.BoolNull()
 		}
-		if value := r.Get("groups.group-4.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A4Radius.IsNull() && !data.Exec[i].A4Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A4Radius = types.BoolValue(false)
-			} else if !data.Exec[i].A4Radius.IsNull() {
+		if value := r.Get("groups.group-4.radius"); !data.Exec[i].A4Radius.IsNull() {
+			if value.Exists() {
 				data.Exec[i].A4Radius = types.BoolValue(true)
+			} else {
+				data.Exec[i].A4Radius = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Exec[i].A4Radius.IsNull() {
-				data.Exec[i].A4Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A4Radius = types.BoolValue(false)
-			}
+			data.Exec[i].A4Radius = types.BoolNull()
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.Exec[i].A4Group.IsNull() {
 			data.Exec[i].A4Group = types.StringValue(value.String())
@@ -1160,8 +1017,8 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.Eventmanager {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Eventmanager[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Eventmanager[i].List.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "eventmanager.authorization-list").ForEach(
@@ -1187,82 +1044,46 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Eventmanager[i].List = types.StringNull()
 		}
-		if value := r.Get("local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Eventmanager[i].A1Local.IsNull() && !data.Eventmanager[i].A1Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Eventmanager[i].A1Local = types.BoolValue(false)
-			} else if !data.Eventmanager[i].A1Local.IsNull() {
+		if value := r.Get("local"); !data.Eventmanager[i].A1Local.IsNull() {
+			if value.Exists() {
 				data.Eventmanager[i].A1Local = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Eventmanager[i].A1Local.IsNull() {
-				data.Eventmanager[i].A1Local = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Eventmanager[i].A1Local = types.BoolValue(false)
 			}
+		} else {
+			data.Eventmanager[i].A1Local = types.BoolNull()
 		}
-		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Eventmanager[i].A1Tacacs.IsNull() && !data.Eventmanager[i].A1Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Eventmanager[i].A1Tacacs = types.BoolValue(false)
-			} else if !data.Eventmanager[i].A1Tacacs.IsNull() {
+		if value := r.Get("groups.group-1.tacacs"); !data.Eventmanager[i].A1Tacacs.IsNull() {
+			if value.Exists() {
 				data.Eventmanager[i].A1Tacacs = types.BoolValue(true)
+			} else {
+				data.Eventmanager[i].A1Tacacs = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Eventmanager[i].A1Tacacs.IsNull() {
-				data.Eventmanager[i].A1Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Eventmanager[i].A1Tacacs = types.BoolValue(false)
-			}
+			data.Eventmanager[i].A1Tacacs = types.BoolNull()
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Eventmanager[i].A1Group.IsNull() {
 			data.Eventmanager[i].A1Group = types.StringValue(value.String())
 		} else {
 			data.Eventmanager[i].A1Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-2.local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Eventmanager[i].A2Local.IsNull() && !data.Eventmanager[i].A2Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Eventmanager[i].A2Local = types.BoolValue(false)
-			} else if !data.Eventmanager[i].A2Local.IsNull() {
+		if value := r.Get("groups.group-2.local"); !data.Eventmanager[i].A2Local.IsNull() {
+			if value.Exists() {
 				data.Eventmanager[i].A2Local = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Eventmanager[i].A2Local.IsNull() {
-				data.Eventmanager[i].A2Local = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Eventmanager[i].A2Local = types.BoolValue(false)
 			}
+		} else {
+			data.Eventmanager[i].A2Local = types.BoolNull()
 		}
-		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Eventmanager[i].A2Tacacs.IsNull() && !data.Eventmanager[i].A2Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Eventmanager[i].A2Tacacs = types.BoolValue(false)
-			} else if !data.Eventmanager[i].A2Tacacs.IsNull() {
+		if value := r.Get("groups.group-2.tacacs"); !data.Eventmanager[i].A2Tacacs.IsNull() {
+			if value.Exists() {
 				data.Eventmanager[i].A2Tacacs = types.BoolValue(true)
+			} else {
+				data.Eventmanager[i].A2Tacacs = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Eventmanager[i].A2Tacacs.IsNull() {
-				data.Eventmanager[i].A2Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Eventmanager[i].A2Tacacs = types.BoolValue(false)
-			}
+			data.Eventmanager[i].A2Tacacs = types.BoolNull()
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Eventmanager[i].A2Group.IsNull() {
 			data.Eventmanager[i].A2Group = types.StringValue(value.String())
@@ -1271,8 +1092,8 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.Commands {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Commands[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Commands[i].List.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "commands.authorization-list").ForEach(
@@ -1298,236 +1119,128 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Commands[i].List = types.StringNull()
 		}
-		if value := r.Get("local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A1Local.IsNull() && !data.Commands[i].A1Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A1Local = types.BoolValue(false)
-			} else if !data.Commands[i].A1Local.IsNull() {
+		if value := r.Get("local"); !data.Commands[i].A1Local.IsNull() {
+			if value.Exists() {
 				data.Commands[i].A1Local = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Commands[i].A1Local.IsNull() {
-				data.Commands[i].A1Local = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Commands[i].A1Local = types.BoolValue(false)
 			}
+		} else {
+			data.Commands[i].A1Local = types.BoolNull()
 		}
-		if value := r.Get("none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A1None.IsNull() && !data.Commands[i].A1None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A1None = types.BoolValue(false)
-			} else if !data.Commands[i].A1None.IsNull() {
+		if value := r.Get("none"); !data.Commands[i].A1None.IsNull() {
+			if value.Exists() {
 				data.Commands[i].A1None = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Commands[i].A1None.IsNull() {
-				data.Commands[i].A1None = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Commands[i].A1None = types.BoolValue(false)
 			}
+		} else {
+			data.Commands[i].A1None = types.BoolNull()
 		}
-		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A1Tacacs.IsNull() && !data.Commands[i].A1Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A1Tacacs = types.BoolValue(false)
-			} else if !data.Commands[i].A1Tacacs.IsNull() {
+		if value := r.Get("groups.group-1.tacacs"); !data.Commands[i].A1Tacacs.IsNull() {
+			if value.Exists() {
 				data.Commands[i].A1Tacacs = types.BoolValue(true)
+			} else {
+				data.Commands[i].A1Tacacs = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Commands[i].A1Tacacs.IsNull() {
-				data.Commands[i].A1Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A1Tacacs = types.BoolValue(false)
-			}
+			data.Commands[i].A1Tacacs = types.BoolNull()
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Commands[i].A1Group.IsNull() {
 			data.Commands[i].A1Group = types.StringValue(value.String())
 		} else {
 			data.Commands[i].A1Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-2.local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A2Local.IsNull() && !data.Commands[i].A2Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A2Local = types.BoolValue(false)
-			} else if !data.Commands[i].A2Local.IsNull() {
+		if value := r.Get("groups.group-2.local"); !data.Commands[i].A2Local.IsNull() {
+			if value.Exists() {
 				data.Commands[i].A2Local = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Commands[i].A2Local.IsNull() {
-				data.Commands[i].A2Local = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Commands[i].A2Local = types.BoolValue(false)
 			}
+		} else {
+			data.Commands[i].A2Local = types.BoolNull()
 		}
-		if value := r.Get("groups.group-2.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A2None.IsNull() && !data.Commands[i].A2None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A2None = types.BoolValue(false)
-			} else if !data.Commands[i].A2None.IsNull() {
+		if value := r.Get("groups.group-2.none"); !data.Commands[i].A2None.IsNull() {
+			if value.Exists() {
 				data.Commands[i].A2None = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Commands[i].A2None.IsNull() {
-				data.Commands[i].A2None = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Commands[i].A2None = types.BoolValue(false)
 			}
+		} else {
+			data.Commands[i].A2None = types.BoolNull()
 		}
-		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A2Tacacs.IsNull() && !data.Commands[i].A2Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A2Tacacs = types.BoolValue(false)
-			} else if !data.Commands[i].A2Tacacs.IsNull() {
+		if value := r.Get("groups.group-2.tacacs"); !data.Commands[i].A2Tacacs.IsNull() {
+			if value.Exists() {
 				data.Commands[i].A2Tacacs = types.BoolValue(true)
+			} else {
+				data.Commands[i].A2Tacacs = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Commands[i].A2Tacacs.IsNull() {
-				data.Commands[i].A2Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A2Tacacs = types.BoolValue(false)
-			}
+			data.Commands[i].A2Tacacs = types.BoolNull()
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Commands[i].A2Group.IsNull() {
 			data.Commands[i].A2Group = types.StringValue(value.String())
 		} else {
 			data.Commands[i].A2Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-3.local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A3Local.IsNull() && !data.Commands[i].A3Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A3Local = types.BoolValue(false)
-			} else if !data.Commands[i].A3Local.IsNull() {
+		if value := r.Get("groups.group-3.local"); !data.Commands[i].A3Local.IsNull() {
+			if value.Exists() {
 				data.Commands[i].A3Local = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Commands[i].A3Local.IsNull() {
-				data.Commands[i].A3Local = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Commands[i].A3Local = types.BoolValue(false)
 			}
+		} else {
+			data.Commands[i].A3Local = types.BoolNull()
 		}
-		if value := r.Get("groups.group-3.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A3None.IsNull() && !data.Commands[i].A3None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A3None = types.BoolValue(false)
-			} else if !data.Commands[i].A3None.IsNull() {
+		if value := r.Get("groups.group-3.none"); !data.Commands[i].A3None.IsNull() {
+			if value.Exists() {
 				data.Commands[i].A3None = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Commands[i].A3None.IsNull() {
-				data.Commands[i].A3None = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Commands[i].A3None = types.BoolValue(false)
 			}
+		} else {
+			data.Commands[i].A3None = types.BoolNull()
 		}
-		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A3Tacacs.IsNull() && !data.Commands[i].A3Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A3Tacacs = types.BoolValue(false)
-			} else if !data.Commands[i].A3Tacacs.IsNull() {
+		if value := r.Get("groups.group-3.tacacs"); !data.Commands[i].A3Tacacs.IsNull() {
+			if value.Exists() {
 				data.Commands[i].A3Tacacs = types.BoolValue(true)
+			} else {
+				data.Commands[i].A3Tacacs = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Commands[i].A3Tacacs.IsNull() {
-				data.Commands[i].A3Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A3Tacacs = types.BoolValue(false)
-			}
+			data.Commands[i].A3Tacacs = types.BoolNull()
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.Commands[i].A3Group.IsNull() {
 			data.Commands[i].A3Group = types.StringValue(value.String())
 		} else {
 			data.Commands[i].A3Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-4.local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A4Local.IsNull() && !data.Commands[i].A4Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A4Local = types.BoolValue(false)
-			} else if !data.Commands[i].A4Local.IsNull() {
+		if value := r.Get("groups.group-4.local"); !data.Commands[i].A4Local.IsNull() {
+			if value.Exists() {
 				data.Commands[i].A4Local = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Commands[i].A4Local.IsNull() {
-				data.Commands[i].A4Local = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Commands[i].A4Local = types.BoolValue(false)
 			}
+		} else {
+			data.Commands[i].A4Local = types.BoolNull()
 		}
-		if value := r.Get("groups.group-4.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A4None.IsNull() && !data.Commands[i].A4None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A4None = types.BoolValue(false)
-			} else if !data.Commands[i].A4None.IsNull() {
+		if value := r.Get("groups.group-4.none"); !data.Commands[i].A4None.IsNull() {
+			if value.Exists() {
 				data.Commands[i].A4None = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Commands[i].A4None.IsNull() {
-				data.Commands[i].A4None = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Commands[i].A4None = types.BoolValue(false)
 			}
+		} else {
+			data.Commands[i].A4None = types.BoolNull()
 		}
-		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A4Tacacs.IsNull() && !data.Commands[i].A4Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A4Tacacs = types.BoolValue(false)
-			} else if !data.Commands[i].A4Tacacs.IsNull() {
+		if value := r.Get("groups.group-4.tacacs"); !data.Commands[i].A4Tacacs.IsNull() {
+			if value.Exists() {
 				data.Commands[i].A4Tacacs = types.BoolValue(true)
+			} else {
+				data.Commands[i].A4Tacacs = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Commands[i].A4Tacacs.IsNull() {
-				data.Commands[i].A4Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A4Tacacs = types.BoolValue(false)
-			}
+			data.Commands[i].A4Tacacs = types.BoolNull()
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.Commands[i].A4Group.IsNull() {
 			data.Commands[i].A4Group = types.StringValue(value.String())
@@ -1536,8 +1249,8 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.Network {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Network[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Network[i].List.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "network.authorization-list").ForEach(
@@ -1563,308 +1276,164 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Network[i].List = types.StringNull()
 		}
-		if value := r.Get("local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A1Local.IsNull() && !data.Network[i].A1Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A1Local = types.BoolValue(false)
-			} else if !data.Network[i].A1Local.IsNull() {
+		if value := r.Get("local"); !data.Network[i].A1Local.IsNull() {
+			if value.Exists() {
 				data.Network[i].A1Local = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A1Local.IsNull() {
-				data.Network[i].A1Local = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Network[i].A1Local = types.BoolValue(false)
 			}
+		} else {
+			data.Network[i].A1Local = types.BoolNull()
 		}
-		if value := r.Get("none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A1None.IsNull() && !data.Network[i].A1None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A1None = types.BoolValue(false)
-			} else if !data.Network[i].A1None.IsNull() {
+		if value := r.Get("none"); !data.Network[i].A1None.IsNull() {
+			if value.Exists() {
 				data.Network[i].A1None = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A1None.IsNull() {
-				data.Network[i].A1None = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Network[i].A1None = types.BoolValue(false)
 			}
+		} else {
+			data.Network[i].A1None = types.BoolNull()
 		}
-		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A1Tacacs.IsNull() && !data.Network[i].A1Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A1Tacacs = types.BoolValue(false)
-			} else if !data.Network[i].A1Tacacs.IsNull() {
+		if value := r.Get("groups.group-1.tacacs"); !data.Network[i].A1Tacacs.IsNull() {
+			if value.Exists() {
 				data.Network[i].A1Tacacs = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A1Tacacs.IsNull() {
-				data.Network[i].A1Tacacs = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Network[i].A1Tacacs = types.BoolValue(false)
 			}
+		} else {
+			data.Network[i].A1Tacacs = types.BoolNull()
 		}
-		if value := r.Get("groups.group-1.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A1Radius.IsNull() && !data.Network[i].A1Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A1Radius = types.BoolValue(false)
-			} else if !data.Network[i].A1Radius.IsNull() {
+		if value := r.Get("groups.group-1.radius"); !data.Network[i].A1Radius.IsNull() {
+			if value.Exists() {
 				data.Network[i].A1Radius = types.BoolValue(true)
+			} else {
+				data.Network[i].A1Radius = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A1Radius.IsNull() {
-				data.Network[i].A1Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A1Radius = types.BoolValue(false)
-			}
+			data.Network[i].A1Radius = types.BoolNull()
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Network[i].A1Group.IsNull() {
 			data.Network[i].A1Group = types.StringValue(value.String())
 		} else {
 			data.Network[i].A1Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-2.local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A2Local.IsNull() && !data.Network[i].A2Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A2Local = types.BoolValue(false)
-			} else if !data.Network[i].A2Local.IsNull() {
+		if value := r.Get("groups.group-2.local"); !data.Network[i].A2Local.IsNull() {
+			if value.Exists() {
 				data.Network[i].A2Local = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A2Local.IsNull() {
-				data.Network[i].A2Local = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Network[i].A2Local = types.BoolValue(false)
 			}
+		} else {
+			data.Network[i].A2Local = types.BoolNull()
 		}
-		if value := r.Get("groups.group-2.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A2None.IsNull() && !data.Network[i].A2None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A2None = types.BoolValue(false)
-			} else if !data.Network[i].A2None.IsNull() {
+		if value := r.Get("groups.group-2.none"); !data.Network[i].A2None.IsNull() {
+			if value.Exists() {
 				data.Network[i].A2None = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A2None.IsNull() {
-				data.Network[i].A2None = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Network[i].A2None = types.BoolValue(false)
 			}
+		} else {
+			data.Network[i].A2None = types.BoolNull()
 		}
-		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A2Tacacs.IsNull() && !data.Network[i].A2Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A2Tacacs = types.BoolValue(false)
-			} else if !data.Network[i].A2Tacacs.IsNull() {
+		if value := r.Get("groups.group-2.tacacs"); !data.Network[i].A2Tacacs.IsNull() {
+			if value.Exists() {
 				data.Network[i].A2Tacacs = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A2Tacacs.IsNull() {
-				data.Network[i].A2Tacacs = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Network[i].A2Tacacs = types.BoolValue(false)
 			}
+		} else {
+			data.Network[i].A2Tacacs = types.BoolNull()
 		}
-		if value := r.Get("groups.group-2.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A2Radius.IsNull() && !data.Network[i].A2Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A2Radius = types.BoolValue(false)
-			} else if !data.Network[i].A2Radius.IsNull() {
+		if value := r.Get("groups.group-2.radius"); !data.Network[i].A2Radius.IsNull() {
+			if value.Exists() {
 				data.Network[i].A2Radius = types.BoolValue(true)
+			} else {
+				data.Network[i].A2Radius = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A2Radius.IsNull() {
-				data.Network[i].A2Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A2Radius = types.BoolValue(false)
-			}
+			data.Network[i].A2Radius = types.BoolNull()
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Network[i].A2Group.IsNull() {
 			data.Network[i].A2Group = types.StringValue(value.String())
 		} else {
 			data.Network[i].A2Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-3.local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A3Local.IsNull() && !data.Network[i].A3Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A3Local = types.BoolValue(false)
-			} else if !data.Network[i].A3Local.IsNull() {
+		if value := r.Get("groups.group-3.local"); !data.Network[i].A3Local.IsNull() {
+			if value.Exists() {
 				data.Network[i].A3Local = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A3Local.IsNull() {
-				data.Network[i].A3Local = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Network[i].A3Local = types.BoolValue(false)
 			}
+		} else {
+			data.Network[i].A3Local = types.BoolNull()
 		}
-		if value := r.Get("groups.group-3.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A3None.IsNull() && !data.Network[i].A3None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A3None = types.BoolValue(false)
-			} else if !data.Network[i].A3None.IsNull() {
+		if value := r.Get("groups.group-3.none"); !data.Network[i].A3None.IsNull() {
+			if value.Exists() {
 				data.Network[i].A3None = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A3None.IsNull() {
-				data.Network[i].A3None = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Network[i].A3None = types.BoolValue(false)
 			}
+		} else {
+			data.Network[i].A3None = types.BoolNull()
 		}
-		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A3Tacacs.IsNull() && !data.Network[i].A3Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A3Tacacs = types.BoolValue(false)
-			} else if !data.Network[i].A3Tacacs.IsNull() {
+		if value := r.Get("groups.group-3.tacacs"); !data.Network[i].A3Tacacs.IsNull() {
+			if value.Exists() {
 				data.Network[i].A3Tacacs = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A3Tacacs.IsNull() {
-				data.Network[i].A3Tacacs = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Network[i].A3Tacacs = types.BoolValue(false)
 			}
+		} else {
+			data.Network[i].A3Tacacs = types.BoolNull()
 		}
-		if value := r.Get("groups.group-3.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A3Radius.IsNull() && !data.Network[i].A3Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A3Radius = types.BoolValue(false)
-			} else if !data.Network[i].A3Radius.IsNull() {
+		if value := r.Get("groups.group-3.radius"); !data.Network[i].A3Radius.IsNull() {
+			if value.Exists() {
 				data.Network[i].A3Radius = types.BoolValue(true)
+			} else {
+				data.Network[i].A3Radius = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A3Radius.IsNull() {
-				data.Network[i].A3Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A3Radius = types.BoolValue(false)
-			}
+			data.Network[i].A3Radius = types.BoolNull()
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.Network[i].A3Group.IsNull() {
 			data.Network[i].A3Group = types.StringValue(value.String())
 		} else {
 			data.Network[i].A3Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-4.local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A4Local.IsNull() && !data.Network[i].A4Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A4Local = types.BoolValue(false)
-			} else if !data.Network[i].A4Local.IsNull() {
+		if value := r.Get("groups.group-4.local"); !data.Network[i].A4Local.IsNull() {
+			if value.Exists() {
 				data.Network[i].A4Local = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A4Local.IsNull() {
-				data.Network[i].A4Local = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Network[i].A4Local = types.BoolValue(false)
 			}
+		} else {
+			data.Network[i].A4Local = types.BoolNull()
 		}
-		if value := r.Get("groups.group-4.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A4None.IsNull() && !data.Network[i].A4None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A4None = types.BoolValue(false)
-			} else if !data.Network[i].A4None.IsNull() {
+		if value := r.Get("groups.group-4.none"); !data.Network[i].A4None.IsNull() {
+			if value.Exists() {
 				data.Network[i].A4None = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A4None.IsNull() {
-				data.Network[i].A4None = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Network[i].A4None = types.BoolValue(false)
 			}
+		} else {
+			data.Network[i].A4None = types.BoolNull()
 		}
-		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A4Tacacs.IsNull() && !data.Network[i].A4Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A4Tacacs = types.BoolValue(false)
-			} else if !data.Network[i].A4Tacacs.IsNull() {
+		if value := r.Get("groups.group-4.tacacs"); !data.Network[i].A4Tacacs.IsNull() {
+			if value.Exists() {
 				data.Network[i].A4Tacacs = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A4Tacacs.IsNull() {
-				data.Network[i].A4Tacacs = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Network[i].A4Tacacs = types.BoolValue(false)
 			}
+		} else {
+			data.Network[i].A4Tacacs = types.BoolNull()
 		}
-		if value := r.Get("groups.group-4.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A4Radius.IsNull() && !data.Network[i].A4Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A4Radius = types.BoolValue(false)
-			} else if !data.Network[i].A4Radius.IsNull() {
+		if value := r.Get("groups.group-4.radius"); !data.Network[i].A4Radius.IsNull() {
+			if value.Exists() {
 				data.Network[i].A4Radius = types.BoolValue(true)
+			} else {
+				data.Network[i].A4Radius = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Network[i].A4Radius.IsNull() {
-				data.Network[i].A4Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A4Radius = types.BoolValue(false)
-			}
+			data.Network[i].A4Radius = types.BoolNull()
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.Network[i].A4Group.IsNull() {
 			data.Network[i].A4Group = types.StringValue(value.String())
@@ -1880,11 +1449,11 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 
 func (data *AAAAuthorization) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	for i := range data.Exec {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Exec[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Exec[i].List.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/exec/authorization-list").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/exec/authorization-list").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2073,11 +1642,11 @@ func (data *AAAAuthorization) updateFromBodyXML(ctx context.Context, res xmldot.
 		}
 	}
 	for i := range data.Eventmanager {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Eventmanager[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Eventmanager[i].List.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/eventmanager/authorization-list").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/eventmanager/authorization-list").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2148,11 +1717,11 @@ func (data *AAAAuthorization) updateFromBodyXML(ctx context.Context, res xmldot.
 		}
 	}
 	for i := range data.Commands {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Commands[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Commands[i].List.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/commands/authorization-list").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/commands/authorization-list").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2305,11 +1874,11 @@ func (data *AAAAuthorization) updateFromBodyXML(ctx context.Context, res xmldot.
 		}
 	}
 	for i := range data.Network {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Network[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Network[i].List.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/network/authorization-list").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/network/authorization-list").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2508,7 +2077,7 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "exec.authorization-list"); value.Exists() {
+	if value := res.Get(prefix+"exec.authorization-list"); value.Exists() {
 		data.Exec = make([]AAAAuthorizationExec, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAuthorizationExec{}
@@ -2518,22 +2087,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolNull()
+				item.A1Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolNull()
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolNull()
+				item.A1Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -2541,22 +2110,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolNull()
+				item.A2Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolNull()
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolNull()
+				item.A2Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -2564,22 +2133,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.local"); cValue.Exists() {
 				item.A3Local = types.BoolValue(true)
 			} else {
-				item.A3Local = types.BoolNull()
+				item.A3Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolNull()
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolNull()
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolNull()
+				item.A3Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -2587,22 +2156,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.local"); cValue.Exists() {
 				item.A4Local = types.BoolValue(true)
 			} else {
-				item.A4Local = types.BoolNull()
+				item.A4Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolNull()
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolNull()
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolNull()
+				item.A4Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -2611,7 +2180,7 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "eventmanager.authorization-list"); value.Exists() {
+	if value := res.Get(prefix+"eventmanager.authorization-list"); value.Exists() {
 		data.Eventmanager = make([]AAAAuthorizationEventmanager, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAuthorizationEventmanager{}
@@ -2621,12 +2190,12 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolNull()
+				item.A1Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -2634,12 +2203,12 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolNull()
+				item.A2Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -2648,7 +2217,7 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "commands.authorization-list"); value.Exists() {
+	if value := res.Get(prefix+"commands.authorization-list"); value.Exists() {
 		data.Commands = make([]AAAAuthorizationCommands, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAuthorizationCommands{}
@@ -2658,17 +2227,17 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolNull()
+				item.A1Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolNull()
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -2676,17 +2245,17 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolNull()
+				item.A2Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolNull()
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -2694,17 +2263,17 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.local"); cValue.Exists() {
 				item.A3Local = types.BoolValue(true)
 			} else {
-				item.A3Local = types.BoolNull()
+				item.A3Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolNull()
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolNull()
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -2712,17 +2281,17 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.local"); cValue.Exists() {
 				item.A4Local = types.BoolValue(true)
 			} else {
-				item.A4Local = types.BoolNull()
+				item.A4Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolNull()
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolNull()
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -2731,7 +2300,7 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "network.authorization-list"); value.Exists() {
+	if value := res.Get(prefix+"network.authorization-list"); value.Exists() {
 		data.Network = make([]AAAAuthorizationNetwork, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAuthorizationNetwork{}
@@ -2741,22 +2310,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolNull()
+				item.A1Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolNull()
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolNull()
+				item.A1Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -2764,22 +2333,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolNull()
+				item.A2Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolNull()
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolNull()
+				item.A2Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -2787,22 +2356,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.local"); cValue.Exists() {
 				item.A3Local = types.BoolValue(true)
 			} else {
-				item.A3Local = types.BoolNull()
+				item.A3Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolNull()
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolNull()
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolNull()
+				item.A3Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -2810,22 +2379,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.local"); cValue.Exists() {
 				item.A4Local = types.BoolValue(true)
 			} else {
-				item.A4Local = types.BoolNull()
+				item.A4Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolNull()
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolNull()
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolNull()
+				item.A4Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -2845,7 +2414,7 @@ func (data *AAAAuthorizationData) fromBody(ctx context.Context, res gjson.Result
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "exec.authorization-list"); value.Exists() {
+	if value := res.Get(prefix+"exec.authorization-list"); value.Exists() {
 		data.Exec = make([]AAAAuthorizationExec, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAuthorizationExec{}
@@ -2948,7 +2517,7 @@ func (data *AAAAuthorizationData) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix + "eventmanager.authorization-list"); value.Exists() {
+	if value := res.Get(prefix+"eventmanager.authorization-list"); value.Exists() {
 		data.Eventmanager = make([]AAAAuthorizationEventmanager, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAuthorizationEventmanager{}
@@ -2985,7 +2554,7 @@ func (data *AAAAuthorizationData) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix + "commands.authorization-list"); value.Exists() {
+	if value := res.Get(prefix+"commands.authorization-list"); value.Exists() {
 		data.Commands = make([]AAAAuthorizationCommands, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAuthorizationCommands{}
@@ -3068,7 +2637,7 @@ func (data *AAAAuthorizationData) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix + "network.authorization-list"); value.Exists() {
+	if value := res.Get(prefix+"network.authorization-list"); value.Exists() {
 		data.Network = make([]AAAAuthorizationNetwork, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAuthorizationNetwork{}
@@ -3178,7 +2747,7 @@ func (data *AAAAuthorizationData) fromBody(ctx context.Context, res gjson.Result
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/exec/authorization-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/exec/authorization-list"); value.Exists() {
 		data.Exec = make([]AAAAuthorizationExec, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAuthorizationExec{}
@@ -3188,22 +2757,22 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolNull()
+				item.A1Local = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolNull()
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolNull()
+				item.A1Radius = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -3211,22 +2780,22 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolNull()
+				item.A2Local = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolNull()
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolNull()
+				item.A2Radius = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -3234,22 +2803,22 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
 				item.A3Local = types.BoolValue(true)
 			} else {
-				item.A3Local = types.BoolNull()
+				item.A3Local = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolNull()
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolNull()
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolNull()
+				item.A3Radius = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -3257,22 +2826,22 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
 				item.A4Local = types.BoolValue(true)
 			} else {
-				item.A4Local = types.BoolNull()
+				item.A4Local = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolNull()
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolNull()
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolNull()
+				item.A4Radius = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -3281,7 +2850,7 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eventmanager/authorization-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/eventmanager/authorization-list"); value.Exists() {
 		data.Eventmanager = make([]AAAAuthorizationEventmanager, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAuthorizationEventmanager{}
@@ -3291,12 +2860,12 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolNull()
+				item.A1Local = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -3304,12 +2873,12 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolNull()
+				item.A2Local = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -3318,7 +2887,7 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/commands/authorization-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/commands/authorization-list"); value.Exists() {
 		data.Commands = make([]AAAAuthorizationCommands, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAuthorizationCommands{}
@@ -3328,17 +2897,17 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolNull()
+				item.A1Local = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolNull()
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -3346,17 +2915,17 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolNull()
+				item.A2Local = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolNull()
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -3364,17 +2933,17 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
 				item.A3Local = types.BoolValue(true)
 			} else {
-				item.A3Local = types.BoolNull()
+				item.A3Local = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolNull()
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolNull()
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -3382,17 +2951,17 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
 				item.A4Local = types.BoolValue(true)
 			} else {
-				item.A4Local = types.BoolNull()
+				item.A4Local = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolNull()
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolNull()
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -3401,7 +2970,7 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/network/authorization-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/network/authorization-list"); value.Exists() {
 		data.Network = make([]AAAAuthorizationNetwork, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAuthorizationNetwork{}
@@ -3411,22 +2980,22 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolNull()
+				item.A1Local = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolNull()
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolNull()
+				item.A1Radius = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -3434,22 +3003,22 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolNull()
+				item.A2Local = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolNull()
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolNull()
+				item.A2Radius = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -3457,22 +3026,22 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
 				item.A3Local = types.BoolValue(true)
 			} else {
-				item.A3Local = types.BoolNull()
+				item.A3Local = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolNull()
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolNull()
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolNull()
+				item.A3Radius = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -3480,22 +3049,22 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
 				item.A4Local = types.BoolValue(true)
 			} else {
-				item.A4Local = types.BoolNull()
+				item.A4Local = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolNull()
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolNull()
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolNull()
+				item.A4Radius = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -3511,102 +3080,102 @@ func (data *AAAAuthorization) fromBodyXML(ctx context.Context, res xmldot.Result
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *AAAAuthorizationData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/exec/authorization-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/exec/authorization-list"); value.Exists() {
 		data.Exec = make([]AAAAuthorizationExec, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAuthorizationExec{}
 			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
 				item.List = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
-				item.A1Local = types.BoolValue(true)
-			} else {
-				item.A1Local = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
-				item.A1None = types.BoolValue(true)
-			} else {
-				item.A1None = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
-				item.A1Tacacs = types.BoolValue(true)
-			} else {
-				item.A1Tacacs = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
-				item.A1Radius = types.BoolValue(true)
-			} else {
-				item.A1Radius = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
+			item.A1Local = types.BoolValue(true)
+		} else {
+			item.A1Local = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
+			item.A1None = types.BoolValue(true)
+		} else {
+			item.A1None = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
+			item.A1Tacacs = types.BoolValue(true)
+		} else {
+			item.A1Tacacs = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
+			item.A1Radius = types.BoolValue(true)
+		} else {
+			item.A1Radius = types.BoolValue(false)
+		}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
-				item.A2Local = types.BoolValue(true)
-			} else {
-				item.A2Local = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
-				item.A2None = types.BoolValue(true)
-			} else {
-				item.A2None = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
-				item.A2Tacacs = types.BoolValue(true)
-			} else {
-				item.A2Tacacs = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
-				item.A2Radius = types.BoolValue(true)
-			} else {
-				item.A2Radius = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
+			item.A2Local = types.BoolValue(true)
+		} else {
+			item.A2Local = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
+			item.A2None = types.BoolValue(true)
+		} else {
+			item.A2None = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
+			item.A2Tacacs = types.BoolValue(true)
+		} else {
+			item.A2Tacacs = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
+			item.A2Radius = types.BoolValue(true)
+		} else {
+			item.A2Radius = types.BoolValue(false)
+		}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
-				item.A3Local = types.BoolValue(true)
-			} else {
-				item.A3Local = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
-				item.A3None = types.BoolValue(true)
-			} else {
-				item.A3None = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
-				item.A3Tacacs = types.BoolValue(true)
-			} else {
-				item.A3Tacacs = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
-				item.A3Radius = types.BoolValue(true)
-			} else {
-				item.A3Radius = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
+			item.A3Local = types.BoolValue(true)
+		} else {
+			item.A3Local = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
+			item.A3None = types.BoolValue(true)
+		} else {
+			item.A3None = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
+			item.A3Tacacs = types.BoolValue(true)
+		} else {
+			item.A3Tacacs = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
+			item.A3Radius = types.BoolValue(true)
+		} else {
+			item.A3Radius = types.BoolValue(false)
+		}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
-				item.A4Local = types.BoolValue(true)
-			} else {
-				item.A4Local = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
-				item.A4None = types.BoolValue(true)
-			} else {
-				item.A4None = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
-				item.A4Tacacs = types.BoolValue(true)
-			} else {
-				item.A4Tacacs = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
-				item.A4Radius = types.BoolValue(true)
-			} else {
-				item.A4Radius = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
+			item.A4Local = types.BoolValue(true)
+		} else {
+			item.A4Local = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
+			item.A4None = types.BoolValue(true)
+		} else {
+			item.A4None = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
+			item.A4Tacacs = types.BoolValue(true)
+		} else {
+			item.A4Tacacs = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
+			item.A4Radius = types.BoolValue(true)
+		} else {
+			item.A4Radius = types.BoolValue(false)
+		}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
 			}
@@ -3614,36 +3183,36 @@ func (data *AAAAuthorizationData) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eventmanager/authorization-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/eventmanager/authorization-list"); value.Exists() {
 		data.Eventmanager = make([]AAAAuthorizationEventmanager, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAuthorizationEventmanager{}
 			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
 				item.List = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
-				item.A1Local = types.BoolValue(true)
-			} else {
-				item.A1Local = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
-				item.A1Tacacs = types.BoolValue(true)
-			} else {
-				item.A1Tacacs = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
+			item.A1Local = types.BoolValue(true)
+		} else {
+			item.A1Local = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
+			item.A1Tacacs = types.BoolValue(true)
+		} else {
+			item.A1Tacacs = types.BoolValue(false)
+		}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
-				item.A2Local = types.BoolValue(true)
-			} else {
-				item.A2Local = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
-				item.A2Tacacs = types.BoolValue(true)
-			} else {
-				item.A2Tacacs = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
+			item.A2Local = types.BoolValue(true)
+		} else {
+			item.A2Local = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
+			item.A2Tacacs = types.BoolValue(true)
+		} else {
+			item.A2Tacacs = types.BoolValue(false)
+		}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
 			}
@@ -3651,82 +3220,82 @@ func (data *AAAAuthorizationData) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/commands/authorization-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/commands/authorization-list"); value.Exists() {
 		data.Commands = make([]AAAAuthorizationCommands, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAuthorizationCommands{}
 			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
 				item.List = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
-				item.A1Local = types.BoolValue(true)
-			} else {
-				item.A1Local = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
-				item.A1None = types.BoolValue(true)
-			} else {
-				item.A1None = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
-				item.A1Tacacs = types.BoolValue(true)
-			} else {
-				item.A1Tacacs = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
+			item.A1Local = types.BoolValue(true)
+		} else {
+			item.A1Local = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
+			item.A1None = types.BoolValue(true)
+		} else {
+			item.A1None = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
+			item.A1Tacacs = types.BoolValue(true)
+		} else {
+			item.A1Tacacs = types.BoolValue(false)
+		}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
-				item.A2Local = types.BoolValue(true)
-			} else {
-				item.A2Local = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
-				item.A2None = types.BoolValue(true)
-			} else {
-				item.A2None = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
-				item.A2Tacacs = types.BoolValue(true)
-			} else {
-				item.A2Tacacs = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
+			item.A2Local = types.BoolValue(true)
+		} else {
+			item.A2Local = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
+			item.A2None = types.BoolValue(true)
+		} else {
+			item.A2None = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
+			item.A2Tacacs = types.BoolValue(true)
+		} else {
+			item.A2Tacacs = types.BoolValue(false)
+		}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
-				item.A3Local = types.BoolValue(true)
-			} else {
-				item.A3Local = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
-				item.A3None = types.BoolValue(true)
-			} else {
-				item.A3None = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
-				item.A3Tacacs = types.BoolValue(true)
-			} else {
-				item.A3Tacacs = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
+			item.A3Local = types.BoolValue(true)
+		} else {
+			item.A3Local = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
+			item.A3None = types.BoolValue(true)
+		} else {
+			item.A3None = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
+			item.A3Tacacs = types.BoolValue(true)
+		} else {
+			item.A3Tacacs = types.BoolValue(false)
+		}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
-				item.A4Local = types.BoolValue(true)
-			} else {
-				item.A4Local = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
-				item.A4None = types.BoolValue(true)
-			} else {
-				item.A4None = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
-				item.A4Tacacs = types.BoolValue(true)
-			} else {
-				item.A4Tacacs = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
+			item.A4Local = types.BoolValue(true)
+		} else {
+			item.A4Local = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
+			item.A4None = types.BoolValue(true)
+		} else {
+			item.A4None = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
+			item.A4Tacacs = types.BoolValue(true)
+		} else {
+			item.A4Tacacs = types.BoolValue(false)
+		}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
 			}
@@ -3734,102 +3303,102 @@ func (data *AAAAuthorizationData) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/network/authorization-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/network/authorization-list"); value.Exists() {
 		data.Network = make([]AAAAuthorizationNetwork, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAuthorizationNetwork{}
 			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
 				item.List = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
-				item.A1Local = types.BoolValue(true)
-			} else {
-				item.A1Local = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
-				item.A1None = types.BoolValue(true)
-			} else {
-				item.A1None = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
-				item.A1Tacacs = types.BoolValue(true)
-			} else {
-				item.A1Tacacs = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
-				item.A1Radius = types.BoolValue(true)
-			} else {
-				item.A1Radius = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
+			item.A1Local = types.BoolValue(true)
+		} else {
+			item.A1Local = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
+			item.A1None = types.BoolValue(true)
+		} else {
+			item.A1None = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
+			item.A1Tacacs = types.BoolValue(true)
+		} else {
+			item.A1Tacacs = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
+			item.A1Radius = types.BoolValue(true)
+		} else {
+			item.A1Radius = types.BoolValue(false)
+		}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
-				item.A2Local = types.BoolValue(true)
-			} else {
-				item.A2Local = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
-				item.A2None = types.BoolValue(true)
-			} else {
-				item.A2None = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
-				item.A2Tacacs = types.BoolValue(true)
-			} else {
-				item.A2Tacacs = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
-				item.A2Radius = types.BoolValue(true)
-			} else {
-				item.A2Radius = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
+			item.A2Local = types.BoolValue(true)
+		} else {
+			item.A2Local = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
+			item.A2None = types.BoolValue(true)
+		} else {
+			item.A2None = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
+			item.A2Tacacs = types.BoolValue(true)
+		} else {
+			item.A2Tacacs = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
+			item.A2Radius = types.BoolValue(true)
+		} else {
+			item.A2Radius = types.BoolValue(false)
+		}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
-				item.A3Local = types.BoolValue(true)
-			} else {
-				item.A3Local = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
-				item.A3None = types.BoolValue(true)
-			} else {
-				item.A3None = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
-				item.A3Tacacs = types.BoolValue(true)
-			} else {
-				item.A3Tacacs = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
-				item.A3Radius = types.BoolValue(true)
-			} else {
-				item.A3Radius = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
+			item.A3Local = types.BoolValue(true)
+		} else {
+			item.A3Local = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
+			item.A3None = types.BoolValue(true)
+		} else {
+			item.A3None = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
+			item.A3Tacacs = types.BoolValue(true)
+		} else {
+			item.A3Tacacs = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
+			item.A3Radius = types.BoolValue(true)
+		} else {
+			item.A3Radius = types.BoolValue(false)
+		}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
 			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
-				item.A4Local = types.BoolValue(true)
-			} else {
-				item.A4Local = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
-				item.A4None = types.BoolValue(true)
-			} else {
-				item.A4None = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
-				item.A4Tacacs = types.BoolValue(true)
-			} else {
-				item.A4Tacacs = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
-				item.A4Radius = types.BoolValue(true)
-			} else {
-				item.A4Radius = types.BoolValue(false)
-			}
+		if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
+			item.A4Local = types.BoolValue(true)
+		} else {
+			item.A4Local = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
+			item.A4None = types.BoolValue(true)
+		} else {
+			item.A4None = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
+			item.A4Tacacs = types.BoolValue(true)
+		} else {
+			item.A4Tacacs = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
+			item.A4Radius = types.BoolValue(true)
+		} else {
+			item.A4Radius = types.BoolValue(false)
+		}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
 			}
@@ -3846,11 +3415,11 @@ func (data *AAAAuthorizationData) fromBodyXML(ctx context.Context, res xmldot.Re
 func (data *AAAAuthorization) getDeletedItems(ctx context.Context, state AAAAuthorization) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.Network {
-		keys := [...]string{"list-name"}
-		stateKeyValues := [...]string{state.Network[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		stateKeyValues := [...]string{ state.Network[i].List.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -3867,67 +3436,67 @@ func (data *AAAAuthorization) getDeletedItems(ctx context.Context, state AAAAuth
 			if state.Network[i].List.ValueString() != data.Network[j].List.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.Network[i].A4Group.IsNull() && data.Network[j].A4Group.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-4/server-group-name", state.getPath(), keyString))
-				}
-				if !state.Network[i].A4Radius.IsNull() && data.Network[j].A4Radius.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-4/radius", state.getPath(), keyString))
-				}
-				if !state.Network[i].A4Tacacs.IsNull() && data.Network[j].A4Tacacs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-4/tacacs", state.getPath(), keyString))
-				}
-				if !state.Network[i].A4None.IsNull() && data.Network[j].A4None.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-4/none", state.getPath(), keyString))
-				}
-				if !state.Network[i].A4Local.IsNull() && data.Network[j].A4Local.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-4/local", state.getPath(), keyString))
-				}
-				if !state.Network[i].A3Group.IsNull() && data.Network[j].A3Group.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-3/server-group-name", state.getPath(), keyString))
-				}
-				if !state.Network[i].A3Radius.IsNull() && data.Network[j].A3Radius.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-3/radius", state.getPath(), keyString))
-				}
-				if !state.Network[i].A3Tacacs.IsNull() && data.Network[j].A3Tacacs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-3/tacacs", state.getPath(), keyString))
-				}
-				if !state.Network[i].A3None.IsNull() && data.Network[j].A3None.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-3/none", state.getPath(), keyString))
-				}
-				if !state.Network[i].A3Local.IsNull() && data.Network[j].A3Local.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-3/local", state.getPath(), keyString))
-				}
-				if !state.Network[i].A2Group.IsNull() && data.Network[j].A2Group.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
-				}
-				if !state.Network[i].A2Radius.IsNull() && data.Network[j].A2Radius.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-2/radius", state.getPath(), keyString))
-				}
-				if !state.Network[i].A2Tacacs.IsNull() && data.Network[j].A2Tacacs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-2/tacacs", state.getPath(), keyString))
-				}
-				if !state.Network[i].A2None.IsNull() && data.Network[j].A2None.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-2/none", state.getPath(), keyString))
-				}
-				if !state.Network[i].A2Local.IsNull() && data.Network[j].A2Local.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-2/local", state.getPath(), keyString))
-				}
-				if !state.Network[i].A1Group.IsNull() && data.Network[j].A1Group.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
-				}
-				if !state.Network[i].A1Radius.IsNull() && data.Network[j].A1Radius.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-1/radius", state.getPath(), keyString))
-				}
-				if !state.Network[i].A1Tacacs.IsNull() && data.Network[j].A1Tacacs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-1/tacacs", state.getPath(), keyString))
-				}
-				if !state.Network[i].A1None.IsNull() && data.Network[j].A1None.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/none", state.getPath(), keyString))
-				}
-				if !state.Network[i].A1Local.IsNull() && data.Network[j].A1Local.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/local", state.getPath(), keyString))
-				}
+		if found {
+			if !state.Network[i].A4Group.IsNull() && data.Network[j].A4Group.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-4/server-group-name", state.getPath(), keyString))
+			}
+			if !state.Network[i].A4Radius.IsNull() && data.Network[j].A4Radius.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-4/radius", state.getPath(), keyString))
+			}
+			if !state.Network[i].A4Tacacs.IsNull() && data.Network[j].A4Tacacs.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-4/tacacs", state.getPath(), keyString))
+			}
+			if !state.Network[i].A4None.IsNull() && data.Network[j].A4None.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-4/none", state.getPath(), keyString))
+			}
+			if !state.Network[i].A4Local.IsNull() && data.Network[j].A4Local.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-4/local", state.getPath(), keyString))
+			}
+			if !state.Network[i].A3Group.IsNull() && data.Network[j].A3Group.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-3/server-group-name", state.getPath(), keyString))
+			}
+			if !state.Network[i].A3Radius.IsNull() && data.Network[j].A3Radius.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-3/radius", state.getPath(), keyString))
+			}
+			if !state.Network[i].A3Tacacs.IsNull() && data.Network[j].A3Tacacs.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-3/tacacs", state.getPath(), keyString))
+			}
+			if !state.Network[i].A3None.IsNull() && data.Network[j].A3None.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-3/none", state.getPath(), keyString))
+			}
+			if !state.Network[i].A3Local.IsNull() && data.Network[j].A3Local.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-3/local", state.getPath(), keyString))
+			}
+			if !state.Network[i].A2Group.IsNull() && data.Network[j].A2Group.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
+			}
+			if !state.Network[i].A2Radius.IsNull() && data.Network[j].A2Radius.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-2/radius", state.getPath(), keyString))
+			}
+			if !state.Network[i].A2Tacacs.IsNull() && data.Network[j].A2Tacacs.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-2/tacacs", state.getPath(), keyString))
+			}
+			if !state.Network[i].A2None.IsNull() && data.Network[j].A2None.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-2/none", state.getPath(), keyString))
+			}
+			if !state.Network[i].A2Local.IsNull() && data.Network[j].A2Local.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-2/local", state.getPath(), keyString))
+			}
+			if !state.Network[i].A1Group.IsNull() && data.Network[j].A1Group.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
+			}
+			if !state.Network[i].A1Radius.IsNull() && data.Network[j].A1Radius.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-1/radius", state.getPath(), keyString))
+			}
+			if !state.Network[i].A1Tacacs.IsNull() && data.Network[j].A1Tacacs.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/groups/group-1/tacacs", state.getPath(), keyString))
+			}
+			if !state.Network[i].A1None.IsNull() && data.Network[j].A1None.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/none", state.getPath(), keyString))
+			}
+			if !state.Network[i].A1Local.IsNull() && data.Network[j].A1Local.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/authorization-list%v/local", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -3936,11 +3505,11 @@ func (data *AAAAuthorization) getDeletedItems(ctx context.Context, state AAAAuth
 		}
 	}
 	for i := range state.Commands {
-		keys := [...]string{"list-name"}
-		stateKeyValues := [...]string{state.Commands[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		stateKeyValues := [...]string{ state.Commands[i].List.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -3957,55 +3526,55 @@ func (data *AAAAuthorization) getDeletedItems(ctx context.Context, state AAAAuth
 			if state.Commands[i].List.ValueString() != data.Commands[j].List.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.Commands[i].A4Group.IsNull() && data.Commands[j].A4Group.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-4/server-group-name", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A4Tacacs.IsNull() && data.Commands[j].A4Tacacs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-4/tacacs", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A4None.IsNull() && data.Commands[j].A4None.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-4/none", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A4Local.IsNull() && data.Commands[j].A4Local.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-4/local", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A3Group.IsNull() && data.Commands[j].A3Group.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-3/server-group-name", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A3Tacacs.IsNull() && data.Commands[j].A3Tacacs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-3/tacacs", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A3None.IsNull() && data.Commands[j].A3None.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-3/none", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A3Local.IsNull() && data.Commands[j].A3Local.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-3/local", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A2Group.IsNull() && data.Commands[j].A2Group.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A2Tacacs.IsNull() && data.Commands[j].A2Tacacs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-2/tacacs", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A2None.IsNull() && data.Commands[j].A2None.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-2/none", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A2Local.IsNull() && data.Commands[j].A2Local.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-2/local", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A1Group.IsNull() && data.Commands[j].A1Group.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A1Tacacs.IsNull() && data.Commands[j].A1Tacacs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-1/tacacs", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A1None.IsNull() && data.Commands[j].A1None.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/none", state.getPath(), keyString))
-				}
-				if !state.Commands[i].A1Local.IsNull() && data.Commands[j].A1Local.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/local", state.getPath(), keyString))
-				}
+		if found {
+			if !state.Commands[i].A4Group.IsNull() && data.Commands[j].A4Group.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-4/server-group-name", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A4Tacacs.IsNull() && data.Commands[j].A4Tacacs.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-4/tacacs", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A4None.IsNull() && data.Commands[j].A4None.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-4/none", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A4Local.IsNull() && data.Commands[j].A4Local.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-4/local", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A3Group.IsNull() && data.Commands[j].A3Group.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-3/server-group-name", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A3Tacacs.IsNull() && data.Commands[j].A3Tacacs.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-3/tacacs", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A3None.IsNull() && data.Commands[j].A3None.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-3/none", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A3Local.IsNull() && data.Commands[j].A3Local.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-3/local", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A2Group.IsNull() && data.Commands[j].A2Group.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A2Tacacs.IsNull() && data.Commands[j].A2Tacacs.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-2/tacacs", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A2None.IsNull() && data.Commands[j].A2None.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-2/none", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A2Local.IsNull() && data.Commands[j].A2Local.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-2/local", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A1Group.IsNull() && data.Commands[j].A1Group.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A1Tacacs.IsNull() && data.Commands[j].A1Tacacs.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/groups/group-1/tacacs", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A1None.IsNull() && data.Commands[j].A1None.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/none", state.getPath(), keyString))
+			}
+			if !state.Commands[i].A1Local.IsNull() && data.Commands[j].A1Local.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/authorization-list%v/local", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -4014,11 +3583,11 @@ func (data *AAAAuthorization) getDeletedItems(ctx context.Context, state AAAAuth
 		}
 	}
 	for i := range state.Eventmanager {
-		keys := [...]string{"list-name"}
-		stateKeyValues := [...]string{state.Eventmanager[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		stateKeyValues := [...]string{ state.Eventmanager[i].List.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -4035,25 +3604,25 @@ func (data *AAAAuthorization) getDeletedItems(ctx context.Context, state AAAAuth
 			if state.Eventmanager[i].List.ValueString() != data.Eventmanager[j].List.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.Eventmanager[i].A2Group.IsNull() && data.Eventmanager[j].A2Group.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/eventmanager/authorization-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
-				}
-				if !state.Eventmanager[i].A2Tacacs.IsNull() && data.Eventmanager[j].A2Tacacs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/eventmanager/authorization-list%v/groups/group-2/tacacs", state.getPath(), keyString))
-				}
-				if !state.Eventmanager[i].A2Local.IsNull() && data.Eventmanager[j].A2Local.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/eventmanager/authorization-list%v/groups/group-2/local", state.getPath(), keyString))
-				}
-				if !state.Eventmanager[i].A1Group.IsNull() && data.Eventmanager[j].A1Group.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/eventmanager/authorization-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
-				}
-				if !state.Eventmanager[i].A1Tacacs.IsNull() && data.Eventmanager[j].A1Tacacs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/eventmanager/authorization-list%v/groups/group-1/tacacs", state.getPath(), keyString))
-				}
-				if !state.Eventmanager[i].A1Local.IsNull() && data.Eventmanager[j].A1Local.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/eventmanager/authorization-list%v/local", state.getPath(), keyString))
-				}
+		if found {
+			if !state.Eventmanager[i].A2Group.IsNull() && data.Eventmanager[j].A2Group.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/eventmanager/authorization-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
+			}
+			if !state.Eventmanager[i].A2Tacacs.IsNull() && data.Eventmanager[j].A2Tacacs.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/eventmanager/authorization-list%v/groups/group-2/tacacs", state.getPath(), keyString))
+			}
+			if !state.Eventmanager[i].A2Local.IsNull() && data.Eventmanager[j].A2Local.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/eventmanager/authorization-list%v/groups/group-2/local", state.getPath(), keyString))
+			}
+			if !state.Eventmanager[i].A1Group.IsNull() && data.Eventmanager[j].A1Group.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/eventmanager/authorization-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
+			}
+			if !state.Eventmanager[i].A1Tacacs.IsNull() && data.Eventmanager[j].A1Tacacs.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/eventmanager/authorization-list%v/groups/group-1/tacacs", state.getPath(), keyString))
+			}
+			if !state.Eventmanager[i].A1Local.IsNull() && data.Eventmanager[j].A1Local.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/eventmanager/authorization-list%v/local", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -4062,11 +3631,11 @@ func (data *AAAAuthorization) getDeletedItems(ctx context.Context, state AAAAuth
 		}
 	}
 	for i := range state.Exec {
-		keys := [...]string{"list-name"}
-		stateKeyValues := [...]string{state.Exec[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		stateKeyValues := [...]string{ state.Exec[i].List.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -4083,67 +3652,67 @@ func (data *AAAAuthorization) getDeletedItems(ctx context.Context, state AAAAuth
 			if state.Exec[i].List.ValueString() != data.Exec[j].List.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.Exec[i].A4Group.IsNull() && data.Exec[j].A4Group.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-4/server-group-name", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A4Radius.IsNull() && data.Exec[j].A4Radius.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-4/radius", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A4Tacacs.IsNull() && data.Exec[j].A4Tacacs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-4/tacacs", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A4None.IsNull() && data.Exec[j].A4None.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-4/none", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A4Local.IsNull() && data.Exec[j].A4Local.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-4/local", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A3Group.IsNull() && data.Exec[j].A3Group.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-3/server-group-name", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A3Radius.IsNull() && data.Exec[j].A3Radius.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-3/radius", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A3Tacacs.IsNull() && data.Exec[j].A3Tacacs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-3/tacacs", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A3None.IsNull() && data.Exec[j].A3None.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-3/none", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A3Local.IsNull() && data.Exec[j].A3Local.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-3/local", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A2Group.IsNull() && data.Exec[j].A2Group.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A2Radius.IsNull() && data.Exec[j].A2Radius.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-2/radius", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A2Tacacs.IsNull() && data.Exec[j].A2Tacacs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-2/tacacs", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A2None.IsNull() && data.Exec[j].A2None.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-2/none", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A2Local.IsNull() && data.Exec[j].A2Local.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-2/local", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A1Group.IsNull() && data.Exec[j].A1Group.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A1Radius.IsNull() && data.Exec[j].A1Radius.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-1/radius", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A1Tacacs.IsNull() && data.Exec[j].A1Tacacs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-1/tacacs", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A1None.IsNull() && data.Exec[j].A1None.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/none", state.getPath(), keyString))
-				}
-				if !state.Exec[i].A1Local.IsNull() && data.Exec[j].A1Local.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/local", state.getPath(), keyString))
-				}
+		if found {
+			if !state.Exec[i].A4Group.IsNull() && data.Exec[j].A4Group.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-4/server-group-name", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A4Radius.IsNull() && data.Exec[j].A4Radius.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-4/radius", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A4Tacacs.IsNull() && data.Exec[j].A4Tacacs.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-4/tacacs", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A4None.IsNull() && data.Exec[j].A4None.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-4/none", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A4Local.IsNull() && data.Exec[j].A4Local.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-4/local", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A3Group.IsNull() && data.Exec[j].A3Group.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-3/server-group-name", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A3Radius.IsNull() && data.Exec[j].A3Radius.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-3/radius", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A3Tacacs.IsNull() && data.Exec[j].A3Tacacs.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-3/tacacs", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A3None.IsNull() && data.Exec[j].A3None.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-3/none", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A3Local.IsNull() && data.Exec[j].A3Local.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-3/local", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A2Group.IsNull() && data.Exec[j].A2Group.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A2Radius.IsNull() && data.Exec[j].A2Radius.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-2/radius", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A2Tacacs.IsNull() && data.Exec[j].A2Tacacs.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-2/tacacs", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A2None.IsNull() && data.Exec[j].A2None.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-2/none", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A2Local.IsNull() && data.Exec[j].A2Local.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-2/local", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A1Group.IsNull() && data.Exec[j].A1Group.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A1Radius.IsNull() && data.Exec[j].A1Radius.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-1/radius", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A1Tacacs.IsNull() && data.Exec[j].A1Tacacs.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/groups/group-1/tacacs", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A1None.IsNull() && data.Exec[j].A1None.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/none", state.getPath(), keyString))
+			}
+			if !state.Exec[i].A1Local.IsNull() && data.Exec[j].A1Local.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/authorization-list%v/local", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -4161,11 +3730,11 @@ func (data *AAAAuthorization) getDeletedItems(ctx context.Context, state AAAAuth
 func (data *AAAAuthorization) getEmptyLeafsDelete(ctx context.Context, state *AAAAuthorization) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Network {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Network[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Network[i].List.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.Network[i].A4Radius.IsNull() && !data.Network[i].A4Radius.ValueBool() {
@@ -4281,11 +3850,11 @@ func (data *AAAAuthorization) getEmptyLeafsDelete(ctx context.Context, state *AA
 		}
 	}
 	for i := range data.Commands {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Commands[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Commands[i].List.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.Commands[i].A4Tacacs.IsNull() && !data.Commands[i].A4Tacacs.ValueBool() {
@@ -4373,11 +3942,11 @@ func (data *AAAAuthorization) getEmptyLeafsDelete(ctx context.Context, state *AA
 		}
 	}
 	for i := range data.Eventmanager {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Eventmanager[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Eventmanager[i].List.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.Eventmanager[i].A2Tacacs.IsNull() && !data.Eventmanager[i].A2Tacacs.ValueBool() {
@@ -4409,11 +3978,11 @@ func (data *AAAAuthorization) getEmptyLeafsDelete(ctx context.Context, state *AA
 		}
 	}
 	for i := range data.Exec {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Exec[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Exec[i].List.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.Exec[i].A4Radius.IsNull() && !data.Exec[i].A4Radius.ValueBool() {
@@ -4538,22 +4107,22 @@ func (data *AAAAuthorization) getEmptyLeafsDelete(ctx context.Context, state *AA
 func (data *AAAAuthorization) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Network {
-		keyValues := [...]string{data.Network[i].List.ValueString()}
+		keyValues := [...]string{ data.Network[i].List.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/network/authorization-list=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Commands {
-		keyValues := [...]string{data.Commands[i].List.ValueString()}
+		keyValues := [...]string{ data.Commands[i].List.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/commands/authorization-list=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Eventmanager {
-		keyValues := [...]string{data.Eventmanager[i].List.ValueString()}
+		keyValues := [...]string{ data.Eventmanager[i].List.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/eventmanager/authorization-list=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Exec {
-		keyValues := [...]string{data.Exec[i].List.ValueString()}
+		keyValues := [...]string{ data.Exec[i].List.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/exec/authorization-list=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -4570,8 +4139,8 @@ func (data *AAAAuthorization) addDeletedItemsXML(ctx context.Context, state AAAA
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.Network {
-		stateKeys := [...]string{"list-name"}
-		stateKeyValues := [...]string{state.Network[i].List.ValueString()}
+		stateKeys := [...]string{ "list-name",  }
+		stateKeyValues := [...]string{ state.Network[i].List.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4592,82 +4161,82 @@ func (data *AAAAuthorization) addDeletedItemsXML(ctx context.Context, state AAAA
 				found = false
 			}
 			if found {
-				if !state.Network[i].A4Group.IsNull() && data.Network[j].A4Group.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-4/server-group-name", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A4Radius.IsNull() && state.Network[i].A4Radius.ValueBool() && data.Network[j].A4Radius.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-4/radius", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A4Tacacs.IsNull() && state.Network[i].A4Tacacs.ValueBool() && data.Network[j].A4Tacacs.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-4/tacacs", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A4None.IsNull() && state.Network[i].A4None.ValueBool() && data.Network[j].A4None.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-4/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A4Local.IsNull() && state.Network[i].A4Local.ValueBool() && data.Network[j].A4Local.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-4/local", predicates))
-				}
-				if !state.Network[i].A3Group.IsNull() && data.Network[j].A3Group.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-3/server-group-name", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A3Radius.IsNull() && state.Network[i].A3Radius.ValueBool() && data.Network[j].A3Radius.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-3/radius", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A3Tacacs.IsNull() && state.Network[i].A3Tacacs.ValueBool() && data.Network[j].A3Tacacs.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-3/tacacs", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A3None.IsNull() && state.Network[i].A3None.ValueBool() && data.Network[j].A3None.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-3/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A3Local.IsNull() && state.Network[i].A3Local.ValueBool() && data.Network[j].A3Local.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-3/local", predicates))
-				}
-				if !state.Network[i].A2Group.IsNull() && data.Network[j].A2Group.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-2/server-group-name", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A2Radius.IsNull() && state.Network[i].A2Radius.ValueBool() && data.Network[j].A2Radius.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-2/radius", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A2Tacacs.IsNull() && state.Network[i].A2Tacacs.ValueBool() && data.Network[j].A2Tacacs.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-2/tacacs", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A2None.IsNull() && state.Network[i].A2None.ValueBool() && data.Network[j].A2None.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-2/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A2Local.IsNull() && state.Network[i].A2Local.ValueBool() && data.Network[j].A2Local.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-2/local", predicates))
-				}
-				if !state.Network[i].A1Group.IsNull() && data.Network[j].A1Group.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-1/server-group-name", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A1Radius.IsNull() && state.Network[i].A1Radius.ValueBool() && data.Network[j].A1Radius.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-1/radius", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A1Tacacs.IsNull() && state.Network[i].A1Tacacs.ValueBool() && data.Network[j].A1Tacacs.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-1/tacacs", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A1None.IsNull() && state.Network[i].A1None.ValueBool() && data.Network[j].A1None.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Network[i].A1Local.IsNull() && state.Network[i].A1Local.ValueBool() && data.Network[j].A1Local.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/local", predicates))
-				}
+			if !state.Network[i].A4Group.IsNull() && data.Network[j].A4Group.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-4/server-group-name", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A4Radius.IsNull() && state.Network[i].A4Radius.ValueBool() && data.Network[j].A4Radius.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-4/radius", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A4Tacacs.IsNull() && state.Network[i].A4Tacacs.ValueBool() && data.Network[j].A4Tacacs.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-4/tacacs", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A4None.IsNull() && state.Network[i].A4None.ValueBool() && data.Network[j].A4None.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-4/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A4Local.IsNull() && state.Network[i].A4Local.ValueBool() && data.Network[j].A4Local.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-4/local", predicates))
+			}
+			if !state.Network[i].A3Group.IsNull() && data.Network[j].A3Group.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-3/server-group-name", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A3Radius.IsNull() && state.Network[i].A3Radius.ValueBool() && data.Network[j].A3Radius.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-3/radius", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A3Tacacs.IsNull() && state.Network[i].A3Tacacs.ValueBool() && data.Network[j].A3Tacacs.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-3/tacacs", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A3None.IsNull() && state.Network[i].A3None.ValueBool() && data.Network[j].A3None.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-3/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A3Local.IsNull() && state.Network[i].A3Local.ValueBool() && data.Network[j].A3Local.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-3/local", predicates))
+			}
+			if !state.Network[i].A2Group.IsNull() && data.Network[j].A2Group.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-2/server-group-name", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A2Radius.IsNull() && state.Network[i].A2Radius.ValueBool() && data.Network[j].A2Radius.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-2/radius", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A2Tacacs.IsNull() && state.Network[i].A2Tacacs.ValueBool() && data.Network[j].A2Tacacs.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-2/tacacs", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A2None.IsNull() && state.Network[i].A2None.ValueBool() && data.Network[j].A2None.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-2/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A2Local.IsNull() && state.Network[i].A2Local.ValueBool() && data.Network[j].A2Local.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-2/local", predicates))
+			}
+			if !state.Network[i].A1Group.IsNull() && data.Network[j].A1Group.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-1/server-group-name", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A1Radius.IsNull() && state.Network[i].A1Radius.ValueBool() && data.Network[j].A1Radius.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-1/radius", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A1Tacacs.IsNull() && state.Network[i].A1Tacacs.ValueBool() && data.Network[j].A1Tacacs.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/groups/group-1/tacacs", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A1None.IsNull() && state.Network[i].A1None.ValueBool() && data.Network[j].A1None.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Network[i].A1Local.IsNull() && state.Network[i].A1Local.ValueBool() && data.Network[j].A1Local.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/authorization-list%v/local", predicates))
+			}
 				break
 			}
 		}
@@ -4676,8 +4245,8 @@ func (data *AAAAuthorization) addDeletedItemsXML(ctx context.Context, state AAAA
 		}
 	}
 	for i := range state.Commands {
-		stateKeys := [...]string{"list-name"}
-		stateKeyValues := [...]string{state.Commands[i].List.ValueString()}
+		stateKeys := [...]string{ "list-name",  }
+		stateKeyValues := [...]string{ state.Commands[i].List.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4698,66 +4267,66 @@ func (data *AAAAuthorization) addDeletedItemsXML(ctx context.Context, state AAAA
 				found = false
 			}
 			if found {
-				if !state.Commands[i].A4Group.IsNull() && data.Commands[j].A4Group.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-4/server-group-name", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Commands[i].A4Tacacs.IsNull() && state.Commands[i].A4Tacacs.ValueBool() && data.Commands[j].A4Tacacs.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-4/tacacs", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Commands[i].A4None.IsNull() && state.Commands[i].A4None.ValueBool() && data.Commands[j].A4None.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-4/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Commands[i].A4Local.IsNull() && state.Commands[i].A4Local.ValueBool() && data.Commands[j].A4Local.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-4/local", predicates))
-				}
-				if !state.Commands[i].A3Group.IsNull() && data.Commands[j].A3Group.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-3/server-group-name", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Commands[i].A3Tacacs.IsNull() && state.Commands[i].A3Tacacs.ValueBool() && data.Commands[j].A3Tacacs.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-3/tacacs", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Commands[i].A3None.IsNull() && state.Commands[i].A3None.ValueBool() && data.Commands[j].A3None.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-3/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Commands[i].A3Local.IsNull() && state.Commands[i].A3Local.ValueBool() && data.Commands[j].A3Local.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-3/local", predicates))
-				}
-				if !state.Commands[i].A2Group.IsNull() && data.Commands[j].A2Group.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-2/server-group-name", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Commands[i].A2Tacacs.IsNull() && state.Commands[i].A2Tacacs.ValueBool() && data.Commands[j].A2Tacacs.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-2/tacacs", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Commands[i].A2None.IsNull() && state.Commands[i].A2None.ValueBool() && data.Commands[j].A2None.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-2/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Commands[i].A2Local.IsNull() && state.Commands[i].A2Local.ValueBool() && data.Commands[j].A2Local.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-2/local", predicates))
-				}
-				if !state.Commands[i].A1Group.IsNull() && data.Commands[j].A1Group.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-1/server-group-name", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Commands[i].A1Tacacs.IsNull() && state.Commands[i].A1Tacacs.ValueBool() && data.Commands[j].A1Tacacs.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-1/tacacs", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Commands[i].A1None.IsNull() && state.Commands[i].A1None.ValueBool() && data.Commands[j].A1None.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Commands[i].A1Local.IsNull() && state.Commands[i].A1Local.ValueBool() && data.Commands[j].A1Local.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/local", predicates))
-				}
+			if !state.Commands[i].A4Group.IsNull() && data.Commands[j].A4Group.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-4/server-group-name", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Commands[i].A4Tacacs.IsNull() && state.Commands[i].A4Tacacs.ValueBool() && data.Commands[j].A4Tacacs.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-4/tacacs", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Commands[i].A4None.IsNull() && state.Commands[i].A4None.ValueBool() && data.Commands[j].A4None.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-4/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Commands[i].A4Local.IsNull() && state.Commands[i].A4Local.ValueBool() && data.Commands[j].A4Local.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-4/local", predicates))
+			}
+			if !state.Commands[i].A3Group.IsNull() && data.Commands[j].A3Group.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-3/server-group-name", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Commands[i].A3Tacacs.IsNull() && state.Commands[i].A3Tacacs.ValueBool() && data.Commands[j].A3Tacacs.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-3/tacacs", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Commands[i].A3None.IsNull() && state.Commands[i].A3None.ValueBool() && data.Commands[j].A3None.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-3/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Commands[i].A3Local.IsNull() && state.Commands[i].A3Local.ValueBool() && data.Commands[j].A3Local.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-3/local", predicates))
+			}
+			if !state.Commands[i].A2Group.IsNull() && data.Commands[j].A2Group.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-2/server-group-name", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Commands[i].A2Tacacs.IsNull() && state.Commands[i].A2Tacacs.ValueBool() && data.Commands[j].A2Tacacs.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-2/tacacs", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Commands[i].A2None.IsNull() && state.Commands[i].A2None.ValueBool() && data.Commands[j].A2None.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-2/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Commands[i].A2Local.IsNull() && state.Commands[i].A2Local.ValueBool() && data.Commands[j].A2Local.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-2/local", predicates))
+			}
+			if !state.Commands[i].A1Group.IsNull() && data.Commands[j].A1Group.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-1/server-group-name", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Commands[i].A1Tacacs.IsNull() && state.Commands[i].A1Tacacs.ValueBool() && data.Commands[j].A1Tacacs.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/groups/group-1/tacacs", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Commands[i].A1None.IsNull() && state.Commands[i].A1None.ValueBool() && data.Commands[j].A1None.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Commands[i].A1Local.IsNull() && state.Commands[i].A1Local.ValueBool() && data.Commands[j].A1Local.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/authorization-list%v/local", predicates))
+			}
 				break
 			}
 		}
@@ -4766,8 +4335,8 @@ func (data *AAAAuthorization) addDeletedItemsXML(ctx context.Context, state AAAA
 		}
 	}
 	for i := range state.Eventmanager {
-		stateKeys := [...]string{"list-name"}
-		stateKeyValues := [...]string{state.Eventmanager[i].List.ValueString()}
+		stateKeys := [...]string{ "list-name",  }
+		stateKeyValues := [...]string{ state.Eventmanager[i].List.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4788,28 +4357,28 @@ func (data *AAAAuthorization) addDeletedItemsXML(ctx context.Context, state AAAA
 				found = false
 			}
 			if found {
-				if !state.Eventmanager[i].A2Group.IsNull() && data.Eventmanager[j].A2Group.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/eventmanager/authorization-list%v/groups/group-2/server-group-name", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Eventmanager[i].A2Tacacs.IsNull() && state.Eventmanager[i].A2Tacacs.ValueBool() && data.Eventmanager[j].A2Tacacs.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/eventmanager/authorization-list%v/groups/group-2/tacacs", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Eventmanager[i].A2Local.IsNull() && state.Eventmanager[i].A2Local.ValueBool() && data.Eventmanager[j].A2Local.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/eventmanager/authorization-list%v/groups/group-2/local", predicates))
-				}
-				if !state.Eventmanager[i].A1Group.IsNull() && data.Eventmanager[j].A1Group.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/eventmanager/authorization-list%v/groups/group-1/server-group-name", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Eventmanager[i].A1Tacacs.IsNull() && state.Eventmanager[i].A1Tacacs.ValueBool() && data.Eventmanager[j].A1Tacacs.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/eventmanager/authorization-list%v/groups/group-1/tacacs", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Eventmanager[i].A1Local.IsNull() && state.Eventmanager[i].A1Local.ValueBool() && data.Eventmanager[j].A1Local.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/eventmanager/authorization-list%v/local", predicates))
-				}
+			if !state.Eventmanager[i].A2Group.IsNull() && data.Eventmanager[j].A2Group.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/eventmanager/authorization-list%v/groups/group-2/server-group-name", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Eventmanager[i].A2Tacacs.IsNull() && state.Eventmanager[i].A2Tacacs.ValueBool() && data.Eventmanager[j].A2Tacacs.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/eventmanager/authorization-list%v/groups/group-2/tacacs", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Eventmanager[i].A2Local.IsNull() && state.Eventmanager[i].A2Local.ValueBool() && data.Eventmanager[j].A2Local.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/eventmanager/authorization-list%v/groups/group-2/local", predicates))
+			}
+			if !state.Eventmanager[i].A1Group.IsNull() && data.Eventmanager[j].A1Group.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/eventmanager/authorization-list%v/groups/group-1/server-group-name", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Eventmanager[i].A1Tacacs.IsNull() && state.Eventmanager[i].A1Tacacs.ValueBool() && data.Eventmanager[j].A1Tacacs.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/eventmanager/authorization-list%v/groups/group-1/tacacs", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Eventmanager[i].A1Local.IsNull() && state.Eventmanager[i].A1Local.ValueBool() && data.Eventmanager[j].A1Local.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/eventmanager/authorization-list%v/local", predicates))
+			}
 				break
 			}
 		}
@@ -4818,8 +4387,8 @@ func (data *AAAAuthorization) addDeletedItemsXML(ctx context.Context, state AAAA
 		}
 	}
 	for i := range state.Exec {
-		stateKeys := [...]string{"list-name"}
-		stateKeyValues := [...]string{state.Exec[i].List.ValueString()}
+		stateKeys := [...]string{ "list-name",  }
+		stateKeyValues := [...]string{ state.Exec[i].List.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4840,82 +4409,82 @@ func (data *AAAAuthorization) addDeletedItemsXML(ctx context.Context, state AAAA
 				found = false
 			}
 			if found {
-				if !state.Exec[i].A4Group.IsNull() && data.Exec[j].A4Group.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-4/server-group-name", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A4Radius.IsNull() && state.Exec[i].A4Radius.ValueBool() && data.Exec[j].A4Radius.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-4/radius", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A4Tacacs.IsNull() && state.Exec[i].A4Tacacs.ValueBool() && data.Exec[j].A4Tacacs.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-4/tacacs", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A4None.IsNull() && state.Exec[i].A4None.ValueBool() && data.Exec[j].A4None.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-4/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A4Local.IsNull() && state.Exec[i].A4Local.ValueBool() && data.Exec[j].A4Local.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-4/local", predicates))
-				}
-				if !state.Exec[i].A3Group.IsNull() && data.Exec[j].A3Group.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-3/server-group-name", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A3Radius.IsNull() && state.Exec[i].A3Radius.ValueBool() && data.Exec[j].A3Radius.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-3/radius", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A3Tacacs.IsNull() && state.Exec[i].A3Tacacs.ValueBool() && data.Exec[j].A3Tacacs.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-3/tacacs", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A3None.IsNull() && state.Exec[i].A3None.ValueBool() && data.Exec[j].A3None.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-3/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A3Local.IsNull() && state.Exec[i].A3Local.ValueBool() && data.Exec[j].A3Local.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-3/local", predicates))
-				}
-				if !state.Exec[i].A2Group.IsNull() && data.Exec[j].A2Group.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-2/server-group-name", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A2Radius.IsNull() && state.Exec[i].A2Radius.ValueBool() && data.Exec[j].A2Radius.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-2/radius", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A2Tacacs.IsNull() && state.Exec[i].A2Tacacs.ValueBool() && data.Exec[j].A2Tacacs.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-2/tacacs", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A2None.IsNull() && state.Exec[i].A2None.ValueBool() && data.Exec[j].A2None.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-2/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A2Local.IsNull() && state.Exec[i].A2Local.ValueBool() && data.Exec[j].A2Local.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-2/local", predicates))
-				}
-				if !state.Exec[i].A1Group.IsNull() && data.Exec[j].A1Group.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-1/server-group-name", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A1Radius.IsNull() && state.Exec[i].A1Radius.ValueBool() && data.Exec[j].A1Radius.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-1/radius", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A1Tacacs.IsNull() && state.Exec[i].A1Tacacs.ValueBool() && data.Exec[j].A1Tacacs.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-1/tacacs", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A1None.IsNull() && state.Exec[i].A1None.ValueBool() && data.Exec[j].A1None.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Exec[i].A1Local.IsNull() && state.Exec[i].A1Local.ValueBool() && data.Exec[j].A1Local.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/local", predicates))
-				}
+			if !state.Exec[i].A4Group.IsNull() && data.Exec[j].A4Group.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-4/server-group-name", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A4Radius.IsNull() && state.Exec[i].A4Radius.ValueBool() && data.Exec[j].A4Radius.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-4/radius", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A4Tacacs.IsNull() && state.Exec[i].A4Tacacs.ValueBool() && data.Exec[j].A4Tacacs.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-4/tacacs", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A4None.IsNull() && state.Exec[i].A4None.ValueBool() && data.Exec[j].A4None.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-4/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A4Local.IsNull() && state.Exec[i].A4Local.ValueBool() && data.Exec[j].A4Local.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-4/local", predicates))
+			}
+			if !state.Exec[i].A3Group.IsNull() && data.Exec[j].A3Group.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-3/server-group-name", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A3Radius.IsNull() && state.Exec[i].A3Radius.ValueBool() && data.Exec[j].A3Radius.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-3/radius", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A3Tacacs.IsNull() && state.Exec[i].A3Tacacs.ValueBool() && data.Exec[j].A3Tacacs.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-3/tacacs", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A3None.IsNull() && state.Exec[i].A3None.ValueBool() && data.Exec[j].A3None.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-3/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A3Local.IsNull() && state.Exec[i].A3Local.ValueBool() && data.Exec[j].A3Local.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-3/local", predicates))
+			}
+			if !state.Exec[i].A2Group.IsNull() && data.Exec[j].A2Group.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-2/server-group-name", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A2Radius.IsNull() && state.Exec[i].A2Radius.ValueBool() && data.Exec[j].A2Radius.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-2/radius", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A2Tacacs.IsNull() && state.Exec[i].A2Tacacs.ValueBool() && data.Exec[j].A2Tacacs.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-2/tacacs", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A2None.IsNull() && state.Exec[i].A2None.ValueBool() && data.Exec[j].A2None.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-2/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A2Local.IsNull() && state.Exec[i].A2Local.ValueBool() && data.Exec[j].A2Local.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-2/local", predicates))
+			}
+			if !state.Exec[i].A1Group.IsNull() && data.Exec[j].A1Group.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-1/server-group-name", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A1Radius.IsNull() && state.Exec[i].A1Radius.ValueBool() && data.Exec[j].A1Radius.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-1/radius", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A1Tacacs.IsNull() && state.Exec[i].A1Tacacs.ValueBool() && data.Exec[j].A1Tacacs.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/groups/group-1/tacacs", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A1None.IsNull() && state.Exec[i].A1None.ValueBool() && data.Exec[j].A1None.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Exec[i].A1Local.IsNull() && state.Exec[i].A1Local.ValueBool() && data.Exec[j].A1Local.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/authorization-list%v/local", predicates))
+			}
 				break
 			}
 		}
@@ -4936,8 +4505,8 @@ func (data *AAAAuthorization) addDeletedItemsXML(ctx context.Context, state AAAA
 func (data *AAAAuthorization) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.Network {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Network[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Network[i].List.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4946,8 +4515,8 @@ func (data *AAAAuthorization) addDeletePathsXML(ctx context.Context, body string
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/network/authorization-list%v", predicates))
 	}
 	for i := range data.Commands {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Commands[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Commands[i].List.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4956,8 +4525,8 @@ func (data *AAAAuthorization) addDeletePathsXML(ctx context.Context, body string
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/commands/authorization-list%v", predicates))
 	}
 	for i := range data.Eventmanager {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Eventmanager[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Eventmanager[i].List.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4966,8 +4535,8 @@ func (data *AAAAuthorization) addDeletePathsXML(ctx context.Context, body string
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/eventmanager/authorization-list%v", predicates))
 	}
 	for i := range data.Exec {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.Exec[i].List.ValueString()}
+		keys := [...]string{ "list-name",  }
+		keyValues := [...]string{ data.Exec[i].List.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

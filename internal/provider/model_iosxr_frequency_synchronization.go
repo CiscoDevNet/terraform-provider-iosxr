@@ -23,48 +23,52 @@ package provider
 import (
 	"context"
 	"fmt"
+	"reflect"
+	"sort"
+	"strconv"
+	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type FrequencySynchronization struct {
-	Device                              types.String `tfsdk:"device"`
-	Id                                  types.String `tfsdk:"id"`
-	DeleteMode                          types.String `tfsdk:"delete_mode"`
-	QualityItuTOptionOne                types.Bool   `tfsdk:"quality_itu_t_option_one"`
-	QualityItuTOptionTwoGenerationOne   types.Bool   `tfsdk:"quality_itu_t_option_two_generation_one"`
-	QualityItuTOptionTwoGenerationTwo   types.Bool   `tfsdk:"quality_itu_t_option_two_generation_two"`
-	ClockInterfaceTimingModeSystem      types.Bool   `tfsdk:"clock_interface_timing_mode_system"`
-	ClockInterfaceTimingModeIndependent types.Bool   `tfsdk:"clock_interface_timing_mode_independent"`
-	SystemTimingModeLineOnly            types.Bool   `tfsdk:"system_timing_mode_line_only"`
-	SystemTimingModeClockOnly           types.Bool   `tfsdk:"system_timing_mode_clock_only"`
-	LogSelectionChanges                 types.Bool   `tfsdk:"log_selection_changes"`
-	LogSelectionErrors                  types.Bool   `tfsdk:"log_selection_errors"`
-	ClockIdentityMacAddress             types.String `tfsdk:"clock_identity_mac_address"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	QualityItuTOptionOne types.Bool `tfsdk:"quality_itu_t_option_one"`
+	QualityItuTOptionTwoGenerationOne types.Bool `tfsdk:"quality_itu_t_option_two_generation_one"`
+	QualityItuTOptionTwoGenerationTwo types.Bool `tfsdk:"quality_itu_t_option_two_generation_two"`
+	ClockInterfaceTimingModeSystem types.Bool `tfsdk:"clock_interface_timing_mode_system"`
+	ClockInterfaceTimingModeIndependent types.Bool `tfsdk:"clock_interface_timing_mode_independent"`
+	SystemTimingModeLineOnly types.Bool `tfsdk:"system_timing_mode_line_only"`
+	SystemTimingModeClockOnly types.Bool `tfsdk:"system_timing_mode_clock_only"`
+	LogSelectionChanges types.Bool `tfsdk:"log_selection_changes"`
+	LogSelectionErrors types.Bool `tfsdk:"log_selection_errors"`
+	ClockIdentityMacAddress types.String `tfsdk:"clock_identity_mac_address"`
 }
 
 type FrequencySynchronizationData struct {
-	Device                              types.String `tfsdk:"device"`
-	Id                                  types.String `tfsdk:"id"`
-	QualityItuTOptionOne                types.Bool   `tfsdk:"quality_itu_t_option_one"`
-	QualityItuTOptionTwoGenerationOne   types.Bool   `tfsdk:"quality_itu_t_option_two_generation_one"`
-	QualityItuTOptionTwoGenerationTwo   types.Bool   `tfsdk:"quality_itu_t_option_two_generation_two"`
-	ClockInterfaceTimingModeSystem      types.Bool   `tfsdk:"clock_interface_timing_mode_system"`
-	ClockInterfaceTimingModeIndependent types.Bool   `tfsdk:"clock_interface_timing_mode_independent"`
-	SystemTimingModeLineOnly            types.Bool   `tfsdk:"system_timing_mode_line_only"`
-	SystemTimingModeClockOnly           types.Bool   `tfsdk:"system_timing_mode_clock_only"`
-	LogSelectionChanges                 types.Bool   `tfsdk:"log_selection_changes"`
-	LogSelectionErrors                  types.Bool   `tfsdk:"log_selection_errors"`
-	ClockIdentityMacAddress             types.String `tfsdk:"clock_identity_mac_address"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	QualityItuTOptionOne types.Bool `tfsdk:"quality_itu_t_option_one"`
+	QualityItuTOptionTwoGenerationOne types.Bool `tfsdk:"quality_itu_t_option_two_generation_one"`
+	QualityItuTOptionTwoGenerationTwo types.Bool `tfsdk:"quality_itu_t_option_two_generation_two"`
+	ClockInterfaceTimingModeSystem types.Bool `tfsdk:"clock_interface_timing_mode_system"`
+	ClockInterfaceTimingModeIndependent types.Bool `tfsdk:"clock_interface_timing_mode_independent"`
+	SystemTimingModeLineOnly types.Bool `tfsdk:"system_timing_mode_line_only"`
+	SystemTimingModeClockOnly types.Bool `tfsdk:"system_timing_mode_clock_only"`
+	LogSelectionChanges types.Bool `tfsdk:"log_selection_changes"`
+	LogSelectionErrors types.Bool `tfsdk:"log_selection_errors"`
+	ClockIdentityMacAddress types.String `tfsdk:"clock_identity_mac_address"`
 }
 
 // End of section. //template:end types
@@ -155,51 +159,51 @@ func (data FrequencySynchronization) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.QualityItuTOptionOne.IsNull() && !data.QualityItuTOptionOne.IsUnknown() {
 		if data.QualityItuTOptionOne.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/quality/itu-t/option/one", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/quality/itu-t/option/one", "")
 		}
 	}
 	if !data.QualityItuTOptionTwoGenerationOne.IsNull() && !data.QualityItuTOptionTwoGenerationOne.IsUnknown() {
 		if data.QualityItuTOptionTwoGenerationOne.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/quality/itu-t/option/two/generation/one", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/quality/itu-t/option/two/generation/one", "")
 		}
 	}
 	if !data.QualityItuTOptionTwoGenerationTwo.IsNull() && !data.QualityItuTOptionTwoGenerationTwo.IsUnknown() {
 		if data.QualityItuTOptionTwoGenerationTwo.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/quality/itu-t/option/two/generation/two", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/quality/itu-t/option/two/generation/two", "")
 		}
 	}
 	if !data.ClockInterfaceTimingModeSystem.IsNull() && !data.ClockInterfaceTimingModeSystem.IsUnknown() {
 		if data.ClockInterfaceTimingModeSystem.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/clock-interface/timing-mode/system", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/clock-interface/timing-mode/system", "")
 		}
 	}
 	if !data.ClockInterfaceTimingModeIndependent.IsNull() && !data.ClockInterfaceTimingModeIndependent.IsUnknown() {
 		if data.ClockInterfaceTimingModeIndependent.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/clock-interface/timing-mode/independent", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/clock-interface/timing-mode/independent", "")
 		}
 	}
 	if !data.SystemTimingModeLineOnly.IsNull() && !data.SystemTimingModeLineOnly.IsUnknown() {
 		if data.SystemTimingModeLineOnly.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/system/timing-mode/line-only", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/system/timing-mode/line-only", "")
 		}
 	}
 	if !data.SystemTimingModeClockOnly.IsNull() && !data.SystemTimingModeClockOnly.IsUnknown() {
 		if data.SystemTimingModeClockOnly.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/system/timing-mode/clock-only", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/system/timing-mode/clock-only", "")
 		}
 	}
 	if !data.LogSelectionChanges.IsNull() && !data.LogSelectionChanges.IsUnknown() {
 		if data.LogSelectionChanges.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/log/selection/changes", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/log/selection/changes", "")
 		}
 	}
 	if !data.LogSelectionErrors.IsNull() && !data.LogSelectionErrors.IsUnknown() {
 		if data.LogSelectionErrors.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/log/selection/errors", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/log/selection/errors", "")
 		}
 	}
 	if !data.ClockIdentityMacAddress.IsNull() && !data.ClockIdentityMacAddress.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/clock-identity/mac-address", data.ClockIdentityMacAddress.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/clock-identity/mac-address", data.ClockIdentityMacAddress.ValueString())
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -213,95 +217,86 @@ func (data FrequencySynchronization) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "quality.itu-t.option.one"); value.Exists() {
-		if !data.QualityItuTOptionOne.IsNull() {
+	if value := gjson.GetBytes(res, "quality.itu-t.option.one"); !data.QualityItuTOptionOne.IsNull() {
+		if value.Exists() {
 			data.QualityItuTOptionOne = types.BoolValue(true)
+		} else {
+			data.QualityItuTOptionOne = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.QualityItuTOptionOne.IsNull() {
-			data.QualityItuTOptionOne = types.BoolNull()
-		}
+		data.QualityItuTOptionOne = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "quality.itu-t.option.two.generation.one"); value.Exists() {
-		if !data.QualityItuTOptionTwoGenerationOne.IsNull() {
+	if value := gjson.GetBytes(res, "quality.itu-t.option.two.generation.one"); !data.QualityItuTOptionTwoGenerationOne.IsNull() {
+		if value.Exists() {
 			data.QualityItuTOptionTwoGenerationOne = types.BoolValue(true)
+		} else {
+			data.QualityItuTOptionTwoGenerationOne = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.QualityItuTOptionTwoGenerationOne.IsNull() {
-			data.QualityItuTOptionTwoGenerationOne = types.BoolNull()
-		}
+		data.QualityItuTOptionTwoGenerationOne = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "quality.itu-t.option.two.generation.two"); value.Exists() {
-		if !data.QualityItuTOptionTwoGenerationTwo.IsNull() {
+	if value := gjson.GetBytes(res, "quality.itu-t.option.two.generation.two"); !data.QualityItuTOptionTwoGenerationTwo.IsNull() {
+		if value.Exists() {
 			data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(true)
+		} else {
+			data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.QualityItuTOptionTwoGenerationTwo.IsNull() {
-			data.QualityItuTOptionTwoGenerationTwo = types.BoolNull()
-		}
+		data.QualityItuTOptionTwoGenerationTwo = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "clock-interface.timing-mode.system"); value.Exists() {
-		if !data.ClockInterfaceTimingModeSystem.IsNull() {
+	if value := gjson.GetBytes(res, "clock-interface.timing-mode.system"); !data.ClockInterfaceTimingModeSystem.IsNull() {
+		if value.Exists() {
 			data.ClockInterfaceTimingModeSystem = types.BoolValue(true)
+		} else {
+			data.ClockInterfaceTimingModeSystem = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.ClockInterfaceTimingModeSystem.IsNull() {
-			data.ClockInterfaceTimingModeSystem = types.BoolNull()
-		}
+		data.ClockInterfaceTimingModeSystem = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "clock-interface.timing-mode.independent"); value.Exists() {
-		if !data.ClockInterfaceTimingModeIndependent.IsNull() {
+	if value := gjson.GetBytes(res, "clock-interface.timing-mode.independent"); !data.ClockInterfaceTimingModeIndependent.IsNull() {
+		if value.Exists() {
 			data.ClockInterfaceTimingModeIndependent = types.BoolValue(true)
+		} else {
+			data.ClockInterfaceTimingModeIndependent = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.ClockInterfaceTimingModeIndependent.IsNull() {
-			data.ClockInterfaceTimingModeIndependent = types.BoolNull()
-		}
+		data.ClockInterfaceTimingModeIndependent = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "system.timing-mode.line-only"); value.Exists() {
-		if !data.SystemTimingModeLineOnly.IsNull() {
+	if value := gjson.GetBytes(res, "system.timing-mode.line-only"); !data.SystemTimingModeLineOnly.IsNull() {
+		if value.Exists() {
 			data.SystemTimingModeLineOnly = types.BoolValue(true)
+		} else {
+			data.SystemTimingModeLineOnly = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.SystemTimingModeLineOnly.IsNull() {
-			data.SystemTimingModeLineOnly = types.BoolNull()
-		}
+		data.SystemTimingModeLineOnly = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "system.timing-mode.clock-only"); value.Exists() {
-		if !data.SystemTimingModeClockOnly.IsNull() {
+	if value := gjson.GetBytes(res, "system.timing-mode.clock-only"); !data.SystemTimingModeClockOnly.IsNull() {
+		if value.Exists() {
 			data.SystemTimingModeClockOnly = types.BoolValue(true)
+		} else {
+			data.SystemTimingModeClockOnly = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.SystemTimingModeClockOnly.IsNull() {
-			data.SystemTimingModeClockOnly = types.BoolNull()
-		}
+		data.SystemTimingModeClockOnly = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "log.selection.changes"); value.Exists() {
-		if !data.LogSelectionChanges.IsNull() {
+	if value := gjson.GetBytes(res, "log.selection.changes"); !data.LogSelectionChanges.IsNull() {
+		if value.Exists() {
 			data.LogSelectionChanges = types.BoolValue(true)
+		} else {
+			data.LogSelectionChanges = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.LogSelectionChanges.IsNull() {
-			data.LogSelectionChanges = types.BoolNull()
-		}
+		data.LogSelectionChanges = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "log.selection.errors"); value.Exists() {
-		if !data.LogSelectionErrors.IsNull() {
+	if value := gjson.GetBytes(res, "log.selection.errors"); !data.LogSelectionErrors.IsNull() {
+		if value.Exists() {
 			data.LogSelectionErrors = types.BoolValue(true)
+		} else {
+			data.LogSelectionErrors = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.LogSelectionErrors.IsNull() {
-			data.LogSelectionErrors = types.BoolNull()
-		}
+		data.LogSelectionErrors = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "clock-identity.mac-address"); value.Exists() && !data.ClockIdentityMacAddress.IsNull() {
 		data.ClockIdentityMacAddress = types.StringValue(value.String())
@@ -315,7 +310,7 @@ func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res []
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *FrequencySynchronization) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/quality/itu-t/option/one"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/quality/itu-t/option/one"); value.Exists() {
 		data.QualityItuTOptionOne = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -323,7 +318,7 @@ func (data *FrequencySynchronization) updateFromBodyXML(ctx context.Context, res
 			data.QualityItuTOptionOne = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/quality/itu-t/option/two/generation/one"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/quality/itu-t/option/two/generation/one"); value.Exists() {
 		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -331,7 +326,7 @@ func (data *FrequencySynchronization) updateFromBodyXML(ctx context.Context, res
 			data.QualityItuTOptionTwoGenerationOne = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/quality/itu-t/option/two/generation/two"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/quality/itu-t/option/two/generation/two"); value.Exists() {
 		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -339,7 +334,7 @@ func (data *FrequencySynchronization) updateFromBodyXML(ctx context.Context, res
 			data.QualityItuTOptionTwoGenerationTwo = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock-interface/timing-mode/system"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/clock-interface/timing-mode/system"); value.Exists() {
 		data.ClockInterfaceTimingModeSystem = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -347,7 +342,7 @@ func (data *FrequencySynchronization) updateFromBodyXML(ctx context.Context, res
 			data.ClockInterfaceTimingModeSystem = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock-interface/timing-mode/independent"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/clock-interface/timing-mode/independent"); value.Exists() {
 		data.ClockInterfaceTimingModeIndependent = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -355,7 +350,7 @@ func (data *FrequencySynchronization) updateFromBodyXML(ctx context.Context, res
 			data.ClockInterfaceTimingModeIndependent = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system/timing-mode/line-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system/timing-mode/line-only"); value.Exists() {
 		data.SystemTimingModeLineOnly = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -363,7 +358,7 @@ func (data *FrequencySynchronization) updateFromBodyXML(ctx context.Context, res
 			data.SystemTimingModeLineOnly = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system/timing-mode/clock-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system/timing-mode/clock-only"); value.Exists() {
 		data.SystemTimingModeClockOnly = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -371,7 +366,7 @@ func (data *FrequencySynchronization) updateFromBodyXML(ctx context.Context, res
 			data.SystemTimingModeClockOnly = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/selection/changes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/log/selection/changes"); value.Exists() {
 		data.LogSelectionChanges = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -379,7 +374,7 @@ func (data *FrequencySynchronization) updateFromBodyXML(ctx context.Context, res
 			data.LogSelectionChanges = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/selection/errors"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/log/selection/errors"); value.Exists() {
 		data.LogSelectionErrors = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -387,7 +382,7 @@ func (data *FrequencySynchronization) updateFromBodyXML(ctx context.Context, res
 			data.LogSelectionErrors = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock-identity/mac-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/clock-identity/mac-address"); value.Exists() {
 		data.ClockIdentityMacAddress = types.StringValue(value.String())
 	} else if data.ClockIdentityMacAddress.IsNull() {
 		data.ClockIdentityMacAddress = types.StringNull()
@@ -403,52 +398,52 @@ func (data *FrequencySynchronization) fromBody(ctx context.Context, res gjson.Re
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "quality.itu-t.option.one"); value.Exists() {
+	if value := res.Get(prefix+"quality.itu-t.option.one"); value.Exists() {
 		data.QualityItuTOptionOne = types.BoolValue(true)
 	} else {
-		data.QualityItuTOptionOne = types.BoolNull()
+		data.QualityItuTOptionOne = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "quality.itu-t.option.two.generation.one"); value.Exists() {
+	if value := res.Get(prefix+"quality.itu-t.option.two.generation.one"); value.Exists() {
 		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(true)
 	} else {
-		data.QualityItuTOptionTwoGenerationOne = types.BoolNull()
+		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "quality.itu-t.option.two.generation.two"); value.Exists() {
+	if value := res.Get(prefix+"quality.itu-t.option.two.generation.two"); value.Exists() {
 		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(true)
 	} else {
-		data.QualityItuTOptionTwoGenerationTwo = types.BoolNull()
+		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "clock-interface.timing-mode.system"); value.Exists() {
+	if value := res.Get(prefix+"clock-interface.timing-mode.system"); value.Exists() {
 		data.ClockInterfaceTimingModeSystem = types.BoolValue(true)
 	} else {
-		data.ClockInterfaceTimingModeSystem = types.BoolNull()
+		data.ClockInterfaceTimingModeSystem = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "clock-interface.timing-mode.independent"); value.Exists() {
+	if value := res.Get(prefix+"clock-interface.timing-mode.independent"); value.Exists() {
 		data.ClockInterfaceTimingModeIndependent = types.BoolValue(true)
 	} else {
-		data.ClockInterfaceTimingModeIndependent = types.BoolNull()
+		data.ClockInterfaceTimingModeIndependent = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "system.timing-mode.line-only"); value.Exists() {
+	if value := res.Get(prefix+"system.timing-mode.line-only"); value.Exists() {
 		data.SystemTimingModeLineOnly = types.BoolValue(true)
 	} else {
-		data.SystemTimingModeLineOnly = types.BoolNull()
+		data.SystemTimingModeLineOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "system.timing-mode.clock-only"); value.Exists() {
+	if value := res.Get(prefix+"system.timing-mode.clock-only"); value.Exists() {
 		data.SystemTimingModeClockOnly = types.BoolValue(true)
 	} else {
-		data.SystemTimingModeClockOnly = types.BoolNull()
+		data.SystemTimingModeClockOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "log.selection.changes"); value.Exists() {
+	if value := res.Get(prefix+"log.selection.changes"); value.Exists() {
 		data.LogSelectionChanges = types.BoolValue(true)
 	} else {
-		data.LogSelectionChanges = types.BoolNull()
+		data.LogSelectionChanges = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "log.selection.errors"); value.Exists() {
+	if value := res.Get(prefix+"log.selection.errors"); value.Exists() {
 		data.LogSelectionErrors = types.BoolValue(true)
 	} else {
-		data.LogSelectionErrors = types.BoolNull()
+		data.LogSelectionErrors = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "clock-identity.mac-address"); value.Exists() {
+	if value := res.Get(prefix+"clock-identity.mac-address"); value.Exists() {
 		data.ClockIdentityMacAddress = types.StringValue(value.String())
 	}
 }
@@ -462,52 +457,52 @@ func (data *FrequencySynchronizationData) fromBody(ctx context.Context, res gjso
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "quality.itu-t.option.one"); value.Exists() {
+	if value := res.Get(prefix+"quality.itu-t.option.one"); value.Exists() {
 		data.QualityItuTOptionOne = types.BoolValue(true)
 	} else {
 		data.QualityItuTOptionOne = types.BoolNull()
 	}
-	if value := res.Get(prefix + "quality.itu-t.option.two.generation.one"); value.Exists() {
+	if value := res.Get(prefix+"quality.itu-t.option.two.generation.one"); value.Exists() {
 		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(true)
 	} else {
 		data.QualityItuTOptionTwoGenerationOne = types.BoolNull()
 	}
-	if value := res.Get(prefix + "quality.itu-t.option.two.generation.two"); value.Exists() {
+	if value := res.Get(prefix+"quality.itu-t.option.two.generation.two"); value.Exists() {
 		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(true)
 	} else {
 		data.QualityItuTOptionTwoGenerationTwo = types.BoolNull()
 	}
-	if value := res.Get(prefix + "clock-interface.timing-mode.system"); value.Exists() {
+	if value := res.Get(prefix+"clock-interface.timing-mode.system"); value.Exists() {
 		data.ClockInterfaceTimingModeSystem = types.BoolValue(true)
 	} else {
 		data.ClockInterfaceTimingModeSystem = types.BoolNull()
 	}
-	if value := res.Get(prefix + "clock-interface.timing-mode.independent"); value.Exists() {
+	if value := res.Get(prefix+"clock-interface.timing-mode.independent"); value.Exists() {
 		data.ClockInterfaceTimingModeIndependent = types.BoolValue(true)
 	} else {
 		data.ClockInterfaceTimingModeIndependent = types.BoolNull()
 	}
-	if value := res.Get(prefix + "system.timing-mode.line-only"); value.Exists() {
+	if value := res.Get(prefix+"system.timing-mode.line-only"); value.Exists() {
 		data.SystemTimingModeLineOnly = types.BoolValue(true)
 	} else {
 		data.SystemTimingModeLineOnly = types.BoolNull()
 	}
-	if value := res.Get(prefix + "system.timing-mode.clock-only"); value.Exists() {
+	if value := res.Get(prefix+"system.timing-mode.clock-only"); value.Exists() {
 		data.SystemTimingModeClockOnly = types.BoolValue(true)
 	} else {
 		data.SystemTimingModeClockOnly = types.BoolNull()
 	}
-	if value := res.Get(prefix + "log.selection.changes"); value.Exists() {
+	if value := res.Get(prefix+"log.selection.changes"); value.Exists() {
 		data.LogSelectionChanges = types.BoolValue(true)
 	} else {
 		data.LogSelectionChanges = types.BoolNull()
 	}
-	if value := res.Get(prefix + "log.selection.errors"); value.Exists() {
+	if value := res.Get(prefix+"log.selection.errors"); value.Exists() {
 		data.LogSelectionErrors = types.BoolValue(true)
 	} else {
 		data.LogSelectionErrors = types.BoolNull()
 	}
-	if value := res.Get(prefix + "clock-identity.mac-address"); value.Exists() {
+	if value := res.Get(prefix+"clock-identity.mac-address"); value.Exists() {
 		data.ClockIdentityMacAddress = types.StringValue(value.String())
 	}
 }
@@ -517,52 +512,52 @@ func (data *FrequencySynchronizationData) fromBody(ctx context.Context, res gjso
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *FrequencySynchronization) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/quality/itu-t/option/one"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/quality/itu-t/option/one"); value.Exists() {
 		data.QualityItuTOptionOne = types.BoolValue(true)
 	} else {
-		data.QualityItuTOptionOne = types.BoolNull()
+		data.QualityItuTOptionOne = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/quality/itu-t/option/two/generation/one"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/quality/itu-t/option/two/generation/one"); value.Exists() {
 		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(true)
 	} else {
-		data.QualityItuTOptionTwoGenerationOne = types.BoolNull()
+		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/quality/itu-t/option/two/generation/two"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/quality/itu-t/option/two/generation/two"); value.Exists() {
 		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(true)
 	} else {
-		data.QualityItuTOptionTwoGenerationTwo = types.BoolNull()
+		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock-interface/timing-mode/system"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/clock-interface/timing-mode/system"); value.Exists() {
 		data.ClockInterfaceTimingModeSystem = types.BoolValue(true)
 	} else {
-		data.ClockInterfaceTimingModeSystem = types.BoolNull()
+		data.ClockInterfaceTimingModeSystem = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock-interface/timing-mode/independent"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/clock-interface/timing-mode/independent"); value.Exists() {
 		data.ClockInterfaceTimingModeIndependent = types.BoolValue(true)
 	} else {
-		data.ClockInterfaceTimingModeIndependent = types.BoolNull()
+		data.ClockInterfaceTimingModeIndependent = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system/timing-mode/line-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system/timing-mode/line-only"); value.Exists() {
 		data.SystemTimingModeLineOnly = types.BoolValue(true)
 	} else {
-		data.SystemTimingModeLineOnly = types.BoolNull()
+		data.SystemTimingModeLineOnly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system/timing-mode/clock-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system/timing-mode/clock-only"); value.Exists() {
 		data.SystemTimingModeClockOnly = types.BoolValue(true)
 	} else {
-		data.SystemTimingModeClockOnly = types.BoolNull()
+		data.SystemTimingModeClockOnly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/selection/changes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/log/selection/changes"); value.Exists() {
 		data.LogSelectionChanges = types.BoolValue(true)
 	} else {
-		data.LogSelectionChanges = types.BoolNull()
+		data.LogSelectionChanges = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/selection/errors"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/log/selection/errors"); value.Exists() {
 		data.LogSelectionErrors = types.BoolValue(true)
 	} else {
-		data.LogSelectionErrors = types.BoolNull()
+		data.LogSelectionErrors = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock-identity/mac-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/clock-identity/mac-address"); value.Exists() {
 		data.ClockIdentityMacAddress = types.StringValue(value.String())
 	}
 }
@@ -572,52 +567,52 @@ func (data *FrequencySynchronization) fromBodyXML(ctx context.Context, res xmldo
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *FrequencySynchronizationData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/quality/itu-t/option/one"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/quality/itu-t/option/one"); value.Exists() {
 		data.QualityItuTOptionOne = types.BoolValue(true)
 	} else {
 		data.QualityItuTOptionOne = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/quality/itu-t/option/two/generation/one"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/quality/itu-t/option/two/generation/one"); value.Exists() {
 		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(true)
 	} else {
 		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/quality/itu-t/option/two/generation/two"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/quality/itu-t/option/two/generation/two"); value.Exists() {
 		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(true)
 	} else {
 		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock-interface/timing-mode/system"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/clock-interface/timing-mode/system"); value.Exists() {
 		data.ClockInterfaceTimingModeSystem = types.BoolValue(true)
 	} else {
 		data.ClockInterfaceTimingModeSystem = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock-interface/timing-mode/independent"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/clock-interface/timing-mode/independent"); value.Exists() {
 		data.ClockInterfaceTimingModeIndependent = types.BoolValue(true)
 	} else {
 		data.ClockInterfaceTimingModeIndependent = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system/timing-mode/line-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system/timing-mode/line-only"); value.Exists() {
 		data.SystemTimingModeLineOnly = types.BoolValue(true)
 	} else {
 		data.SystemTimingModeLineOnly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system/timing-mode/clock-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system/timing-mode/clock-only"); value.Exists() {
 		data.SystemTimingModeClockOnly = types.BoolValue(true)
 	} else {
 		data.SystemTimingModeClockOnly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/selection/changes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/log/selection/changes"); value.Exists() {
 		data.LogSelectionChanges = types.BoolValue(true)
 	} else {
 		data.LogSelectionChanges = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/selection/errors"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/log/selection/errors"); value.Exists() {
 		data.LogSelectionErrors = types.BoolValue(true)
 	} else {
 		data.LogSelectionErrors = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock-identity/mac-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/clock-identity/mac-address"); value.Exists() {
 		data.ClockIdentityMacAddress = types.StringValue(value.String())
 	}
 }
@@ -773,7 +768,7 @@ func (data *FrequencySynchronization) addDeletedItemsXML(ctx context.Context, st
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.ClockIdentityMacAddress.IsNull() && data.ClockIdentityMacAddress.IsNull() {
-		deletePath := state.getXPath() + "/clock-identity/mac-address"
+		deletePath := state.getXPath()+"/clock-identity/mac-address"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -781,7 +776,7 @@ func (data *FrequencySynchronization) addDeletedItemsXML(ctx context.Context, st
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LogSelectionErrors.IsNull() && state.LogSelectionErrors.ValueBool() && data.LogSelectionErrors.IsNull() {
-		deletePath := state.getXPath() + "/log/selection/errors"
+		deletePath := state.getXPath()+"/log/selection/errors"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -789,7 +784,7 @@ func (data *FrequencySynchronization) addDeletedItemsXML(ctx context.Context, st
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LogSelectionChanges.IsNull() && state.LogSelectionChanges.ValueBool() && data.LogSelectionChanges.IsNull() {
-		deletePath := state.getXPath() + "/log/selection/changes"
+		deletePath := state.getXPath()+"/log/selection/changes"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -797,7 +792,7 @@ func (data *FrequencySynchronization) addDeletedItemsXML(ctx context.Context, st
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SystemTimingModeClockOnly.IsNull() && state.SystemTimingModeClockOnly.ValueBool() && data.SystemTimingModeClockOnly.IsNull() {
-		deletePath := state.getXPath() + "/system/timing-mode/clock-only"
+		deletePath := state.getXPath()+"/system/timing-mode/clock-only"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -805,7 +800,7 @@ func (data *FrequencySynchronization) addDeletedItemsXML(ctx context.Context, st
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SystemTimingModeLineOnly.IsNull() && state.SystemTimingModeLineOnly.ValueBool() && data.SystemTimingModeLineOnly.IsNull() {
-		deletePath := state.getXPath() + "/system/timing-mode/line-only"
+		deletePath := state.getXPath()+"/system/timing-mode/line-only"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -813,7 +808,7 @@ func (data *FrequencySynchronization) addDeletedItemsXML(ctx context.Context, st
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ClockInterfaceTimingModeIndependent.IsNull() && state.ClockInterfaceTimingModeIndependent.ValueBool() && data.ClockInterfaceTimingModeIndependent.IsNull() {
-		deletePath := state.getXPath() + "/clock-interface/timing-mode/independent"
+		deletePath := state.getXPath()+"/clock-interface/timing-mode/independent"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -821,7 +816,7 @@ func (data *FrequencySynchronization) addDeletedItemsXML(ctx context.Context, st
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ClockInterfaceTimingModeSystem.IsNull() && state.ClockInterfaceTimingModeSystem.ValueBool() && data.ClockInterfaceTimingModeSystem.IsNull() {
-		deletePath := state.getXPath() + "/clock-interface/timing-mode/system"
+		deletePath := state.getXPath()+"/clock-interface/timing-mode/system"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -829,7 +824,7 @@ func (data *FrequencySynchronization) addDeletedItemsXML(ctx context.Context, st
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.QualityItuTOptionTwoGenerationTwo.IsNull() && state.QualityItuTOptionTwoGenerationTwo.ValueBool() && data.QualityItuTOptionTwoGenerationTwo.IsNull() {
-		deletePath := state.getXPath() + "/quality/itu-t/option/two/generation/two"
+		deletePath := state.getXPath()+"/quality/itu-t/option/two/generation/two"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -837,7 +832,7 @@ func (data *FrequencySynchronization) addDeletedItemsXML(ctx context.Context, st
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.QualityItuTOptionTwoGenerationOne.IsNull() && state.QualityItuTOptionTwoGenerationOne.ValueBool() && data.QualityItuTOptionTwoGenerationOne.IsNull() {
-		deletePath := state.getXPath() + "/quality/itu-t/option/two/generation/one"
+		deletePath := state.getXPath()+"/quality/itu-t/option/two/generation/one"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -845,7 +840,7 @@ func (data *FrequencySynchronization) addDeletedItemsXML(ctx context.Context, st
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.QualityItuTOptionOne.IsNull() && state.QualityItuTOptionOne.ValueBool() && data.QualityItuTOptionOne.IsNull() {
-		deletePath := state.getXPath() + "/quality/itu-t/option/one"
+		deletePath := state.getXPath()+"/quality/itu-t/option/one"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true

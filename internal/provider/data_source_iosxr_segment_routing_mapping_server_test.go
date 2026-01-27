@@ -43,8 +43,8 @@ func TestAccDataSourceIosxrSegmentRoutingMappingServer(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSegmentRoutingMappingServerPrerequisitesConfig + testAccDataSourceIosxrSegmentRoutingMappingServerConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrSegmentRoutingMappingServerPrerequisitesConfig+testAccDataSourceIosxrSegmentRoutingMappingServerConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

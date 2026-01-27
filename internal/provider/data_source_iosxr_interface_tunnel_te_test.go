@@ -113,7 +113,7 @@ func TestAccDataSourceIosxrInterfaceTunnelTE(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrInterfaceTunnelTEConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

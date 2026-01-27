@@ -24,21 +24,28 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -49,7 +56,7 @@ func NewSegmentRoutingTEPolicyResource() resource.Resource {
 	return &SegmentRoutingTEPolicyResource{}
 }
 
-type SegmentRoutingTEPolicyResource struct {
+type SegmentRoutingTEPolicyResource struct{
 	data *IosxrProviderData
 }
 
@@ -127,10 +134,10 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 				},
 			},
 			"binding_sid_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Binding SID type").AddStringEnumDescription("mpls-label-any", "mpls-label-specified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Binding SID type").AddStringEnumDescription("mpls-label-any", "mpls-label-specified", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("mpls-label-any", "mpls-label-specified"),
+					stringvalidator.OneOf("mpls-label-any", "mpls-label-specified", ),
 				},
 			},
 			"binding_sid_mpls_label": schema.Int64Attribute{
@@ -156,10 +163,10 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 				},
 			},
 			"policy_color_endpoint_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("End point type").AddStringEnumDescription("end-point-type-ipv4", "end-point-type-ipv6").String,
+				MarkdownDescription: helpers.NewAttributeDescription("End point type").AddStringEnumDescription("end-point-type-ipv4", "end-point-type-ipv6", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("end-point-type-ipv4", "end-point-type-ipv6"),
+					stringvalidator.OneOf("end-point-type-ipv4", "end-point-type-ipv6", ),
 				},
 			},
 			"policy_color_endpoint_address": schema.StringAttribute{
@@ -190,10 +197,10 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 				},
 			},
 			"auto_route_metric_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Metric type").AddStringEnumDescription("constant", "relative").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Metric type").AddStringEnumDescription("constant", "relative", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("constant", "relative"),
+					stringvalidator.OneOf("constant", "relative", ),
 				},
 			},
 			"auto_route_metric_relative_value": schema.Int64Attribute{
@@ -216,10 +223,10 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"af_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Address family type").AddStringEnumDescription("af-type-all", "af-type-ipv4", "af-type-ipv6").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Address family type").AddStringEnumDescription("af-type-all", "af-type-ipv4", "af-type-ipv6", ).String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("af-type-all", "af-type-ipv4", "af-type-ipv6"),
+								stringvalidator.OneOf("af-type-all", "af-type-ipv4", "af-type-ipv6", ),
 							},
 						},
 						"address": schema.StringAttribute{
@@ -271,10 +278,10 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 							},
 						},
 						"constraints_disjoint_path_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Disjointness Type").AddStringEnumDescription("link", "node", "srlg", "srlg-node").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Disjointness Type").AddStringEnumDescription("link", "node", "srlg", "srlg-node", ).String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("link", "node", "srlg", "srlg-node"),
+								stringvalidator.OneOf("link", "node", "srlg", "srlg-node", ),
 							},
 						},
 						"constraints_disjoint_path_sub_id": schema.Int64Attribute{
@@ -293,10 +300,10 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 							Optional:            true,
 						},
 						"constraints_segment_rules_protection_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Protection Type").AddStringEnumDescription("protected-only", "protected-preferred", "unprotected-only", "unprotected-preferred").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Protection Type").AddStringEnumDescription("protected-only", "protected-preferred", "unprotected-only", "unprotected-preferred", ).String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("protected-only", "protected-preferred", "unprotected-only", "unprotected-preferred"),
+								stringvalidator.OneOf("protected-only", "protected-preferred", "unprotected-only", "unprotected-preferred", ),
 							},
 						},
 						"constraints_segment_rules_sid_algorithm": schema.Int64Attribute{
@@ -316,10 +323,10 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"affinity_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Affinity rule type").AddStringEnumDescription("affinity-exclude-any", "affinity-include-all", "affinity-include-any").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Affinity rule type").AddStringEnumDescription("affinity-exclude-any", "affinity-include-all", "affinity-include-any", ).String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("affinity-exclude-any", "affinity-include-all", "affinity-include-any"),
+											stringvalidator.OneOf("affinity-exclude-any", "affinity-include-all", "affinity-include-any", ),
 										},
 									},
 									"affinities": schema.ListNestedAttribute{
@@ -327,16 +334,16 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 										Optional:            true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												"affinity_name": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Affinity name").String,
-													Required:            true,
-													Validators: []validator.String{
-														stringvalidator.LengthBetween(1, 32),
-														stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-													},
+											"affinity_name": schema.StringAttribute{
+												MarkdownDescription: helpers.NewAttributeDescription("Affinity name").String,
+												Required:            true,
+												Validators: []validator.String{
+													stringvalidator.LengthBetween(1, 32),
+													stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 												},
 											},
 										},
+									},
 									},
 								},
 							},
@@ -347,17 +354,17 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Scope of the bound").AddStringEnumDescription("bound-scope-cumulative", "bound-scope-link", "bound-scope-none").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Scope of the bound").AddStringEnumDescription("bound-scope-cumulative", "bound-scope-link", "bound-scope-none", ).String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("bound-scope-cumulative", "bound-scope-link", "bound-scope-none"),
+											stringvalidator.OneOf("bound-scope-cumulative", "bound-scope-link", "bound-scope-none", ),
 										},
 									},
 									"metric_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Metric type to bound").AddStringEnumDescription("hopcount", "igp", "latency", "te").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Metric type to bound").AddStringEnumDescription("hopcount", "igp", "latency", "te", ).String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("hopcount", "igp", "latency", "te"),
+											stringvalidator.OneOf("hopcount", "igp", "latency", "te", ),
 										},
 									},
 									"value": schema.Int64Attribute{
@@ -387,17 +394,17 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Path-option type").AddStringEnumDescription("dynamic", "explicit").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Path-option type").AddStringEnumDescription("dynamic", "explicit", ).String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("dynamic", "explicit"),
+											stringvalidator.OneOf("dynamic", "explicit", ),
 										},
 									},
 									"hop_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Type of dynamic path to be computed").AddStringEnumDescription("mpls", "srv6").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Type of dynamic path to be computed").AddStringEnumDescription("mpls", "srv6", ).String,
 										Optional:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("mpls", "srv6"),
+											stringvalidator.OneOf("mpls", "srv6", ),
 										},
 									},
 									"segment_list_name": schema.StringAttribute{
@@ -420,17 +427,17 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 										},
 									},
 									"metric_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Metric type").AddStringEnumDescription("hopcount", "igp", "latency", "te").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Metric type").AddStringEnumDescription("hopcount", "igp", "latency", "te", ).String,
 										Optional:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("hopcount", "igp", "latency", "te"),
+											stringvalidator.OneOf("hopcount", "igp", "latency", "te", ),
 										},
 									},
 									"metric_margin_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Metric margin type").AddStringEnumDescription("absolute", "relative").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Metric margin type").AddStringEnumDescription("absolute", "relative", ).String,
 										Optional:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("absolute", "relative"),
+											stringvalidator.OneOf("absolute", "relative", ),
 										},
 									},
 									"metric_margin_relative": schema.Int64Attribute{
@@ -517,10 +524,10 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 							},
 						},
 						"effective_metric_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Metric type, advertised to other protocols").AddStringEnumDescription("default", "hopcount", "igp", "latency", "te").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Metric type, advertised to other protocols").AddStringEnumDescription("default", "hopcount", "igp", "latency", "te", ).String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("default", "hopcount", "igp", "latency", "te"),
+								stringvalidator.OneOf("default", "hopcount", "igp", "latency", "te", ),
 							},
 						},
 					},
@@ -559,10 +566,10 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 				Optional:            true,
 			},
 			"performance_measurement_liveness_invalidation_action": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Action to be taken when PM liveness session is invalidated").AddStringEnumDescription("invalid-ation-action-down", "invalid-ation-action-none").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Action to be taken when PM liveness session is invalidated").AddStringEnumDescription("invalid-ation-action-down", "invalid-ation-action-none", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("invalid-ation-action-down", "invalid-ation-action-none"),
+					stringvalidator.OneOf("invalid-ation-action-down", "invalid-ation-action-none", ),
 				},
 			},
 			"performance_measurement_reverse_path_segment_list": schema.StringAttribute{
@@ -603,10 +610,10 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 				},
 			},
 			"bfd_invalidation_action": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Action to be taken when BFD session is invalidated").AddStringEnumDescription("invalid-ation-action-down", "invalid-ation-action-none").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Action to be taken when BFD session is invalidated").AddStringEnumDescription("invalid-ation-action-down", "invalid-ation-action-none", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("invalid-ation-action-down", "invalid-ation-action-none"),
+					stringvalidator.OneOf("invalid-ation-action-down", "invalid-ation-action-none", ),
 				},
 			},
 			"bfd_reverse_path_binding_label": schema.Int64Attribute{
@@ -621,10 +628,10 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 				Optional:            true,
 			},
 			"source_address_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IP address type").AddStringEnumDescription("end-point-type-ipv4", "end-point-type-ipv6").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IP address type").AddStringEnumDescription("end-point-type-ipv4", "end-point-type-ipv6", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("end-point-type-ipv4", "end-point-type-ipv6"),
+					stringvalidator.OneOf("end-point-type-ipv4", "end-point-type-ipv6", ),
 				},
 			},
 			"source_address": schema.StringAttribute{
@@ -639,10 +646,10 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 				},
 			},
 			"effective_metric_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Metric type, advertised to other protocols").AddStringEnumDescription("default", "hopcount", "igp", "latency", "te").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Metric type, advertised to other protocols").AddStringEnumDescription("default", "hopcount", "igp", "latency", "te", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("default", "hopcount", "igp", "latency", "te"),
+					stringvalidator.OneOf("default", "hopcount", "igp", "latency", "te", ),
 				},
 			},
 			"srv6_locator_name": schema.StringAttribute{
@@ -654,17 +661,17 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 				},
 			},
 			"srv6_locator_binding_sid_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Binding Segment ID type").AddStringEnumDescription("srv6-dynamic").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Binding Segment ID type").AddStringEnumDescription("srv6-dynamic", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("srv6-dynamic"),
+					stringvalidator.OneOf("srv6-dynamic", ),
 				},
 			},
 			"srv6_locator_behavior": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-encaps-reduced", "ub6-insert-reduced").String,
+				MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-encaps-reduced", "ub6-insert-reduced", ).String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced"),
+					stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced", ),
 				},
 			},
 		},
@@ -703,14 +710,14 @@ func (r *SegmentRoutingTEPolicyResource) Create(ctx context.Context, req resourc
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			var ops []gnmi.SetOperation
+		var ops []gnmi.SetOperation
 
-			// Create object
-			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -931,11 +938,11 @@ func (r *SegmentRoutingTEPolicyResource) Update(ctx context.Context, req resourc
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			// Combine update and delete operations into a single transaction
-			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-				resp.Diagnostics.AddError("Client Error", err.Error())
-				return
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
 			}
 		}
 	}

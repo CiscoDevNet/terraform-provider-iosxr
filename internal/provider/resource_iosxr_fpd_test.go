@@ -21,8 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -35,8 +33,8 @@ import (
 
 func TestAccIosxrFPD(t *testing.T) {
 	if os.Getenv("NCS") == "" {
-		t.Skip("skipping test, set environment variable NCS")
-	}
+        t.Skip("skipping test, set environment variable NCS")
+    }
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_fpd.test", "auto_upgrade_enable", "true"))
 	var steps []resource.TestStep
@@ -47,18 +45,18 @@ func TestAccIosxrFPD(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrFPDConfig_all(),
-		Check:  resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:      "iosxr_fpd.test",
-		ImportState:       true,
+		ResourceName:  "iosxr_fpd.test",
+		ImportState:   true,
 		ImportStateIdFunc: iosxrFPDImportStateIdFunc("iosxr_fpd.test"),
-		Check:             resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps:                    steps,
+		Steps: steps,
 	})
 }
 
@@ -90,7 +88,7 @@ func testAccIosxrFPDConfig_all() string {
 func iosxrFPDImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf(""), nil
+		return fmt.Sprintf("", ), nil
 	}
 }
 

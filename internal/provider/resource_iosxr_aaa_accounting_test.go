@@ -21,8 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -35,8 +33,8 @@ import (
 
 func TestAccIosxrAAAAccounting(t *testing.T) {
 	if os.Getenv("AAA") == "" {
-		t.Skip("skipping test, set environment variable AAA")
-	}
+        t.Skip("skipping test, set environment variable AAA")
+    }
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_aaa_accounting.test", "update_newinfo", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_aaa_accounting.test", "exec.0.list", "AAA-EXEC"))
@@ -66,23 +64,23 @@ func TestAccIosxrAAAAccounting(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrAAAAccountingPrerequisitesConfig + testAccIosxrAAAAccountingConfig_minimum(),
+			Config: testAccIosxrAAAAccountingPrerequisitesConfig+testAccIosxrAAAAccountingConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrAAAAccountingPrerequisitesConfig + testAccIosxrAAAAccountingConfig_all(),
-		Check:  resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrAAAAccountingPrerequisitesConfig+testAccIosxrAAAAccountingConfig_all(),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:      "iosxr_aaa_accounting.test",
-		ImportState:       true,
+		ResourceName:  "iosxr_aaa_accounting.test",
+		ImportState:   true,
 		ImportStateIdFunc: iosxrAAAAccountingImportStateIdFunc("iosxr_aaa_accounting.test"),
-		Check:             resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps:                    steps,
+		Steps: steps,
 	})
 }
 
@@ -93,7 +91,7 @@ func TestAccIosxrAAAAccounting(t *testing.T) {
 func iosxrAAAAccountingImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf(""), nil
+		return fmt.Sprintf("", ), nil
 	}
 }
 

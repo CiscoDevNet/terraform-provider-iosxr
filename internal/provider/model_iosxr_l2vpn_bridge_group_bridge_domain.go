@@ -24,150 +24,151 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type L2VPNBridgeGroupBridgeDomain struct {
-	Device                                      types.String                                     `tfsdk:"device"`
-	Id                                          types.String                                     `tfsdk:"id"`
-	DeleteMode                                  types.String                                     `tfsdk:"delete_mode"`
-	BridgeGroupName                             types.String                                     `tfsdk:"bridge_group_name"`
-	BridgeDomainName                            types.String                                     `tfsdk:"bridge_domain_name"`
-	Mtu                                         types.Int64                                      `tfsdk:"mtu"`
-	Description                                 types.String                                     `tfsdk:"description"`
-	Evis                                        []L2VPNBridgeGroupBridgeDomainEvis               `tfsdk:"evis"`
-	Srv6Evis                                    []L2VPNBridgeGroupBridgeDomainSrv6Evis           `tfsdk:"srv6_evis"`
-	Vnis                                        []L2VPNBridgeGroupBridgeDomainVnis               `tfsdk:"vnis"`
-	CoupledMode                                 types.Bool                                       `tfsdk:"coupled_mode"`
-	TransportModeVlanPassthrough                types.Bool                                       `tfsdk:"transport_mode_vlan_passthrough"`
-	FloodingDisable                             types.Bool                                       `tfsdk:"flooding_disable"`
-	DynamicArpInspection                        types.Bool                                       `tfsdk:"dynamic_arp_inspection"`
-	DynamicArpInspectionLogging                 types.Bool                                       `tfsdk:"dynamic_arp_inspection_logging"`
-	DynamicArpInspectionAddressValidationSrcMac types.Bool                                       `tfsdk:"dynamic_arp_inspection_address_validation_src_mac"`
-	DynamicArpInspectionAddressValidationDstMac types.Bool                                       `tfsdk:"dynamic_arp_inspection_address_validation_dst_mac"`
-	DynamicArpInspectionAddressValidationIpv4   types.Bool                                       `tfsdk:"dynamic_arp_inspection_address_validation_ipv4"`
-	IpSourceGuard                               types.Bool                                       `tfsdk:"ip_source_guard"`
-	IpSourceGuardLogging                        types.Bool                                       `tfsdk:"ip_source_guard_logging"`
-	IgmpSnoopingProfile                         types.String                                     `tfsdk:"igmp_snooping_profile"`
-	IgmpSnoopingDisable                         types.Bool                                       `tfsdk:"igmp_snooping_disable"`
-	MldSnoopingProfile                          types.String                                     `tfsdk:"mld_snooping_profile"`
-	StormControlBroadcastPps                    types.Int64                                      `tfsdk:"storm_control_broadcast_pps"`
-	StormControlBroadcastKbps                   types.Int64                                      `tfsdk:"storm_control_broadcast_kbps"`
-	StormControlMulticastPps                    types.Int64                                      `tfsdk:"storm_control_multicast_pps"`
-	StormControlMulticastKbps                   types.Int64                                      `tfsdk:"storm_control_multicast_kbps"`
-	StormControlUnknownUnicastPps               types.Int64                                      `tfsdk:"storm_control_unknown_unicast_pps"`
-	StormControlUnknownUnicastKbps              types.Int64                                      `tfsdk:"storm_control_unknown_unicast_kbps"`
-	MulticastSourceIpv4                         types.Bool                                       `tfsdk:"multicast_source_ipv4"`
-	MulticastSourceIpv6                         types.Bool                                       `tfsdk:"multicast_source_ipv6"`
-	MulticastSourceIpv4Ipv6                     types.Bool                                       `tfsdk:"multicast_source_ipv4_ipv6"`
-	Interfaces                                  []L2VPNBridgeGroupBridgeDomainInterfaces         `tfsdk:"interfaces"`
-	RoutedInterface                             []L2VPNBridgeGroupBridgeDomainRoutedInterface    `tfsdk:"routed_interface"`
-	Shutdown                                    types.Bool                                       `tfsdk:"shutdown"`
-	MacAgingTime                                types.Int64                                      `tfsdk:"mac_aging_time"`
-	MacAgingTypeAbsolute                        types.Bool                                       `tfsdk:"mac_aging_type_absolute"`
-	MacStaticAddresses                          []L2VPNBridgeGroupBridgeDomainMacStaticAddresses `tfsdk:"mac_static_addresses"`
-	MacLearningDisable                          types.Bool                                       `tfsdk:"mac_learning_disable"`
-	MacWithdrawDisable                          types.Bool                                       `tfsdk:"mac_withdraw_disable"`
-	MacWithdrawAccessPwDisable                  types.Bool                                       `tfsdk:"mac_withdraw_access_pw_disable"`
-	MacWithdrawRelay                            types.Bool                                       `tfsdk:"mac_withdraw_relay"`
-	MacWithdrawStateDown                        types.Bool                                       `tfsdk:"mac_withdraw_state_down"`
-	MacWithdrawOptimize                         types.Bool                                       `tfsdk:"mac_withdraw_optimize"`
-	MacLimitMaximum                             types.Int64                                      `tfsdk:"mac_limit_maximum"`
-	MacLimitActionFlood                         types.Bool                                       `tfsdk:"mac_limit_action_flood"`
-	MacLimitActionNoFlood                       types.Bool                                       `tfsdk:"mac_limit_action_no_flood"`
-	MacLimitActionShutdown                      types.Bool                                       `tfsdk:"mac_limit_action_shutdown"`
-	MacLimitNotificationTrap                    types.Bool                                       `tfsdk:"mac_limit_notification_trap"`
-	MacLimitNotificationBoth                    types.Bool                                       `tfsdk:"mac_limit_notification_both"`
-	MacLimitNotificationNone                    types.Bool                                       `tfsdk:"mac_limit_notification_none"`
-	MacPortDownFlushDisable                     types.Bool                                       `tfsdk:"mac_port_down_flush_disable"`
-	MacSecure                                   types.Bool                                       `tfsdk:"mac_secure"`
-	MacSecureLogging                            types.Bool                                       `tfsdk:"mac_secure_logging"`
-	MacSecureThreshold                          types.Bool                                       `tfsdk:"mac_secure_threshold"`
-	MacSecureActionNone                         types.Bool                                       `tfsdk:"mac_secure_action_none"`
-	MacSecureActionShutdown                     types.Bool                                       `tfsdk:"mac_secure_action_shutdown"`
-	MacSecureShutdownRecoveryTimeout            types.Int64                                      `tfsdk:"mac_secure_shutdown_recovery_timeout"`
-	NeighborsEvpnEvi                            []L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi   `tfsdk:"neighbors_evpn_evi"`
-	EfpVisibility                               types.Bool                                       `tfsdk:"efp_visibility"`
-	Etree                                       types.Bool                                       `tfsdk:"etree"`
-	EtreeLeaf                                   types.Bool                                       `tfsdk:"etree_leaf"`
-	MemberVnisVni                               []L2VPNBridgeGroupBridgeDomainMemberVnisVni      `tfsdk:"member_vnis_vni"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	BridgeGroupName types.String `tfsdk:"bridge_group_name"`
+	BridgeDomainName types.String `tfsdk:"bridge_domain_name"`
+	Mtu types.Int64 `tfsdk:"mtu"`
+	Description types.String `tfsdk:"description"`
+	Evis []L2VPNBridgeGroupBridgeDomainEvis `tfsdk:"evis"`
+	Srv6Evis []L2VPNBridgeGroupBridgeDomainSrv6Evis `tfsdk:"srv6_evis"`
+	Vnis []L2VPNBridgeGroupBridgeDomainVnis `tfsdk:"vnis"`
+	CoupledMode types.Bool `tfsdk:"coupled_mode"`
+	TransportModeVlanPassthrough types.Bool `tfsdk:"transport_mode_vlan_passthrough"`
+	FloodingDisable types.Bool `tfsdk:"flooding_disable"`
+	DynamicArpInspection types.Bool `tfsdk:"dynamic_arp_inspection"`
+	DynamicArpInspectionLogging types.Bool `tfsdk:"dynamic_arp_inspection_logging"`
+	DynamicArpInspectionAddressValidationSrcMac types.Bool `tfsdk:"dynamic_arp_inspection_address_validation_src_mac"`
+	DynamicArpInspectionAddressValidationDstMac types.Bool `tfsdk:"dynamic_arp_inspection_address_validation_dst_mac"`
+	DynamicArpInspectionAddressValidationIpv4 types.Bool `tfsdk:"dynamic_arp_inspection_address_validation_ipv4"`
+	IpSourceGuard types.Bool `tfsdk:"ip_source_guard"`
+	IpSourceGuardLogging types.Bool `tfsdk:"ip_source_guard_logging"`
+	IgmpSnoopingProfile types.String `tfsdk:"igmp_snooping_profile"`
+	IgmpSnoopingDisable types.Bool `tfsdk:"igmp_snooping_disable"`
+	MldSnoopingProfile types.String `tfsdk:"mld_snooping_profile"`
+	StormControlBroadcastPps types.Int64 `tfsdk:"storm_control_broadcast_pps"`
+	StormControlBroadcastKbps types.Int64 `tfsdk:"storm_control_broadcast_kbps"`
+	StormControlMulticastPps types.Int64 `tfsdk:"storm_control_multicast_pps"`
+	StormControlMulticastKbps types.Int64 `tfsdk:"storm_control_multicast_kbps"`
+	StormControlUnknownUnicastPps types.Int64 `tfsdk:"storm_control_unknown_unicast_pps"`
+	StormControlUnknownUnicastKbps types.Int64 `tfsdk:"storm_control_unknown_unicast_kbps"`
+	MulticastSourceIpv4 types.Bool `tfsdk:"multicast_source_ipv4"`
+	MulticastSourceIpv6 types.Bool `tfsdk:"multicast_source_ipv6"`
+	MulticastSourceIpv4Ipv6 types.Bool `tfsdk:"multicast_source_ipv4_ipv6"`
+	Interfaces []L2VPNBridgeGroupBridgeDomainInterfaces `tfsdk:"interfaces"`
+	RoutedInterface []L2VPNBridgeGroupBridgeDomainRoutedInterface `tfsdk:"routed_interface"`
+	Shutdown types.Bool `tfsdk:"shutdown"`
+	MacAgingTime types.Int64 `tfsdk:"mac_aging_time"`
+	MacAgingTypeAbsolute types.Bool `tfsdk:"mac_aging_type_absolute"`
+	MacStaticAddresses []L2VPNBridgeGroupBridgeDomainMacStaticAddresses `tfsdk:"mac_static_addresses"`
+	MacLearningDisable types.Bool `tfsdk:"mac_learning_disable"`
+	MacWithdrawDisable types.Bool `tfsdk:"mac_withdraw_disable"`
+	MacWithdrawAccessPwDisable types.Bool `tfsdk:"mac_withdraw_access_pw_disable"`
+	MacWithdrawRelay types.Bool `tfsdk:"mac_withdraw_relay"`
+	MacWithdrawStateDown types.Bool `tfsdk:"mac_withdraw_state_down"`
+	MacWithdrawOptimize types.Bool `tfsdk:"mac_withdraw_optimize"`
+	MacLimitMaximum types.Int64 `tfsdk:"mac_limit_maximum"`
+	MacLimitActionFlood types.Bool `tfsdk:"mac_limit_action_flood"`
+	MacLimitActionNoFlood types.Bool `tfsdk:"mac_limit_action_no_flood"`
+	MacLimitActionShutdown types.Bool `tfsdk:"mac_limit_action_shutdown"`
+	MacLimitNotificationTrap types.Bool `tfsdk:"mac_limit_notification_trap"`
+	MacLimitNotificationBoth types.Bool `tfsdk:"mac_limit_notification_both"`
+	MacLimitNotificationNone types.Bool `tfsdk:"mac_limit_notification_none"`
+	MacPortDownFlushDisable types.Bool `tfsdk:"mac_port_down_flush_disable"`
+	MacSecure types.Bool `tfsdk:"mac_secure"`
+	MacSecureLogging types.Bool `tfsdk:"mac_secure_logging"`
+	MacSecureThreshold types.Bool `tfsdk:"mac_secure_threshold"`
+	MacSecureActionNone types.Bool `tfsdk:"mac_secure_action_none"`
+	MacSecureActionShutdown types.Bool `tfsdk:"mac_secure_action_shutdown"`
+	MacSecureShutdownRecoveryTimeout types.Int64 `tfsdk:"mac_secure_shutdown_recovery_timeout"`
+	NeighborsEvpnEvi []L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi `tfsdk:"neighbors_evpn_evi"`
+	EfpVisibility types.Bool `tfsdk:"efp_visibility"`
+	Etree types.Bool `tfsdk:"etree"`
+	EtreeLeaf types.Bool `tfsdk:"etree_leaf"`
+	MemberVnisVni []L2VPNBridgeGroupBridgeDomainMemberVnisVni `tfsdk:"member_vnis_vni"`
 }
 
 type L2VPNBridgeGroupBridgeDomainData struct {
-	Device                                      types.String                                     `tfsdk:"device"`
-	Id                                          types.String                                     `tfsdk:"id"`
-	BridgeGroupName                             types.String                                     `tfsdk:"bridge_group_name"`
-	BridgeDomainName                            types.String                                     `tfsdk:"bridge_domain_name"`
-	Mtu                                         types.Int64                                      `tfsdk:"mtu"`
-	Description                                 types.String                                     `tfsdk:"description"`
-	Evis                                        []L2VPNBridgeGroupBridgeDomainEvis               `tfsdk:"evis"`
-	Srv6Evis                                    []L2VPNBridgeGroupBridgeDomainSrv6Evis           `tfsdk:"srv6_evis"`
-	Vnis                                        []L2VPNBridgeGroupBridgeDomainVnis               `tfsdk:"vnis"`
-	CoupledMode                                 types.Bool                                       `tfsdk:"coupled_mode"`
-	TransportModeVlanPassthrough                types.Bool                                       `tfsdk:"transport_mode_vlan_passthrough"`
-	FloodingDisable                             types.Bool                                       `tfsdk:"flooding_disable"`
-	DynamicArpInspection                        types.Bool                                       `tfsdk:"dynamic_arp_inspection"`
-	DynamicArpInspectionLogging                 types.Bool                                       `tfsdk:"dynamic_arp_inspection_logging"`
-	DynamicArpInspectionAddressValidationSrcMac types.Bool                                       `tfsdk:"dynamic_arp_inspection_address_validation_src_mac"`
-	DynamicArpInspectionAddressValidationDstMac types.Bool                                       `tfsdk:"dynamic_arp_inspection_address_validation_dst_mac"`
-	DynamicArpInspectionAddressValidationIpv4   types.Bool                                       `tfsdk:"dynamic_arp_inspection_address_validation_ipv4"`
-	IpSourceGuard                               types.Bool                                       `tfsdk:"ip_source_guard"`
-	IpSourceGuardLogging                        types.Bool                                       `tfsdk:"ip_source_guard_logging"`
-	IgmpSnoopingProfile                         types.String                                     `tfsdk:"igmp_snooping_profile"`
-	IgmpSnoopingDisable                         types.Bool                                       `tfsdk:"igmp_snooping_disable"`
-	MldSnoopingProfile                          types.String                                     `tfsdk:"mld_snooping_profile"`
-	StormControlBroadcastPps                    types.Int64                                      `tfsdk:"storm_control_broadcast_pps"`
-	StormControlBroadcastKbps                   types.Int64                                      `tfsdk:"storm_control_broadcast_kbps"`
-	StormControlMulticastPps                    types.Int64                                      `tfsdk:"storm_control_multicast_pps"`
-	StormControlMulticastKbps                   types.Int64                                      `tfsdk:"storm_control_multicast_kbps"`
-	StormControlUnknownUnicastPps               types.Int64                                      `tfsdk:"storm_control_unknown_unicast_pps"`
-	StormControlUnknownUnicastKbps              types.Int64                                      `tfsdk:"storm_control_unknown_unicast_kbps"`
-	MulticastSourceIpv4                         types.Bool                                       `tfsdk:"multicast_source_ipv4"`
-	MulticastSourceIpv6                         types.Bool                                       `tfsdk:"multicast_source_ipv6"`
-	MulticastSourceIpv4Ipv6                     types.Bool                                       `tfsdk:"multicast_source_ipv4_ipv6"`
-	Interfaces                                  []L2VPNBridgeGroupBridgeDomainInterfaces         `tfsdk:"interfaces"`
-	RoutedInterface                             []L2VPNBridgeGroupBridgeDomainRoutedInterface    `tfsdk:"routed_interface"`
-	Shutdown                                    types.Bool                                       `tfsdk:"shutdown"`
-	MacAgingTime                                types.Int64                                      `tfsdk:"mac_aging_time"`
-	MacAgingTypeAbsolute                        types.Bool                                       `tfsdk:"mac_aging_type_absolute"`
-	MacStaticAddresses                          []L2VPNBridgeGroupBridgeDomainMacStaticAddresses `tfsdk:"mac_static_addresses"`
-	MacLearningDisable                          types.Bool                                       `tfsdk:"mac_learning_disable"`
-	MacWithdrawDisable                          types.Bool                                       `tfsdk:"mac_withdraw_disable"`
-	MacWithdrawAccessPwDisable                  types.Bool                                       `tfsdk:"mac_withdraw_access_pw_disable"`
-	MacWithdrawRelay                            types.Bool                                       `tfsdk:"mac_withdraw_relay"`
-	MacWithdrawStateDown                        types.Bool                                       `tfsdk:"mac_withdraw_state_down"`
-	MacWithdrawOptimize                         types.Bool                                       `tfsdk:"mac_withdraw_optimize"`
-	MacLimitMaximum                             types.Int64                                      `tfsdk:"mac_limit_maximum"`
-	MacLimitActionFlood                         types.Bool                                       `tfsdk:"mac_limit_action_flood"`
-	MacLimitActionNoFlood                       types.Bool                                       `tfsdk:"mac_limit_action_no_flood"`
-	MacLimitActionShutdown                      types.Bool                                       `tfsdk:"mac_limit_action_shutdown"`
-	MacLimitNotificationTrap                    types.Bool                                       `tfsdk:"mac_limit_notification_trap"`
-	MacLimitNotificationBoth                    types.Bool                                       `tfsdk:"mac_limit_notification_both"`
-	MacLimitNotificationNone                    types.Bool                                       `tfsdk:"mac_limit_notification_none"`
-	MacPortDownFlushDisable                     types.Bool                                       `tfsdk:"mac_port_down_flush_disable"`
-	MacSecure                                   types.Bool                                       `tfsdk:"mac_secure"`
-	MacSecureLogging                            types.Bool                                       `tfsdk:"mac_secure_logging"`
-	MacSecureThreshold                          types.Bool                                       `tfsdk:"mac_secure_threshold"`
-	MacSecureActionNone                         types.Bool                                       `tfsdk:"mac_secure_action_none"`
-	MacSecureActionShutdown                     types.Bool                                       `tfsdk:"mac_secure_action_shutdown"`
-	MacSecureShutdownRecoveryTimeout            types.Int64                                      `tfsdk:"mac_secure_shutdown_recovery_timeout"`
-	NeighborsEvpnEvi                            []L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi   `tfsdk:"neighbors_evpn_evi"`
-	EfpVisibility                               types.Bool                                       `tfsdk:"efp_visibility"`
-	Etree                                       types.Bool                                       `tfsdk:"etree"`
-	EtreeLeaf                                   types.Bool                                       `tfsdk:"etree_leaf"`
-	MemberVnisVni                               []L2VPNBridgeGroupBridgeDomainMemberVnisVni      `tfsdk:"member_vnis_vni"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	BridgeGroupName types.String `tfsdk:"bridge_group_name"`
+	BridgeDomainName types.String `tfsdk:"bridge_domain_name"`
+	Mtu types.Int64 `tfsdk:"mtu"`
+	Description types.String `tfsdk:"description"`
+	Evis []L2VPNBridgeGroupBridgeDomainEvis `tfsdk:"evis"`
+	Srv6Evis []L2VPNBridgeGroupBridgeDomainSrv6Evis `tfsdk:"srv6_evis"`
+	Vnis []L2VPNBridgeGroupBridgeDomainVnis `tfsdk:"vnis"`
+	CoupledMode types.Bool `tfsdk:"coupled_mode"`
+	TransportModeVlanPassthrough types.Bool `tfsdk:"transport_mode_vlan_passthrough"`
+	FloodingDisable types.Bool `tfsdk:"flooding_disable"`
+	DynamicArpInspection types.Bool `tfsdk:"dynamic_arp_inspection"`
+	DynamicArpInspectionLogging types.Bool `tfsdk:"dynamic_arp_inspection_logging"`
+	DynamicArpInspectionAddressValidationSrcMac types.Bool `tfsdk:"dynamic_arp_inspection_address_validation_src_mac"`
+	DynamicArpInspectionAddressValidationDstMac types.Bool `tfsdk:"dynamic_arp_inspection_address_validation_dst_mac"`
+	DynamicArpInspectionAddressValidationIpv4 types.Bool `tfsdk:"dynamic_arp_inspection_address_validation_ipv4"`
+	IpSourceGuard types.Bool `tfsdk:"ip_source_guard"`
+	IpSourceGuardLogging types.Bool `tfsdk:"ip_source_guard_logging"`
+	IgmpSnoopingProfile types.String `tfsdk:"igmp_snooping_profile"`
+	IgmpSnoopingDisable types.Bool `tfsdk:"igmp_snooping_disable"`
+	MldSnoopingProfile types.String `tfsdk:"mld_snooping_profile"`
+	StormControlBroadcastPps types.Int64 `tfsdk:"storm_control_broadcast_pps"`
+	StormControlBroadcastKbps types.Int64 `tfsdk:"storm_control_broadcast_kbps"`
+	StormControlMulticastPps types.Int64 `tfsdk:"storm_control_multicast_pps"`
+	StormControlMulticastKbps types.Int64 `tfsdk:"storm_control_multicast_kbps"`
+	StormControlUnknownUnicastPps types.Int64 `tfsdk:"storm_control_unknown_unicast_pps"`
+	StormControlUnknownUnicastKbps types.Int64 `tfsdk:"storm_control_unknown_unicast_kbps"`
+	MulticastSourceIpv4 types.Bool `tfsdk:"multicast_source_ipv4"`
+	MulticastSourceIpv6 types.Bool `tfsdk:"multicast_source_ipv6"`
+	MulticastSourceIpv4Ipv6 types.Bool `tfsdk:"multicast_source_ipv4_ipv6"`
+	Interfaces []L2VPNBridgeGroupBridgeDomainInterfaces `tfsdk:"interfaces"`
+	RoutedInterface []L2VPNBridgeGroupBridgeDomainRoutedInterface `tfsdk:"routed_interface"`
+	Shutdown types.Bool `tfsdk:"shutdown"`
+	MacAgingTime types.Int64 `tfsdk:"mac_aging_time"`
+	MacAgingTypeAbsolute types.Bool `tfsdk:"mac_aging_type_absolute"`
+	MacStaticAddresses []L2VPNBridgeGroupBridgeDomainMacStaticAddresses `tfsdk:"mac_static_addresses"`
+	MacLearningDisable types.Bool `tfsdk:"mac_learning_disable"`
+	MacWithdrawDisable types.Bool `tfsdk:"mac_withdraw_disable"`
+	MacWithdrawAccessPwDisable types.Bool `tfsdk:"mac_withdraw_access_pw_disable"`
+	MacWithdrawRelay types.Bool `tfsdk:"mac_withdraw_relay"`
+	MacWithdrawStateDown types.Bool `tfsdk:"mac_withdraw_state_down"`
+	MacWithdrawOptimize types.Bool `tfsdk:"mac_withdraw_optimize"`
+	MacLimitMaximum types.Int64 `tfsdk:"mac_limit_maximum"`
+	MacLimitActionFlood types.Bool `tfsdk:"mac_limit_action_flood"`
+	MacLimitActionNoFlood types.Bool `tfsdk:"mac_limit_action_no_flood"`
+	MacLimitActionShutdown types.Bool `tfsdk:"mac_limit_action_shutdown"`
+	MacLimitNotificationTrap types.Bool `tfsdk:"mac_limit_notification_trap"`
+	MacLimitNotificationBoth types.Bool `tfsdk:"mac_limit_notification_both"`
+	MacLimitNotificationNone types.Bool `tfsdk:"mac_limit_notification_none"`
+	MacPortDownFlushDisable types.Bool `tfsdk:"mac_port_down_flush_disable"`
+	MacSecure types.Bool `tfsdk:"mac_secure"`
+	MacSecureLogging types.Bool `tfsdk:"mac_secure_logging"`
+	MacSecureThreshold types.Bool `tfsdk:"mac_secure_threshold"`
+	MacSecureActionNone types.Bool `tfsdk:"mac_secure_action_none"`
+	MacSecureActionShutdown types.Bool `tfsdk:"mac_secure_action_shutdown"`
+	MacSecureShutdownRecoveryTimeout types.Int64 `tfsdk:"mac_secure_shutdown_recovery_timeout"`
+	NeighborsEvpnEvi []L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi `tfsdk:"neighbors_evpn_evi"`
+	EfpVisibility types.Bool `tfsdk:"efp_visibility"`
+	Etree types.Bool `tfsdk:"etree"`
+	EtreeLeaf types.Bool `tfsdk:"etree_leaf"`
+	MemberVnisVni []L2VPNBridgeGroupBridgeDomainMemberVnisVni `tfsdk:"member_vnis_vni"`
 }
 type L2VPNBridgeGroupBridgeDomainEvis struct {
 	VpnId types.Int64 `tfsdk:"vpn_id"`
@@ -179,70 +180,70 @@ type L2VPNBridgeGroupBridgeDomainVnis struct {
 	VniId types.Int64 `tfsdk:"vni_id"`
 }
 type L2VPNBridgeGroupBridgeDomainInterfaces struct {
-	InterfaceName                                      types.String                                               `tfsdk:"interface_name"`
-	DynamicArpInspectionLogging                        types.Bool                                                 `tfsdk:"dynamic_arp_inspection_logging"`
-	DynamicArpInspectionLoggingDisable                 types.Bool                                                 `tfsdk:"dynamic_arp_inspection_logging_disable"`
-	DynamicArpInspectionDisable                        types.Bool                                                 `tfsdk:"dynamic_arp_inspection_disable"`
-	DynamicArpInspectionAddressValidationSrcMac        types.Bool                                                 `tfsdk:"dynamic_arp_inspection_address_validation_src_mac"`
-	DynamicArpInspectionAddressValidationSrcMacDisable types.Bool                                                 `tfsdk:"dynamic_arp_inspection_address_validation_src_mac_disable"`
-	DynamicArpInspectionAddressValidationDstMac        types.Bool                                                 `tfsdk:"dynamic_arp_inspection_address_validation_dst_mac"`
-	DynamicArpInspectionAddressValidationDstMacDisable types.Bool                                                 `tfsdk:"dynamic_arp_inspection_address_validation_dst_mac_disable"`
-	DynamicArpInspectionAddressValidationIpv4          types.Bool                                                 `tfsdk:"dynamic_arp_inspection_address_validation_ipv4"`
-	DynamicArpInspectionAddressValidationIpv4Disable   types.Bool                                                 `tfsdk:"dynamic_arp_inspection_address_validation_ipv4_disable"`
-	FloodingDisable                                    types.Bool                                                 `tfsdk:"flooding_disable"`
-	IgmpSnoopingProfile                                types.String                                               `tfsdk:"igmp_snooping_profile"`
-	IpSourceGuard                                      types.Bool                                                 `tfsdk:"ip_source_guard"`
-	IpSourceGuardDisable                               types.Bool                                                 `tfsdk:"ip_source_guard_disable"`
-	IpSourceGuardLogging                               types.Bool                                                 `tfsdk:"ip_source_guard_logging"`
-	IpSourceGuardLoggingDisable                        types.Bool                                                 `tfsdk:"ip_source_guard_logging_disable"`
-	MacAgingTime                                       types.Int64                                                `tfsdk:"mac_aging_time"`
-	MacAgingTypeAbsolute                               types.Bool                                                 `tfsdk:"mac_aging_type_absolute"`
-	MacAgingTypeInactivity                             types.Bool                                                 `tfsdk:"mac_aging_type_inactivity"`
-	MacLearning                                        types.Bool                                                 `tfsdk:"mac_learning"`
-	MacLearningDisable                                 types.Bool                                                 `tfsdk:"mac_learning_disable"`
-	MacLimitMaximum                                    types.Int64                                                `tfsdk:"mac_limit_maximum"`
-	MacLimitActionFlood                                types.Bool                                                 `tfsdk:"mac_limit_action_flood"`
-	MacLimitActionNoFlood                              types.Bool                                                 `tfsdk:"mac_limit_action_no_flood"`
-	MacLimitActionShutdown                             types.Bool                                                 `tfsdk:"mac_limit_action_shutdown"`
-	MacLimitActionNone                                 types.Bool                                                 `tfsdk:"mac_limit_action_none"`
-	MacLimitNotificationTrap                           types.Bool                                                 `tfsdk:"mac_limit_notification_trap"`
-	MacLimitNotificationBoth                           types.Bool                                                 `tfsdk:"mac_limit_notification_both"`
-	MacLimitNotificationNone                           types.Bool                                                 `tfsdk:"mac_limit_notification_none"`
-	MacLimitNotificationSyslog                         types.Bool                                                 `tfsdk:"mac_limit_notification_syslog"`
-	MacPortDownFlushDisable                            types.Bool                                                 `tfsdk:"mac_port_down_flush_disable"`
-	MacSecure                                          types.Bool                                                 `tfsdk:"mac_secure"`
-	MacSecureLogging                                   types.Bool                                                 `tfsdk:"mac_secure_logging"`
-	MacSecureLoggingDisable                            types.Bool                                                 `tfsdk:"mac_secure_logging_disable"`
-	MacSecureActionNone                                types.Bool                                                 `tfsdk:"mac_secure_action_none"`
-	MacSecureActionShutdown                            types.Bool                                                 `tfsdk:"mac_secure_action_shutdown"`
-	MacSecureActionRestrict                            types.Bool                                                 `tfsdk:"mac_secure_action_restrict"`
-	MacSecureDisable                                   types.Bool                                                 `tfsdk:"mac_secure_disable"`
-	MacSecureShutdownRecoveryTimeout                   types.Int64                                                `tfsdk:"mac_secure_shutdown_recovery_timeout"`
-	MacSecureShutdownRecoveryTimeoutDisable            types.Bool                                                 `tfsdk:"mac_secure_shutdown_recovery_timeout_disable"`
-	MldSnoopingProfile                                 types.String                                               `tfsdk:"mld_snooping_profile"`
-	StormControlBroadcastPps                           types.Int64                                                `tfsdk:"storm_control_broadcast_pps"`
-	StormControlBroadcastKbps                          types.Int64                                                `tfsdk:"storm_control_broadcast_kbps"`
-	StormControlMulticastPps                           types.Int64                                                `tfsdk:"storm_control_multicast_pps"`
-	StormControlMulticastKbps                          types.Int64                                                `tfsdk:"storm_control_multicast_kbps"`
-	StormControlUnknownUnicastPps                      types.Int64                                                `tfsdk:"storm_control_unknown_unicast_pps"`
-	StormControlUnknownUnicastKbps                     types.Int64                                                `tfsdk:"storm_control_unknown_unicast_kbps"`
-	SplitHorizonGroup                                  types.Bool                                                 `tfsdk:"split_horizon_group"`
-	StaticMacAddresses                                 []L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses `tfsdk:"static_mac_addresses"`
+	InterfaceName types.String `tfsdk:"interface_name"`
+	DynamicArpInspectionLogging types.Bool `tfsdk:"dynamic_arp_inspection_logging"`
+	DynamicArpInspectionLoggingDisable types.Bool `tfsdk:"dynamic_arp_inspection_logging_disable"`
+	DynamicArpInspectionDisable types.Bool `tfsdk:"dynamic_arp_inspection_disable"`
+	DynamicArpInspectionAddressValidationSrcMac types.Bool `tfsdk:"dynamic_arp_inspection_address_validation_src_mac"`
+	DynamicArpInspectionAddressValidationSrcMacDisable types.Bool `tfsdk:"dynamic_arp_inspection_address_validation_src_mac_disable"`
+	DynamicArpInspectionAddressValidationDstMac types.Bool `tfsdk:"dynamic_arp_inspection_address_validation_dst_mac"`
+	DynamicArpInspectionAddressValidationDstMacDisable types.Bool `tfsdk:"dynamic_arp_inspection_address_validation_dst_mac_disable"`
+	DynamicArpInspectionAddressValidationIpv4 types.Bool `tfsdk:"dynamic_arp_inspection_address_validation_ipv4"`
+	DynamicArpInspectionAddressValidationIpv4Disable types.Bool `tfsdk:"dynamic_arp_inspection_address_validation_ipv4_disable"`
+	FloodingDisable types.Bool `tfsdk:"flooding_disable"`
+	IgmpSnoopingProfile types.String `tfsdk:"igmp_snooping_profile"`
+	IpSourceGuard types.Bool `tfsdk:"ip_source_guard"`
+	IpSourceGuardDisable types.Bool `tfsdk:"ip_source_guard_disable"`
+	IpSourceGuardLogging types.Bool `tfsdk:"ip_source_guard_logging"`
+	IpSourceGuardLoggingDisable types.Bool `tfsdk:"ip_source_guard_logging_disable"`
+	MacAgingTime types.Int64 `tfsdk:"mac_aging_time"`
+	MacAgingTypeAbsolute types.Bool `tfsdk:"mac_aging_type_absolute"`
+	MacAgingTypeInactivity types.Bool `tfsdk:"mac_aging_type_inactivity"`
+	MacLearning types.Bool `tfsdk:"mac_learning"`
+	MacLearningDisable types.Bool `tfsdk:"mac_learning_disable"`
+	MacLimitMaximum types.Int64 `tfsdk:"mac_limit_maximum"`
+	MacLimitActionFlood types.Bool `tfsdk:"mac_limit_action_flood"`
+	MacLimitActionNoFlood types.Bool `tfsdk:"mac_limit_action_no_flood"`
+	MacLimitActionShutdown types.Bool `tfsdk:"mac_limit_action_shutdown"`
+	MacLimitActionNone types.Bool `tfsdk:"mac_limit_action_none"`
+	MacLimitNotificationTrap types.Bool `tfsdk:"mac_limit_notification_trap"`
+	MacLimitNotificationBoth types.Bool `tfsdk:"mac_limit_notification_both"`
+	MacLimitNotificationNone types.Bool `tfsdk:"mac_limit_notification_none"`
+	MacLimitNotificationSyslog types.Bool `tfsdk:"mac_limit_notification_syslog"`
+	MacPortDownFlushDisable types.Bool `tfsdk:"mac_port_down_flush_disable"`
+	MacSecure types.Bool `tfsdk:"mac_secure"`
+	MacSecureLogging types.Bool `tfsdk:"mac_secure_logging"`
+	MacSecureLoggingDisable types.Bool `tfsdk:"mac_secure_logging_disable"`
+	MacSecureActionNone types.Bool `tfsdk:"mac_secure_action_none"`
+	MacSecureActionShutdown types.Bool `tfsdk:"mac_secure_action_shutdown"`
+	MacSecureActionRestrict types.Bool `tfsdk:"mac_secure_action_restrict"`
+	MacSecureDisable types.Bool `tfsdk:"mac_secure_disable"`
+	MacSecureShutdownRecoveryTimeout types.Int64 `tfsdk:"mac_secure_shutdown_recovery_timeout"`
+	MacSecureShutdownRecoveryTimeoutDisable types.Bool `tfsdk:"mac_secure_shutdown_recovery_timeout_disable"`
+	MldSnoopingProfile types.String `tfsdk:"mld_snooping_profile"`
+	StormControlBroadcastPps types.Int64 `tfsdk:"storm_control_broadcast_pps"`
+	StormControlBroadcastKbps types.Int64 `tfsdk:"storm_control_broadcast_kbps"`
+	StormControlMulticastPps types.Int64 `tfsdk:"storm_control_multicast_pps"`
+	StormControlMulticastKbps types.Int64 `tfsdk:"storm_control_multicast_kbps"`
+	StormControlUnknownUnicastPps types.Int64 `tfsdk:"storm_control_unknown_unicast_pps"`
+	StormControlUnknownUnicastKbps types.Int64 `tfsdk:"storm_control_unknown_unicast_kbps"`
+	SplitHorizonGroup types.Bool `tfsdk:"split_horizon_group"`
+	StaticMacAddresses []L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses `tfsdk:"static_mac_addresses"`
 }
 type L2VPNBridgeGroupBridgeDomainRoutedInterface struct {
-	InterfaceName         types.String `tfsdk:"interface_name"`
-	SplitHorizonGroupCore types.Bool   `tfsdk:"split_horizon_group_core"`
+	InterfaceName types.String `tfsdk:"interface_name"`
+	SplitHorizonGroupCore types.Bool `tfsdk:"split_horizon_group_core"`
 }
 type L2VPNBridgeGroupBridgeDomainMacStaticAddresses struct {
 	MacAddress types.String `tfsdk:"mac_address"`
-	Drop       types.Bool   `tfsdk:"drop"`
+	Drop types.Bool `tfsdk:"drop"`
 }
 type L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi struct {
-	VpnId  types.Int64 `tfsdk:"vpn_id"`
+	VpnId types.Int64 `tfsdk:"vpn_id"`
 	Target types.Int64 `tfsdk:"target"`
 }
 type L2VPNBridgeGroupBridgeDomainMemberVnisVni struct {
-	VniId              types.Int64                                                   `tfsdk:"vni_id"`
+	VniId types.Int64 `tfsdk:"vni_id"`
 	StaticMacAddresses []L2VPNBridgeGroupBridgeDomainMemberVnisVniStaticMacAddresses `tfsdk:"static_mac_addresses"`
 }
 type L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses struct {
@@ -250,7 +251,7 @@ type L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses struct {
 }
 type L2VPNBridgeGroupBridgeDomainMemberVnisVniStaticMacAddresses struct {
 	MacAddress types.String `tfsdk:"mac_address"`
-	NextHop    types.String `tfsdk:"next_hop"`
+	NextHop types.String `tfsdk:"next_hop"`
 }
 
 // End of section. //template:end types
@@ -839,8 +840,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		data.Description = types.StringNull()
 	}
 	for i := range data.Evis {
-		keys := [...]string{"vpn-id"}
-		keyValues := [...]string{strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "evis.evi").ForEach(
@@ -868,8 +869,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		}
 	}
 	for i := range data.Srv6Evis {
-		keys := [...]string{"vpn-id"}
-		keyValues := [...]string{strconv.FormatInt(data.Srv6Evis[i].VpnId.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.Srv6Evis[i].VpnId.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "segment-routing-srv6-evis.evi").ForEach(
@@ -897,8 +898,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		}
 	}
 	for i := range data.Vnis {
-		keys := [...]string{"vni-id"}
-		keyValues := [...]string{strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10)}
+		keys := [...]string{ "vni-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "vnis.vni").ForEach(
@@ -925,120 +926,109 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.Vnis[i].VniId = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "coupled-mode"); value.Exists() {
-		if !data.CoupledMode.IsNull() {
+	if value := gjson.GetBytes(res, "coupled-mode"); !data.CoupledMode.IsNull() {
+		if value.Exists() {
 			data.CoupledMode = types.BoolValue(true)
+		} else {
+			data.CoupledMode = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.CoupledMode.IsNull() {
-			data.CoupledMode = types.BoolNull()
-		}
+		data.CoupledMode = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "transport-mode.vlan.passthrough"); value.Exists() {
-		if !data.TransportModeVlanPassthrough.IsNull() {
+	if value := gjson.GetBytes(res, "transport-mode.vlan.passthrough"); !data.TransportModeVlanPassthrough.IsNull() {
+		if value.Exists() {
 			data.TransportModeVlanPassthrough = types.BoolValue(true)
+		} else {
+			data.TransportModeVlanPassthrough = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.TransportModeVlanPassthrough.IsNull() {
-			data.TransportModeVlanPassthrough = types.BoolNull()
-		}
+		data.TransportModeVlanPassthrough = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "flooding.disable"); value.Exists() {
-		if !data.FloodingDisable.IsNull() {
+	if value := gjson.GetBytes(res, "flooding.disable"); !data.FloodingDisable.IsNull() {
+		if value.Exists() {
 			data.FloodingDisable = types.BoolValue(true)
+		} else {
+			data.FloodingDisable = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.FloodingDisable.IsNull() {
-			data.FloodingDisable = types.BoolNull()
-		}
+		data.FloodingDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "dynamic-arp-inspection"); value.Exists() {
-		if !data.DynamicArpInspection.IsNull() {
+	if value := gjson.GetBytes(res, "dynamic-arp-inspection"); !data.DynamicArpInspection.IsNull() {
+		if value.Exists() {
 			data.DynamicArpInspection = types.BoolValue(true)
+		} else {
+			data.DynamicArpInspection = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.DynamicArpInspection.IsNull() {
-			data.DynamicArpInspection = types.BoolNull()
-		}
+		data.DynamicArpInspection = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "dynamic-arp-inspection.logging"); value.Exists() {
-		if !data.DynamicArpInspectionLogging.IsNull() {
+	if value := gjson.GetBytes(res, "dynamic-arp-inspection.logging"); !data.DynamicArpInspectionLogging.IsNull() {
+		if value.Exists() {
 			data.DynamicArpInspectionLogging = types.BoolValue(true)
+		} else {
+			data.DynamicArpInspectionLogging = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.DynamicArpInspectionLogging.IsNull() {
-			data.DynamicArpInspectionLogging = types.BoolNull()
-		}
+		data.DynamicArpInspectionLogging = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "dynamic-arp-inspection.address-validation.src-mac"); value.Exists() {
-		if !data.DynamicArpInspectionAddressValidationSrcMac.IsNull() {
+	if value := gjson.GetBytes(res, "dynamic-arp-inspection.address-validation.src-mac"); !data.DynamicArpInspectionAddressValidationSrcMac.IsNull() {
+		if value.Exists() {
 			data.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
+		} else {
+			data.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.DynamicArpInspectionAddressValidationSrcMac.IsNull() {
-			data.DynamicArpInspectionAddressValidationSrcMac = types.BoolNull()
-		}
+		data.DynamicArpInspectionAddressValidationSrcMac = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "dynamic-arp-inspection.address-validation.dst-mac"); value.Exists() {
-		if !data.DynamicArpInspectionAddressValidationDstMac.IsNull() {
+	if value := gjson.GetBytes(res, "dynamic-arp-inspection.address-validation.dst-mac"); !data.DynamicArpInspectionAddressValidationDstMac.IsNull() {
+		if value.Exists() {
 			data.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
+		} else {
+			data.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.DynamicArpInspectionAddressValidationDstMac.IsNull() {
-			data.DynamicArpInspectionAddressValidationDstMac = types.BoolNull()
-		}
+		data.DynamicArpInspectionAddressValidationDstMac = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "dynamic-arp-inspection.address-validation.ipv4"); value.Exists() {
-		if !data.DynamicArpInspectionAddressValidationIpv4.IsNull() {
+	if value := gjson.GetBytes(res, "dynamic-arp-inspection.address-validation.ipv4"); !data.DynamicArpInspectionAddressValidationIpv4.IsNull() {
+		if value.Exists() {
 			data.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
+		} else {
+			data.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.DynamicArpInspectionAddressValidationIpv4.IsNull() {
-			data.DynamicArpInspectionAddressValidationIpv4 = types.BoolNull()
-		}
+		data.DynamicArpInspectionAddressValidationIpv4 = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ip-source-guard"); value.Exists() {
-		if !data.IpSourceGuard.IsNull() {
+	if value := gjson.GetBytes(res, "ip-source-guard"); !data.IpSourceGuard.IsNull() {
+		if value.Exists() {
 			data.IpSourceGuard = types.BoolValue(true)
+		} else {
+			data.IpSourceGuard = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.IpSourceGuard.IsNull() {
-			data.IpSourceGuard = types.BoolNull()
-		}
+		data.IpSourceGuard = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ip-source-guard.logging"); value.Exists() {
-		if !data.IpSourceGuardLogging.IsNull() {
+	if value := gjson.GetBytes(res, "ip-source-guard.logging"); !data.IpSourceGuardLogging.IsNull() {
+		if value.Exists() {
 			data.IpSourceGuardLogging = types.BoolValue(true)
+		} else {
+			data.IpSourceGuardLogging = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.IpSourceGuardLogging.IsNull() {
-			data.IpSourceGuardLogging = types.BoolNull()
-		}
+		data.IpSourceGuardLogging = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "igmp.snooping.profile"); value.Exists() && !data.IgmpSnoopingProfile.IsNull() {
 		data.IgmpSnoopingProfile = types.StringValue(value.String())
 	} else {
 		data.IgmpSnoopingProfile = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "igmp.snooping.disable"); value.Exists() {
-		if !data.IgmpSnoopingDisable.IsNull() {
+	if value := gjson.GetBytes(res, "igmp.snooping.disable"); !data.IgmpSnoopingDisable.IsNull() {
+		if value.Exists() {
 			data.IgmpSnoopingDisable = types.BoolValue(true)
+		} else {
+			data.IgmpSnoopingDisable = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.IgmpSnoopingDisable.IsNull() {
-			data.IgmpSnoopingDisable = types.BoolNull()
-		}
+		data.IgmpSnoopingDisable = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "mld.snooping.profile"); value.Exists() && !data.MldSnoopingProfile.IsNull() {
 		data.MldSnoopingProfile = types.StringValue(value.String())
@@ -1075,39 +1065,36 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 	} else {
 		data.StormControlUnknownUnicastKbps = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "multicast-source.ipv4"); value.Exists() {
-		if !data.MulticastSourceIpv4.IsNull() {
+	if value := gjson.GetBytes(res, "multicast-source.ipv4"); !data.MulticastSourceIpv4.IsNull() {
+		if value.Exists() {
 			data.MulticastSourceIpv4 = types.BoolValue(true)
+		} else {
+			data.MulticastSourceIpv4 = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MulticastSourceIpv4.IsNull() {
-			data.MulticastSourceIpv4 = types.BoolNull()
-		}
+		data.MulticastSourceIpv4 = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "multicast-source.ipv6"); value.Exists() {
-		if !data.MulticastSourceIpv6.IsNull() {
+	if value := gjson.GetBytes(res, "multicast-source.ipv6"); !data.MulticastSourceIpv6.IsNull() {
+		if value.Exists() {
 			data.MulticastSourceIpv6 = types.BoolValue(true)
+		} else {
+			data.MulticastSourceIpv6 = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MulticastSourceIpv6.IsNull() {
-			data.MulticastSourceIpv6 = types.BoolNull()
-		}
+		data.MulticastSourceIpv6 = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "multicast-source.ipv4-ipv6"); value.Exists() {
-		if !data.MulticastSourceIpv4Ipv6.IsNull() {
+	if value := gjson.GetBytes(res, "multicast-source.ipv4-ipv6"); !data.MulticastSourceIpv4Ipv6.IsNull() {
+		if value.Exists() {
 			data.MulticastSourceIpv4Ipv6 = types.BoolValue(true)
+		} else {
+			data.MulticastSourceIpv4Ipv6 = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MulticastSourceIpv4Ipv6.IsNull() {
-			data.MulticastSourceIpv4Ipv6 = types.BoolNull()
-		}
+		data.MulticastSourceIpv4Ipv6 = types.BoolNull()
 	}
 	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.Interfaces[i].InterfaceName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "interfaces.interface").ForEach(
@@ -1133,655 +1120,340 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		} else {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
-		if value := r.Get("dynamic-arp-inspection.logging"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].DynamicArpInspectionLogging.IsNull() && !data.Interfaces[i].DynamicArpInspectionLogging.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].DynamicArpInspectionLogging = types.BoolValue(false)
-			} else if !data.Interfaces[i].DynamicArpInspectionLogging.IsNull() {
+		if value := r.Get("dynamic-arp-inspection.logging"); !data.Interfaces[i].DynamicArpInspectionLogging.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].DynamicArpInspectionLogging = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].DynamicArpInspectionLogging.IsNull() {
-				data.Interfaces[i].DynamicArpInspectionLogging = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].DynamicArpInspectionLogging = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].DynamicArpInspectionLogging = types.BoolNull()
 		}
-		if value := r.Get("dynamic-arp-inspection.logging.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].DynamicArpInspectionLoggingDisable.IsNull() && !data.Interfaces[i].DynamicArpInspectionLoggingDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].DynamicArpInspectionLoggingDisable = types.BoolValue(false)
-			} else if !data.Interfaces[i].DynamicArpInspectionLoggingDisable.IsNull() {
+		if value := r.Get("dynamic-arp-inspection.logging.disable"); !data.Interfaces[i].DynamicArpInspectionLoggingDisable.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].DynamicArpInspectionLoggingDisable = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].DynamicArpInspectionLoggingDisable.IsNull() {
-				data.Interfaces[i].DynamicArpInspectionLoggingDisable = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].DynamicArpInspectionLoggingDisable = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].DynamicArpInspectionLoggingDisable = types.BoolNull()
 		}
-		if value := r.Get("dynamic-arp-inspection.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].DynamicArpInspectionDisable.IsNull() && !data.Interfaces[i].DynamicArpInspectionDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].DynamicArpInspectionDisable = types.BoolValue(false)
-			} else if !data.Interfaces[i].DynamicArpInspectionDisable.IsNull() {
+		if value := r.Get("dynamic-arp-inspection.disable"); !data.Interfaces[i].DynamicArpInspectionDisable.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].DynamicArpInspectionDisable = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].DynamicArpInspectionDisable.IsNull() {
-				data.Interfaces[i].DynamicArpInspectionDisable = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].DynamicArpInspectionDisable = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].DynamicArpInspectionDisable = types.BoolNull()
 		}
-		if value := r.Get("dynamic-arp-inspection.address-validation.src-mac"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.IsNull() && !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(false)
-			} else if !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.IsNull() {
+		if value := r.Get("dynamic-arp-inspection.address-validation.src-mac"); !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.IsNull() {
-				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac = types.BoolNull()
 		}
-		if value := r.Get("dynamic-arp-inspection.address-validation.src-mac.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() && !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(false)
-			} else if !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() {
+		if value := r.Get("dynamic-arp-inspection.address-validation.src-mac.disable"); !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() {
-				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolNull()
 		}
-		if value := r.Get("dynamic-arp-inspection.address-validation.dst-mac"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.IsNull() && !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac = types.BoolValue(false)
-			} else if !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.IsNull() {
+		if value := r.Get("dynamic-arp-inspection.address-validation.dst-mac"); !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.IsNull() {
-				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac = types.BoolNull()
 		}
-		if value := r.Get("dynamic-arp-inspection.address-validation.dst-mac.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() && !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(false)
-			} else if !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() {
+		if value := r.Get("dynamic-arp-inspection.address-validation.dst-mac.disable"); !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() {
-				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable = types.BoolNull()
 		}
-		if value := r.Get("dynamic-arp-inspection.address-validation.ipv4"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.IsNull() && !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(false)
-			} else if !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.IsNull() {
+		if value := r.Get("dynamic-arp-inspection.address-validation.ipv4"); !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.IsNull() {
-				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4 = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4 = types.BoolNull()
 		}
-		if value := r.Get("dynamic-arp-inspection.address-validation.ipv4.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() && !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(false)
-			} else if !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() {
+		if value := r.Get("dynamic-arp-inspection.address-validation.ipv4.disable"); !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() {
-				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable = types.BoolNull()
 		}
-		if value := r.Get("flooding.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].FloodingDisable.IsNull() && !data.Interfaces[i].FloodingDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].FloodingDisable = types.BoolValue(false)
-			} else if !data.Interfaces[i].FloodingDisable.IsNull() {
+		if value := r.Get("flooding.disable"); !data.Interfaces[i].FloodingDisable.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].FloodingDisable = types.BoolValue(true)
+			} else {
+				data.Interfaces[i].FloodingDisable = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].FloodingDisable.IsNull() {
-				data.Interfaces[i].FloodingDisable = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Interfaces[i].FloodingDisable = types.BoolValue(false)
-			}
+			data.Interfaces[i].FloodingDisable = types.BoolNull()
 		}
 		if value := r.Get("igmp.snooping.profile"); value.Exists() && !data.Interfaces[i].IgmpSnoopingProfile.IsNull() {
 			data.Interfaces[i].IgmpSnoopingProfile = types.StringValue(value.String())
 		} else {
 			data.Interfaces[i].IgmpSnoopingProfile = types.StringNull()
 		}
-		if value := r.Get("ip-source-guard"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].IpSourceGuard.IsNull() && !data.Interfaces[i].IpSourceGuard.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].IpSourceGuard = types.BoolValue(false)
-			} else if !data.Interfaces[i].IpSourceGuard.IsNull() {
+		if value := r.Get("ip-source-guard"); !data.Interfaces[i].IpSourceGuard.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].IpSourceGuard = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].IpSourceGuard.IsNull() {
-				data.Interfaces[i].IpSourceGuard = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].IpSourceGuard = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].IpSourceGuard = types.BoolNull()
 		}
-		if value := r.Get("ip-source-guard.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].IpSourceGuardDisable.IsNull() && !data.Interfaces[i].IpSourceGuardDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].IpSourceGuardDisable = types.BoolValue(false)
-			} else if !data.Interfaces[i].IpSourceGuardDisable.IsNull() {
+		if value := r.Get("ip-source-guard.disable"); !data.Interfaces[i].IpSourceGuardDisable.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].IpSourceGuardDisable = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].IpSourceGuardDisable.IsNull() {
-				data.Interfaces[i].IpSourceGuardDisable = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].IpSourceGuardDisable = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].IpSourceGuardDisable = types.BoolNull()
 		}
-		if value := r.Get("ip-source-guard.logging"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].IpSourceGuardLogging.IsNull() && !data.Interfaces[i].IpSourceGuardLogging.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].IpSourceGuardLogging = types.BoolValue(false)
-			} else if !data.Interfaces[i].IpSourceGuardLogging.IsNull() {
+		if value := r.Get("ip-source-guard.logging"); !data.Interfaces[i].IpSourceGuardLogging.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].IpSourceGuardLogging = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].IpSourceGuardLogging.IsNull() {
-				data.Interfaces[i].IpSourceGuardLogging = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].IpSourceGuardLogging = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].IpSourceGuardLogging = types.BoolNull()
 		}
-		if value := r.Get("ip-source-guard.logging.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].IpSourceGuardLoggingDisable.IsNull() && !data.Interfaces[i].IpSourceGuardLoggingDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].IpSourceGuardLoggingDisable = types.BoolValue(false)
-			} else if !data.Interfaces[i].IpSourceGuardLoggingDisable.IsNull() {
+		if value := r.Get("ip-source-guard.logging.disable"); !data.Interfaces[i].IpSourceGuardLoggingDisable.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].IpSourceGuardLoggingDisable = types.BoolValue(true)
+			} else {
+				data.Interfaces[i].IpSourceGuardLoggingDisable = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].IpSourceGuardLoggingDisable.IsNull() {
-				data.Interfaces[i].IpSourceGuardLoggingDisable = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Interfaces[i].IpSourceGuardLoggingDisable = types.BoolValue(false)
-			}
+			data.Interfaces[i].IpSourceGuardLoggingDisable = types.BoolNull()
 		}
 		if value := r.Get("mac.aging.time"); value.Exists() && !data.Interfaces[i].MacAgingTime.IsNull() {
 			data.Interfaces[i].MacAgingTime = types.Int64Value(value.Int())
 		} else {
 			data.Interfaces[i].MacAgingTime = types.Int64Null()
 		}
-		if value := r.Get("mac.aging.type.absolute"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacAgingTypeAbsolute.IsNull() && !data.Interfaces[i].MacAgingTypeAbsolute.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacAgingTypeAbsolute = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacAgingTypeAbsolute.IsNull() {
+		if value := r.Get("mac.aging.type.absolute"); !data.Interfaces[i].MacAgingTypeAbsolute.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacAgingTypeAbsolute = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacAgingTypeAbsolute.IsNull() {
-				data.Interfaces[i].MacAgingTypeAbsolute = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacAgingTypeAbsolute = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacAgingTypeAbsolute = types.BoolNull()
 		}
-		if value := r.Get("mac.aging.type.inactivity"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacAgingTypeInactivity.IsNull() && !data.Interfaces[i].MacAgingTypeInactivity.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacAgingTypeInactivity = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacAgingTypeInactivity.IsNull() {
+		if value := r.Get("mac.aging.type.inactivity"); !data.Interfaces[i].MacAgingTypeInactivity.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacAgingTypeInactivity = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacAgingTypeInactivity.IsNull() {
-				data.Interfaces[i].MacAgingTypeInactivity = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacAgingTypeInactivity = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacAgingTypeInactivity = types.BoolNull()
 		}
-		if value := r.Get("mac.learning"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacLearning.IsNull() && !data.Interfaces[i].MacLearning.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacLearning = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacLearning.IsNull() {
+		if value := r.Get("mac.learning"); !data.Interfaces[i].MacLearning.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacLearning = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacLearning.IsNull() {
-				data.Interfaces[i].MacLearning = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacLearning = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacLearning = types.BoolNull()
 		}
-		if value := r.Get("mac.learning.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacLearningDisable.IsNull() && !data.Interfaces[i].MacLearningDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacLearningDisable = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacLearningDisable.IsNull() {
+		if value := r.Get("mac.learning.disable"); !data.Interfaces[i].MacLearningDisable.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacLearningDisable = types.BoolValue(true)
+			} else {
+				data.Interfaces[i].MacLearningDisable = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacLearningDisable.IsNull() {
-				data.Interfaces[i].MacLearningDisable = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Interfaces[i].MacLearningDisable = types.BoolValue(false)
-			}
+			data.Interfaces[i].MacLearningDisable = types.BoolNull()
 		}
 		if value := r.Get("mac.limit.maximum"); value.Exists() && !data.Interfaces[i].MacLimitMaximum.IsNull() {
 			data.Interfaces[i].MacLimitMaximum = types.Int64Value(value.Int())
 		} else {
 			data.Interfaces[i].MacLimitMaximum = types.Int64Null()
 		}
-		if value := r.Get("mac.limit.action.flood"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacLimitActionFlood.IsNull() && !data.Interfaces[i].MacLimitActionFlood.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacLimitActionFlood = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacLimitActionFlood.IsNull() {
+		if value := r.Get("mac.limit.action.flood"); !data.Interfaces[i].MacLimitActionFlood.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacLimitActionFlood = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacLimitActionFlood.IsNull() {
-				data.Interfaces[i].MacLimitActionFlood = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacLimitActionFlood = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacLimitActionFlood = types.BoolNull()
 		}
-		if value := r.Get("mac.limit.action.no-flood"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacLimitActionNoFlood.IsNull() && !data.Interfaces[i].MacLimitActionNoFlood.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacLimitActionNoFlood = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacLimitActionNoFlood.IsNull() {
+		if value := r.Get("mac.limit.action.no-flood"); !data.Interfaces[i].MacLimitActionNoFlood.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacLimitActionNoFlood = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacLimitActionNoFlood.IsNull() {
-				data.Interfaces[i].MacLimitActionNoFlood = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacLimitActionNoFlood = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacLimitActionNoFlood = types.BoolNull()
 		}
-		if value := r.Get("mac.limit.action.shutdown"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacLimitActionShutdown.IsNull() && !data.Interfaces[i].MacLimitActionShutdown.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacLimitActionShutdown = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacLimitActionShutdown.IsNull() {
+		if value := r.Get("mac.limit.action.shutdown"); !data.Interfaces[i].MacLimitActionShutdown.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacLimitActionShutdown = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacLimitActionShutdown.IsNull() {
-				data.Interfaces[i].MacLimitActionShutdown = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacLimitActionShutdown = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacLimitActionShutdown = types.BoolNull()
 		}
-		if value := r.Get("mac.limit.action.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacLimitActionNone.IsNull() && !data.Interfaces[i].MacLimitActionNone.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacLimitActionNone = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacLimitActionNone.IsNull() {
+		if value := r.Get("mac.limit.action.none"); !data.Interfaces[i].MacLimitActionNone.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacLimitActionNone = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacLimitActionNone.IsNull() {
-				data.Interfaces[i].MacLimitActionNone = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacLimitActionNone = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacLimitActionNone = types.BoolNull()
 		}
-		if value := r.Get("mac.limit.notification.trap"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacLimitNotificationTrap.IsNull() && !data.Interfaces[i].MacLimitNotificationTrap.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacLimitNotificationTrap = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacLimitNotificationTrap.IsNull() {
+		if value := r.Get("mac.limit.notification.trap"); !data.Interfaces[i].MacLimitNotificationTrap.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacLimitNotificationTrap = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacLimitNotificationTrap.IsNull() {
-				data.Interfaces[i].MacLimitNotificationTrap = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacLimitNotificationTrap = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacLimitNotificationTrap = types.BoolNull()
 		}
-		if value := r.Get("mac.limit.notification.both"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacLimitNotificationBoth.IsNull() && !data.Interfaces[i].MacLimitNotificationBoth.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacLimitNotificationBoth = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacLimitNotificationBoth.IsNull() {
+		if value := r.Get("mac.limit.notification.both"); !data.Interfaces[i].MacLimitNotificationBoth.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacLimitNotificationBoth = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacLimitNotificationBoth.IsNull() {
-				data.Interfaces[i].MacLimitNotificationBoth = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacLimitNotificationBoth = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacLimitNotificationBoth = types.BoolNull()
 		}
-		if value := r.Get("mac.limit.notification.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacLimitNotificationNone.IsNull() && !data.Interfaces[i].MacLimitNotificationNone.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacLimitNotificationNone = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacLimitNotificationNone.IsNull() {
+		if value := r.Get("mac.limit.notification.none"); !data.Interfaces[i].MacLimitNotificationNone.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacLimitNotificationNone = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacLimitNotificationNone.IsNull() {
-				data.Interfaces[i].MacLimitNotificationNone = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacLimitNotificationNone = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacLimitNotificationNone = types.BoolNull()
 		}
-		if value := r.Get("mac.limit.notification.syslog"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacLimitNotificationSyslog.IsNull() && !data.Interfaces[i].MacLimitNotificationSyslog.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacLimitNotificationSyslog = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacLimitNotificationSyslog.IsNull() {
+		if value := r.Get("mac.limit.notification.syslog"); !data.Interfaces[i].MacLimitNotificationSyslog.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacLimitNotificationSyslog = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacLimitNotificationSyslog.IsNull() {
-				data.Interfaces[i].MacLimitNotificationSyslog = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacLimitNotificationSyslog = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacLimitNotificationSyslog = types.BoolNull()
 		}
-		if value := r.Get("mac.port-down.flush.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacPortDownFlushDisable.IsNull() && !data.Interfaces[i].MacPortDownFlushDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacPortDownFlushDisable = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacPortDownFlushDisable.IsNull() {
+		if value := r.Get("mac.port-down.flush.disable"); !data.Interfaces[i].MacPortDownFlushDisable.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacPortDownFlushDisable = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacPortDownFlushDisable.IsNull() {
-				data.Interfaces[i].MacPortDownFlushDisable = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacPortDownFlushDisable = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacPortDownFlushDisable = types.BoolNull()
 		}
-		if value := r.Get("mac.secure"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacSecure.IsNull() && !data.Interfaces[i].MacSecure.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacSecure = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacSecure.IsNull() {
+		if value := r.Get("mac.secure"); !data.Interfaces[i].MacSecure.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacSecure = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacSecure.IsNull() {
-				data.Interfaces[i].MacSecure = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacSecure = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacSecure = types.BoolNull()
 		}
-		if value := r.Get("mac.secure.logging"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacSecureLogging.IsNull() && !data.Interfaces[i].MacSecureLogging.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacSecureLogging = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacSecureLogging.IsNull() {
+		if value := r.Get("mac.secure.logging"); !data.Interfaces[i].MacSecureLogging.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacSecureLogging = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacSecureLogging.IsNull() {
-				data.Interfaces[i].MacSecureLogging = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacSecureLogging = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacSecureLogging = types.BoolNull()
 		}
-		if value := r.Get("mac.secure.logging.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacSecureLoggingDisable.IsNull() && !data.Interfaces[i].MacSecureLoggingDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacSecureLoggingDisable = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacSecureLoggingDisable.IsNull() {
+		if value := r.Get("mac.secure.logging.disable"); !data.Interfaces[i].MacSecureLoggingDisable.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacSecureLoggingDisable = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacSecureLoggingDisable.IsNull() {
-				data.Interfaces[i].MacSecureLoggingDisable = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacSecureLoggingDisable = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacSecureLoggingDisable = types.BoolNull()
 		}
-		if value := r.Get("mac.secure.action.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacSecureActionNone.IsNull() && !data.Interfaces[i].MacSecureActionNone.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacSecureActionNone = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacSecureActionNone.IsNull() {
+		if value := r.Get("mac.secure.action.none"); !data.Interfaces[i].MacSecureActionNone.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacSecureActionNone = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacSecureActionNone.IsNull() {
-				data.Interfaces[i].MacSecureActionNone = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacSecureActionNone = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacSecureActionNone = types.BoolNull()
 		}
-		if value := r.Get("mac.secure.action.shutdown"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacSecureActionShutdown.IsNull() && !data.Interfaces[i].MacSecureActionShutdown.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacSecureActionShutdown = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacSecureActionShutdown.IsNull() {
+		if value := r.Get("mac.secure.action.shutdown"); !data.Interfaces[i].MacSecureActionShutdown.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacSecureActionShutdown = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacSecureActionShutdown.IsNull() {
-				data.Interfaces[i].MacSecureActionShutdown = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacSecureActionShutdown = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacSecureActionShutdown = types.BoolNull()
 		}
-		if value := r.Get("mac.secure.action.restrict"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacSecureActionRestrict.IsNull() && !data.Interfaces[i].MacSecureActionRestrict.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacSecureActionRestrict = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacSecureActionRestrict.IsNull() {
+		if value := r.Get("mac.secure.action.restrict"); !data.Interfaces[i].MacSecureActionRestrict.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacSecureActionRestrict = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacSecureActionRestrict.IsNull() {
-				data.Interfaces[i].MacSecureActionRestrict = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.Interfaces[i].MacSecureActionRestrict = types.BoolValue(false)
 			}
+		} else {
+			data.Interfaces[i].MacSecureActionRestrict = types.BoolNull()
 		}
-		if value := r.Get("mac.secure.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacSecureDisable.IsNull() && !data.Interfaces[i].MacSecureDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacSecureDisable = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacSecureDisable.IsNull() {
+		if value := r.Get("mac.secure.disable"); !data.Interfaces[i].MacSecureDisable.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacSecureDisable = types.BoolValue(true)
+			} else {
+				data.Interfaces[i].MacSecureDisable = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacSecureDisable.IsNull() {
-				data.Interfaces[i].MacSecureDisable = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Interfaces[i].MacSecureDisable = types.BoolValue(false)
-			}
+			data.Interfaces[i].MacSecureDisable = types.BoolNull()
 		}
 		if value := r.Get("mac.secure.shutdown-recovery-timeout.recovery-timer-in-second"); value.Exists() && !data.Interfaces[i].MacSecureShutdownRecoveryTimeout.IsNull() {
 			data.Interfaces[i].MacSecureShutdownRecoveryTimeout = types.Int64Value(value.Int())
 		} else {
 			data.Interfaces[i].MacSecureShutdownRecoveryTimeout = types.Int64Null()
 		}
-		if value := r.Get("mac.secure.shutdown-recovery-timeout.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.IsNull() && !data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(false)
-			} else if !data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.IsNull() {
+		if value := r.Get("mac.secure.shutdown-recovery-timeout.disable"); !data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(true)
+			} else {
+				data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.IsNull() {
-				data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(false)
-			}
+			data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable = types.BoolNull()
 		}
 		if value := r.Get("mld.snooping.profile"); value.Exists() && !data.Interfaces[i].MldSnoopingProfile.IsNull() {
 			data.Interfaces[i].MldSnoopingProfile = types.StringValue(value.String())
@@ -1818,56 +1490,48 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		} else {
 			data.Interfaces[i].StormControlUnknownUnicastKbps = types.Int64Null()
 		}
-		if value := r.Get("split-horizon.group"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].SplitHorizonGroup.IsNull() && !data.Interfaces[i].SplitHorizonGroup.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].SplitHorizonGroup = types.BoolValue(false)
-			} else if !data.Interfaces[i].SplitHorizonGroup.IsNull() {
+		if value := r.Get("split-horizon.group"); !data.Interfaces[i].SplitHorizonGroup.IsNull() {
+			if value.Exists() {
 				data.Interfaces[i].SplitHorizonGroup = types.BoolValue(true)
+			} else {
+				data.Interfaces[i].SplitHorizonGroup = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.Interfaces[i].SplitHorizonGroup.IsNull() {
-				data.Interfaces[i].SplitHorizonGroup = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Interfaces[i].SplitHorizonGroup = types.BoolValue(false)
-			}
+			data.Interfaces[i].SplitHorizonGroup = types.BoolNull()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("static-mac-addresses.static-mac-address"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.Interfaces[i].StaticMacAddresses
-			data.Interfaces[i].StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses{}
-				if cValue := cr.Get("mac-address"); cValue.Exists() {
-					citem.MacAddress = types.StringValue(cValue.String())
-				}
+		for ci := range data.Interfaces[i].StaticMacAddresses {
+			keys := [...]string{ "mac-address",  }
+			keyValues := [...]string{ data.Interfaces[i].StaticMacAddresses[ci].MacAddress.ValueString(),  }
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.MacAddress.ValueString() != citem.MacAddress.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("static-mac-addresses.static-mac-address").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Interfaces[i].StaticMacAddresses = append(data.Interfaces[i].StaticMacAddresses, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("mac-address"); value.Exists() && !data.Interfaces[i].StaticMacAddresses[ci].MacAddress.IsNull() {
+				data.Interfaces[i].StaticMacAddresses[ci].MacAddress = types.StringValue(value.String())
+			} else {
+				data.Interfaces[i].StaticMacAddresses[ci].MacAddress = types.StringNull()
+			}
 		}
 	}
 	for i := range data.RoutedInterface {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.RoutedInterface[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.RoutedInterface[i].InterfaceName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "routed.interface").ForEach(
@@ -1893,53 +1557,42 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		} else {
 			data.RoutedInterface[i].InterfaceName = types.StringNull()
 		}
-		if value := r.Get("split-horizon.group.core"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.RoutedInterface[i].SplitHorizonGroupCore.IsNull() && !data.RoutedInterface[i].SplitHorizonGroupCore.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.RoutedInterface[i].SplitHorizonGroupCore = types.BoolValue(false)
-			} else if !data.RoutedInterface[i].SplitHorizonGroupCore.IsNull() {
+		if value := r.Get("split-horizon.group.core"); !data.RoutedInterface[i].SplitHorizonGroupCore.IsNull() {
+			if value.Exists() {
 				data.RoutedInterface[i].SplitHorizonGroupCore = types.BoolValue(true)
+			} else {
+				data.RoutedInterface[i].SplitHorizonGroupCore = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.RoutedInterface[i].SplitHorizonGroupCore.IsNull() {
-				data.RoutedInterface[i].SplitHorizonGroupCore = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.RoutedInterface[i].SplitHorizonGroupCore = types.BoolValue(false)
-			}
+			data.RoutedInterface[i].SplitHorizonGroupCore = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
-		if !data.Shutdown.IsNull() {
+	if value := gjson.GetBytes(res, "shutdown"); !data.Shutdown.IsNull() {
+		if value.Exists() {
 			data.Shutdown = types.BoolValue(true)
+		} else {
+			data.Shutdown = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.Shutdown.IsNull() {
-			data.Shutdown = types.BoolNull()
-		}
+		data.Shutdown = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "mac.aging.time"); value.Exists() && !data.MacAgingTime.IsNull() {
 		data.MacAgingTime = types.Int64Value(value.Int())
 	} else {
 		data.MacAgingTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mac.aging.type.absolute"); value.Exists() {
-		if !data.MacAgingTypeAbsolute.IsNull() {
+	if value := gjson.GetBytes(res, "mac.aging.type.absolute"); !data.MacAgingTypeAbsolute.IsNull() {
+		if value.Exists() {
 			data.MacAgingTypeAbsolute = types.BoolValue(true)
+		} else {
+			data.MacAgingTypeAbsolute = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacAgingTypeAbsolute.IsNull() {
-			data.MacAgingTypeAbsolute = types.BoolNull()
-		}
+		data.MacAgingTypeAbsolute = types.BoolNull()
 	}
 	for i := range data.MacStaticAddresses {
-		keys := [...]string{"mac-address"}
-		keyValues := [...]string{data.MacStaticAddresses[i].MacAddress.ValueString()}
+		keys := [...]string{ "mac-address",  }
+		keyValues := [...]string{ data.MacStaticAddresses[i].MacAddress.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "mac.static-addresses.static-address").ForEach(
@@ -1965,209 +1618,182 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		} else {
 			data.MacStaticAddresses[i].MacAddress = types.StringNull()
 		}
-		if value := r.Get("drop"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MacStaticAddresses[i].Drop.IsNull() && !data.MacStaticAddresses[i].Drop.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MacStaticAddresses[i].Drop = types.BoolValue(false)
-			} else if !data.MacStaticAddresses[i].Drop.IsNull() {
+		if value := r.Get("drop"); !data.MacStaticAddresses[i].Drop.IsNull() {
+			if value.Exists() {
 				data.MacStaticAddresses[i].Drop = types.BoolValue(true)
+			} else {
+				data.MacStaticAddresses[i].Drop = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.MacStaticAddresses[i].Drop.IsNull() {
-				data.MacStaticAddresses[i].Drop = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MacStaticAddresses[i].Drop = types.BoolValue(false)
-			}
+			data.MacStaticAddresses[i].Drop = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.learning.disable"); value.Exists() {
-		if !data.MacLearningDisable.IsNull() {
+	if value := gjson.GetBytes(res, "mac.learning.disable"); !data.MacLearningDisable.IsNull() {
+		if value.Exists() {
 			data.MacLearningDisable = types.BoolValue(true)
+		} else {
+			data.MacLearningDisable = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacLearningDisable.IsNull() {
-			data.MacLearningDisable = types.BoolNull()
-		}
+		data.MacLearningDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.withdraw.disable"); value.Exists() {
-		if !data.MacWithdrawDisable.IsNull() {
+	if value := gjson.GetBytes(res, "mac.withdraw.disable"); !data.MacWithdrawDisable.IsNull() {
+		if value.Exists() {
 			data.MacWithdrawDisable = types.BoolValue(true)
+		} else {
+			data.MacWithdrawDisable = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacWithdrawDisable.IsNull() {
-			data.MacWithdrawDisable = types.BoolNull()
-		}
+		data.MacWithdrawDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.withdraw.access-pw.disable"); value.Exists() {
-		if !data.MacWithdrawAccessPwDisable.IsNull() {
+	if value := gjson.GetBytes(res, "mac.withdraw.access-pw.disable"); !data.MacWithdrawAccessPwDisable.IsNull() {
+		if value.Exists() {
 			data.MacWithdrawAccessPwDisable = types.BoolValue(true)
+		} else {
+			data.MacWithdrawAccessPwDisable = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacWithdrawAccessPwDisable.IsNull() {
-			data.MacWithdrawAccessPwDisable = types.BoolNull()
-		}
+		data.MacWithdrawAccessPwDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.withdraw.relay"); value.Exists() {
-		if !data.MacWithdrawRelay.IsNull() {
+	if value := gjson.GetBytes(res, "mac.withdraw.relay"); !data.MacWithdrawRelay.IsNull() {
+		if value.Exists() {
 			data.MacWithdrawRelay = types.BoolValue(true)
+		} else {
+			data.MacWithdrawRelay = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacWithdrawRelay.IsNull() {
-			data.MacWithdrawRelay = types.BoolNull()
-		}
+		data.MacWithdrawRelay = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.withdraw.state-down"); value.Exists() {
-		if !data.MacWithdrawStateDown.IsNull() {
+	if value := gjson.GetBytes(res, "mac.withdraw.state-down"); !data.MacWithdrawStateDown.IsNull() {
+		if value.Exists() {
 			data.MacWithdrawStateDown = types.BoolValue(true)
+		} else {
+			data.MacWithdrawStateDown = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacWithdrawStateDown.IsNull() {
-			data.MacWithdrawStateDown = types.BoolNull()
-		}
+		data.MacWithdrawStateDown = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.withdraw.optimize"); value.Exists() {
-		if !data.MacWithdrawOptimize.IsNull() {
+	if value := gjson.GetBytes(res, "mac.withdraw.optimize"); !data.MacWithdrawOptimize.IsNull() {
+		if value.Exists() {
 			data.MacWithdrawOptimize = types.BoolValue(true)
+		} else {
+			data.MacWithdrawOptimize = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacWithdrawOptimize.IsNull() {
-			data.MacWithdrawOptimize = types.BoolNull()
-		}
+		data.MacWithdrawOptimize = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "mac.limit.maximum"); value.Exists() && !data.MacLimitMaximum.IsNull() {
 		data.MacLimitMaximum = types.Int64Value(value.Int())
 	} else {
 		data.MacLimitMaximum = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mac.limit.action.flood"); value.Exists() {
-		if !data.MacLimitActionFlood.IsNull() {
+	if value := gjson.GetBytes(res, "mac.limit.action.flood"); !data.MacLimitActionFlood.IsNull() {
+		if value.Exists() {
 			data.MacLimitActionFlood = types.BoolValue(true)
+		} else {
+			data.MacLimitActionFlood = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacLimitActionFlood.IsNull() {
-			data.MacLimitActionFlood = types.BoolNull()
-		}
+		data.MacLimitActionFlood = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.limit.action.no-flood"); value.Exists() {
-		if !data.MacLimitActionNoFlood.IsNull() {
+	if value := gjson.GetBytes(res, "mac.limit.action.no-flood"); !data.MacLimitActionNoFlood.IsNull() {
+		if value.Exists() {
 			data.MacLimitActionNoFlood = types.BoolValue(true)
+		} else {
+			data.MacLimitActionNoFlood = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacLimitActionNoFlood.IsNull() {
-			data.MacLimitActionNoFlood = types.BoolNull()
-		}
+		data.MacLimitActionNoFlood = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.limit.action.shutdown"); value.Exists() {
-		if !data.MacLimitActionShutdown.IsNull() {
+	if value := gjson.GetBytes(res, "mac.limit.action.shutdown"); !data.MacLimitActionShutdown.IsNull() {
+		if value.Exists() {
 			data.MacLimitActionShutdown = types.BoolValue(true)
+		} else {
+			data.MacLimitActionShutdown = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacLimitActionShutdown.IsNull() {
-			data.MacLimitActionShutdown = types.BoolNull()
-		}
+		data.MacLimitActionShutdown = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.limit.notification.trap"); value.Exists() {
-		if !data.MacLimitNotificationTrap.IsNull() {
+	if value := gjson.GetBytes(res, "mac.limit.notification.trap"); !data.MacLimitNotificationTrap.IsNull() {
+		if value.Exists() {
 			data.MacLimitNotificationTrap = types.BoolValue(true)
+		} else {
+			data.MacLimitNotificationTrap = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacLimitNotificationTrap.IsNull() {
-			data.MacLimitNotificationTrap = types.BoolNull()
-		}
+		data.MacLimitNotificationTrap = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.limit.notification.both"); value.Exists() {
-		if !data.MacLimitNotificationBoth.IsNull() {
+	if value := gjson.GetBytes(res, "mac.limit.notification.both"); !data.MacLimitNotificationBoth.IsNull() {
+		if value.Exists() {
 			data.MacLimitNotificationBoth = types.BoolValue(true)
+		} else {
+			data.MacLimitNotificationBoth = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacLimitNotificationBoth.IsNull() {
-			data.MacLimitNotificationBoth = types.BoolNull()
-		}
+		data.MacLimitNotificationBoth = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.limit.notification.none"); value.Exists() {
-		if !data.MacLimitNotificationNone.IsNull() {
+	if value := gjson.GetBytes(res, "mac.limit.notification.none"); !data.MacLimitNotificationNone.IsNull() {
+		if value.Exists() {
 			data.MacLimitNotificationNone = types.BoolValue(true)
+		} else {
+			data.MacLimitNotificationNone = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacLimitNotificationNone.IsNull() {
-			data.MacLimitNotificationNone = types.BoolNull()
-		}
+		data.MacLimitNotificationNone = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.port-down.flush.disable"); value.Exists() {
-		if !data.MacPortDownFlushDisable.IsNull() {
+	if value := gjson.GetBytes(res, "mac.port-down.flush.disable"); !data.MacPortDownFlushDisable.IsNull() {
+		if value.Exists() {
 			data.MacPortDownFlushDisable = types.BoolValue(true)
+		} else {
+			data.MacPortDownFlushDisable = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacPortDownFlushDisable.IsNull() {
-			data.MacPortDownFlushDisable = types.BoolNull()
-		}
+		data.MacPortDownFlushDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.secure"); value.Exists() {
-		if !data.MacSecure.IsNull() {
+	if value := gjson.GetBytes(res, "mac.secure"); !data.MacSecure.IsNull() {
+		if value.Exists() {
 			data.MacSecure = types.BoolValue(true)
+		} else {
+			data.MacSecure = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacSecure.IsNull() {
-			data.MacSecure = types.BoolNull()
-		}
+		data.MacSecure = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.secure.logging"); value.Exists() {
-		if !data.MacSecureLogging.IsNull() {
+	if value := gjson.GetBytes(res, "mac.secure.logging"); !data.MacSecureLogging.IsNull() {
+		if value.Exists() {
 			data.MacSecureLogging = types.BoolValue(true)
+		} else {
+			data.MacSecureLogging = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacSecureLogging.IsNull() {
-			data.MacSecureLogging = types.BoolNull()
-		}
+		data.MacSecureLogging = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.secure.threshold"); value.Exists() {
-		if !data.MacSecureThreshold.IsNull() {
+	if value := gjson.GetBytes(res, "mac.secure.threshold"); !data.MacSecureThreshold.IsNull() {
+		if value.Exists() {
 			data.MacSecureThreshold = types.BoolValue(true)
+		} else {
+			data.MacSecureThreshold = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacSecureThreshold.IsNull() {
-			data.MacSecureThreshold = types.BoolNull()
-		}
+		data.MacSecureThreshold = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.secure.action.none"); value.Exists() {
-		if !data.MacSecureActionNone.IsNull() {
+	if value := gjson.GetBytes(res, "mac.secure.action.none"); !data.MacSecureActionNone.IsNull() {
+		if value.Exists() {
 			data.MacSecureActionNone = types.BoolValue(true)
+		} else {
+			data.MacSecureActionNone = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacSecureActionNone.IsNull() {
-			data.MacSecureActionNone = types.BoolNull()
-		}
+		data.MacSecureActionNone = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mac.secure.action.shutdown"); value.Exists() {
-		if !data.MacSecureActionShutdown.IsNull() {
+	if value := gjson.GetBytes(res, "mac.secure.action.shutdown"); !data.MacSecureActionShutdown.IsNull() {
+		if value.Exists() {
 			data.MacSecureActionShutdown = types.BoolValue(true)
+		} else {
+			data.MacSecureActionShutdown = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.MacSecureActionShutdown.IsNull() {
-			data.MacSecureActionShutdown = types.BoolNull()
-		}
+		data.MacSecureActionShutdown = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "mac.secure.shutdown-recovery-timeout"); value.Exists() && !data.MacSecureShutdownRecoveryTimeout.IsNull() {
 		data.MacSecureShutdownRecoveryTimeout = types.Int64Value(value.Int())
@@ -2175,8 +1801,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		data.MacSecureShutdownRecoveryTimeout = types.Int64Null()
 	}
 	for i := range data.NeighborsEvpnEvi {
-		keys := [...]string{"vpn-id", "target"}
-		keyValues := [...]string{strconv.FormatInt(data.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborsEvpnEvi[i].Target.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id", "target",  }
+		keyValues := [...]string{ strconv.FormatInt(data.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborsEvpnEvi[i].Target.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "neighbors.evpn.evi").ForEach(
@@ -2208,39 +1834,36 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.NeighborsEvpnEvi[i].Target = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "efp-visibility"); value.Exists() {
-		if !data.EfpVisibility.IsNull() {
+	if value := gjson.GetBytes(res, "efp-visibility"); !data.EfpVisibility.IsNull() {
+		if value.Exists() {
 			data.EfpVisibility = types.BoolValue(true)
+		} else {
+			data.EfpVisibility = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.EfpVisibility.IsNull() {
-			data.EfpVisibility = types.BoolNull()
-		}
+		data.EfpVisibility = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "etree"); value.Exists() {
-		if !data.Etree.IsNull() {
+	if value := gjson.GetBytes(res, "etree"); !data.Etree.IsNull() {
+		if value.Exists() {
 			data.Etree = types.BoolValue(true)
+		} else {
+			data.Etree = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.Etree.IsNull() {
-			data.Etree = types.BoolNull()
-		}
+		data.Etree = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "etree.leaf"); value.Exists() {
-		if !data.EtreeLeaf.IsNull() {
+	if value := gjson.GetBytes(res, "etree.leaf"); !data.EtreeLeaf.IsNull() {
+		if value.Exists() {
 			data.EtreeLeaf = types.BoolValue(true)
+		} else {
+			data.EtreeLeaf = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.EtreeLeaf.IsNull() {
-			data.EtreeLeaf = types.BoolNull()
-		}
+		data.EtreeLeaf = types.BoolNull()
 	}
 	for i := range data.MemberVnisVni {
-		keys := [...]string{"vni-id"}
-		keyValues := [...]string{strconv.FormatInt(data.MemberVnisVni[i].VniId.ValueInt64(), 10)}
+		keys := [...]string{ "vni-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.MemberVnisVni[i].VniId.ValueInt64(), 10),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "member.vnis.vni").ForEach(
@@ -2266,36 +1889,39 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		} else {
 			data.MemberVnisVni[i].VniId = types.Int64Null()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("static-mac-addresses.static-mac-address"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.MemberVnisVni[i].StaticMacAddresses
-			data.MemberVnisVni[i].StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainMemberVnisVniStaticMacAddresses, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := L2VPNBridgeGroupBridgeDomainMemberVnisVniStaticMacAddresses{}
-				if cValue := cr.Get("mac-address"); cValue.Exists() {
-					citem.MacAddress = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get("next-hop"); cValue.Exists() {
-					citem.NextHop = types.StringValue(cValue.String())
-				}
+		for ci := range data.MemberVnisVni[i].StaticMacAddresses {
+			keys := [...]string{ "mac-address",  }
+			keyValues := [...]string{ data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress.ValueString(),  }
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.MacAddress.ValueString() != citem.MacAddress.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("static-mac-addresses.static-mac-address").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.MemberVnisVni[i].StaticMacAddresses = append(data.MemberVnisVni[i].StaticMacAddresses, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("mac-address"); value.Exists() && !data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress.IsNull() {
+				data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress = types.StringValue(value.String())
+			} else {
+				data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress = types.StringNull()
+			}
+			if value := cr.Get("next-hop"); value.Exists() && !data.MemberVnisVni[i].StaticMacAddresses[ci].NextHop.IsNull() {
+				data.MemberVnisVni[i].StaticMacAddresses[ci].NextHop = types.StringValue(value.String())
+			} else {
+				data.MemberVnisVni[i].StaticMacAddresses[ci].NextHop = types.StringNull()
+			}
 		}
 	}
 }
@@ -2306,13 +1932,13 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.BridgeDomainName.IsNull() && !data.BridgeDomainName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/bridge-domain-name", data.BridgeDomainName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/bridge-domain-name", data.BridgeDomainName.ValueString())
 	}
 	if !data.Mtu.IsNull() && !data.Mtu.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
 	}
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/description", data.Description.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/description", data.Description.ValueString())
 	}
 	if len(data.Evis) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -2349,96 +1975,96 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 	}
 	if !data.CoupledMode.IsNull() && !data.CoupledMode.IsUnknown() {
 		if data.CoupledMode.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/coupled-mode", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/coupled-mode", "")
 		}
 	}
 	if !data.TransportModeVlanPassthrough.IsNull() && !data.TransportModeVlanPassthrough.IsUnknown() {
 		if data.TransportModeVlanPassthrough.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/transport-mode/vlan/passthrough", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/transport-mode/vlan/passthrough", "")
 		}
 	}
 	if !data.FloodingDisable.IsNull() && !data.FloodingDisable.IsUnknown() {
 		if data.FloodingDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/flooding/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/flooding/disable", "")
 		}
 	}
 	if !data.DynamicArpInspection.IsNull() && !data.DynamicArpInspection.IsUnknown() {
 		if data.DynamicArpInspection.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/dynamic-arp-inspection", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/dynamic-arp-inspection", "")
 		}
 	}
 	if !data.DynamicArpInspectionLogging.IsNull() && !data.DynamicArpInspectionLogging.IsUnknown() {
 		if data.DynamicArpInspectionLogging.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/dynamic-arp-inspection/logging", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/dynamic-arp-inspection/logging", "")
 		}
 	}
 	if !data.DynamicArpInspectionAddressValidationSrcMac.IsNull() && !data.DynamicArpInspectionAddressValidationSrcMac.IsUnknown() {
 		if data.DynamicArpInspectionAddressValidationSrcMac.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/dynamic-arp-inspection/address-validation/src-mac", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/dynamic-arp-inspection/address-validation/src-mac", "")
 		}
 	}
 	if !data.DynamicArpInspectionAddressValidationDstMac.IsNull() && !data.DynamicArpInspectionAddressValidationDstMac.IsUnknown() {
 		if data.DynamicArpInspectionAddressValidationDstMac.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/dynamic-arp-inspection/address-validation/dst-mac", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/dynamic-arp-inspection/address-validation/dst-mac", "")
 		}
 	}
 	if !data.DynamicArpInspectionAddressValidationIpv4.IsNull() && !data.DynamicArpInspectionAddressValidationIpv4.IsUnknown() {
 		if data.DynamicArpInspectionAddressValidationIpv4.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/dynamic-arp-inspection/address-validation/ipv4", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/dynamic-arp-inspection/address-validation/ipv4", "")
 		}
 	}
 	if !data.IpSourceGuard.IsNull() && !data.IpSourceGuard.IsUnknown() {
 		if data.IpSourceGuard.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/ip-source-guard", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/ip-source-guard", "")
 		}
 	}
 	if !data.IpSourceGuardLogging.IsNull() && !data.IpSourceGuardLogging.IsUnknown() {
 		if data.IpSourceGuardLogging.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/ip-source-guard/logging", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/ip-source-guard/logging", "")
 		}
 	}
 	if !data.IgmpSnoopingProfile.IsNull() && !data.IgmpSnoopingProfile.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/igmp/snooping/profile", data.IgmpSnoopingProfile.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/igmp/snooping/profile", data.IgmpSnoopingProfile.ValueString())
 	}
 	if !data.IgmpSnoopingDisable.IsNull() && !data.IgmpSnoopingDisable.IsUnknown() {
 		if data.IgmpSnoopingDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/igmp/snooping/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/igmp/snooping/disable", "")
 		}
 	}
 	if !data.MldSnoopingProfile.IsNull() && !data.MldSnoopingProfile.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/mld/snooping/profile", data.MldSnoopingProfile.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/mld/snooping/profile", data.MldSnoopingProfile.ValueString())
 	}
 	if !data.StormControlBroadcastPps.IsNull() && !data.StormControlBroadcastPps.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/storm-control/broadcast/pps", strconv.FormatInt(data.StormControlBroadcastPps.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/storm-control/broadcast/pps", strconv.FormatInt(data.StormControlBroadcastPps.ValueInt64(), 10))
 	}
 	if !data.StormControlBroadcastKbps.IsNull() && !data.StormControlBroadcastKbps.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/storm-control/broadcast/kbps", strconv.FormatInt(data.StormControlBroadcastKbps.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/storm-control/broadcast/kbps", strconv.FormatInt(data.StormControlBroadcastKbps.ValueInt64(), 10))
 	}
 	if !data.StormControlMulticastPps.IsNull() && !data.StormControlMulticastPps.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/storm-control/multicast/pps", strconv.FormatInt(data.StormControlMulticastPps.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/storm-control/multicast/pps", strconv.FormatInt(data.StormControlMulticastPps.ValueInt64(), 10))
 	}
 	if !data.StormControlMulticastKbps.IsNull() && !data.StormControlMulticastKbps.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/storm-control/multicast/kbps", strconv.FormatInt(data.StormControlMulticastKbps.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/storm-control/multicast/kbps", strconv.FormatInt(data.StormControlMulticastKbps.ValueInt64(), 10))
 	}
 	if !data.StormControlUnknownUnicastPps.IsNull() && !data.StormControlUnknownUnicastPps.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/storm-control/unknown-unicast/pps", strconv.FormatInt(data.StormControlUnknownUnicastPps.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/storm-control/unknown-unicast/pps", strconv.FormatInt(data.StormControlUnknownUnicastPps.ValueInt64(), 10))
 	}
 	if !data.StormControlUnknownUnicastKbps.IsNull() && !data.StormControlUnknownUnicastKbps.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/storm-control/unknown-unicast/kbps", strconv.FormatInt(data.StormControlUnknownUnicastKbps.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/storm-control/unknown-unicast/kbps", strconv.FormatInt(data.StormControlUnknownUnicastKbps.ValueInt64(), 10))
 	}
 	if !data.MulticastSourceIpv4.IsNull() && !data.MulticastSourceIpv4.IsUnknown() {
 		if data.MulticastSourceIpv4.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/multicast-source/ipv4", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/multicast-source/ipv4", "")
 		}
 	}
 	if !data.MulticastSourceIpv6.IsNull() && !data.MulticastSourceIpv6.IsUnknown() {
 		if data.MulticastSourceIpv6.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/multicast-source/ipv6", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/multicast-source/ipv6", "")
 		}
 	}
 	if !data.MulticastSourceIpv4Ipv6.IsNull() && !data.MulticastSourceIpv4Ipv6.IsUnknown() {
 		if data.MulticastSourceIpv4Ipv6.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/multicast-source/ipv4-ipv6", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/multicast-source/ipv4-ipv6", "")
 		}
 	}
 	if len(data.Interfaces) > 0 {
@@ -2692,15 +2318,15 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 	}
 	if !data.Shutdown.IsNull() && !data.Shutdown.IsUnknown() {
 		if data.Shutdown.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/shutdown", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/shutdown", "")
 		}
 	}
 	if !data.MacAgingTime.IsNull() && !data.MacAgingTime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/mac/aging/time", strconv.FormatInt(data.MacAgingTime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/mac/aging/time", strconv.FormatInt(data.MacAgingTime.ValueInt64(), 10))
 	}
 	if !data.MacAgingTypeAbsolute.IsNull() && !data.MacAgingTypeAbsolute.IsUnknown() {
 		if data.MacAgingTypeAbsolute.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/aging/type/absolute", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/aging/type/absolute", "")
 		}
 	}
 	if len(data.MacStaticAddresses) > 0 {
@@ -2721,99 +2347,99 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 	}
 	if !data.MacLearningDisable.IsNull() && !data.MacLearningDisable.IsUnknown() {
 		if data.MacLearningDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/learning/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/learning/disable", "")
 		}
 	}
 	if !data.MacWithdrawDisable.IsNull() && !data.MacWithdrawDisable.IsUnknown() {
 		if data.MacWithdrawDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/withdraw/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/withdraw/disable", "")
 		}
 	}
 	if !data.MacWithdrawAccessPwDisable.IsNull() && !data.MacWithdrawAccessPwDisable.IsUnknown() {
 		if data.MacWithdrawAccessPwDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/withdraw/access-pw/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/withdraw/access-pw/disable", "")
 		}
 	}
 	if !data.MacWithdrawRelay.IsNull() && !data.MacWithdrawRelay.IsUnknown() {
 		if data.MacWithdrawRelay.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/withdraw/relay", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/withdraw/relay", "")
 		}
 	}
 	if !data.MacWithdrawStateDown.IsNull() && !data.MacWithdrawStateDown.IsUnknown() {
 		if data.MacWithdrawStateDown.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/withdraw/state-down", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/withdraw/state-down", "")
 		}
 	}
 	if !data.MacWithdrawOptimize.IsNull() && !data.MacWithdrawOptimize.IsUnknown() {
 		if data.MacWithdrawOptimize.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/withdraw/optimize", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/withdraw/optimize", "")
 		}
 	}
 	if !data.MacLimitMaximum.IsNull() && !data.MacLimitMaximum.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/mac/limit/maximum", strconv.FormatInt(data.MacLimitMaximum.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/mac/limit/maximum", strconv.FormatInt(data.MacLimitMaximum.ValueInt64(), 10))
 	}
 	if !data.MacLimitActionFlood.IsNull() && !data.MacLimitActionFlood.IsUnknown() {
 		if data.MacLimitActionFlood.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/limit/action/flood", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/limit/action/flood", "")
 		}
 	}
 	if !data.MacLimitActionNoFlood.IsNull() && !data.MacLimitActionNoFlood.IsUnknown() {
 		if data.MacLimitActionNoFlood.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/limit/action/no-flood", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/limit/action/no-flood", "")
 		}
 	}
 	if !data.MacLimitActionShutdown.IsNull() && !data.MacLimitActionShutdown.IsUnknown() {
 		if data.MacLimitActionShutdown.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/limit/action/shutdown", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/limit/action/shutdown", "")
 		}
 	}
 	if !data.MacLimitNotificationTrap.IsNull() && !data.MacLimitNotificationTrap.IsUnknown() {
 		if data.MacLimitNotificationTrap.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/limit/notification/trap", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/limit/notification/trap", "")
 		}
 	}
 	if !data.MacLimitNotificationBoth.IsNull() && !data.MacLimitNotificationBoth.IsUnknown() {
 		if data.MacLimitNotificationBoth.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/limit/notification/both", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/limit/notification/both", "")
 		}
 	}
 	if !data.MacLimitNotificationNone.IsNull() && !data.MacLimitNotificationNone.IsUnknown() {
 		if data.MacLimitNotificationNone.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/limit/notification/none", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/limit/notification/none", "")
 		}
 	}
 	if !data.MacPortDownFlushDisable.IsNull() && !data.MacPortDownFlushDisable.IsUnknown() {
 		if data.MacPortDownFlushDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/port-down/flush/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/port-down/flush/disable", "")
 		}
 	}
 	if !data.MacSecure.IsNull() && !data.MacSecure.IsUnknown() {
 		if data.MacSecure.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/secure", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/secure", "")
 		}
 	}
 	if !data.MacSecureLogging.IsNull() && !data.MacSecureLogging.IsUnknown() {
 		if data.MacSecureLogging.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/secure/logging", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/secure/logging", "")
 		}
 	}
 	if !data.MacSecureThreshold.IsNull() && !data.MacSecureThreshold.IsUnknown() {
 		if data.MacSecureThreshold.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/secure/threshold", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/secure/threshold", "")
 		}
 	}
 	if !data.MacSecureActionNone.IsNull() && !data.MacSecureActionNone.IsUnknown() {
 		if data.MacSecureActionNone.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/secure/action/none", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/secure/action/none", "")
 		}
 	}
 	if !data.MacSecureActionShutdown.IsNull() && !data.MacSecureActionShutdown.IsUnknown() {
 		if data.MacSecureActionShutdown.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/mac/secure/action/shutdown", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/mac/secure/action/shutdown", "")
 		}
 	}
 	if !data.MacSecureShutdownRecoveryTimeout.IsNull() && !data.MacSecureShutdownRecoveryTimeout.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/mac/secure/shutdown-recovery-timeout", strconv.FormatInt(data.MacSecureShutdownRecoveryTimeout.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/mac/secure/shutdown-recovery-timeout", strconv.FormatInt(data.MacSecureShutdownRecoveryTimeout.ValueInt64(), 10))
 	}
 	if len(data.NeighborsEvpnEvi) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -2831,17 +2457,17 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 	}
 	if !data.EfpVisibility.IsNull() && !data.EfpVisibility.IsUnknown() {
 		if data.EfpVisibility.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/efp-visibility", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/efp-visibility", "")
 		}
 	}
 	if !data.Etree.IsNull() && !data.Etree.IsUnknown() {
 		if data.Etree.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/etree", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/etree", "")
 		}
 	}
 	if !data.EtreeLeaf.IsNull() && !data.EtreeLeaf.IsUnknown() {
 		if data.EtreeLeaf.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/etree/leaf", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/etree/leaf", "")
 		}
 	}
 	if len(data.MemberVnisVni) > 0 {
@@ -2878,27 +2504,27 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bridge-domain-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bridge-domain-name"); value.Exists() {
 		data.BridgeDomainName = types.StringValue(value.String())
 	} else if data.BridgeDomainName.IsNull() {
 		data.BridgeDomainName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mtu"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mtu"); value.Exists() {
 		data.Mtu = types.Int64Value(value.Int())
 	} else if data.Mtu.IsNull() {
 		data.Mtu = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
 	for i := range data.Evis {
-		keys := [...]string{"vpn-id"}
-		keyValues := [...]string{strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/evis/evi").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/evis/evi").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2923,11 +2549,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 		}
 	}
 	for i := range data.Srv6Evis {
-		keys := [...]string{"vpn-id"}
-		keyValues := [...]string{strconv.FormatInt(data.Srv6Evis[i].VpnId.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.Srv6Evis[i].VpnId.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing-srv6-evis/evi").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/segment-routing-srv6-evis/evi").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2952,11 +2578,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 		}
 	}
 	for i := range data.Vnis {
-		keys := [...]string{"vni-id"}
-		keyValues := [...]string{strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10)}
+		keys := [...]string{ "vni-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/vnis/vni").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/vnis/vni").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2980,7 +2606,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.Vnis[i].VniId = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/coupled-mode"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/coupled-mode"); value.Exists() {
 		data.CoupledMode = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -2988,7 +2614,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.CoupledMode = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport-mode/vlan/passthrough"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport-mode/vlan/passthrough"); value.Exists() {
 		data.TransportModeVlanPassthrough = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -2996,7 +2622,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.TransportModeVlanPassthrough = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/flooding/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/flooding/disable"); value.Exists() {
 		data.FloodingDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3004,7 +2630,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.FloodingDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection"); value.Exists() {
 		data.DynamicArpInspection = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3012,7 +2638,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.DynamicArpInspection = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection/logging"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection/logging"); value.Exists() {
 		data.DynamicArpInspectionLogging = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3020,7 +2646,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.DynamicArpInspectionLogging = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection/address-validation/src-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection/address-validation/src-mac"); value.Exists() {
 		data.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3028,7 +2654,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.DynamicArpInspectionAddressValidationSrcMac = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection/address-validation/dst-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection/address-validation/dst-mac"); value.Exists() {
 		data.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3036,7 +2662,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.DynamicArpInspectionAddressValidationDstMac = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection/address-validation/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection/address-validation/ipv4"); value.Exists() {
 		data.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3044,7 +2670,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.DynamicArpInspectionAddressValidationIpv4 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ip-source-guard"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ip-source-guard"); value.Exists() {
 		data.IpSourceGuard = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3052,7 +2678,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.IpSourceGuard = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ip-source-guard/logging"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ip-source-guard/logging"); value.Exists() {
 		data.IpSourceGuardLogging = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3060,12 +2686,12 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.IpSourceGuardLogging = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/igmp/snooping/profile"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/igmp/snooping/profile"); value.Exists() {
 		data.IgmpSnoopingProfile = types.StringValue(value.String())
 	} else if data.IgmpSnoopingProfile.IsNull() {
 		data.IgmpSnoopingProfile = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/igmp/snooping/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/igmp/snooping/disable"); value.Exists() {
 		data.IgmpSnoopingDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3073,42 +2699,42 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.IgmpSnoopingDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mld/snooping/profile"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mld/snooping/profile"); value.Exists() {
 		data.MldSnoopingProfile = types.StringValue(value.String())
 	} else if data.MldSnoopingProfile.IsNull() {
 		data.MldSnoopingProfile = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/broadcast/pps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/broadcast/pps"); value.Exists() {
 		data.StormControlBroadcastPps = types.Int64Value(value.Int())
 	} else if data.StormControlBroadcastPps.IsNull() {
 		data.StormControlBroadcastPps = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/broadcast/kbps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/broadcast/kbps"); value.Exists() {
 		data.StormControlBroadcastKbps = types.Int64Value(value.Int())
 	} else if data.StormControlBroadcastKbps.IsNull() {
 		data.StormControlBroadcastKbps = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/multicast/pps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/multicast/pps"); value.Exists() {
 		data.StormControlMulticastPps = types.Int64Value(value.Int())
 	} else if data.StormControlMulticastPps.IsNull() {
 		data.StormControlMulticastPps = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/multicast/kbps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/multicast/kbps"); value.Exists() {
 		data.StormControlMulticastKbps = types.Int64Value(value.Int())
 	} else if data.StormControlMulticastKbps.IsNull() {
 		data.StormControlMulticastKbps = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/unknown-unicast/pps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/unknown-unicast/pps"); value.Exists() {
 		data.StormControlUnknownUnicastPps = types.Int64Value(value.Int())
 	} else if data.StormControlUnknownUnicastPps.IsNull() {
 		data.StormControlUnknownUnicastPps = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/unknown-unicast/kbps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/unknown-unicast/kbps"); value.Exists() {
 		data.StormControlUnknownUnicastKbps = types.Int64Value(value.Int())
 	} else if data.StormControlUnknownUnicastKbps.IsNull() {
 		data.StormControlUnknownUnicastKbps = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast-source/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/multicast-source/ipv4"); value.Exists() {
 		data.MulticastSourceIpv4 = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3116,7 +2742,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MulticastSourceIpv4 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast-source/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/multicast-source/ipv6"); value.Exists() {
 		data.MulticastSourceIpv6 = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3124,7 +2750,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MulticastSourceIpv6 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast-source/ipv4-ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/multicast-source/ipv4-ipv6"); value.Exists() {
 		data.MulticastSourceIpv4Ipv6 = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3133,11 +2759,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 		}
 	}
 	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.Interfaces[i].InterfaceName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3539,44 +3165,42 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 				data.Interfaces[i].SplitHorizonGroup = types.BoolNull()
 			}
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "static-mac-addresses/static-mac-address"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.Interfaces[i].StaticMacAddresses
-			data.Interfaces[i].StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses, 0)
+		for ci := range data.Interfaces[i].StaticMacAddresses {
+			keys := [...]string{ "mac-address",  }
+			keyValues := [...]string{ data.Interfaces[i].StaticMacAddresses[ci].MacAddress.ValueString(),  }
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "mac-address"); cValue.Exists() {
-					citem.MacAddress = types.StringValue(cValue.String())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.MacAddress.ValueString() != citem.MacAddress.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "static-mac-addresses/static-mac-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Interfaces[i].StaticMacAddresses = append(data.Interfaces[i].StaticMacAddresses, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "mac-address"); value.Exists() {
+				data.Interfaces[i].StaticMacAddresses[ci].MacAddress = types.StringValue(value.String())
+			} else {
+				data.Interfaces[i].StaticMacAddresses[ci].MacAddress = types.StringNull()
+			}
 		}
 	}
 	for i := range data.RoutedInterface {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.RoutedInterface[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.RoutedInterface[i].InterfaceName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/routed/interface").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/routed/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3609,7 +3233,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3617,12 +3241,12 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.Shutdown = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/aging/time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/aging/time"); value.Exists() {
 		data.MacAgingTime = types.Int64Value(value.Int())
 	} else if data.MacAgingTime.IsNull() {
 		data.MacAgingTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/aging/type/absolute"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/aging/type/absolute"); value.Exists() {
 		data.MacAgingTypeAbsolute = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3631,11 +3255,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 		}
 	}
 	for i := range data.MacStaticAddresses {
-		keys := [...]string{"mac-address"}
-		keyValues := [...]string{data.MacStaticAddresses[i].MacAddress.ValueString()}
+		keys := [...]string{ "mac-address",  }
+		keyValues := [...]string{ data.MacStaticAddresses[i].MacAddress.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/static-addresses/static-address").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/static-addresses/static-address").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3668,7 +3292,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/learning/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/learning/disable"); value.Exists() {
 		data.MacLearningDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3676,7 +3300,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacLearningDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/disable"); value.Exists() {
 		data.MacWithdrawDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3684,7 +3308,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacWithdrawDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/access-pw/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/access-pw/disable"); value.Exists() {
 		data.MacWithdrawAccessPwDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3692,7 +3316,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacWithdrawAccessPwDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/relay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/relay"); value.Exists() {
 		data.MacWithdrawRelay = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3700,7 +3324,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacWithdrawRelay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/state-down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/state-down"); value.Exists() {
 		data.MacWithdrawStateDown = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3708,7 +3332,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacWithdrawStateDown = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/optimize"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/optimize"); value.Exists() {
 		data.MacWithdrawOptimize = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3716,12 +3340,12 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacWithdrawOptimize = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/maximum"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/maximum"); value.Exists() {
 		data.MacLimitMaximum = types.Int64Value(value.Int())
 	} else if data.MacLimitMaximum.IsNull() {
 		data.MacLimitMaximum = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/action/flood"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/action/flood"); value.Exists() {
 		data.MacLimitActionFlood = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3729,7 +3353,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacLimitActionFlood = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/action/no-flood"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/action/no-flood"); value.Exists() {
 		data.MacLimitActionNoFlood = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3737,7 +3361,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacLimitActionNoFlood = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/action/shutdown"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/action/shutdown"); value.Exists() {
 		data.MacLimitActionShutdown = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3745,7 +3369,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacLimitActionShutdown = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/notification/trap"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/notification/trap"); value.Exists() {
 		data.MacLimitNotificationTrap = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3753,7 +3377,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacLimitNotificationTrap = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/notification/both"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/notification/both"); value.Exists() {
 		data.MacLimitNotificationBoth = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3761,7 +3385,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacLimitNotificationBoth = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/notification/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/notification/none"); value.Exists() {
 		data.MacLimitNotificationNone = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3769,7 +3393,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacLimitNotificationNone = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/port-down/flush/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/port-down/flush/disable"); value.Exists() {
 		data.MacPortDownFlushDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3777,7 +3401,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacPortDownFlushDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure"); value.Exists() {
 		data.MacSecure = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3785,7 +3409,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacSecure = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/logging"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/logging"); value.Exists() {
 		data.MacSecureLogging = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3793,7 +3417,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacSecureLogging = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/threshold"); value.Exists() {
 		data.MacSecureThreshold = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3801,7 +3425,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacSecureThreshold = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/action/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/action/none"); value.Exists() {
 		data.MacSecureActionNone = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3809,7 +3433,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacSecureActionNone = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/action/shutdown"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/action/shutdown"); value.Exists() {
 		data.MacSecureActionShutdown = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3817,17 +3441,17 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.MacSecureActionShutdown = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/shutdown-recovery-timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/shutdown-recovery-timeout"); value.Exists() {
 		data.MacSecureShutdownRecoveryTimeout = types.Int64Value(value.Int())
 	} else if data.MacSecureShutdownRecoveryTimeout.IsNull() {
 		data.MacSecureShutdownRecoveryTimeout = types.Int64Null()
 	}
 	for i := range data.NeighborsEvpnEvi {
-		keys := [...]string{"vpn-id", "target"}
-		keyValues := [...]string{strconv.FormatInt(data.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborsEvpnEvi[i].Target.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id", "target",  }
+		keyValues := [...]string{ strconv.FormatInt(data.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborsEvpnEvi[i].Target.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/evpn/evi").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbors/evpn/evi").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3856,7 +3480,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.NeighborsEvpnEvi[i].Target = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/efp-visibility"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/efp-visibility"); value.Exists() {
 		data.EfpVisibility = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3864,7 +3488,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.EfpVisibility = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/etree"); value.Exists() {
 		data.Etree = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3872,7 +3496,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 			data.Etree = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/leaf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/etree/leaf"); value.Exists() {
 		data.EtreeLeaf = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -3881,11 +3505,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 		}
 	}
 	for i := range data.MemberVnisVni {
-		keys := [...]string{"vni-id"}
-		keyValues := [...]string{strconv.FormatInt(data.MemberVnisVni[i].VniId.ValueInt64(), 10)}
+		keys := [...]string{ "vni-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.MemberVnisVni[i].VniId.ValueInt64(), 10),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/member/vnis/vni").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/member/vnis/vni").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3908,39 +3532,39 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context,
 		} else if data.MemberVnisVni[i].VniId.IsNull() {
 			data.MemberVnisVni[i].VniId = types.Int64Null()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "static-mac-addresses/static-mac-address"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.MemberVnisVni[i].StaticMacAddresses
-			data.MemberVnisVni[i].StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainMemberVnisVniStaticMacAddresses, 0)
+		for ci := range data.MemberVnisVni[i].StaticMacAddresses {
+			keys := [...]string{ "mac-address",  }
+			keyValues := [...]string{ data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress.ValueString(),  }
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := L2VPNBridgeGroupBridgeDomainMemberVnisVniStaticMacAddresses{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "mac-address"); cValue.Exists() {
-					citem.MacAddress = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, "next-hop"); cValue.Exists() {
-					citem.NextHop = types.StringValue(cValue.String())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.MacAddress.ValueString() != citem.MacAddress.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "static-mac-addresses/static-mac-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.MemberVnisVni[i].StaticMacAddresses = append(data.MemberVnisVni[i].StaticMacAddresses, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "mac-address"); value.Exists() {
+				data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress = types.StringValue(value.String())
+			} else {
+				data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "next-hop"); value.Exists() {
+				data.MemberVnisVni[i].StaticMacAddresses[ci].NextHop = types.StringValue(value.String())
+			} else {
+				data.MemberVnisVni[i].StaticMacAddresses[ci].NextHop = types.StringNull()
+			}
 		}
 	}
 }
@@ -3953,13 +3577,13 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "mtu"); value.Exists() {
+	if value := res.Get(prefix+"mtu"); value.Exists() {
 		data.Mtu = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "description"); value.Exists() {
+	if value := res.Get(prefix+"description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "evis.evi"); value.Exists() {
+	if value := res.Get(prefix+"evis.evi"); value.Exists() {
 		data.Evis = make([]L2VPNBridgeGroupBridgeDomainEvis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainEvis{}
@@ -3970,7 +3594,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			return true
 		})
 	}
-	if value := res.Get(prefix + "segment-routing-srv6-evis.evi"); value.Exists() {
+	if value := res.Get(prefix+"segment-routing-srv6-evis.evi"); value.Exists() {
 		data.Srv6Evis = make([]L2VPNBridgeGroupBridgeDomainSrv6Evis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainSrv6Evis{}
@@ -3981,7 +3605,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			return true
 		})
 	}
-	if value := res.Get(prefix + "vnis.vni"); value.Exists() {
+	if value := res.Get(prefix+"vnis.vni"); value.Exists() {
 		data.Vnis = make([]L2VPNBridgeGroupBridgeDomainVnis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVnis{}
@@ -3992,101 +3616,101 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			return true
 		})
 	}
-	if value := res.Get(prefix + "coupled-mode"); value.Exists() {
+	if value := res.Get(prefix+"coupled-mode"); value.Exists() {
 		data.CoupledMode = types.BoolValue(true)
 	} else {
-		data.CoupledMode = types.BoolNull()
+		data.CoupledMode = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "transport-mode.vlan.passthrough"); value.Exists() {
+	if value := res.Get(prefix+"transport-mode.vlan.passthrough"); value.Exists() {
 		data.TransportModeVlanPassthrough = types.BoolValue(true)
 	} else {
-		data.TransportModeVlanPassthrough = types.BoolNull()
+		data.TransportModeVlanPassthrough = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "flooding.disable"); value.Exists() {
+	if value := res.Get(prefix+"flooding.disable"); value.Exists() {
 		data.FloodingDisable = types.BoolValue(true)
 	} else {
-		data.FloodingDisable = types.BoolNull()
+		data.FloodingDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "dynamic-arp-inspection"); value.Exists() {
+	if value := res.Get(prefix+"dynamic-arp-inspection"); value.Exists() {
 		data.DynamicArpInspection = types.BoolValue(true)
 	} else {
-		data.DynamicArpInspection = types.BoolNull()
+		data.DynamicArpInspection = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "dynamic-arp-inspection.logging"); value.Exists() {
+	if value := res.Get(prefix+"dynamic-arp-inspection.logging"); value.Exists() {
 		data.DynamicArpInspectionLogging = types.BoolValue(true)
 	} else {
-		data.DynamicArpInspectionLogging = types.BoolNull()
+		data.DynamicArpInspectionLogging = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "dynamic-arp-inspection.address-validation.src-mac"); value.Exists() {
+	if value := res.Get(prefix+"dynamic-arp-inspection.address-validation.src-mac"); value.Exists() {
 		data.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
 	} else {
-		data.DynamicArpInspectionAddressValidationSrcMac = types.BoolNull()
+		data.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "dynamic-arp-inspection.address-validation.dst-mac"); value.Exists() {
+	if value := res.Get(prefix+"dynamic-arp-inspection.address-validation.dst-mac"); value.Exists() {
 		data.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
 	} else {
-		data.DynamicArpInspectionAddressValidationDstMac = types.BoolNull()
+		data.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "dynamic-arp-inspection.address-validation.ipv4"); value.Exists() {
+	if value := res.Get(prefix+"dynamic-arp-inspection.address-validation.ipv4"); value.Exists() {
 		data.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
 	} else {
-		data.DynamicArpInspectionAddressValidationIpv4 = types.BoolNull()
+		data.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ip-source-guard"); value.Exists() {
+	if value := res.Get(prefix+"ip-source-guard"); value.Exists() {
 		data.IpSourceGuard = types.BoolValue(true)
 	} else {
-		data.IpSourceGuard = types.BoolNull()
+		data.IpSourceGuard = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ip-source-guard.logging"); value.Exists() {
+	if value := res.Get(prefix+"ip-source-guard.logging"); value.Exists() {
 		data.IpSourceGuardLogging = types.BoolValue(true)
 	} else {
-		data.IpSourceGuardLogging = types.BoolNull()
+		data.IpSourceGuardLogging = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "igmp.snooping.profile"); value.Exists() {
+	if value := res.Get(prefix+"igmp.snooping.profile"); value.Exists() {
 		data.IgmpSnoopingProfile = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "igmp.snooping.disable"); value.Exists() {
+	if value := res.Get(prefix+"igmp.snooping.disable"); value.Exists() {
 		data.IgmpSnoopingDisable = types.BoolValue(true)
 	} else {
-		data.IgmpSnoopingDisable = types.BoolNull()
+		data.IgmpSnoopingDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mld.snooping.profile"); value.Exists() {
+	if value := res.Get(prefix+"mld.snooping.profile"); value.Exists() {
 		data.MldSnoopingProfile = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "storm-control.broadcast.pps"); value.Exists() {
+	if value := res.Get(prefix+"storm-control.broadcast.pps"); value.Exists() {
 		data.StormControlBroadcastPps = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "storm-control.broadcast.kbps"); value.Exists() {
+	if value := res.Get(prefix+"storm-control.broadcast.kbps"); value.Exists() {
 		data.StormControlBroadcastKbps = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "storm-control.multicast.pps"); value.Exists() {
+	if value := res.Get(prefix+"storm-control.multicast.pps"); value.Exists() {
 		data.StormControlMulticastPps = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "storm-control.multicast.kbps"); value.Exists() {
+	if value := res.Get(prefix+"storm-control.multicast.kbps"); value.Exists() {
 		data.StormControlMulticastKbps = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "storm-control.unknown-unicast.pps"); value.Exists() {
+	if value := res.Get(prefix+"storm-control.unknown-unicast.pps"); value.Exists() {
 		data.StormControlUnknownUnicastPps = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "storm-control.unknown-unicast.kbps"); value.Exists() {
+	if value := res.Get(prefix+"storm-control.unknown-unicast.kbps"); value.Exists() {
 		data.StormControlUnknownUnicastKbps = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "multicast-source.ipv4"); value.Exists() {
+	if value := res.Get(prefix+"multicast-source.ipv4"); value.Exists() {
 		data.MulticastSourceIpv4 = types.BoolValue(true)
 	} else {
-		data.MulticastSourceIpv4 = types.BoolNull()
+		data.MulticastSourceIpv4 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "multicast-source.ipv6"); value.Exists() {
+	if value := res.Get(prefix+"multicast-source.ipv6"); value.Exists() {
 		data.MulticastSourceIpv6 = types.BoolValue(true)
 	} else {
-		data.MulticastSourceIpv6 = types.BoolNull()
+		data.MulticastSourceIpv6 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "multicast-source.ipv4-ipv6"); value.Exists() {
+	if value := res.Get(prefix+"multicast-source.ipv4-ipv6"); value.Exists() {
 		data.MulticastSourceIpv4Ipv6 = types.BoolValue(true)
 	} else {
-		data.MulticastSourceIpv4Ipv6 = types.BoolNull()
+		data.MulticastSourceIpv4Ipv6 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]L2VPNBridgeGroupBridgeDomainInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainInterfaces{}
@@ -4096,52 +3720,52 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("dynamic-arp-inspection.logging"); cValue.Exists() {
 				item.DynamicArpInspectionLogging = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionLogging = types.BoolNull()
+				item.DynamicArpInspectionLogging = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.logging.disable"); cValue.Exists() {
 				item.DynamicArpInspectionLoggingDisable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionLoggingDisable = types.BoolNull()
+				item.DynamicArpInspectionLoggingDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.disable"); cValue.Exists() {
 				item.DynamicArpInspectionDisable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionDisable = types.BoolNull()
+				item.DynamicArpInspectionDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.src-mac"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationSrcMac = types.BoolNull()
+				item.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.src-mac.disable"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolNull()
+				item.DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.dst-mac"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationDstMac = types.BoolNull()
+				item.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.dst-mac.disable"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationDstMacDisable = types.BoolNull()
+				item.DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.ipv4"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationIpv4 = types.BoolNull()
+				item.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.ipv4.disable"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationIpv4Disable = types.BoolNull()
+				item.DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(false)
 			}
 			if cValue := v.Get("flooding.disable"); cValue.Exists() {
 				item.FloodingDisable = types.BoolValue(true)
 			} else {
-				item.FloodingDisable = types.BoolNull()
+				item.FloodingDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("igmp.snooping.profile"); cValue.Exists() {
 				item.IgmpSnoopingProfile = types.StringValue(cValue.String())
@@ -4149,22 +3773,22 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("ip-source-guard"); cValue.Exists() {
 				item.IpSourceGuard = types.BoolValue(true)
 			} else {
-				item.IpSourceGuard = types.BoolNull()
+				item.IpSourceGuard = types.BoolValue(false)
 			}
 			if cValue := v.Get("ip-source-guard.disable"); cValue.Exists() {
 				item.IpSourceGuardDisable = types.BoolValue(true)
 			} else {
-				item.IpSourceGuardDisable = types.BoolNull()
+				item.IpSourceGuardDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("ip-source-guard.logging"); cValue.Exists() {
 				item.IpSourceGuardLogging = types.BoolValue(true)
 			} else {
-				item.IpSourceGuardLogging = types.BoolNull()
+				item.IpSourceGuardLogging = types.BoolValue(false)
 			}
 			if cValue := v.Get("ip-source-guard.logging.disable"); cValue.Exists() {
 				item.IpSourceGuardLoggingDisable = types.BoolValue(true)
 			} else {
-				item.IpSourceGuardLoggingDisable = types.BoolNull()
+				item.IpSourceGuardLoggingDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.aging.time"); cValue.Exists() {
 				item.MacAgingTime = types.Int64Value(cValue.Int())
@@ -4172,22 +3796,22 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("mac.aging.type.absolute"); cValue.Exists() {
 				item.MacAgingTypeAbsolute = types.BoolValue(true)
 			} else {
-				item.MacAgingTypeAbsolute = types.BoolNull()
+				item.MacAgingTypeAbsolute = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.aging.type.inactivity"); cValue.Exists() {
 				item.MacAgingTypeInactivity = types.BoolValue(true)
 			} else {
-				item.MacAgingTypeInactivity = types.BoolNull()
+				item.MacAgingTypeInactivity = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.learning"); cValue.Exists() {
 				item.MacLearning = types.BoolValue(true)
 			} else {
-				item.MacLearning = types.BoolNull()
+				item.MacLearning = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.learning.disable"); cValue.Exists() {
 				item.MacLearningDisable = types.BoolValue(true)
 			} else {
-				item.MacLearningDisable = types.BoolNull()
+				item.MacLearningDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.maximum"); cValue.Exists() {
 				item.MacLimitMaximum = types.Int64Value(cValue.Int())
@@ -4195,82 +3819,82 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("mac.limit.action.flood"); cValue.Exists() {
 				item.MacLimitActionFlood = types.BoolValue(true)
 			} else {
-				item.MacLimitActionFlood = types.BoolNull()
+				item.MacLimitActionFlood = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.action.no-flood"); cValue.Exists() {
 				item.MacLimitActionNoFlood = types.BoolValue(true)
 			} else {
-				item.MacLimitActionNoFlood = types.BoolNull()
+				item.MacLimitActionNoFlood = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.action.shutdown"); cValue.Exists() {
 				item.MacLimitActionShutdown = types.BoolValue(true)
 			} else {
-				item.MacLimitActionShutdown = types.BoolNull()
+				item.MacLimitActionShutdown = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.action.none"); cValue.Exists() {
 				item.MacLimitActionNone = types.BoolValue(true)
 			} else {
-				item.MacLimitActionNone = types.BoolNull()
+				item.MacLimitActionNone = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.notification.trap"); cValue.Exists() {
 				item.MacLimitNotificationTrap = types.BoolValue(true)
 			} else {
-				item.MacLimitNotificationTrap = types.BoolNull()
+				item.MacLimitNotificationTrap = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.notification.both"); cValue.Exists() {
 				item.MacLimitNotificationBoth = types.BoolValue(true)
 			} else {
-				item.MacLimitNotificationBoth = types.BoolNull()
+				item.MacLimitNotificationBoth = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.notification.none"); cValue.Exists() {
 				item.MacLimitNotificationNone = types.BoolValue(true)
 			} else {
-				item.MacLimitNotificationNone = types.BoolNull()
+				item.MacLimitNotificationNone = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.notification.syslog"); cValue.Exists() {
 				item.MacLimitNotificationSyslog = types.BoolValue(true)
 			} else {
-				item.MacLimitNotificationSyslog = types.BoolNull()
+				item.MacLimitNotificationSyslog = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.port-down.flush.disable"); cValue.Exists() {
 				item.MacPortDownFlushDisable = types.BoolValue(true)
 			} else {
-				item.MacPortDownFlushDisable = types.BoolNull()
+				item.MacPortDownFlushDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure"); cValue.Exists() {
 				item.MacSecure = types.BoolValue(true)
 			} else {
-				item.MacSecure = types.BoolNull()
+				item.MacSecure = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure.logging"); cValue.Exists() {
 				item.MacSecureLogging = types.BoolValue(true)
 			} else {
-				item.MacSecureLogging = types.BoolNull()
+				item.MacSecureLogging = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure.logging.disable"); cValue.Exists() {
 				item.MacSecureLoggingDisable = types.BoolValue(true)
 			} else {
-				item.MacSecureLoggingDisable = types.BoolNull()
+				item.MacSecureLoggingDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure.action.none"); cValue.Exists() {
 				item.MacSecureActionNone = types.BoolValue(true)
 			} else {
-				item.MacSecureActionNone = types.BoolNull()
+				item.MacSecureActionNone = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure.action.shutdown"); cValue.Exists() {
 				item.MacSecureActionShutdown = types.BoolValue(true)
 			} else {
-				item.MacSecureActionShutdown = types.BoolNull()
+				item.MacSecureActionShutdown = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure.action.restrict"); cValue.Exists() {
 				item.MacSecureActionRestrict = types.BoolValue(true)
 			} else {
-				item.MacSecureActionRestrict = types.BoolNull()
+				item.MacSecureActionRestrict = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure.disable"); cValue.Exists() {
 				item.MacSecureDisable = types.BoolValue(true)
 			} else {
-				item.MacSecureDisable = types.BoolNull()
+				item.MacSecureDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure.shutdown-recovery-timeout.recovery-timer-in-second"); cValue.Exists() {
 				item.MacSecureShutdownRecoveryTimeout = types.Int64Value(cValue.Int())
@@ -4278,7 +3902,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("mac.secure.shutdown-recovery-timeout.disable"); cValue.Exists() {
 				item.MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(true)
 			} else {
-				item.MacSecureShutdownRecoveryTimeoutDisable = types.BoolNull()
+				item.MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mld.snooping.profile"); cValue.Exists() {
 				item.MldSnoopingProfile = types.StringValue(cValue.String())
@@ -4304,7 +3928,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("split-horizon.group"); cValue.Exists() {
 				item.SplitHorizonGroup = types.BoolValue(true)
 			} else {
-				item.SplitHorizonGroup = types.BoolNull()
+				item.SplitHorizonGroup = types.BoolValue(false)
 			}
 			if cValue := v.Get("static-mac-addresses.static-mac-address"); cValue.Exists() {
 				item.StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses, 0)
@@ -4313,15 +3937,15 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 					if ccValue := cv.Get("mac-address"); ccValue.Exists() {
 						cItem.MacAddress = types.StringValue(ccValue.String())
 					}
-					item.StaticMacAddresses = append(item.StaticMacAddresses, cItem)
-					return true
-				})
-			}
+				item.StaticMacAddresses = append(item.StaticMacAddresses, cItem)
+				return true
+			})
+		}
 			data.Interfaces = append(data.Interfaces, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "routed.interface"); value.Exists() {
+	if value := res.Get(prefix+"routed.interface"); value.Exists() {
 		data.RoutedInterface = make([]L2VPNBridgeGroupBridgeDomainRoutedInterface, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainRoutedInterface{}
@@ -4331,26 +3955,26 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("split-horizon.group.core"); cValue.Exists() {
 				item.SplitHorizonGroupCore = types.BoolValue(true)
 			} else {
-				item.SplitHorizonGroupCore = types.BoolNull()
+				item.SplitHorizonGroupCore = types.BoolValue(false)
 			}
 			data.RoutedInterface = append(data.RoutedInterface, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "shutdown"); value.Exists() {
+	if value := res.Get(prefix+"shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
-		data.Shutdown = types.BoolNull()
+		data.Shutdown = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.aging.time"); value.Exists() {
+	if value := res.Get(prefix+"mac.aging.time"); value.Exists() {
 		data.MacAgingTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "mac.aging.type.absolute"); value.Exists() {
+	if value := res.Get(prefix+"mac.aging.type.absolute"); value.Exists() {
 		data.MacAgingTypeAbsolute = types.BoolValue(true)
 	} else {
-		data.MacAgingTypeAbsolute = types.BoolNull()
+		data.MacAgingTypeAbsolute = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.static-addresses.static-address"); value.Exists() {
+	if value := res.Get(prefix+"mac.static-addresses.static-address"); value.Exists() {
 		data.MacStaticAddresses = make([]L2VPNBridgeGroupBridgeDomainMacStaticAddresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainMacStaticAddresses{}
@@ -4360,109 +3984,109 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("drop"); cValue.Exists() {
 				item.Drop = types.BoolValue(true)
 			} else {
-				item.Drop = types.BoolNull()
+				item.Drop = types.BoolValue(false)
 			}
 			data.MacStaticAddresses = append(data.MacStaticAddresses, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "mac.learning.disable"); value.Exists() {
+	if value := res.Get(prefix+"mac.learning.disable"); value.Exists() {
 		data.MacLearningDisable = types.BoolValue(true)
 	} else {
-		data.MacLearningDisable = types.BoolNull()
+		data.MacLearningDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.withdraw.disable"); value.Exists() {
+	if value := res.Get(prefix+"mac.withdraw.disable"); value.Exists() {
 		data.MacWithdrawDisable = types.BoolValue(true)
 	} else {
-		data.MacWithdrawDisable = types.BoolNull()
+		data.MacWithdrawDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.withdraw.access-pw.disable"); value.Exists() {
+	if value := res.Get(prefix+"mac.withdraw.access-pw.disable"); value.Exists() {
 		data.MacWithdrawAccessPwDisable = types.BoolValue(true)
 	} else {
-		data.MacWithdrawAccessPwDisable = types.BoolNull()
+		data.MacWithdrawAccessPwDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.withdraw.relay"); value.Exists() {
+	if value := res.Get(prefix+"mac.withdraw.relay"); value.Exists() {
 		data.MacWithdrawRelay = types.BoolValue(true)
 	} else {
-		data.MacWithdrawRelay = types.BoolNull()
+		data.MacWithdrawRelay = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.withdraw.state-down"); value.Exists() {
+	if value := res.Get(prefix+"mac.withdraw.state-down"); value.Exists() {
 		data.MacWithdrawStateDown = types.BoolValue(true)
 	} else {
-		data.MacWithdrawStateDown = types.BoolNull()
+		data.MacWithdrawStateDown = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.withdraw.optimize"); value.Exists() {
+	if value := res.Get(prefix+"mac.withdraw.optimize"); value.Exists() {
 		data.MacWithdrawOptimize = types.BoolValue(true)
 	} else {
-		data.MacWithdrawOptimize = types.BoolNull()
+		data.MacWithdrawOptimize = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.limit.maximum"); value.Exists() {
+	if value := res.Get(prefix+"mac.limit.maximum"); value.Exists() {
 		data.MacLimitMaximum = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "mac.limit.action.flood"); value.Exists() {
+	if value := res.Get(prefix+"mac.limit.action.flood"); value.Exists() {
 		data.MacLimitActionFlood = types.BoolValue(true)
 	} else {
-		data.MacLimitActionFlood = types.BoolNull()
+		data.MacLimitActionFlood = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.limit.action.no-flood"); value.Exists() {
+	if value := res.Get(prefix+"mac.limit.action.no-flood"); value.Exists() {
 		data.MacLimitActionNoFlood = types.BoolValue(true)
 	} else {
-		data.MacLimitActionNoFlood = types.BoolNull()
+		data.MacLimitActionNoFlood = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.limit.action.shutdown"); value.Exists() {
+	if value := res.Get(prefix+"mac.limit.action.shutdown"); value.Exists() {
 		data.MacLimitActionShutdown = types.BoolValue(true)
 	} else {
-		data.MacLimitActionShutdown = types.BoolNull()
+		data.MacLimitActionShutdown = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.limit.notification.trap"); value.Exists() {
+	if value := res.Get(prefix+"mac.limit.notification.trap"); value.Exists() {
 		data.MacLimitNotificationTrap = types.BoolValue(true)
 	} else {
-		data.MacLimitNotificationTrap = types.BoolNull()
+		data.MacLimitNotificationTrap = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.limit.notification.both"); value.Exists() {
+	if value := res.Get(prefix+"mac.limit.notification.both"); value.Exists() {
 		data.MacLimitNotificationBoth = types.BoolValue(true)
 	} else {
-		data.MacLimitNotificationBoth = types.BoolNull()
+		data.MacLimitNotificationBoth = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.limit.notification.none"); value.Exists() {
+	if value := res.Get(prefix+"mac.limit.notification.none"); value.Exists() {
 		data.MacLimitNotificationNone = types.BoolValue(true)
 	} else {
-		data.MacLimitNotificationNone = types.BoolNull()
+		data.MacLimitNotificationNone = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.port-down.flush.disable"); value.Exists() {
+	if value := res.Get(prefix+"mac.port-down.flush.disable"); value.Exists() {
 		data.MacPortDownFlushDisable = types.BoolValue(true)
 	} else {
-		data.MacPortDownFlushDisable = types.BoolNull()
+		data.MacPortDownFlushDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.secure"); value.Exists() {
+	if value := res.Get(prefix+"mac.secure"); value.Exists() {
 		data.MacSecure = types.BoolValue(true)
 	} else {
-		data.MacSecure = types.BoolNull()
+		data.MacSecure = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.secure.logging"); value.Exists() {
+	if value := res.Get(prefix+"mac.secure.logging"); value.Exists() {
 		data.MacSecureLogging = types.BoolValue(true)
 	} else {
-		data.MacSecureLogging = types.BoolNull()
+		data.MacSecureLogging = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.secure.threshold"); value.Exists() {
+	if value := res.Get(prefix+"mac.secure.threshold"); value.Exists() {
 		data.MacSecureThreshold = types.BoolValue(true)
 	} else {
-		data.MacSecureThreshold = types.BoolNull()
+		data.MacSecureThreshold = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.secure.action.none"); value.Exists() {
+	if value := res.Get(prefix+"mac.secure.action.none"); value.Exists() {
 		data.MacSecureActionNone = types.BoolValue(true)
 	} else {
-		data.MacSecureActionNone = types.BoolNull()
+		data.MacSecureActionNone = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.secure.action.shutdown"); value.Exists() {
+	if value := res.Get(prefix+"mac.secure.action.shutdown"); value.Exists() {
 		data.MacSecureActionShutdown = types.BoolValue(true)
 	} else {
-		data.MacSecureActionShutdown = types.BoolNull()
+		data.MacSecureActionShutdown = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mac.secure.shutdown-recovery-timeout"); value.Exists() {
+	if value := res.Get(prefix+"mac.secure.shutdown-recovery-timeout"); value.Exists() {
 		data.MacSecureShutdownRecoveryTimeout = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "neighbors.evpn.evi"); value.Exists() {
+	if value := res.Get(prefix+"neighbors.evpn.evi"); value.Exists() {
 		data.NeighborsEvpnEvi = make([]L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi{}
@@ -4476,22 +4100,22 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			return true
 		})
 	}
-	if value := res.Get(prefix + "efp-visibility"); value.Exists() {
+	if value := res.Get(prefix+"efp-visibility"); value.Exists() {
 		data.EfpVisibility = types.BoolValue(true)
 	} else {
-		data.EfpVisibility = types.BoolNull()
+		data.EfpVisibility = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "etree"); value.Exists() {
+	if value := res.Get(prefix+"etree"); value.Exists() {
 		data.Etree = types.BoolValue(true)
 	} else {
-		data.Etree = types.BoolNull()
+		data.Etree = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "etree.leaf"); value.Exists() {
+	if value := res.Get(prefix+"etree.leaf"); value.Exists() {
 		data.EtreeLeaf = types.BoolValue(true)
 	} else {
-		data.EtreeLeaf = types.BoolNull()
+		data.EtreeLeaf = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "member.vnis.vni"); value.Exists() {
+	if value := res.Get(prefix+"member.vnis.vni"); value.Exists() {
 		data.MemberVnisVni = make([]L2VPNBridgeGroupBridgeDomainMemberVnisVni, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainMemberVnisVni{}
@@ -4508,10 +4132,10 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 					if ccValue := cv.Get("next-hop"); ccValue.Exists() {
 						cItem.NextHop = types.StringValue(ccValue.String())
 					}
-					item.StaticMacAddresses = append(item.StaticMacAddresses, cItem)
-					return true
-				})
-			}
+				item.StaticMacAddresses = append(item.StaticMacAddresses, cItem)
+				return true
+			})
+		}
 			data.MemberVnisVni = append(data.MemberVnisVni, item)
 			return true
 		})
@@ -4526,13 +4150,13 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "mtu"); value.Exists() {
+	if value := res.Get(prefix+"mtu"); value.Exists() {
 		data.Mtu = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "description"); value.Exists() {
+	if value := res.Get(prefix+"description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "evis.evi"); value.Exists() {
+	if value := res.Get(prefix+"evis.evi"); value.Exists() {
 		data.Evis = make([]L2VPNBridgeGroupBridgeDomainEvis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainEvis{}
@@ -4543,7 +4167,7 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := res.Get(prefix + "segment-routing-srv6-evis.evi"); value.Exists() {
+	if value := res.Get(prefix+"segment-routing-srv6-evis.evi"); value.Exists() {
 		data.Srv6Evis = make([]L2VPNBridgeGroupBridgeDomainSrv6Evis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainSrv6Evis{}
@@ -4554,7 +4178,7 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := res.Get(prefix + "vnis.vni"); value.Exists() {
+	if value := res.Get(prefix+"vnis.vni"); value.Exists() {
 		data.Vnis = make([]L2VPNBridgeGroupBridgeDomainVnis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVnis{}
@@ -4565,101 +4189,101 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := res.Get(prefix + "coupled-mode"); value.Exists() {
+	if value := res.Get(prefix+"coupled-mode"); value.Exists() {
 		data.CoupledMode = types.BoolValue(true)
 	} else {
 		data.CoupledMode = types.BoolNull()
 	}
-	if value := res.Get(prefix + "transport-mode.vlan.passthrough"); value.Exists() {
+	if value := res.Get(prefix+"transport-mode.vlan.passthrough"); value.Exists() {
 		data.TransportModeVlanPassthrough = types.BoolValue(true)
 	} else {
 		data.TransportModeVlanPassthrough = types.BoolNull()
 	}
-	if value := res.Get(prefix + "flooding.disable"); value.Exists() {
+	if value := res.Get(prefix+"flooding.disable"); value.Exists() {
 		data.FloodingDisable = types.BoolValue(true)
 	} else {
 		data.FloodingDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix + "dynamic-arp-inspection"); value.Exists() {
+	if value := res.Get(prefix+"dynamic-arp-inspection"); value.Exists() {
 		data.DynamicArpInspection = types.BoolValue(true)
 	} else {
 		data.DynamicArpInspection = types.BoolNull()
 	}
-	if value := res.Get(prefix + "dynamic-arp-inspection.logging"); value.Exists() {
+	if value := res.Get(prefix+"dynamic-arp-inspection.logging"); value.Exists() {
 		data.DynamicArpInspectionLogging = types.BoolValue(true)
 	} else {
 		data.DynamicArpInspectionLogging = types.BoolNull()
 	}
-	if value := res.Get(prefix + "dynamic-arp-inspection.address-validation.src-mac"); value.Exists() {
+	if value := res.Get(prefix+"dynamic-arp-inspection.address-validation.src-mac"); value.Exists() {
 		data.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
 	} else {
 		data.DynamicArpInspectionAddressValidationSrcMac = types.BoolNull()
 	}
-	if value := res.Get(prefix + "dynamic-arp-inspection.address-validation.dst-mac"); value.Exists() {
+	if value := res.Get(prefix+"dynamic-arp-inspection.address-validation.dst-mac"); value.Exists() {
 		data.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
 	} else {
 		data.DynamicArpInspectionAddressValidationDstMac = types.BoolNull()
 	}
-	if value := res.Get(prefix + "dynamic-arp-inspection.address-validation.ipv4"); value.Exists() {
+	if value := res.Get(prefix+"dynamic-arp-inspection.address-validation.ipv4"); value.Exists() {
 		data.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
 	} else {
 		data.DynamicArpInspectionAddressValidationIpv4 = types.BoolNull()
 	}
-	if value := res.Get(prefix + "ip-source-guard"); value.Exists() {
+	if value := res.Get(prefix+"ip-source-guard"); value.Exists() {
 		data.IpSourceGuard = types.BoolValue(true)
 	} else {
 		data.IpSourceGuard = types.BoolNull()
 	}
-	if value := res.Get(prefix + "ip-source-guard.logging"); value.Exists() {
+	if value := res.Get(prefix+"ip-source-guard.logging"); value.Exists() {
 		data.IpSourceGuardLogging = types.BoolValue(true)
 	} else {
 		data.IpSourceGuardLogging = types.BoolNull()
 	}
-	if value := res.Get(prefix + "igmp.snooping.profile"); value.Exists() {
+	if value := res.Get(prefix+"igmp.snooping.profile"); value.Exists() {
 		data.IgmpSnoopingProfile = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "igmp.snooping.disable"); value.Exists() {
+	if value := res.Get(prefix+"igmp.snooping.disable"); value.Exists() {
 		data.IgmpSnoopingDisable = types.BoolValue(true)
 	} else {
 		data.IgmpSnoopingDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mld.snooping.profile"); value.Exists() {
+	if value := res.Get(prefix+"mld.snooping.profile"); value.Exists() {
 		data.MldSnoopingProfile = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "storm-control.broadcast.pps"); value.Exists() {
+	if value := res.Get(prefix+"storm-control.broadcast.pps"); value.Exists() {
 		data.StormControlBroadcastPps = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "storm-control.broadcast.kbps"); value.Exists() {
+	if value := res.Get(prefix+"storm-control.broadcast.kbps"); value.Exists() {
 		data.StormControlBroadcastKbps = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "storm-control.multicast.pps"); value.Exists() {
+	if value := res.Get(prefix+"storm-control.multicast.pps"); value.Exists() {
 		data.StormControlMulticastPps = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "storm-control.multicast.kbps"); value.Exists() {
+	if value := res.Get(prefix+"storm-control.multicast.kbps"); value.Exists() {
 		data.StormControlMulticastKbps = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "storm-control.unknown-unicast.pps"); value.Exists() {
+	if value := res.Get(prefix+"storm-control.unknown-unicast.pps"); value.Exists() {
 		data.StormControlUnknownUnicastPps = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "storm-control.unknown-unicast.kbps"); value.Exists() {
+	if value := res.Get(prefix+"storm-control.unknown-unicast.kbps"); value.Exists() {
 		data.StormControlUnknownUnicastKbps = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "multicast-source.ipv4"); value.Exists() {
+	if value := res.Get(prefix+"multicast-source.ipv4"); value.Exists() {
 		data.MulticastSourceIpv4 = types.BoolValue(true)
 	} else {
 		data.MulticastSourceIpv4 = types.BoolNull()
 	}
-	if value := res.Get(prefix + "multicast-source.ipv6"); value.Exists() {
+	if value := res.Get(prefix+"multicast-source.ipv6"); value.Exists() {
 		data.MulticastSourceIpv6 = types.BoolValue(true)
 	} else {
 		data.MulticastSourceIpv6 = types.BoolNull()
 	}
-	if value := res.Get(prefix + "multicast-source.ipv4-ipv6"); value.Exists() {
+	if value := res.Get(prefix+"multicast-source.ipv4-ipv6"); value.Exists() {
 		data.MulticastSourceIpv4Ipv6 = types.BoolValue(true)
 	} else {
 		data.MulticastSourceIpv4Ipv6 = types.BoolNull()
 	}
-	if value := res.Get(prefix + "interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix+"interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]L2VPNBridgeGroupBridgeDomainInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainInterfaces{}
@@ -4894,7 +4518,7 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := res.Get(prefix + "routed.interface"); value.Exists() {
+	if value := res.Get(prefix+"routed.interface"); value.Exists() {
 		data.RoutedInterface = make([]L2VPNBridgeGroupBridgeDomainRoutedInterface, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainRoutedInterface{}
@@ -4910,20 +4534,20 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := res.Get(prefix + "shutdown"); value.Exists() {
+	if value := res.Get(prefix+"shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
 		data.Shutdown = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.aging.time"); value.Exists() {
+	if value := res.Get(prefix+"mac.aging.time"); value.Exists() {
 		data.MacAgingTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "mac.aging.type.absolute"); value.Exists() {
+	if value := res.Get(prefix+"mac.aging.type.absolute"); value.Exists() {
 		data.MacAgingTypeAbsolute = types.BoolValue(true)
 	} else {
 		data.MacAgingTypeAbsolute = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.static-addresses.static-address"); value.Exists() {
+	if value := res.Get(prefix+"mac.static-addresses.static-address"); value.Exists() {
 		data.MacStaticAddresses = make([]L2VPNBridgeGroupBridgeDomainMacStaticAddresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainMacStaticAddresses{}
@@ -4939,103 +4563,103 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := res.Get(prefix + "mac.learning.disable"); value.Exists() {
+	if value := res.Get(prefix+"mac.learning.disable"); value.Exists() {
 		data.MacLearningDisable = types.BoolValue(true)
 	} else {
 		data.MacLearningDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.withdraw.disable"); value.Exists() {
+	if value := res.Get(prefix+"mac.withdraw.disable"); value.Exists() {
 		data.MacWithdrawDisable = types.BoolValue(true)
 	} else {
 		data.MacWithdrawDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.withdraw.access-pw.disable"); value.Exists() {
+	if value := res.Get(prefix+"mac.withdraw.access-pw.disable"); value.Exists() {
 		data.MacWithdrawAccessPwDisable = types.BoolValue(true)
 	} else {
 		data.MacWithdrawAccessPwDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.withdraw.relay"); value.Exists() {
+	if value := res.Get(prefix+"mac.withdraw.relay"); value.Exists() {
 		data.MacWithdrawRelay = types.BoolValue(true)
 	} else {
 		data.MacWithdrawRelay = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.withdraw.state-down"); value.Exists() {
+	if value := res.Get(prefix+"mac.withdraw.state-down"); value.Exists() {
 		data.MacWithdrawStateDown = types.BoolValue(true)
 	} else {
 		data.MacWithdrawStateDown = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.withdraw.optimize"); value.Exists() {
+	if value := res.Get(prefix+"mac.withdraw.optimize"); value.Exists() {
 		data.MacWithdrawOptimize = types.BoolValue(true)
 	} else {
 		data.MacWithdrawOptimize = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.limit.maximum"); value.Exists() {
+	if value := res.Get(prefix+"mac.limit.maximum"); value.Exists() {
 		data.MacLimitMaximum = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "mac.limit.action.flood"); value.Exists() {
+	if value := res.Get(prefix+"mac.limit.action.flood"); value.Exists() {
 		data.MacLimitActionFlood = types.BoolValue(true)
 	} else {
 		data.MacLimitActionFlood = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.limit.action.no-flood"); value.Exists() {
+	if value := res.Get(prefix+"mac.limit.action.no-flood"); value.Exists() {
 		data.MacLimitActionNoFlood = types.BoolValue(true)
 	} else {
 		data.MacLimitActionNoFlood = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.limit.action.shutdown"); value.Exists() {
+	if value := res.Get(prefix+"mac.limit.action.shutdown"); value.Exists() {
 		data.MacLimitActionShutdown = types.BoolValue(true)
 	} else {
 		data.MacLimitActionShutdown = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.limit.notification.trap"); value.Exists() {
+	if value := res.Get(prefix+"mac.limit.notification.trap"); value.Exists() {
 		data.MacLimitNotificationTrap = types.BoolValue(true)
 	} else {
 		data.MacLimitNotificationTrap = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.limit.notification.both"); value.Exists() {
+	if value := res.Get(prefix+"mac.limit.notification.both"); value.Exists() {
 		data.MacLimitNotificationBoth = types.BoolValue(true)
 	} else {
 		data.MacLimitNotificationBoth = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.limit.notification.none"); value.Exists() {
+	if value := res.Get(prefix+"mac.limit.notification.none"); value.Exists() {
 		data.MacLimitNotificationNone = types.BoolValue(true)
 	} else {
 		data.MacLimitNotificationNone = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.port-down.flush.disable"); value.Exists() {
+	if value := res.Get(prefix+"mac.port-down.flush.disable"); value.Exists() {
 		data.MacPortDownFlushDisable = types.BoolValue(true)
 	} else {
 		data.MacPortDownFlushDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.secure"); value.Exists() {
+	if value := res.Get(prefix+"mac.secure"); value.Exists() {
 		data.MacSecure = types.BoolValue(true)
 	} else {
 		data.MacSecure = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.secure.logging"); value.Exists() {
+	if value := res.Get(prefix+"mac.secure.logging"); value.Exists() {
 		data.MacSecureLogging = types.BoolValue(true)
 	} else {
 		data.MacSecureLogging = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.secure.threshold"); value.Exists() {
+	if value := res.Get(prefix+"mac.secure.threshold"); value.Exists() {
 		data.MacSecureThreshold = types.BoolValue(true)
 	} else {
 		data.MacSecureThreshold = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.secure.action.none"); value.Exists() {
+	if value := res.Get(prefix+"mac.secure.action.none"); value.Exists() {
 		data.MacSecureActionNone = types.BoolValue(true)
 	} else {
 		data.MacSecureActionNone = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.secure.action.shutdown"); value.Exists() {
+	if value := res.Get(prefix+"mac.secure.action.shutdown"); value.Exists() {
 		data.MacSecureActionShutdown = types.BoolValue(true)
 	} else {
 		data.MacSecureActionShutdown = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mac.secure.shutdown-recovery-timeout"); value.Exists() {
+	if value := res.Get(prefix+"mac.secure.shutdown-recovery-timeout"); value.Exists() {
 		data.MacSecureShutdownRecoveryTimeout = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "neighbors.evpn.evi"); value.Exists() {
+	if value := res.Get(prefix+"neighbors.evpn.evi"); value.Exists() {
 		data.NeighborsEvpnEvi = make([]L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi{}
@@ -5049,22 +4673,22 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := res.Get(prefix + "efp-visibility"); value.Exists() {
+	if value := res.Get(prefix+"efp-visibility"); value.Exists() {
 		data.EfpVisibility = types.BoolValue(true)
 	} else {
 		data.EfpVisibility = types.BoolNull()
 	}
-	if value := res.Get(prefix + "etree"); value.Exists() {
+	if value := res.Get(prefix+"etree"); value.Exists() {
 		data.Etree = types.BoolValue(true)
 	} else {
 		data.Etree = types.BoolNull()
 	}
-	if value := res.Get(prefix + "etree.leaf"); value.Exists() {
+	if value := res.Get(prefix+"etree.leaf"); value.Exists() {
 		data.EtreeLeaf = types.BoolValue(true)
 	} else {
 		data.EtreeLeaf = types.BoolNull()
 	}
-	if value := res.Get(prefix + "member.vnis.vni"); value.Exists() {
+	if value := res.Get(prefix+"member.vnis.vni"); value.Exists() {
 		data.MemberVnisVni = make([]L2VPNBridgeGroupBridgeDomainMemberVnisVni, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainMemberVnisVni{}
@@ -5095,13 +4719,13 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *L2VPNBridgeGroupBridgeDomain) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mtu"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mtu"); value.Exists() {
 		data.Mtu = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/evis/evi"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/evis/evi"); value.Exists() {
 		data.Evis = make([]L2VPNBridgeGroupBridgeDomainEvis, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainEvis{}
@@ -5112,7 +4736,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBodyXML(ctx context.Context, res x
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing-srv6-evis/evi"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/segment-routing-srv6-evis/evi"); value.Exists() {
 		data.Srv6Evis = make([]L2VPNBridgeGroupBridgeDomainSrv6Evis, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainSrv6Evis{}
@@ -5123,7 +4747,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBodyXML(ctx context.Context, res x
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vnis/vni"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/vnis/vni"); value.Exists() {
 		data.Vnis = make([]L2VPNBridgeGroupBridgeDomainVnis, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVnis{}
@@ -5134,670 +4758,101 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBodyXML(ctx context.Context, res x
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/coupled-mode"); value.Exists() {
-		data.CoupledMode = types.BoolValue(true)
-	} else {
-		data.CoupledMode = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport-mode/vlan/passthrough"); value.Exists() {
-		data.TransportModeVlanPassthrough = types.BoolValue(true)
-	} else {
-		data.TransportModeVlanPassthrough = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/flooding/disable"); value.Exists() {
-		data.FloodingDisable = types.BoolValue(true)
-	} else {
-		data.FloodingDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection"); value.Exists() {
-		data.DynamicArpInspection = types.BoolValue(true)
-	} else {
-		data.DynamicArpInspection = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection/logging"); value.Exists() {
-		data.DynamicArpInspectionLogging = types.BoolValue(true)
-	} else {
-		data.DynamicArpInspectionLogging = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection/address-validation/src-mac"); value.Exists() {
-		data.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
-	} else {
-		data.DynamicArpInspectionAddressValidationSrcMac = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection/address-validation/dst-mac"); value.Exists() {
-		data.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
-	} else {
-		data.DynamicArpInspectionAddressValidationDstMac = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection/address-validation/ipv4"); value.Exists() {
-		data.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
-	} else {
-		data.DynamicArpInspectionAddressValidationIpv4 = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ip-source-guard"); value.Exists() {
-		data.IpSourceGuard = types.BoolValue(true)
-	} else {
-		data.IpSourceGuard = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ip-source-guard/logging"); value.Exists() {
-		data.IpSourceGuardLogging = types.BoolValue(true)
-	} else {
-		data.IpSourceGuardLogging = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/igmp/snooping/profile"); value.Exists() {
-		data.IgmpSnoopingProfile = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/igmp/snooping/disable"); value.Exists() {
-		data.IgmpSnoopingDisable = types.BoolValue(true)
-	} else {
-		data.IgmpSnoopingDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mld/snooping/profile"); value.Exists() {
-		data.MldSnoopingProfile = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/broadcast/pps"); value.Exists() {
-		data.StormControlBroadcastPps = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/broadcast/kbps"); value.Exists() {
-		data.StormControlBroadcastKbps = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/multicast/pps"); value.Exists() {
-		data.StormControlMulticastPps = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/multicast/kbps"); value.Exists() {
-		data.StormControlMulticastKbps = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/unknown-unicast/pps"); value.Exists() {
-		data.StormControlUnknownUnicastPps = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/unknown-unicast/kbps"); value.Exists() {
-		data.StormControlUnknownUnicastKbps = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast-source/ipv4"); value.Exists() {
-		data.MulticastSourceIpv4 = types.BoolValue(true)
-	} else {
-		data.MulticastSourceIpv4 = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast-source/ipv6"); value.Exists() {
-		data.MulticastSourceIpv6 = types.BoolValue(true)
-	} else {
-		data.MulticastSourceIpv6 = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast-source/ipv4-ipv6"); value.Exists() {
-		data.MulticastSourceIpv4Ipv6 = types.BoolValue(true)
-	} else {
-		data.MulticastSourceIpv4Ipv6 = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface"); value.Exists() {
-		data.Interfaces = make([]L2VPNBridgeGroupBridgeDomainInterfaces, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := L2VPNBridgeGroupBridgeDomainInterfaces{}
-			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/logging"); cValue.Exists() {
-				item.DynamicArpInspectionLogging = types.BoolValue(true)
-			} else {
-				item.DynamicArpInspectionLogging = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/logging/disable"); cValue.Exists() {
-				item.DynamicArpInspectionLoggingDisable = types.BoolValue(true)
-			} else {
-				item.DynamicArpInspectionLoggingDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/disable"); cValue.Exists() {
-				item.DynamicArpInspectionDisable = types.BoolValue(true)
-			} else {
-				item.DynamicArpInspectionDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/address-validation/src-mac"); cValue.Exists() {
-				item.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
-			} else {
-				item.DynamicArpInspectionAddressValidationSrcMac = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/address-validation/src-mac/disable"); cValue.Exists() {
-				item.DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(true)
-			} else {
-				item.DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/address-validation/dst-mac"); cValue.Exists() {
-				item.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
-			} else {
-				item.DynamicArpInspectionAddressValidationDstMac = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/address-validation/dst-mac/disable"); cValue.Exists() {
-				item.DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(true)
-			} else {
-				item.DynamicArpInspectionAddressValidationDstMacDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/address-validation/ipv4"); cValue.Exists() {
-				item.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
-			} else {
-				item.DynamicArpInspectionAddressValidationIpv4 = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/address-validation/ipv4/disable"); cValue.Exists() {
-				item.DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(true)
-			} else {
-				item.DynamicArpInspectionAddressValidationIpv4Disable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "flooding/disable"); cValue.Exists() {
-				item.FloodingDisable = types.BoolValue(true)
-			} else {
-				item.FloodingDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "igmp/snooping/profile"); cValue.Exists() {
-				item.IgmpSnoopingProfile = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "ip-source-guard"); cValue.Exists() {
-				item.IpSourceGuard = types.BoolValue(true)
-			} else {
-				item.IpSourceGuard = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "ip-source-guard/disable"); cValue.Exists() {
-				item.IpSourceGuardDisable = types.BoolValue(true)
-			} else {
-				item.IpSourceGuardDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "ip-source-guard/logging"); cValue.Exists() {
-				item.IpSourceGuardLogging = types.BoolValue(true)
-			} else {
-				item.IpSourceGuardLogging = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "ip-source-guard/logging/disable"); cValue.Exists() {
-				item.IpSourceGuardLoggingDisable = types.BoolValue(true)
-			} else {
-				item.IpSourceGuardLoggingDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/aging/time"); cValue.Exists() {
-				item.MacAgingTime = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/aging/type/absolute"); cValue.Exists() {
-				item.MacAgingTypeAbsolute = types.BoolValue(true)
-			} else {
-				item.MacAgingTypeAbsolute = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/aging/type/inactivity"); cValue.Exists() {
-				item.MacAgingTypeInactivity = types.BoolValue(true)
-			} else {
-				item.MacAgingTypeInactivity = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/learning"); cValue.Exists() {
-				item.MacLearning = types.BoolValue(true)
-			} else {
-				item.MacLearning = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/learning/disable"); cValue.Exists() {
-				item.MacLearningDisable = types.BoolValue(true)
-			} else {
-				item.MacLearningDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/limit/maximum"); cValue.Exists() {
-				item.MacLimitMaximum = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/limit/action/flood"); cValue.Exists() {
-				item.MacLimitActionFlood = types.BoolValue(true)
-			} else {
-				item.MacLimitActionFlood = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/limit/action/no-flood"); cValue.Exists() {
-				item.MacLimitActionNoFlood = types.BoolValue(true)
-			} else {
-				item.MacLimitActionNoFlood = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/limit/action/shutdown"); cValue.Exists() {
-				item.MacLimitActionShutdown = types.BoolValue(true)
-			} else {
-				item.MacLimitActionShutdown = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/limit/action/none"); cValue.Exists() {
-				item.MacLimitActionNone = types.BoolValue(true)
-			} else {
-				item.MacLimitActionNone = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/limit/notification/trap"); cValue.Exists() {
-				item.MacLimitNotificationTrap = types.BoolValue(true)
-			} else {
-				item.MacLimitNotificationTrap = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/limit/notification/both"); cValue.Exists() {
-				item.MacLimitNotificationBoth = types.BoolValue(true)
-			} else {
-				item.MacLimitNotificationBoth = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/limit/notification/none"); cValue.Exists() {
-				item.MacLimitNotificationNone = types.BoolValue(true)
-			} else {
-				item.MacLimitNotificationNone = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/limit/notification/syslog"); cValue.Exists() {
-				item.MacLimitNotificationSyslog = types.BoolValue(true)
-			} else {
-				item.MacLimitNotificationSyslog = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/port-down/flush/disable"); cValue.Exists() {
-				item.MacPortDownFlushDisable = types.BoolValue(true)
-			} else {
-				item.MacPortDownFlushDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/secure"); cValue.Exists() {
-				item.MacSecure = types.BoolValue(true)
-			} else {
-				item.MacSecure = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/secure/logging"); cValue.Exists() {
-				item.MacSecureLogging = types.BoolValue(true)
-			} else {
-				item.MacSecureLogging = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/secure/logging/disable"); cValue.Exists() {
-				item.MacSecureLoggingDisable = types.BoolValue(true)
-			} else {
-				item.MacSecureLoggingDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/secure/action/none"); cValue.Exists() {
-				item.MacSecureActionNone = types.BoolValue(true)
-			} else {
-				item.MacSecureActionNone = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/secure/action/shutdown"); cValue.Exists() {
-				item.MacSecureActionShutdown = types.BoolValue(true)
-			} else {
-				item.MacSecureActionShutdown = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/secure/action/restrict"); cValue.Exists() {
-				item.MacSecureActionRestrict = types.BoolValue(true)
-			} else {
-				item.MacSecureActionRestrict = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/secure/disable"); cValue.Exists() {
-				item.MacSecureDisable = types.BoolValue(true)
-			} else {
-				item.MacSecureDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/secure/shutdown-recovery-timeout/recovery-timer-in-second"); cValue.Exists() {
-				item.MacSecureShutdownRecoveryTimeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "mac/secure/shutdown-recovery-timeout/disable"); cValue.Exists() {
-				item.MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(true)
-			} else {
-				item.MacSecureShutdownRecoveryTimeoutDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "mld/snooping/profile"); cValue.Exists() {
-				item.MldSnoopingProfile = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "storm-control/broadcast/pps"); cValue.Exists() {
-				item.StormControlBroadcastPps = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "storm-control/broadcast/kbps"); cValue.Exists() {
-				item.StormControlBroadcastKbps = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "storm-control/multicast/pps"); cValue.Exists() {
-				item.StormControlMulticastPps = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "storm-control/multicast/kbps"); cValue.Exists() {
-				item.StormControlMulticastKbps = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "storm-control/unknown-unicast/pps"); cValue.Exists() {
-				item.StormControlUnknownUnicastPps = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "storm-control/unknown-unicast/kbps"); cValue.Exists() {
-				item.StormControlUnknownUnicastKbps = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "split-horizon/group"); cValue.Exists() {
-				item.SplitHorizonGroup = types.BoolValue(true)
-			} else {
-				item.SplitHorizonGroup = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "static-mac-addresses/static-mac-address"); cValue.Exists() {
-				item.StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses{}
-					if ccValue := helpers.GetFromXPath(cv, "mac-address"); ccValue.Exists() {
-						cItem.MacAddress = types.StringValue(ccValue.String())
-					}
-					item.StaticMacAddresses = append(item.StaticMacAddresses, cItem)
-					return true
-				})
-			}
-			data.Interfaces = append(data.Interfaces, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/routed/interface"); value.Exists() {
-		data.RoutedInterface = make([]L2VPNBridgeGroupBridgeDomainRoutedInterface, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := L2VPNBridgeGroupBridgeDomainRoutedInterface{}
-			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "split-horizon/group/core"); cValue.Exists() {
-				item.SplitHorizonGroupCore = types.BoolValue(true)
-			} else {
-				item.SplitHorizonGroupCore = types.BoolNull()
-			}
-			data.RoutedInterface = append(data.RoutedInterface, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
-		data.Shutdown = types.BoolValue(true)
-	} else {
-		data.Shutdown = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/aging/time"); value.Exists() {
-		data.MacAgingTime = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/aging/type/absolute"); value.Exists() {
-		data.MacAgingTypeAbsolute = types.BoolValue(true)
-	} else {
-		data.MacAgingTypeAbsolute = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/static-addresses/static-address"); value.Exists() {
-		data.MacStaticAddresses = make([]L2VPNBridgeGroupBridgeDomainMacStaticAddresses, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := L2VPNBridgeGroupBridgeDomainMacStaticAddresses{}
-			if cValue := helpers.GetFromXPath(v, "mac-address"); cValue.Exists() {
-				item.MacAddress = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "drop"); cValue.Exists() {
-				item.Drop = types.BoolValue(true)
-			} else {
-				item.Drop = types.BoolNull()
-			}
-			data.MacStaticAddresses = append(data.MacStaticAddresses, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/learning/disable"); value.Exists() {
-		data.MacLearningDisable = types.BoolValue(true)
-	} else {
-		data.MacLearningDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/disable"); value.Exists() {
-		data.MacWithdrawDisable = types.BoolValue(true)
-	} else {
-		data.MacWithdrawDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/access-pw/disable"); value.Exists() {
-		data.MacWithdrawAccessPwDisable = types.BoolValue(true)
-	} else {
-		data.MacWithdrawAccessPwDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/relay"); value.Exists() {
-		data.MacWithdrawRelay = types.BoolValue(true)
-	} else {
-		data.MacWithdrawRelay = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/state-down"); value.Exists() {
-		data.MacWithdrawStateDown = types.BoolValue(true)
-	} else {
-		data.MacWithdrawStateDown = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/optimize"); value.Exists() {
-		data.MacWithdrawOptimize = types.BoolValue(true)
-	} else {
-		data.MacWithdrawOptimize = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/maximum"); value.Exists() {
-		data.MacLimitMaximum = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/action/flood"); value.Exists() {
-		data.MacLimitActionFlood = types.BoolValue(true)
-	} else {
-		data.MacLimitActionFlood = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/action/no-flood"); value.Exists() {
-		data.MacLimitActionNoFlood = types.BoolValue(true)
-	} else {
-		data.MacLimitActionNoFlood = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/action/shutdown"); value.Exists() {
-		data.MacLimitActionShutdown = types.BoolValue(true)
-	} else {
-		data.MacLimitActionShutdown = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/notification/trap"); value.Exists() {
-		data.MacLimitNotificationTrap = types.BoolValue(true)
-	} else {
-		data.MacLimitNotificationTrap = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/notification/both"); value.Exists() {
-		data.MacLimitNotificationBoth = types.BoolValue(true)
-	} else {
-		data.MacLimitNotificationBoth = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/notification/none"); value.Exists() {
-		data.MacLimitNotificationNone = types.BoolValue(true)
-	} else {
-		data.MacLimitNotificationNone = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/port-down/flush/disable"); value.Exists() {
-		data.MacPortDownFlushDisable = types.BoolValue(true)
-	} else {
-		data.MacPortDownFlushDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure"); value.Exists() {
-		data.MacSecure = types.BoolValue(true)
-	} else {
-		data.MacSecure = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/logging"); value.Exists() {
-		data.MacSecureLogging = types.BoolValue(true)
-	} else {
-		data.MacSecureLogging = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/threshold"); value.Exists() {
-		data.MacSecureThreshold = types.BoolValue(true)
-	} else {
-		data.MacSecureThreshold = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/action/none"); value.Exists() {
-		data.MacSecureActionNone = types.BoolValue(true)
-	} else {
-		data.MacSecureActionNone = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/action/shutdown"); value.Exists() {
-		data.MacSecureActionShutdown = types.BoolValue(true)
-	} else {
-		data.MacSecureActionShutdown = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/shutdown-recovery-timeout"); value.Exists() {
-		data.MacSecureShutdownRecoveryTimeout = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/evpn/evi"); value.Exists() {
-		data.NeighborsEvpnEvi = make([]L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi{}
-			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
-				item.VpnId = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "target"); cValue.Exists() {
-				item.Target = types.Int64Value(cValue.Int())
-			}
-			data.NeighborsEvpnEvi = append(data.NeighborsEvpnEvi, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/efp-visibility"); value.Exists() {
-		data.EfpVisibility = types.BoolValue(true)
-	} else {
-		data.EfpVisibility = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree"); value.Exists() {
-		data.Etree = types.BoolValue(true)
-	} else {
-		data.Etree = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/leaf"); value.Exists() {
-		data.EtreeLeaf = types.BoolValue(true)
-	} else {
-		data.EtreeLeaf = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/member/vnis/vni"); value.Exists() {
-		data.MemberVnisVni = make([]L2VPNBridgeGroupBridgeDomainMemberVnisVni, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := L2VPNBridgeGroupBridgeDomainMemberVnisVni{}
-			if cValue := helpers.GetFromXPath(v, "vni-id"); cValue.Exists() {
-				item.VniId = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "static-mac-addresses/static-mac-address"); cValue.Exists() {
-				item.StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainMemberVnisVniStaticMacAddresses, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := L2VPNBridgeGroupBridgeDomainMemberVnisVniStaticMacAddresses{}
-					if ccValue := helpers.GetFromXPath(cv, "mac-address"); ccValue.Exists() {
-						cItem.MacAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "next-hop"); ccValue.Exists() {
-						cItem.NextHop = types.StringValue(ccValue.String())
-					}
-					item.StaticMacAddresses = append(item.StaticMacAddresses, cItem)
-					return true
-				})
-			}
-			data.MemberVnisVni = append(data.MemberVnisVni, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *L2VPNBridgeGroupBridgeDomainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mtu"); value.Exists() {
-		data.Mtu = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
-		data.Description = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/evis/evi"); value.Exists() {
-		data.Evis = make([]L2VPNBridgeGroupBridgeDomainEvis, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := L2VPNBridgeGroupBridgeDomainEvis{}
-			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
-				item.VpnId = types.Int64Value(cValue.Int())
-			}
-			data.Evis = append(data.Evis, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing-srv6-evis/evi"); value.Exists() {
-		data.Srv6Evis = make([]L2VPNBridgeGroupBridgeDomainSrv6Evis, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := L2VPNBridgeGroupBridgeDomainSrv6Evis{}
-			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
-				item.VpnId = types.Int64Value(cValue.Int())
-			}
-			data.Srv6Evis = append(data.Srv6Evis, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vnis/vni"); value.Exists() {
-		data.Vnis = make([]L2VPNBridgeGroupBridgeDomainVnis, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := L2VPNBridgeGroupBridgeDomainVnis{}
-			if cValue := helpers.GetFromXPath(v, "vni-id"); cValue.Exists() {
-				item.VniId = types.Int64Value(cValue.Int())
-			}
-			data.Vnis = append(data.Vnis, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/coupled-mode"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/coupled-mode"); value.Exists() {
 		data.CoupledMode = types.BoolValue(true)
 	} else {
 		data.CoupledMode = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport-mode/vlan/passthrough"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport-mode/vlan/passthrough"); value.Exists() {
 		data.TransportModeVlanPassthrough = types.BoolValue(true)
 	} else {
 		data.TransportModeVlanPassthrough = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/flooding/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/flooding/disable"); value.Exists() {
 		data.FloodingDisable = types.BoolValue(true)
 	} else {
 		data.FloodingDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection"); value.Exists() {
 		data.DynamicArpInspection = types.BoolValue(true)
 	} else {
 		data.DynamicArpInspection = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection/logging"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection/logging"); value.Exists() {
 		data.DynamicArpInspectionLogging = types.BoolValue(true)
 	} else {
 		data.DynamicArpInspectionLogging = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection/address-validation/src-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection/address-validation/src-mac"); value.Exists() {
 		data.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
 	} else {
 		data.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection/address-validation/dst-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection/address-validation/dst-mac"); value.Exists() {
 		data.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
 	} else {
 		data.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dynamic-arp-inspection/address-validation/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection/address-validation/ipv4"); value.Exists() {
 		data.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
 	} else {
 		data.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ip-source-guard"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ip-source-guard"); value.Exists() {
 		data.IpSourceGuard = types.BoolValue(true)
 	} else {
 		data.IpSourceGuard = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ip-source-guard/logging"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ip-source-guard/logging"); value.Exists() {
 		data.IpSourceGuardLogging = types.BoolValue(true)
 	} else {
 		data.IpSourceGuardLogging = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/igmp/snooping/profile"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/igmp/snooping/profile"); value.Exists() {
 		data.IgmpSnoopingProfile = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/igmp/snooping/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/igmp/snooping/disable"); value.Exists() {
 		data.IgmpSnoopingDisable = types.BoolValue(true)
 	} else {
 		data.IgmpSnoopingDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mld/snooping/profile"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mld/snooping/profile"); value.Exists() {
 		data.MldSnoopingProfile = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/broadcast/pps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/broadcast/pps"); value.Exists() {
 		data.StormControlBroadcastPps = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/broadcast/kbps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/broadcast/kbps"); value.Exists() {
 		data.StormControlBroadcastKbps = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/multicast/pps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/multicast/pps"); value.Exists() {
 		data.StormControlMulticastPps = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/multicast/kbps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/multicast/kbps"); value.Exists() {
 		data.StormControlMulticastKbps = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/unknown-unicast/pps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/unknown-unicast/pps"); value.Exists() {
 		data.StormControlUnknownUnicastPps = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/unknown-unicast/kbps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/unknown-unicast/kbps"); value.Exists() {
 		data.StormControlUnknownUnicastKbps = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast-source/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/multicast-source/ipv4"); value.Exists() {
 		data.MulticastSourceIpv4 = types.BoolValue(true)
 	} else {
 		data.MulticastSourceIpv4 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast-source/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/multicast-source/ipv6"); value.Exists() {
 		data.MulticastSourceIpv6 = types.BoolValue(true)
 	} else {
 		data.MulticastSourceIpv6 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast-source/ipv4-ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/multicast-source/ipv4-ipv6"); value.Exists() {
 		data.MulticastSourceIpv4Ipv6 = types.BoolValue(true)
 	} else {
 		data.MulticastSourceIpv4Ipv6 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/interfaces/interface"); value.Exists() {
 		data.Interfaces = make([]L2VPNBridgeGroupBridgeDomainInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainInterfaces{}
@@ -6032,7 +5087,7 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBodyXML(ctx context.Context, r
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/routed/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/routed/interface"); value.Exists() {
 		data.RoutedInterface = make([]L2VPNBridgeGroupBridgeDomainRoutedInterface, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainRoutedInterface{}
@@ -6048,20 +5103,20 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBodyXML(ctx context.Context, r
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
 		data.Shutdown = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/aging/time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/aging/time"); value.Exists() {
 		data.MacAgingTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/aging/type/absolute"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/aging/type/absolute"); value.Exists() {
 		data.MacAgingTypeAbsolute = types.BoolValue(true)
 	} else {
 		data.MacAgingTypeAbsolute = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/static-addresses/static-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/static-addresses/static-address"); value.Exists() {
 		data.MacStaticAddresses = make([]L2VPNBridgeGroupBridgeDomainMacStaticAddresses, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainMacStaticAddresses{}
@@ -6077,103 +5132,103 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBodyXML(ctx context.Context, r
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/learning/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/learning/disable"); value.Exists() {
 		data.MacLearningDisable = types.BoolValue(true)
 	} else {
 		data.MacLearningDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/disable"); value.Exists() {
 		data.MacWithdrawDisable = types.BoolValue(true)
 	} else {
 		data.MacWithdrawDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/access-pw/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/access-pw/disable"); value.Exists() {
 		data.MacWithdrawAccessPwDisable = types.BoolValue(true)
 	} else {
 		data.MacWithdrawAccessPwDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/relay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/relay"); value.Exists() {
 		data.MacWithdrawRelay = types.BoolValue(true)
 	} else {
 		data.MacWithdrawRelay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/state-down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/state-down"); value.Exists() {
 		data.MacWithdrawStateDown = types.BoolValue(true)
 	} else {
 		data.MacWithdrawStateDown = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/withdraw/optimize"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/optimize"); value.Exists() {
 		data.MacWithdrawOptimize = types.BoolValue(true)
 	} else {
 		data.MacWithdrawOptimize = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/maximum"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/maximum"); value.Exists() {
 		data.MacLimitMaximum = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/action/flood"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/action/flood"); value.Exists() {
 		data.MacLimitActionFlood = types.BoolValue(true)
 	} else {
 		data.MacLimitActionFlood = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/action/no-flood"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/action/no-flood"); value.Exists() {
 		data.MacLimitActionNoFlood = types.BoolValue(true)
 	} else {
 		data.MacLimitActionNoFlood = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/action/shutdown"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/action/shutdown"); value.Exists() {
 		data.MacLimitActionShutdown = types.BoolValue(true)
 	} else {
 		data.MacLimitActionShutdown = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/notification/trap"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/notification/trap"); value.Exists() {
 		data.MacLimitNotificationTrap = types.BoolValue(true)
 	} else {
 		data.MacLimitNotificationTrap = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/notification/both"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/notification/both"); value.Exists() {
 		data.MacLimitNotificationBoth = types.BoolValue(true)
 	} else {
 		data.MacLimitNotificationBoth = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/notification/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/notification/none"); value.Exists() {
 		data.MacLimitNotificationNone = types.BoolValue(true)
 	} else {
 		data.MacLimitNotificationNone = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/port-down/flush/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/port-down/flush/disable"); value.Exists() {
 		data.MacPortDownFlushDisable = types.BoolValue(true)
 	} else {
 		data.MacPortDownFlushDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure"); value.Exists() {
 		data.MacSecure = types.BoolValue(true)
 	} else {
 		data.MacSecure = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/logging"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/logging"); value.Exists() {
 		data.MacSecureLogging = types.BoolValue(true)
 	} else {
 		data.MacSecureLogging = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/threshold"); value.Exists() {
 		data.MacSecureThreshold = types.BoolValue(true)
 	} else {
 		data.MacSecureThreshold = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/action/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/action/none"); value.Exists() {
 		data.MacSecureActionNone = types.BoolValue(true)
 	} else {
 		data.MacSecureActionNone = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/action/shutdown"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/action/shutdown"); value.Exists() {
 		data.MacSecureActionShutdown = types.BoolValue(true)
 	} else {
 		data.MacSecureActionShutdown = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/secure/shutdown-recovery-timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/shutdown-recovery-timeout"); value.Exists() {
 		data.MacSecureShutdownRecoveryTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/evpn/evi"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbors/evpn/evi"); value.Exists() {
 		data.NeighborsEvpnEvi = make([]L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi{}
@@ -6187,22 +5242,591 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBodyXML(ctx context.Context, r
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/efp-visibility"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/efp-visibility"); value.Exists() {
 		data.EfpVisibility = types.BoolValue(true)
 	} else {
 		data.EfpVisibility = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/etree"); value.Exists() {
 		data.Etree = types.BoolValue(true)
 	} else {
 		data.Etree = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/leaf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/etree/leaf"); value.Exists() {
 		data.EtreeLeaf = types.BoolValue(true)
 	} else {
 		data.EtreeLeaf = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/member/vnis/vni"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/member/vnis/vni"); value.Exists() {
+		data.MemberVnisVni = make([]L2VPNBridgeGroupBridgeDomainMemberVnisVni, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainMemberVnisVni{}
+			if cValue := helpers.GetFromXPath(v, "vni-id"); cValue.Exists() {
+				item.VniId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "static-mac-addresses/static-mac-address"); cValue.Exists() {
+				item.StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainMemberVnisVniStaticMacAddresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := L2VPNBridgeGroupBridgeDomainMemberVnisVniStaticMacAddresses{}
+					if ccValue := helpers.GetFromXPath(cv, "mac-address"); ccValue.Exists() {
+						cItem.MacAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "next-hop"); ccValue.Exists() {
+						cItem.NextHop = types.StringValue(ccValue.String())
+					}
+					item.StaticMacAddresses = append(item.StaticMacAddresses, cItem)
+					return true
+				})
+			}
+			data.MemberVnisVni = append(data.MemberVnisVni, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *L2VPNBridgeGroupBridgeDomainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mtu"); value.Exists() {
+		data.Mtu = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/evis/evi"); value.Exists() {
+		data.Evis = make([]L2VPNBridgeGroupBridgeDomainEvis, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainEvis{}
+			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			data.Evis = append(data.Evis, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/segment-routing-srv6-evis/evi"); value.Exists() {
+		data.Srv6Evis = make([]L2VPNBridgeGroupBridgeDomainSrv6Evis, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainSrv6Evis{}
+			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			data.Srv6Evis = append(data.Srv6Evis, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/vnis/vni"); value.Exists() {
+		data.Vnis = make([]L2VPNBridgeGroupBridgeDomainVnis, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainVnis{}
+			if cValue := helpers.GetFromXPath(v, "vni-id"); cValue.Exists() {
+				item.VniId = types.Int64Value(cValue.Int())
+			}
+			data.Vnis = append(data.Vnis, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/coupled-mode"); value.Exists() {
+		data.CoupledMode = types.BoolValue(true)
+	} else {
+		data.CoupledMode = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport-mode/vlan/passthrough"); value.Exists() {
+		data.TransportModeVlanPassthrough = types.BoolValue(true)
+	} else {
+		data.TransportModeVlanPassthrough = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/flooding/disable"); value.Exists() {
+		data.FloodingDisable = types.BoolValue(true)
+	} else {
+		data.FloodingDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection"); value.Exists() {
+		data.DynamicArpInspection = types.BoolValue(true)
+	} else {
+		data.DynamicArpInspection = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection/logging"); value.Exists() {
+		data.DynamicArpInspectionLogging = types.BoolValue(true)
+	} else {
+		data.DynamicArpInspectionLogging = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection/address-validation/src-mac"); value.Exists() {
+		data.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
+	} else {
+		data.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection/address-validation/dst-mac"); value.Exists() {
+		data.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
+	} else {
+		data.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/dynamic-arp-inspection/address-validation/ipv4"); value.Exists() {
+		data.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
+	} else {
+		data.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ip-source-guard"); value.Exists() {
+		data.IpSourceGuard = types.BoolValue(true)
+	} else {
+		data.IpSourceGuard = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ip-source-guard/logging"); value.Exists() {
+		data.IpSourceGuardLogging = types.BoolValue(true)
+	} else {
+		data.IpSourceGuardLogging = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/igmp/snooping/profile"); value.Exists() {
+		data.IgmpSnoopingProfile = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/igmp/snooping/disable"); value.Exists() {
+		data.IgmpSnoopingDisable = types.BoolValue(true)
+	} else {
+		data.IgmpSnoopingDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mld/snooping/profile"); value.Exists() {
+		data.MldSnoopingProfile = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/broadcast/pps"); value.Exists() {
+		data.StormControlBroadcastPps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/broadcast/kbps"); value.Exists() {
+		data.StormControlBroadcastKbps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/multicast/pps"); value.Exists() {
+		data.StormControlMulticastPps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/multicast/kbps"); value.Exists() {
+		data.StormControlMulticastKbps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/unknown-unicast/pps"); value.Exists() {
+		data.StormControlUnknownUnicastPps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/storm-control/unknown-unicast/kbps"); value.Exists() {
+		data.StormControlUnknownUnicastKbps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/multicast-source/ipv4"); value.Exists() {
+		data.MulticastSourceIpv4 = types.BoolValue(true)
+	} else {
+		data.MulticastSourceIpv4 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/multicast-source/ipv6"); value.Exists() {
+		data.MulticastSourceIpv6 = types.BoolValue(true)
+	} else {
+		data.MulticastSourceIpv6 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/multicast-source/ipv4-ipv6"); value.Exists() {
+		data.MulticastSourceIpv4Ipv6 = types.BoolValue(true)
+	} else {
+		data.MulticastSourceIpv4Ipv6 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/interfaces/interface"); value.Exists() {
+		data.Interfaces = make([]L2VPNBridgeGroupBridgeDomainInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+		if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/logging"); cValue.Exists() {
+			item.DynamicArpInspectionLogging = types.BoolValue(true)
+		} else {
+			item.DynamicArpInspectionLogging = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/logging/disable"); cValue.Exists() {
+			item.DynamicArpInspectionLoggingDisable = types.BoolValue(true)
+		} else {
+			item.DynamicArpInspectionLoggingDisable = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/disable"); cValue.Exists() {
+			item.DynamicArpInspectionDisable = types.BoolValue(true)
+		} else {
+			item.DynamicArpInspectionDisable = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/address-validation/src-mac"); cValue.Exists() {
+			item.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
+		} else {
+			item.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/address-validation/src-mac/disable"); cValue.Exists() {
+			item.DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(true)
+		} else {
+			item.DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/address-validation/dst-mac"); cValue.Exists() {
+			item.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
+		} else {
+			item.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/address-validation/dst-mac/disable"); cValue.Exists() {
+			item.DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(true)
+		} else {
+			item.DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/address-validation/ipv4"); cValue.Exists() {
+			item.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
+		} else {
+			item.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "dynamic-arp-inspection/address-validation/ipv4/disable"); cValue.Exists() {
+			item.DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(true)
+		} else {
+			item.DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "flooding/disable"); cValue.Exists() {
+			item.FloodingDisable = types.BoolValue(true)
+		} else {
+			item.FloodingDisable = types.BoolValue(false)
+		}
+			if cValue := helpers.GetFromXPath(v, "igmp/snooping/profile"); cValue.Exists() {
+				item.IgmpSnoopingProfile = types.StringValue(cValue.String())
+			}
+		if cValue := helpers.GetFromXPath(v, "ip-source-guard"); cValue.Exists() {
+			item.IpSourceGuard = types.BoolValue(true)
+		} else {
+			item.IpSourceGuard = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "ip-source-guard/disable"); cValue.Exists() {
+			item.IpSourceGuardDisable = types.BoolValue(true)
+		} else {
+			item.IpSourceGuardDisable = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "ip-source-guard/logging"); cValue.Exists() {
+			item.IpSourceGuardLogging = types.BoolValue(true)
+		} else {
+			item.IpSourceGuardLogging = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "ip-source-guard/logging/disable"); cValue.Exists() {
+			item.IpSourceGuardLoggingDisable = types.BoolValue(true)
+		} else {
+			item.IpSourceGuardLoggingDisable = types.BoolValue(false)
+		}
+			if cValue := helpers.GetFromXPath(v, "mac/aging/time"); cValue.Exists() {
+				item.MacAgingTime = types.Int64Value(cValue.Int())
+			}
+		if cValue := helpers.GetFromXPath(v, "mac/aging/type/absolute"); cValue.Exists() {
+			item.MacAgingTypeAbsolute = types.BoolValue(true)
+		} else {
+			item.MacAgingTypeAbsolute = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/aging/type/inactivity"); cValue.Exists() {
+			item.MacAgingTypeInactivity = types.BoolValue(true)
+		} else {
+			item.MacAgingTypeInactivity = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/learning"); cValue.Exists() {
+			item.MacLearning = types.BoolValue(true)
+		} else {
+			item.MacLearning = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/learning/disable"); cValue.Exists() {
+			item.MacLearningDisable = types.BoolValue(true)
+		} else {
+			item.MacLearningDisable = types.BoolValue(false)
+		}
+			if cValue := helpers.GetFromXPath(v, "mac/limit/maximum"); cValue.Exists() {
+				item.MacLimitMaximum = types.Int64Value(cValue.Int())
+			}
+		if cValue := helpers.GetFromXPath(v, "mac/limit/action/flood"); cValue.Exists() {
+			item.MacLimitActionFlood = types.BoolValue(true)
+		} else {
+			item.MacLimitActionFlood = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/limit/action/no-flood"); cValue.Exists() {
+			item.MacLimitActionNoFlood = types.BoolValue(true)
+		} else {
+			item.MacLimitActionNoFlood = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/limit/action/shutdown"); cValue.Exists() {
+			item.MacLimitActionShutdown = types.BoolValue(true)
+		} else {
+			item.MacLimitActionShutdown = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/limit/action/none"); cValue.Exists() {
+			item.MacLimitActionNone = types.BoolValue(true)
+		} else {
+			item.MacLimitActionNone = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/limit/notification/trap"); cValue.Exists() {
+			item.MacLimitNotificationTrap = types.BoolValue(true)
+		} else {
+			item.MacLimitNotificationTrap = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/limit/notification/both"); cValue.Exists() {
+			item.MacLimitNotificationBoth = types.BoolValue(true)
+		} else {
+			item.MacLimitNotificationBoth = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/limit/notification/none"); cValue.Exists() {
+			item.MacLimitNotificationNone = types.BoolValue(true)
+		} else {
+			item.MacLimitNotificationNone = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/limit/notification/syslog"); cValue.Exists() {
+			item.MacLimitNotificationSyslog = types.BoolValue(true)
+		} else {
+			item.MacLimitNotificationSyslog = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/port-down/flush/disable"); cValue.Exists() {
+			item.MacPortDownFlushDisable = types.BoolValue(true)
+		} else {
+			item.MacPortDownFlushDisable = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/secure"); cValue.Exists() {
+			item.MacSecure = types.BoolValue(true)
+		} else {
+			item.MacSecure = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/secure/logging"); cValue.Exists() {
+			item.MacSecureLogging = types.BoolValue(true)
+		} else {
+			item.MacSecureLogging = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/secure/logging/disable"); cValue.Exists() {
+			item.MacSecureLoggingDisable = types.BoolValue(true)
+		} else {
+			item.MacSecureLoggingDisable = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/secure/action/none"); cValue.Exists() {
+			item.MacSecureActionNone = types.BoolValue(true)
+		} else {
+			item.MacSecureActionNone = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/secure/action/shutdown"); cValue.Exists() {
+			item.MacSecureActionShutdown = types.BoolValue(true)
+		} else {
+			item.MacSecureActionShutdown = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/secure/action/restrict"); cValue.Exists() {
+			item.MacSecureActionRestrict = types.BoolValue(true)
+		} else {
+			item.MacSecureActionRestrict = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, "mac/secure/disable"); cValue.Exists() {
+			item.MacSecureDisable = types.BoolValue(true)
+		} else {
+			item.MacSecureDisable = types.BoolValue(false)
+		}
+			if cValue := helpers.GetFromXPath(v, "mac/secure/shutdown-recovery-timeout/recovery-timer-in-second"); cValue.Exists() {
+				item.MacSecureShutdownRecoveryTimeout = types.Int64Value(cValue.Int())
+			}
+		if cValue := helpers.GetFromXPath(v, "mac/secure/shutdown-recovery-timeout/disable"); cValue.Exists() {
+			item.MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(true)
+		} else {
+			item.MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(false)
+		}
+			if cValue := helpers.GetFromXPath(v, "mld/snooping/profile"); cValue.Exists() {
+				item.MldSnoopingProfile = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "storm-control/broadcast/pps"); cValue.Exists() {
+				item.StormControlBroadcastPps = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "storm-control/broadcast/kbps"); cValue.Exists() {
+				item.StormControlBroadcastKbps = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "storm-control/multicast/pps"); cValue.Exists() {
+				item.StormControlMulticastPps = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "storm-control/multicast/kbps"); cValue.Exists() {
+				item.StormControlMulticastKbps = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "storm-control/unknown-unicast/pps"); cValue.Exists() {
+				item.StormControlUnknownUnicastPps = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "storm-control/unknown-unicast/kbps"); cValue.Exists() {
+				item.StormControlUnknownUnicastKbps = types.Int64Value(cValue.Int())
+			}
+		if cValue := helpers.GetFromXPath(v, "split-horizon/group"); cValue.Exists() {
+			item.SplitHorizonGroup = types.BoolValue(true)
+		} else {
+			item.SplitHorizonGroup = types.BoolValue(false)
+		}
+			if cValue := helpers.GetFromXPath(v, "static-mac-addresses/static-mac-address"); cValue.Exists() {
+				item.StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses{}
+					if ccValue := helpers.GetFromXPath(cv, "mac-address"); ccValue.Exists() {
+						cItem.MacAddress = types.StringValue(ccValue.String())
+					}
+					item.StaticMacAddresses = append(item.StaticMacAddresses, cItem)
+					return true
+				})
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/routed/interface"); value.Exists() {
+		data.RoutedInterface = make([]L2VPNBridgeGroupBridgeDomainRoutedInterface, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainRoutedInterface{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+		if cValue := helpers.GetFromXPath(v, "split-horizon/group/core"); cValue.Exists() {
+			item.SplitHorizonGroupCore = types.BoolValue(true)
+		} else {
+			item.SplitHorizonGroupCore = types.BoolValue(false)
+		}
+			data.RoutedInterface = append(data.RoutedInterface, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/shutdown"); value.Exists() {
+		data.Shutdown = types.BoolValue(true)
+	} else {
+		data.Shutdown = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/aging/time"); value.Exists() {
+		data.MacAgingTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/aging/type/absolute"); value.Exists() {
+		data.MacAgingTypeAbsolute = types.BoolValue(true)
+	} else {
+		data.MacAgingTypeAbsolute = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/static-addresses/static-address"); value.Exists() {
+		data.MacStaticAddresses = make([]L2VPNBridgeGroupBridgeDomainMacStaticAddresses, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainMacStaticAddresses{}
+			if cValue := helpers.GetFromXPath(v, "mac-address"); cValue.Exists() {
+				item.MacAddress = types.StringValue(cValue.String())
+			}
+		if cValue := helpers.GetFromXPath(v, "drop"); cValue.Exists() {
+			item.Drop = types.BoolValue(true)
+		} else {
+			item.Drop = types.BoolValue(false)
+		}
+			data.MacStaticAddresses = append(data.MacStaticAddresses, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/learning/disable"); value.Exists() {
+		data.MacLearningDisable = types.BoolValue(true)
+	} else {
+		data.MacLearningDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/disable"); value.Exists() {
+		data.MacWithdrawDisable = types.BoolValue(true)
+	} else {
+		data.MacWithdrawDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/access-pw/disable"); value.Exists() {
+		data.MacWithdrawAccessPwDisable = types.BoolValue(true)
+	} else {
+		data.MacWithdrawAccessPwDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/relay"); value.Exists() {
+		data.MacWithdrawRelay = types.BoolValue(true)
+	} else {
+		data.MacWithdrawRelay = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/state-down"); value.Exists() {
+		data.MacWithdrawStateDown = types.BoolValue(true)
+	} else {
+		data.MacWithdrawStateDown = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/withdraw/optimize"); value.Exists() {
+		data.MacWithdrawOptimize = types.BoolValue(true)
+	} else {
+		data.MacWithdrawOptimize = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/maximum"); value.Exists() {
+		data.MacLimitMaximum = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/action/flood"); value.Exists() {
+		data.MacLimitActionFlood = types.BoolValue(true)
+	} else {
+		data.MacLimitActionFlood = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/action/no-flood"); value.Exists() {
+		data.MacLimitActionNoFlood = types.BoolValue(true)
+	} else {
+		data.MacLimitActionNoFlood = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/action/shutdown"); value.Exists() {
+		data.MacLimitActionShutdown = types.BoolValue(true)
+	} else {
+		data.MacLimitActionShutdown = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/notification/trap"); value.Exists() {
+		data.MacLimitNotificationTrap = types.BoolValue(true)
+	} else {
+		data.MacLimitNotificationTrap = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/notification/both"); value.Exists() {
+		data.MacLimitNotificationBoth = types.BoolValue(true)
+	} else {
+		data.MacLimitNotificationBoth = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/notification/none"); value.Exists() {
+		data.MacLimitNotificationNone = types.BoolValue(true)
+	} else {
+		data.MacLimitNotificationNone = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/port-down/flush/disable"); value.Exists() {
+		data.MacPortDownFlushDisable = types.BoolValue(true)
+	} else {
+		data.MacPortDownFlushDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure"); value.Exists() {
+		data.MacSecure = types.BoolValue(true)
+	} else {
+		data.MacSecure = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/logging"); value.Exists() {
+		data.MacSecureLogging = types.BoolValue(true)
+	} else {
+		data.MacSecureLogging = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/threshold"); value.Exists() {
+		data.MacSecureThreshold = types.BoolValue(true)
+	} else {
+		data.MacSecureThreshold = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/action/none"); value.Exists() {
+		data.MacSecureActionNone = types.BoolValue(true)
+	} else {
+		data.MacSecureActionNone = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/action/shutdown"); value.Exists() {
+		data.MacSecureActionShutdown = types.BoolValue(true)
+	} else {
+		data.MacSecureActionShutdown = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/secure/shutdown-recovery-timeout"); value.Exists() {
+		data.MacSecureShutdownRecoveryTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbors/evpn/evi"); value.Exists() {
+		data.NeighborsEvpnEvi = make([]L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainNeighborsEvpnEvi{}
+			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "target"); cValue.Exists() {
+				item.Target = types.Int64Value(cValue.Int())
+			}
+			data.NeighborsEvpnEvi = append(data.NeighborsEvpnEvi, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/efp-visibility"); value.Exists() {
+		data.EfpVisibility = types.BoolValue(true)
+	} else {
+		data.EfpVisibility = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/etree"); value.Exists() {
+		data.Etree = types.BoolValue(true)
+	} else {
+		data.Etree = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/etree/leaf"); value.Exists() {
+		data.EtreeLeaf = types.BoolValue(true)
+	} else {
+		data.EtreeLeaf = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/member/vnis/vni"); value.Exists() {
 		data.MemberVnisVni = make([]L2VPNBridgeGroupBridgeDomainMemberVnisVni, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainMemberVnisVni{}
@@ -6235,11 +5859,11 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBodyXML(ctx context.Context, r
 func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, state L2VPNBridgeGroupBridgeDomain) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.MemberVnisVni {
-		keys := [...]string{"vni-id"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.MemberVnisVni[i].VniId.ValueInt64(), 10)}
+		keys := [...]string{ "vni-id",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.MemberVnisVni[i].VniId.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -6256,13 +5880,13 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 			if state.MemberVnisVni[i].VniId.ValueInt64() != data.MemberVnisVni[j].VniId.ValueInt64() {
 				found = false
 			}
-			if found {
+		if found {
 				for ci := range state.MemberVnisVni[i].StaticMacAddresses {
-					ckeys := [...]string{"mac-address"}
-					cstateKeyValues := [...]string{state.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+					ckeys := [...]string{ "mac-address",  }
+					cstateKeyValues := [...]string{ state.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress.ValueString(),  }
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
 					}
 
 					cemptyKeys := true
@@ -6279,17 +5903,17 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 						if state.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress.ValueString() != data.MemberVnisVni[j].StaticMacAddresses[cj].MacAddress.ValueString() {
 							found = false
 						}
-						if found {
-							if !state.MemberVnisVni[i].StaticMacAddresses[ci].NextHop.IsNull() && data.MemberVnisVni[j].StaticMacAddresses[cj].NextHop.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/member/vnis/vni%v/static-mac-addresses/static-mac-address%v/next-hop", state.getPath(), keyString, ckeyString))
-							}
-							break
+					if found {
+						if !state.MemberVnisVni[i].StaticMacAddresses[ci].NextHop.IsNull() && data.MemberVnisVni[j].StaticMacAddresses[cj].NextHop.IsNull() {
+							deletedItems = append(deletedItems, fmt.Sprintf("%v/member/vnis/vni%v/static-mac-addresses/static-mac-address%v/next-hop", state.getPath(), keyString, ckeyString))
 						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/member/vnis/vni%v/static-mac-addresses/static-mac-address%v", state.getPath(), keyString, ckeyString))
+						break
 					}
 				}
+				if !found {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/member/vnis/vni%v/static-mac-addresses/static-mac-address%v", state.getPath(), keyString, ckeyString))
+				}
+			}
 				break
 			}
 		}
@@ -6307,11 +5931,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/efp-visibility", state.getPath()))
 	}
 	for i := range state.NeighborsEvpnEvi {
-		keys := [...]string{"vpn-id", "target"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(state.NeighborsEvpnEvi[i].Target.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id", "target",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(state.NeighborsEvpnEvi[i].Target.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -6334,7 +5958,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 			if state.NeighborsEvpnEvi[i].Target.ValueInt64() != data.NeighborsEvpnEvi[j].Target.ValueInt64() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -6403,11 +6027,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/mac/learning/disable", state.getPath()))
 	}
 	for i := range state.MacStaticAddresses {
-		keys := [...]string{"mac-address"}
-		stateKeyValues := [...]string{state.MacStaticAddresses[i].MacAddress.ValueString()}
+		keys := [...]string{ "mac-address",  }
+		stateKeyValues := [...]string{ state.MacStaticAddresses[i].MacAddress.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -6424,10 +6048,10 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 			if state.MacStaticAddresses[i].MacAddress.ValueString() != data.MacStaticAddresses[j].MacAddress.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.MacStaticAddresses[i].Drop.IsNull() && data.MacStaticAddresses[j].Drop.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/mac/static-addresses/static-address%v/drop", state.getPath(), keyString))
-				}
+		if found {
+			if !state.MacStaticAddresses[i].Drop.IsNull() && data.MacStaticAddresses[j].Drop.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/mac/static-addresses/static-address%v/drop", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -6445,11 +6069,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/shutdown", state.getPath()))
 	}
 	for i := range state.RoutedInterface {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.RoutedInterface[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.RoutedInterface[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -6466,10 +6090,10 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 			if state.RoutedInterface[i].InterfaceName.ValueString() != data.RoutedInterface[j].InterfaceName.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.RoutedInterface[i].SplitHorizonGroupCore.IsNull() && data.RoutedInterface[j].SplitHorizonGroupCore.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/routed/interface%v/split-horizon/group/core", state.getPath(), keyString))
-				}
+		if found {
+			if !state.RoutedInterface[i].SplitHorizonGroupCore.IsNull() && data.RoutedInterface[j].SplitHorizonGroupCore.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/routed/interface%v/split-horizon/group/core", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -6478,11 +6102,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 		}
 	}
 	for i := range state.Interfaces {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.Interfaces[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -6499,13 +6123,13 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
 				found = false
 			}
-			if found {
+		if found {
 				for ci := range state.Interfaces[i].StaticMacAddresses {
-					ckeys := [...]string{"mac-address"}
-					cstateKeyValues := [...]string{state.Interfaces[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+					ckeys := [...]string{ "mac-address",  }
+					cstateKeyValues := [...]string{ state.Interfaces[i].StaticMacAddresses[ci].MacAddress.ValueString(),  }
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
 					}
 
 					cemptyKeys := true
@@ -6522,155 +6146,155 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 						if state.Interfaces[i].StaticMacAddresses[ci].MacAddress.ValueString() != data.Interfaces[j].StaticMacAddresses[cj].MacAddress.ValueString() {
 							found = false
 						}
-						if found {
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/static-mac-addresses/static-mac-address%v", state.getPath(), keyString, ckeyString))
+					if found {
+						break
 					}
 				}
-				if !state.Interfaces[i].SplitHorizonGroup.IsNull() && data.Interfaces[j].SplitHorizonGroup.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/split-horizon/group", state.getPath(), keyString))
+				if !found {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/static-mac-addresses/static-mac-address%v", state.getPath(), keyString, ckeyString))
 				}
-				if !state.Interfaces[i].StormControlUnknownUnicastKbps.IsNull() && data.Interfaces[j].StormControlUnknownUnicastKbps.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/storm-control/unknown-unicast/kbps", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].StormControlUnknownUnicastPps.IsNull() && data.Interfaces[j].StormControlUnknownUnicastPps.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/storm-control/unknown-unicast/pps", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].StormControlMulticastKbps.IsNull() && data.Interfaces[j].StormControlMulticastKbps.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/storm-control/multicast/kbps", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].StormControlMulticastPps.IsNull() && data.Interfaces[j].StormControlMulticastPps.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/storm-control/multicast/pps", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].StormControlBroadcastKbps.IsNull() && data.Interfaces[j].StormControlBroadcastKbps.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/storm-control/broadcast/kbps", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].StormControlBroadcastPps.IsNull() && data.Interfaces[j].StormControlBroadcastPps.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/storm-control/broadcast/pps", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MldSnoopingProfile.IsNull() && data.Interfaces[j].MldSnoopingProfile.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mld/snooping/profile", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.IsNull() && data.Interfaces[j].MacSecureShutdownRecoveryTimeoutDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/shutdown-recovery-timeout/disable", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacSecureShutdownRecoveryTimeout.IsNull() && data.Interfaces[j].MacSecureShutdownRecoveryTimeout.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/shutdown-recovery-timeout/recovery-timer-in-second", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacSecureDisable.IsNull() && data.Interfaces[j].MacSecureDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/disable", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacSecureActionRestrict.IsNull() && data.Interfaces[j].MacSecureActionRestrict.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/action/restrict", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacSecureActionShutdown.IsNull() && data.Interfaces[j].MacSecureActionShutdown.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/action/shutdown", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacSecureActionNone.IsNull() && data.Interfaces[j].MacSecureActionNone.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/action/none", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacSecureLoggingDisable.IsNull() && data.Interfaces[j].MacSecureLoggingDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/logging/disable", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacSecureLogging.IsNull() && data.Interfaces[j].MacSecureLogging.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/logging", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacSecure.IsNull() && data.Interfaces[j].MacSecure.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacPortDownFlushDisable.IsNull() && data.Interfaces[j].MacPortDownFlushDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/port-down/flush/disable", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacLimitNotificationSyslog.IsNull() && data.Interfaces[j].MacLimitNotificationSyslog.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/notification/syslog", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacLimitNotificationNone.IsNull() && data.Interfaces[j].MacLimitNotificationNone.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/notification/none", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacLimitNotificationBoth.IsNull() && data.Interfaces[j].MacLimitNotificationBoth.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/notification/both", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacLimitNotificationTrap.IsNull() && data.Interfaces[j].MacLimitNotificationTrap.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/notification/trap", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacLimitActionNone.IsNull() && data.Interfaces[j].MacLimitActionNone.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/action/none", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacLimitActionShutdown.IsNull() && data.Interfaces[j].MacLimitActionShutdown.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/action/shutdown", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacLimitActionNoFlood.IsNull() && data.Interfaces[j].MacLimitActionNoFlood.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/action/no-flood", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacLimitActionFlood.IsNull() && data.Interfaces[j].MacLimitActionFlood.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/action/flood", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacLimitMaximum.IsNull() && data.Interfaces[j].MacLimitMaximum.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/maximum", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacLearningDisable.IsNull() && data.Interfaces[j].MacLearningDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/learning/disable", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacLearning.IsNull() && data.Interfaces[j].MacLearning.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/learning", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacAgingTypeInactivity.IsNull() && data.Interfaces[j].MacAgingTypeInactivity.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/aging/type/inactivity", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacAgingTypeAbsolute.IsNull() && data.Interfaces[j].MacAgingTypeAbsolute.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/aging/type/absolute", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].MacAgingTime.IsNull() && data.Interfaces[j].MacAgingTime.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/aging/time", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].IpSourceGuardLoggingDisable.IsNull() && data.Interfaces[j].IpSourceGuardLoggingDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/ip-source-guard/logging/disable", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].IpSourceGuardLogging.IsNull() && data.Interfaces[j].IpSourceGuardLogging.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/ip-source-guard/logging", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].IpSourceGuardDisable.IsNull() && data.Interfaces[j].IpSourceGuardDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/ip-source-guard/disable", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].IpSourceGuard.IsNull() && data.Interfaces[j].IpSourceGuard.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/ip-source-guard", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].IgmpSnoopingProfile.IsNull() && data.Interfaces[j].IgmpSnoopingProfile.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/igmp/snooping/profile", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].FloodingDisable.IsNull() && data.Interfaces[j].FloodingDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/flooding/disable", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() && data.Interfaces[j].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/address-validation/ipv4/disable", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.IsNull() && data.Interfaces[j].DynamicArpInspectionAddressValidationIpv4.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/address-validation/ipv4", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() && data.Interfaces[j].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/address-validation/dst-mac/disable", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.IsNull() && data.Interfaces[j].DynamicArpInspectionAddressValidationDstMac.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/address-validation/dst-mac", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() && data.Interfaces[j].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/address-validation/src-mac/disable", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.IsNull() && data.Interfaces[j].DynamicArpInspectionAddressValidationSrcMac.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/address-validation/src-mac", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].DynamicArpInspectionDisable.IsNull() && data.Interfaces[j].DynamicArpInspectionDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/disable", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].DynamicArpInspectionLoggingDisable.IsNull() && data.Interfaces[j].DynamicArpInspectionLoggingDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/logging/disable", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].DynamicArpInspectionLogging.IsNull() && data.Interfaces[j].DynamicArpInspectionLogging.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/logging", state.getPath(), keyString))
-				}
+			}
+			if !state.Interfaces[i].SplitHorizonGroup.IsNull() && data.Interfaces[j].SplitHorizonGroup.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/split-horizon/group", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].StormControlUnknownUnicastKbps.IsNull() && data.Interfaces[j].StormControlUnknownUnicastKbps.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/storm-control/unknown-unicast/kbps", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].StormControlUnknownUnicastPps.IsNull() && data.Interfaces[j].StormControlUnknownUnicastPps.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/storm-control/unknown-unicast/pps", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].StormControlMulticastKbps.IsNull() && data.Interfaces[j].StormControlMulticastKbps.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/storm-control/multicast/kbps", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].StormControlMulticastPps.IsNull() && data.Interfaces[j].StormControlMulticastPps.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/storm-control/multicast/pps", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].StormControlBroadcastKbps.IsNull() && data.Interfaces[j].StormControlBroadcastKbps.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/storm-control/broadcast/kbps", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].StormControlBroadcastPps.IsNull() && data.Interfaces[j].StormControlBroadcastPps.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/storm-control/broadcast/pps", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MldSnoopingProfile.IsNull() && data.Interfaces[j].MldSnoopingProfile.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mld/snooping/profile", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.IsNull() && data.Interfaces[j].MacSecureShutdownRecoveryTimeoutDisable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/shutdown-recovery-timeout/disable", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacSecureShutdownRecoveryTimeout.IsNull() && data.Interfaces[j].MacSecureShutdownRecoveryTimeout.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/shutdown-recovery-timeout/recovery-timer-in-second", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacSecureDisable.IsNull() && data.Interfaces[j].MacSecureDisable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/disable", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacSecureActionRestrict.IsNull() && data.Interfaces[j].MacSecureActionRestrict.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/action/restrict", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacSecureActionShutdown.IsNull() && data.Interfaces[j].MacSecureActionShutdown.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/action/shutdown", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacSecureActionNone.IsNull() && data.Interfaces[j].MacSecureActionNone.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/action/none", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacSecureLoggingDisable.IsNull() && data.Interfaces[j].MacSecureLoggingDisable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/logging/disable", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacSecureLogging.IsNull() && data.Interfaces[j].MacSecureLogging.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure/logging", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacSecure.IsNull() && data.Interfaces[j].MacSecure.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/secure", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacPortDownFlushDisable.IsNull() && data.Interfaces[j].MacPortDownFlushDisable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/port-down/flush/disable", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacLimitNotificationSyslog.IsNull() && data.Interfaces[j].MacLimitNotificationSyslog.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/notification/syslog", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacLimitNotificationNone.IsNull() && data.Interfaces[j].MacLimitNotificationNone.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/notification/none", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacLimitNotificationBoth.IsNull() && data.Interfaces[j].MacLimitNotificationBoth.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/notification/both", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacLimitNotificationTrap.IsNull() && data.Interfaces[j].MacLimitNotificationTrap.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/notification/trap", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacLimitActionNone.IsNull() && data.Interfaces[j].MacLimitActionNone.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/action/none", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacLimitActionShutdown.IsNull() && data.Interfaces[j].MacLimitActionShutdown.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/action/shutdown", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacLimitActionNoFlood.IsNull() && data.Interfaces[j].MacLimitActionNoFlood.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/action/no-flood", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacLimitActionFlood.IsNull() && data.Interfaces[j].MacLimitActionFlood.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/action/flood", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacLimitMaximum.IsNull() && data.Interfaces[j].MacLimitMaximum.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/limit/maximum", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacLearningDisable.IsNull() && data.Interfaces[j].MacLearningDisable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/learning/disable", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacLearning.IsNull() && data.Interfaces[j].MacLearning.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/learning", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacAgingTypeInactivity.IsNull() && data.Interfaces[j].MacAgingTypeInactivity.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/aging/type/inactivity", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacAgingTypeAbsolute.IsNull() && data.Interfaces[j].MacAgingTypeAbsolute.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/aging/type/absolute", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].MacAgingTime.IsNull() && data.Interfaces[j].MacAgingTime.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/mac/aging/time", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].IpSourceGuardLoggingDisable.IsNull() && data.Interfaces[j].IpSourceGuardLoggingDisable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/ip-source-guard/logging/disable", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].IpSourceGuardLogging.IsNull() && data.Interfaces[j].IpSourceGuardLogging.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/ip-source-guard/logging", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].IpSourceGuardDisable.IsNull() && data.Interfaces[j].IpSourceGuardDisable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/ip-source-guard/disable", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].IpSourceGuard.IsNull() && data.Interfaces[j].IpSourceGuard.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/ip-source-guard", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].IgmpSnoopingProfile.IsNull() && data.Interfaces[j].IgmpSnoopingProfile.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/igmp/snooping/profile", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].FloodingDisable.IsNull() && data.Interfaces[j].FloodingDisable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/flooding/disable", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() && data.Interfaces[j].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/address-validation/ipv4/disable", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.IsNull() && data.Interfaces[j].DynamicArpInspectionAddressValidationIpv4.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/address-validation/ipv4", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() && data.Interfaces[j].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/address-validation/dst-mac/disable", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.IsNull() && data.Interfaces[j].DynamicArpInspectionAddressValidationDstMac.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/address-validation/dst-mac", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() && data.Interfaces[j].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/address-validation/src-mac/disable", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.IsNull() && data.Interfaces[j].DynamicArpInspectionAddressValidationSrcMac.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/address-validation/src-mac", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].DynamicArpInspectionDisable.IsNull() && data.Interfaces[j].DynamicArpInspectionDisable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/disable", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].DynamicArpInspectionLoggingDisable.IsNull() && data.Interfaces[j].DynamicArpInspectionLoggingDisable.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/logging/disable", state.getPath(), keyString))
+			}
+			if !state.Interfaces[i].DynamicArpInspectionLogging.IsNull() && data.Interfaces[j].DynamicArpInspectionLogging.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/dynamic-arp-inspection/logging", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -6745,11 +6369,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/coupled-mode", state.getPath()))
 	}
 	for i := range state.Vnis {
-		keys := [...]string{"vni-id"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.Vnis[i].VniId.ValueInt64(), 10)}
+		keys := [...]string{ "vni-id",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.Vnis[i].VniId.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -6766,7 +6390,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 			if state.Vnis[i].VniId.ValueInt64() != data.Vnis[j].VniId.ValueInt64() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -6775,11 +6399,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 		}
 	}
 	for i := range state.Srv6Evis {
-		keys := [...]string{"vpn-id"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.Srv6Evis[i].VpnId.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.Srv6Evis[i].VpnId.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -6796,7 +6420,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 			if state.Srv6Evis[i].VpnId.ValueInt64() != data.Srv6Evis[j].VpnId.ValueInt64() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -6805,11 +6429,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 		}
 	}
 	for i := range state.Evis {
-		keys := [...]string{"vpn-id"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.Evis[i].VpnId.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.Evis[i].VpnId.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -6826,7 +6450,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 			if state.Evis[i].VpnId.ValueInt64() != data.Evis[j].VpnId.ValueInt64() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -6849,18 +6473,18 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Context, state *L2VPNBridgeGroupBridgeDomain) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.MemberVnisVni {
-		keys := [...]string{"vni-id"}
-		keyValues := [...]string{strconv.FormatInt(data.MemberVnisVni[i].VniId.ValueInt64(), 10)}
+		keys := [...]string{ "vni-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.MemberVnisVni[i].VniId.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		for ci := range data.MemberVnisVni[i].StaticMacAddresses {
-			ckeys := [...]string{"mac-address"}
-			ckeyValues := [...]string{data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+			ckeys := [...]string{ "mac-address",  }
+			ckeyValues := [...]string{ data.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress.ValueString(),  }
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
 			}
 		}
 	}
@@ -6883,11 +6507,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Contex
 		}
 	}
 	for i := range data.NeighborsEvpnEvi {
-		keys := [...]string{"vpn-id", "target"}
-		keyValues := [...]string{strconv.FormatInt(data.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborsEvpnEvi[i].Target.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id", "target",  }
+		keyValues := [...]string{ strconv.FormatInt(data.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborsEvpnEvi[i].Target.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -6999,11 +6623,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Contex
 		}
 	}
 	for i := range data.MacStaticAddresses {
-		keys := [...]string{"mac-address"}
-		keyValues := [...]string{data.MacStaticAddresses[i].MacAddress.ValueString()}
+		keys := [...]string{ "mac-address",  }
+		keyValues := [...]string{ data.MacStaticAddresses[i].MacAddress.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.MacStaticAddresses[i].Drop.IsNull() && !data.MacStaticAddresses[i].Drop.ValueBool() {
@@ -7026,11 +6650,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Contex
 		}
 	}
 	for i := range data.RoutedInterface {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.RoutedInterface[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.RoutedInterface[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.RoutedInterface[i].SplitHorizonGroupCore.IsNull() && !data.RoutedInterface[i].SplitHorizonGroupCore.ValueBool() {
@@ -7041,18 +6665,18 @@ func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Contex
 		}
 	}
 	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.Interfaces[i].InterfaceName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		for ci := range data.Interfaces[i].StaticMacAddresses {
-			ckeys := [...]string{"mac-address"}
-			ckeyValues := [...]string{data.Interfaces[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+			ckeys := [...]string{ "mac-address",  }
+			ckeyValues := [...]string{ data.Interfaces[i].StaticMacAddresses[ci].MacAddress.ValueString(),  }
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
 			}
 		}
 		// Only delete if state has true and plan has false
@@ -7393,27 +7017,27 @@ func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Contex
 		}
 	}
 	for i := range data.Vnis {
-		keys := [...]string{"vni-id"}
-		keyValues := [...]string{strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10)}
+		keys := [...]string{ "vni-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.Srv6Evis {
-		keys := [...]string{"vpn-id"}
-		keyValues := [...]string{strconv.FormatInt(data.Srv6Evis[i].VpnId.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.Srv6Evis[i].VpnId.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.Evis {
-		keys := [...]string{"vpn-id"}
-		keyValues := [...]string{strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	return emptyLeafsDelete
@@ -7425,7 +7049,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Contex
 func (data *L2VPNBridgeGroupBridgeDomain) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.MemberVnisVni {
-		keyValues := [...]string{strconv.FormatInt(data.MemberVnisVni[i].VniId.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.MemberVnisVni[i].VniId.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/member/vnis/vni=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -7439,7 +7063,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletePaths(ctx context.Context) []
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/efp-visibility", data.getPath()))
 	}
 	for i := range data.NeighborsEvpnEvi {
-		keyValues := [...]string{strconv.FormatInt(data.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborsEvpnEvi[i].Target.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborsEvpnEvi[i].Target.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbors/evpn/evi=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -7504,7 +7128,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletePaths(ctx context.Context) []
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/mac/learning/disable", data.getPath()))
 	}
 	for i := range data.MacStaticAddresses {
-		keyValues := [...]string{data.MacStaticAddresses[i].MacAddress.ValueString()}
+		keyValues := [...]string{ data.MacStaticAddresses[i].MacAddress.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/mac/static-addresses/static-address=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -7518,12 +7142,12 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletePaths(ctx context.Context) []
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/shutdown", data.getPath()))
 	}
 	for i := range data.RoutedInterface {
-		keyValues := [...]string{data.RoutedInterface[i].InterfaceName.ValueString()}
+		keyValues := [...]string{ data.RoutedInterface[i].InterfaceName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/routed/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Interfaces {
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keyValues := [...]string{ data.Interfaces[i].InterfaceName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -7594,17 +7218,17 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletePaths(ctx context.Context) []
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/coupled-mode", data.getPath()))
 	}
 	for i := range data.Vnis {
-		keyValues := [...]string{strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/vnis/vni=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Srv6Evis {
-		keyValues := [...]string{strconv.FormatInt(data.Srv6Evis[i].VpnId.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.Srv6Evis[i].VpnId.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing-srv6-evis/evi=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Evis {
-		keyValues := [...]string{strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10)}
+		keyValues := [...]string{ strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/evis/evi=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -7626,8 +7250,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.MemberVnisVni {
-		stateKeys := [...]string{"vni-id"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.MemberVnisVni[i].VniId.ValueInt64(), 10)}
+		stateKeys := [...]string{ "vni-id",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.MemberVnisVni[i].VniId.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -7648,9 +7272,9 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 				found = false
 			}
 			if found {
-				for ci := range state.MemberVnisVni[i].StaticMacAddresses {
-					cstateKeys := [...]string{"mac-address"}
-					cstateKeyValues := [...]string{state.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+			for ci := range state.MemberVnisVni[i].StaticMacAddresses {
+					cstateKeys := [...]string{ "mac-address",  }
+					cstateKeyValues := [...]string{ state.MemberVnisVni[i].StaticMacAddresses[ci].MacAddress.ValueString(),  }
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -7690,7 +7314,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.EtreeLeaf.IsNull() && state.EtreeLeaf.ValueBool() && data.EtreeLeaf.IsNull() {
-		deletePath := state.getXPath() + "/etree/leaf"
+		deletePath := state.getXPath()+"/etree/leaf"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7698,7 +7322,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Etree.IsNull() && state.Etree.ValueBool() && data.Etree.IsNull() {
-		deletePath := state.getXPath() + "/etree"
+		deletePath := state.getXPath()+"/etree"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7706,15 +7330,15 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.EfpVisibility.IsNull() && state.EfpVisibility.ValueBool() && data.EfpVisibility.IsNull() {
-		deletePath := state.getXPath() + "/efp-visibility"
+		deletePath := state.getXPath()+"/efp-visibility"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.NeighborsEvpnEvi {
-		stateKeys := [...]string{"vpn-id", "target"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(state.NeighborsEvpnEvi[i].Target.ValueInt64(), 10)}
+		stateKeys := [...]string{ "vpn-id", "target",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(state.NeighborsEvpnEvi[i].Target.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -7749,7 +7373,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 		}
 	}
 	if !state.MacSecureShutdownRecoveryTimeout.IsNull() && data.MacSecureShutdownRecoveryTimeout.IsNull() {
-		deletePath := state.getXPath() + "/mac/secure/shutdown-recovery-timeout"
+		deletePath := state.getXPath()+"/mac/secure/shutdown-recovery-timeout"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7757,7 +7381,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacSecureActionShutdown.IsNull() && state.MacSecureActionShutdown.ValueBool() && data.MacSecureActionShutdown.IsNull() {
-		deletePath := state.getXPath() + "/mac/secure/action/shutdown"
+		deletePath := state.getXPath()+"/mac/secure/action/shutdown"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7765,7 +7389,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacSecureActionNone.IsNull() && state.MacSecureActionNone.ValueBool() && data.MacSecureActionNone.IsNull() {
-		deletePath := state.getXPath() + "/mac/secure/action/none"
+		deletePath := state.getXPath()+"/mac/secure/action/none"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7773,7 +7397,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacSecureThreshold.IsNull() && state.MacSecureThreshold.ValueBool() && data.MacSecureThreshold.IsNull() {
-		deletePath := state.getXPath() + "/mac/secure/threshold"
+		deletePath := state.getXPath()+"/mac/secure/threshold"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7781,7 +7405,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacSecureLogging.IsNull() && state.MacSecureLogging.ValueBool() && data.MacSecureLogging.IsNull() {
-		deletePath := state.getXPath() + "/mac/secure/logging"
+		deletePath := state.getXPath()+"/mac/secure/logging"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7789,7 +7413,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacSecure.IsNull() && state.MacSecure.ValueBool() && data.MacSecure.IsNull() {
-		deletePath := state.getXPath() + "/mac/secure"
+		deletePath := state.getXPath()+"/mac/secure"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7797,7 +7421,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacPortDownFlushDisable.IsNull() && state.MacPortDownFlushDisable.ValueBool() && data.MacPortDownFlushDisable.IsNull() {
-		deletePath := state.getXPath() + "/mac/port-down/flush/disable"
+		deletePath := state.getXPath()+"/mac/port-down/flush/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7805,7 +7429,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacLimitNotificationNone.IsNull() && state.MacLimitNotificationNone.ValueBool() && data.MacLimitNotificationNone.IsNull() {
-		deletePath := state.getXPath() + "/mac/limit/notification/none"
+		deletePath := state.getXPath()+"/mac/limit/notification/none"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7813,7 +7437,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacLimitNotificationBoth.IsNull() && state.MacLimitNotificationBoth.ValueBool() && data.MacLimitNotificationBoth.IsNull() {
-		deletePath := state.getXPath() + "/mac/limit/notification/both"
+		deletePath := state.getXPath()+"/mac/limit/notification/both"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7821,7 +7445,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacLimitNotificationTrap.IsNull() && state.MacLimitNotificationTrap.ValueBool() && data.MacLimitNotificationTrap.IsNull() {
-		deletePath := state.getXPath() + "/mac/limit/notification/trap"
+		deletePath := state.getXPath()+"/mac/limit/notification/trap"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7829,7 +7453,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacLimitActionShutdown.IsNull() && state.MacLimitActionShutdown.ValueBool() && data.MacLimitActionShutdown.IsNull() {
-		deletePath := state.getXPath() + "/mac/limit/action/shutdown"
+		deletePath := state.getXPath()+"/mac/limit/action/shutdown"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7837,7 +7461,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacLimitActionNoFlood.IsNull() && state.MacLimitActionNoFlood.ValueBool() && data.MacLimitActionNoFlood.IsNull() {
-		deletePath := state.getXPath() + "/mac/limit/action/no-flood"
+		deletePath := state.getXPath()+"/mac/limit/action/no-flood"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7845,14 +7469,14 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacLimitActionFlood.IsNull() && state.MacLimitActionFlood.ValueBool() && data.MacLimitActionFlood.IsNull() {
-		deletePath := state.getXPath() + "/mac/limit/action/flood"
+		deletePath := state.getXPath()+"/mac/limit/action/flood"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MacLimitMaximum.IsNull() && data.MacLimitMaximum.IsNull() {
-		deletePath := state.getXPath() + "/mac/limit/maximum"
+		deletePath := state.getXPath()+"/mac/limit/maximum"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7860,7 +7484,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacWithdrawOptimize.IsNull() && state.MacWithdrawOptimize.ValueBool() && data.MacWithdrawOptimize.IsNull() {
-		deletePath := state.getXPath() + "/mac/withdraw/optimize"
+		deletePath := state.getXPath()+"/mac/withdraw/optimize"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7868,7 +7492,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacWithdrawStateDown.IsNull() && state.MacWithdrawStateDown.ValueBool() && data.MacWithdrawStateDown.IsNull() {
-		deletePath := state.getXPath() + "/mac/withdraw/state-down"
+		deletePath := state.getXPath()+"/mac/withdraw/state-down"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7876,7 +7500,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacWithdrawRelay.IsNull() && state.MacWithdrawRelay.ValueBool() && data.MacWithdrawRelay.IsNull() {
-		deletePath := state.getXPath() + "/mac/withdraw/relay"
+		deletePath := state.getXPath()+"/mac/withdraw/relay"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7884,7 +7508,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacWithdrawAccessPwDisable.IsNull() && state.MacWithdrawAccessPwDisable.ValueBool() && data.MacWithdrawAccessPwDisable.IsNull() {
-		deletePath := state.getXPath() + "/mac/withdraw/access-pw/disable"
+		deletePath := state.getXPath()+"/mac/withdraw/access-pw/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7892,7 +7516,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacWithdrawDisable.IsNull() && state.MacWithdrawDisable.ValueBool() && data.MacWithdrawDisable.IsNull() {
-		deletePath := state.getXPath() + "/mac/withdraw/disable"
+		deletePath := state.getXPath()+"/mac/withdraw/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7900,15 +7524,15 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacLearningDisable.IsNull() && state.MacLearningDisable.ValueBool() && data.MacLearningDisable.IsNull() {
-		deletePath := state.getXPath() + "/mac/learning/disable"
+		deletePath := state.getXPath()+"/mac/learning/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.MacStaticAddresses {
-		stateKeys := [...]string{"mac-address"}
-		stateKeyValues := [...]string{state.MacStaticAddresses[i].MacAddress.ValueString()}
+		stateKeys := [...]string{ "mac-address",  }
+		stateKeyValues := [...]string{ state.MacStaticAddresses[i].MacAddress.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -7929,10 +7553,10 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 				found = false
 			}
 			if found {
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.MacStaticAddresses[i].Drop.IsNull() && state.MacStaticAddresses[i].Drop.ValueBool() && data.MacStaticAddresses[j].Drop.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/mac/static-addresses/static-address%v/drop", predicates))
-				}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.MacStaticAddresses[i].Drop.IsNull() && state.MacStaticAddresses[i].Drop.ValueBool() && data.MacStaticAddresses[j].Drop.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/mac/static-addresses/static-address%v/drop", predicates))
+			}
 				break
 			}
 		}
@@ -7942,14 +7566,14 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MacAgingTypeAbsolute.IsNull() && state.MacAgingTypeAbsolute.ValueBool() && data.MacAgingTypeAbsolute.IsNull() {
-		deletePath := state.getXPath() + "/mac/aging/type/absolute"
+		deletePath := state.getXPath()+"/mac/aging/type/absolute"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MacAgingTime.IsNull() && data.MacAgingTime.IsNull() {
-		deletePath := state.getXPath() + "/mac/aging/time"
+		deletePath := state.getXPath()+"/mac/aging/time"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -7957,15 +7581,15 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Shutdown.IsNull() && state.Shutdown.ValueBool() && data.Shutdown.IsNull() {
-		deletePath := state.getXPath() + "/shutdown"
+		deletePath := state.getXPath()+"/shutdown"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.RoutedInterface {
-		stateKeys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.RoutedInterface[i].InterfaceName.ValueString()}
+		stateKeys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.RoutedInterface[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -7986,10 +7610,10 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 				found = false
 			}
 			if found {
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.RoutedInterface[i].SplitHorizonGroupCore.IsNull() && state.RoutedInterface[i].SplitHorizonGroupCore.ValueBool() && data.RoutedInterface[j].SplitHorizonGroupCore.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/routed/interface%v/split-horizon/group/core", predicates))
-				}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.RoutedInterface[i].SplitHorizonGroupCore.IsNull() && state.RoutedInterface[i].SplitHorizonGroupCore.ValueBool() && data.RoutedInterface[j].SplitHorizonGroupCore.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/routed/interface%v/split-horizon/group/core", predicates))
+			}
 				break
 			}
 		}
@@ -7998,8 +7622,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 		}
 	}
 	for i := range state.Interfaces {
-		stateKeys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		stateKeys := [...]string{ "interface-name",  }
+		stateKeyValues := [...]string{ state.Interfaces[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -8020,9 +7644,9 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 				found = false
 			}
 			if found {
-				for ci := range state.Interfaces[i].StaticMacAddresses {
-					cstateKeys := [...]string{"mac-address"}
-					cstateKeyValues := [...]string{state.Interfaces[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+			for ci := range state.Interfaces[i].StaticMacAddresses {
+					cstateKeys := [...]string{ "mac-address",  }
+					cstateKeyValues := [...]string{ state.Interfaces[i].StaticMacAddresses[ci].MacAddress.ValueString(),  }
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -8050,183 +7674,183 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/static-mac-addresses/static-mac-address%v", predicates, cpredicates))
 					}
 				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].SplitHorizonGroup.IsNull() && state.Interfaces[i].SplitHorizonGroup.ValueBool() && data.Interfaces[j].SplitHorizonGroup.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/split-horizon/group", predicates))
-				}
-				if !state.Interfaces[i].StormControlUnknownUnicastKbps.IsNull() && data.Interfaces[j].StormControlUnknownUnicastKbps.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/storm-control/unknown-unicast/kbps", predicates))
-				}
-				if !state.Interfaces[i].StormControlUnknownUnicastPps.IsNull() && data.Interfaces[j].StormControlUnknownUnicastPps.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/storm-control/unknown-unicast/pps", predicates))
-				}
-				if !state.Interfaces[i].StormControlMulticastKbps.IsNull() && data.Interfaces[j].StormControlMulticastKbps.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/storm-control/multicast/kbps", predicates))
-				}
-				if !state.Interfaces[i].StormControlMulticastPps.IsNull() && data.Interfaces[j].StormControlMulticastPps.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/storm-control/multicast/pps", predicates))
-				}
-				if !state.Interfaces[i].StormControlBroadcastKbps.IsNull() && data.Interfaces[j].StormControlBroadcastKbps.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/storm-control/broadcast/kbps", predicates))
-				}
-				if !state.Interfaces[i].StormControlBroadcastPps.IsNull() && data.Interfaces[j].StormControlBroadcastPps.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/storm-control/broadcast/pps", predicates))
-				}
-				if !state.Interfaces[i].MldSnoopingProfile.IsNull() && data.Interfaces[j].MldSnoopingProfile.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mld/snooping/profile", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.IsNull() && state.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.ValueBool() && data.Interfaces[j].MacSecureShutdownRecoveryTimeoutDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/shutdown-recovery-timeout/disable", predicates))
-				}
-				if !state.Interfaces[i].MacSecureShutdownRecoveryTimeout.IsNull() && data.Interfaces[j].MacSecureShutdownRecoveryTimeout.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/shutdown-recovery-timeout/recovery-timer-in-second", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacSecureDisable.IsNull() && state.Interfaces[i].MacSecureDisable.ValueBool() && data.Interfaces[j].MacSecureDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/disable", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacSecureActionRestrict.IsNull() && state.Interfaces[i].MacSecureActionRestrict.ValueBool() && data.Interfaces[j].MacSecureActionRestrict.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/action/restrict", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacSecureActionShutdown.IsNull() && state.Interfaces[i].MacSecureActionShutdown.ValueBool() && data.Interfaces[j].MacSecureActionShutdown.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/action/shutdown", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacSecureActionNone.IsNull() && state.Interfaces[i].MacSecureActionNone.ValueBool() && data.Interfaces[j].MacSecureActionNone.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/action/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacSecureLoggingDisable.IsNull() && state.Interfaces[i].MacSecureLoggingDisable.ValueBool() && data.Interfaces[j].MacSecureLoggingDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/logging/disable", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacSecureLogging.IsNull() && state.Interfaces[i].MacSecureLogging.ValueBool() && data.Interfaces[j].MacSecureLogging.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/logging", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacSecure.IsNull() && state.Interfaces[i].MacSecure.ValueBool() && data.Interfaces[j].MacSecure.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacPortDownFlushDisable.IsNull() && state.Interfaces[i].MacPortDownFlushDisable.ValueBool() && data.Interfaces[j].MacPortDownFlushDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/port-down/flush/disable", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacLimitNotificationSyslog.IsNull() && state.Interfaces[i].MacLimitNotificationSyslog.ValueBool() && data.Interfaces[j].MacLimitNotificationSyslog.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/notification/syslog", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacLimitNotificationNone.IsNull() && state.Interfaces[i].MacLimitNotificationNone.ValueBool() && data.Interfaces[j].MacLimitNotificationNone.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/notification/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacLimitNotificationBoth.IsNull() && state.Interfaces[i].MacLimitNotificationBoth.ValueBool() && data.Interfaces[j].MacLimitNotificationBoth.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/notification/both", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacLimitNotificationTrap.IsNull() && state.Interfaces[i].MacLimitNotificationTrap.ValueBool() && data.Interfaces[j].MacLimitNotificationTrap.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/notification/trap", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacLimitActionNone.IsNull() && state.Interfaces[i].MacLimitActionNone.ValueBool() && data.Interfaces[j].MacLimitActionNone.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/action/none", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacLimitActionShutdown.IsNull() && state.Interfaces[i].MacLimitActionShutdown.ValueBool() && data.Interfaces[j].MacLimitActionShutdown.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/action/shutdown", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacLimitActionNoFlood.IsNull() && state.Interfaces[i].MacLimitActionNoFlood.ValueBool() && data.Interfaces[j].MacLimitActionNoFlood.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/action/no-flood", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacLimitActionFlood.IsNull() && state.Interfaces[i].MacLimitActionFlood.ValueBool() && data.Interfaces[j].MacLimitActionFlood.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/action/flood", predicates))
-				}
-				if !state.Interfaces[i].MacLimitMaximum.IsNull() && data.Interfaces[j].MacLimitMaximum.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/maximum", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacLearningDisable.IsNull() && state.Interfaces[i].MacLearningDisable.ValueBool() && data.Interfaces[j].MacLearningDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/learning/disable", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacLearning.IsNull() && state.Interfaces[i].MacLearning.ValueBool() && data.Interfaces[j].MacLearning.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/learning", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacAgingTypeInactivity.IsNull() && state.Interfaces[i].MacAgingTypeInactivity.ValueBool() && data.Interfaces[j].MacAgingTypeInactivity.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/aging/type/inactivity", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].MacAgingTypeAbsolute.IsNull() && state.Interfaces[i].MacAgingTypeAbsolute.ValueBool() && data.Interfaces[j].MacAgingTypeAbsolute.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/aging/type/absolute", predicates))
-				}
-				if !state.Interfaces[i].MacAgingTime.IsNull() && data.Interfaces[j].MacAgingTime.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/aging/time", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].IpSourceGuardLoggingDisable.IsNull() && state.Interfaces[i].IpSourceGuardLoggingDisable.ValueBool() && data.Interfaces[j].IpSourceGuardLoggingDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/ip-source-guard/logging/disable", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].IpSourceGuardLogging.IsNull() && state.Interfaces[i].IpSourceGuardLogging.ValueBool() && data.Interfaces[j].IpSourceGuardLogging.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/ip-source-guard/logging", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].IpSourceGuardDisable.IsNull() && state.Interfaces[i].IpSourceGuardDisable.ValueBool() && data.Interfaces[j].IpSourceGuardDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/ip-source-guard/disable", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].IpSourceGuard.IsNull() && state.Interfaces[i].IpSourceGuard.ValueBool() && data.Interfaces[j].IpSourceGuard.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/ip-source-guard", predicates))
-				}
-				if !state.Interfaces[i].IgmpSnoopingProfile.IsNull() && data.Interfaces[j].IgmpSnoopingProfile.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/igmp/snooping/profile", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].FloodingDisable.IsNull() && state.Interfaces[i].FloodingDisable.ValueBool() && data.Interfaces[j].FloodingDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/flooding/disable", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() && state.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.ValueBool() && data.Interfaces[j].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/address-validation/ipv4/disable", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.IsNull() && state.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.ValueBool() && data.Interfaces[j].DynamicArpInspectionAddressValidationIpv4.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/address-validation/ipv4", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() && state.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.ValueBool() && data.Interfaces[j].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/address-validation/dst-mac/disable", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.IsNull() && state.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.ValueBool() && data.Interfaces[j].DynamicArpInspectionAddressValidationDstMac.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/address-validation/dst-mac", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() && state.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.ValueBool() && data.Interfaces[j].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/address-validation/src-mac/disable", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.IsNull() && state.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.ValueBool() && data.Interfaces[j].DynamicArpInspectionAddressValidationSrcMac.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/address-validation/src-mac", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].DynamicArpInspectionDisable.IsNull() && state.Interfaces[i].DynamicArpInspectionDisable.ValueBool() && data.Interfaces[j].DynamicArpInspectionDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/disable", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].DynamicArpInspectionLoggingDisable.IsNull() && state.Interfaces[i].DynamicArpInspectionLoggingDisable.ValueBool() && data.Interfaces[j].DynamicArpInspectionLoggingDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/logging/disable", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.Interfaces[i].DynamicArpInspectionLogging.IsNull() && state.Interfaces[i].DynamicArpInspectionLogging.ValueBool() && data.Interfaces[j].DynamicArpInspectionLogging.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/logging", predicates))
-				}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].SplitHorizonGroup.IsNull() && state.Interfaces[i].SplitHorizonGroup.ValueBool() && data.Interfaces[j].SplitHorizonGroup.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/split-horizon/group", predicates))
+			}
+			if !state.Interfaces[i].StormControlUnknownUnicastKbps.IsNull() && data.Interfaces[j].StormControlUnknownUnicastKbps.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/storm-control/unknown-unicast/kbps", predicates))
+			}
+			if !state.Interfaces[i].StormControlUnknownUnicastPps.IsNull() && data.Interfaces[j].StormControlUnknownUnicastPps.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/storm-control/unknown-unicast/pps", predicates))
+			}
+			if !state.Interfaces[i].StormControlMulticastKbps.IsNull() && data.Interfaces[j].StormControlMulticastKbps.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/storm-control/multicast/kbps", predicates))
+			}
+			if !state.Interfaces[i].StormControlMulticastPps.IsNull() && data.Interfaces[j].StormControlMulticastPps.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/storm-control/multicast/pps", predicates))
+			}
+			if !state.Interfaces[i].StormControlBroadcastKbps.IsNull() && data.Interfaces[j].StormControlBroadcastKbps.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/storm-control/broadcast/kbps", predicates))
+			}
+			if !state.Interfaces[i].StormControlBroadcastPps.IsNull() && data.Interfaces[j].StormControlBroadcastPps.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/storm-control/broadcast/pps", predicates))
+			}
+			if !state.Interfaces[i].MldSnoopingProfile.IsNull() && data.Interfaces[j].MldSnoopingProfile.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mld/snooping/profile", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.IsNull() && state.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.ValueBool() && data.Interfaces[j].MacSecureShutdownRecoveryTimeoutDisable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/shutdown-recovery-timeout/disable", predicates))
+			}
+			if !state.Interfaces[i].MacSecureShutdownRecoveryTimeout.IsNull() && data.Interfaces[j].MacSecureShutdownRecoveryTimeout.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/shutdown-recovery-timeout/recovery-timer-in-second", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacSecureDisable.IsNull() && state.Interfaces[i].MacSecureDisable.ValueBool() && data.Interfaces[j].MacSecureDisable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/disable", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacSecureActionRestrict.IsNull() && state.Interfaces[i].MacSecureActionRestrict.ValueBool() && data.Interfaces[j].MacSecureActionRestrict.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/action/restrict", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacSecureActionShutdown.IsNull() && state.Interfaces[i].MacSecureActionShutdown.ValueBool() && data.Interfaces[j].MacSecureActionShutdown.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/action/shutdown", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacSecureActionNone.IsNull() && state.Interfaces[i].MacSecureActionNone.ValueBool() && data.Interfaces[j].MacSecureActionNone.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/action/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacSecureLoggingDisable.IsNull() && state.Interfaces[i].MacSecureLoggingDisable.ValueBool() && data.Interfaces[j].MacSecureLoggingDisable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/logging/disable", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacSecureLogging.IsNull() && state.Interfaces[i].MacSecureLogging.ValueBool() && data.Interfaces[j].MacSecureLogging.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure/logging", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacSecure.IsNull() && state.Interfaces[i].MacSecure.ValueBool() && data.Interfaces[j].MacSecure.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/secure", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacPortDownFlushDisable.IsNull() && state.Interfaces[i].MacPortDownFlushDisable.ValueBool() && data.Interfaces[j].MacPortDownFlushDisable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/port-down/flush/disable", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacLimitNotificationSyslog.IsNull() && state.Interfaces[i].MacLimitNotificationSyslog.ValueBool() && data.Interfaces[j].MacLimitNotificationSyslog.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/notification/syslog", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacLimitNotificationNone.IsNull() && state.Interfaces[i].MacLimitNotificationNone.ValueBool() && data.Interfaces[j].MacLimitNotificationNone.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/notification/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacLimitNotificationBoth.IsNull() && state.Interfaces[i].MacLimitNotificationBoth.ValueBool() && data.Interfaces[j].MacLimitNotificationBoth.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/notification/both", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacLimitNotificationTrap.IsNull() && state.Interfaces[i].MacLimitNotificationTrap.ValueBool() && data.Interfaces[j].MacLimitNotificationTrap.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/notification/trap", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacLimitActionNone.IsNull() && state.Interfaces[i].MacLimitActionNone.ValueBool() && data.Interfaces[j].MacLimitActionNone.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/action/none", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacLimitActionShutdown.IsNull() && state.Interfaces[i].MacLimitActionShutdown.ValueBool() && data.Interfaces[j].MacLimitActionShutdown.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/action/shutdown", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacLimitActionNoFlood.IsNull() && state.Interfaces[i].MacLimitActionNoFlood.ValueBool() && data.Interfaces[j].MacLimitActionNoFlood.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/action/no-flood", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacLimitActionFlood.IsNull() && state.Interfaces[i].MacLimitActionFlood.ValueBool() && data.Interfaces[j].MacLimitActionFlood.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/action/flood", predicates))
+			}
+			if !state.Interfaces[i].MacLimitMaximum.IsNull() && data.Interfaces[j].MacLimitMaximum.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/limit/maximum", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacLearningDisable.IsNull() && state.Interfaces[i].MacLearningDisable.ValueBool() && data.Interfaces[j].MacLearningDisable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/learning/disable", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacLearning.IsNull() && state.Interfaces[i].MacLearning.ValueBool() && data.Interfaces[j].MacLearning.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/learning", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacAgingTypeInactivity.IsNull() && state.Interfaces[i].MacAgingTypeInactivity.ValueBool() && data.Interfaces[j].MacAgingTypeInactivity.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/aging/type/inactivity", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].MacAgingTypeAbsolute.IsNull() && state.Interfaces[i].MacAgingTypeAbsolute.ValueBool() && data.Interfaces[j].MacAgingTypeAbsolute.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/aging/type/absolute", predicates))
+			}
+			if !state.Interfaces[i].MacAgingTime.IsNull() && data.Interfaces[j].MacAgingTime.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mac/aging/time", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].IpSourceGuardLoggingDisable.IsNull() && state.Interfaces[i].IpSourceGuardLoggingDisable.ValueBool() && data.Interfaces[j].IpSourceGuardLoggingDisable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/ip-source-guard/logging/disable", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].IpSourceGuardLogging.IsNull() && state.Interfaces[i].IpSourceGuardLogging.ValueBool() && data.Interfaces[j].IpSourceGuardLogging.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/ip-source-guard/logging", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].IpSourceGuardDisable.IsNull() && state.Interfaces[i].IpSourceGuardDisable.ValueBool() && data.Interfaces[j].IpSourceGuardDisable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/ip-source-guard/disable", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].IpSourceGuard.IsNull() && state.Interfaces[i].IpSourceGuard.ValueBool() && data.Interfaces[j].IpSourceGuard.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/ip-source-guard", predicates))
+			}
+			if !state.Interfaces[i].IgmpSnoopingProfile.IsNull() && data.Interfaces[j].IgmpSnoopingProfile.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/igmp/snooping/profile", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].FloodingDisable.IsNull() && state.Interfaces[i].FloodingDisable.ValueBool() && data.Interfaces[j].FloodingDisable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/flooding/disable", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() && state.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.ValueBool() && data.Interfaces[j].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/address-validation/ipv4/disable", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.IsNull() && state.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.ValueBool() && data.Interfaces[j].DynamicArpInspectionAddressValidationIpv4.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/address-validation/ipv4", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() && state.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.ValueBool() && data.Interfaces[j].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/address-validation/dst-mac/disable", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.IsNull() && state.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.ValueBool() && data.Interfaces[j].DynamicArpInspectionAddressValidationDstMac.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/address-validation/dst-mac", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() && state.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.ValueBool() && data.Interfaces[j].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/address-validation/src-mac/disable", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.IsNull() && state.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.ValueBool() && data.Interfaces[j].DynamicArpInspectionAddressValidationSrcMac.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/address-validation/src-mac", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].DynamicArpInspectionDisable.IsNull() && state.Interfaces[i].DynamicArpInspectionDisable.ValueBool() && data.Interfaces[j].DynamicArpInspectionDisable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/disable", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].DynamicArpInspectionLoggingDisable.IsNull() && state.Interfaces[i].DynamicArpInspectionLoggingDisable.ValueBool() && data.Interfaces[j].DynamicArpInspectionLoggingDisable.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/logging/disable", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.Interfaces[i].DynamicArpInspectionLogging.IsNull() && state.Interfaces[i].DynamicArpInspectionLogging.ValueBool() && data.Interfaces[j].DynamicArpInspectionLogging.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/dynamic-arp-inspection/logging", predicates))
+			}
 				break
 			}
 		}
@@ -8236,7 +7860,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MulticastSourceIpv4Ipv6.IsNull() && state.MulticastSourceIpv4Ipv6.ValueBool() && data.MulticastSourceIpv4Ipv6.IsNull() {
-		deletePath := state.getXPath() + "/multicast-source/ipv4-ipv6"
+		deletePath := state.getXPath()+"/multicast-source/ipv4-ipv6"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -8244,7 +7868,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MulticastSourceIpv6.IsNull() && state.MulticastSourceIpv6.ValueBool() && data.MulticastSourceIpv6.IsNull() {
-		deletePath := state.getXPath() + "/multicast-source/ipv6"
+		deletePath := state.getXPath()+"/multicast-source/ipv6"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -8252,56 +7876,56 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MulticastSourceIpv4.IsNull() && state.MulticastSourceIpv4.ValueBool() && data.MulticastSourceIpv4.IsNull() {
-		deletePath := state.getXPath() + "/multicast-source/ipv4"
+		deletePath := state.getXPath()+"/multicast-source/ipv4"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.StormControlUnknownUnicastKbps.IsNull() && data.StormControlUnknownUnicastKbps.IsNull() {
-		deletePath := state.getXPath() + "/storm-control/unknown-unicast/kbps"
+		deletePath := state.getXPath()+"/storm-control/unknown-unicast/kbps"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.StormControlUnknownUnicastPps.IsNull() && data.StormControlUnknownUnicastPps.IsNull() {
-		deletePath := state.getXPath() + "/storm-control/unknown-unicast/pps"
+		deletePath := state.getXPath()+"/storm-control/unknown-unicast/pps"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.StormControlMulticastKbps.IsNull() && data.StormControlMulticastKbps.IsNull() {
-		deletePath := state.getXPath() + "/storm-control/multicast/kbps"
+		deletePath := state.getXPath()+"/storm-control/multicast/kbps"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.StormControlMulticastPps.IsNull() && data.StormControlMulticastPps.IsNull() {
-		deletePath := state.getXPath() + "/storm-control/multicast/pps"
+		deletePath := state.getXPath()+"/storm-control/multicast/pps"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.StormControlBroadcastKbps.IsNull() && data.StormControlBroadcastKbps.IsNull() {
-		deletePath := state.getXPath() + "/storm-control/broadcast/kbps"
+		deletePath := state.getXPath()+"/storm-control/broadcast/kbps"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.StormControlBroadcastPps.IsNull() && data.StormControlBroadcastPps.IsNull() {
-		deletePath := state.getXPath() + "/storm-control/broadcast/pps"
+		deletePath := state.getXPath()+"/storm-control/broadcast/pps"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MldSnoopingProfile.IsNull() && data.MldSnoopingProfile.IsNull() {
-		deletePath := state.getXPath() + "/mld/snooping/profile"
+		deletePath := state.getXPath()+"/mld/snooping/profile"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -8309,14 +7933,14 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.IgmpSnoopingDisable.IsNull() && state.IgmpSnoopingDisable.ValueBool() && data.IgmpSnoopingDisable.IsNull() {
-		deletePath := state.getXPath() + "/igmp/snooping/disable"
+		deletePath := state.getXPath()+"/igmp/snooping/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.IgmpSnoopingProfile.IsNull() && data.IgmpSnoopingProfile.IsNull() {
-		deletePath := state.getXPath() + "/igmp/snooping/profile"
+		deletePath := state.getXPath()+"/igmp/snooping/profile"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -8324,7 +7948,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.IpSourceGuardLogging.IsNull() && state.IpSourceGuardLogging.ValueBool() && data.IpSourceGuardLogging.IsNull() {
-		deletePath := state.getXPath() + "/ip-source-guard/logging"
+		deletePath := state.getXPath()+"/ip-source-guard/logging"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -8332,7 +7956,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.IpSourceGuard.IsNull() && state.IpSourceGuard.ValueBool() && data.IpSourceGuard.IsNull() {
-		deletePath := state.getXPath() + "/ip-source-guard"
+		deletePath := state.getXPath()+"/ip-source-guard"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -8340,7 +7964,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DynamicArpInspectionAddressValidationIpv4.IsNull() && state.DynamicArpInspectionAddressValidationIpv4.ValueBool() && data.DynamicArpInspectionAddressValidationIpv4.IsNull() {
-		deletePath := state.getXPath() + "/dynamic-arp-inspection/address-validation/ipv4"
+		deletePath := state.getXPath()+"/dynamic-arp-inspection/address-validation/ipv4"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -8348,7 +7972,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DynamicArpInspectionAddressValidationDstMac.IsNull() && state.DynamicArpInspectionAddressValidationDstMac.ValueBool() && data.DynamicArpInspectionAddressValidationDstMac.IsNull() {
-		deletePath := state.getXPath() + "/dynamic-arp-inspection/address-validation/dst-mac"
+		deletePath := state.getXPath()+"/dynamic-arp-inspection/address-validation/dst-mac"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -8356,7 +7980,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DynamicArpInspectionAddressValidationSrcMac.IsNull() && state.DynamicArpInspectionAddressValidationSrcMac.ValueBool() && data.DynamicArpInspectionAddressValidationSrcMac.IsNull() {
-		deletePath := state.getXPath() + "/dynamic-arp-inspection/address-validation/src-mac"
+		deletePath := state.getXPath()+"/dynamic-arp-inspection/address-validation/src-mac"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -8364,7 +7988,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DynamicArpInspectionLogging.IsNull() && state.DynamicArpInspectionLogging.ValueBool() && data.DynamicArpInspectionLogging.IsNull() {
-		deletePath := state.getXPath() + "/dynamic-arp-inspection/logging"
+		deletePath := state.getXPath()+"/dynamic-arp-inspection/logging"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -8372,7 +7996,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DynamicArpInspection.IsNull() && state.DynamicArpInspection.ValueBool() && data.DynamicArpInspection.IsNull() {
-		deletePath := state.getXPath() + "/dynamic-arp-inspection"
+		deletePath := state.getXPath()+"/dynamic-arp-inspection"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -8380,7 +8004,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.FloodingDisable.IsNull() && state.FloodingDisable.ValueBool() && data.FloodingDisable.IsNull() {
-		deletePath := state.getXPath() + "/flooding/disable"
+		deletePath := state.getXPath()+"/flooding/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -8388,7 +8012,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TransportModeVlanPassthrough.IsNull() && state.TransportModeVlanPassthrough.ValueBool() && data.TransportModeVlanPassthrough.IsNull() {
-		deletePath := state.getXPath() + "/transport-mode/vlan/passthrough"
+		deletePath := state.getXPath()+"/transport-mode/vlan/passthrough"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -8396,15 +8020,15 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.CoupledMode.IsNull() && state.CoupledMode.ValueBool() && data.CoupledMode.IsNull() {
-		deletePath := state.getXPath() + "/coupled-mode"
+		deletePath := state.getXPath()+"/coupled-mode"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.Vnis {
-		stateKeys := [...]string{"vni-id"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.Vnis[i].VniId.ValueInt64(), 10)}
+		stateKeys := [...]string{ "vni-id",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.Vnis[i].VniId.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -8433,8 +8057,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 		}
 	}
 	for i := range state.Srv6Evis {
-		stateKeys := [...]string{"vpn-id"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.Srv6Evis[i].VpnId.ValueInt64(), 10)}
+		stateKeys := [...]string{ "vpn-id",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.Srv6Evis[i].VpnId.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -8463,8 +8087,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 		}
 	}
 	for i := range state.Evis {
-		stateKeys := [...]string{"vpn-id"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.Evis[i].VpnId.ValueInt64(), 10)}
+		stateKeys := [...]string{ "vpn-id",  }
+		stateKeyValues := [...]string{ strconv.FormatInt(state.Evis[i].VpnId.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -8493,14 +8117,14 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 		}
 	}
 	if !state.Description.IsNull() && data.Description.IsNull() {
-		deletePath := state.getXPath() + "/description"
+		deletePath := state.getXPath()+"/description"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Mtu.IsNull() && data.Mtu.IsNull() {
-		deletePath := state.getXPath() + "/mtu"
+		deletePath := state.getXPath()+"/mtu"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -8518,8 +8142,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context
 func (data *L2VPNBridgeGroupBridgeDomain) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.MemberVnisVni {
-		keys := [...]string{"vni-id"}
-		keyValues := [...]string{strconv.FormatInt(data.MemberVnisVni[i].VniId.ValueInt64(), 10)}
+		keys := [...]string{ "vni-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.MemberVnisVni[i].VniId.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -8537,8 +8161,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletePathsXML(ctx context.Context,
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/efp-visibility")
 	}
 	for i := range data.NeighborsEvpnEvi {
-		keys := [...]string{"vpn-id", "target"}
-		keyValues := [...]string{strconv.FormatInt(data.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborsEvpnEvi[i].Target.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id", "target",  }
+		keyValues := [...]string{ strconv.FormatInt(data.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborsEvpnEvi[i].Target.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -8607,8 +8231,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletePathsXML(ctx context.Context,
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/mac/learning/disable")
 	}
 	for i := range data.MacStaticAddresses {
-		keys := [...]string{"mac-address"}
-		keyValues := [...]string{data.MacStaticAddresses[i].MacAddress.ValueString()}
+		keys := [...]string{ "mac-address",  }
+		keyValues := [...]string{ data.MacStaticAddresses[i].MacAddress.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -8626,8 +8250,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletePathsXML(ctx context.Context,
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/shutdown")
 	}
 	for i := range data.RoutedInterface {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.RoutedInterface[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.RoutedInterface[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -8636,8 +8260,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletePathsXML(ctx context.Context,
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/routed/interface%v", predicates))
 	}
 	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keys := [...]string{ "interface-name",  }
+		keyValues := [...]string{ data.Interfaces[i].InterfaceName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -8712,8 +8336,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletePathsXML(ctx context.Context,
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/coupled-mode")
 	}
 	for i := range data.Vnis {
-		keys := [...]string{"vni-id"}
-		keyValues := [...]string{strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10)}
+		keys := [...]string{ "vni-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -8722,8 +8346,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletePathsXML(ctx context.Context,
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/vnis/vni%v", predicates))
 	}
 	for i := range data.Srv6Evis {
-		keys := [...]string{"vpn-id"}
-		keyValues := [...]string{strconv.FormatInt(data.Srv6Evis[i].VpnId.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.Srv6Evis[i].VpnId.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -8732,8 +8356,8 @@ func (data *L2VPNBridgeGroupBridgeDomain) addDeletePathsXML(ctx context.Context,
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/segment-routing-srv6-evis/evi%v", predicates))
 	}
 	for i := range data.Evis {
-		keys := [...]string{"vpn-id"}
-		keyValues := [...]string{strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10)}
+		keys := [...]string{ "vpn-id",  }
+		keyValues := [...]string{ strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

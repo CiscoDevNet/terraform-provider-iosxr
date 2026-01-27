@@ -24,21 +24,28 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -49,7 +56,7 @@ func NewTelemetryModelDrivenResource() resource.Resource {
 	return &TelemetryModelDrivenResource{}
 }
 
-type TelemetryModelDrivenResource struct {
+type TelemetryModelDrivenResource struct{
 	data *IosxrProviderData
 }
 
@@ -189,10 +196,10 @@ func (r *TelemetryModelDrivenResource) Schema(ctx context.Context, req resource.
 										},
 									},
 									"encoding": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Transport protocol encoding").AddStringEnumDescription("gpb", "json", "self-describing-gpb").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Transport protocol encoding").AddStringEnumDescription("gpb", "json", "self-describing-gpb", ).String,
 										Optional:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("gpb", "json", "self-describing-gpb"),
+											stringvalidator.OneOf("gpb", "json", "self-describing-gpb", ),
 										},
 									},
 									"protocol_grpc": schema.BoolAttribute{
@@ -254,17 +261,17 @@ func (r *TelemetryModelDrivenResource) Schema(ctx context.Context, req resource.
 										},
 									},
 									"address_family": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Specify the desired address family for the returned addresses from DNS. Only applicable to FQDN").AddStringEnumDescription("ipv4", "ipv6").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Specify the desired address family for the returned addresses from DNS. Only applicable to FQDN").AddStringEnumDescription("ipv4", "ipv6", ).String,
 										Optional:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4", "ipv6"),
+											stringvalidator.OneOf("ipv4", "ipv6", ),
 										},
 									},
 									"encoding": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Transport protocol encoding").AddStringEnumDescription("gpb", "json", "self-describing-gpb").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Transport protocol encoding").AddStringEnumDescription("gpb", "json", "self-describing-gpb", ).String,
 										Optional:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("gpb", "json", "self-describing-gpb"),
+											stringvalidator.OneOf("gpb", "json", "self-describing-gpb", ),
 										},
 									},
 									"protocol_grpc": schema.BoolAttribute{
@@ -322,10 +329,10 @@ func (r *TelemetryModelDrivenResource) Schema(ctx context.Context, req resource.
 							},
 						},
 						"source_qos_marking": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Outgoing DSCP value").AddStringEnumDescription("af11", "af12", "af13", "af21", "af22", "af23", "af31", "af32", "af33", "af41", "af42", "af43", "cs1", "cs2", "cs3", "cs4", "cs5", "cs6", "cs7", "default", "ef").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Outgoing DSCP value").AddStringEnumDescription("af11", "af12", "af13", "af21", "af22", "af23", "af31", "af32", "af33", "af41", "af42", "af43", "cs1", "cs2", "cs3", "cs4", "cs5", "cs6", "cs7", "default", "ef", ).String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("af11", "af12", "af13", "af21", "af22", "af23", "af31", "af32", "af33", "af41", "af42", "af43", "cs1", "cs2", "cs3", "cs4", "cs5", "cs6", "cs7", "default", "ef"),
+								stringvalidator.OneOf("af11", "af12", "af13", "af21", "af22", "af23", "af31", "af32", "af33", "af41", "af42", "af43", "cs1", "cs2", "cs3", "cs4", "cs5", "cs6", "cs7", "default", "ef", ),
 							},
 						},
 						"source_interface": schema.StringAttribute{
@@ -349,10 +356,10 @@ func (r *TelemetryModelDrivenResource) Schema(ctx context.Context, req resource.
 										},
 									},
 									"mode": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Subscription mode").AddStringEnumDescription("target-defined").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Subscription mode").AddStringEnumDescription("target-defined", ).String,
 										Optional:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("target-defined"),
+											stringvalidator.OneOf("target-defined", ),
 										},
 									},
 									"heartbeat_always": schema.BoolAttribute{
@@ -480,14 +487,14 @@ func (r *TelemetryModelDrivenResource) Create(ctx context.Context, req resource.
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			var ops []gnmi.SetOperation
+		var ops []gnmi.SetOperation
 
-			// Create object
-			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -708,11 +715,11 @@ func (r *TelemetryModelDrivenResource) Update(ctx context.Context, req resource.
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			// Combine update and delete operations into a single transaction
-			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-				resp.Diagnostics.AddError("Client Error", err.Error())
-				return
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
 			}
 		}
 	}

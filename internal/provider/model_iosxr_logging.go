@@ -24,161 +24,162 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type Logging struct {
-	Device                         types.String              `tfsdk:"device"`
-	Id                             types.String              `tfsdk:"id"`
-	DeleteMode                     types.String              `tfsdk:"delete_mode"`
-	Console                        types.String              `tfsdk:"console"`
-	Trap                           types.String              `tfsdk:"trap"`
-	Monitor                        types.String              `tfsdk:"monitor"`
-	ConsoleFacility                types.String              `tfsdk:"console_facility"`
-	MonitorDiscriminatorMatch1     types.String              `tfsdk:"monitor_discriminator_match1"`
-	MonitorDiscriminatorMatch2     types.String              `tfsdk:"monitor_discriminator_match2"`
-	MonitorDiscriminatorMatch3     types.String              `tfsdk:"monitor_discriminator_match3"`
-	MonitorDiscriminatorNomatch1   types.String              `tfsdk:"monitor_discriminator_nomatch1"`
-	MonitorDiscriminatorNomatch2   types.String              `tfsdk:"monitor_discriminator_nomatch2"`
-	MonitorDiscriminatorNomatch3   types.String              `tfsdk:"monitor_discriminator_nomatch3"`
-	ArchiveDisk0                   types.Bool                `tfsdk:"archive_disk0"`
-	ArchiveDisk1                   types.Bool                `tfsdk:"archive_disk1"`
-	ArchiveHarddisk                types.Bool                `tfsdk:"archive_harddisk"`
-	ArchiveFrequencyDaily          types.Bool                `tfsdk:"archive_frequency_daily"`
-	ArchiveFrequencyWeekly         types.Bool                `tfsdk:"archive_frequency_weekly"`
-	ArchiveFilesize                types.Int64               `tfsdk:"archive_filesize"`
-	ArchiveSize                    types.Int64               `tfsdk:"archive_size"`
-	ArchiveLength                  types.Int64               `tfsdk:"archive_length"`
-	ArchiveSeverity                types.String              `tfsdk:"archive_severity"`
-	ArchiveThreshold               types.Int64               `tfsdk:"archive_threshold"`
-	Ipv4Dscp                       types.String              `tfsdk:"ipv4_dscp"`
-	Ipv4Precedence                 types.String              `tfsdk:"ipv4_precedence"`
-	Ipv6Dscp                       types.String              `tfsdk:"ipv6_dscp"`
-	Ipv6Precedence                 types.String              `tfsdk:"ipv6_precedence"`
-	FacilityLevel                  types.String              `tfsdk:"facility_level"`
-	BufferedEntriesCount           types.Int64               `tfsdk:"buffered_entries_count"`
-	BufferedSize                   types.Int64               `tfsdk:"buffered_size"`
-	BufferedLevel                  types.String              `tfsdk:"buffered_level"`
-	BufferedDiscriminatorMatch1    types.String              `tfsdk:"buffered_discriminator_match1"`
-	BufferedDiscriminatorMatch2    types.String              `tfsdk:"buffered_discriminator_match2"`
-	BufferedDiscriminatorMatch3    types.String              `tfsdk:"buffered_discriminator_match3"`
-	BufferedDiscriminatorNomatch1  types.String              `tfsdk:"buffered_discriminator_nomatch1"`
-	BufferedDiscriminatorNomatch2  types.String              `tfsdk:"buffered_discriminator_nomatch2"`
-	BufferedDiscriminatorNomatch3  types.String              `tfsdk:"buffered_discriminator_nomatch3"`
-	ContainerAll                   types.Bool                `tfsdk:"container_all"`
-	ContainerFetchTimestamp        types.Bool                `tfsdk:"container_fetch_timestamp"`
-	File                           []LoggingFile             `tfsdk:"file"`
-	History                        types.String              `tfsdk:"history"`
-	HistorySize                    types.Int64               `tfsdk:"history_size"`
-	Hostnameprefix                 types.String              `tfsdk:"hostnameprefix"`
-	Localfilesize                  types.Int64               `tfsdk:"localfilesize"`
-	SourceInterfaces               []LoggingSourceInterfaces `tfsdk:"source_interfaces"`
-	SuppressDuplicates             types.Bool                `tfsdk:"suppress_duplicates"`
-	FormatRfc5424                  types.Bool                `tfsdk:"format_rfc5424"`
-	FormatBsd                      types.Bool                `tfsdk:"format_bsd"`
-	Yang                           types.String              `tfsdk:"yang"`
-	SuppressRules                  []LoggingSuppressRules    `tfsdk:"suppress_rules"`
-	EventsBufferSize               types.Int64               `tfsdk:"events_buffer_size"`
-	FilterMatches                  []LoggingFilterMatches    `tfsdk:"filter_matches"`
-	EventsDisplayLocation          types.Bool                `tfsdk:"events_display_location"`
-	EventsLevel                    types.String              `tfsdk:"events_level"`
-	EventsThreshold                types.Int64               `tfsdk:"events_threshold"`
-	EventsPrecfgSuppression        types.String              `tfsdk:"events_precfg_suppression"`
-	EventsPrecfgSuppressionTimeout types.Int64               `tfsdk:"events_precfg_suppression_timeout"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	Console types.String `tfsdk:"console"`
+	Trap types.String `tfsdk:"trap"`
+	Monitor types.String `tfsdk:"monitor"`
+	ConsoleFacility types.String `tfsdk:"console_facility"`
+	MonitorDiscriminatorMatch1 types.String `tfsdk:"monitor_discriminator_match1"`
+	MonitorDiscriminatorMatch2 types.String `tfsdk:"monitor_discriminator_match2"`
+	MonitorDiscriminatorMatch3 types.String `tfsdk:"monitor_discriminator_match3"`
+	MonitorDiscriminatorNomatch1 types.String `tfsdk:"monitor_discriminator_nomatch1"`
+	MonitorDiscriminatorNomatch2 types.String `tfsdk:"monitor_discriminator_nomatch2"`
+	MonitorDiscriminatorNomatch3 types.String `tfsdk:"monitor_discriminator_nomatch3"`
+	ArchiveDisk0 types.Bool `tfsdk:"archive_disk0"`
+	ArchiveDisk1 types.Bool `tfsdk:"archive_disk1"`
+	ArchiveHarddisk types.Bool `tfsdk:"archive_harddisk"`
+	ArchiveFrequencyDaily types.Bool `tfsdk:"archive_frequency_daily"`
+	ArchiveFrequencyWeekly types.Bool `tfsdk:"archive_frequency_weekly"`
+	ArchiveFilesize types.Int64 `tfsdk:"archive_filesize"`
+	ArchiveSize types.Int64 `tfsdk:"archive_size"`
+	ArchiveLength types.Int64 `tfsdk:"archive_length"`
+	ArchiveSeverity types.String `tfsdk:"archive_severity"`
+	ArchiveThreshold types.Int64 `tfsdk:"archive_threshold"`
+	Ipv4Dscp types.String `tfsdk:"ipv4_dscp"`
+	Ipv4Precedence types.String `tfsdk:"ipv4_precedence"`
+	Ipv6Dscp types.String `tfsdk:"ipv6_dscp"`
+	Ipv6Precedence types.String `tfsdk:"ipv6_precedence"`
+	FacilityLevel types.String `tfsdk:"facility_level"`
+	BufferedEntriesCount types.Int64 `tfsdk:"buffered_entries_count"`
+	BufferedSize types.Int64 `tfsdk:"buffered_size"`
+	BufferedLevel types.String `tfsdk:"buffered_level"`
+	BufferedDiscriminatorMatch1 types.String `tfsdk:"buffered_discriminator_match1"`
+	BufferedDiscriminatorMatch2 types.String `tfsdk:"buffered_discriminator_match2"`
+	BufferedDiscriminatorMatch3 types.String `tfsdk:"buffered_discriminator_match3"`
+	BufferedDiscriminatorNomatch1 types.String `tfsdk:"buffered_discriminator_nomatch1"`
+	BufferedDiscriminatorNomatch2 types.String `tfsdk:"buffered_discriminator_nomatch2"`
+	BufferedDiscriminatorNomatch3 types.String `tfsdk:"buffered_discriminator_nomatch3"`
+	ContainerAll types.Bool `tfsdk:"container_all"`
+	ContainerFetchTimestamp types.Bool `tfsdk:"container_fetch_timestamp"`
+	File []LoggingFile `tfsdk:"file"`
+	History types.String `tfsdk:"history"`
+	HistorySize types.Int64 `tfsdk:"history_size"`
+	Hostnameprefix types.String `tfsdk:"hostnameprefix"`
+	Localfilesize types.Int64 `tfsdk:"localfilesize"`
+	SourceInterfaces []LoggingSourceInterfaces `tfsdk:"source_interfaces"`
+	SuppressDuplicates types.Bool `tfsdk:"suppress_duplicates"`
+	FormatRfc5424 types.Bool `tfsdk:"format_rfc5424"`
+	FormatBsd types.Bool `tfsdk:"format_bsd"`
+	Yang types.String `tfsdk:"yang"`
+	SuppressRules []LoggingSuppressRules `tfsdk:"suppress_rules"`
+	EventsBufferSize types.Int64 `tfsdk:"events_buffer_size"`
+	FilterMatches []LoggingFilterMatches `tfsdk:"filter_matches"`
+	EventsDisplayLocation types.Bool `tfsdk:"events_display_location"`
+	EventsLevel types.String `tfsdk:"events_level"`
+	EventsThreshold types.Int64 `tfsdk:"events_threshold"`
+	EventsPrecfgSuppression types.String `tfsdk:"events_precfg_suppression"`
+	EventsPrecfgSuppressionTimeout types.Int64 `tfsdk:"events_precfg_suppression_timeout"`
 }
 
 type LoggingData struct {
-	Device                         types.String              `tfsdk:"device"`
-	Id                             types.String              `tfsdk:"id"`
-	Console                        types.String              `tfsdk:"console"`
-	Trap                           types.String              `tfsdk:"trap"`
-	Monitor                        types.String              `tfsdk:"monitor"`
-	ConsoleFacility                types.String              `tfsdk:"console_facility"`
-	MonitorDiscriminatorMatch1     types.String              `tfsdk:"monitor_discriminator_match1"`
-	MonitorDiscriminatorMatch2     types.String              `tfsdk:"monitor_discriminator_match2"`
-	MonitorDiscriminatorMatch3     types.String              `tfsdk:"monitor_discriminator_match3"`
-	MonitorDiscriminatorNomatch1   types.String              `tfsdk:"monitor_discriminator_nomatch1"`
-	MonitorDiscriminatorNomatch2   types.String              `tfsdk:"monitor_discriminator_nomatch2"`
-	MonitorDiscriminatorNomatch3   types.String              `tfsdk:"monitor_discriminator_nomatch3"`
-	ArchiveDisk0                   types.Bool                `tfsdk:"archive_disk0"`
-	ArchiveDisk1                   types.Bool                `tfsdk:"archive_disk1"`
-	ArchiveHarddisk                types.Bool                `tfsdk:"archive_harddisk"`
-	ArchiveFrequencyDaily          types.Bool                `tfsdk:"archive_frequency_daily"`
-	ArchiveFrequencyWeekly         types.Bool                `tfsdk:"archive_frequency_weekly"`
-	ArchiveFilesize                types.Int64               `tfsdk:"archive_filesize"`
-	ArchiveSize                    types.Int64               `tfsdk:"archive_size"`
-	ArchiveLength                  types.Int64               `tfsdk:"archive_length"`
-	ArchiveSeverity                types.String              `tfsdk:"archive_severity"`
-	ArchiveThreshold               types.Int64               `tfsdk:"archive_threshold"`
-	Ipv4Dscp                       types.String              `tfsdk:"ipv4_dscp"`
-	Ipv4Precedence                 types.String              `tfsdk:"ipv4_precedence"`
-	Ipv6Dscp                       types.String              `tfsdk:"ipv6_dscp"`
-	Ipv6Precedence                 types.String              `tfsdk:"ipv6_precedence"`
-	FacilityLevel                  types.String              `tfsdk:"facility_level"`
-	BufferedEntriesCount           types.Int64               `tfsdk:"buffered_entries_count"`
-	BufferedSize                   types.Int64               `tfsdk:"buffered_size"`
-	BufferedLevel                  types.String              `tfsdk:"buffered_level"`
-	BufferedDiscriminatorMatch1    types.String              `tfsdk:"buffered_discriminator_match1"`
-	BufferedDiscriminatorMatch2    types.String              `tfsdk:"buffered_discriminator_match2"`
-	BufferedDiscriminatorMatch3    types.String              `tfsdk:"buffered_discriminator_match3"`
-	BufferedDiscriminatorNomatch1  types.String              `tfsdk:"buffered_discriminator_nomatch1"`
-	BufferedDiscriminatorNomatch2  types.String              `tfsdk:"buffered_discriminator_nomatch2"`
-	BufferedDiscriminatorNomatch3  types.String              `tfsdk:"buffered_discriminator_nomatch3"`
-	ContainerAll                   types.Bool                `tfsdk:"container_all"`
-	ContainerFetchTimestamp        types.Bool                `tfsdk:"container_fetch_timestamp"`
-	File                           []LoggingFile             `tfsdk:"file"`
-	History                        types.String              `tfsdk:"history"`
-	HistorySize                    types.Int64               `tfsdk:"history_size"`
-	Hostnameprefix                 types.String              `tfsdk:"hostnameprefix"`
-	Localfilesize                  types.Int64               `tfsdk:"localfilesize"`
-	SourceInterfaces               []LoggingSourceInterfaces `tfsdk:"source_interfaces"`
-	SuppressDuplicates             types.Bool                `tfsdk:"suppress_duplicates"`
-	FormatRfc5424                  types.Bool                `tfsdk:"format_rfc5424"`
-	FormatBsd                      types.Bool                `tfsdk:"format_bsd"`
-	Yang                           types.String              `tfsdk:"yang"`
-	SuppressRules                  []LoggingSuppressRules    `tfsdk:"suppress_rules"`
-	EventsBufferSize               types.Int64               `tfsdk:"events_buffer_size"`
-	FilterMatches                  []LoggingFilterMatches    `tfsdk:"filter_matches"`
-	EventsDisplayLocation          types.Bool                `tfsdk:"events_display_location"`
-	EventsLevel                    types.String              `tfsdk:"events_level"`
-	EventsThreshold                types.Int64               `tfsdk:"events_threshold"`
-	EventsPrecfgSuppression        types.String              `tfsdk:"events_precfg_suppression"`
-	EventsPrecfgSuppressionTimeout types.Int64               `tfsdk:"events_precfg_suppression_timeout"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	Console types.String `tfsdk:"console"`
+	Trap types.String `tfsdk:"trap"`
+	Monitor types.String `tfsdk:"monitor"`
+	ConsoleFacility types.String `tfsdk:"console_facility"`
+	MonitorDiscriminatorMatch1 types.String `tfsdk:"monitor_discriminator_match1"`
+	MonitorDiscriminatorMatch2 types.String `tfsdk:"monitor_discriminator_match2"`
+	MonitorDiscriminatorMatch3 types.String `tfsdk:"monitor_discriminator_match3"`
+	MonitorDiscriminatorNomatch1 types.String `tfsdk:"monitor_discriminator_nomatch1"`
+	MonitorDiscriminatorNomatch2 types.String `tfsdk:"monitor_discriminator_nomatch2"`
+	MonitorDiscriminatorNomatch3 types.String `tfsdk:"monitor_discriminator_nomatch3"`
+	ArchiveDisk0 types.Bool `tfsdk:"archive_disk0"`
+	ArchiveDisk1 types.Bool `tfsdk:"archive_disk1"`
+	ArchiveHarddisk types.Bool `tfsdk:"archive_harddisk"`
+	ArchiveFrequencyDaily types.Bool `tfsdk:"archive_frequency_daily"`
+	ArchiveFrequencyWeekly types.Bool `tfsdk:"archive_frequency_weekly"`
+	ArchiveFilesize types.Int64 `tfsdk:"archive_filesize"`
+	ArchiveSize types.Int64 `tfsdk:"archive_size"`
+	ArchiveLength types.Int64 `tfsdk:"archive_length"`
+	ArchiveSeverity types.String `tfsdk:"archive_severity"`
+	ArchiveThreshold types.Int64 `tfsdk:"archive_threshold"`
+	Ipv4Dscp types.String `tfsdk:"ipv4_dscp"`
+	Ipv4Precedence types.String `tfsdk:"ipv4_precedence"`
+	Ipv6Dscp types.String `tfsdk:"ipv6_dscp"`
+	Ipv6Precedence types.String `tfsdk:"ipv6_precedence"`
+	FacilityLevel types.String `tfsdk:"facility_level"`
+	BufferedEntriesCount types.Int64 `tfsdk:"buffered_entries_count"`
+	BufferedSize types.Int64 `tfsdk:"buffered_size"`
+	BufferedLevel types.String `tfsdk:"buffered_level"`
+	BufferedDiscriminatorMatch1 types.String `tfsdk:"buffered_discriminator_match1"`
+	BufferedDiscriminatorMatch2 types.String `tfsdk:"buffered_discriminator_match2"`
+	BufferedDiscriminatorMatch3 types.String `tfsdk:"buffered_discriminator_match3"`
+	BufferedDiscriminatorNomatch1 types.String `tfsdk:"buffered_discriminator_nomatch1"`
+	BufferedDiscriminatorNomatch2 types.String `tfsdk:"buffered_discriminator_nomatch2"`
+	BufferedDiscriminatorNomatch3 types.String `tfsdk:"buffered_discriminator_nomatch3"`
+	ContainerAll types.Bool `tfsdk:"container_all"`
+	ContainerFetchTimestamp types.Bool `tfsdk:"container_fetch_timestamp"`
+	File []LoggingFile `tfsdk:"file"`
+	History types.String `tfsdk:"history"`
+	HistorySize types.Int64 `tfsdk:"history_size"`
+	Hostnameprefix types.String `tfsdk:"hostnameprefix"`
+	Localfilesize types.Int64 `tfsdk:"localfilesize"`
+	SourceInterfaces []LoggingSourceInterfaces `tfsdk:"source_interfaces"`
+	SuppressDuplicates types.Bool `tfsdk:"suppress_duplicates"`
+	FormatRfc5424 types.Bool `tfsdk:"format_rfc5424"`
+	FormatBsd types.Bool `tfsdk:"format_bsd"`
+	Yang types.String `tfsdk:"yang"`
+	SuppressRules []LoggingSuppressRules `tfsdk:"suppress_rules"`
+	EventsBufferSize types.Int64 `tfsdk:"events_buffer_size"`
+	FilterMatches []LoggingFilterMatches `tfsdk:"filter_matches"`
+	EventsDisplayLocation types.Bool `tfsdk:"events_display_location"`
+	EventsLevel types.String `tfsdk:"events_level"`
+	EventsThreshold types.Int64 `tfsdk:"events_threshold"`
+	EventsPrecfgSuppression types.String `tfsdk:"events_precfg_suppression"`
+	EventsPrecfgSuppressionTimeout types.Int64 `tfsdk:"events_precfg_suppression_timeout"`
 }
 type LoggingFile struct {
-	FileName                                 types.String `tfsdk:"file_name"`
-	Path                                     types.String `tfsdk:"path"`
-	Maxfilesize                              types.Int64  `tfsdk:"maxfilesize"`
-	Severity                                 types.String `tfsdk:"severity"`
+	FileName types.String `tfsdk:"file_name"`
+	Path types.String `tfsdk:"path"`
+	Maxfilesize types.Int64 `tfsdk:"maxfilesize"`
+	Severity types.String `tfsdk:"severity"`
 	LocalAccountingSendToRemoteFacilityLevel types.String `tfsdk:"local_accounting_send_to_remote_facility_level"`
-	DiscriminatorMatch1                      types.String `tfsdk:"discriminator_match1"`
-	DiscriminatorMatch2                      types.String `tfsdk:"discriminator_match2"`
-	DiscriminatorMatch3                      types.String `tfsdk:"discriminator_match3"`
-	DiscriminatorNomatch1                    types.String `tfsdk:"discriminator_nomatch1"`
-	DiscriminatorNomatch2                    types.String `tfsdk:"discriminator_nomatch2"`
-	DiscriminatorNomatch3                    types.String `tfsdk:"discriminator_nomatch3"`
+	DiscriminatorMatch1 types.String `tfsdk:"discriminator_match1"`
+	DiscriminatorMatch2 types.String `tfsdk:"discriminator_match2"`
+	DiscriminatorMatch3 types.String `tfsdk:"discriminator_match3"`
+	DiscriminatorNomatch1 types.String `tfsdk:"discriminator_nomatch1"`
+	DiscriminatorNomatch2 types.String `tfsdk:"discriminator_nomatch2"`
+	DiscriminatorNomatch3 types.String `tfsdk:"discriminator_nomatch3"`
 }
 type LoggingSourceInterfaces struct {
-	Name types.String                  `tfsdk:"name"`
+	Name types.String `tfsdk:"name"`
 	Vrfs []LoggingSourceInterfacesVrfs `tfsdk:"vrfs"`
 }
 type LoggingSuppressRules struct {
-	RuleName             types.String                               `tfsdk:"rule_name"`
-	Alarms               []LoggingSuppressRulesAlarms               `tfsdk:"alarms"`
-	AllAlarms            types.Bool                                 `tfsdk:"all_alarms"`
-	ApplyAllOfRouter     types.Bool                                 `tfsdk:"apply_all_of_router"`
+	RuleName types.String `tfsdk:"rule_name"`
+	Alarms []LoggingSuppressRulesAlarms `tfsdk:"alarms"`
+	AllAlarms types.Bool `tfsdk:"all_alarms"`
+	ApplyAllOfRouter types.Bool `tfsdk:"apply_all_of_router"`
 	ApplySourceLocations []LoggingSuppressRulesApplySourceLocations `tfsdk:"apply_source_locations"`
 }
 type LoggingFilterMatches struct {
@@ -189,8 +190,8 @@ type LoggingSourceInterfacesVrfs struct {
 }
 type LoggingSuppressRulesAlarms struct {
 	MessageCategory types.String `tfsdk:"message_category"`
-	GroupName       types.String `tfsdk:"group_name"`
-	MessageCode     types.String `tfsdk:"message_code"`
+	GroupName types.String `tfsdk:"group_name"`
+	MessageCode types.String `tfsdk:"message_code"`
 }
 type LoggingSuppressRulesApplySourceLocations struct {
 	LocationName types.String `tfsdk:"location_name"`
@@ -557,55 +558,50 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.MonitorDiscriminatorNomatch3 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "archive.device.disk0"); value.Exists() {
-		if !data.ArchiveDisk0.IsNull() {
+	if value := gjson.GetBytes(res, "archive.device.disk0"); !data.ArchiveDisk0.IsNull() {
+		if value.Exists() {
 			data.ArchiveDisk0 = types.BoolValue(true)
+		} else {
+			data.ArchiveDisk0 = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.ArchiveDisk0.IsNull() {
-			data.ArchiveDisk0 = types.BoolNull()
-		}
+		data.ArchiveDisk0 = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "archive.device.disk1"); value.Exists() {
-		if !data.ArchiveDisk1.IsNull() {
+	if value := gjson.GetBytes(res, "archive.device.disk1"); !data.ArchiveDisk1.IsNull() {
+		if value.Exists() {
 			data.ArchiveDisk1 = types.BoolValue(true)
+		} else {
+			data.ArchiveDisk1 = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.ArchiveDisk1.IsNull() {
-			data.ArchiveDisk1 = types.BoolNull()
-		}
+		data.ArchiveDisk1 = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "archive.device.harddisk"); value.Exists() {
-		if !data.ArchiveHarddisk.IsNull() {
+	if value := gjson.GetBytes(res, "archive.device.harddisk"); !data.ArchiveHarddisk.IsNull() {
+		if value.Exists() {
 			data.ArchiveHarddisk = types.BoolValue(true)
+		} else {
+			data.ArchiveHarddisk = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.ArchiveHarddisk.IsNull() {
-			data.ArchiveHarddisk = types.BoolNull()
-		}
+		data.ArchiveHarddisk = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "archive.frequency.daily"); value.Exists() {
-		if !data.ArchiveFrequencyDaily.IsNull() {
+	if value := gjson.GetBytes(res, "archive.frequency.daily"); !data.ArchiveFrequencyDaily.IsNull() {
+		if value.Exists() {
 			data.ArchiveFrequencyDaily = types.BoolValue(true)
+		} else {
+			data.ArchiveFrequencyDaily = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.ArchiveFrequencyDaily.IsNull() {
-			data.ArchiveFrequencyDaily = types.BoolNull()
-		}
+		data.ArchiveFrequencyDaily = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "archive.frequency.weekly"); value.Exists() {
-		if !data.ArchiveFrequencyWeekly.IsNull() {
+	if value := gjson.GetBytes(res, "archive.frequency.weekly"); !data.ArchiveFrequencyWeekly.IsNull() {
+		if value.Exists() {
 			data.ArchiveFrequencyWeekly = types.BoolValue(true)
+		} else {
+			data.ArchiveFrequencyWeekly = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.ArchiveFrequencyWeekly.IsNull() {
-			data.ArchiveFrequencyWeekly = types.BoolNull()
-		}
+		data.ArchiveFrequencyWeekly = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "archive.file-size"); value.Exists() && !data.ArchiveFilesize.IsNull() {
 		data.ArchiveFilesize = types.Int64Value(value.Int())
@@ -702,29 +698,27 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BufferedDiscriminatorNomatch3 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "container.all"); value.Exists() {
-		if !data.ContainerAll.IsNull() {
+	if value := gjson.GetBytes(res, "container.all"); !data.ContainerAll.IsNull() {
+		if value.Exists() {
 			data.ContainerAll = types.BoolValue(true)
+		} else {
+			data.ContainerAll = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.ContainerAll.IsNull() {
-			data.ContainerAll = types.BoolNull()
-		}
+		data.ContainerAll = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "container.fetch-timestamp"); value.Exists() {
-		if !data.ContainerFetchTimestamp.IsNull() {
+	if value := gjson.GetBytes(res, "container.fetch-timestamp"); !data.ContainerFetchTimestamp.IsNull() {
+		if value.Exists() {
 			data.ContainerFetchTimestamp = types.BoolValue(true)
+		} else {
+			data.ContainerFetchTimestamp = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.ContainerFetchTimestamp.IsNull() {
-			data.ContainerFetchTimestamp = types.BoolNull()
-		}
+		data.ContainerFetchTimestamp = types.BoolNull()
 	}
 	for i := range data.File {
-		keys := [...]string{"file-name"}
-		keyValues := [...]string{data.File[i].FileName.ValueString()}
+		keys := [...]string{ "file-name",  }
+		keyValues := [...]string{ data.File[i].FileName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "files.file").ForEach(
@@ -822,8 +816,8 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 		data.Localfilesize = types.Int64Null()
 	}
 	for i := range data.SourceInterfaces {
-		keys := [...]string{"source-interface-name"}
-		keyValues := [...]string{data.SourceInterfaces[i].Name.ValueString()}
+		keys := [...]string{ "source-interface-name",  }
+		keyValues := [...]string{ data.SourceInterfaces[i].Name.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "source-interfaces.source-interface").ForEach(
@@ -849,64 +843,62 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.SourceInterfaces[i].Name = types.StringNull()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("vrfs.vrf"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.SourceInterfaces[i].Vrfs
-			data.SourceInterfaces[i].Vrfs = make([]LoggingSourceInterfacesVrfs, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := LoggingSourceInterfacesVrfs{}
-				if cValue := cr.Get("vrf-name"); cValue.Exists() {
-					citem.Name = types.StringValue(cValue.String())
-				}
+		for ci := range data.SourceInterfaces[i].Vrfs {
+			keys := [...]string{ "vrf-name",  }
+			keyValues := [...]string{ data.SourceInterfaces[i].Vrfs[ci].Name.ValueString(),  }
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.Name.ValueString() != citem.Name.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("vrfs.vrf").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.SourceInterfaces[i].Vrfs = append(data.SourceInterfaces[i].Vrfs, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("vrf-name"); value.Exists() && !data.SourceInterfaces[i].Vrfs[ci].Name.IsNull() {
+				data.SourceInterfaces[i].Vrfs[ci].Name = types.StringValue(value.String())
+			} else {
+				data.SourceInterfaces[i].Vrfs[ci].Name = types.StringNull()
+			}
 		}
 	}
-	if value := gjson.GetBytes(res, "suppress.duplicates"); value.Exists() {
-		if !data.SuppressDuplicates.IsNull() {
+	if value := gjson.GetBytes(res, "suppress.duplicates"); !data.SuppressDuplicates.IsNull() {
+		if value.Exists() {
 			data.SuppressDuplicates = types.BoolValue(true)
+		} else {
+			data.SuppressDuplicates = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.SuppressDuplicates.IsNull() {
-			data.SuppressDuplicates = types.BoolNull()
-		}
+		data.SuppressDuplicates = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "format.rfc5424"); value.Exists() {
-		if !data.FormatRfc5424.IsNull() {
+	if value := gjson.GetBytes(res, "format.rfc5424"); !data.FormatRfc5424.IsNull() {
+		if value.Exists() {
 			data.FormatRfc5424 = types.BoolValue(true)
+		} else {
+			data.FormatRfc5424 = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.FormatRfc5424.IsNull() {
-			data.FormatRfc5424 = types.BoolNull()
-		}
+		data.FormatRfc5424 = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "format.bsd"); value.Exists() {
-		if !data.FormatBsd.IsNull() {
+	if value := gjson.GetBytes(res, "format.bsd"); !data.FormatBsd.IsNull() {
+		if value.Exists() {
 			data.FormatBsd = types.BoolValue(true)
+		} else {
+			data.FormatBsd = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.FormatBsd.IsNull() {
-			data.FormatBsd = types.BoolNull()
-		}
+		data.FormatBsd = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "yang"); value.Exists() && !data.Yang.IsNull() {
 		data.Yang = types.StringValue(value.String())
@@ -914,8 +906,8 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 		data.Yang = types.StringNull()
 	}
 	for i := range data.SuppressRules {
-		keys := [...]string{"rule-name"}
-		keyValues := [...]string{data.SuppressRules[i].RuleName.ValueString()}
+		keys := [...]string{ "rule-name",  }
+		keyValues := [...]string{ data.SuppressRules[i].RuleName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule").ForEach(
@@ -941,109 +933,91 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.SuppressRules[i].RuleName = types.StringNull()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get(""); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.SuppressRules[i].Alarms
-			data.SuppressRules[i].Alarms = make([]LoggingSuppressRulesAlarms, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := LoggingSuppressRulesAlarms{}
-				if cValue := cr.Get(""); cValue.Exists() {
-					citem.MessageCategory = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get(""); cValue.Exists() {
-					citem.GroupName = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get(""); cValue.Exists() {
-					citem.MessageCode = types.StringValue(cValue.String())
-				}
+		for ci := range data.SuppressRules[i].Alarms {
+			keys := [...]string{ "message-category", "group-name", "message-code",  }
+			keyValues := [...]string{ data.SuppressRules[i].Alarms[ci].MessageCategory.ValueString(), data.SuppressRules[i].Alarms[ci].GroupName.ValueString(), data.SuppressRules[i].Alarms[ci].MessageCode.ValueString(),  }
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.MessageCategory.ValueString() != citem.MessageCategory.ValueString() {
-						match = false
-					}
-					if existingItem.GroupName.ValueString() != citem.GroupName.ValueString() {
-						match = false
-					}
-					if existingItem.MessageCode.ValueString() != citem.MessageCode.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.SuppressRules[i].Alarms = append(data.SuppressRules[i].Alarms, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get(""); value.Exists() && !data.SuppressRules[i].Alarms[ci].MessageCategory.IsNull() {
+				data.SuppressRules[i].Alarms[ci].MessageCategory = types.StringValue(value.String())
+			} else {
+				data.SuppressRules[i].Alarms[ci].MessageCategory = types.StringNull()
+			}
+			if value := cr.Get(""); value.Exists() && !data.SuppressRules[i].Alarms[ci].GroupName.IsNull() {
+				data.SuppressRules[i].Alarms[ci].GroupName = types.StringValue(value.String())
+			} else {
+				data.SuppressRules[i].Alarms[ci].GroupName = types.StringNull()
+			}
+			if value := cr.Get(""); value.Exists() && !data.SuppressRules[i].Alarms[ci].MessageCode.IsNull() {
+				data.SuppressRules[i].Alarms[ci].MessageCode = types.StringValue(value.String())
+			} else {
+				data.SuppressRules[i].Alarms[ci].MessageCode = types.StringNull()
+			}
 		}
-		if value := r.Get(""); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.SuppressRules[i].AllAlarms.IsNull() && !data.SuppressRules[i].AllAlarms.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.SuppressRules[i].AllAlarms = types.BoolValue(false)
-			} else if !data.SuppressRules[i].AllAlarms.IsNull() {
+		if value := r.Get(""); !data.SuppressRules[i].AllAlarms.IsNull() {
+			if value.Exists() {
 				data.SuppressRules[i].AllAlarms = types.BoolValue(true)
-			}
-		} else {
-			// Element doesn't exist on device
-			if data.SuppressRules[i].AllAlarms.IsNull() {
-				data.SuppressRules[i].AllAlarms = types.BoolNull()
 			} else {
-				// Preserve false value from state when element doesn't exist
 				data.SuppressRules[i].AllAlarms = types.BoolValue(false)
 			}
+		} else {
+			data.SuppressRules[i].AllAlarms = types.BoolNull()
 		}
-		if value := r.Get(""); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.SuppressRules[i].ApplyAllOfRouter.IsNull() && !data.SuppressRules[i].ApplyAllOfRouter.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.SuppressRules[i].ApplyAllOfRouter = types.BoolValue(false)
-			} else if !data.SuppressRules[i].ApplyAllOfRouter.IsNull() {
+		if value := r.Get(""); !data.SuppressRules[i].ApplyAllOfRouter.IsNull() {
+			if value.Exists() {
 				data.SuppressRules[i].ApplyAllOfRouter = types.BoolValue(true)
+			} else {
+				data.SuppressRules[i].ApplyAllOfRouter = types.BoolValue(false)
 			}
 		} else {
-			// Element doesn't exist on device
-			if data.SuppressRules[i].ApplyAllOfRouter.IsNull() {
-				data.SuppressRules[i].ApplyAllOfRouter = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.SuppressRules[i].ApplyAllOfRouter = types.BoolValue(false)
-			}
+			data.SuppressRules[i].ApplyAllOfRouter = types.BoolNull()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get(""); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.SuppressRules[i].ApplySourceLocations
-			data.SuppressRules[i].ApplySourceLocations = make([]LoggingSuppressRulesApplySourceLocations, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := LoggingSuppressRulesApplySourceLocations{}
-				if cValue := cr.Get(""); cValue.Exists() {
-					citem.LocationName = types.StringValue(cValue.String())
-				}
+		for ci := range data.SuppressRules[i].ApplySourceLocations {
+			keys := [...]string{ "location-name",  }
+			keyValues := [...]string{ data.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString(),  }
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.LocationName.ValueString() != citem.LocationName.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.SuppressRules[i].ApplySourceLocations = append(data.SuppressRules[i].ApplySourceLocations, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get(""); value.Exists() && !data.SuppressRules[i].ApplySourceLocations[ci].LocationName.IsNull() {
+				data.SuppressRules[i].ApplySourceLocations[ci].LocationName = types.StringValue(value.String())
+			} else {
+				data.SuppressRules[i].ApplySourceLocations[ci].LocationName = types.StringNull()
+			}
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.buffer-size"); value.Exists() && !data.EventsBufferSize.IsNull() {
@@ -1052,8 +1026,8 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 		data.EventsBufferSize = types.Int64Null()
 	}
 	for i := range data.FilterMatches {
-		keys := [...]string{"match-string"}
-		keyValues := [...]string{data.FilterMatches[i].Match.ValueString()}
+		keys := [...]string{ "match-string",  }
+		keyValues := [...]string{ data.FilterMatches[i].Match.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.filter.match").ForEach(
@@ -1080,15 +1054,14 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 			data.FilterMatches[i].Match = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
-		if !data.EventsDisplayLocation.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); !data.EventsDisplayLocation.IsNull() {
+		if value.Exists() {
 			data.EventsDisplayLocation = types.BoolValue(true)
+		} else {
+			data.EventsDisplayLocation = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.EventsDisplayLocation.IsNull() {
-			data.EventsDisplayLocation = types.BoolNull()
-		}
+		data.EventsDisplayLocation = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() && !data.EventsLevel.IsNull() {
 		data.EventsLevel = types.StringValue(value.String())
@@ -1118,125 +1091,125 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 func (data Logging) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.Console.IsNull() && !data.Console.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/console", data.Console.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/console", data.Console.ValueString())
 	}
 	if !data.Trap.IsNull() && !data.Trap.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/trap", data.Trap.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/trap", data.Trap.ValueString())
 	}
 	if !data.Monitor.IsNull() && !data.Monitor.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor", data.Monitor.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/monitor", data.Monitor.ValueString())
 	}
 	if !data.ConsoleFacility.IsNull() && !data.ConsoleFacility.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/console-logging/console-log-facility/console-facility-level", data.ConsoleFacility.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/console-logging/console-log-facility/console-facility-level", data.ConsoleFacility.ValueString())
 	}
 	if !data.MonitorDiscriminatorMatch1.IsNull() && !data.MonitorDiscriminatorMatch1.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-discriminator/match1", data.MonitorDiscriminatorMatch1.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/monitor-discriminator/match1", data.MonitorDiscriminatorMatch1.ValueString())
 	}
 	if !data.MonitorDiscriminatorMatch2.IsNull() && !data.MonitorDiscriminatorMatch2.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-discriminator/match2", data.MonitorDiscriminatorMatch2.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/monitor-discriminator/match2", data.MonitorDiscriminatorMatch2.ValueString())
 	}
 	if !data.MonitorDiscriminatorMatch3.IsNull() && !data.MonitorDiscriminatorMatch3.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-discriminator/match3", data.MonitorDiscriminatorMatch3.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/monitor-discriminator/match3", data.MonitorDiscriminatorMatch3.ValueString())
 	}
 	if !data.MonitorDiscriminatorNomatch1.IsNull() && !data.MonitorDiscriminatorNomatch1.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-discriminator/nomatch1", data.MonitorDiscriminatorNomatch1.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/monitor-discriminator/nomatch1", data.MonitorDiscriminatorNomatch1.ValueString())
 	}
 	if !data.MonitorDiscriminatorNomatch2.IsNull() && !data.MonitorDiscriminatorNomatch2.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-discriminator/nomatch2", data.MonitorDiscriminatorNomatch2.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/monitor-discriminator/nomatch2", data.MonitorDiscriminatorNomatch2.ValueString())
 	}
 	if !data.MonitorDiscriminatorNomatch3.IsNull() && !data.MonitorDiscriminatorNomatch3.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-discriminator/nomatch3", data.MonitorDiscriminatorNomatch3.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/monitor-discriminator/nomatch3", data.MonitorDiscriminatorNomatch3.ValueString())
 	}
 	if !data.ArchiveDisk0.IsNull() && !data.ArchiveDisk0.IsUnknown() {
 		if data.ArchiveDisk0.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/archive/device/disk0", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/archive/device/disk0", "")
 		}
 	}
 	if !data.ArchiveDisk1.IsNull() && !data.ArchiveDisk1.IsUnknown() {
 		if data.ArchiveDisk1.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/archive/device/disk1", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/archive/device/disk1", "")
 		}
 	}
 	if !data.ArchiveHarddisk.IsNull() && !data.ArchiveHarddisk.IsUnknown() {
 		if data.ArchiveHarddisk.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/archive/device/harddisk", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/archive/device/harddisk", "")
 		}
 	}
 	if !data.ArchiveFrequencyDaily.IsNull() && !data.ArchiveFrequencyDaily.IsUnknown() {
 		if data.ArchiveFrequencyDaily.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/archive/frequency/daily", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/archive/frequency/daily", "")
 		}
 	}
 	if !data.ArchiveFrequencyWeekly.IsNull() && !data.ArchiveFrequencyWeekly.IsUnknown() {
 		if data.ArchiveFrequencyWeekly.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/archive/frequency/weekly", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/archive/frequency/weekly", "")
 		}
 	}
 	if !data.ArchiveFilesize.IsNull() && !data.ArchiveFilesize.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/archive/file-size", strconv.FormatInt(data.ArchiveFilesize.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/archive/file-size", strconv.FormatInt(data.ArchiveFilesize.ValueInt64(), 10))
 	}
 	if !data.ArchiveSize.IsNull() && !data.ArchiveSize.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/archive/archive-size", strconv.FormatInt(data.ArchiveSize.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/archive/archive-size", strconv.FormatInt(data.ArchiveSize.ValueInt64(), 10))
 	}
 	if !data.ArchiveLength.IsNull() && !data.ArchiveLength.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/archive/archive-length", strconv.FormatInt(data.ArchiveLength.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/archive/archive-length", strconv.FormatInt(data.ArchiveLength.ValueInt64(), 10))
 	}
 	if !data.ArchiveSeverity.IsNull() && !data.ArchiveSeverity.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/archive/severity", data.ArchiveSeverity.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/archive/severity", data.ArchiveSeverity.ValueString())
 	}
 	if !data.ArchiveThreshold.IsNull() && !data.ArchiveThreshold.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/archive/threshold", strconv.FormatInt(data.ArchiveThreshold.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/archive/threshold", strconv.FormatInt(data.ArchiveThreshold.ValueInt64(), 10))
 	}
 	if !data.Ipv4Dscp.IsNull() && !data.Ipv4Dscp.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/dscp", data.Ipv4Dscp.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/ipv4/dscp", data.Ipv4Dscp.ValueString())
 	}
 	if !data.Ipv4Precedence.IsNull() && !data.Ipv4Precedence.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/precedence", data.Ipv4Precedence.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/ipv4/precedence", data.Ipv4Precedence.ValueString())
 	}
 	if !data.Ipv6Dscp.IsNull() && !data.Ipv6Dscp.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv6/dscp", data.Ipv6Dscp.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/ipv6/dscp", data.Ipv6Dscp.ValueString())
 	}
 	if !data.Ipv6Precedence.IsNull() && !data.Ipv6Precedence.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv6/precedence", data.Ipv6Precedence.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/ipv6/precedence", data.Ipv6Precedence.ValueString())
 	}
 	if !data.FacilityLevel.IsNull() && !data.FacilityLevel.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/facility/level", data.FacilityLevel.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/facility/level", data.FacilityLevel.ValueString())
 	}
 	if !data.BufferedEntriesCount.IsNull() && !data.BufferedEntriesCount.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/buffered-entries/count", strconv.FormatInt(data.BufferedEntriesCount.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/buffered/buffered-entries/count", strconv.FormatInt(data.BufferedEntriesCount.ValueInt64(), 10))
 	}
 	if !data.BufferedSize.IsNull() && !data.BufferedSize.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/logging-buffer-size", strconv.FormatInt(data.BufferedSize.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/buffered/logging-buffer-size", strconv.FormatInt(data.BufferedSize.ValueInt64(), 10))
 	}
 	if !data.BufferedLevel.IsNull() && !data.BufferedLevel.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/level", data.BufferedLevel.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/buffered/level", data.BufferedLevel.ValueString())
 	}
 	if !data.BufferedDiscriminatorMatch1.IsNull() && !data.BufferedDiscriminatorMatch1.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/discriminator/match1", data.BufferedDiscriminatorMatch1.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/buffered/discriminator/match1", data.BufferedDiscriminatorMatch1.ValueString())
 	}
 	if !data.BufferedDiscriminatorMatch2.IsNull() && !data.BufferedDiscriminatorMatch2.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/discriminator/match2", data.BufferedDiscriminatorMatch2.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/buffered/discriminator/match2", data.BufferedDiscriminatorMatch2.ValueString())
 	}
 	if !data.BufferedDiscriminatorMatch3.IsNull() && !data.BufferedDiscriminatorMatch3.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/discriminator/match3", data.BufferedDiscriminatorMatch3.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/buffered/discriminator/match3", data.BufferedDiscriminatorMatch3.ValueString())
 	}
 	if !data.BufferedDiscriminatorNomatch1.IsNull() && !data.BufferedDiscriminatorNomatch1.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/discriminator/nomatch1", data.BufferedDiscriminatorNomatch1.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/buffered/discriminator/nomatch1", data.BufferedDiscriminatorNomatch1.ValueString())
 	}
 	if !data.BufferedDiscriminatorNomatch2.IsNull() && !data.BufferedDiscriminatorNomatch2.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/discriminator/nomatch2", data.BufferedDiscriminatorNomatch2.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/buffered/discriminator/nomatch2", data.BufferedDiscriminatorNomatch2.ValueString())
 	}
 	if !data.BufferedDiscriminatorNomatch3.IsNull() && !data.BufferedDiscriminatorNomatch3.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/discriminator/nomatch3", data.BufferedDiscriminatorNomatch3.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/buffered/discriminator/nomatch3", data.BufferedDiscriminatorNomatch3.ValueString())
 	}
 	if !data.ContainerAll.IsNull() && !data.ContainerAll.IsUnknown() {
 		if data.ContainerAll.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/container/all", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/container/all", "")
 		}
 	}
 	if !data.ContainerFetchTimestamp.IsNull() && !data.ContainerFetchTimestamp.IsUnknown() {
 		if data.ContainerFetchTimestamp.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/container/fetch-timestamp", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/container/fetch-timestamp", "")
 		}
 	}
 	if len(data.File) > 0 {
@@ -1281,16 +1254,16 @@ func (data Logging) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.History.IsNull() && !data.History.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/history", data.History.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/history", data.History.ValueString())
 	}
 	if !data.HistorySize.IsNull() && !data.HistorySize.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/history-size", strconv.FormatInt(data.HistorySize.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/history-size", strconv.FormatInt(data.HistorySize.ValueInt64(), 10))
 	}
 	if !data.Hostnameprefix.IsNull() && !data.Hostnameprefix.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/hostnameprefix", data.Hostnameprefix.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/hostnameprefix", data.Hostnameprefix.ValueString())
 	}
 	if !data.Localfilesize.IsNull() && !data.Localfilesize.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/localfilesize", strconv.FormatInt(data.Localfilesize.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/localfilesize", strconv.FormatInt(data.Localfilesize.ValueInt64(), 10))
 	}
 	if len(data.SourceInterfaces) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -1314,21 +1287,21 @@ func (data Logging) toBodyXML(ctx context.Context) string {
 	}
 	if !data.SuppressDuplicates.IsNull() && !data.SuppressDuplicates.IsUnknown() {
 		if data.SuppressDuplicates.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/suppress/duplicates", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/suppress/duplicates", "")
 		}
 	}
 	if !data.FormatRfc5424.IsNull() && !data.FormatRfc5424.IsUnknown() {
 		if data.FormatRfc5424.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/format/rfc5424", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/format/rfc5424", "")
 		}
 	}
 	if !data.FormatBsd.IsNull() && !data.FormatBsd.IsUnknown() {
 		if data.FormatBsd.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/format/bsd", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/format/bsd", "")
 		}
 	}
 	if !data.Yang.IsNull() && !data.Yang.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/yang", data.Yang.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/yang", data.Yang.ValueString())
 	}
 	if len(data.SuppressRules) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -1376,7 +1349,7 @@ func (data Logging) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.EventsBufferSize.IsNull() && !data.EventsBufferSize.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size", strconv.FormatInt(data.EventsBufferSize.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size", strconv.FormatInt(data.EventsBufferSize.ValueInt64(), 10))
 	}
 	if len(data.FilterMatches) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -1391,20 +1364,20 @@ func (data Logging) toBodyXML(ctx context.Context) string {
 	}
 	if !data.EventsDisplayLocation.IsNull() && !data.EventsDisplayLocation.IsUnknown() {
 		if data.EventsDisplayLocation.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", "")
 		}
 	}
 	if !data.EventsLevel.IsNull() && !data.EventsLevel.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level", data.EventsLevel.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/level", data.EventsLevel.ValueString())
 	}
 	if !data.EventsThreshold.IsNull() && !data.EventsThreshold.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/threshold", strconv.FormatInt(data.EventsThreshold.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/threshold", strconv.FormatInt(data.EventsThreshold.ValueInt64(), 10))
 	}
 	if !data.EventsPrecfgSuppression.IsNull() && !data.EventsPrecfgSuppression.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression", data.EventsPrecfgSuppression.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression", data.EventsPrecfgSuppression.ValueString())
 	}
 	if !data.EventsPrecfgSuppressionTimeout.IsNull() && !data.EventsPrecfgSuppressionTimeout.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout", strconv.FormatInt(data.EventsPrecfgSuppressionTimeout.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout", strconv.FormatInt(data.EventsPrecfgSuppressionTimeout.ValueInt64(), 10))
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -1417,57 +1390,57 @@ func (data Logging) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/console"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/console"); value.Exists() {
 		data.Console = types.StringValue(value.String())
 	} else if data.Console.IsNull() {
 		data.Console = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/trap"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/trap"); value.Exists() {
 		data.Trap = types.StringValue(value.String())
 	} else if data.Trap.IsNull() {
 		data.Trap = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor"); value.Exists() {
 		data.Monitor = types.StringValue(value.String())
 	} else if data.Monitor.IsNull() {
 		data.Monitor = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/console-logging/console-log-facility/console-facility-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/console-logging/console-log-facility/console-facility-level"); value.Exists() {
 		data.ConsoleFacility = types.StringValue(value.String())
 	} else if data.ConsoleFacility.IsNull() {
 		data.ConsoleFacility = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/match1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/match1"); value.Exists() {
 		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
 	} else if data.MonitorDiscriminatorMatch1.IsNull() {
 		data.MonitorDiscriminatorMatch1 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/match2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/match2"); value.Exists() {
 		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
 	} else if data.MonitorDiscriminatorMatch2.IsNull() {
 		data.MonitorDiscriminatorMatch2 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/match3"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/match3"); value.Exists() {
 		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
 	} else if data.MonitorDiscriminatorMatch3.IsNull() {
 		data.MonitorDiscriminatorMatch3 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/nomatch1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/nomatch1"); value.Exists() {
 		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
 	} else if data.MonitorDiscriminatorNomatch1.IsNull() {
 		data.MonitorDiscriminatorNomatch1 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/nomatch2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/nomatch2"); value.Exists() {
 		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
 	} else if data.MonitorDiscriminatorNomatch2.IsNull() {
 		data.MonitorDiscriminatorNomatch2 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/nomatch3"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/nomatch3"); value.Exists() {
 		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
 	} else if data.MonitorDiscriminatorNomatch3.IsNull() {
 		data.MonitorDiscriminatorNomatch3 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/device/disk0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/device/disk0"); value.Exists() {
 		data.ArchiveDisk0 = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1475,7 +1448,7 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ArchiveDisk0 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/device/disk1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/device/disk1"); value.Exists() {
 		data.ArchiveDisk1 = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1483,7 +1456,7 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ArchiveDisk1 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/device/harddisk"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/device/harddisk"); value.Exists() {
 		data.ArchiveHarddisk = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1491,7 +1464,7 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ArchiveHarddisk = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/frequency/daily"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/frequency/daily"); value.Exists() {
 		data.ArchiveFrequencyDaily = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1499,7 +1472,7 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ArchiveFrequencyDaily = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/frequency/weekly"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/frequency/weekly"); value.Exists() {
 		data.ArchiveFrequencyWeekly = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1507,102 +1480,102 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ArchiveFrequencyWeekly = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/file-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/file-size"); value.Exists() {
 		data.ArchiveFilesize = types.Int64Value(value.Int())
 	} else if data.ArchiveFilesize.IsNull() {
 		data.ArchiveFilesize = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/archive-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/archive-size"); value.Exists() {
 		data.ArchiveSize = types.Int64Value(value.Int())
 	} else if data.ArchiveSize.IsNull() {
 		data.ArchiveSize = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/archive-length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/archive-length"); value.Exists() {
 		data.ArchiveLength = types.Int64Value(value.Int())
 	} else if data.ArchiveLength.IsNull() {
 		data.ArchiveLength = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/severity"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/severity"); value.Exists() {
 		data.ArchiveSeverity = types.StringValue(value.String())
 	} else if data.ArchiveSeverity.IsNull() {
 		data.ArchiveSeverity = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/threshold"); value.Exists() {
 		data.ArchiveThreshold = types.Int64Value(value.Int())
 	} else if data.ArchiveThreshold.IsNull() {
 		data.ArchiveThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv4/dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	} else if data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/precedence"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv4/precedence"); value.Exists() {
 		data.Ipv4Precedence = types.StringValue(value.String())
 	} else if data.Ipv4Precedence.IsNull() {
 		data.Ipv4Precedence = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv6/dscp"); value.Exists() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	} else if data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/precedence"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv6/precedence"); value.Exists() {
 		data.Ipv6Precedence = types.StringValue(value.String())
 	} else if data.Ipv6Precedence.IsNull() {
 		data.Ipv6Precedence = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/facility/level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/facility/level"); value.Exists() {
 		data.FacilityLevel = types.StringValue(value.String())
 	} else if data.FacilityLevel.IsNull() {
 		data.FacilityLevel = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/buffered-entries/count"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/buffered-entries/count"); value.Exists() {
 		data.BufferedEntriesCount = types.Int64Value(value.Int())
 	} else if data.BufferedEntriesCount.IsNull() {
 		data.BufferedEntriesCount = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/logging-buffer-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/logging-buffer-size"); value.Exists() {
 		data.BufferedSize = types.Int64Value(value.Int())
 	} else if data.BufferedSize.IsNull() {
 		data.BufferedSize = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/level"); value.Exists() {
 		data.BufferedLevel = types.StringValue(value.String())
 	} else if data.BufferedLevel.IsNull() {
 		data.BufferedLevel = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/match1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/match1"); value.Exists() {
 		data.BufferedDiscriminatorMatch1 = types.StringValue(value.String())
 	} else if data.BufferedDiscriminatorMatch1.IsNull() {
 		data.BufferedDiscriminatorMatch1 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/match2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/match2"); value.Exists() {
 		data.BufferedDiscriminatorMatch2 = types.StringValue(value.String())
 	} else if data.BufferedDiscriminatorMatch2.IsNull() {
 		data.BufferedDiscriminatorMatch2 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/match3"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/match3"); value.Exists() {
 		data.BufferedDiscriminatorMatch3 = types.StringValue(value.String())
 	} else if data.BufferedDiscriminatorMatch3.IsNull() {
 		data.BufferedDiscriminatorMatch3 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/nomatch1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/nomatch1"); value.Exists() {
 		data.BufferedDiscriminatorNomatch1 = types.StringValue(value.String())
 	} else if data.BufferedDiscriminatorNomatch1.IsNull() {
 		data.BufferedDiscriminatorNomatch1 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/nomatch2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/nomatch2"); value.Exists() {
 		data.BufferedDiscriminatorNomatch2 = types.StringValue(value.String())
 	} else if data.BufferedDiscriminatorNomatch2.IsNull() {
 		data.BufferedDiscriminatorNomatch2 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/nomatch3"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/nomatch3"); value.Exists() {
 		data.BufferedDiscriminatorNomatch3 = types.StringValue(value.String())
 	} else if data.BufferedDiscriminatorNomatch3.IsNull() {
 		data.BufferedDiscriminatorNomatch3 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/container/all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/container/all"); value.Exists() {
 		data.ContainerAll = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1610,7 +1583,7 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ContainerAll = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/container/fetch-timestamp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/container/fetch-timestamp"); value.Exists() {
 		data.ContainerFetchTimestamp = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1619,11 +1592,11 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.File {
-		keys := [...]string{"file-name"}
-		keyValues := [...]string{data.File[i].FileName.ValueString()}
+		keys := [...]string{ "file-name",  }
+		keyValues := [...]string{ data.File[i].FileName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/files/file").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/files/file").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1697,32 +1670,32 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.File[i].DiscriminatorNomatch3 = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/history"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/history"); value.Exists() {
 		data.History = types.StringValue(value.String())
 	} else if data.History.IsNull() {
 		data.History = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/history-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/history-size"); value.Exists() {
 		data.HistorySize = types.Int64Value(value.Int())
 	} else if data.HistorySize.IsNull() {
 		data.HistorySize = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hostnameprefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hostnameprefix"); value.Exists() {
 		data.Hostnameprefix = types.StringValue(value.String())
 	} else if data.Hostnameprefix.IsNull() {
 		data.Hostnameprefix = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/localfilesize"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/localfilesize"); value.Exists() {
 		data.Localfilesize = types.Int64Value(value.Int())
 	} else if data.Localfilesize.IsNull() {
 		data.Localfilesize = types.Int64Null()
 	}
 	for i := range data.SourceInterfaces {
-		keys := [...]string{"source-interface-name"}
-		keyValues := [...]string{data.SourceInterfaces[i].Name.ValueString()}
+		keys := [...]string{ "source-interface-name",  }
+		keyValues := [...]string{ data.SourceInterfaces[i].Name.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interfaces/source-interface").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/source-interfaces/source-interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1745,39 +1718,37 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.SourceInterfaces[i].Name.IsNull() {
 			data.SourceInterfaces[i].Name = types.StringNull()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "vrfs/vrf"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.SourceInterfaces[i].Vrfs
-			data.SourceInterfaces[i].Vrfs = make([]LoggingSourceInterfacesVrfs, 0)
+		for ci := range data.SourceInterfaces[i].Vrfs {
+			keys := [...]string{ "vrf-name",  }
+			keyValues := [...]string{ data.SourceInterfaces[i].Vrfs[ci].Name.ValueString(),  }
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := LoggingSourceInterfacesVrfs{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "vrf-name"); cValue.Exists() {
-					citem.Name = types.StringValue(cValue.String())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.Name.ValueString() != citem.Name.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "vrfs/vrf").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.SourceInterfaces[i].Vrfs = append(data.SourceInterfaces[i].Vrfs, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "vrf-name"); value.Exists() {
+				data.SourceInterfaces[i].Vrfs[ci].Name = types.StringValue(value.String())
+			} else {
+				data.SourceInterfaces[i].Vrfs[ci].Name = types.StringNull()
+			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/suppress/duplicates"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/suppress/duplicates"); value.Exists() {
 		data.SuppressDuplicates = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1785,7 +1756,7 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.SuppressDuplicates = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/format/rfc5424"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/format/rfc5424"); value.Exists() {
 		data.FormatRfc5424 = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1793,7 +1764,7 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.FormatRfc5424 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/format/bsd"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/format/bsd"); value.Exists() {
 		data.FormatBsd = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1801,17 +1772,17 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.FormatBsd = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/yang"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/yang"); value.Exists() {
 		data.Yang = types.StringValue(value.String())
 	} else if data.Yang.IsNull() {
 		data.Yang = types.StringNull()
 	}
 	for i := range data.SuppressRules {
-		keys := [...]string{""}
-		keyValues := [...]string{data.SuppressRules[i].RuleName.ValueString()}
+		keys := [...]string{ "",  }
+		keyValues := [...]string{ data.SuppressRules[i].RuleName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1834,48 +1805,44 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.SuppressRules[i].RuleName.IsNull() {
 			data.SuppressRules[i].RuleName = types.StringNull()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, ""); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.SuppressRules[i].Alarms
-			data.SuppressRules[i].Alarms = make([]LoggingSuppressRulesAlarms, 0)
+		for ci := range data.SuppressRules[i].Alarms {
+			keys := [...]string{ "", "", "",  }
+			keyValues := [...]string{ data.SuppressRules[i].Alarms[ci].MessageCategory.ValueString(), data.SuppressRules[i].Alarms[ci].GroupName.ValueString(), data.SuppressRules[i].Alarms[ci].MessageCode.ValueString(),  }
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := LoggingSuppressRulesAlarms{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
-					citem.MessageCategory = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
-					citem.GroupName = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
-					citem.MessageCode = types.StringValue(cValue.String())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.MessageCategory.ValueString() != citem.MessageCategory.ValueString() {
-						match = false
-					}
-					if existingItem.GroupName.ValueString() != citem.GroupName.ValueString() {
-						match = false
-					}
-					if existingItem.MessageCode.ValueString() != citem.MessageCode.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.SuppressRules[i].Alarms = append(data.SuppressRules[i].Alarms, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
+				data.SuppressRules[i].Alarms[ci].MessageCategory = types.StringValue(value.String())
+			} else {
+				data.SuppressRules[i].Alarms[ci].MessageCategory = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
+				data.SuppressRules[i].Alarms[ci].GroupName = types.StringValue(value.String())
+			} else {
+				data.SuppressRules[i].Alarms[ci].GroupName = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
+				data.SuppressRules[i].Alarms[ci].MessageCode = types.StringValue(value.String())
+			} else {
+				data.SuppressRules[i].Alarms[ci].MessageCode = types.StringNull()
+			}
 		}
 		if value := helpers.GetFromXPath(r, ""); value.Exists() {
 			data.SuppressRules[i].AllAlarms = types.BoolValue(true)
@@ -1895,49 +1862,47 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				data.SuppressRules[i].ApplyAllOfRouter = types.BoolNull()
 			}
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, ""); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.SuppressRules[i].ApplySourceLocations
-			data.SuppressRules[i].ApplySourceLocations = make([]LoggingSuppressRulesApplySourceLocations, 0)
+		for ci := range data.SuppressRules[i].ApplySourceLocations {
+			keys := [...]string{ "",  }
+			keyValues := [...]string{ data.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString(),  }
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := LoggingSuppressRulesApplySourceLocations{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, ""); cValue.Exists() {
-					citem.LocationName = types.StringValue(cValue.String())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.LocationName.ValueString() != citem.LocationName.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.SuppressRules[i].ApplySourceLocations = append(data.SuppressRules[i].ApplySourceLocations, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, ""); value.Exists() {
+				data.SuppressRules[i].ApplySourceLocations[ci].LocationName = types.StringValue(value.String())
+			} else {
+				data.SuppressRules[i].ApplySourceLocations[ci].LocationName = types.StringNull()
+			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size"); value.Exists() {
 		data.EventsBufferSize = types.Int64Value(value.Int())
 	} else if data.EventsBufferSize.IsNull() {
 		data.EventsBufferSize = types.Int64Null()
 	}
 	for i := range data.FilterMatches {
-		keys := [...]string{"match-string"}
-		keyValues := [...]string{data.FilterMatches[i].Match.ValueString()}
+		keys := [...]string{ "match-string",  }
+		keyValues := [...]string{ data.FilterMatches[i].Match.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1961,7 +1926,7 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.FilterMatches[i].Match = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"); value.Exists() {
 		data.EventsDisplayLocation = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1969,22 +1934,22 @@ func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.EventsDisplayLocation = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/level"); value.Exists() {
 		data.EventsLevel = types.StringValue(value.String())
 	} else if data.EventsLevel.IsNull() {
 		data.EventsLevel = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/threshold"); value.Exists() {
 		data.EventsThreshold = types.Int64Value(value.Int())
 	} else if data.EventsThreshold.IsNull() {
 		data.EventsThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression"); value.Exists() {
 		data.EventsPrecfgSuppression = types.StringValue(value.String())
 	} else if data.EventsPrecfgSuppression.IsNull() {
 		data.EventsPrecfgSuppression = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout"); value.Exists() {
 		data.EventsPrecfgSuppressionTimeout = types.Int64Value(value.Int())
 	} else if data.EventsPrecfgSuppressionTimeout.IsNull() {
 		data.EventsPrecfgSuppressionTimeout = types.Int64Null()
@@ -1999,129 +1964,129 @@ func (data *Logging) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "console"); value.Exists() {
+	if value := res.Get(prefix+"console"); value.Exists() {
 		data.Console = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "trap"); value.Exists() {
+	if value := res.Get(prefix+"trap"); value.Exists() {
 		data.Trap = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "monitor"); value.Exists() {
+	if value := res.Get(prefix+"monitor"); value.Exists() {
 		data.Monitor = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "console-logging.console-log-facility.console-facility-level"); value.Exists() {
+	if value := res.Get(prefix+"console-logging.console-log-facility.console-facility-level"); value.Exists() {
 		data.ConsoleFacility = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "monitor-discriminator.match1"); value.Exists() {
+	if value := res.Get(prefix+"monitor-discriminator.match1"); value.Exists() {
 		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "monitor-discriminator.match2"); value.Exists() {
+	if value := res.Get(prefix+"monitor-discriminator.match2"); value.Exists() {
 		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "monitor-discriminator.match3"); value.Exists() {
+	if value := res.Get(prefix+"monitor-discriminator.match3"); value.Exists() {
 		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "monitor-discriminator.nomatch1"); value.Exists() {
+	if value := res.Get(prefix+"monitor-discriminator.nomatch1"); value.Exists() {
 		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "monitor-discriminator.nomatch2"); value.Exists() {
+	if value := res.Get(prefix+"monitor-discriminator.nomatch2"); value.Exists() {
 		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "monitor-discriminator.nomatch3"); value.Exists() {
+	if value := res.Get(prefix+"monitor-discriminator.nomatch3"); value.Exists() {
 		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "archive.device.disk0"); value.Exists() {
+	if value := res.Get(prefix+"archive.device.disk0"); value.Exists() {
 		data.ArchiveDisk0 = types.BoolValue(true)
 	} else {
-		data.ArchiveDisk0 = types.BoolNull()
+		data.ArchiveDisk0 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "archive.device.disk1"); value.Exists() {
+	if value := res.Get(prefix+"archive.device.disk1"); value.Exists() {
 		data.ArchiveDisk1 = types.BoolValue(true)
 	} else {
-		data.ArchiveDisk1 = types.BoolNull()
+		data.ArchiveDisk1 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "archive.device.harddisk"); value.Exists() {
+	if value := res.Get(prefix+"archive.device.harddisk"); value.Exists() {
 		data.ArchiveHarddisk = types.BoolValue(true)
 	} else {
-		data.ArchiveHarddisk = types.BoolNull()
+		data.ArchiveHarddisk = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "archive.frequency.daily"); value.Exists() {
+	if value := res.Get(prefix+"archive.frequency.daily"); value.Exists() {
 		data.ArchiveFrequencyDaily = types.BoolValue(true)
 	} else {
-		data.ArchiveFrequencyDaily = types.BoolNull()
+		data.ArchiveFrequencyDaily = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "archive.frequency.weekly"); value.Exists() {
+	if value := res.Get(prefix+"archive.frequency.weekly"); value.Exists() {
 		data.ArchiveFrequencyWeekly = types.BoolValue(true)
 	} else {
-		data.ArchiveFrequencyWeekly = types.BoolNull()
+		data.ArchiveFrequencyWeekly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "archive.file-size"); value.Exists() {
+	if value := res.Get(prefix+"archive.file-size"); value.Exists() {
 		data.ArchiveFilesize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "archive.archive-size"); value.Exists() {
+	if value := res.Get(prefix+"archive.archive-size"); value.Exists() {
 		data.ArchiveSize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "archive.archive-length"); value.Exists() {
+	if value := res.Get(prefix+"archive.archive-length"); value.Exists() {
 		data.ArchiveLength = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "archive.severity"); value.Exists() {
+	if value := res.Get(prefix+"archive.severity"); value.Exists() {
 		data.ArchiveSeverity = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "archive.threshold"); value.Exists() {
+	if value := res.Get(prefix+"archive.threshold"); value.Exists() {
 		data.ArchiveThreshold = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "ipv4.dscp"); value.Exists() {
+	if value := res.Get(prefix+"ipv4.dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "ipv4.precedence"); value.Exists() {
+	if value := res.Get(prefix+"ipv4.precedence"); value.Exists() {
 		data.Ipv4Precedence = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "ipv6.dscp"); value.Exists() {
+	if value := res.Get(prefix+"ipv6.dscp"); value.Exists() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "ipv6.precedence"); value.Exists() {
+	if value := res.Get(prefix+"ipv6.precedence"); value.Exists() {
 		data.Ipv6Precedence = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "facility.level"); value.Exists() {
+	if value := res.Get(prefix+"facility.level"); value.Exists() {
 		data.FacilityLevel = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "buffered.buffered-entries.count"); value.Exists() {
+	if value := res.Get(prefix+"buffered.buffered-entries.count"); value.Exists() {
 		data.BufferedEntriesCount = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "buffered.logging-buffer-size"); value.Exists() {
+	if value := res.Get(prefix+"buffered.logging-buffer-size"); value.Exists() {
 		data.BufferedSize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "buffered.level"); value.Exists() {
+	if value := res.Get(prefix+"buffered.level"); value.Exists() {
 		data.BufferedLevel = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "buffered.discriminator.match1"); value.Exists() {
+	if value := res.Get(prefix+"buffered.discriminator.match1"); value.Exists() {
 		data.BufferedDiscriminatorMatch1 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "buffered.discriminator.match2"); value.Exists() {
+	if value := res.Get(prefix+"buffered.discriminator.match2"); value.Exists() {
 		data.BufferedDiscriminatorMatch2 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "buffered.discriminator.match3"); value.Exists() {
+	if value := res.Get(prefix+"buffered.discriminator.match3"); value.Exists() {
 		data.BufferedDiscriminatorMatch3 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "buffered.discriminator.nomatch1"); value.Exists() {
+	if value := res.Get(prefix+"buffered.discriminator.nomatch1"); value.Exists() {
 		data.BufferedDiscriminatorNomatch1 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "buffered.discriminator.nomatch2"); value.Exists() {
+	if value := res.Get(prefix+"buffered.discriminator.nomatch2"); value.Exists() {
 		data.BufferedDiscriminatorNomatch2 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "buffered.discriminator.nomatch3"); value.Exists() {
+	if value := res.Get(prefix+"buffered.discriminator.nomatch3"); value.Exists() {
 		data.BufferedDiscriminatorNomatch3 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "container.all"); value.Exists() {
+	if value := res.Get(prefix+"container.all"); value.Exists() {
 		data.ContainerAll = types.BoolValue(true)
 	} else {
-		data.ContainerAll = types.BoolNull()
+		data.ContainerAll = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "container.fetch-timestamp"); value.Exists() {
+	if value := res.Get(prefix+"container.fetch-timestamp"); value.Exists() {
 		data.ContainerFetchTimestamp = types.BoolValue(true)
 	} else {
-		data.ContainerFetchTimestamp = types.BoolNull()
+		data.ContainerFetchTimestamp = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "files.file"); value.Exists() {
+	if value := res.Get(prefix+"files.file"); value.Exists() {
 		data.File = make([]LoggingFile, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingFile{}
@@ -2162,19 +2127,19 @@ func (data *Logging) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "history"); value.Exists() {
+	if value := res.Get(prefix+"history"); value.Exists() {
 		data.History = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "history-size"); value.Exists() {
+	if value := res.Get(prefix+"history-size"); value.Exists() {
 		data.HistorySize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "hostnameprefix"); value.Exists() {
+	if value := res.Get(prefix+"hostnameprefix"); value.Exists() {
 		data.Hostnameprefix = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "localfilesize"); value.Exists() {
+	if value := res.Get(prefix+"localfilesize"); value.Exists() {
 		data.Localfilesize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "source-interfaces.source-interface"); value.Exists() {
+	if value := res.Get(prefix+"source-interfaces.source-interface"); value.Exists() {
 		data.SourceInterfaces = make([]LoggingSourceInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingSourceInterfaces{}
@@ -2188,33 +2153,33 @@ func (data *Logging) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("vrf-name"); ccValue.Exists() {
 						cItem.Name = types.StringValue(ccValue.String())
 					}
-					item.Vrfs = append(item.Vrfs, cItem)
-					return true
-				})
-			}
+				item.Vrfs = append(item.Vrfs, cItem)
+				return true
+			})
+		}
 			data.SourceInterfaces = append(data.SourceInterfaces, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "suppress.duplicates"); value.Exists() {
+	if value := res.Get(prefix+"suppress.duplicates"); value.Exists() {
 		data.SuppressDuplicates = types.BoolValue(true)
 	} else {
-		data.SuppressDuplicates = types.BoolNull()
+		data.SuppressDuplicates = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "format.rfc5424"); value.Exists() {
+	if value := res.Get(prefix+"format.rfc5424"); value.Exists() {
 		data.FormatRfc5424 = types.BoolValue(true)
 	} else {
-		data.FormatRfc5424 = types.BoolNull()
+		data.FormatRfc5424 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "format.bsd"); value.Exists() {
+	if value := res.Get(prefix+"format.bsd"); value.Exists() {
 		data.FormatBsd = types.BoolValue(true)
 	} else {
-		data.FormatBsd = types.BoolNull()
+		data.FormatBsd = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "yang"); value.Exists() {
+	if value := res.Get(prefix+"yang"); value.Exists() {
 		data.Yang = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"); value.Exists() {
 		data.SuppressRules = make([]LoggingSuppressRules, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingSuppressRules{}
@@ -2234,19 +2199,19 @@ func (data *Logging) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get(""); ccValue.Exists() {
 						cItem.MessageCode = types.StringValue(ccValue.String())
 					}
-					item.Alarms = append(item.Alarms, cItem)
-					return true
-				})
-			}
+				item.Alarms = append(item.Alarms, cItem)
+				return true
+			})
+		}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AllAlarms = types.BoolValue(true)
 			} else {
-				item.AllAlarms = types.BoolNull()
+				item.AllAlarms = types.BoolValue(false)
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.ApplyAllOfRouter = types.BoolValue(true)
 			} else {
-				item.ApplyAllOfRouter = types.BoolNull()
+				item.ApplyAllOfRouter = types.BoolValue(false)
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.ApplySourceLocations = make([]LoggingSuppressRulesApplySourceLocations, 0)
@@ -2255,18 +2220,18 @@ func (data *Logging) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get(""); ccValue.Exists() {
 						cItem.LocationName = types.StringValue(ccValue.String())
 					}
-					item.ApplySourceLocations = append(item.ApplySourceLocations, cItem)
-					return true
-				})
-			}
+				item.ApplySourceLocations = append(item.ApplySourceLocations, cItem)
+				return true
+			})
+		}
 			data.SuppressRules = append(data.SuppressRules, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.buffer-size"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-events-cfg:events.buffer-size"); value.Exists() {
 		data.EventsBufferSize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.filter.match"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-events-cfg:events.filter.match"); value.Exists() {
 		data.FilterMatches = make([]LoggingFilterMatches, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingFilterMatches{}
@@ -2277,21 +2242,21 @@ func (data *Logging) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
 		data.EventsDisplayLocation = types.BoolValue(true)
 	} else {
-		data.EventsDisplayLocation = types.BoolNull()
+		data.EventsDisplayLocation = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() {
 		data.EventsLevel = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.threshold"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-events-cfg:events.threshold"); value.Exists() {
 		data.EventsThreshold = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression"); value.Exists() {
 		data.EventsPrecfgSuppression = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression-timeout"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression-timeout"); value.Exists() {
 		data.EventsPrecfgSuppressionTimeout = types.Int64Value(value.Int())
 	}
 }
@@ -2304,129 +2269,129 @@ func (data *LoggingData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "console"); value.Exists() {
+	if value := res.Get(prefix+"console"); value.Exists() {
 		data.Console = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "trap"); value.Exists() {
+	if value := res.Get(prefix+"trap"); value.Exists() {
 		data.Trap = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "monitor"); value.Exists() {
+	if value := res.Get(prefix+"monitor"); value.Exists() {
 		data.Monitor = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "console-logging.console-log-facility.console-facility-level"); value.Exists() {
+	if value := res.Get(prefix+"console-logging.console-log-facility.console-facility-level"); value.Exists() {
 		data.ConsoleFacility = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "monitor-discriminator.match1"); value.Exists() {
+	if value := res.Get(prefix+"monitor-discriminator.match1"); value.Exists() {
 		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "monitor-discriminator.match2"); value.Exists() {
+	if value := res.Get(prefix+"monitor-discriminator.match2"); value.Exists() {
 		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "monitor-discriminator.match3"); value.Exists() {
+	if value := res.Get(prefix+"monitor-discriminator.match3"); value.Exists() {
 		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "monitor-discriminator.nomatch1"); value.Exists() {
+	if value := res.Get(prefix+"monitor-discriminator.nomatch1"); value.Exists() {
 		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "monitor-discriminator.nomatch2"); value.Exists() {
+	if value := res.Get(prefix+"monitor-discriminator.nomatch2"); value.Exists() {
 		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "monitor-discriminator.nomatch3"); value.Exists() {
+	if value := res.Get(prefix+"monitor-discriminator.nomatch3"); value.Exists() {
 		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "archive.device.disk0"); value.Exists() {
+	if value := res.Get(prefix+"archive.device.disk0"); value.Exists() {
 		data.ArchiveDisk0 = types.BoolValue(true)
 	} else {
 		data.ArchiveDisk0 = types.BoolNull()
 	}
-	if value := res.Get(prefix + "archive.device.disk1"); value.Exists() {
+	if value := res.Get(prefix+"archive.device.disk1"); value.Exists() {
 		data.ArchiveDisk1 = types.BoolValue(true)
 	} else {
 		data.ArchiveDisk1 = types.BoolNull()
 	}
-	if value := res.Get(prefix + "archive.device.harddisk"); value.Exists() {
+	if value := res.Get(prefix+"archive.device.harddisk"); value.Exists() {
 		data.ArchiveHarddisk = types.BoolValue(true)
 	} else {
 		data.ArchiveHarddisk = types.BoolNull()
 	}
-	if value := res.Get(prefix + "archive.frequency.daily"); value.Exists() {
+	if value := res.Get(prefix+"archive.frequency.daily"); value.Exists() {
 		data.ArchiveFrequencyDaily = types.BoolValue(true)
 	} else {
 		data.ArchiveFrequencyDaily = types.BoolNull()
 	}
-	if value := res.Get(prefix + "archive.frequency.weekly"); value.Exists() {
+	if value := res.Get(prefix+"archive.frequency.weekly"); value.Exists() {
 		data.ArchiveFrequencyWeekly = types.BoolValue(true)
 	} else {
 		data.ArchiveFrequencyWeekly = types.BoolNull()
 	}
-	if value := res.Get(prefix + "archive.file-size"); value.Exists() {
+	if value := res.Get(prefix+"archive.file-size"); value.Exists() {
 		data.ArchiveFilesize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "archive.archive-size"); value.Exists() {
+	if value := res.Get(prefix+"archive.archive-size"); value.Exists() {
 		data.ArchiveSize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "archive.archive-length"); value.Exists() {
+	if value := res.Get(prefix+"archive.archive-length"); value.Exists() {
 		data.ArchiveLength = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "archive.severity"); value.Exists() {
+	if value := res.Get(prefix+"archive.severity"); value.Exists() {
 		data.ArchiveSeverity = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "archive.threshold"); value.Exists() {
+	if value := res.Get(prefix+"archive.threshold"); value.Exists() {
 		data.ArchiveThreshold = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "ipv4.dscp"); value.Exists() {
+	if value := res.Get(prefix+"ipv4.dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "ipv4.precedence"); value.Exists() {
+	if value := res.Get(prefix+"ipv4.precedence"); value.Exists() {
 		data.Ipv4Precedence = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "ipv6.dscp"); value.Exists() {
+	if value := res.Get(prefix+"ipv6.dscp"); value.Exists() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "ipv6.precedence"); value.Exists() {
+	if value := res.Get(prefix+"ipv6.precedence"); value.Exists() {
 		data.Ipv6Precedence = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "facility.level"); value.Exists() {
+	if value := res.Get(prefix+"facility.level"); value.Exists() {
 		data.FacilityLevel = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "buffered.buffered-entries.count"); value.Exists() {
+	if value := res.Get(prefix+"buffered.buffered-entries.count"); value.Exists() {
 		data.BufferedEntriesCount = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "buffered.logging-buffer-size"); value.Exists() {
+	if value := res.Get(prefix+"buffered.logging-buffer-size"); value.Exists() {
 		data.BufferedSize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "buffered.level"); value.Exists() {
+	if value := res.Get(prefix+"buffered.level"); value.Exists() {
 		data.BufferedLevel = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "buffered.discriminator.match1"); value.Exists() {
+	if value := res.Get(prefix+"buffered.discriminator.match1"); value.Exists() {
 		data.BufferedDiscriminatorMatch1 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "buffered.discriminator.match2"); value.Exists() {
+	if value := res.Get(prefix+"buffered.discriminator.match2"); value.Exists() {
 		data.BufferedDiscriminatorMatch2 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "buffered.discriminator.match3"); value.Exists() {
+	if value := res.Get(prefix+"buffered.discriminator.match3"); value.Exists() {
 		data.BufferedDiscriminatorMatch3 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "buffered.discriminator.nomatch1"); value.Exists() {
+	if value := res.Get(prefix+"buffered.discriminator.nomatch1"); value.Exists() {
 		data.BufferedDiscriminatorNomatch1 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "buffered.discriminator.nomatch2"); value.Exists() {
+	if value := res.Get(prefix+"buffered.discriminator.nomatch2"); value.Exists() {
 		data.BufferedDiscriminatorNomatch2 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "buffered.discriminator.nomatch3"); value.Exists() {
+	if value := res.Get(prefix+"buffered.discriminator.nomatch3"); value.Exists() {
 		data.BufferedDiscriminatorNomatch3 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "container.all"); value.Exists() {
+	if value := res.Get(prefix+"container.all"); value.Exists() {
 		data.ContainerAll = types.BoolValue(true)
 	} else {
 		data.ContainerAll = types.BoolNull()
 	}
-	if value := res.Get(prefix + "container.fetch-timestamp"); value.Exists() {
+	if value := res.Get(prefix+"container.fetch-timestamp"); value.Exists() {
 		data.ContainerFetchTimestamp = types.BoolValue(true)
 	} else {
 		data.ContainerFetchTimestamp = types.BoolNull()
 	}
-	if value := res.Get(prefix + "files.file"); value.Exists() {
+	if value := res.Get(prefix+"files.file"); value.Exists() {
 		data.File = make([]LoggingFile, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingFile{}
@@ -2467,19 +2432,19 @@ func (data *LoggingData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "history"); value.Exists() {
+	if value := res.Get(prefix+"history"); value.Exists() {
 		data.History = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "history-size"); value.Exists() {
+	if value := res.Get(prefix+"history-size"); value.Exists() {
 		data.HistorySize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "hostnameprefix"); value.Exists() {
+	if value := res.Get(prefix+"hostnameprefix"); value.Exists() {
 		data.Hostnameprefix = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "localfilesize"); value.Exists() {
+	if value := res.Get(prefix+"localfilesize"); value.Exists() {
 		data.Localfilesize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "source-interfaces.source-interface"); value.Exists() {
+	if value := res.Get(prefix+"source-interfaces.source-interface"); value.Exists() {
 		data.SourceInterfaces = make([]LoggingSourceInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingSourceInterfaces{}
@@ -2501,25 +2466,25 @@ func (data *LoggingData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "suppress.duplicates"); value.Exists() {
+	if value := res.Get(prefix+"suppress.duplicates"); value.Exists() {
 		data.SuppressDuplicates = types.BoolValue(true)
 	} else {
 		data.SuppressDuplicates = types.BoolNull()
 	}
-	if value := res.Get(prefix + "format.rfc5424"); value.Exists() {
+	if value := res.Get(prefix+"format.rfc5424"); value.Exists() {
 		data.FormatRfc5424 = types.BoolValue(true)
 	} else {
 		data.FormatRfc5424 = types.BoolNull()
 	}
-	if value := res.Get(prefix + "format.bsd"); value.Exists() {
+	if value := res.Get(prefix+"format.bsd"); value.Exists() {
 		data.FormatBsd = types.BoolValue(true)
 	} else {
 		data.FormatBsd = types.BoolNull()
 	}
-	if value := res.Get(prefix + "yang"); value.Exists() {
+	if value := res.Get(prefix+"yang"); value.Exists() {
 		data.Yang = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"); value.Exists() {
 		data.SuppressRules = make([]LoggingSuppressRules, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingSuppressRules{}
@@ -2568,10 +2533,10 @@ func (data *LoggingData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.buffer-size"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-events-cfg:events.buffer-size"); value.Exists() {
 		data.EventsBufferSize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.filter.match"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-events-cfg:events.filter.match"); value.Exists() {
 		data.FilterMatches = make([]LoggingFilterMatches, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingFilterMatches{}
@@ -2582,21 +2547,21 @@ func (data *LoggingData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
 		data.EventsDisplayLocation = types.BoolValue(true)
 	} else {
 		data.EventsDisplayLocation = types.BoolNull()
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() {
 		data.EventsLevel = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.threshold"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-events-cfg:events.threshold"); value.Exists() {
 		data.EventsThreshold = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression"); value.Exists() {
 		data.EventsPrecfgSuppression = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression-timeout"); value.Exists() {
+	if value := res.Get(prefix+"Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression-timeout"); value.Exists() {
 		data.EventsPrecfgSuppressionTimeout = types.Int64Value(value.Int())
 	}
 }
@@ -2605,430 +2570,129 @@ func (data *LoggingData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *Logging) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/console"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/console"); value.Exists() {
 		data.Console = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/trap"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/trap"); value.Exists() {
 		data.Trap = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor"); value.Exists() {
 		data.Monitor = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/console-logging/console-log-facility/console-facility-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/console-logging/console-log-facility/console-facility-level"); value.Exists() {
 		data.ConsoleFacility = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/match1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/match1"); value.Exists() {
 		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/match2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/match2"); value.Exists() {
 		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/match3"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/match3"); value.Exists() {
 		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/nomatch1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/nomatch1"); value.Exists() {
 		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/nomatch2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/nomatch2"); value.Exists() {
 		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/nomatch3"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/nomatch3"); value.Exists() {
 		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/device/disk0"); value.Exists() {
-		data.ArchiveDisk0 = types.BoolValue(true)
-	} else {
-		data.ArchiveDisk0 = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/device/disk1"); value.Exists() {
-		data.ArchiveDisk1 = types.BoolValue(true)
-	} else {
-		data.ArchiveDisk1 = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/device/harddisk"); value.Exists() {
-		data.ArchiveHarddisk = types.BoolValue(true)
-	} else {
-		data.ArchiveHarddisk = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/frequency/daily"); value.Exists() {
-		data.ArchiveFrequencyDaily = types.BoolValue(true)
-	} else {
-		data.ArchiveFrequencyDaily = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/frequency/weekly"); value.Exists() {
-		data.ArchiveFrequencyWeekly = types.BoolValue(true)
-	} else {
-		data.ArchiveFrequencyWeekly = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/file-size"); value.Exists() {
-		data.ArchiveFilesize = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/archive-size"); value.Exists() {
-		data.ArchiveSize = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/archive-length"); value.Exists() {
-		data.ArchiveLength = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/severity"); value.Exists() {
-		data.ArchiveSeverity = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/threshold"); value.Exists() {
-		data.ArchiveThreshold = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
-		data.Ipv4Dscp = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/precedence"); value.Exists() {
-		data.Ipv4Precedence = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
-		data.Ipv6Dscp = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/precedence"); value.Exists() {
-		data.Ipv6Precedence = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/facility/level"); value.Exists() {
-		data.FacilityLevel = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/buffered-entries/count"); value.Exists() {
-		data.BufferedEntriesCount = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/logging-buffer-size"); value.Exists() {
-		data.BufferedSize = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/level"); value.Exists() {
-		data.BufferedLevel = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/match1"); value.Exists() {
-		data.BufferedDiscriminatorMatch1 = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/match2"); value.Exists() {
-		data.BufferedDiscriminatorMatch2 = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/match3"); value.Exists() {
-		data.BufferedDiscriminatorMatch3 = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/nomatch1"); value.Exists() {
-		data.BufferedDiscriminatorNomatch1 = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/nomatch2"); value.Exists() {
-		data.BufferedDiscriminatorNomatch2 = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/nomatch3"); value.Exists() {
-		data.BufferedDiscriminatorNomatch3 = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/container/all"); value.Exists() {
-		data.ContainerAll = types.BoolValue(true)
-	} else {
-		data.ContainerAll = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/container/fetch-timestamp"); value.Exists() {
-		data.ContainerFetchTimestamp = types.BoolValue(true)
-	} else {
-		data.ContainerFetchTimestamp = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/files/file"); value.Exists() {
-		data.File = make([]LoggingFile, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := LoggingFile{}
-			if cValue := helpers.GetFromXPath(v, "file-name"); cValue.Exists() {
-				item.FileName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "path"); cValue.Exists() {
-				item.Path = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "maxfilesize"); cValue.Exists() {
-				item.Maxfilesize = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "severity"); cValue.Exists() {
-				item.Severity = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "local-accounting/send-to-remote/facility/level"); cValue.Exists() {
-				item.LocalAccountingSendToRemoteFacilityLevel = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "discriminator/match1"); cValue.Exists() {
-				item.DiscriminatorMatch1 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "discriminator/match2"); cValue.Exists() {
-				item.DiscriminatorMatch2 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "discriminator/match3"); cValue.Exists() {
-				item.DiscriminatorMatch3 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "discriminator/nomatch1"); cValue.Exists() {
-				item.DiscriminatorNomatch1 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "discriminator/nomatch2"); cValue.Exists() {
-				item.DiscriminatorNomatch2 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "discriminator/nomatch3"); cValue.Exists() {
-				item.DiscriminatorNomatch3 = types.StringValue(cValue.String())
-			}
-			data.File = append(data.File, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/history"); value.Exists() {
-		data.History = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/history-size"); value.Exists() {
-		data.HistorySize = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hostnameprefix"); value.Exists() {
-		data.Hostnameprefix = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/localfilesize"); value.Exists() {
-		data.Localfilesize = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interfaces/source-interface"); value.Exists() {
-		data.SourceInterfaces = make([]LoggingSourceInterfaces, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := LoggingSourceInterfaces{}
-			if cValue := helpers.GetFromXPath(v, "source-interface-name"); cValue.Exists() {
-				item.Name = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "vrfs/vrf"); cValue.Exists() {
-				item.Vrfs = make([]LoggingSourceInterfacesVrfs, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := LoggingSourceInterfacesVrfs{}
-					if ccValue := helpers.GetFromXPath(cv, "vrf-name"); ccValue.Exists() {
-						cItem.Name = types.StringValue(ccValue.String())
-					}
-					item.Vrfs = append(item.Vrfs, cItem)
-					return true
-				})
-			}
-			data.SourceInterfaces = append(data.SourceInterfaces, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/suppress/duplicates"); value.Exists() {
-		data.SuppressDuplicates = types.BoolValue(true)
-	} else {
-		data.SuppressDuplicates = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/format/rfc5424"); value.Exists() {
-		data.FormatRfc5424 = types.BoolValue(true)
-	} else {
-		data.FormatRfc5424 = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/format/bsd"); value.Exists() {
-		data.FormatBsd = types.BoolValue(true)
-	} else {
-		data.FormatBsd = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/yang"); value.Exists() {
-		data.Yang = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule"); value.Exists() {
-		data.SuppressRules = make([]LoggingSuppressRules, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := LoggingSuppressRules{}
-			if cValue := helpers.GetFromXPath(v, ""); cValue.Exists() {
-				item.RuleName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, ""); cValue.Exists() {
-				item.Alarms = make([]LoggingSuppressRulesAlarms, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := LoggingSuppressRulesAlarms{}
-					if ccValue := helpers.GetFromXPath(cv, ""); ccValue.Exists() {
-						cItem.MessageCategory = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, ""); ccValue.Exists() {
-						cItem.GroupName = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, ""); ccValue.Exists() {
-						cItem.MessageCode = types.StringValue(ccValue.String())
-					}
-					item.Alarms = append(item.Alarms, cItem)
-					return true
-				})
-			}
-			if cValue := helpers.GetFromXPath(v, ""); cValue.Exists() {
-				item.AllAlarms = types.BoolValue(true)
-			} else {
-				item.AllAlarms = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, ""); cValue.Exists() {
-				item.ApplyAllOfRouter = types.BoolValue(true)
-			} else {
-				item.ApplyAllOfRouter = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, ""); cValue.Exists() {
-				item.ApplySourceLocations = make([]LoggingSuppressRulesApplySourceLocations, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := LoggingSuppressRulesApplySourceLocations{}
-					if ccValue := helpers.GetFromXPath(cv, ""); ccValue.Exists() {
-						cItem.LocationName = types.StringValue(ccValue.String())
-					}
-					item.ApplySourceLocations = append(item.ApplySourceLocations, cItem)
-					return true
-				})
-			}
-			data.SuppressRules = append(data.SuppressRules, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size"); value.Exists() {
-		data.EventsBufferSize = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match"); value.Exists() {
-		data.FilterMatches = make([]LoggingFilterMatches, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := LoggingFilterMatches{}
-			if cValue := helpers.GetFromXPath(v, "match-string"); cValue.Exists() {
-				item.Match = types.StringValue(cValue.String())
-			}
-			data.FilterMatches = append(data.FilterMatches, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"); value.Exists() {
-		data.EventsDisplayLocation = types.BoolValue(true)
-	} else {
-		data.EventsDisplayLocation = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level"); value.Exists() {
-		data.EventsLevel = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/threshold"); value.Exists() {
-		data.EventsThreshold = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression"); value.Exists() {
-		data.EventsPrecfgSuppression = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout"); value.Exists() {
-		data.EventsPrecfgSuppressionTimeout = types.Int64Value(value.Int())
-	}
-}
-
-// End of section. //template:end fromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *LoggingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/console"); value.Exists() {
-		data.Console = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/trap"); value.Exists() {
-		data.Trap = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor"); value.Exists() {
-		data.Monitor = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/console-logging/console-log-facility/console-facility-level"); value.Exists() {
-		data.ConsoleFacility = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/match1"); value.Exists() {
-		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/match2"); value.Exists() {
-		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/match3"); value.Exists() {
-		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/nomatch1"); value.Exists() {
-		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/nomatch2"); value.Exists() {
-		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-discriminator/nomatch3"); value.Exists() {
-		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/device/disk0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/device/disk0"); value.Exists() {
 		data.ArchiveDisk0 = types.BoolValue(true)
 	} else {
 		data.ArchiveDisk0 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/device/disk1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/device/disk1"); value.Exists() {
 		data.ArchiveDisk1 = types.BoolValue(true)
 	} else {
 		data.ArchiveDisk1 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/device/harddisk"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/device/harddisk"); value.Exists() {
 		data.ArchiveHarddisk = types.BoolValue(true)
 	} else {
 		data.ArchiveHarddisk = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/frequency/daily"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/frequency/daily"); value.Exists() {
 		data.ArchiveFrequencyDaily = types.BoolValue(true)
 	} else {
 		data.ArchiveFrequencyDaily = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/frequency/weekly"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/frequency/weekly"); value.Exists() {
 		data.ArchiveFrequencyWeekly = types.BoolValue(true)
 	} else {
 		data.ArchiveFrequencyWeekly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/file-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/file-size"); value.Exists() {
 		data.ArchiveFilesize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/archive-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/archive-size"); value.Exists() {
 		data.ArchiveSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/archive-length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/archive-length"); value.Exists() {
 		data.ArchiveLength = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/severity"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/severity"); value.Exists() {
 		data.ArchiveSeverity = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/archive/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/threshold"); value.Exists() {
 		data.ArchiveThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv4/dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/precedence"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv4/precedence"); value.Exists() {
 		data.Ipv4Precedence = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv6/dscp"); value.Exists() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/precedence"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv6/precedence"); value.Exists() {
 		data.Ipv6Precedence = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/facility/level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/facility/level"); value.Exists() {
 		data.FacilityLevel = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/buffered-entries/count"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/buffered-entries/count"); value.Exists() {
 		data.BufferedEntriesCount = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/logging-buffer-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/logging-buffer-size"); value.Exists() {
 		data.BufferedSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/level"); value.Exists() {
 		data.BufferedLevel = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/match1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/match1"); value.Exists() {
 		data.BufferedDiscriminatorMatch1 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/match2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/match2"); value.Exists() {
 		data.BufferedDiscriminatorMatch2 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/match3"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/match3"); value.Exists() {
 		data.BufferedDiscriminatorMatch3 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/nomatch1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/nomatch1"); value.Exists() {
 		data.BufferedDiscriminatorNomatch1 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/nomatch2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/nomatch2"); value.Exists() {
 		data.BufferedDiscriminatorNomatch2 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/discriminator/nomatch3"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/nomatch3"); value.Exists() {
 		data.BufferedDiscriminatorNomatch3 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/container/all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/container/all"); value.Exists() {
 		data.ContainerAll = types.BoolValue(true)
 	} else {
 		data.ContainerAll = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/container/fetch-timestamp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/container/fetch-timestamp"); value.Exists() {
 		data.ContainerFetchTimestamp = types.BoolValue(true)
 	} else {
 		data.ContainerFetchTimestamp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/files/file"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/files/file"); value.Exists() {
 		data.File = make([]LoggingFile, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := LoggingFile{}
@@ -3069,19 +2733,19 @@ func (data *LoggingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/history"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/history"); value.Exists() {
 		data.History = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/history-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/history-size"); value.Exists() {
 		data.HistorySize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hostnameprefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hostnameprefix"); value.Exists() {
 		data.Hostnameprefix = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/localfilesize"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/localfilesize"); value.Exists() {
 		data.Localfilesize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interfaces/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/source-interfaces/source-interface"); value.Exists() {
 		data.SourceInterfaces = make([]LoggingSourceInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := LoggingSourceInterfaces{}
@@ -3103,25 +2767,25 @@ func (data *LoggingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/suppress/duplicates"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/suppress/duplicates"); value.Exists() {
 		data.SuppressDuplicates = types.BoolValue(true)
 	} else {
 		data.SuppressDuplicates = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/format/rfc5424"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/format/rfc5424"); value.Exists() {
 		data.FormatRfc5424 = types.BoolValue(true)
 	} else {
 		data.FormatRfc5424 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/format/bsd"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/format/bsd"); value.Exists() {
 		data.FormatBsd = types.BoolValue(true)
 	} else {
 		data.FormatBsd = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/yang"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/yang"); value.Exists() {
 		data.Yang = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule"); value.Exists() {
 		data.SuppressRules = make([]LoggingSuppressRules, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := LoggingSuppressRules{}
@@ -3170,10 +2834,10 @@ func (data *LoggingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size"); value.Exists() {
 		data.EventsBufferSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match"); value.Exists() {
 		data.FilterMatches = make([]LoggingFilterMatches, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := LoggingFilterMatches{}
@@ -3184,21 +2848,322 @@ func (data *LoggingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"); value.Exists() {
 		data.EventsDisplayLocation = types.BoolValue(true)
 	} else {
 		data.EventsDisplayLocation = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/level"); value.Exists() {
 		data.EventsLevel = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/threshold"); value.Exists() {
 		data.EventsThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression"); value.Exists() {
 		data.EventsPrecfgSuppression = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout"); value.Exists() {
+		data.EventsPrecfgSuppressionTimeout = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *LoggingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/console"); value.Exists() {
+		data.Console = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/trap"); value.Exists() {
+		data.Trap = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor"); value.Exists() {
+		data.Monitor = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/console-logging/console-log-facility/console-facility-level"); value.Exists() {
+		data.ConsoleFacility = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/match1"); value.Exists() {
+		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/match2"); value.Exists() {
+		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/match3"); value.Exists() {
+		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/nomatch1"); value.Exists() {
+		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/nomatch2"); value.Exists() {
+		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/monitor-discriminator/nomatch3"); value.Exists() {
+		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/device/disk0"); value.Exists() {
+		data.ArchiveDisk0 = types.BoolValue(true)
+	} else {
+		data.ArchiveDisk0 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/device/disk1"); value.Exists() {
+		data.ArchiveDisk1 = types.BoolValue(true)
+	} else {
+		data.ArchiveDisk1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/device/harddisk"); value.Exists() {
+		data.ArchiveHarddisk = types.BoolValue(true)
+	} else {
+		data.ArchiveHarddisk = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/frequency/daily"); value.Exists() {
+		data.ArchiveFrequencyDaily = types.BoolValue(true)
+	} else {
+		data.ArchiveFrequencyDaily = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/frequency/weekly"); value.Exists() {
+		data.ArchiveFrequencyWeekly = types.BoolValue(true)
+	} else {
+		data.ArchiveFrequencyWeekly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/file-size"); value.Exists() {
+		data.ArchiveFilesize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/archive-size"); value.Exists() {
+		data.ArchiveSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/archive-length"); value.Exists() {
+		data.ArchiveLength = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/severity"); value.Exists() {
+		data.ArchiveSeverity = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/archive/threshold"); value.Exists() {
+		data.ArchiveThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv4/dscp"); value.Exists() {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv4/precedence"); value.Exists() {
+		data.Ipv4Precedence = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv6/dscp"); value.Exists() {
+		data.Ipv6Dscp = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv6/precedence"); value.Exists() {
+		data.Ipv6Precedence = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/facility/level"); value.Exists() {
+		data.FacilityLevel = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/buffered-entries/count"); value.Exists() {
+		data.BufferedEntriesCount = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/logging-buffer-size"); value.Exists() {
+		data.BufferedSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/level"); value.Exists() {
+		data.BufferedLevel = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/match1"); value.Exists() {
+		data.BufferedDiscriminatorMatch1 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/match2"); value.Exists() {
+		data.BufferedDiscriminatorMatch2 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/match3"); value.Exists() {
+		data.BufferedDiscriminatorMatch3 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/nomatch1"); value.Exists() {
+		data.BufferedDiscriminatorNomatch1 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/nomatch2"); value.Exists() {
+		data.BufferedDiscriminatorNomatch2 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/buffered/discriminator/nomatch3"); value.Exists() {
+		data.BufferedDiscriminatorNomatch3 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/container/all"); value.Exists() {
+		data.ContainerAll = types.BoolValue(true)
+	} else {
+		data.ContainerAll = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/container/fetch-timestamp"); value.Exists() {
+		data.ContainerFetchTimestamp = types.BoolValue(true)
+	} else {
+		data.ContainerFetchTimestamp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/files/file"); value.Exists() {
+		data.File = make([]LoggingFile, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingFile{}
+			if cValue := helpers.GetFromXPath(v, "file-name"); cValue.Exists() {
+				item.FileName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "path"); cValue.Exists() {
+				item.Path = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "maxfilesize"); cValue.Exists() {
+				item.Maxfilesize = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "severity"); cValue.Exists() {
+				item.Severity = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "local-accounting/send-to-remote/facility/level"); cValue.Exists() {
+				item.LocalAccountingSendToRemoteFacilityLevel = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/match1"); cValue.Exists() {
+				item.DiscriminatorMatch1 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/match2"); cValue.Exists() {
+				item.DiscriminatorMatch2 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/match3"); cValue.Exists() {
+				item.DiscriminatorMatch3 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/nomatch1"); cValue.Exists() {
+				item.DiscriminatorNomatch1 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/nomatch2"); cValue.Exists() {
+				item.DiscriminatorNomatch2 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/nomatch3"); cValue.Exists() {
+				item.DiscriminatorNomatch3 = types.StringValue(cValue.String())
+			}
+			data.File = append(data.File, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/history"); value.Exists() {
+		data.History = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/history-size"); value.Exists() {
+		data.HistorySize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hostnameprefix"); value.Exists() {
+		data.Hostnameprefix = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/localfilesize"); value.Exists() {
+		data.Localfilesize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/source-interfaces/source-interface"); value.Exists() {
+		data.SourceInterfaces = make([]LoggingSourceInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingSourceInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "source-interface-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "vrfs/vrf"); cValue.Exists() {
+				item.Vrfs = make([]LoggingSourceInterfacesVrfs, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := LoggingSourceInterfacesVrfs{}
+					if ccValue := helpers.GetFromXPath(cv, "vrf-name"); ccValue.Exists() {
+						cItem.Name = types.StringValue(ccValue.String())
+					}
+					item.Vrfs = append(item.Vrfs, cItem)
+					return true
+				})
+			}
+			data.SourceInterfaces = append(data.SourceInterfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/suppress/duplicates"); value.Exists() {
+		data.SuppressDuplicates = types.BoolValue(true)
+	} else {
+		data.SuppressDuplicates = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/format/rfc5424"); value.Exists() {
+		data.FormatRfc5424 = types.BoolValue(true)
+	} else {
+		data.FormatRfc5424 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/format/bsd"); value.Exists() {
+		data.FormatBsd = types.BoolValue(true)
+	} else {
+		data.FormatBsd = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/yang"); value.Exists() {
+		data.Yang = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule"); value.Exists() {
+		data.SuppressRules = make([]LoggingSuppressRules, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingSuppressRules{}
+			if cValue := helpers.GetFromXPath(v, ""); cValue.Exists() {
+				item.RuleName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, ""); cValue.Exists() {
+				item.Alarms = make([]LoggingSuppressRulesAlarms, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := LoggingSuppressRulesAlarms{}
+					if ccValue := helpers.GetFromXPath(cv, ""); ccValue.Exists() {
+						cItem.MessageCategory = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, ""); ccValue.Exists() {
+						cItem.GroupName = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, ""); ccValue.Exists() {
+						cItem.MessageCode = types.StringValue(ccValue.String())
+					}
+					item.Alarms = append(item.Alarms, cItem)
+					return true
+				})
+			}
+		if cValue := helpers.GetFromXPath(v, ""); cValue.Exists() {
+			item.AllAlarms = types.BoolValue(true)
+		} else {
+			item.AllAlarms = types.BoolValue(false)
+		}
+		if cValue := helpers.GetFromXPath(v, ""); cValue.Exists() {
+			item.ApplyAllOfRouter = types.BoolValue(true)
+		} else {
+			item.ApplyAllOfRouter = types.BoolValue(false)
+		}
+			if cValue := helpers.GetFromXPath(v, ""); cValue.Exists() {
+				item.ApplySourceLocations = make([]LoggingSuppressRulesApplySourceLocations, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := LoggingSuppressRulesApplySourceLocations{}
+					if ccValue := helpers.GetFromXPath(cv, ""); ccValue.Exists() {
+						cItem.LocationName = types.StringValue(ccValue.String())
+					}
+					item.ApplySourceLocations = append(item.ApplySourceLocations, cItem)
+					return true
+				})
+			}
+			data.SuppressRules = append(data.SuppressRules, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size"); value.Exists() {
+		data.EventsBufferSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match"); value.Exists() {
+		data.FilterMatches = make([]LoggingFilterMatches, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingFilterMatches{}
+			if cValue := helpers.GetFromXPath(v, "match-string"); cValue.Exists() {
+				item.Match = types.StringValue(cValue.String())
+			}
+			data.FilterMatches = append(data.FilterMatches, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"); value.Exists() {
+		data.EventsDisplayLocation = types.BoolValue(true)
+	} else {
+		data.EventsDisplayLocation = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/level"); value.Exists() {
+		data.EventsLevel = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/threshold"); value.Exists() {
+		data.EventsThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression"); value.Exists() {
+		data.EventsPrecfgSuppression = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout"); value.Exists() {
 		data.EventsPrecfgSuppressionTimeout = types.Int64Value(value.Int())
 	}
 }
@@ -3224,11 +3189,11 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", state.getPath()))
 	}
 	for i := range state.FilterMatches {
-		keys := [...]string{"match-string"}
-		stateKeyValues := [...]string{state.FilterMatches[i].Match.ValueString()}
+		keys := [...]string{ "match-string",  }
+		stateKeyValues := [...]string{ state.FilterMatches[i].Match.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -3245,7 +3210,7 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 			if state.FilterMatches[i].Match.ValueString() != data.FilterMatches[j].Match.ValueString() {
 				found = false
 			}
-			if found {
+		if found {
 				break
 			}
 		}
@@ -3257,11 +3222,11 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size", state.getPath()))
 	}
 	for i := range state.SuppressRules {
-		keys := [...]string{""}
-		stateKeyValues := [...]string{state.SuppressRules[i].RuleName.ValueString()}
+		keys := [...]string{ "",  }
+		stateKeyValues := [...]string{ state.SuppressRules[i].RuleName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -3278,13 +3243,13 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 			if state.SuppressRules[i].RuleName.ValueString() != data.SuppressRules[j].RuleName.ValueString() {
 				found = false
 			}
-			if found {
+		if found {
 				for ci := range state.SuppressRules[i].ApplySourceLocations {
-					ckeys := [...]string{""}
-					cstateKeyValues := [...]string{state.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString()}
+					ckeys := [...]string{ "",  }
+					cstateKeyValues := [...]string{ state.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString(),  }
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
 					}
 
 					cemptyKeys := true
@@ -3301,26 +3266,26 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 						if state.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString() != data.SuppressRules[j].ApplySourceLocations[cj].LocationName.ValueString() {
 							found = false
 						}
-						if found {
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/%v", state.getPath(), keyString, ckeyString))
+					if found {
+						break
 					}
 				}
-				if !state.SuppressRules[i].ApplyAllOfRouter.IsNull() && data.SuppressRules[j].ApplyAllOfRouter.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/", state.getPath(), keyString))
+				if !found {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/%v", state.getPath(), keyString, ckeyString))
 				}
-				if !state.SuppressRules[i].AllAlarms.IsNull() && data.SuppressRules[j].AllAlarms.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/", state.getPath(), keyString))
-				}
+			}
+			if !state.SuppressRules[i].ApplyAllOfRouter.IsNull() && data.SuppressRules[j].ApplyAllOfRouter.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/", state.getPath(), keyString))
+			}
+			if !state.SuppressRules[i].AllAlarms.IsNull() && data.SuppressRules[j].AllAlarms.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/", state.getPath(), keyString))
+			}
 				for ci := range state.SuppressRules[i].Alarms {
-					ckeys := [...]string{"", "", ""}
-					cstateKeyValues := [...]string{state.SuppressRules[i].Alarms[ci].MessageCategory.ValueString(), state.SuppressRules[i].Alarms[ci].GroupName.ValueString(), state.SuppressRules[i].Alarms[ci].MessageCode.ValueString()}
+					ckeys := [...]string{ "", "", "",  }
+					cstateKeyValues := [...]string{ state.SuppressRules[i].Alarms[ci].MessageCategory.ValueString(), state.SuppressRules[i].Alarms[ci].GroupName.ValueString(), state.SuppressRules[i].Alarms[ci].MessageCode.ValueString(),  }
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
 					}
 
 					cemptyKeys := true
@@ -3349,14 +3314,14 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 						if state.SuppressRules[i].Alarms[ci].MessageCode.ValueString() != data.SuppressRules[j].Alarms[cj].MessageCode.ValueString() {
 							found = false
 						}
-						if found {
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/%v", state.getPath(), keyString, ckeyString))
+					if found {
+						break
 					}
 				}
+				if !found {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/%v", state.getPath(), keyString, ckeyString))
+				}
+			}
 				break
 			}
 		}
@@ -3377,11 +3342,11 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/suppress/duplicates", state.getPath()))
 	}
 	for i := range state.SourceInterfaces {
-		keys := [...]string{"source-interface-name"}
-		stateKeyValues := [...]string{state.SourceInterfaces[i].Name.ValueString()}
+		keys := [...]string{ "source-interface-name",  }
+		stateKeyValues := [...]string{ state.SourceInterfaces[i].Name.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -3398,13 +3363,13 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 			if state.SourceInterfaces[i].Name.ValueString() != data.SourceInterfaces[j].Name.ValueString() {
 				found = false
 			}
-			if found {
+		if found {
 				for ci := range state.SourceInterfaces[i].Vrfs {
-					ckeys := [...]string{"vrf-name"}
-					cstateKeyValues := [...]string{state.SourceInterfaces[i].Vrfs[ci].Name.ValueString()}
+					ckeys := [...]string{ "vrf-name",  }
+					cstateKeyValues := [...]string{ state.SourceInterfaces[i].Vrfs[ci].Name.ValueString(),  }
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
 					}
 
 					cemptyKeys := true
@@ -3421,14 +3386,14 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 						if state.SourceInterfaces[i].Vrfs[ci].Name.ValueString() != data.SourceInterfaces[j].Vrfs[cj].Name.ValueString() {
 							found = false
 						}
-						if found {
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/source-interfaces/source-interface%v/vrfs/vrf%v", state.getPath(), keyString, ckeyString))
+					if found {
+						break
 					}
 				}
+				if !found {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/source-interfaces/source-interface%v/vrfs/vrf%v", state.getPath(), keyString, ckeyString))
+				}
+			}
 				break
 			}
 		}
@@ -3449,11 +3414,11 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/history", state.getPath()))
 	}
 	for i := range state.File {
-		keys := [...]string{"file-name"}
-		stateKeyValues := [...]string{state.File[i].FileName.ValueString()}
+		keys := [...]string{ "file-name",  }
+		stateKeyValues := [...]string{ state.File[i].FileName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -3470,37 +3435,37 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 			if state.File[i].FileName.ValueString() != data.File[j].FileName.ValueString() {
 				found = false
 			}
-			if found {
-				if !state.File[i].DiscriminatorNomatch3.IsNull() && data.File[j].DiscriminatorNomatch3.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/discriminator/nomatch3", state.getPath(), keyString))
-				}
-				if !state.File[i].DiscriminatorNomatch2.IsNull() && data.File[j].DiscriminatorNomatch2.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/discriminator/nomatch2", state.getPath(), keyString))
-				}
-				if !state.File[i].DiscriminatorNomatch1.IsNull() && data.File[j].DiscriminatorNomatch1.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/discriminator/nomatch1", state.getPath(), keyString))
-				}
-				if !state.File[i].DiscriminatorMatch3.IsNull() && data.File[j].DiscriminatorMatch3.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/discriminator/match3", state.getPath(), keyString))
-				}
-				if !state.File[i].DiscriminatorMatch2.IsNull() && data.File[j].DiscriminatorMatch2.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/discriminator/match2", state.getPath(), keyString))
-				}
-				if !state.File[i].DiscriminatorMatch1.IsNull() && data.File[j].DiscriminatorMatch1.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/discriminator/match1", state.getPath(), keyString))
-				}
-				if !state.File[i].LocalAccountingSendToRemoteFacilityLevel.IsNull() && data.File[j].LocalAccountingSendToRemoteFacilityLevel.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/local-accounting/send-to-remote/facility/level", state.getPath(), keyString))
-				}
-				if !state.File[i].Severity.IsNull() && data.File[j].Severity.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/.", state.getPath(), keyString))
-				}
-				if !state.File[i].Maxfilesize.IsNull() && data.File[j].Maxfilesize.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/.", state.getPath(), keyString))
-				}
-				if !state.File[i].Path.IsNull() && data.File[j].Path.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/.", state.getPath(), keyString))
-				}
+		if found {
+			if !state.File[i].DiscriminatorNomatch3.IsNull() && data.File[j].DiscriminatorNomatch3.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/discriminator/nomatch3", state.getPath(), keyString))
+			}
+			if !state.File[i].DiscriminatorNomatch2.IsNull() && data.File[j].DiscriminatorNomatch2.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/discriminator/nomatch2", state.getPath(), keyString))
+			}
+			if !state.File[i].DiscriminatorNomatch1.IsNull() && data.File[j].DiscriminatorNomatch1.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/discriminator/nomatch1", state.getPath(), keyString))
+			}
+			if !state.File[i].DiscriminatorMatch3.IsNull() && data.File[j].DiscriminatorMatch3.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/discriminator/match3", state.getPath(), keyString))
+			}
+			if !state.File[i].DiscriminatorMatch2.IsNull() && data.File[j].DiscriminatorMatch2.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/discriminator/match2", state.getPath(), keyString))
+			}
+			if !state.File[i].DiscriminatorMatch1.IsNull() && data.File[j].DiscriminatorMatch1.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/discriminator/match1", state.getPath(), keyString))
+			}
+			if !state.File[i].LocalAccountingSendToRemoteFacilityLevel.IsNull() && data.File[j].LocalAccountingSendToRemoteFacilityLevel.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/local-accounting/send-to-remote/facility/level", state.getPath(), keyString))
+			}
+			if !state.File[i].Severity.IsNull() && data.File[j].Severity.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/.", state.getPath(), keyString))
+			}
+			if !state.File[i].Maxfilesize.IsNull() && data.File[j].Maxfilesize.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/.", state.getPath(), keyString))
+			}
+			if !state.File[i].Path.IsNull() && data.File[j].Path.IsNull() {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/.", state.getPath(), keyString))
+			}
 				break
 			}
 		}
@@ -3631,26 +3596,26 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context, state *Logging) []
 		}
 	}
 	for i := range data.FilterMatches {
-		keys := [...]string{"match-string"}
-		keyValues := [...]string{data.FilterMatches[i].Match.ValueString()}
+		keys := [...]string{ "match-string",  }
+		keyValues := [...]string{ data.FilterMatches[i].Match.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	for i := range data.SuppressRules {
-		keys := [...]string{""}
-		keyValues := [...]string{data.SuppressRules[i].RuleName.ValueString()}
+		keys := [...]string{ "",  }
+		keyValues := [...]string{ data.SuppressRules[i].RuleName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		for ci := range data.SuppressRules[i].ApplySourceLocations {
-			ckeys := [...]string{""}
-			ckeyValues := [...]string{data.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString()}
+			ckeys := [...]string{ "",  }
+			ckeyValues := [...]string{ data.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString(),  }
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
 			}
 		}
 		// Only delete if state has true and plan has false
@@ -3668,11 +3633,11 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context, state *Logging) []
 			}
 		}
 		for ci := range data.SuppressRules[i].Alarms {
-			ckeys := [...]string{"", "", ""}
-			ckeyValues := [...]string{data.SuppressRules[i].Alarms[ci].MessageCategory.ValueString(), data.SuppressRules[i].Alarms[ci].GroupName.ValueString(), data.SuppressRules[i].Alarms[ci].MessageCode.ValueString()}
+			ckeys := [...]string{ "", "", "",  }
+			ckeyValues := [...]string{ data.SuppressRules[i].Alarms[ci].MessageCategory.ValueString(), data.SuppressRules[i].Alarms[ci].GroupName.ValueString(), data.SuppressRules[i].Alarms[ci].MessageCode.ValueString(),  }
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
 			}
 		}
 	}
@@ -3695,27 +3660,27 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context, state *Logging) []
 		}
 	}
 	for i := range data.SourceInterfaces {
-		keys := [...]string{"source-interface-name"}
-		keyValues := [...]string{data.SourceInterfaces[i].Name.ValueString()}
+		keys := [...]string{ "source-interface-name",  }
+		keyValues := [...]string{ data.SourceInterfaces[i].Name.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		for ci := range data.SourceInterfaces[i].Vrfs {
-			ckeys := [...]string{"vrf-name"}
-			ckeyValues := [...]string{data.SourceInterfaces[i].Vrfs[ci].Name.ValueString()}
+			ckeys := [...]string{ "vrf-name",  }
+			ckeyValues := [...]string{ data.SourceInterfaces[i].Vrfs[ci].Name.ValueString(),  }
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
 			}
 		}
 	}
 	for i := range data.File {
-		keys := [...]string{"file-name"}
-		keyValues := [...]string{data.File[i].FileName.ValueString()}
+		keys := [...]string{ "file-name",  }
+		keyValues := [...]string{ data.File[i].FileName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -3784,7 +3749,7 @@ func (data *Logging) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", data.getPath()))
 	}
 	for i := range data.FilterMatches {
-		keyValues := [...]string{data.FilterMatches[i].Match.ValueString()}
+		keyValues := [...]string{ data.FilterMatches[i].Match.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -3792,7 +3757,7 @@ func (data *Logging) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size", data.getPath()))
 	}
 	for i := range data.SuppressRules {
-		keyValues := [...]string{data.SuppressRules[i].RuleName.ValueString()}
+		keyValues := [...]string{ data.SuppressRules[i].RuleName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -3809,7 +3774,7 @@ func (data *Logging) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/suppress/duplicates", data.getPath()))
 	}
 	for i := range data.SourceInterfaces {
-		keyValues := [...]string{data.SourceInterfaces[i].Name.ValueString()}
+		keyValues := [...]string{ data.SourceInterfaces[i].Name.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-interfaces/source-interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -3826,7 +3791,7 @@ func (data *Logging) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/history", data.getPath()))
 	}
 	for i := range data.File {
-		keyValues := [...]string{data.File[i].FileName.ValueString()}
+		keyValues := [...]string{ data.File[i].FileName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/files/file=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -3950,28 +3915,28 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.EventsPrecfgSuppressionTimeout.IsNull() && data.EventsPrecfgSuppressionTimeout.IsNull() {
-		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout"
+		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EventsPrecfgSuppression.IsNull() && data.EventsPrecfgSuppression.IsNull() {
-		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression"
+		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EventsThreshold.IsNull() && data.EventsThreshold.IsNull() {
-		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/threshold"
+		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/threshold"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EventsLevel.IsNull() && data.EventsLevel.IsNull() {
-		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/level"
+		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3979,15 +3944,15 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.EventsDisplayLocation.IsNull() && state.EventsDisplayLocation.ValueBool() && data.EventsDisplayLocation.IsNull() {
-		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"
+		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.FilterMatches {
-		stateKeys := [...]string{"match-string"}
-		stateKeyValues := [...]string{state.FilterMatches[i].Match.ValueString()}
+		stateKeys := [...]string{ "match-string",  }
+		stateKeyValues := [...]string{ state.FilterMatches[i].Match.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4016,15 +3981,15 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 		}
 	}
 	if !state.EventsBufferSize.IsNull() && data.EventsBufferSize.IsNull() {
-		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size"
+		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.SuppressRules {
-		stateKeys := [...]string{""}
-		stateKeyValues := [...]string{state.SuppressRules[i].RuleName.ValueString()}
+		stateKeys := [...]string{ "",  }
+		stateKeyValues := [...]string{ state.SuppressRules[i].RuleName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4045,9 +4010,9 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 				found = false
 			}
 			if found {
-				for ci := range state.SuppressRules[i].ApplySourceLocations {
-					cstateKeys := [...]string{""}
-					cstateKeyValues := [...]string{state.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString()}
+			for ci := range state.SuppressRules[i].ApplySourceLocations {
+					cstateKeys := [...]string{ "",  }
+					cstateKeyValues := [...]string{ state.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString(),  }
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -4075,17 +4040,17 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/%v", predicates, cpredicates))
 					}
 				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.SuppressRules[i].ApplyAllOfRouter.IsNull() && state.SuppressRules[i].ApplyAllOfRouter.ValueBool() && data.SuppressRules[j].ApplyAllOfRouter.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.SuppressRules[i].AllAlarms.IsNull() && state.SuppressRules[i].AllAlarms.ValueBool() && data.SuppressRules[j].AllAlarms.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/", predicates))
-				}
-				for ci := range state.SuppressRules[i].Alarms {
-					cstateKeys := [...]string{"", "", ""}
-					cstateKeyValues := [...]string{state.SuppressRules[i].Alarms[ci].MessageCategory.ValueString(), state.SuppressRules[i].Alarms[ci].GroupName.ValueString(), state.SuppressRules[i].Alarms[ci].MessageCode.ValueString()}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.SuppressRules[i].ApplyAllOfRouter.IsNull() && state.SuppressRules[i].ApplyAllOfRouter.ValueBool() && data.SuppressRules[j].ApplyAllOfRouter.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/", predicates))
+			}
+			// For boolean fields, only delete if state was true (presence container was set)
+			if !state.SuppressRules[i].AllAlarms.IsNull() && state.SuppressRules[i].AllAlarms.ValueBool() && data.SuppressRules[j].AllAlarms.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/", predicates))
+			}
+			for ci := range state.SuppressRules[i].Alarms {
+					cstateKeys := [...]string{ "", "", "",  }
+					cstateKeyValues := [...]string{ state.SuppressRules[i].Alarms[ci].MessageCategory.ValueString(), state.SuppressRules[i].Alarms[ci].GroupName.ValueString(), state.SuppressRules[i].Alarms[ci].MessageCode.ValueString(),  }
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -4133,7 +4098,7 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 		}
 	}
 	if !state.Yang.IsNull() && data.Yang.IsNull() {
-		deletePath := state.getXPath() + "/yang"
+		deletePath := state.getXPath()+"/yang"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -4141,7 +4106,7 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.FormatBsd.IsNull() && state.FormatBsd.ValueBool() && data.FormatBsd.IsNull() {
-		deletePath := state.getXPath() + "/format/bsd"
+		deletePath := state.getXPath()+"/format/bsd"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -4149,7 +4114,7 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.FormatRfc5424.IsNull() && state.FormatRfc5424.ValueBool() && data.FormatRfc5424.IsNull() {
-		deletePath := state.getXPath() + "/format/rfc5424"
+		deletePath := state.getXPath()+"/format/rfc5424"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -4157,15 +4122,15 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SuppressDuplicates.IsNull() && state.SuppressDuplicates.ValueBool() && data.SuppressDuplicates.IsNull() {
-		deletePath := state.getXPath() + "/suppress/duplicates"
+		deletePath := state.getXPath()+"/suppress/duplicates"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.SourceInterfaces {
-		stateKeys := [...]string{"source-interface-name"}
-		stateKeyValues := [...]string{state.SourceInterfaces[i].Name.ValueString()}
+		stateKeys := [...]string{ "source-interface-name",  }
+		stateKeyValues := [...]string{ state.SourceInterfaces[i].Name.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4186,9 +4151,9 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 				found = false
 			}
 			if found {
-				for ci := range state.SourceInterfaces[i].Vrfs {
-					cstateKeys := [...]string{"vrf-name"}
-					cstateKeyValues := [...]string{state.SourceInterfaces[i].Vrfs[ci].Name.ValueString()}
+			for ci := range state.SourceInterfaces[i].Vrfs {
+					cstateKeys := [...]string{ "vrf-name",  }
+					cstateKeyValues := [...]string{ state.SourceInterfaces[i].Vrfs[ci].Name.ValueString(),  }
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -4224,36 +4189,36 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 		}
 	}
 	if !state.Localfilesize.IsNull() && data.Localfilesize.IsNull() {
-		deletePath := state.getXPath() + "/localfilesize"
+		deletePath := state.getXPath()+"/localfilesize"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Hostnameprefix.IsNull() && data.Hostnameprefix.IsNull() {
-		deletePath := state.getXPath() + "/hostnameprefix"
+		deletePath := state.getXPath()+"/hostnameprefix"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.HistorySize.IsNull() && data.HistorySize.IsNull() {
-		deletePath := state.getXPath() + "/history-size"
+		deletePath := state.getXPath()+"/history-size"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.History.IsNull() && data.History.IsNull() {
-		deletePath := state.getXPath() + "/history"
+		deletePath := state.getXPath()+"/history"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.File {
-		stateKeys := [...]string{"file-name"}
-		stateKeyValues := [...]string{state.File[i].FileName.ValueString()}
+		stateKeys := [...]string{ "file-name",  }
+		stateKeyValues := [...]string{ state.File[i].FileName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -4274,36 +4239,36 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 				found = false
 			}
 			if found {
-				if !state.File[i].DiscriminatorNomatch3.IsNull() && data.File[j].DiscriminatorNomatch3.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/nomatch3", predicates))
-				}
-				if !state.File[i].DiscriminatorNomatch2.IsNull() && data.File[j].DiscriminatorNomatch2.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/nomatch2", predicates))
-				}
-				if !state.File[i].DiscriminatorNomatch1.IsNull() && data.File[j].DiscriminatorNomatch1.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/nomatch1", predicates))
-				}
-				if !state.File[i].DiscriminatorMatch3.IsNull() && data.File[j].DiscriminatorMatch3.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/match3", predicates))
-				}
-				if !state.File[i].DiscriminatorMatch2.IsNull() && data.File[j].DiscriminatorMatch2.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/match2", predicates))
-				}
-				if !state.File[i].DiscriminatorMatch1.IsNull() && data.File[j].DiscriminatorMatch1.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/match1", predicates))
-				}
-				if !state.File[i].LocalAccountingSendToRemoteFacilityLevel.IsNull() && data.File[j].LocalAccountingSendToRemoteFacilityLevel.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/local-accounting/send-to-remote/facility/level", predicates))
-				}
-				if !state.File[i].Severity.IsNull() && data.File[j].Severity.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/.", predicates))
-				}
-				if !state.File[i].Maxfilesize.IsNull() && data.File[j].Maxfilesize.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/.", predicates))
-				}
-				if !state.File[i].Path.IsNull() && data.File[j].Path.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/.", predicates))
-				}
+			if !state.File[i].DiscriminatorNomatch3.IsNull() && data.File[j].DiscriminatorNomatch3.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/nomatch3", predicates))
+			}
+			if !state.File[i].DiscriminatorNomatch2.IsNull() && data.File[j].DiscriminatorNomatch2.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/nomatch2", predicates))
+			}
+			if !state.File[i].DiscriminatorNomatch1.IsNull() && data.File[j].DiscriminatorNomatch1.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/nomatch1", predicates))
+			}
+			if !state.File[i].DiscriminatorMatch3.IsNull() && data.File[j].DiscriminatorMatch3.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/match3", predicates))
+			}
+			if !state.File[i].DiscriminatorMatch2.IsNull() && data.File[j].DiscriminatorMatch2.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/match2", predicates))
+			}
+			if !state.File[i].DiscriminatorMatch1.IsNull() && data.File[j].DiscriminatorMatch1.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/match1", predicates))
+			}
+			if !state.File[i].LocalAccountingSendToRemoteFacilityLevel.IsNull() && data.File[j].LocalAccountingSendToRemoteFacilityLevel.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/local-accounting/send-to-remote/facility/level", predicates))
+			}
+			if !state.File[i].Severity.IsNull() && data.File[j].Severity.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/.", predicates))
+			}
+			if !state.File[i].Maxfilesize.IsNull() && data.File[j].Maxfilesize.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/.", predicates))
+			}
+			if !state.File[i].Path.IsNull() && data.File[j].Path.IsNull() {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/.", predicates))
+			}
 				break
 			}
 		}
@@ -4313,7 +4278,7 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ContainerFetchTimestamp.IsNull() && state.ContainerFetchTimestamp.ValueBool() && data.ContainerFetchTimestamp.IsNull() {
-		deletePath := state.getXPath() + "/container/fetch-timestamp"
+		deletePath := state.getXPath()+"/container/fetch-timestamp"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -4321,140 +4286,140 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ContainerAll.IsNull() && state.ContainerAll.ValueBool() && data.ContainerAll.IsNull() {
-		deletePath := state.getXPath() + "/container/all"
+		deletePath := state.getXPath()+"/container/all"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BufferedDiscriminatorNomatch3.IsNull() && data.BufferedDiscriminatorNomatch3.IsNull() {
-		deletePath := state.getXPath() + "/buffered/discriminator/nomatch3"
+		deletePath := state.getXPath()+"/buffered/discriminator/nomatch3"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BufferedDiscriminatorNomatch2.IsNull() && data.BufferedDiscriminatorNomatch2.IsNull() {
-		deletePath := state.getXPath() + "/buffered/discriminator/nomatch2"
+		deletePath := state.getXPath()+"/buffered/discriminator/nomatch2"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BufferedDiscriminatorNomatch1.IsNull() && data.BufferedDiscriminatorNomatch1.IsNull() {
-		deletePath := state.getXPath() + "/buffered/discriminator/nomatch1"
+		deletePath := state.getXPath()+"/buffered/discriminator/nomatch1"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BufferedDiscriminatorMatch3.IsNull() && data.BufferedDiscriminatorMatch3.IsNull() {
-		deletePath := state.getXPath() + "/buffered/discriminator/match3"
+		deletePath := state.getXPath()+"/buffered/discriminator/match3"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BufferedDiscriminatorMatch2.IsNull() && data.BufferedDiscriminatorMatch2.IsNull() {
-		deletePath := state.getXPath() + "/buffered/discriminator/match2"
+		deletePath := state.getXPath()+"/buffered/discriminator/match2"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BufferedDiscriminatorMatch1.IsNull() && data.BufferedDiscriminatorMatch1.IsNull() {
-		deletePath := state.getXPath() + "/buffered/discriminator/match1"
+		deletePath := state.getXPath()+"/buffered/discriminator/match1"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BufferedLevel.IsNull() && data.BufferedLevel.IsNull() {
-		deletePath := state.getXPath() + "/buffered/level"
+		deletePath := state.getXPath()+"/buffered/level"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BufferedSize.IsNull() && data.BufferedSize.IsNull() {
-		deletePath := state.getXPath() + "/buffered/logging-buffer-size"
+		deletePath := state.getXPath()+"/buffered/logging-buffer-size"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BufferedEntriesCount.IsNull() && data.BufferedEntriesCount.IsNull() {
-		deletePath := state.getXPath() + "/buffered/buffered-entries/count"
+		deletePath := state.getXPath()+"/buffered/buffered-entries/count"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.FacilityLevel.IsNull() && data.FacilityLevel.IsNull() {
-		deletePath := state.getXPath() + "/facility/level"
+		deletePath := state.getXPath()+"/facility/level"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Ipv6Precedence.IsNull() && data.Ipv6Precedence.IsNull() {
-		deletePath := state.getXPath() + "/ipv6/precedence"
+		deletePath := state.getXPath()+"/ipv6/precedence"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Ipv6Dscp.IsNull() && data.Ipv6Dscp.IsNull() {
-		deletePath := state.getXPath() + "/ipv6/dscp"
+		deletePath := state.getXPath()+"/ipv6/dscp"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Ipv4Precedence.IsNull() && data.Ipv4Precedence.IsNull() {
-		deletePath := state.getXPath() + "/ipv4/precedence"
+		deletePath := state.getXPath()+"/ipv4/precedence"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Ipv4Dscp.IsNull() && data.Ipv4Dscp.IsNull() {
-		deletePath := state.getXPath() + "/ipv4/dscp"
+		deletePath := state.getXPath()+"/ipv4/dscp"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ArchiveThreshold.IsNull() && data.ArchiveThreshold.IsNull() {
-		deletePath := state.getXPath() + "/archive/threshold"
+		deletePath := state.getXPath()+"/archive/threshold"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ArchiveSeverity.IsNull() && data.ArchiveSeverity.IsNull() {
-		deletePath := state.getXPath() + "/archive/severity"
+		deletePath := state.getXPath()+"/archive/severity"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ArchiveLength.IsNull() && data.ArchiveLength.IsNull() {
-		deletePath := state.getXPath() + "/archive/archive-length"
+		deletePath := state.getXPath()+"/archive/archive-length"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ArchiveSize.IsNull() && data.ArchiveSize.IsNull() {
-		deletePath := state.getXPath() + "/archive/archive-size"
+		deletePath := state.getXPath()+"/archive/archive-size"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ArchiveFilesize.IsNull() && data.ArchiveFilesize.IsNull() {
-		deletePath := state.getXPath() + "/archive/file-size"
+		deletePath := state.getXPath()+"/archive/file-size"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -4462,7 +4427,7 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ArchiveFrequencyWeekly.IsNull() && state.ArchiveFrequencyWeekly.ValueBool() && data.ArchiveFrequencyWeekly.IsNull() {
-		deletePath := state.getXPath() + "/archive/frequency/weekly"
+		deletePath := state.getXPath()+"/archive/frequency/weekly"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -4470,7 +4435,7 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ArchiveFrequencyDaily.IsNull() && state.ArchiveFrequencyDaily.ValueBool() && data.ArchiveFrequencyDaily.IsNull() {
-		deletePath := state.getXPath() + "/archive/frequency/daily"
+		deletePath := state.getXPath()+"/archive/frequency/daily"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -4478,7 +4443,7 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ArchiveHarddisk.IsNull() && state.ArchiveHarddisk.ValueBool() && data.ArchiveHarddisk.IsNull() {
-		deletePath := state.getXPath() + "/archive/device/harddisk"
+		deletePath := state.getXPath()+"/archive/device/harddisk"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -4486,7 +4451,7 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ArchiveDisk1.IsNull() && state.ArchiveDisk1.ValueBool() && data.ArchiveDisk1.IsNull() {
-		deletePath := state.getXPath() + "/archive/device/disk1"
+		deletePath := state.getXPath()+"/archive/device/disk1"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -4494,77 +4459,77 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ArchiveDisk0.IsNull() && state.ArchiveDisk0.ValueBool() && data.ArchiveDisk0.IsNull() {
-		deletePath := state.getXPath() + "/archive/device/disk0"
+		deletePath := state.getXPath()+"/archive/device/disk0"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MonitorDiscriminatorNomatch3.IsNull() && data.MonitorDiscriminatorNomatch3.IsNull() {
-		deletePath := state.getXPath() + "/monitor-discriminator/nomatch3"
+		deletePath := state.getXPath()+"/monitor-discriminator/nomatch3"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MonitorDiscriminatorNomatch2.IsNull() && data.MonitorDiscriminatorNomatch2.IsNull() {
-		deletePath := state.getXPath() + "/monitor-discriminator/nomatch2"
+		deletePath := state.getXPath()+"/monitor-discriminator/nomatch2"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MonitorDiscriminatorNomatch1.IsNull() && data.MonitorDiscriminatorNomatch1.IsNull() {
-		deletePath := state.getXPath() + "/monitor-discriminator/nomatch1"
+		deletePath := state.getXPath()+"/monitor-discriminator/nomatch1"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MonitorDiscriminatorMatch3.IsNull() && data.MonitorDiscriminatorMatch3.IsNull() {
-		deletePath := state.getXPath() + "/monitor-discriminator/match3"
+		deletePath := state.getXPath()+"/monitor-discriminator/match3"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MonitorDiscriminatorMatch2.IsNull() && data.MonitorDiscriminatorMatch2.IsNull() {
-		deletePath := state.getXPath() + "/monitor-discriminator/match2"
+		deletePath := state.getXPath()+"/monitor-discriminator/match2"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MonitorDiscriminatorMatch1.IsNull() && data.MonitorDiscriminatorMatch1.IsNull() {
-		deletePath := state.getXPath() + "/monitor-discriminator/match1"
+		deletePath := state.getXPath()+"/monitor-discriminator/match1"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ConsoleFacility.IsNull() && data.ConsoleFacility.IsNull() {
-		deletePath := state.getXPath() + "/console-logging/console-log-facility/console-facility-level"
+		deletePath := state.getXPath()+"/console-logging/console-log-facility/console-facility-level"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Monitor.IsNull() && data.Monitor.IsNull() {
-		deletePath := state.getXPath() + "/monitor"
+		deletePath := state.getXPath()+"/monitor"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Trap.IsNull() && data.Trap.IsNull() {
-		deletePath := state.getXPath() + "/trap"
+		deletePath := state.getXPath()+"/trap"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Console.IsNull() && data.Console.IsNull() {
-		deletePath := state.getXPath() + "/console"
+		deletePath := state.getXPath()+"/console"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -4597,8 +4562,8 @@ func (data *Logging) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location")
 	}
 	for i := range data.FilterMatches {
-		keys := [...]string{"match-string"}
-		keyValues := [...]string{data.FilterMatches[i].Match.ValueString()}
+		keys := [...]string{ "match-string",  }
+		keyValues := [...]string{ data.FilterMatches[i].Match.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4610,8 +4575,8 @@ func (data *Logging) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size")
 	}
 	for i := range data.SuppressRules {
-		keys := [...]string{""}
-		keyValues := [...]string{data.SuppressRules[i].RuleName.ValueString()}
+		keys := [...]string{ "",  }
+		keyValues := [...]string{ data.SuppressRules[i].RuleName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4632,8 +4597,8 @@ func (data *Logging) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/suppress/duplicates")
 	}
 	for i := range data.SourceInterfaces {
-		keys := [...]string{"source-interface-name"}
-		keyValues := [...]string{data.SourceInterfaces[i].Name.ValueString()}
+		keys := [...]string{ "source-interface-name",  }
+		keyValues := [...]string{ data.SourceInterfaces[i].Name.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -4654,8 +4619,8 @@ func (data *Logging) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/history")
 	}
 	for i := range data.File {
-		keys := [...]string{"file-name"}
-		keyValues := [...]string{data.File[i].FileName.ValueString()}
+		keys := [...]string{ "file-name",  }
+		keyValues := [...]string{ data.File[i].FileName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

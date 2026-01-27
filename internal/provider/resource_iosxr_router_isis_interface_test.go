@@ -21,8 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -83,23 +81,23 @@ func TestAccIosxrRouterISISInterface(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterISISInterfacePrerequisitesConfig + testAccIosxrRouterISISInterfaceConfig_minimum(),
+			Config: testAccIosxrRouterISISInterfacePrerequisitesConfig+testAccIosxrRouterISISInterfaceConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterISISInterfacePrerequisitesConfig + testAccIosxrRouterISISInterfaceConfig_all(),
-		Check:  resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrRouterISISInterfacePrerequisitesConfig+testAccIosxrRouterISISInterfaceConfig_all(),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:      "iosxr_router_isis_interface.test",
-		ImportState:       true,
+		ResourceName:  "iosxr_router_isis_interface.test",
+		ImportState:   true,
 		ImportStateIdFunc: iosxrRouterISISInterfaceImportStateIdFunc("iosxr_router_isis_interface.test"),
-		Check:             resource.ComposeTestCheckFunc(checks...),
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps:                    steps,
+		Steps: steps,
 	})
 }
 
@@ -113,7 +111,7 @@ func iosxrRouterISISInterfaceImportStateIdFunc(resourceName string) resource.Imp
 		ProcessId := primary.Attributes["process_id"]
 		InterfaceName := primary.Attributes["interface_name"]
 
-		return fmt.Sprintf("%s,%s", ProcessId, InterfaceName), nil
+		return fmt.Sprintf("%s,%s", ProcessId,InterfaceName), nil
 	}
 }
 

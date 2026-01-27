@@ -55,8 +55,8 @@ func TestAccDataSourceIosxrLoggingVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrLoggingVRFPrerequisitesConfig + testAccDataSourceIosxrLoggingVRFConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrLoggingVRFPrerequisitesConfig+testAccDataSourceIosxrLoggingVRFConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

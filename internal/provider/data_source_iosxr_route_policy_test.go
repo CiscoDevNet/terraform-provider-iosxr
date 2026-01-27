@@ -51,8 +51,8 @@ func TestAccDataSourceIosxrRoutePolicy(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRoutePolicyPrerequisitesConfig + testAccDataSourceIosxrRoutePolicyConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrRoutePolicyPrerequisitesConfig+testAccDataSourceIosxrRoutePolicyConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

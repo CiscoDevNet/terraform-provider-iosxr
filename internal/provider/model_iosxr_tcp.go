@@ -24,65 +24,66 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/tidwall/sjson"
+	"github.com/tidwall/gjson"
+	"github.com/netascode/xmldot"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
-	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type TCP struct {
-	Device                   types.String     `tfsdk:"device"`
-	Id                       types.String     `tfsdk:"id"`
-	DeleteMode               types.String     `tfsdk:"delete_mode"`
-	WindowSize               types.Int64      `tfsdk:"window_size"`
-	SynwaitTime              types.Int64      `tfsdk:"synwait_time"`
-	PathMtuDiscovery         types.Bool       `tfsdk:"path_mtu_discovery"`
-	PathMtuDiscoveryAgeTimer types.String     `tfsdk:"path_mtu_discovery_age_timer"`
-	ReceiveQueue             types.Int64      `tfsdk:"receive_queue"`
-	Timestamp                types.Bool       `tfsdk:"timestamp"`
-	Throttle                 types.Int64      `tfsdk:"throttle"`
-	ThrottleHighWaterMark    types.Int64      `tfsdk:"throttle_high_water_mark"`
-	SelectiveAck             types.Bool       `tfsdk:"selective_ack"`
-	Mss                      types.Int64      `tfsdk:"mss"`
-	AcceptRate               types.Int64      `tfsdk:"accept_rate"`
-	Ao                       types.Bool       `tfsdk:"ao"`
-	AoKeychains              []TCPAoKeychains `tfsdk:"ao_keychains"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	WindowSize types.Int64 `tfsdk:"window_size"`
+	SynwaitTime types.Int64 `tfsdk:"synwait_time"`
+	PathMtuDiscovery types.Bool `tfsdk:"path_mtu_discovery"`
+	PathMtuDiscoveryAgeTimer types.String `tfsdk:"path_mtu_discovery_age_timer"`
+	ReceiveQueue types.Int64 `tfsdk:"receive_queue"`
+	Timestamp types.Bool `tfsdk:"timestamp"`
+	Throttle types.Int64 `tfsdk:"throttle"`
+	ThrottleHighWaterMark types.Int64 `tfsdk:"throttle_high_water_mark"`
+	SelectiveAck types.Bool `tfsdk:"selective_ack"`
+	Mss types.Int64 `tfsdk:"mss"`
+	AcceptRate types.Int64 `tfsdk:"accept_rate"`
+	Ao types.Bool `tfsdk:"ao"`
+	AoKeychains []TCPAoKeychains `tfsdk:"ao_keychains"`
 }
 
 type TCPData struct {
-	Device                   types.String     `tfsdk:"device"`
-	Id                       types.String     `tfsdk:"id"`
-	WindowSize               types.Int64      `tfsdk:"window_size"`
-	SynwaitTime              types.Int64      `tfsdk:"synwait_time"`
-	PathMtuDiscovery         types.Bool       `tfsdk:"path_mtu_discovery"`
-	PathMtuDiscoveryAgeTimer types.String     `tfsdk:"path_mtu_discovery_age_timer"`
-	ReceiveQueue             types.Int64      `tfsdk:"receive_queue"`
-	Timestamp                types.Bool       `tfsdk:"timestamp"`
-	Throttle                 types.Int64      `tfsdk:"throttle"`
-	ThrottleHighWaterMark    types.Int64      `tfsdk:"throttle_high_water_mark"`
-	SelectiveAck             types.Bool       `tfsdk:"selective_ack"`
-	Mss                      types.Int64      `tfsdk:"mss"`
-	AcceptRate               types.Int64      `tfsdk:"accept_rate"`
-	Ao                       types.Bool       `tfsdk:"ao"`
-	AoKeychains              []TCPAoKeychains `tfsdk:"ao_keychains"`
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	WindowSize types.Int64 `tfsdk:"window_size"`
+	SynwaitTime types.Int64 `tfsdk:"synwait_time"`
+	PathMtuDiscovery types.Bool `tfsdk:"path_mtu_discovery"`
+	PathMtuDiscoveryAgeTimer types.String `tfsdk:"path_mtu_discovery_age_timer"`
+	ReceiveQueue types.Int64 `tfsdk:"receive_queue"`
+	Timestamp types.Bool `tfsdk:"timestamp"`
+	Throttle types.Int64 `tfsdk:"throttle"`
+	ThrottleHighWaterMark types.Int64 `tfsdk:"throttle_high_water_mark"`
+	SelectiveAck types.Bool `tfsdk:"selective_ack"`
+	Mss types.Int64 `tfsdk:"mss"`
+	AcceptRate types.Int64 `tfsdk:"accept_rate"`
+	Ao types.Bool `tfsdk:"ao"`
+	AoKeychains []TCPAoKeychains `tfsdk:"ao_keychains"`
 }
 type TCPAoKeychains struct {
-	KeychainName types.String         `tfsdk:"keychain_name"`
-	Keys         []TCPAoKeychainsKeys `tfsdk:"keys"`
+	KeychainName types.String `tfsdk:"keychain_name"`
+	Keys []TCPAoKeychainsKeys `tfsdk:"keys"`
 }
 type TCPAoKeychainsKeys struct {
-	KeyName   types.String `tfsdk:"key_name"`
-	SendId    types.Int64  `tfsdk:"send_id"`
-	ReceiveId types.Int64  `tfsdk:"receive_id"`
+	KeyName types.String `tfsdk:"key_name"`
+	SendId types.Int64 `tfsdk:"send_id"`
+	ReceiveId types.Int64 `tfsdk:"receive_id"`
 }
 
 // End of section. //template:end types
@@ -198,15 +199,14 @@ func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.SynwaitTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "path-mtu-discovery"); value.Exists() {
-		if !data.PathMtuDiscovery.IsNull() {
+	if value := gjson.GetBytes(res, "path-mtu-discovery"); !data.PathMtuDiscovery.IsNull() {
+		if value.Exists() {
 			data.PathMtuDiscovery = types.BoolValue(true)
+		} else {
+			data.PathMtuDiscovery = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.PathMtuDiscovery.IsNull() {
-			data.PathMtuDiscovery = types.BoolNull()
-		}
+		data.PathMtuDiscovery = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "path-mtu-discovery.age-timer"); value.Exists() && !data.PathMtuDiscoveryAgeTimer.IsNull() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
@@ -218,15 +218,14 @@ func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.ReceiveQueue = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timestamp"); value.Exists() {
-		if !data.Timestamp.IsNull() {
+	if value := gjson.GetBytes(res, "timestamp"); !data.Timestamp.IsNull() {
+		if value.Exists() {
 			data.Timestamp = types.BoolValue(true)
+		} else {
+			data.Timestamp = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.Timestamp.IsNull() {
-			data.Timestamp = types.BoolNull()
-		}
+		data.Timestamp = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "throttle"); value.Exists() && !data.Throttle.IsNull() {
 		data.Throttle = types.Int64Value(value.Int())
@@ -238,15 +237,14 @@ func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.ThrottleHighWaterMark = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "selective-ack"); value.Exists() {
-		if !data.SelectiveAck.IsNull() {
+	if value := gjson.GetBytes(res, "selective-ack"); !data.SelectiveAck.IsNull() {
+		if value.Exists() {
 			data.SelectiveAck = types.BoolValue(true)
+		} else {
+			data.SelectiveAck = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.SelectiveAck.IsNull() {
-			data.SelectiveAck = types.BoolNull()
-		}
+		data.SelectiveAck = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "mss"); value.Exists() && !data.Mss.IsNull() {
 		data.Mss = types.Int64Value(value.Int())
@@ -258,19 +256,18 @@ func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.AcceptRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ao"); value.Exists() {
-		if !data.Ao.IsNull() {
+	if value := gjson.GetBytes(res, "ao"); !data.Ao.IsNull() {
+		if value.Exists() {
 			data.Ao = types.BoolValue(true)
+		} else {
+			data.Ao = types.BoolValue(false)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
-		if data.Ao.IsNull() {
-			data.Ao = types.BoolNull()
-		}
+		data.Ao = types.BoolNull()
 	}
 	for i := range data.AoKeychains {
-		keys := [...]string{"keychain-name"}
-		keyValues := [...]string{data.AoKeychains[i].KeychainName.ValueString()}
+		keys := [...]string{ "keychain-name",  }
+		keyValues := [...]string{ data.AoKeychains[i].KeychainName.ValueString(),  }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "ao.keychains.keychain").ForEach(
@@ -296,39 +293,44 @@ func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.AoKeychains[i].KeychainName = types.StringNull()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("keys.key"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.AoKeychains[i].Keys
-			data.AoKeychains[i].Keys = make([]TCPAoKeychainsKeys, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := TCPAoKeychainsKeys{}
-				if cValue := cr.Get("key-name"); cValue.Exists() {
-					citem.KeyName = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get("send-id"); cValue.Exists() {
-					citem.SendId = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("receive-id"); cValue.Exists() {
-					citem.ReceiveId = types.Int64Value(cValue.Int())
-				}
+		for ci := range data.AoKeychains[i].Keys {
+			keys := [...]string{ "key-name",  }
+			keyValues := [...]string{ data.AoKeychains[i].Keys[ci].KeyName.ValueString(),  }
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.KeyName.ValueString() != citem.KeyName.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("keys.key").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.AoKeychains[i].Keys = append(data.AoKeychains[i].Keys, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("key-name"); value.Exists() && !data.AoKeychains[i].Keys[ci].KeyName.IsNull() {
+				data.AoKeychains[i].Keys[ci].KeyName = types.StringValue(value.String())
+			} else {
+				data.AoKeychains[i].Keys[ci].KeyName = types.StringNull()
+			}
+			if value := cr.Get("send-id"); value.Exists() && !data.AoKeychains[i].Keys[ci].SendId.IsNull() {
+				data.AoKeychains[i].Keys[ci].SendId = types.Int64Value(value.Int())
+			} else {
+				data.AoKeychains[i].Keys[ci].SendId = types.Int64Null()
+			}
+			if value := cr.Get("receive-id"); value.Exists() && !data.AoKeychains[i].Keys[ci].ReceiveId.IsNull() {
+				data.AoKeychains[i].Keys[ci].ReceiveId = types.Int64Value(value.Int())
+			} else {
+				data.AoKeychains[i].Keys[ci].ReceiveId = types.Int64Null()
+			}
 		}
 	}
 }
@@ -339,47 +341,47 @@ func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 func (data TCP) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.WindowSize.IsNull() && !data.WindowSize.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/window-size", strconv.FormatInt(data.WindowSize.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/window-size", strconv.FormatInt(data.WindowSize.ValueInt64(), 10))
 	}
 	if !data.SynwaitTime.IsNull() && !data.SynwaitTime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/synwait-time", strconv.FormatInt(data.SynwaitTime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/synwait-time", strconv.FormatInt(data.SynwaitTime.ValueInt64(), 10))
 	}
 	if !data.PathMtuDiscovery.IsNull() && !data.PathMtuDiscovery.IsUnknown() {
 		if data.PathMtuDiscovery.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/path-mtu-discovery", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/path-mtu-discovery", "")
 		}
 	}
 	if !data.PathMtuDiscoveryAgeTimer.IsNull() && !data.PathMtuDiscoveryAgeTimer.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/path-mtu-discovery/age-timer", data.PathMtuDiscoveryAgeTimer.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath() + "/path-mtu-discovery/age-timer", data.PathMtuDiscoveryAgeTimer.ValueString())
 	}
 	if !data.ReceiveQueue.IsNull() && !data.ReceiveQueue.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/receive-queue", strconv.FormatInt(data.ReceiveQueue.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/receive-queue", strconv.FormatInt(data.ReceiveQueue.ValueInt64(), 10))
 	}
 	if !data.Timestamp.IsNull() && !data.Timestamp.IsUnknown() {
 		if data.Timestamp.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/timestamp", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/timestamp", "")
 		}
 	}
 	if !data.Throttle.IsNull() && !data.Throttle.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/throttle", strconv.FormatInt(data.Throttle.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/throttle", strconv.FormatInt(data.Throttle.ValueInt64(), 10))
 	}
 	if !data.ThrottleHighWaterMark.IsNull() && !data.ThrottleHighWaterMark.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/high-water-mark-throttling", strconv.FormatInt(data.ThrottleHighWaterMark.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/high-water-mark-throttling", strconv.FormatInt(data.ThrottleHighWaterMark.ValueInt64(), 10))
 	}
 	if !data.SelectiveAck.IsNull() && !data.SelectiveAck.IsUnknown() {
 		if data.SelectiveAck.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/selective-ack", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/selective-ack", "")
 		}
 	}
 	if !data.Mss.IsNull() && !data.Mss.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/mss", strconv.FormatInt(data.Mss.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/mss", strconv.FormatInt(data.Mss.ValueInt64(), 10))
 	}
 	if !data.AcceptRate.IsNull() && !data.AcceptRate.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/accept-rate", strconv.FormatInt(data.AcceptRate.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath() + "/accept-rate", strconv.FormatInt(data.AcceptRate.ValueInt64(), 10))
 	}
 	if !data.Ao.IsNull() && !data.Ao.IsUnknown() {
 		if data.Ao.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/ao", "")
+			body = helpers.SetFromXPath(body, data.getXPath() + "/ao", "")
 		}
 	}
 	if len(data.AoKeychains) > 0 {
@@ -419,17 +421,17 @@ func (data TCP) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *TCP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/window-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/window-size"); value.Exists() {
 		data.WindowSize = types.Int64Value(value.Int())
 	} else if data.WindowSize.IsNull() {
 		data.WindowSize = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/synwait-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/synwait-time"); value.Exists() {
 		data.SynwaitTime = types.Int64Value(value.Int())
 	} else if data.SynwaitTime.IsNull() {
 		data.SynwaitTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu-discovery"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/path-mtu-discovery"); value.Exists() {
 		data.PathMtuDiscovery = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -437,17 +439,17 @@ func (data *TCP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.PathMtuDiscovery = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu-discovery/age-timer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/path-mtu-discovery/age-timer"); value.Exists() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
 	} else if data.PathMtuDiscoveryAgeTimer.IsNull() {
 		data.PathMtuDiscoveryAgeTimer = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/receive-queue"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/receive-queue"); value.Exists() {
 		data.ReceiveQueue = types.Int64Value(value.Int())
 	} else if data.ReceiveQueue.IsNull() {
 		data.ReceiveQueue = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timestamp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timestamp"); value.Exists() {
 		data.Timestamp = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -455,17 +457,17 @@ func (data *TCP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Timestamp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/throttle"); value.Exists() {
 		data.Throttle = types.Int64Value(value.Int())
 	} else if data.Throttle.IsNull() {
 		data.Throttle = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/high-water-mark-throttling"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/high-water-mark-throttling"); value.Exists() {
 		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
 	} else if data.ThrottleHighWaterMark.IsNull() {
 		data.ThrottleHighWaterMark = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/selective-ack"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/selective-ack"); value.Exists() {
 		data.SelectiveAck = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -473,17 +475,17 @@ func (data *TCP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.SelectiveAck = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mss"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mss"); value.Exists() {
 		data.Mss = types.Int64Value(value.Int())
 	} else if data.Mss.IsNull() {
 		data.Mss = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/accept-rate"); value.Exists() {
 		data.AcceptRate = types.Int64Value(value.Int())
 	} else if data.AcceptRate.IsNull() {
 		data.AcceptRate = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ao"); value.Exists() {
 		data.Ao = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -492,11 +494,11 @@ func (data *TCP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.AoKeychains {
-		keys := [...]string{"keychain-name"}
-		keyValues := [...]string{data.AoKeychains[i].KeychainName.ValueString()}
+		keys := [...]string{ "keychain-name",  }
+		keyValues := [...]string{ data.AoKeychains[i].KeychainName.ValueString(),  }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/keychains/keychain").ForEach(
+		helpers.GetFromXPath(res, "data" + data.getXPath() + "/ao/keychains/keychain").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -519,42 +521,44 @@ func (data *TCP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.AoKeychains[i].KeychainName.IsNull() {
 			data.AoKeychains[i].KeychainName = types.StringNull()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "keys/key"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.AoKeychains[i].Keys
-			data.AoKeychains[i].Keys = make([]TCPAoKeychainsKeys, 0)
+		for ci := range data.AoKeychains[i].Keys {
+			keys := [...]string{ "key-name",  }
+			keyValues := [...]string{ data.AoKeychains[i].Keys[ci].KeyName.ValueString(),  }
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := TCPAoKeychainsKeys{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "key-name"); cValue.Exists() {
-					citem.KeyName = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, "send-id"); cValue.Exists() {
-					citem.SendId = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "receive-id"); cValue.Exists() {
-					citem.ReceiveId = types.Int64Value(cValue.Int())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.KeyName.ValueString() != citem.KeyName.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "keys/key").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.AoKeychains[i].Keys = append(data.AoKeychains[i].Keys, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "key-name"); value.Exists() {
+				data.AoKeychains[i].Keys[ci].KeyName = types.StringValue(value.String())
+			} else {
+				data.AoKeychains[i].Keys[ci].KeyName = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "send-id"); value.Exists() {
+				data.AoKeychains[i].Keys[ci].SendId = types.Int64Value(value.Int())
+			} else {
+				data.AoKeychains[i].Keys[ci].SendId = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "receive-id"); value.Exists() {
+				data.AoKeychains[i].Keys[ci].ReceiveId = types.Int64Value(value.Int())
+			} else {
+				data.AoKeychains[i].Keys[ci].ReceiveId = types.Int64Null()
+			}
 		}
 	}
 }
@@ -567,51 +571,51 @@ func (data *TCP) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "window-size"); value.Exists() {
+	if value := res.Get(prefix+"window-size"); value.Exists() {
 		data.WindowSize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "synwait-time"); value.Exists() {
+	if value := res.Get(prefix+"synwait-time"); value.Exists() {
 		data.SynwaitTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "path-mtu-discovery"); value.Exists() {
+	if value := res.Get(prefix+"path-mtu-discovery"); value.Exists() {
 		data.PathMtuDiscovery = types.BoolValue(true)
 	} else {
-		data.PathMtuDiscovery = types.BoolNull()
+		data.PathMtuDiscovery = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "path-mtu-discovery.age-timer"); value.Exists() {
+	if value := res.Get(prefix+"path-mtu-discovery.age-timer"); value.Exists() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "receive-queue"); value.Exists() {
+	if value := res.Get(prefix+"receive-queue"); value.Exists() {
 		data.ReceiveQueue = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "timestamp"); value.Exists() {
+	if value := res.Get(prefix+"timestamp"); value.Exists() {
 		data.Timestamp = types.BoolValue(true)
 	} else {
-		data.Timestamp = types.BoolNull()
+		data.Timestamp = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "throttle"); value.Exists() {
+	if value := res.Get(prefix+"throttle"); value.Exists() {
 		data.Throttle = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "high-water-mark-throttling"); value.Exists() {
+	if value := res.Get(prefix+"high-water-mark-throttling"); value.Exists() {
 		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "selective-ack"); value.Exists() {
+	if value := res.Get(prefix+"selective-ack"); value.Exists() {
 		data.SelectiveAck = types.BoolValue(true)
 	} else {
-		data.SelectiveAck = types.BoolNull()
+		data.SelectiveAck = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mss"); value.Exists() {
+	if value := res.Get(prefix+"mss"); value.Exists() {
 		data.Mss = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "accept-rate"); value.Exists() {
+	if value := res.Get(prefix+"accept-rate"); value.Exists() {
 		data.AcceptRate = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "ao"); value.Exists() {
+	if value := res.Get(prefix+"ao"); value.Exists() {
 		data.Ao = types.BoolValue(true)
 	} else {
-		data.Ao = types.BoolNull()
+		data.Ao = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ao.keychains.keychain"); value.Exists() {
+	if value := res.Get(prefix+"ao.keychains.keychain"); value.Exists() {
 		data.AoKeychains = make([]TCPAoKeychains, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TCPAoKeychains{}
@@ -625,16 +629,16 @@ func (data *TCP) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("key-name"); ccValue.Exists() {
 						cItem.KeyName = types.StringValue(ccValue.String())
 					}
-					if ccValue := cv.Get("send-id"); ccValue.Exists() {
-						cItem.SendId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("receive-id"); ccValue.Exists() {
-						cItem.ReceiveId = types.Int64Value(ccValue.Int())
-					}
-					item.Keys = append(item.Keys, cItem)
-					return true
-				})
-			}
+				if ccValue := cv.Get("send-id"); ccValue.Exists() {
+					cItem.SendId = types.Int64Value(ccValue.Int())
+				}
+				if ccValue := cv.Get("receive-id"); ccValue.Exists() {
+					cItem.ReceiveId = types.Int64Value(ccValue.Int())
+				}
+				item.Keys = append(item.Keys, cItem)
+				return true
+			})
+		}
 			data.AoKeychains = append(data.AoKeychains, item)
 			return true
 		})
@@ -649,51 +653,51 @@ func (data *TCPData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + "window-size"); value.Exists() {
+	if value := res.Get(prefix+"window-size"); value.Exists() {
 		data.WindowSize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "synwait-time"); value.Exists() {
+	if value := res.Get(prefix+"synwait-time"); value.Exists() {
 		data.SynwaitTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "path-mtu-discovery"); value.Exists() {
+	if value := res.Get(prefix+"path-mtu-discovery"); value.Exists() {
 		data.PathMtuDiscovery = types.BoolValue(true)
 	} else {
 		data.PathMtuDiscovery = types.BoolNull()
 	}
-	if value := res.Get(prefix + "path-mtu-discovery.age-timer"); value.Exists() {
+	if value := res.Get(prefix+"path-mtu-discovery.age-timer"); value.Exists() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "receive-queue"); value.Exists() {
+	if value := res.Get(prefix+"receive-queue"); value.Exists() {
 		data.ReceiveQueue = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "timestamp"); value.Exists() {
+	if value := res.Get(prefix+"timestamp"); value.Exists() {
 		data.Timestamp = types.BoolValue(true)
 	} else {
 		data.Timestamp = types.BoolNull()
 	}
-	if value := res.Get(prefix + "throttle"); value.Exists() {
+	if value := res.Get(prefix+"throttle"); value.Exists() {
 		data.Throttle = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "high-water-mark-throttling"); value.Exists() {
+	if value := res.Get(prefix+"high-water-mark-throttling"); value.Exists() {
 		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "selective-ack"); value.Exists() {
+	if value := res.Get(prefix+"selective-ack"); value.Exists() {
 		data.SelectiveAck = types.BoolValue(true)
 	} else {
 		data.SelectiveAck = types.BoolNull()
 	}
-	if value := res.Get(prefix + "mss"); value.Exists() {
+	if value := res.Get(prefix+"mss"); value.Exists() {
 		data.Mss = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "accept-rate"); value.Exists() {
+	if value := res.Get(prefix+"accept-rate"); value.Exists() {
 		data.AcceptRate = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "ao"); value.Exists() {
+	if value := res.Get(prefix+"ao"); value.Exists() {
 		data.Ao = types.BoolValue(true)
 	} else {
 		data.Ao = types.BoolNull()
 	}
-	if value := res.Get(prefix + "ao.keychains.keychain"); value.Exists() {
+	if value := res.Get(prefix+"ao.keychains.keychain"); value.Exists() {
 		data.AoKeychains = make([]TCPAoKeychains, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TCPAoKeychains{}
@@ -727,51 +731,51 @@ func (data *TCPData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *TCP) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/window-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/window-size"); value.Exists() {
 		data.WindowSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/synwait-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/synwait-time"); value.Exists() {
 		data.SynwaitTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu-discovery"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/path-mtu-discovery"); value.Exists() {
 		data.PathMtuDiscovery = types.BoolValue(true)
 	} else {
-		data.PathMtuDiscovery = types.BoolNull()
+		data.PathMtuDiscovery = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu-discovery/age-timer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/path-mtu-discovery/age-timer"); value.Exists() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/receive-queue"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/receive-queue"); value.Exists() {
 		data.ReceiveQueue = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timestamp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timestamp"); value.Exists() {
 		data.Timestamp = types.BoolValue(true)
 	} else {
-		data.Timestamp = types.BoolNull()
+		data.Timestamp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/throttle"); value.Exists() {
 		data.Throttle = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/high-water-mark-throttling"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/high-water-mark-throttling"); value.Exists() {
 		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/selective-ack"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/selective-ack"); value.Exists() {
 		data.SelectiveAck = types.BoolValue(true)
 	} else {
-		data.SelectiveAck = types.BoolNull()
+		data.SelectiveAck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mss"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mss"); value.Exists() {
 		data.Mss = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/accept-rate"); value.Exists() {
 		data.AcceptRate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ao"); value.Exists() {
 		data.Ao = types.BoolValue(true)
 	} else {
-		data.Ao = types.BoolNull()
+		data.Ao = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/keychains/keychain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ao/keychains/keychain"); value.Exists() {
 		data.AoKeychains = make([]TCPAoKeychains, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TCPAoKeychains{}
@@ -805,51 +809,51 @@ func (data *TCP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *TCPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/window-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/window-size"); value.Exists() {
 		data.WindowSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/synwait-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/synwait-time"); value.Exists() {
 		data.SynwaitTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu-discovery"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/path-mtu-discovery"); value.Exists() {
 		data.PathMtuDiscovery = types.BoolValue(true)
 	} else {
 		data.PathMtuDiscovery = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu-discovery/age-timer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/path-mtu-discovery/age-timer"); value.Exists() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/receive-queue"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/receive-queue"); value.Exists() {
 		data.ReceiveQueue = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timestamp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timestamp"); value.Exists() {
 		data.Timestamp = types.BoolValue(true)
 	} else {
 		data.Timestamp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/throttle"); value.Exists() {
 		data.Throttle = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/high-water-mark-throttling"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/high-water-mark-throttling"); value.Exists() {
 		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/selective-ack"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/selective-ack"); value.Exists() {
 		data.SelectiveAck = types.BoolValue(true)
 	} else {
 		data.SelectiveAck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mss"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mss"); value.Exists() {
 		data.Mss = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/accept-rate"); value.Exists() {
 		data.AcceptRate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ao"); value.Exists() {
 		data.Ao = types.BoolValue(true)
 	} else {
 		data.Ao = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/keychains/keychain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ao/keychains/keychain"); value.Exists() {
 		data.AoKeychains = make([]TCPAoKeychains, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TCPAoKeychains{}
@@ -885,11 +889,11 @@ func (data *TCPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 func (data *TCP) getDeletedItems(ctx context.Context, state TCP) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.AoKeychains {
-		keys := [...]string{"keychain-name"}
-		stateKeyValues := [...]string{state.AoKeychains[i].KeychainName.ValueString()}
+		keys := [...]string{ "keychain-name",  }
+		stateKeyValues := [...]string{ state.AoKeychains[i].KeychainName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
 
 		emptyKeys := true
@@ -906,13 +910,13 @@ func (data *TCP) getDeletedItems(ctx context.Context, state TCP) []string {
 			if state.AoKeychains[i].KeychainName.ValueString() != data.AoKeychains[j].KeychainName.ValueString() {
 				found = false
 			}
-			if found {
+		if found {
 				for ci := range state.AoKeychains[i].Keys {
-					ckeys := [...]string{"key-name"}
-					cstateKeyValues := [...]string{state.AoKeychains[i].Keys[ci].KeyName.ValueString()}
+					ckeys := [...]string{ "key-name",  }
+					cstateKeyValues := [...]string{ state.AoKeychains[i].Keys[ci].KeyName.ValueString(),  }
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
 					}
 
 					cemptyKeys := true
@@ -929,20 +933,20 @@ func (data *TCP) getDeletedItems(ctx context.Context, state TCP) []string {
 						if state.AoKeychains[i].Keys[ci].KeyName.ValueString() != data.AoKeychains[j].Keys[cj].KeyName.ValueString() {
 							found = false
 						}
-						if found {
-							if !state.AoKeychains[i].Keys[ci].ReceiveId.IsNull() && data.AoKeychains[j].Keys[cj].ReceiveId.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/keychains/keychain%v/keys/key%v/receive-id", state.getPath(), keyString, ckeyString))
-							}
-							if !state.AoKeychains[i].Keys[ci].SendId.IsNull() && data.AoKeychains[j].Keys[cj].SendId.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/keychains/keychain%v/keys/key%v/send-id", state.getPath(), keyString, ckeyString))
-							}
-							break
+					if found {
+						if !state.AoKeychains[i].Keys[ci].ReceiveId.IsNull() && data.AoKeychains[j].Keys[cj].ReceiveId.IsNull() {
+							deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/keychains/keychain%v/keys/key%v/receive-id", state.getPath(), keyString, ckeyString))
 						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/keychains/keychain%v/keys/key%v", state.getPath(), keyString, ckeyString))
+						if !state.AoKeychains[i].Keys[ci].SendId.IsNull() && data.AoKeychains[j].Keys[cj].SendId.IsNull() {
+							deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/keychains/keychain%v/keys/key%v/send-id", state.getPath(), keyString, ckeyString))
+						}
+						break
 					}
 				}
+				if !found {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/keychains/keychain%v/keys/key%v", state.getPath(), keyString, ckeyString))
+				}
+			}
 				break
 			}
 		}
@@ -995,18 +999,18 @@ func (data *TCP) getDeletedItems(ctx context.Context, state TCP) []string {
 func (data *TCP) getEmptyLeafsDelete(ctx context.Context, state *TCP) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.AoKeychains {
-		keys := [...]string{"keychain-name"}
-		keyValues := [...]string{data.AoKeychains[i].KeychainName.ValueString()}
+		keys := [...]string{ "keychain-name",  }
+		keyValues := [...]string{ data.AoKeychains[i].KeychainName.ValueString(),  }
 		keyString := ""
 		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		for ci := range data.AoKeychains[i].Keys {
-			ckeys := [...]string{"key-name"}
-			ckeyValues := [...]string{data.AoKeychains[i].Keys[ci].KeyName.ValueString()}
+			ckeys := [...]string{ "key-name",  }
+			ckeyValues := [...]string{ data.AoKeychains[i].Keys[ci].KeyName.ValueString(),  }
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
 			}
 		}
 	}
@@ -1043,7 +1047,7 @@ func (data *TCP) getEmptyLeafsDelete(ctx context.Context, state *TCP) []string {
 func (data *TCP) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.AoKeychains {
-		keyValues := [...]string{data.AoKeychains[i].KeychainName.ValueString()}
+		keyValues := [...]string{ data.AoKeychains[i].KeychainName.ValueString(),  }
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/keychains/keychain=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -1095,8 +1099,8 @@ func (data *TCP) addDeletedItemsXML(ctx context.Context, state TCP, body string)
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.AoKeychains {
-		stateKeys := [...]string{"keychain-name"}
-		stateKeyValues := [...]string{state.AoKeychains[i].KeychainName.ValueString()}
+		stateKeys := [...]string{ "keychain-name",  }
+		stateKeyValues := [...]string{ state.AoKeychains[i].KeychainName.ValueString(),  }
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -1117,9 +1121,9 @@ func (data *TCP) addDeletedItemsXML(ctx context.Context, state TCP, body string)
 				found = false
 			}
 			if found {
-				for ci := range state.AoKeychains[i].Keys {
-					cstateKeys := [...]string{"key-name"}
-					cstateKeyValues := [...]string{state.AoKeychains[i].Keys[ci].KeyName.ValueString()}
+			for ci := range state.AoKeychains[i].Keys {
+					cstateKeys := [...]string{ "key-name",  }
+					cstateKeyValues := [...]string{ state.AoKeychains[i].Keys[ci].KeyName.ValueString(),  }
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -1162,21 +1166,21 @@ func (data *TCP) addDeletedItemsXML(ctx context.Context, state TCP, body string)
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Ao.IsNull() && state.Ao.ValueBool() && data.Ao.IsNull() {
-		deletePath := state.getXPath() + "/ao"
+		deletePath := state.getXPath()+"/ao"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AcceptRate.IsNull() && data.AcceptRate.IsNull() {
-		deletePath := state.getXPath() + "/accept-rate"
+		deletePath := state.getXPath()+"/accept-rate"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Mss.IsNull() && data.Mss.IsNull() {
-		deletePath := state.getXPath() + "/mss"
+		deletePath := state.getXPath()+"/mss"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1184,21 +1188,21 @@ func (data *TCP) addDeletedItemsXML(ctx context.Context, state TCP, body string)
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SelectiveAck.IsNull() && state.SelectiveAck.ValueBool() && data.SelectiveAck.IsNull() {
-		deletePath := state.getXPath() + "/selective-ack"
+		deletePath := state.getXPath()+"/selective-ack"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ThrottleHighWaterMark.IsNull() && data.ThrottleHighWaterMark.IsNull() {
-		deletePath := state.getXPath() + "/high-water-mark-throttling"
+		deletePath := state.getXPath()+"/high-water-mark-throttling"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Throttle.IsNull() && data.Throttle.IsNull() {
-		deletePath := state.getXPath() + "/throttle"
+		deletePath := state.getXPath()+"/throttle"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1206,21 +1210,21 @@ func (data *TCP) addDeletedItemsXML(ctx context.Context, state TCP, body string)
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Timestamp.IsNull() && state.Timestamp.ValueBool() && data.Timestamp.IsNull() {
-		deletePath := state.getXPath() + "/timestamp"
+		deletePath := state.getXPath()+"/timestamp"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ReceiveQueue.IsNull() && data.ReceiveQueue.IsNull() {
-		deletePath := state.getXPath() + "/receive-queue"
+		deletePath := state.getXPath()+"/receive-queue"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PathMtuDiscoveryAgeTimer.IsNull() && data.PathMtuDiscoveryAgeTimer.IsNull() {
-		deletePath := state.getXPath() + "/path-mtu-discovery/age-timer"
+		deletePath := state.getXPath()+"/path-mtu-discovery/age-timer"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1228,21 +1232,21 @@ func (data *TCP) addDeletedItemsXML(ctx context.Context, state TCP, body string)
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PathMtuDiscovery.IsNull() && state.PathMtuDiscovery.ValueBool() && data.PathMtuDiscovery.IsNull() {
-		deletePath := state.getXPath() + "/path-mtu-discovery"
+		deletePath := state.getXPath()+"/path-mtu-discovery"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SynwaitTime.IsNull() && data.SynwaitTime.IsNull() {
-		deletePath := state.getXPath() + "/synwait-time"
+		deletePath := state.getXPath()+"/synwait-time"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.WindowSize.IsNull() && data.WindowSize.IsNull() {
-		deletePath := state.getXPath() + "/window-size"
+		deletePath := state.getXPath()+"/window-size"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1260,8 +1264,8 @@ func (data *TCP) addDeletedItemsXML(ctx context.Context, state TCP, body string)
 func (data *TCP) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.AoKeychains {
-		keys := [...]string{"keychain-name"}
-		keyValues := [...]string{data.AoKeychains[i].KeychainName.ValueString()}
+		keys := [...]string{ "keychain-name",  }
+		keyValues := [...]string{ data.AoKeychains[i].KeychainName.ValueString(),  }
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

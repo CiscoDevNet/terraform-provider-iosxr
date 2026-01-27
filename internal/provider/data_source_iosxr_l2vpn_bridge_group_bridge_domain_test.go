@@ -21,7 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +32,8 @@ import (
 
 func TestAccDataSourceIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
 	if os.Getenv("XRD") == "" && os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
-		t.Skip("skipping test, set environment variable XRD or NCS or C8000")
-	}
+        t.Skip("skipping test, set environment variable XRD or NCS or C8000")
+    }
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mtu", "1500"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "description", "Bridge domain description"))
@@ -167,8 +166,8 @@ func TestAccDataSourceIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig + testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig+testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

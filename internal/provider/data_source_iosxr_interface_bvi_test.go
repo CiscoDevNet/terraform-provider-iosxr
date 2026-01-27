@@ -21,7 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -41,10 +40,10 @@ func TestAccDataSourceIosxrInterfaceBVI(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "dampening_suppress_threshold", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "dampening_max_suppress_time", "30"))
 	if os.Getenv("XRV9K") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "service_policy_input.0.name", "PMAP-IN"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "service_policy_input.0.name", "PMAP-IN"))
 	}
 	if os.Getenv("XRV9K") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "service_policy_output.0.name", "PMAP-OUT"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "service_policy_output.0.name", "PMAP-OUT"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "shutdown", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "mtu", "9000"))
@@ -244,16 +243,16 @@ func TestAccDataSourceIosxrInterfaceBVI(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_local_priority", "128"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_slave_ipv4s.0.address", "10.2.2.2"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_slave_ipv4s.0.non_negotiated", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_slave_ipv4s.0.address", "10.2.2.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_slave_ipv4s.0.non_negotiated", "true"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_slave_ipv6s.0.address", "2001:db8::2"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_slave_ipv6s.0.non_negotiated", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_slave_ipv6s.0.address", "2001:db8::2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_slave_ipv6s.0.non_negotiated", "true"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_slave_ethernets.0.address", "00:11:22:33:44:55"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_slave_ethernets.0.non_negotiated", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_slave_ethernets.0.address", "00:11:22:33:44:55"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_slave_ethernets.0.non_negotiated", "true"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_interop_profile_g_8275_2", "true"))
@@ -277,8 +276,8 @@ func TestAccDataSourceIosxrInterfaceBVI(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_interop_egress_conversion_clock_class_default", "6"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_interop_egress_conversion_clock_class_mappings.0.clock_class_to_map_from", "6"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_interop_egress_conversion_clock_class_mappings.0.clock_class_to_map_to", "13"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_interop_egress_conversion_clock_class_mappings.0.clock_class_to_map_from", "6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_interop_egress_conversion_clock_class_mappings.0.clock_class_to_map_to", "13"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_interop_ingress_conversion_priority1", "128"))
@@ -296,16 +295,16 @@ func TestAccDataSourceIosxrInterfaceBVI(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_interop_ingress_conversion_clock_class_default", "6"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_from", "13"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_to", "6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_from", "13"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bvi.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_to", "6"))
 	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrInterfaceBVIPrerequisitesConfig + testAccDataSourceIosxrInterfaceBVIConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrInterfaceBVIPrerequisitesConfig+testAccDataSourceIosxrInterfaceBVIConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -415,14 +414,14 @@ func testAccDataSourceIosxrInterfaceBVIConfig() string {
 	config += `	dampening_suppress_threshold = 20` + "\n"
 	config += `	dampening_max_suppress_time = 30` + "\n"
 	if os.Getenv("XRV9K") != "" {
-		config += `	service_policy_input = [{` + "\n"
-		config += `		name = "PMAP-IN"` + "\n"
-		config += `	}]` + "\n"
+	config += `	service_policy_input = [{` + "\n"
+	config += `		name = "PMAP-IN"` + "\n"
+	config += `	}]` + "\n"
 	}
 	if os.Getenv("XRV9K") != "" {
-		config += `	service_policy_output = [{` + "\n"
-		config += `		name = "PMAP-OUT"` + "\n"
-		config += `	}]` + "\n"
+	config += `	service_policy_output = [{` + "\n"
+	config += `		name = "PMAP-OUT"` + "\n"
+	config += `	}]` + "\n"
 	}
 	config += `	shutdown = false` + "\n"
 	config += `	mtu = 9000` + "\n"
@@ -630,22 +629,22 @@ func testAccDataSourceIosxrInterfaceBVIConfig() string {
 		config += `	ptp_local_priority = 128` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		config += `	ptp_slave_ipv4s = [{` + "\n"
-		config += `		address = "10.2.2.2"` + "\n"
-		config += `		non_negotiated = true` + "\n"
-		config += `	}]` + "\n"
+	config += `	ptp_slave_ipv4s = [{` + "\n"
+	config += `		address = "10.2.2.2"` + "\n"
+	config += `		non_negotiated = true` + "\n"
+	config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		config += `	ptp_slave_ipv6s = [{` + "\n"
-		config += `		address = "2001:db8::2"` + "\n"
-		config += `		non_negotiated = true` + "\n"
-		config += `	}]` + "\n"
+	config += `	ptp_slave_ipv6s = [{` + "\n"
+	config += `		address = "2001:db8::2"` + "\n"
+	config += `		non_negotiated = true` + "\n"
+	config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		config += `	ptp_slave_ethernets = [{` + "\n"
-		config += `		address = "00:11:22:33:44:55"` + "\n"
-		config += `		non_negotiated = true` + "\n"
-		config += `	}]` + "\n"
+	config += `	ptp_slave_ethernets = [{` + "\n"
+	config += `		address = "00:11:22:33:44:55"` + "\n"
+	config += `		non_negotiated = true` + "\n"
+	config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	ptp_interop_profile_g_8275_2 = true` + "\n"
@@ -669,10 +668,10 @@ func testAccDataSourceIosxrInterfaceBVIConfig() string {
 		config += `	ptp_interop_egress_conversion_clock_class_default = 6` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		config += `	ptp_interop_egress_conversion_clock_class_mappings = [{` + "\n"
-		config += `		clock_class_to_map_from = 6` + "\n"
-		config += `		clock_class_to_map_to = 13` + "\n"
-		config += `	}]` + "\n"
+	config += `	ptp_interop_egress_conversion_clock_class_mappings = [{` + "\n"
+	config += `		clock_class_to_map_from = 6` + "\n"
+	config += `		clock_class_to_map_to = 13` + "\n"
+	config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	ptp_interop_ingress_conversion_priority1 = 128` + "\n"
@@ -690,10 +689,10 @@ func testAccDataSourceIosxrInterfaceBVIConfig() string {
 		config += `	ptp_interop_ingress_conversion_clock_class_default = 6` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		config += `	ptp_interop_ingress_conversion_clock_class_mappings = [{` + "\n"
-		config += `		clock_class_to_map_from = 13` + "\n"
-		config += `		clock_class_to_map_to = 6` + "\n"
-		config += `	}]` + "\n"
+	config += `	ptp_interop_ingress_conversion_clock_class_mappings = [{` + "\n"
+	config += `		clock_class_to_map_from = 13` + "\n"
+	config += `		clock_class_to_map_to = 6` + "\n"
+	config += `	}]` + "\n"
 	}
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"

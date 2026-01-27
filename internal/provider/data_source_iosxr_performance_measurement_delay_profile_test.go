@@ -135,8 +135,8 @@ func TestAccDataSourceIosxrPerformanceMeasurementDelayProfile(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrPerformanceMeasurementDelayProfilePrerequisitesConfig + testAccDataSourceIosxrPerformanceMeasurementDelayProfileConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrPerformanceMeasurementDelayProfilePrerequisitesConfig+testAccDataSourceIosxrPerformanceMeasurementDelayProfileConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

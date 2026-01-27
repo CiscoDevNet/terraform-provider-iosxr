@@ -23,15 +23,19 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/netascode/go-gnmi"
+	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -48,7 +52,7 @@ func NewHWModuleProfile8000DataSource() datasource.DataSource {
 	return &HWModuleProfile8000DataSource{}
 }
 
-type HWModuleProfile8000DataSource struct {
+type HWModuleProfile8000DataSource struct{
 	data *IosxrProviderData
 }
 
@@ -416,47 +420,47 @@ func (d *HWModuleProfile8000DataSource) Schema(ctx context.Context, req datasour
 									"traffic_class_id": schema.Int64Attribute{
 										MarkdownDescription: "configure traffic-class",
 										Computed:            true,
-									},
+								},
 									"pause_threshold": schema.Int64Attribute{
 										MarkdownDescription: "configure pause-threshold",
 										Computed:            true,
-									},
+								},
 									"pause_threshold_bytes": schema.Int64Attribute{
 										MarkdownDescription: "configure pause-threshold",
 										Computed:            true,
-									},
+								},
 									"ms": schema.BoolAttribute{
 										MarkdownDescription: "Milliseconds (2-25 ms)",
 										Computed:            true,
-									},
+								},
 									"ms_headroom": schema.Int64Attribute{
 										MarkdownDescription: "configure headroom",
 										Computed:            true,
-									},
+								},
 									"us": schema.BoolAttribute{
 										MarkdownDescription: "Microseconds (2000-25000 us)",
 										Computed:            true,
-									},
+								},
 									"us_headroom": schema.Int64Attribute{
 										MarkdownDescription: "configure headroom",
 										Computed:            true,
-									},
+								},
 									"kbytes": schema.BoolAttribute{
 										MarkdownDescription: "KBytes (1024-200000 kbytes)",
 										Computed:            true,
-									},
+								},
 									"kbytes_headroom": schema.Int64Attribute{
 										MarkdownDescription: "configure headroom",
 										Computed:            true,
-									},
+								},
 									"mbytes": schema.BoolAttribute{
 										MarkdownDescription: "MBytes (1-200 mbytes)",
 										Computed:            true,
-									},
+								},
 									"mbytes_headroom": schema.Int64Attribute{
 										MarkdownDescription: "configure headroom",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -468,27 +472,27 @@ func (d *HWModuleProfile8000DataSource) Schema(ctx context.Context, req datasour
 									"traffic_class_id": schema.Int64Attribute{
 										MarkdownDescription: "configure traffic-class",
 										Computed:            true,
-									},
+								},
 									"pause_threshold": schema.Int64Attribute{
 										MarkdownDescription: "configure pause-threshold",
 										Computed:            true,
-									},
+								},
 									"headroom": schema.Int64Attribute{
 										MarkdownDescription: "configure headroom",
 										Computed:            true,
-									},
+								},
 									"ecn": schema.Int64Attribute{
 										MarkdownDescription: "configure ecn",
 										Computed:            true,
-									},
+								},
 									"max_threshold": schema.Int64Attribute{
 										MarkdownDescription: "ecn max threshold",
 										Computed:            true,
-									},
+								},
 									"probability_percentage": schema.Int64Attribute{
 										MarkdownDescription: "maximum probability percentage",
 										Computed:            true,
-									},
+								},
 								},
 							},
 						},
@@ -636,6 +640,7 @@ func (d *HWModuleProfile8000DataSource) Read(ctx context.Context, req datasource
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
+
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

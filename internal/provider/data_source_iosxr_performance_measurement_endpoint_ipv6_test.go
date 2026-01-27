@@ -47,8 +47,8 @@ func TestAccDataSourceIosxrPerformanceMeasurementEndpointIPv6(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrPerformanceMeasurementEndpointIPv6PrerequisitesConfig + testAccDataSourceIosxrPerformanceMeasurementEndpointIPv6Config(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrPerformanceMeasurementEndpointIPv6PrerequisitesConfig+testAccDataSourceIosxrPerformanceMeasurementEndpointIPv6Config(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

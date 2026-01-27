@@ -21,7 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +32,8 @@ import (
 
 func TestAccDataSourceIosxrMPLSLDPVRF(t *testing.T) {
 	if os.Getenv("XRV9K") == "" && os.Getenv("XRD") == "" {
-		t.Skip("skipping test, set environment variable XRV9K or XRD")
-	}
+        t.Skip("skipping test, set environment variable XRV9K or XRD")
+    }
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_vrf.test", "router_id", "1.2.3.4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_vrf.test", "session_downstream_on_demand_with", "ACL1"))
@@ -83,8 +82,8 @@ func TestAccDataSourceIosxrMPLSLDPVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrMPLSLDPVRFPrerequisitesConfig + testAccDataSourceIosxrMPLSLDPVRFConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrMPLSLDPVRFPrerequisitesConfig+testAccDataSourceIosxrMPLSLDPVRFConfig(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

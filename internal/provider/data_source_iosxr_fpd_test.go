@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -35,8 +36,8 @@ import (
 
 func TestAccDataSourceIosxrFPD(t *testing.T) {
 	if os.Getenv("NCS") == "" {
-        t.Skip("skipping test, set environment variable NCS")
-    }
+		t.Skip("skipping test, set environment variable NCS")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_fpd.test", "auto_upgrade_enable", "true"))
 	resource.Test(t, resource.TestCase{
@@ -45,7 +46,7 @@ func TestAccDataSourceIosxrFPD(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrFPDConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

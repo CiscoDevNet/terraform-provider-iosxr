@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -32,8 +33,8 @@ import (
 
 func TestAccDataSourceIosxrGenericInterfaceList(t *testing.T) {
 	if os.Getenv("XRD") == "" && os.Getenv("C8000") == "" {
-        t.Skip("skipping test, set environment variable XRD or C8000")
-    }
+		t.Skip("skipping test, set environment variable XRD or C8000")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_generic_interface_list.test", "interfaces.0.interface_name", "Bundle-Ether101"))
 	resource.Test(t, resource.TestCase{
@@ -42,7 +43,7 @@ func TestAccDataSourceIosxrGenericInterfaceList(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrGenericInterfaceListConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

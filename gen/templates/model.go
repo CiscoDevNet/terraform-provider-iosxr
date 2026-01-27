@@ -773,7 +773,7 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 		data.{{toGoName .TfName}} = types.BoolValue(true)
 		{{- end}}
 	} else {
-		data.{{toGoName .TfName}} = types.BoolNull()
+		data.{{toGoName .TfName}} = types.BoolValue(false)
 	}
 	{{- else if eq .Type "String"}}
 	if value := res.Get(prefix+"{{toDotPath .XPath}}"); value.Exists() {
@@ -822,7 +822,7 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 				item.{{toGoName .TfName}} = types.BoolValue(true)
 				{{- end}}
 			} else {
-				item.{{toGoName .TfName}} = types.BoolNull()
+				item.{{toGoName .TfName}} = types.BoolValue(false)
 			}
 			{{- else if eq .Type "String"}}
 			if cValue := v.Get("{{toDotPath .XPath}}"); cValue.Exists() {
@@ -860,7 +860,7 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 					cItem.{{toGoName .TfName}} = types.BoolValue(true)
 					{{- end}}
 				} else {
-					cItem.{{toGoName .TfName}} = types.BoolNull()
+					cItem.{{toGoName .TfName}} = types.BoolValue(false)
 				}
 					{{- else if eq .Type "String"}}
 					if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
@@ -898,7 +898,7 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 						ccItem.{{toGoName .TfName}} = types.BoolValue(true)
 						{{- end}}
 					} else {
-						ccItem.{{toGoName .TfName}} = types.BoolNull()
+						ccItem.{{toGoName .TfName}} = types.BoolValue(false)
 					}
 						{{- else if eq .Type "String"}}
 						if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
@@ -935,7 +935,7 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 									cccItem.{{toGoName .TfName}} = types.BoolValue(true)
 									{{- end}}
 								} else {
-									cccItem.{{toGoName .TfName}} = types.BoolNull()
+									cccItem.{{toGoName .TfName}} = types.BoolValue(false)
 								}
 								{{- else if eq .Type "String"}}
 								if ccccValue := cccv.Get("{{toDotPath .XPath}}"); ccccValue.Exists() {
@@ -2791,4 +2791,3 @@ func (data *{{camelCase .Name}}) addDeletePathsXML(ctx context.Context, body str
 }
 
 // End of section. //template:end addDeletePathsXML
-

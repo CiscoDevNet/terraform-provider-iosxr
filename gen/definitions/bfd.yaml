@@ -7,8 +7,6 @@ attributes:
     exclude_example: true
     example: false
   - yang_name: echo/latency/detect
-    type: Bool
-    type_yang_bool: presence
     minimum_test_value: true
     example: true
   - yang_name: echo/latency/detect/percentage
@@ -18,8 +16,6 @@ attributes:
     delete_parent: true
     example: 10
   - yang_name: echo/startup/validate/force
-    type: Bool
-    type_yang_bool: presence
     delete_parent: true
     example: true
   - yang_name: echo/ipv4/source/ipv4-address
@@ -50,15 +46,11 @@ attributes:
   - yang_name: dampening/threshold
     example: 60000
   - yang_name: dampening/extensions/down-monitoring
-    type: Bool
-    type_yang_bool: presence
     example: true
   - yang_name: dampening/disable
     exclude_example: true
     example: false
   - yang_name: dampening/bundle-member/l3-only-mode
-    type: Bool
-    type_yang_bool: presence
     example: true
   - yang_name: dampening/bundle-member/initial-wait
     example: 5184
@@ -81,7 +73,6 @@ attributes:
         exclude_example: true
         example: disable
       - yang_name: echo/ipv4/source/ipv4-address
-        xpath: echo/ipv4/source/ipv4-address
         tf_name: echo_ipv4_source
         example: 12.1.1.1
       - yang_name: ipv6/checksum/disable

@@ -698,8 +698,6 @@ attributes:
   - yang_name: bgp/bestpath/cost-community/ignore
     example: true
   - yang_name: bgp/bestpath/compare-routerid
-    type: Bool
-    type_yang_bool: presence
     example: true
   - yang_name: bgp/bestpath/aigp/ignore
     example: true
@@ -709,8 +707,6 @@ attributes:
   - yang_name: bgp/bestpath/igp-metric/sr-policy
     example: true
   - yang_name: bgp/bestpath/med/missing-as-worst
-    type: Bool
-    type_yang_bool: presence
     example: true
   - yang_name: bgp/bestpath/med/always
     example: true
@@ -750,8 +746,6 @@ attributes:
   - yang_name: bgp/fast-external-fallover/disable
     example: true
   - yang_name: bgp/log/neighbor/changes/detail
-    type: Bool
-    type_yang_bool: presence
     example: true
   - yang_name: bgp/log/neighbor/changes/disable
     exclude_test: true

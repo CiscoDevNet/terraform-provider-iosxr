@@ -8,6 +8,5 @@ attributes:
     example: ROUTE1
   - yang_name: rpl-extended-community-rt-set
     tf_name: rpl
-    read_raw: true
     description: "Configures an extended community rt set"
     example: "extcommunity-set rt ROUTE1\\nend-set\\n"

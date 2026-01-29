@@ -8,6 +8,5 @@ attributes:
     example: SITE1
   - yang_name: rpl-extended-community-soo-set
     tf_name: rpl
-    read_raw: true
     description: "Configures an extended community soo set"
     example: "extcommunity-set soo SITE1\\nend-set\\n"

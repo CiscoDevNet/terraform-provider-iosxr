@@ -152,7 +152,7 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 				},
 			},
 			"reuse_connection": schema.BoolAttribute{
-				MarkdownDescription: "Keep connections open between operations for better performance. When disabled, connections are closed and reopened for each operation. Only applies to NETCONF protocol. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.",
+				MarkdownDescription: "Keep connections open between operations for better performance. When disabled, connections are closed and reopened for each operation. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.",
 				Optional:            true,
 			},
 			"selected_devices": schema.ListAttribute{

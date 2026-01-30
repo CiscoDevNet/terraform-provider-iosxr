@@ -9,7 +9,7 @@ description: |-
 
 # IOSXR Provider
 
-The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices. The provider supports the **gNMI** (HTTP/2-based) protocol for device communication by default.
+The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices. The provider supports the **gNMI** (HTTP/2-based) protocol for device communication by default and NETCONF as alternative protocol
 
 ## Device Configuration
 The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices using gNMI or NETCONF protocols.
@@ -19,7 +19,7 @@ The IOSXR provider provides resources to interact with one or more Cisco IOS-XR 
 The provider supports two protocols for device communication:
 
 - **gNMI (gRPC Network Management Interface)** - Default protocol, recommended for production use
-- **NETCONF** - Alternative protocol for legacy systems or specific use cases
+- **NETCONF** Alternative protocol for network device configuration and management
 
 ### gNMI (Default)
 
@@ -99,7 +99,7 @@ provider "iosxr" {
 - `password` (String, Sensitive) Password for the IOS-XR device. This can also be set as the IOSXR_PASSWORD environment variable.
 - `protocol` (String) Protocol to use for device communication. Either `gnmi` or `netconf` (SSH). This can also be set as the IOSXR_PROTOCOL environment variable. Defaults to `gnmi`.
 - `retries` (Number) Number of retries for API calls. This can also be set as the IOSXR_RETRIES environment variable. Defaults to `3`.
-- `reuse_connection` (Boolean) Keep connections open between operations for better performance. When disabled, connections are closed and reopened for each operation. Only applies to NETCONF protocol. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.
+- `reuse_connection` (Boolean) Keep connections open between operations for better performance. When disabled, connections are closed and reopened for each operation. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.
 - `selected_devices` (List of String) This can be used to select a list of devices to manage from the `devices` list. Selected devices will be managed while other devices will be skipped and their state will be frozen. This can be used to deploy changes to a subset of devices. Defaults to all devices.
 - `tls` (Boolean) Use TLS. This can also be set as the IOSXR_TLS environment variable. Defaults to `true`.
 - `username` (String) Username for the IOS-XR device. This can also be set as the IOSXR_USERNAME environment variable.

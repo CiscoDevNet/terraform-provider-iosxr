@@ -1741,7 +1741,7 @@ func (r *RouterISISAddressFamilyResource) Create(ctx context.Context, req resour
 				tflog.Info(ctx, fmt.Sprintf("NETCONF CREATE: Final body with deletes: %s", bodyStr))
 			}
 
-			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, device.AutoCommit); err != nil {
+			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true); err != nil {
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
@@ -1926,7 +1926,7 @@ func (r *RouterISISAddressFamilyResource) Update(ctx context.Context, req resour
 
 			// Combine update and delete operations into a single transaction
 			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, true); err != nil {
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
@@ -1995,7 +1995,7 @@ func (r *RouterISISAddressFamilyResource) Delete(ctx context.Context, req resour
 				// RemoveFromXPathString returns raw XML string for delete operations
 				xmlStr := helpers.RemoveFromXPathString(body, xpath)
 
-				if err := helpers.EditConfig(ctx, device.NetconfClient, xmlStr, device.AutoCommit); err != nil {
+				if err := helpers.EditConfig(ctx, device.NetconfClient, xmlStr, true); err != nil {
 					// Ignore data-missing errors as the resource may already be deleted
 					if !strings.Contains(err.Error(), "data-missing") {
 						resp.Diagnostics.AddError("Client Error", err.Error())
@@ -2034,7 +2034,7 @@ func (r *RouterISISAddressFamilyResource) Delete(ctx context.Context, req resour
 
 				body := state.addDeletePathsXML(ctx, "")
 
-				if err := helpers.EditConfig(ctx, device.NetconfClient, body, device.AutoCommit); err != nil {
+				if err := helpers.EditConfig(ctx, device.NetconfClient, body, true); err != nil {
 					// Ignore data-missing errors as the attributes may already be deleted
 					if !strings.Contains(err.Error(), "data-missing") {
 						resp.Diagnostics.AddError("Client Error", err.Error())

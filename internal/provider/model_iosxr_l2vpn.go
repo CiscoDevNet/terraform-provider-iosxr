@@ -24,122 +24,121 @@ import (
 	"context"
 	"fmt"
 	"reflect"
-	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type L2VPN struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
-	Description types.String `tfsdk:"description"`
-	RouterId types.String `tfsdk:"router_id"`
-	RedundancyIccpGroups []L2VPNRedundancyIccpGroups `tfsdk:"redundancy_iccp_groups"`
-	FlexibleXconnectServiceVlanUnaware []L2VPNFlexibleXconnectServiceVlanUnaware `tfsdk:"flexible_xconnect_service_vlan_unaware"`
-	FlexibleXconnectServiceVlanAwareEvis []L2VPNFlexibleXconnectServiceVlanAwareEvis `tfsdk:"flexible_xconnect_service_vlan_aware_evis"`
-	IgnoreMtuMismatch types.Bool `tfsdk:"ignore_mtu_mismatch"`
-	IgnoreMtuMismatchAd types.Bool `tfsdk:"ignore_mtu_mismatch_ad"`
-	PwStatusDisable types.Bool `tfsdk:"pw_status_disable"`
-	LoadBalancingFlowSrcDstMac types.Bool `tfsdk:"load_balancing_flow_src_dst_mac"`
-	LoadBalancingFlowSrcDstIp types.Bool `tfsdk:"load_balancing_flow_src_dst_ip"`
-	CapabilitySingleMode types.Bool `tfsdk:"capability_single_mode"`
-	CapabilityHighMode types.Bool `tfsdk:"capability_high_mode"`
-	PwOamRefreshTransmit types.Int64 `tfsdk:"pw_oam_refresh_transmit"`
-	TcnPropagation types.Bool `tfsdk:"tcn_propagation"`
-	PwGrouping types.Bool `tfsdk:"pw_grouping"`
-	NeighborsAllLdpFlap types.Bool `tfsdk:"neighbors_all_ldp_flap"`
-	MacLimitThreshold types.Int64 `tfsdk:"mac_limit_threshold"`
-	LoggingPseudowire types.Bool `tfsdk:"logging_pseudowire"`
-	LoggingBridgeDomain types.Bool `tfsdk:"logging_bridge_domain"`
-	LoggingVfi types.Bool `tfsdk:"logging_vfi"`
-	LoggingNsr types.Bool `tfsdk:"logging_nsr"`
-	LoggingPwheReplicationDisable types.Bool `tfsdk:"logging_pwhe_replication_disable"`
-	AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore types.Bool `tfsdk:"autodiscovery_bgp_signaling_protocol_bgp_mtu_mismatch_ignore"`
-	PwRoutingGlobalId types.Int64 `tfsdk:"pw_routing_global_id"`
-	PwRoutingBgpRdTwoByteAsNumber types.Int64 `tfsdk:"pw_routing_bgp_rd_two_byte_as_number"`
-	PwRoutingBgpRdTwoByteAsAssignedNumber types.Int64 `tfsdk:"pw_routing_bgp_rd_two_byte_as_assigned_number"`
-	PwRoutingBgpRdFourByteAsNumber types.Int64 `tfsdk:"pw_routing_bgp_rd_four_byte_as_number"`
-	PwRoutingBgpRdFourByteAsAssignedNumber types.Int64 `tfsdk:"pw_routing_bgp_rd_four_byte_as_assigned_number"`
-	PwRoutingBgpRdIpv4Address types.String `tfsdk:"pw_routing_bgp_rd_ipv4_address"`
-	PwRoutingBgpRdIpv4AddressAssignedNumber types.Int64 `tfsdk:"pw_routing_bgp_rd_ipv4_address_assigned_number"`
-	SnmpMibInterfaceFormatExternal types.Bool `tfsdk:"snmp_mib_interface_format_external"`
-	SnmpMibPseudowireStatistics types.Bool `tfsdk:"snmp_mib_pseudowire_statistics"`
+	Device                                                types.String                                `tfsdk:"device"`
+	Id                                                    types.String                                `tfsdk:"id"`
+	DeleteMode                                            types.String                                `tfsdk:"delete_mode"`
+	Description                                           types.String                                `tfsdk:"description"`
+	RouterId                                              types.String                                `tfsdk:"router_id"`
+	RedundancyIccpGroups                                  []L2VPNRedundancyIccpGroups                 `tfsdk:"redundancy_iccp_groups"`
+	FlexibleXconnectServiceVlanUnaware                    []L2VPNFlexibleXconnectServiceVlanUnaware   `tfsdk:"flexible_xconnect_service_vlan_unaware"`
+	FlexibleXconnectServiceVlanAwareEvis                  []L2VPNFlexibleXconnectServiceVlanAwareEvis `tfsdk:"flexible_xconnect_service_vlan_aware_evis"`
+	IgnoreMtuMismatch                                     types.Bool                                  `tfsdk:"ignore_mtu_mismatch"`
+	IgnoreMtuMismatchAd                                   types.Bool                                  `tfsdk:"ignore_mtu_mismatch_ad"`
+	PwStatusDisable                                       types.Bool                                  `tfsdk:"pw_status_disable"`
+	LoadBalancingFlowSrcDstMac                            types.Bool                                  `tfsdk:"load_balancing_flow_src_dst_mac"`
+	LoadBalancingFlowSrcDstIp                             types.Bool                                  `tfsdk:"load_balancing_flow_src_dst_ip"`
+	CapabilitySingleMode                                  types.Bool                                  `tfsdk:"capability_single_mode"`
+	CapabilityHighMode                                    types.Bool                                  `tfsdk:"capability_high_mode"`
+	PwOamRefreshTransmit                                  types.Int64                                 `tfsdk:"pw_oam_refresh_transmit"`
+	TcnPropagation                                        types.Bool                                  `tfsdk:"tcn_propagation"`
+	PwGrouping                                            types.Bool                                  `tfsdk:"pw_grouping"`
+	NeighborsAllLdpFlap                                   types.Bool                                  `tfsdk:"neighbors_all_ldp_flap"`
+	MacLimitThreshold                                     types.Int64                                 `tfsdk:"mac_limit_threshold"`
+	LoggingPseudowire                                     types.Bool                                  `tfsdk:"logging_pseudowire"`
+	LoggingBridgeDomain                                   types.Bool                                  `tfsdk:"logging_bridge_domain"`
+	LoggingVfi                                            types.Bool                                  `tfsdk:"logging_vfi"`
+	LoggingNsr                                            types.Bool                                  `tfsdk:"logging_nsr"`
+	LoggingPwheReplicationDisable                         types.Bool                                  `tfsdk:"logging_pwhe_replication_disable"`
+	AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore types.Bool                                  `tfsdk:"autodiscovery_bgp_signaling_protocol_bgp_mtu_mismatch_ignore"`
+	PwRoutingGlobalId                                     types.Int64                                 `tfsdk:"pw_routing_global_id"`
+	PwRoutingBgpRdTwoByteAsNumber                         types.Int64                                 `tfsdk:"pw_routing_bgp_rd_two_byte_as_number"`
+	PwRoutingBgpRdTwoByteAsAssignedNumber                 types.Int64                                 `tfsdk:"pw_routing_bgp_rd_two_byte_as_assigned_number"`
+	PwRoutingBgpRdFourByteAsNumber                        types.Int64                                 `tfsdk:"pw_routing_bgp_rd_four_byte_as_number"`
+	PwRoutingBgpRdFourByteAsAssignedNumber                types.Int64                                 `tfsdk:"pw_routing_bgp_rd_four_byte_as_assigned_number"`
+	PwRoutingBgpRdIpv4Address                             types.String                                `tfsdk:"pw_routing_bgp_rd_ipv4_address"`
+	PwRoutingBgpRdIpv4AddressAssignedNumber               types.Int64                                 `tfsdk:"pw_routing_bgp_rd_ipv4_address_assigned_number"`
+	SnmpMibInterfaceFormatExternal                        types.Bool                                  `tfsdk:"snmp_mib_interface_format_external"`
+	SnmpMibPseudowireStatistics                           types.Bool                                  `tfsdk:"snmp_mib_pseudowire_statistics"`
 }
 
 type L2VPNData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	Description types.String `tfsdk:"description"`
-	RouterId types.String `tfsdk:"router_id"`
-	RedundancyIccpGroups []L2VPNRedundancyIccpGroups `tfsdk:"redundancy_iccp_groups"`
-	FlexibleXconnectServiceVlanUnaware []L2VPNFlexibleXconnectServiceVlanUnaware `tfsdk:"flexible_xconnect_service_vlan_unaware"`
-	FlexibleXconnectServiceVlanAwareEvis []L2VPNFlexibleXconnectServiceVlanAwareEvis `tfsdk:"flexible_xconnect_service_vlan_aware_evis"`
-	IgnoreMtuMismatch types.Bool `tfsdk:"ignore_mtu_mismatch"`
-	IgnoreMtuMismatchAd types.Bool `tfsdk:"ignore_mtu_mismatch_ad"`
-	PwStatusDisable types.Bool `tfsdk:"pw_status_disable"`
-	LoadBalancingFlowSrcDstMac types.Bool `tfsdk:"load_balancing_flow_src_dst_mac"`
-	LoadBalancingFlowSrcDstIp types.Bool `tfsdk:"load_balancing_flow_src_dst_ip"`
-	CapabilitySingleMode types.Bool `tfsdk:"capability_single_mode"`
-	CapabilityHighMode types.Bool `tfsdk:"capability_high_mode"`
-	PwOamRefreshTransmit types.Int64 `tfsdk:"pw_oam_refresh_transmit"`
-	TcnPropagation types.Bool `tfsdk:"tcn_propagation"`
-	PwGrouping types.Bool `tfsdk:"pw_grouping"`
-	NeighborsAllLdpFlap types.Bool `tfsdk:"neighbors_all_ldp_flap"`
-	MacLimitThreshold types.Int64 `tfsdk:"mac_limit_threshold"`
-	LoggingPseudowire types.Bool `tfsdk:"logging_pseudowire"`
-	LoggingBridgeDomain types.Bool `tfsdk:"logging_bridge_domain"`
-	LoggingVfi types.Bool `tfsdk:"logging_vfi"`
-	LoggingNsr types.Bool `tfsdk:"logging_nsr"`
-	LoggingPwheReplicationDisable types.Bool `tfsdk:"logging_pwhe_replication_disable"`
-	AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore types.Bool `tfsdk:"autodiscovery_bgp_signaling_protocol_bgp_mtu_mismatch_ignore"`
-	PwRoutingGlobalId types.Int64 `tfsdk:"pw_routing_global_id"`
-	PwRoutingBgpRdTwoByteAsNumber types.Int64 `tfsdk:"pw_routing_bgp_rd_two_byte_as_number"`
-	PwRoutingBgpRdTwoByteAsAssignedNumber types.Int64 `tfsdk:"pw_routing_bgp_rd_two_byte_as_assigned_number"`
-	PwRoutingBgpRdFourByteAsNumber types.Int64 `tfsdk:"pw_routing_bgp_rd_four_byte_as_number"`
-	PwRoutingBgpRdFourByteAsAssignedNumber types.Int64 `tfsdk:"pw_routing_bgp_rd_four_byte_as_assigned_number"`
-	PwRoutingBgpRdIpv4Address types.String `tfsdk:"pw_routing_bgp_rd_ipv4_address"`
-	PwRoutingBgpRdIpv4AddressAssignedNumber types.Int64 `tfsdk:"pw_routing_bgp_rd_ipv4_address_assigned_number"`
-	SnmpMibInterfaceFormatExternal types.Bool `tfsdk:"snmp_mib_interface_format_external"`
-	SnmpMibPseudowireStatistics types.Bool `tfsdk:"snmp_mib_pseudowire_statistics"`
+	Device                                                types.String                                `tfsdk:"device"`
+	Id                                                    types.String                                `tfsdk:"id"`
+	Description                                           types.String                                `tfsdk:"description"`
+	RouterId                                              types.String                                `tfsdk:"router_id"`
+	RedundancyIccpGroups                                  []L2VPNRedundancyIccpGroups                 `tfsdk:"redundancy_iccp_groups"`
+	FlexibleXconnectServiceVlanUnaware                    []L2VPNFlexibleXconnectServiceVlanUnaware   `tfsdk:"flexible_xconnect_service_vlan_unaware"`
+	FlexibleXconnectServiceVlanAwareEvis                  []L2VPNFlexibleXconnectServiceVlanAwareEvis `tfsdk:"flexible_xconnect_service_vlan_aware_evis"`
+	IgnoreMtuMismatch                                     types.Bool                                  `tfsdk:"ignore_mtu_mismatch"`
+	IgnoreMtuMismatchAd                                   types.Bool                                  `tfsdk:"ignore_mtu_mismatch_ad"`
+	PwStatusDisable                                       types.Bool                                  `tfsdk:"pw_status_disable"`
+	LoadBalancingFlowSrcDstMac                            types.Bool                                  `tfsdk:"load_balancing_flow_src_dst_mac"`
+	LoadBalancingFlowSrcDstIp                             types.Bool                                  `tfsdk:"load_balancing_flow_src_dst_ip"`
+	CapabilitySingleMode                                  types.Bool                                  `tfsdk:"capability_single_mode"`
+	CapabilityHighMode                                    types.Bool                                  `tfsdk:"capability_high_mode"`
+	PwOamRefreshTransmit                                  types.Int64                                 `tfsdk:"pw_oam_refresh_transmit"`
+	TcnPropagation                                        types.Bool                                  `tfsdk:"tcn_propagation"`
+	PwGrouping                                            types.Bool                                  `tfsdk:"pw_grouping"`
+	NeighborsAllLdpFlap                                   types.Bool                                  `tfsdk:"neighbors_all_ldp_flap"`
+	MacLimitThreshold                                     types.Int64                                 `tfsdk:"mac_limit_threshold"`
+	LoggingPseudowire                                     types.Bool                                  `tfsdk:"logging_pseudowire"`
+	LoggingBridgeDomain                                   types.Bool                                  `tfsdk:"logging_bridge_domain"`
+	LoggingVfi                                            types.Bool                                  `tfsdk:"logging_vfi"`
+	LoggingNsr                                            types.Bool                                  `tfsdk:"logging_nsr"`
+	LoggingPwheReplicationDisable                         types.Bool                                  `tfsdk:"logging_pwhe_replication_disable"`
+	AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore types.Bool                                  `tfsdk:"autodiscovery_bgp_signaling_protocol_bgp_mtu_mismatch_ignore"`
+	PwRoutingGlobalId                                     types.Int64                                 `tfsdk:"pw_routing_global_id"`
+	PwRoutingBgpRdTwoByteAsNumber                         types.Int64                                 `tfsdk:"pw_routing_bgp_rd_two_byte_as_number"`
+	PwRoutingBgpRdTwoByteAsAssignedNumber                 types.Int64                                 `tfsdk:"pw_routing_bgp_rd_two_byte_as_assigned_number"`
+	PwRoutingBgpRdFourByteAsNumber                        types.Int64                                 `tfsdk:"pw_routing_bgp_rd_four_byte_as_number"`
+	PwRoutingBgpRdFourByteAsAssignedNumber                types.Int64                                 `tfsdk:"pw_routing_bgp_rd_four_byte_as_assigned_number"`
+	PwRoutingBgpRdIpv4Address                             types.String                                `tfsdk:"pw_routing_bgp_rd_ipv4_address"`
+	PwRoutingBgpRdIpv4AddressAssignedNumber               types.Int64                                 `tfsdk:"pw_routing_bgp_rd_ipv4_address_assigned_number"`
+	SnmpMibInterfaceFormatExternal                        types.Bool                                  `tfsdk:"snmp_mib_interface_format_external"`
+	SnmpMibPseudowireStatistics                           types.Bool                                  `tfsdk:"snmp_mib_pseudowire_statistics"`
 }
 type L2VPNRedundancyIccpGroups struct {
-	GroupNumber types.Int64 `tfsdk:"group_number"`
-	Interfaces []L2VPNRedundancyIccpGroupsInterfaces `tfsdk:"interfaces"`
-	MultiHomingNodeId types.Int64 `tfsdk:"multi_homing_node_id"`
+	GroupNumber       types.Int64                           `tfsdk:"group_number"`
+	Interfaces        []L2VPNRedundancyIccpGroupsInterfaces `tfsdk:"interfaces"`
+	MultiHomingNodeId types.Int64                           `tfsdk:"multi_homing_node_id"`
 }
 type L2VPNFlexibleXconnectServiceVlanUnaware struct {
-	ServiceName types.String `tfsdk:"service_name"`
-	Interfaces []L2VPNFlexibleXconnectServiceVlanUnawareInterfaces `tfsdk:"interfaces"`
+	ServiceName      types.String                                              `tfsdk:"service_name"`
+	Interfaces       []L2VPNFlexibleXconnectServiceVlanUnawareInterfaces       `tfsdk:"interfaces"`
 	NeighborEvpnEvis []L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis `tfsdk:"neighbor_evpn_evis"`
 }
 type L2VPNFlexibleXconnectServiceVlanAwareEvis struct {
-	VpnId types.Int64 `tfsdk:"vpn_id"`
+	VpnId      types.Int64                                           `tfsdk:"vpn_id"`
 	Interfaces []L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces `tfsdk:"interfaces"`
 }
 type L2VPNRedundancyIccpGroupsInterfaces struct {
-	InterfaceName types.String `tfsdk:"interface_name"`
-	PrimaryVlan types.String `tfsdk:"primary_vlan"`
-	SecondaryVlan types.String `tfsdk:"secondary_vlan"`
-	MacFlushStpTcn types.Bool `tfsdk:"mac_flush_stp_tcn"`
-	RecoveryDelay types.Int64 `tfsdk:"recovery_delay"`
+	InterfaceName  types.String `tfsdk:"interface_name"`
+	PrimaryVlan    types.String `tfsdk:"primary_vlan"`
+	SecondaryVlan  types.String `tfsdk:"secondary_vlan"`
+	MacFlushStpTcn types.Bool   `tfsdk:"mac_flush_stp_tcn"`
+	RecoveryDelay  types.Int64  `tfsdk:"recovery_delay"`
 }
 type L2VPNFlexibleXconnectServiceVlanUnawareInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
 }
 type L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis struct {
-	VpnId types.Int64 `tfsdk:"vpn_id"`
+	VpnId      types.Int64 `tfsdk:"vpn_id"`
 	RemoteAcId types.Int64 `tfsdk:"remote_ac_id"`
 }
 type L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces struct {
@@ -393,8 +392,8 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 		data.RouterId = types.StringNull()
 	}
 	for i := range data.RedundancyIccpGroups {
-		keys := [...]string{ "group-number",  }
-		keyValues := [...]string{ strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10),  }
+		keys := [...]string{"group-number"}
+		keyValues := [...]string{strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "redundancy.iccp.groups.group").ForEach(
@@ -421,8 +420,8 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.RedundancyIccpGroups[i].GroupNumber = types.Int64Null()
 		}
 		for ci := range data.RedundancyIccpGroups[i].Interfaces {
-			keys := [...]string{ "interface-name",  }
-			keyValues := [...]string{ data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString(),  }
+			keys := [...]string{"interface-name"}
+			keyValues := [...]string{data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString()}
 
 			var cr gjson.Result
 			r.Get("interface").ForEach(
@@ -458,14 +457,15 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			} else {
 				data.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan = types.StringNull()
 			}
-			if value := cr.Get("mac-flush.stp-tcn"); !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("mac-flush.stp-tcn"); value.Exists() {
+				if !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() {
 					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolValue(true)
-				} else {
-					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolValue(false)
 				}
 			} else {
-				data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() {
+					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolNull()
+				}
 			}
 			if value := cr.Get("recovery.delay"); value.Exists() && !data.RedundancyIccpGroups[i].Interfaces[ci].RecoveryDelay.IsNull() {
 				data.RedundancyIccpGroups[i].Interfaces[ci].RecoveryDelay = types.Int64Value(value.Int())
@@ -480,8 +480,8 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.FlexibleXconnectServiceVlanUnaware {
-		keys := [...]string{ "service-name",  }
-		keyValues := [...]string{ data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString(),  }
+		keys := [...]string{"service-name"}
+		keyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "flexible-xconnect-service.vlan-unawares.vlan-unaware").ForEach(
@@ -508,8 +508,8 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.FlexibleXconnectServiceVlanUnaware[i].ServiceName = types.StringNull()
 		}
 		for ci := range data.FlexibleXconnectServiceVlanUnaware[i].Interfaces {
-			keys := [...]string{ "interface-name",  }
-			keyValues := [...]string{ data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString(),  }
+			keys := [...]string{"interface-name"}
+			keyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString()}
 
 			var cr gjson.Result
 			r.Get("interfaces.interface").ForEach(
@@ -537,8 +537,8 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		for ci := range data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis {
-			keys := [...]string{ "vpn-id", "remote-ac-id",  }
-			keyValues := [...]string{ strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10),  }
+			keys := [...]string{"vpn-id", "remote-ac-id"}
+			keyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10)}
 
 			var cr gjson.Result
 			r.Get("neighbor.evpn.evis.evi").ForEach(
@@ -572,8 +572,8 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.FlexibleXconnectServiceVlanAwareEvis {
-		keys := [...]string{ "vpn-id",  }
-		keyValues := [...]string{ strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10),  }
+		keys := [...]string{"vpn-id"}
+		keyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "flexible-xconnect-service.vlan-aware.evis.evi").ForEach(
@@ -600,8 +600,8 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId = types.Int64Null()
 		}
 		for ci := range data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces {
-			keys := [...]string{ "interface-name",  }
-			keyValues := [...]string{ data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString(),  }
+			keys := [...]string{"interface-name"}
+			keyValues := [...]string{data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString()}
 
 			var cr gjson.Result
 			r.Get("interfaces.interface").ForEach(
@@ -629,159 +629,143 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); !data.IgnoreMtuMismatch.IsNull() {
-		if value.Exists() {
-			data.IgnoreMtuMismatch = types.BoolValue(true)
-		} else {
-			data.IgnoreMtuMismatch = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); value.Exists() {
+		data.IgnoreMtuMismatch = types.BoolValue(true)
 	} else {
-		data.IgnoreMtuMismatch = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.IgnoreMtuMismatch.IsNull() {
+			data.IgnoreMtuMismatch = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "ignore-mtu-mismatch-ad"); !data.IgnoreMtuMismatchAd.IsNull() {
-		if value.Exists() {
-			data.IgnoreMtuMismatchAd = types.BoolValue(true)
-		} else {
-			data.IgnoreMtuMismatchAd = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch-ad"); value.Exists() {
+		data.IgnoreMtuMismatchAd = types.BoolValue(true)
 	} else {
-		data.IgnoreMtuMismatchAd = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.IgnoreMtuMismatchAd.IsNull() {
+			data.IgnoreMtuMismatchAd = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "pw-status.disable"); !data.PwStatusDisable.IsNull() {
-		if value.Exists() {
-			data.PwStatusDisable = types.BoolValue(true)
-		} else {
-			data.PwStatusDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "pw-status.disable"); value.Exists() {
+		data.PwStatusDisable = types.BoolValue(true)
 	} else {
-		data.PwStatusDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.PwStatusDisable.IsNull() {
+			data.PwStatusDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-mac"); !data.LoadBalancingFlowSrcDstMac.IsNull() {
-		if value.Exists() {
-			data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
-		} else {
-			data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-mac"); value.Exists() {
+		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
 	} else {
-		data.LoadBalancingFlowSrcDstMac = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LoadBalancingFlowSrcDstMac.IsNull() {
+			data.LoadBalancingFlowSrcDstMac = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-ip"); !data.LoadBalancingFlowSrcDstIp.IsNull() {
-		if value.Exists() {
-			data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
-		} else {
-			data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-ip"); value.Exists() {
+		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
 	} else {
-		data.LoadBalancingFlowSrcDstIp = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LoadBalancingFlowSrcDstIp.IsNull() {
+			data.LoadBalancingFlowSrcDstIp = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "capability.single-mode"); !data.CapabilitySingleMode.IsNull() {
-		if value.Exists() {
-			data.CapabilitySingleMode = types.BoolValue(true)
-		} else {
-			data.CapabilitySingleMode = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "capability.single-mode"); value.Exists() {
+		data.CapabilitySingleMode = types.BoolValue(true)
 	} else {
-		data.CapabilitySingleMode = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.CapabilitySingleMode.IsNull() {
+			data.CapabilitySingleMode = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "capability.high-mode"); !data.CapabilityHighMode.IsNull() {
-		if value.Exists() {
-			data.CapabilityHighMode = types.BoolValue(true)
-		} else {
-			data.CapabilityHighMode = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "capability.high-mode"); value.Exists() {
+		data.CapabilityHighMode = types.BoolValue(true)
 	} else {
-		data.CapabilityHighMode = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.CapabilityHighMode.IsNull() {
+			data.CapabilityHighMode = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "pw-oam.refresh.transmit"); value.Exists() && !data.PwOamRefreshTransmit.IsNull() {
 		data.PwOamRefreshTransmit = types.Int64Value(value.Int())
 	} else {
 		data.PwOamRefreshTransmit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "tcn-propagation"); !data.TcnPropagation.IsNull() {
-		if value.Exists() {
-			data.TcnPropagation = types.BoolValue(true)
-		} else {
-			data.TcnPropagation = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "tcn-propagation"); value.Exists() {
+		data.TcnPropagation = types.BoolValue(true)
 	} else {
-		data.TcnPropagation = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TcnPropagation.IsNull() {
+			data.TcnPropagation = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "pw-grouping"); !data.PwGrouping.IsNull() {
-		if value.Exists() {
-			data.PwGrouping = types.BoolValue(true)
-		} else {
-			data.PwGrouping = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "pw-grouping"); value.Exists() {
+		data.PwGrouping = types.BoolValue(true)
 	} else {
-		data.PwGrouping = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.PwGrouping.IsNull() {
+			data.PwGrouping = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "neighbors.all.ldp.flap"); !data.NeighborsAllLdpFlap.IsNull() {
-		if value.Exists() {
-			data.NeighborsAllLdpFlap = types.BoolValue(true)
-		} else {
-			data.NeighborsAllLdpFlap = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "neighbors.all.ldp.flap"); value.Exists() {
+		data.NeighborsAllLdpFlap = types.BoolValue(true)
 	} else {
-		data.NeighborsAllLdpFlap = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.NeighborsAllLdpFlap.IsNull() {
+			data.NeighborsAllLdpFlap = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "mac.limit.threshold"); value.Exists() && !data.MacLimitThreshold.IsNull() {
 		data.MacLimitThreshold = types.Int64Value(value.Int())
 	} else {
 		data.MacLimitThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "logging.pseudowire"); !data.LoggingPseudowire.IsNull() {
-		if value.Exists() {
-			data.LoggingPseudowire = types.BoolValue(true)
-		} else {
-			data.LoggingPseudowire = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "logging.pseudowire"); value.Exists() {
+		data.LoggingPseudowire = types.BoolValue(true)
 	} else {
-		data.LoggingPseudowire = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LoggingPseudowire.IsNull() {
+			data.LoggingPseudowire = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "logging.bridge-domain"); !data.LoggingBridgeDomain.IsNull() {
-		if value.Exists() {
-			data.LoggingBridgeDomain = types.BoolValue(true)
-		} else {
-			data.LoggingBridgeDomain = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "logging.bridge-domain"); value.Exists() {
+		data.LoggingBridgeDomain = types.BoolValue(true)
 	} else {
-		data.LoggingBridgeDomain = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LoggingBridgeDomain.IsNull() {
+			data.LoggingBridgeDomain = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "logging.vfi"); !data.LoggingVfi.IsNull() {
-		if value.Exists() {
-			data.LoggingVfi = types.BoolValue(true)
-		} else {
-			data.LoggingVfi = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "logging.vfi"); value.Exists() {
+		data.LoggingVfi = types.BoolValue(true)
 	} else {
-		data.LoggingVfi = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LoggingVfi.IsNull() {
+			data.LoggingVfi = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "logging.nsr"); !data.LoggingNsr.IsNull() {
-		if value.Exists() {
-			data.LoggingNsr = types.BoolValue(true)
-		} else {
-			data.LoggingNsr = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "logging.nsr"); value.Exists() {
+		data.LoggingNsr = types.BoolValue(true)
 	} else {
-		data.LoggingNsr = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LoggingNsr.IsNull() {
+			data.LoggingNsr = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "logging.pwhe-replication.disable"); !data.LoggingPwheReplicationDisable.IsNull() {
-		if value.Exists() {
-			data.LoggingPwheReplicationDisable = types.BoolValue(true)
-		} else {
-			data.LoggingPwheReplicationDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "logging.pwhe-replication.disable"); value.Exists() {
+		data.LoggingPwheReplicationDisable = types.BoolValue(true)
 	} else {
-		data.LoggingPwheReplicationDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LoggingPwheReplicationDisable.IsNull() {
+			data.LoggingPwheReplicationDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.bgp.mtu.mismatch.ignore"); !data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() {
-		if value.Exists() {
-			data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(true)
-		} else {
-			data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.bgp.mtu.mismatch.ignore"); value.Exists() {
+		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() {
+			data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "pw-routing.global-id"); value.Exists() && !data.PwRoutingGlobalId.IsNull() {
 		data.PwRoutingGlobalId = types.Int64Value(value.Int())
@@ -818,23 +802,21 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "snmp.mib.interface.format.external"); !data.SnmpMibInterfaceFormatExternal.IsNull() {
-		if value.Exists() {
-			data.SnmpMibInterfaceFormatExternal = types.BoolValue(true)
-		} else {
-			data.SnmpMibInterfaceFormatExternal = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "snmp.mib.interface.format.external"); value.Exists() {
+		data.SnmpMibInterfaceFormatExternal = types.BoolValue(true)
 	} else {
-		data.SnmpMibInterfaceFormatExternal = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SnmpMibInterfaceFormatExternal.IsNull() {
+			data.SnmpMibInterfaceFormatExternal = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "snmp.mib.pseudowire.statistics"); !data.SnmpMibPseudowireStatistics.IsNull() {
-		if value.Exists() {
-			data.SnmpMibPseudowireStatistics = types.BoolValue(true)
-		} else {
-			data.SnmpMibPseudowireStatistics = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "snmp.mib.pseudowire.statistics"); value.Exists() {
+		data.SnmpMibPseudowireStatistics = types.BoolValue(true)
 	} else {
-		data.SnmpMibPseudowireStatistics = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SnmpMibPseudowireStatistics.IsNull() {
+			data.SnmpMibPseudowireStatistics = types.BoolNull()
+		}
 	}
 }
 
@@ -844,10 +826,10 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 func (data L2VPN) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/description", data.Description.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/description", data.Description.ValueString())
 	}
 	if !data.RouterId.IsNull() && !data.RouterId.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/router-id", data.RouterId.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/router-id", data.RouterId.ValueString())
 	}
 	if len(data.RedundancyIccpGroups) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -940,119 +922,119 @@ func (data L2VPN) toBodyXML(ctx context.Context) string {
 	}
 	if !data.IgnoreMtuMismatch.IsNull() && !data.IgnoreMtuMismatch.IsUnknown() {
 		if data.IgnoreMtuMismatch.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/ignore-mtu-mismatch", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ignore-mtu-mismatch", "")
 		}
 	}
 	if !data.IgnoreMtuMismatchAd.IsNull() && !data.IgnoreMtuMismatchAd.IsUnknown() {
 		if data.IgnoreMtuMismatchAd.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/ignore-mtu-mismatch-ad", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ignore-mtu-mismatch-ad", "")
 		}
 	}
 	if !data.PwStatusDisable.IsNull() && !data.PwStatusDisable.IsUnknown() {
 		if data.PwStatusDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/pw-status/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/pw-status/disable", "")
 		}
 	}
 	if !data.LoadBalancingFlowSrcDstMac.IsNull() && !data.LoadBalancingFlowSrcDstMac.IsUnknown() {
 		if data.LoadBalancingFlowSrcDstMac.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/load-balancing/flow/src-dst-mac", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/load-balancing/flow/src-dst-mac", "")
 		}
 	}
 	if !data.LoadBalancingFlowSrcDstIp.IsNull() && !data.LoadBalancingFlowSrcDstIp.IsUnknown() {
 		if data.LoadBalancingFlowSrcDstIp.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/load-balancing/flow/src-dst-ip", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/load-balancing/flow/src-dst-ip", "")
 		}
 	}
 	if !data.CapabilitySingleMode.IsNull() && !data.CapabilitySingleMode.IsUnknown() {
 		if data.CapabilitySingleMode.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/capability/single-mode", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/capability/single-mode", "")
 		}
 	}
 	if !data.CapabilityHighMode.IsNull() && !data.CapabilityHighMode.IsUnknown() {
 		if data.CapabilityHighMode.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/capability/high-mode", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/capability/high-mode", "")
 		}
 	}
 	if !data.PwOamRefreshTransmit.IsNull() && !data.PwOamRefreshTransmit.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/pw-oam/refresh/transmit", strconv.FormatInt(data.PwOamRefreshTransmit.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/pw-oam/refresh/transmit", strconv.FormatInt(data.PwOamRefreshTransmit.ValueInt64(), 10))
 	}
 	if !data.TcnPropagation.IsNull() && !data.TcnPropagation.IsUnknown() {
 		if data.TcnPropagation.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/tcn-propagation", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/tcn-propagation", "")
 		}
 	}
 	if !data.PwGrouping.IsNull() && !data.PwGrouping.IsUnknown() {
 		if data.PwGrouping.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/pw-grouping", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/pw-grouping", "")
 		}
 	}
 	if !data.NeighborsAllLdpFlap.IsNull() && !data.NeighborsAllLdpFlap.IsUnknown() {
 		if data.NeighborsAllLdpFlap.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/neighbors/all/ldp/flap", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/neighbors/all/ldp/flap", "")
 		}
 	}
 	if !data.MacLimitThreshold.IsNull() && !data.MacLimitThreshold.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/mac/limit/threshold", strconv.FormatInt(data.MacLimitThreshold.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/mac/limit/threshold", strconv.FormatInt(data.MacLimitThreshold.ValueInt64(), 10))
 	}
 	if !data.LoggingPseudowire.IsNull() && !data.LoggingPseudowire.IsUnknown() {
 		if data.LoggingPseudowire.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/logging/pseudowire", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/logging/pseudowire", "")
 		}
 	}
 	if !data.LoggingBridgeDomain.IsNull() && !data.LoggingBridgeDomain.IsUnknown() {
 		if data.LoggingBridgeDomain.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/logging/bridge-domain", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/logging/bridge-domain", "")
 		}
 	}
 	if !data.LoggingVfi.IsNull() && !data.LoggingVfi.IsUnknown() {
 		if data.LoggingVfi.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/logging/vfi", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/logging/vfi", "")
 		}
 	}
 	if !data.LoggingNsr.IsNull() && !data.LoggingNsr.IsUnknown() {
 		if data.LoggingNsr.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/logging/nsr", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/logging/nsr", "")
 		}
 	}
 	if !data.LoggingPwheReplicationDisable.IsNull() && !data.LoggingPwheReplicationDisable.IsUnknown() {
 		if data.LoggingPwheReplicationDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/logging/pwhe-replication/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/logging/pwhe-replication/disable", "")
 		}
 	}
 	if !data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() && !data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsUnknown() {
 		if data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore", "")
 		}
 	}
 	if !data.PwRoutingGlobalId.IsNull() && !data.PwRoutingGlobalId.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/pw-routing/global-id", strconv.FormatInt(data.PwRoutingGlobalId.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/pw-routing/global-id", strconv.FormatInt(data.PwRoutingGlobalId.ValueInt64(), 10))
 	}
 	if !data.PwRoutingBgpRdTwoByteAsNumber.IsNull() && !data.PwRoutingBgpRdTwoByteAsNumber.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/pw-routing/bgp/rd/two-byte-as-number", strconv.FormatInt(data.PwRoutingBgpRdTwoByteAsNumber.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/pw-routing/bgp/rd/two-byte-as-number", strconv.FormatInt(data.PwRoutingBgpRdTwoByteAsNumber.ValueInt64(), 10))
 	}
 	if !data.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() && !data.PwRoutingBgpRdTwoByteAsAssignedNumber.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/pw-routing/bgp/rd/two-byte-as-assigned-number", strconv.FormatInt(data.PwRoutingBgpRdTwoByteAsAssignedNumber.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/pw-routing/bgp/rd/two-byte-as-assigned-number", strconv.FormatInt(data.PwRoutingBgpRdTwoByteAsAssignedNumber.ValueInt64(), 10))
 	}
 	if !data.PwRoutingBgpRdFourByteAsNumber.IsNull() && !data.PwRoutingBgpRdFourByteAsNumber.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/pw-routing/bgp/rd/four-byte-as-number", strconv.FormatInt(data.PwRoutingBgpRdFourByteAsNumber.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/pw-routing/bgp/rd/four-byte-as-number", strconv.FormatInt(data.PwRoutingBgpRdFourByteAsNumber.ValueInt64(), 10))
 	}
 	if !data.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() && !data.PwRoutingBgpRdFourByteAsAssignedNumber.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/pw-routing/bgp/rd/four-byte-as-assigned-number", strconv.FormatInt(data.PwRoutingBgpRdFourByteAsAssignedNumber.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/pw-routing/bgp/rd/four-byte-as-assigned-number", strconv.FormatInt(data.PwRoutingBgpRdFourByteAsAssignedNumber.ValueInt64(), 10))
 	}
 	if !data.PwRoutingBgpRdIpv4Address.IsNull() && !data.PwRoutingBgpRdIpv4Address.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/pw-routing/bgp/rd/ipv4-address", data.PwRoutingBgpRdIpv4Address.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/pw-routing/bgp/rd/ipv4-address", data.PwRoutingBgpRdIpv4Address.ValueString())
 	}
 	if !data.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() && !data.PwRoutingBgpRdIpv4AddressAssignedNumber.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/pw-routing/bgp/rd/ipv4-address-assigned-number", strconv.FormatInt(data.PwRoutingBgpRdIpv4AddressAssignedNumber.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/pw-routing/bgp/rd/ipv4-address-assigned-number", strconv.FormatInt(data.PwRoutingBgpRdIpv4AddressAssignedNumber.ValueInt64(), 10))
 	}
 	if !data.SnmpMibInterfaceFormatExternal.IsNull() && !data.SnmpMibInterfaceFormatExternal.IsUnknown() {
 		if data.SnmpMibInterfaceFormatExternal.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/snmp/mib/interface/format/external", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/snmp/mib/interface/format/external", "")
 		}
 	}
 	if !data.SnmpMibPseudowireStatistics.IsNull() && !data.SnmpMibPseudowireStatistics.IsUnknown() {
 		if data.SnmpMibPseudowireStatistics.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/snmp/mib/pseudowire/statistics", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/snmp/mib/pseudowire/statistics", "")
 		}
 	}
 	bodyString, err := body.String()
@@ -1066,22 +1048,22 @@ func (data L2VPN) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/router-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id"); value.Exists() {
 		data.RouterId = types.StringValue(value.String())
 	} else if data.RouterId.IsNull() {
 		data.RouterId = types.StringNull()
 	}
 	for i := range data.RedundancyIccpGroups {
-		keys := [...]string{ "group-number",  }
-		keyValues := [...]string{ strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10),  }
+		keys := [...]string{"group-number"}
+		keyValues := [...]string{strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/redundancy/iccp/groups/group").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/redundancy/iccp/groups/group").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1105,8 +1087,8 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.RedundancyIccpGroups[i].GroupNumber = types.Int64Null()
 		}
 		for ci := range data.RedundancyIccpGroups[i].Interfaces {
-			keys := [...]string{ "interface-name",  }
-			keyValues := [...]string{ data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString(),  }
+			keys := [...]string{"interface-name"}
+			keyValues := [...]string{data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString()}
 
 			var cr xmldot.Result
 			helpers.GetFromXPath(r, "interface").ForEach(
@@ -1130,31 +1112,34 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
 				data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
 			} else {
-				data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName = types.StringNull()
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
 			}
 			if value := helpers.GetFromXPath(cr, "primary/vlan"); value.Exists() {
 				data.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan = types.StringValue(value.String())
 			} else {
-				data.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan = types.StringNull()
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
 			}
 			if value := helpers.GetFromXPath(cr, "secondary/vlan"); value.Exists() {
 				data.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan = types.StringValue(value.String())
 			} else {
-				data.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan = types.StringNull()
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
 			}
-					if value := helpers.GetFromXPath(cr, "mac-flush/stp-tcn"); value.Exists() {
-						if !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() {
-							data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolValue(true)
-						}
-					} else {
-						// For presence-based booleans, only set to false if the attribute is null in state
-						if data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() {
-							data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolNull()
-						}
-					}
+			if value := helpers.GetFromXPath(cr, "mac-flush/stp-tcn"); value.Exists() {
+				if !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() {
+					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() {
+					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolNull()
+				}
+			}
 			if value := helpers.GetFromXPath(cr, "recovery/delay"); value.Exists() {
 				data.RedundancyIccpGroups[i].Interfaces[ci].RecoveryDelay = types.Int64Value(value.Int())
-			} else {
+			} else if data.RedundancyIccpGroups[i].Interfaces[ci].RecoveryDelay.IsNull() {
 				data.RedundancyIccpGroups[i].Interfaces[ci].RecoveryDelay = types.Int64Null()
 			}
 		}
@@ -1165,11 +1150,11 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		}
 	}
 	for i := range data.FlexibleXconnectServiceVlanUnaware {
-		keys := [...]string{ "service-name",  }
-		keyValues := [...]string{ data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString(),  }
+		keys := [...]string{"service-name"}
+		keyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/flexible-xconnect-service/vlan-unawares/vlan-unaware").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/flexible-xconnect-service/vlan-unawares/vlan-unaware").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1193,8 +1178,8 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.FlexibleXconnectServiceVlanUnaware[i].ServiceName = types.StringNull()
 		}
 		for ci := range data.FlexibleXconnectServiceVlanUnaware[i].Interfaces {
-			keys := [...]string{ "interface-name",  }
-			keyValues := [...]string{ data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString(),  }
+			keys := [...]string{"interface-name"}
+			keyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString()}
 
 			var cr xmldot.Result
 			helpers.GetFromXPath(r, "interfaces/interface").ForEach(
@@ -1218,12 +1203,13 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
 				data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
 			} else {
-				data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName = types.StringNull()
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
 			}
 		}
 		for ci := range data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis {
-			keys := [...]string{ "vpn-id", "remote-ac-id",  }
-			keyValues := [...]string{ strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10),  }
+			keys := [...]string{"vpn-id", "remote-ac-id"}
+			keyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10)}
 
 			var cr xmldot.Result
 			helpers.GetFromXPath(r, "neighbor/evpn/evis/evi").ForEach(
@@ -1246,22 +1232,22 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			)
 			if value := helpers.GetFromXPath(cr, "vpn-id"); value.Exists() {
 				data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId = types.Int64Value(value.Int())
-			} else {
+			} else if data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.IsNull() {
 				data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId = types.Int64Null()
 			}
 			if value := helpers.GetFromXPath(cr, "remote-ac-id"); value.Exists() {
 				data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId = types.Int64Value(value.Int())
-			} else {
+			} else if data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.IsNull() {
 				data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId = types.Int64Null()
 			}
 		}
 	}
 	for i := range data.FlexibleXconnectServiceVlanAwareEvis {
-		keys := [...]string{ "vpn-id",  }
-		keyValues := [...]string{ strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10),  }
+		keys := [...]string{"vpn-id"}
+		keyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/flexible-xconnect-service/vlan-aware/evis/evi").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/flexible-xconnect-service/vlan-aware/evis/evi").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1285,8 +1271,8 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId = types.Int64Null()
 		}
 		for ci := range data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces {
-			keys := [...]string{ "interface-name",  }
-			keyValues := [...]string{ data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString(),  }
+			keys := [...]string{"interface-name"}
+			keyValues := [...]string{data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString()}
 
 			var cr xmldot.Result
 			helpers.GetFromXPath(r, "interfaces/interface").ForEach(
@@ -1310,11 +1296,12 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
 				data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
 			} else {
-				data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName = types.StringNull()
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
 			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ignore-mtu-mismatch"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1322,7 +1309,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.IgnoreMtuMismatch = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ignore-mtu-mismatch-ad"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch-ad"); value.Exists() {
 		data.IgnoreMtuMismatchAd = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1330,7 +1317,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.IgnoreMtuMismatchAd = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-status/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-status/disable"); value.Exists() {
 		data.PwStatusDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1338,7 +1325,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.PwStatusDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/load-balancing/flow/src-dst-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow/src-dst-mac"); value.Exists() {
 		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1346,7 +1333,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LoadBalancingFlowSrcDstMac = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/load-balancing/flow/src-dst-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow/src-dst-ip"); value.Exists() {
 		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1354,7 +1341,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LoadBalancingFlowSrcDstIp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/capability/single-mode"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/capability/single-mode"); value.Exists() {
 		data.CapabilitySingleMode = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1362,7 +1349,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.CapabilitySingleMode = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/capability/high-mode"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/capability/high-mode"); value.Exists() {
 		data.CapabilityHighMode = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1370,12 +1357,12 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.CapabilityHighMode = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-oam/refresh/transmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-oam/refresh/transmit"); value.Exists() {
 		data.PwOamRefreshTransmit = types.Int64Value(value.Int())
 	} else if data.PwOamRefreshTransmit.IsNull() {
 		data.PwOamRefreshTransmit = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tcn-propagation"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tcn-propagation"); value.Exists() {
 		data.TcnPropagation = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1383,7 +1370,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.TcnPropagation = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-grouping"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-grouping"); value.Exists() {
 		data.PwGrouping = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1391,7 +1378,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.PwGrouping = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbors/all/ldp/flap"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/all/ldp/flap"); value.Exists() {
 		data.NeighborsAllLdpFlap = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1399,12 +1386,12 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.NeighborsAllLdpFlap = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/threshold"); value.Exists() {
 		data.MacLimitThreshold = types.Int64Value(value.Int())
 	} else if data.MacLimitThreshold.IsNull() {
 		data.MacLimitThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/pseudowire"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/pseudowire"); value.Exists() {
 		data.LoggingPseudowire = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1412,7 +1399,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LoggingPseudowire = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/bridge-domain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/bridge-domain"); value.Exists() {
 		data.LoggingBridgeDomain = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1420,7 +1407,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LoggingBridgeDomain = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/vfi"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/vfi"); value.Exists() {
 		data.LoggingVfi = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1428,7 +1415,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LoggingVfi = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/nsr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/nsr"); value.Exists() {
 		data.LoggingNsr = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1436,7 +1423,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LoggingNsr = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/pwhe-replication/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/pwhe-replication/disable"); value.Exists() {
 		data.LoggingPwheReplicationDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1444,7 +1431,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.LoggingPwheReplicationDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1452,42 +1439,42 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/global-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/global-id"); value.Exists() {
 		data.PwRoutingGlobalId = types.Int64Value(value.Int())
 	} else if data.PwRoutingGlobalId.IsNull() {
 		data.PwRoutingGlobalId = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/two-byte-as-number"); value.Exists() {
 		data.PwRoutingBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdTwoByteAsNumber.IsNull() {
 		data.PwRoutingBgpRdTwoByteAsNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdTwoByteAsAssignedNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/four-byte-as-number"); value.Exists() {
 		data.PwRoutingBgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdFourByteAsNumber.IsNull() {
 		data.PwRoutingBgpRdFourByteAsNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdFourByteAsAssignedNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/ipv4-address"); value.Exists() {
 		data.PwRoutingBgpRdIpv4Address = types.StringValue(value.String())
 	} else if data.PwRoutingBgpRdIpv4Address.IsNull() {
 		data.PwRoutingBgpRdIpv4Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/snmp/mib/interface/format/external"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/snmp/mib/interface/format/external"); value.Exists() {
 		data.SnmpMibInterfaceFormatExternal = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1495,7 +1482,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.SnmpMibInterfaceFormatExternal = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/snmp/mib/pseudowire/statistics"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/snmp/mib/pseudowire/statistics"); value.Exists() {
 		data.SnmpMibPseudowireStatistics = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1513,13 +1500,13 @@ func (data *L2VPN) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"description"); value.Exists() {
+	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"router-id"); value.Exists() {
+	if value := res.Get(prefix + "router-id"); value.Exists() {
 		data.RouterId = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"redundancy.iccp.groups.group"); value.Exists() {
+	if value := res.Get(prefix + "redundancy.iccp.groups.group"); value.Exists() {
 		data.RedundancyIccpGroups = make([]L2VPNRedundancyIccpGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNRedundancyIccpGroups{}
@@ -1539,18 +1526,18 @@ func (data *L2VPN) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("secondary.vlan"); ccValue.Exists() {
 						cItem.SecondaryVlan = types.StringValue(ccValue.String())
 					}
-				if ccValue := cv.Get("mac-flush.stp-tcn"); ccValue.Exists() {
-					cItem.MacFlushStpTcn = types.BoolValue(true)
-				} else {
-					cItem.MacFlushStpTcn = types.BoolValue(false)
-				}
-				if ccValue := cv.Get("recovery.delay"); ccValue.Exists() {
-					cItem.RecoveryDelay = types.Int64Value(ccValue.Int())
-				}
-				item.Interfaces = append(item.Interfaces, cItem)
-				return true
-			})
-		}
+					if ccValue := cv.Get("mac-flush.stp-tcn"); ccValue.Exists() {
+						cItem.MacFlushStpTcn = types.BoolValue(true)
+					} else {
+						cItem.MacFlushStpTcn = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("recovery.delay"); ccValue.Exists() {
+						cItem.RecoveryDelay = types.Int64Value(ccValue.Int())
+					}
+					item.Interfaces = append(item.Interfaces, cItem)
+					return true
+				})
+			}
 			if cValue := v.Get("multi-homing.node-id"); cValue.Exists() {
 				item.MultiHomingNodeId = types.Int64Value(cValue.Int())
 			}
@@ -1558,7 +1545,7 @@ func (data *L2VPN) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"flexible-xconnect-service.vlan-unawares.vlan-unaware"); value.Exists() {
+	if value := res.Get(prefix + "flexible-xconnect-service.vlan-unawares.vlan-unaware"); value.Exists() {
 		data.FlexibleXconnectServiceVlanUnaware = make([]L2VPNFlexibleXconnectServiceVlanUnaware, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNFlexibleXconnectServiceVlanUnaware{}
@@ -1572,29 +1559,29 @@ func (data *L2VPN) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
 						cItem.InterfaceName = types.StringValue(ccValue.String())
 					}
-				item.Interfaces = append(item.Interfaces, cItem)
-				return true
-			})
-		}
+					item.Interfaces = append(item.Interfaces, cItem)
+					return true
+				})
+			}
 			if cValue := v.Get("neighbor.evpn.evis.evi"); cValue.Exists() {
 				item.NeighborEvpnEvis = make([]L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis{}
-				if ccValue := cv.Get("vpn-id"); ccValue.Exists() {
-					cItem.VpnId = types.Int64Value(ccValue.Int())
-				}
-				if ccValue := cv.Get("remote-ac-id"); ccValue.Exists() {
-					cItem.RemoteAcId = types.Int64Value(ccValue.Int())
-				}
-				item.NeighborEvpnEvis = append(item.NeighborEvpnEvis, cItem)
-				return true
-			})
-		}
+					if ccValue := cv.Get("vpn-id"); ccValue.Exists() {
+						cItem.VpnId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("remote-ac-id"); ccValue.Exists() {
+						cItem.RemoteAcId = types.Int64Value(ccValue.Int())
+					}
+					item.NeighborEvpnEvis = append(item.NeighborEvpnEvis, cItem)
+					return true
+				})
+			}
 			data.FlexibleXconnectServiceVlanUnaware = append(data.FlexibleXconnectServiceVlanUnaware, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix+"flexible-xconnect-service.vlan-aware.evis.evi"); value.Exists() {
+	if value := res.Get(prefix + "flexible-xconnect-service.vlan-aware.evis.evi"); value.Exists() {
 		data.FlexibleXconnectServiceVlanAwareEvis = make([]L2VPNFlexibleXconnectServiceVlanAwareEvis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNFlexibleXconnectServiceVlanAwareEvis{}
@@ -1608,127 +1595,127 @@ func (data *L2VPN) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
 						cItem.InterfaceName = types.StringValue(ccValue.String())
 					}
-				item.Interfaces = append(item.Interfaces, cItem)
-				return true
-			})
-		}
+					item.Interfaces = append(item.Interfaces, cItem)
+					return true
+				})
+			}
 			data.FlexibleXconnectServiceVlanAwareEvis = append(data.FlexibleXconnectServiceVlanAwareEvis, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix+"ignore-mtu-mismatch"); value.Exists() {
+	if value := res.Get(prefix + "ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
 	} else {
 		data.IgnoreMtuMismatch = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"ignore-mtu-mismatch-ad"); value.Exists() {
+	if value := res.Get(prefix + "ignore-mtu-mismatch-ad"); value.Exists() {
 		data.IgnoreMtuMismatchAd = types.BoolValue(true)
 	} else {
 		data.IgnoreMtuMismatchAd = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"pw-status.disable"); value.Exists() {
+	if value := res.Get(prefix + "pw-status.disable"); value.Exists() {
 		data.PwStatusDisable = types.BoolValue(true)
 	} else {
 		data.PwStatusDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"load-balancing.flow.src-dst-mac"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.flow.src-dst-mac"); value.Exists() {
 		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
 	} else {
 		data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"load-balancing.flow.src-dst-ip"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.flow.src-dst-ip"); value.Exists() {
 		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
 	} else {
 		data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"capability.single-mode"); value.Exists() {
+	if value := res.Get(prefix + "capability.single-mode"); value.Exists() {
 		data.CapabilitySingleMode = types.BoolValue(true)
 	} else {
 		data.CapabilitySingleMode = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"capability.high-mode"); value.Exists() {
+	if value := res.Get(prefix + "capability.high-mode"); value.Exists() {
 		data.CapabilityHighMode = types.BoolValue(true)
 	} else {
 		data.CapabilityHighMode = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"pw-oam.refresh.transmit"); value.Exists() {
+	if value := res.Get(prefix + "pw-oam.refresh.transmit"); value.Exists() {
 		data.PwOamRefreshTransmit = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"tcn-propagation"); value.Exists() {
+	if value := res.Get(prefix + "tcn-propagation"); value.Exists() {
 		data.TcnPropagation = types.BoolValue(true)
 	} else {
 		data.TcnPropagation = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"pw-grouping"); value.Exists() {
+	if value := res.Get(prefix + "pw-grouping"); value.Exists() {
 		data.PwGrouping = types.BoolValue(true)
 	} else {
 		data.PwGrouping = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"neighbors.all.ldp.flap"); value.Exists() {
+	if value := res.Get(prefix + "neighbors.all.ldp.flap"); value.Exists() {
 		data.NeighborsAllLdpFlap = types.BoolValue(true)
 	} else {
 		data.NeighborsAllLdpFlap = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"mac.limit.threshold"); value.Exists() {
+	if value := res.Get(prefix + "mac.limit.threshold"); value.Exists() {
 		data.MacLimitThreshold = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"logging.pseudowire"); value.Exists() {
+	if value := res.Get(prefix + "logging.pseudowire"); value.Exists() {
 		data.LoggingPseudowire = types.BoolValue(true)
 	} else {
 		data.LoggingPseudowire = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"logging.bridge-domain"); value.Exists() {
+	if value := res.Get(prefix + "logging.bridge-domain"); value.Exists() {
 		data.LoggingBridgeDomain = types.BoolValue(true)
 	} else {
 		data.LoggingBridgeDomain = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"logging.vfi"); value.Exists() {
+	if value := res.Get(prefix + "logging.vfi"); value.Exists() {
 		data.LoggingVfi = types.BoolValue(true)
 	} else {
 		data.LoggingVfi = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"logging.nsr"); value.Exists() {
+	if value := res.Get(prefix + "logging.nsr"); value.Exists() {
 		data.LoggingNsr = types.BoolValue(true)
 	} else {
 		data.LoggingNsr = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"logging.pwhe-replication.disable"); value.Exists() {
+	if value := res.Get(prefix + "logging.pwhe-replication.disable"); value.Exists() {
 		data.LoggingPwheReplicationDisable = types.BoolValue(true)
 	} else {
 		data.LoggingPwheReplicationDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"autodiscovery.bgp.signaling-protocol.bgp.mtu.mismatch.ignore"); value.Exists() {
+	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp.mtu.mismatch.ignore"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"pw-routing.global-id"); value.Exists() {
+	if value := res.Get(prefix + "pw-routing.global-id"); value.Exists() {
 		data.PwRoutingGlobalId = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"pw-routing.bgp.rd.two-byte-as-number"); value.Exists() {
+	if value := res.Get(prefix + "pw-routing.bgp.rd.two-byte-as-number"); value.Exists() {
 		data.PwRoutingBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"pw-routing.bgp.rd.two-byte-as-assigned-number"); value.Exists() {
+	if value := res.Get(prefix + "pw-routing.bgp.rd.two-byte-as-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"pw-routing.bgp.rd.four-byte-as-number"); value.Exists() {
+	if value := res.Get(prefix + "pw-routing.bgp.rd.four-byte-as-number"); value.Exists() {
 		data.PwRoutingBgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"pw-routing.bgp.rd.four-byte-as-assigned-number"); value.Exists() {
+	if value := res.Get(prefix + "pw-routing.bgp.rd.four-byte-as-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"pw-routing.bgp.rd.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "pw-routing.bgp.rd.ipv4-address"); value.Exists() {
 		data.PwRoutingBgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"pw-routing.bgp.rd.ipv4-address-assigned-number"); value.Exists() {
+	if value := res.Get(prefix + "pw-routing.bgp.rd.ipv4-address-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"snmp.mib.interface.format.external"); value.Exists() {
+	if value := res.Get(prefix + "snmp.mib.interface.format.external"); value.Exists() {
 		data.SnmpMibInterfaceFormatExternal = types.BoolValue(true)
 	} else {
 		data.SnmpMibInterfaceFormatExternal = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"snmp.mib.pseudowire.statistics"); value.Exists() {
+	if value := res.Get(prefix + "snmp.mib.pseudowire.statistics"); value.Exists() {
 		data.SnmpMibPseudowireStatistics = types.BoolValue(true)
 	} else {
 		data.SnmpMibPseudowireStatistics = types.BoolValue(false)
@@ -1743,13 +1730,13 @@ func (data *L2VPNData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"description"); value.Exists() {
+	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"router-id"); value.Exists() {
+	if value := res.Get(prefix + "router-id"); value.Exists() {
 		data.RouterId = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"redundancy.iccp.groups.group"); value.Exists() {
+	if value := res.Get(prefix + "redundancy.iccp.groups.group"); value.Exists() {
 		data.RedundancyIccpGroups = make([]L2VPNRedundancyIccpGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNRedundancyIccpGroups{}
@@ -1788,7 +1775,7 @@ func (data *L2VPNData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"flexible-xconnect-service.vlan-unawares.vlan-unaware"); value.Exists() {
+	if value := res.Get(prefix + "flexible-xconnect-service.vlan-unawares.vlan-unaware"); value.Exists() {
 		data.FlexibleXconnectServiceVlanUnaware = make([]L2VPNFlexibleXconnectServiceVlanUnaware, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNFlexibleXconnectServiceVlanUnaware{}
@@ -1824,7 +1811,7 @@ func (data *L2VPNData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"flexible-xconnect-service.vlan-aware.evis.evi"); value.Exists() {
+	if value := res.Get(prefix + "flexible-xconnect-service.vlan-aware.evis.evi"); value.Exists() {
 		data.FlexibleXconnectServiceVlanAwareEvis = make([]L2VPNFlexibleXconnectServiceVlanAwareEvis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNFlexibleXconnectServiceVlanAwareEvis{}
@@ -1846,119 +1833,119 @@ func (data *L2VPNData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"ignore-mtu-mismatch"); value.Exists() {
+	if value := res.Get(prefix + "ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
 	} else {
 		data.IgnoreMtuMismatch = types.BoolNull()
 	}
-	if value := res.Get(prefix+"ignore-mtu-mismatch-ad"); value.Exists() {
+	if value := res.Get(prefix + "ignore-mtu-mismatch-ad"); value.Exists() {
 		data.IgnoreMtuMismatchAd = types.BoolValue(true)
 	} else {
 		data.IgnoreMtuMismatchAd = types.BoolNull()
 	}
-	if value := res.Get(prefix+"pw-status.disable"); value.Exists() {
+	if value := res.Get(prefix + "pw-status.disable"); value.Exists() {
 		data.PwStatusDisable = types.BoolValue(true)
 	} else {
 		data.PwStatusDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"load-balancing.flow.src-dst-mac"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.flow.src-dst-mac"); value.Exists() {
 		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
 	} else {
 		data.LoadBalancingFlowSrcDstMac = types.BoolNull()
 	}
-	if value := res.Get(prefix+"load-balancing.flow.src-dst-ip"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.flow.src-dst-ip"); value.Exists() {
 		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
 	} else {
 		data.LoadBalancingFlowSrcDstIp = types.BoolNull()
 	}
-	if value := res.Get(prefix+"capability.single-mode"); value.Exists() {
+	if value := res.Get(prefix + "capability.single-mode"); value.Exists() {
 		data.CapabilitySingleMode = types.BoolValue(true)
 	} else {
 		data.CapabilitySingleMode = types.BoolNull()
 	}
-	if value := res.Get(prefix+"capability.high-mode"); value.Exists() {
+	if value := res.Get(prefix + "capability.high-mode"); value.Exists() {
 		data.CapabilityHighMode = types.BoolValue(true)
 	} else {
 		data.CapabilityHighMode = types.BoolNull()
 	}
-	if value := res.Get(prefix+"pw-oam.refresh.transmit"); value.Exists() {
+	if value := res.Get(prefix + "pw-oam.refresh.transmit"); value.Exists() {
 		data.PwOamRefreshTransmit = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"tcn-propagation"); value.Exists() {
+	if value := res.Get(prefix + "tcn-propagation"); value.Exists() {
 		data.TcnPropagation = types.BoolValue(true)
 	} else {
 		data.TcnPropagation = types.BoolNull()
 	}
-	if value := res.Get(prefix+"pw-grouping"); value.Exists() {
+	if value := res.Get(prefix + "pw-grouping"); value.Exists() {
 		data.PwGrouping = types.BoolValue(true)
 	} else {
 		data.PwGrouping = types.BoolNull()
 	}
-	if value := res.Get(prefix+"neighbors.all.ldp.flap"); value.Exists() {
+	if value := res.Get(prefix + "neighbors.all.ldp.flap"); value.Exists() {
 		data.NeighborsAllLdpFlap = types.BoolValue(true)
 	} else {
 		data.NeighborsAllLdpFlap = types.BoolNull()
 	}
-	if value := res.Get(prefix+"mac.limit.threshold"); value.Exists() {
+	if value := res.Get(prefix + "mac.limit.threshold"); value.Exists() {
 		data.MacLimitThreshold = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"logging.pseudowire"); value.Exists() {
+	if value := res.Get(prefix + "logging.pseudowire"); value.Exists() {
 		data.LoggingPseudowire = types.BoolValue(true)
 	} else {
 		data.LoggingPseudowire = types.BoolNull()
 	}
-	if value := res.Get(prefix+"logging.bridge-domain"); value.Exists() {
+	if value := res.Get(prefix + "logging.bridge-domain"); value.Exists() {
 		data.LoggingBridgeDomain = types.BoolValue(true)
 	} else {
 		data.LoggingBridgeDomain = types.BoolNull()
 	}
-	if value := res.Get(prefix+"logging.vfi"); value.Exists() {
+	if value := res.Get(prefix + "logging.vfi"); value.Exists() {
 		data.LoggingVfi = types.BoolValue(true)
 	} else {
 		data.LoggingVfi = types.BoolNull()
 	}
-	if value := res.Get(prefix+"logging.nsr"); value.Exists() {
+	if value := res.Get(prefix + "logging.nsr"); value.Exists() {
 		data.LoggingNsr = types.BoolValue(true)
 	} else {
 		data.LoggingNsr = types.BoolNull()
 	}
-	if value := res.Get(prefix+"logging.pwhe-replication.disable"); value.Exists() {
+	if value := res.Get(prefix + "logging.pwhe-replication.disable"); value.Exists() {
 		data.LoggingPwheReplicationDisable = types.BoolValue(true)
 	} else {
 		data.LoggingPwheReplicationDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"autodiscovery.bgp.signaling-protocol.bgp.mtu.mismatch.ignore"); value.Exists() {
+	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp.mtu.mismatch.ignore"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolNull()
 	}
-	if value := res.Get(prefix+"pw-routing.global-id"); value.Exists() {
+	if value := res.Get(prefix + "pw-routing.global-id"); value.Exists() {
 		data.PwRoutingGlobalId = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"pw-routing.bgp.rd.two-byte-as-number"); value.Exists() {
+	if value := res.Get(prefix + "pw-routing.bgp.rd.two-byte-as-number"); value.Exists() {
 		data.PwRoutingBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"pw-routing.bgp.rd.two-byte-as-assigned-number"); value.Exists() {
+	if value := res.Get(prefix + "pw-routing.bgp.rd.two-byte-as-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"pw-routing.bgp.rd.four-byte-as-number"); value.Exists() {
+	if value := res.Get(prefix + "pw-routing.bgp.rd.four-byte-as-number"); value.Exists() {
 		data.PwRoutingBgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"pw-routing.bgp.rd.four-byte-as-assigned-number"); value.Exists() {
+	if value := res.Get(prefix + "pw-routing.bgp.rd.four-byte-as-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"pw-routing.bgp.rd.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "pw-routing.bgp.rd.ipv4-address"); value.Exists() {
 		data.PwRoutingBgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"pw-routing.bgp.rd.ipv4-address-assigned-number"); value.Exists() {
+	if value := res.Get(prefix + "pw-routing.bgp.rd.ipv4-address-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"snmp.mib.interface.format.external"); value.Exists() {
+	if value := res.Get(prefix + "snmp.mib.interface.format.external"); value.Exists() {
 		data.SnmpMibInterfaceFormatExternal = types.BoolValue(true)
 	} else {
 		data.SnmpMibInterfaceFormatExternal = types.BoolNull()
 	}
-	if value := res.Get(prefix+"snmp.mib.pseudowire.statistics"); value.Exists() {
+	if value := res.Get(prefix + "snmp.mib.pseudowire.statistics"); value.Exists() {
 		data.SnmpMibPseudowireStatistics = types.BoolValue(true)
 	} else {
 		data.SnmpMibPseudowireStatistics = types.BoolNull()
@@ -1969,13 +1956,13 @@ func (data *L2VPNData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *L2VPN) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/router-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id"); value.Exists() {
 		data.RouterId = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/redundancy/iccp/groups/group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redundancy/iccp/groups/group"); value.Exists() {
 		data.RedundancyIccpGroups = make([]L2VPNRedundancyIccpGroups, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNRedundancyIccpGroups{}
@@ -2014,7 +2001,7 @@ func (data *L2VPN) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/flexible-xconnect-service/vlan-unawares/vlan-unaware"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/flexible-xconnect-service/vlan-unawares/vlan-unaware"); value.Exists() {
 		data.FlexibleXconnectServiceVlanUnaware = make([]L2VPNFlexibleXconnectServiceVlanUnaware, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNFlexibleXconnectServiceVlanUnaware{}
@@ -2050,7 +2037,7 @@ func (data *L2VPN) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/flexible-xconnect-service/vlan-aware/evis/evi"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/flexible-xconnect-service/vlan-aware/evis/evi"); value.Exists() {
 		data.FlexibleXconnectServiceVlanAwareEvis = make([]L2VPNFlexibleXconnectServiceVlanAwareEvis, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNFlexibleXconnectServiceVlanAwareEvis{}
@@ -2072,119 +2059,119 @@ func (data *L2VPN) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ignore-mtu-mismatch"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
 	} else {
 		data.IgnoreMtuMismatch = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ignore-mtu-mismatch-ad"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch-ad"); value.Exists() {
 		data.IgnoreMtuMismatchAd = types.BoolValue(true)
 	} else {
 		data.IgnoreMtuMismatchAd = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-status/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-status/disable"); value.Exists() {
 		data.PwStatusDisable = types.BoolValue(true)
 	} else {
 		data.PwStatusDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/load-balancing/flow/src-dst-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow/src-dst-mac"); value.Exists() {
 		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
 	} else {
 		data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/load-balancing/flow/src-dst-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow/src-dst-ip"); value.Exists() {
 		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
 	} else {
 		data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/capability/single-mode"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/capability/single-mode"); value.Exists() {
 		data.CapabilitySingleMode = types.BoolValue(true)
 	} else {
 		data.CapabilitySingleMode = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/capability/high-mode"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/capability/high-mode"); value.Exists() {
 		data.CapabilityHighMode = types.BoolValue(true)
 	} else {
 		data.CapabilityHighMode = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-oam/refresh/transmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-oam/refresh/transmit"); value.Exists() {
 		data.PwOamRefreshTransmit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tcn-propagation"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tcn-propagation"); value.Exists() {
 		data.TcnPropagation = types.BoolValue(true)
 	} else {
 		data.TcnPropagation = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-grouping"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-grouping"); value.Exists() {
 		data.PwGrouping = types.BoolValue(true)
 	} else {
 		data.PwGrouping = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbors/all/ldp/flap"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/all/ldp/flap"); value.Exists() {
 		data.NeighborsAllLdpFlap = types.BoolValue(true)
 	} else {
 		data.NeighborsAllLdpFlap = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/threshold"); value.Exists() {
 		data.MacLimitThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/pseudowire"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/pseudowire"); value.Exists() {
 		data.LoggingPseudowire = types.BoolValue(true)
 	} else {
 		data.LoggingPseudowire = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/bridge-domain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/bridge-domain"); value.Exists() {
 		data.LoggingBridgeDomain = types.BoolValue(true)
 	} else {
 		data.LoggingBridgeDomain = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/vfi"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/vfi"); value.Exists() {
 		data.LoggingVfi = types.BoolValue(true)
 	} else {
 		data.LoggingVfi = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/nsr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/nsr"); value.Exists() {
 		data.LoggingNsr = types.BoolValue(true)
 	} else {
 		data.LoggingNsr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/pwhe-replication/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/pwhe-replication/disable"); value.Exists() {
 		data.LoggingPwheReplicationDisable = types.BoolValue(true)
 	} else {
 		data.LoggingPwheReplicationDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/global-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/global-id"); value.Exists() {
 		data.PwRoutingGlobalId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/two-byte-as-number"); value.Exists() {
 		data.PwRoutingBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/four-byte-as-number"); value.Exists() {
 		data.PwRoutingBgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/ipv4-address"); value.Exists() {
 		data.PwRoutingBgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/snmp/mib/interface/format/external"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/snmp/mib/interface/format/external"); value.Exists() {
 		data.SnmpMibInterfaceFormatExternal = types.BoolValue(true)
 	} else {
 		data.SnmpMibInterfaceFormatExternal = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/snmp/mib/pseudowire/statistics"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/snmp/mib/pseudowire/statistics"); value.Exists() {
 		data.SnmpMibPseudowireStatistics = types.BoolValue(true)
 	} else {
 		data.SnmpMibPseudowireStatistics = types.BoolValue(false)
@@ -2195,13 +2182,13 @@ func (data *L2VPN) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *L2VPNData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/router-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id"); value.Exists() {
 		data.RouterId = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/redundancy/iccp/groups/group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redundancy/iccp/groups/group"); value.Exists() {
 		data.RedundancyIccpGroups = make([]L2VPNRedundancyIccpGroups, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNRedundancyIccpGroups{}
@@ -2239,7 +2226,7 @@ func (data *L2VPNData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/flexible-xconnect-service/vlan-unawares/vlan-unaware"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/flexible-xconnect-service/vlan-unawares/vlan-unaware"); value.Exists() {
 		data.FlexibleXconnectServiceVlanUnaware = make([]L2VPNFlexibleXconnectServiceVlanUnaware, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNFlexibleXconnectServiceVlanUnaware{}
@@ -2275,7 +2262,7 @@ func (data *L2VPNData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/flexible-xconnect-service/vlan-aware/evis/evi"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/flexible-xconnect-service/vlan-aware/evis/evi"); value.Exists() {
 		data.FlexibleXconnectServiceVlanAwareEvis = make([]L2VPNFlexibleXconnectServiceVlanAwareEvis, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNFlexibleXconnectServiceVlanAwareEvis{}
@@ -2297,119 +2284,119 @@ func (data *L2VPNData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ignore-mtu-mismatch"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
 	} else {
 		data.IgnoreMtuMismatch = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ignore-mtu-mismatch-ad"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch-ad"); value.Exists() {
 		data.IgnoreMtuMismatchAd = types.BoolValue(true)
 	} else {
 		data.IgnoreMtuMismatchAd = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-status/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-status/disable"); value.Exists() {
 		data.PwStatusDisable = types.BoolValue(true)
 	} else {
 		data.PwStatusDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/load-balancing/flow/src-dst-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow/src-dst-mac"); value.Exists() {
 		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
 	} else {
 		data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/load-balancing/flow/src-dst-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow/src-dst-ip"); value.Exists() {
 		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
 	} else {
 		data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/capability/single-mode"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/capability/single-mode"); value.Exists() {
 		data.CapabilitySingleMode = types.BoolValue(true)
 	} else {
 		data.CapabilitySingleMode = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/capability/high-mode"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/capability/high-mode"); value.Exists() {
 		data.CapabilityHighMode = types.BoolValue(true)
 	} else {
 		data.CapabilityHighMode = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-oam/refresh/transmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-oam/refresh/transmit"); value.Exists() {
 		data.PwOamRefreshTransmit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tcn-propagation"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tcn-propagation"); value.Exists() {
 		data.TcnPropagation = types.BoolValue(true)
 	} else {
 		data.TcnPropagation = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-grouping"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-grouping"); value.Exists() {
 		data.PwGrouping = types.BoolValue(true)
 	} else {
 		data.PwGrouping = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbors/all/ldp/flap"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/all/ldp/flap"); value.Exists() {
 		data.NeighborsAllLdpFlap = types.BoolValue(true)
 	} else {
 		data.NeighborsAllLdpFlap = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac/limit/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac/limit/threshold"); value.Exists() {
 		data.MacLimitThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/pseudowire"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/pseudowire"); value.Exists() {
 		data.LoggingPseudowire = types.BoolValue(true)
 	} else {
 		data.LoggingPseudowire = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/bridge-domain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/bridge-domain"); value.Exists() {
 		data.LoggingBridgeDomain = types.BoolValue(true)
 	} else {
 		data.LoggingBridgeDomain = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/vfi"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/vfi"); value.Exists() {
 		data.LoggingVfi = types.BoolValue(true)
 	} else {
 		data.LoggingVfi = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/nsr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/nsr"); value.Exists() {
 		data.LoggingNsr = types.BoolValue(true)
 	} else {
 		data.LoggingNsr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/logging/pwhe-replication/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/pwhe-replication/disable"); value.Exists() {
 		data.LoggingPwheReplicationDisable = types.BoolValue(true)
 	} else {
 		data.LoggingPwheReplicationDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/global-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/global-id"); value.Exists() {
 		data.PwRoutingGlobalId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/two-byte-as-number"); value.Exists() {
 		data.PwRoutingBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/four-byte-as-number"); value.Exists() {
 		data.PwRoutingBgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/ipv4-address"); value.Exists() {
 		data.PwRoutingBgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/pw-routing/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-routing/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
 		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/snmp/mib/interface/format/external"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/snmp/mib/interface/format/external"); value.Exists() {
 		data.SnmpMibInterfaceFormatExternal = types.BoolValue(true)
 	} else {
 		data.SnmpMibInterfaceFormatExternal = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/snmp/mib/pseudowire/statistics"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/snmp/mib/pseudowire/statistics"); value.Exists() {
 		data.SnmpMibPseudowireStatistics = types.BoolValue(true)
 	} else {
 		data.SnmpMibPseudowireStatistics = types.BoolValue(false)
@@ -2503,11 +2490,11 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ignore-mtu-mismatch", state.getPath()))
 	}
 	for i := range state.FlexibleXconnectServiceVlanAwareEvis {
-		keys := [...]string{ "vpn-id",  }
-		stateKeyValues := [...]string{ strconv.FormatInt(state.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10),  }
+		keys := [...]string{"vpn-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -2524,13 +2511,13 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 			if state.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64() != data.FlexibleXconnectServiceVlanAwareEvis[j].VpnId.ValueInt64() {
 				found = false
 			}
-		if found {
+			if found {
 				for ci := range state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces {
-					ckeys := [...]string{ "interface-name",  }
-					cstateKeyValues := [...]string{ state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString(),  }
+					ckeys := [...]string{"interface-name"}
+					cstateKeyValues := [...]string{state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString()}
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 					}
 
 					cemptyKeys := true
@@ -2547,14 +2534,14 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 						if state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString() != data.FlexibleXconnectServiceVlanAwareEvis[j].Interfaces[cj].InterfaceName.ValueString() {
 							found = false
 						}
-					if found {
-						break
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/flexible-xconnect-service/vlan-aware/evis/evi%v/interfaces/interface%v", state.getPath(), keyString, ckeyString))
 					}
 				}
-				if !found {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flexible-xconnect-service/vlan-aware/evis/evi%v/interfaces/interface%v", state.getPath(), keyString, ckeyString))
-				}
-			}
 				break
 			}
 		}
@@ -2563,11 +2550,11 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 		}
 	}
 	for i := range state.FlexibleXconnectServiceVlanUnaware {
-		keys := [...]string{ "service-name",  }
-		stateKeyValues := [...]string{ state.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString(),  }
+		keys := [...]string{"service-name"}
+		stateKeyValues := [...]string{state.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -2584,13 +2571,13 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 			if state.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString() != data.FlexibleXconnectServiceVlanUnaware[j].ServiceName.ValueString() {
 				found = false
 			}
-		if found {
+			if found {
 				for ci := range state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis {
-					ckeys := [...]string{ "vpn-id", "remote-ac-id",  }
-					cstateKeyValues := [...]string{ strconv.FormatInt(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10),  }
+					ckeys := [...]string{"vpn-id", "remote-ac-id"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10)}
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 					}
 
 					cemptyKeys := true
@@ -2613,20 +2600,20 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 						if state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64() != data.FlexibleXconnectServiceVlanUnaware[j].NeighborEvpnEvis[cj].RemoteAcId.ValueInt64() {
 							found = false
 						}
-					if found {
-						break
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/flexible-xconnect-service/vlan-unawares/vlan-unaware%v/neighbor/evpn/evis/evi%v", state.getPath(), keyString, ckeyString))
 					}
 				}
-				if !found {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flexible-xconnect-service/vlan-unawares/vlan-unaware%v/neighbor/evpn/evis/evi%v", state.getPath(), keyString, ckeyString))
-				}
-			}
 				for ci := range state.FlexibleXconnectServiceVlanUnaware[i].Interfaces {
-					ckeys := [...]string{ "interface-name",  }
-					cstateKeyValues := [...]string{ state.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString(),  }
+					ckeys := [...]string{"interface-name"}
+					cstateKeyValues := [...]string{state.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString()}
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 					}
 
 					cemptyKeys := true
@@ -2643,14 +2630,14 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 						if state.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString() != data.FlexibleXconnectServiceVlanUnaware[j].Interfaces[cj].InterfaceName.ValueString() {
 							found = false
 						}
-					if found {
-						break
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/flexible-xconnect-service/vlan-unawares/vlan-unaware%v/interfaces/interface%v", state.getPath(), keyString, ckeyString))
 					}
 				}
-				if !found {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flexible-xconnect-service/vlan-unawares/vlan-unaware%v/interfaces/interface%v", state.getPath(), keyString, ckeyString))
-				}
-			}
 				break
 			}
 		}
@@ -2659,11 +2646,11 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 		}
 	}
 	for i := range state.RedundancyIccpGroups {
-		keys := [...]string{ "group-number",  }
-		stateKeyValues := [...]string{ strconv.FormatInt(state.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10),  }
+		keys := [...]string{"group-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -2680,16 +2667,16 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 			if state.RedundancyIccpGroups[i].GroupNumber.ValueInt64() != data.RedundancyIccpGroups[j].GroupNumber.ValueInt64() {
 				found = false
 			}
-		if found {
-			if !state.RedundancyIccpGroups[i].MultiHomingNodeId.IsNull() && data.RedundancyIccpGroups[j].MultiHomingNodeId.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/multi-homing/node-id", state.getPath(), keyString))
-			}
+			if found {
+				if !state.RedundancyIccpGroups[i].MultiHomingNodeId.IsNull() && data.RedundancyIccpGroups[j].MultiHomingNodeId.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/multi-homing/node-id", state.getPath(), keyString))
+				}
 				for ci := range state.RedundancyIccpGroups[i].Interfaces {
-					ckeys := [...]string{ "interface-name",  }
-					cstateKeyValues := [...]string{ state.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString(),  }
+					ckeys := [...]string{"interface-name"}
+					cstateKeyValues := [...]string{state.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString()}
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 					}
 
 					cemptyKeys := true
@@ -2706,26 +2693,26 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 						if state.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString() != data.RedundancyIccpGroups[j].Interfaces[cj].InterfaceName.ValueString() {
 							found = false
 						}
-					if found {
-						if !state.RedundancyIccpGroups[i].Interfaces[ci].RecoveryDelay.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].RecoveryDelay.IsNull() {
-							deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v/recovery/delay", state.getPath(), keyString, ckeyString))
+						if found {
+							if !state.RedundancyIccpGroups[i].Interfaces[ci].RecoveryDelay.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].RecoveryDelay.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v/recovery/delay", state.getPath(), keyString, ckeyString))
+							}
+							if !state.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].MacFlushStpTcn.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v/mac-flush/stp-tcn", state.getPath(), keyString, ckeyString))
+							}
+							if !state.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].SecondaryVlan.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v/secondary/vlan", state.getPath(), keyString, ckeyString))
+							}
+							if !state.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].PrimaryVlan.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v/primary/vlan", state.getPath(), keyString, ckeyString))
+							}
+							break
 						}
-						if !state.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].MacFlushStpTcn.IsNull() {
-							deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v/mac-flush/stp-tcn", state.getPath(), keyString, ckeyString))
-						}
-						if !state.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].SecondaryVlan.IsNull() {
-							deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v/secondary/vlan", state.getPath(), keyString, ckeyString))
-						}
-						if !state.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].PrimaryVlan.IsNull() {
-							deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v/primary/vlan", state.getPath(), keyString, ckeyString))
-						}
-						break
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v", state.getPath(), keyString, ckeyString))
 					}
 				}
-				if !found {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v", state.getPath(), keyString, ckeyString))
-				}
-			}
 				break
 			}
 		}
@@ -2856,58 +2843,58 @@ func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context, state *L2VPN) []stri
 		}
 	}
 	for i := range data.FlexibleXconnectServiceVlanAwareEvis {
-		keys := [...]string{ "vpn-id",  }
-		keyValues := [...]string{ strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10),  }
+		keys := [...]string{"vpn-id"}
+		keyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		for ci := range data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces {
-			ckeys := [...]string{ "interface-name",  }
-			ckeyValues := [...]string{ data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString(),  }
+			ckeys := [...]string{"interface-name"}
+			ckeyValues := [...]string{data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString()}
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
 	}
 	for i := range data.FlexibleXconnectServiceVlanUnaware {
-		keys := [...]string{ "service-name",  }
-		keyValues := [...]string{ data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString(),  }
+		keys := [...]string{"service-name"}
+		keyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		for ci := range data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis {
-			ckeys := [...]string{ "vpn-id", "remote-ac-id",  }
-			ckeyValues := [...]string{ strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10),  }
+			ckeys := [...]string{"vpn-id", "remote-ac-id"}
+			ckeyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10)}
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
 		for ci := range data.FlexibleXconnectServiceVlanUnaware[i].Interfaces {
-			ckeys := [...]string{ "interface-name",  }
-			ckeyValues := [...]string{ data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString(),  }
+			ckeys := [...]string{"interface-name"}
+			ckeyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString()}
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
 	}
 	for i := range data.RedundancyIccpGroups {
-		keys := [...]string{ "group-number",  }
-		keyValues := [...]string{ strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10),  }
+		keys := [...]string{"group-number"}
+		keyValues := [...]string{strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		for ci := range data.RedundancyIccpGroups[i].Interfaces {
-			ckeys := [...]string{ "interface-name",  }
-			ckeyValues := [...]string{ data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString(),  }
+			ckeys := [...]string{"interface-name"}
+			ckeyValues := [...]string{data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString()}
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			// Only delete if state has true and plan has false
 			if !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() && !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.ValueBool() {
@@ -3008,17 +2995,17 @@ func (data *L2VPN) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ignore-mtu-mismatch", data.getPath()))
 	}
 	for i := range data.FlexibleXconnectServiceVlanAwareEvis {
-		keyValues := [...]string{ strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10),  }
+		keyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10)}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/flexible-xconnect-service/vlan-aware/evis/evi=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.FlexibleXconnectServiceVlanUnaware {
-		keyValues := [...]string{ data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString(),  }
+		keyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/flexible-xconnect-service/vlan-unawares/vlan-unaware=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.RedundancyIccpGroups {
-		keyValues := [...]string{ strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10),  }
+		keyValues := [...]string{strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10)}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/redundancy/iccp/groups/group=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -3041,7 +3028,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SnmpMibPseudowireStatistics.IsNull() && state.SnmpMibPseudowireStatistics.ValueBool() && data.SnmpMibPseudowireStatistics.IsNull() {
-		deletePath := state.getXPath()+"/snmp/mib/pseudowire/statistics"
+		deletePath := state.getXPath() + "/snmp/mib/pseudowire/statistics"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3049,56 +3036,56 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SnmpMibInterfaceFormatExternal.IsNull() && state.SnmpMibInterfaceFormatExternal.ValueBool() && data.SnmpMibInterfaceFormatExternal.IsNull() {
-		deletePath := state.getXPath()+"/snmp/mib/interface/format/external"
+		deletePath := state.getXPath() + "/snmp/mib/interface/format/external"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() && data.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() {
-		deletePath := state.getXPath()+"/pw-routing/bgp/rd/ipv4-address-assigned-number"
+		deletePath := state.getXPath() + "/pw-routing/bgp/rd/ipv4-address-assigned-number"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PwRoutingBgpRdIpv4Address.IsNull() && data.PwRoutingBgpRdIpv4Address.IsNull() {
-		deletePath := state.getXPath()+"/pw-routing/bgp/rd/ipv4-address"
+		deletePath := state.getXPath() + "/pw-routing/bgp/rd/ipv4-address"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() && data.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() {
-		deletePath := state.getXPath()+"/pw-routing/bgp/rd/four-byte-as-assigned-number"
+		deletePath := state.getXPath() + "/pw-routing/bgp/rd/four-byte-as-assigned-number"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PwRoutingBgpRdFourByteAsNumber.IsNull() && data.PwRoutingBgpRdFourByteAsNumber.IsNull() {
-		deletePath := state.getXPath()+"/pw-routing/bgp/rd/four-byte-as-number"
+		deletePath := state.getXPath() + "/pw-routing/bgp/rd/four-byte-as-number"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() && data.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() {
-		deletePath := state.getXPath()+"/pw-routing/bgp/rd/two-byte-as-assigned-number"
+		deletePath := state.getXPath() + "/pw-routing/bgp/rd/two-byte-as-assigned-number"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PwRoutingBgpRdTwoByteAsNumber.IsNull() && data.PwRoutingBgpRdTwoByteAsNumber.IsNull() {
-		deletePath := state.getXPath()+"/pw-routing/bgp/rd/two-byte-as-number"
+		deletePath := state.getXPath() + "/pw-routing/bgp/rd/two-byte-as-number"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PwRoutingGlobalId.IsNull() && data.PwRoutingGlobalId.IsNull() {
-		deletePath := state.getXPath()+"/pw-routing/global-id"
+		deletePath := state.getXPath() + "/pw-routing/global-id"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3106,7 +3093,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() && state.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.ValueBool() && data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() {
-		deletePath := state.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore"
+		deletePath := state.getXPath() + "/autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3114,7 +3101,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingPwheReplicationDisable.IsNull() && state.LoggingPwheReplicationDisable.ValueBool() && data.LoggingPwheReplicationDisable.IsNull() {
-		deletePath := state.getXPath()+"/logging/pwhe-replication/disable"
+		deletePath := state.getXPath() + "/logging/pwhe-replication/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3122,7 +3109,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingNsr.IsNull() && state.LoggingNsr.ValueBool() && data.LoggingNsr.IsNull() {
-		deletePath := state.getXPath()+"/logging/nsr"
+		deletePath := state.getXPath() + "/logging/nsr"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3130,7 +3117,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingVfi.IsNull() && state.LoggingVfi.ValueBool() && data.LoggingVfi.IsNull() {
-		deletePath := state.getXPath()+"/logging/vfi"
+		deletePath := state.getXPath() + "/logging/vfi"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3138,7 +3125,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingBridgeDomain.IsNull() && state.LoggingBridgeDomain.ValueBool() && data.LoggingBridgeDomain.IsNull() {
-		deletePath := state.getXPath()+"/logging/bridge-domain"
+		deletePath := state.getXPath() + "/logging/bridge-domain"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3146,14 +3133,14 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingPseudowire.IsNull() && state.LoggingPseudowire.ValueBool() && data.LoggingPseudowire.IsNull() {
-		deletePath := state.getXPath()+"/logging/pseudowire"
+		deletePath := state.getXPath() + "/logging/pseudowire"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MacLimitThreshold.IsNull() && data.MacLimitThreshold.IsNull() {
-		deletePath := state.getXPath()+"/mac/limit/threshold"
+		deletePath := state.getXPath() + "/mac/limit/threshold"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3161,7 +3148,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.NeighborsAllLdpFlap.IsNull() && state.NeighborsAllLdpFlap.ValueBool() && data.NeighborsAllLdpFlap.IsNull() {
-		deletePath := state.getXPath()+"/neighbors/all/ldp/flap"
+		deletePath := state.getXPath() + "/neighbors/all/ldp/flap"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3169,7 +3156,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PwGrouping.IsNull() && state.PwGrouping.ValueBool() && data.PwGrouping.IsNull() {
-		deletePath := state.getXPath()+"/pw-grouping"
+		deletePath := state.getXPath() + "/pw-grouping"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3177,14 +3164,14 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TcnPropagation.IsNull() && state.TcnPropagation.ValueBool() && data.TcnPropagation.IsNull() {
-		deletePath := state.getXPath()+"/tcn-propagation"
+		deletePath := state.getXPath() + "/tcn-propagation"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PwOamRefreshTransmit.IsNull() && data.PwOamRefreshTransmit.IsNull() {
-		deletePath := state.getXPath()+"/pw-oam/refresh/transmit"
+		deletePath := state.getXPath() + "/pw-oam/refresh/transmit"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3192,7 +3179,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.CapabilityHighMode.IsNull() && state.CapabilityHighMode.ValueBool() && data.CapabilityHighMode.IsNull() {
-		deletePath := state.getXPath()+"/capability/high-mode"
+		deletePath := state.getXPath() + "/capability/high-mode"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3200,7 +3187,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.CapabilitySingleMode.IsNull() && state.CapabilitySingleMode.ValueBool() && data.CapabilitySingleMode.IsNull() {
-		deletePath := state.getXPath()+"/capability/single-mode"
+		deletePath := state.getXPath() + "/capability/single-mode"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3208,7 +3195,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoadBalancingFlowSrcDstIp.IsNull() && state.LoadBalancingFlowSrcDstIp.ValueBool() && data.LoadBalancingFlowSrcDstIp.IsNull() {
-		deletePath := state.getXPath()+"/load-balancing/flow/src-dst-ip"
+		deletePath := state.getXPath() + "/load-balancing/flow/src-dst-ip"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3216,7 +3203,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoadBalancingFlowSrcDstMac.IsNull() && state.LoadBalancingFlowSrcDstMac.ValueBool() && data.LoadBalancingFlowSrcDstMac.IsNull() {
-		deletePath := state.getXPath()+"/load-balancing/flow/src-dst-mac"
+		deletePath := state.getXPath() + "/load-balancing/flow/src-dst-mac"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3224,7 +3211,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PwStatusDisable.IsNull() && state.PwStatusDisable.ValueBool() && data.PwStatusDisable.IsNull() {
-		deletePath := state.getXPath()+"/pw-status/disable"
+		deletePath := state.getXPath() + "/pw-status/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3232,7 +3219,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.IgnoreMtuMismatchAd.IsNull() && state.IgnoreMtuMismatchAd.ValueBool() && data.IgnoreMtuMismatchAd.IsNull() {
-		deletePath := state.getXPath()+"/ignore-mtu-mismatch-ad"
+		deletePath := state.getXPath() + "/ignore-mtu-mismatch-ad"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3240,15 +3227,15 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.IgnoreMtuMismatch.IsNull() && state.IgnoreMtuMismatch.ValueBool() && data.IgnoreMtuMismatch.IsNull() {
-		deletePath := state.getXPath()+"/ignore-mtu-mismatch"
+		deletePath := state.getXPath() + "/ignore-mtu-mismatch"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.FlexibleXconnectServiceVlanAwareEvis {
-		stateKeys := [...]string{ "vpn-id",  }
-		stateKeyValues := [...]string{ strconv.FormatInt(state.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10),  }
+		stateKeys := [...]string{"vpn-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10)}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -3269,9 +3256,9 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 				found = false
 			}
 			if found {
-			for ci := range state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces {
-					cstateKeys := [...]string{ "interface-name",  }
-					cstateKeyValues := [...]string{ state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString(),  }
+				for ci := range state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces {
+					cstateKeys := [...]string{"interface-name"}
+					cstateKeyValues := [...]string{state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString()}
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -3307,8 +3294,8 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 		}
 	}
 	for i := range state.FlexibleXconnectServiceVlanUnaware {
-		stateKeys := [...]string{ "service-name",  }
-		stateKeyValues := [...]string{ state.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString(),  }
+		stateKeys := [...]string{"service-name"}
+		stateKeyValues := [...]string{state.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -3329,9 +3316,9 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 				found = false
 			}
 			if found {
-			for ci := range state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis {
-					cstateKeys := [...]string{ "vpn-id", "remote-ac-id",  }
-					cstateKeyValues := [...]string{ strconv.FormatInt(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10),  }
+				for ci := range state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis {
+					cstateKeys := [...]string{"vpn-id", "remote-ac-id"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10)}
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -3365,9 +3352,9 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/flexible-xconnect-service/vlan-unawares/vlan-unaware%v/neighbor/evpn/evis/evi%v", predicates, cpredicates))
 					}
 				}
-			for ci := range state.FlexibleXconnectServiceVlanUnaware[i].Interfaces {
-					cstateKeys := [...]string{ "interface-name",  }
-					cstateKeyValues := [...]string{ state.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString(),  }
+				for ci := range state.FlexibleXconnectServiceVlanUnaware[i].Interfaces {
+					cstateKeys := [...]string{"interface-name"}
+					cstateKeyValues := [...]string{state.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString()}
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -3403,8 +3390,8 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 		}
 	}
 	for i := range state.RedundancyIccpGroups {
-		stateKeys := [...]string{ "group-number",  }
-		stateKeyValues := [...]string{ strconv.FormatInt(state.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10),  }
+		stateKeys := [...]string{"group-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10)}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -3425,12 +3412,12 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 				found = false
 			}
 			if found {
-			if !state.RedundancyIccpGroups[i].MultiHomingNodeId.IsNull() && data.RedundancyIccpGroups[j].MultiHomingNodeId.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redundancy/iccp/groups/group%v/multi-homing/node-id", predicates))
-			}
-			for ci := range state.RedundancyIccpGroups[i].Interfaces {
-					cstateKeys := [...]string{ "interface-name",  }
-					cstateKeyValues := [...]string{ state.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString(),  }
+				if !state.RedundancyIccpGroups[i].MultiHomingNodeId.IsNull() && data.RedundancyIccpGroups[j].MultiHomingNodeId.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redundancy/iccp/groups/group%v/multi-homing/node-id", predicates))
+				}
+				for ci := range state.RedundancyIccpGroups[i].Interfaces {
+					cstateKeys := [...]string{"interface-name"}
+					cstateKeyValues := [...]string{state.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString()}
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -3479,14 +3466,14 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 		}
 	}
 	if !state.RouterId.IsNull() && data.RouterId.IsNull() {
-		deletePath := state.getXPath()+"/router-id"
+		deletePath := state.getXPath() + "/router-id"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Description.IsNull() && data.Description.IsNull() {
-		deletePath := state.getXPath()+"/description"
+		deletePath := state.getXPath() + "/description"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3585,8 +3572,8 @@ func (data *L2VPN) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ignore-mtu-mismatch")
 	}
 	for i := range data.FlexibleXconnectServiceVlanAwareEvis {
-		keys := [...]string{ "vpn-id",  }
-		keyValues := [...]string{ strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10),  }
+		keys := [...]string{"vpn-id"}
+		keyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10)}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -3595,8 +3582,8 @@ func (data *L2VPN) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/flexible-xconnect-service/vlan-aware/evis/evi%v", predicates))
 	}
 	for i := range data.FlexibleXconnectServiceVlanUnaware {
-		keys := [...]string{ "service-name",  }
-		keyValues := [...]string{ data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString(),  }
+		keys := [...]string{"service-name"}
+		keyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -3605,8 +3592,8 @@ func (data *L2VPN) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/flexible-xconnect-service/vlan-unawares/vlan-unaware%v", predicates))
 	}
 	for i := range data.RedundancyIccpGroups {
-		keys := [...]string{ "group-number",  }
-		keyValues := [...]string{ strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10),  }
+		keys := [...]string{"group-number"}
+		keyValues := [...]string{strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10)}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

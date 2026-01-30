@@ -52,7 +52,7 @@ func TestAccDataSourceIosxrIPv6AccessList(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrIPv6AccessListConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

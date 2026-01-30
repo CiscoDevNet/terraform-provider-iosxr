@@ -24,28 +24,21 @@ import (
 	"context"
 	"fmt"
 	"regexp"
-	"strconv"
 	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -56,7 +49,7 @@ func NewPolicyMapQoSResource() resource.Resource {
 	return &PolicyMapQoSResource{}
 }
 
-type PolicyMapQoSResource struct{
+type PolicyMapQoSResource struct {
 	data *IosxrProviderData
 }
 
@@ -105,10 +98,10 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 							},
 						},
 						"type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The type of class-map").AddStringEnumDescription("qos", "traffic", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("The type of class-map").AddStringEnumDescription("qos", "traffic").String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("qos", "traffic", ),
+								stringvalidator.OneOf("qos", "traffic"),
 							},
 						},
 						"bandwidth_value": schema.StringAttribute{
@@ -116,10 +109,10 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 							Optional:            true,
 						},
 						"bandwidth_unit": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Unit of bandwidth for this class").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Unit of bandwidth for this class").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", ),
+								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent"),
 							},
 						},
 						"bandwidth_remaining_value": schema.StringAttribute{
@@ -127,10 +120,10 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 							Optional:            true,
 						},
 						"bandwidth_remaining_unit": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Bandwidth value unit").AddStringEnumDescription("percent", "ratio", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Bandwidth value unit").AddStringEnumDescription("percent", "ratio").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("percent", "ratio", ),
+								stringvalidator.OneOf("percent", "ratio"),
 							},
 						},
 						"police_rate_value": schema.StringAttribute{
@@ -138,10 +131,10 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 							Optional:            true,
 						},
 						"police_rate_unit": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Rate unit").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Rate unit").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps", ),
+								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps"),
 							},
 						},
 						"police_burst_value": schema.Int64Attribute{
@@ -152,10 +145,10 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 							},
 						},
 						"police_burst_unit": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Burst size unit").AddStringEnumDescription("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Burst size unit").AddStringEnumDescription("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us", ),
+								stringvalidator.OneOf("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us"),
 							},
 						},
 						"police_peak_rate_value": schema.StringAttribute{
@@ -163,10 +156,10 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 							Optional:            true,
 						},
 						"police_peak_rate_unit": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Unit of Peak Information Rate").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "percent", "pps", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Unit of Peak Information Rate").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "percent", "pps").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "percent", "pps", ),
+								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "percent", "pps"),
 							},
 						},
 						"police_peak_burst_value": schema.Int64Attribute{
@@ -177,10 +170,10 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 							},
 						},
 						"police_peak_burst_unit": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Burst size unit").AddStringEnumDescription("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Burst size unit").AddStringEnumDescription("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us", ),
+								stringvalidator.OneOf("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us"),
 							},
 						},
 						"police_conform_action_transmit": schema.BoolAttribute{
@@ -353,10 +346,10 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 										Required:            true,
 									},
 									"unit": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("queue-limit unit").AddStringEnumDescription("bytes", "kbytes", "mbytes", "ms", "packets", "percent", "us", ).String,
+										MarkdownDescription: helpers.NewAttributeDescription("queue-limit unit").AddStringEnumDescription("bytes", "kbytes", "mbytes", "ms", "packets", "percent", "us").String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("bytes", "kbytes", "mbytes", "ms", "packets", "percent", "us", ),
+											stringvalidator.OneOf("bytes", "kbytes", "mbytes", "ms", "packets", "percent", "us"),
 										},
 									},
 								},
@@ -379,10 +372,10 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 										},
 									},
 									"minimum_threshold_unit": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("threshold unit").AddStringEnumDescription("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us", ).String,
+										MarkdownDescription: helpers.NewAttributeDescription("threshold unit").AddStringEnumDescription("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us").String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us", ),
+											stringvalidator.OneOf("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us"),
 										},
 									},
 									"maximum_threshold_value": schema.Int64Attribute{
@@ -393,10 +386,10 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 										},
 									},
 									"maximum_threshold_unit": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("threshold unit").AddStringEnumDescription("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us", ).String,
+										MarkdownDescription: helpers.NewAttributeDescription("threshold unit").AddStringEnumDescription("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us").String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us", ),
+											stringvalidator.OneOf("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us"),
 										},
 									},
 								},
@@ -464,10 +457,10 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 							Optional:            true,
 						},
 						"shape_average_rate_unit": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Shape rate unit").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Shape rate unit").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", ),
+								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent"),
 							},
 						},
 						"shape_average_excess_burst_size": schema.Int64Attribute{
@@ -478,10 +471,10 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 							},
 						},
 						"shape_average_excess_burst_unit": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Unit of Excess burst size").AddStringEnumDescription("bytes", "cells", "gbytes", "kbytes", "mbytes", "ms", "packets", "us", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Unit of Excess burst size").AddStringEnumDescription("bytes", "cells", "gbytes", "kbytes", "mbytes", "ms", "packets", "us").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("bytes", "cells", "gbytes", "kbytes", "mbytes", "ms", "packets", "us", ),
+								stringvalidator.OneOf("bytes", "cells", "gbytes", "kbytes", "mbytes", "ms", "packets", "us"),
 							},
 						},
 					},
@@ -523,14 +516,14 @@ func (r *PolicyMapQoSResource) Create(ctx context.Context, req resource.CreateRe
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-		var ops []gnmi.SetOperation
+			var ops []gnmi.SetOperation
 
-		// Create object
-		body := plan.toBody(ctx)
-		ops = append(ops, gnmi.Update(plan.getPath(), body))
+			// Create object
+			body := plan.toBody(ctx)
+			ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -751,11 +744,11 @@ func (r *PolicyMapQoSResource) Update(ctx context.Context, req resource.UpdateRe
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			 // Combine update and delete operations into a single transaction
-		 	combinedBody := body + deleteBody
-		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-		 		resp.Diagnostics.AddError("Client Error", err.Error())
-		 		return
+			// Combine update and delete operations into a single transaction
+			combinedBody := body + deleteBody
+			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+				resp.Diagnostics.AddError("Client Error", err.Error())
+				return
 			}
 		}
 	}

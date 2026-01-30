@@ -23,34 +23,30 @@ package provider
 import (
 	"context"
 	"fmt"
-	"reflect"
-	"sort"
-	"strconv"
-	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type MPLSTrafficEng struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
+	Device     types.String `tfsdk:"device"`
+	Id         types.String `tfsdk:"id"`
 	DeleteMode types.String `tfsdk:"delete_mode"`
-	TrafficEng types.Bool `tfsdk:"traffic_eng"`
+	TrafficEng types.Bool   `tfsdk:"traffic_eng"`
 }
 
 type MPLSTrafficEngData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	TrafficEng types.Bool `tfsdk:"traffic_eng"`
+	Device     types.String `tfsdk:"device"`
+	Id         types.String `tfsdk:"id"`
+	TrafficEng types.Bool   `tfsdk:"traffic_eng"`
 }
 
 // End of section. //template:end types
@@ -98,7 +94,7 @@ func (data MPLSTrafficEng) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.TrafficEng.IsNull() && !data.TrafficEng.IsUnknown() {
 		if data.TrafficEng.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/traffic-eng", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/traffic-eng", "")
 		}
 	}
 	bodyString, err := body.String()
@@ -113,14 +109,13 @@ func (data MPLSTrafficEng) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "traffic-eng"); !data.TrafficEng.IsNull() {
-		if value.Exists() {
-			data.TrafficEng = types.BoolValue(true)
-		} else {
-			data.TrafficEng = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "traffic-eng"); value.Exists() {
+		data.TrafficEng = types.BoolValue(true)
 	} else {
-		data.TrafficEng = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TrafficEng.IsNull() {
+			data.TrafficEng = types.BoolNull()
+		}
 	}
 }
 
@@ -129,7 +124,7 @@ func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *MPLSTrafficEng) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/traffic-eng"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -147,7 +142,7 @@ func (data *MPLSTrafficEng) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"traffic-eng"); value.Exists() {
+	if value := res.Get(prefix + "traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
 	} else {
 		data.TrafficEng = types.BoolValue(false)
@@ -162,7 +157,7 @@ func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res gjson.Result) 
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"traffic-eng"); value.Exists() {
+	if value := res.Get(prefix + "traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
 	} else {
 		data.TrafficEng = types.BoolNull()
@@ -173,7 +168,7 @@ func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res gjson.Result) 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *MPLSTrafficEng) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/traffic-eng"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
 	} else {
 		data.TrafficEng = types.BoolValue(false)
@@ -184,7 +179,7 @@ func (data *MPLSTrafficEng) fromBodyXML(ctx context.Context, res xmldot.Result) 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *MPLSTrafficEngData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/traffic-eng"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
 	} else {
 		data.TrafficEng = types.BoolValue(false)
@@ -237,7 +232,7 @@ func (data *MPLSTrafficEng) addDeletedItemsXML(ctx context.Context, state MPLSTr
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TrafficEng.IsNull() && state.TrafficEng.ValueBool() && data.TrafficEng.IsNull() {
-		deletePath := state.getXPath()+"/traffic-eng"
+		deletePath := state.getXPath() + "/traffic-eng"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true

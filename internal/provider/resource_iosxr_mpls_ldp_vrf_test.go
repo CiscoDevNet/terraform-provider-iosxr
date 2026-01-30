@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +35,8 @@ import (
 
 func TestAccIosxrMPLSLDPVRF(t *testing.T) {
 	if os.Getenv("XRV9K") == "" && os.Getenv("XRD") == "" {
-        t.Skip("skipping test, set environment variable XRV9K or XRD")
-    }
+		t.Skip("skipping test, set environment variable XRV9K or XRD")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp_vrf.test", "vrf_name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp_vrf.test", "router_id", "1.2.3.4"))
@@ -82,23 +84,23 @@ func TestAccIosxrMPLSLDPVRF(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrMPLSLDPVRFPrerequisitesConfig+testAccIosxrMPLSLDPVRFConfig_minimum(),
+			Config: testAccIosxrMPLSLDPVRFPrerequisitesConfig + testAccIosxrMPLSLDPVRFConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrMPLSLDPVRFPrerequisitesConfig+testAccIosxrMPLSLDPVRFConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrMPLSLDPVRFPrerequisitesConfig + testAccIosxrMPLSLDPVRFConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_mpls_ldp_vrf.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_mpls_ldp_vrf.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrMPLSLDPVRFImportStateIdFunc("iosxr_mpls_ldp_vrf.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 

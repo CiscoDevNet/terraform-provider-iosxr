@@ -23,19 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/netascode/go-gnmi"
-	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -52,7 +47,7 @@ func NewNTPDataSource() datasource.DataSource {
 	return &NTPDataSource{}
 }
 
-type NTPDataSource struct{
+type NTPDataSource struct {
 	data *IosxrProviderData
 }
 
@@ -327,27 +322,27 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"interface_name": schema.StringAttribute{
 										MarkdownDescription: "Configure NTP on an interface",
 										Computed:            true,
-								},
+									},
 									"broadcast_client": schema.BoolAttribute{
 										MarkdownDescription: "Listen to NTP broadcasts",
 										Computed:            true,
-								},
+									},
 									"broadcast_destination": schema.StringAttribute{
 										MarkdownDescription: "Configure broadcast destination address",
 										Computed:            true,
-								},
+									},
 									"broadcast_key": schema.Int64Attribute{
 										MarkdownDescription: "Configure broadcast authentication key",
 										Computed:            true,
-								},
+									},
 									"broadcast_version": schema.Int64Attribute{
 										MarkdownDescription: "Configure NTP version",
 										Computed:            true,
-								},
+									},
 									"disable": schema.BoolAttribute{
 										MarkdownDescription: "Disable NTP",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -531,43 +526,43 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"address": schema.StringAttribute{
 										MarkdownDescription: "Peer/server address",
 										Computed:            true,
-								},
+									},
 									"type": schema.StringAttribute{
 										MarkdownDescription: "Specify peer/server",
 										Computed:            true,
-								},
+									},
 									"version": schema.Int64Attribute{
 										MarkdownDescription: "Configure NTP version",
 										Computed:            true,
-								},
+									},
 									"key": schema.Int64Attribute{
 										MarkdownDescription: "Configure peer authentication key",
 										Computed:            true,
-								},
+									},
 									"minpoll": schema.Int64Attribute{
 										MarkdownDescription: "Configure minimum polling rate",
 										Computed:            true,
-								},
+									},
 									"maxpoll": schema.Int64Attribute{
 										MarkdownDescription: "Configure maximum polling rate",
 										Computed:            true,
-								},
+									},
 									"prefer": schema.BoolAttribute{
 										MarkdownDescription: "Prefer this peer when possible",
 										Computed:            true,
-								},
+									},
 									"burst": schema.BoolAttribute{
 										MarkdownDescription: "Use burst mode",
 										Computed:            true,
-								},
+									},
 									"iburst": schema.BoolAttribute{
 										MarkdownDescription: "Use initial burst mode",
 										Computed:            true,
-								},
+									},
 									"source": schema.StringAttribute{
 										MarkdownDescription: "Interface for source address",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -579,47 +574,47 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"address": schema.StringAttribute{
 										MarkdownDescription: "Peer/server address",
 										Computed:            true,
-								},
+									},
 									"type": schema.StringAttribute{
 										MarkdownDescription: "Specify peer/server",
 										Computed:            true,
-								},
+									},
 									"version": schema.Int64Attribute{
 										MarkdownDescription: "Configure NTP version",
 										Computed:            true,
-								},
+									},
 									"key": schema.Int64Attribute{
 										MarkdownDescription: "Configure peer authentication key",
 										Computed:            true,
-								},
+									},
 									"minpoll": schema.Int64Attribute{
 										MarkdownDescription: "Configure minimum polling rate",
 										Computed:            true,
-								},
+									},
 									"maxpoll": schema.Int64Attribute{
 										MarkdownDescription: "Configure maximum polling rate",
 										Computed:            true,
-								},
+									},
 									"prefer": schema.BoolAttribute{
 										MarkdownDescription: "Prefer this peer when possible",
 										Computed:            true,
-								},
+									},
 									"burst": schema.BoolAttribute{
 										MarkdownDescription: "Use burst mode",
 										Computed:            true,
-								},
+									},
 									"iburst": schema.BoolAttribute{
 										MarkdownDescription: "Use initial burst mode",
 										Computed:            true,
-								},
+									},
 									"source": schema.StringAttribute{
 										MarkdownDescription: "Interface for source address",
 										Computed:            true,
-								},
+									},
 									"ipv6_address": schema.StringAttribute{
 										MarkdownDescription: "IPv6 address (must be same as key node 'address')",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -631,43 +626,43 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"fqdn_hostname": schema.StringAttribute{
 										MarkdownDescription: "Peer/server hostname",
 										Computed:            true,
-								},
+									},
 									"type": schema.StringAttribute{
 										MarkdownDescription: "Specify peer/server",
 										Computed:            true,
-								},
+									},
 									"version": schema.Int64Attribute{
 										MarkdownDescription: "Configure NTP version",
 										Computed:            true,
-								},
+									},
 									"key": schema.Int64Attribute{
 										MarkdownDescription: "Configure peer authentication key",
 										Computed:            true,
-								},
+									},
 									"minpoll": schema.Int64Attribute{
 										MarkdownDescription: "Configure minimum polling rate",
 										Computed:            true,
-								},
+									},
 									"maxpoll": schema.Int64Attribute{
 										MarkdownDescription: "Configure maximum polling rate",
 										Computed:            true,
-								},
+									},
 									"prefer": schema.BoolAttribute{
 										MarkdownDescription: "Prefer this peer when possible",
 										Computed:            true,
-								},
+									},
 									"burst": schema.BoolAttribute{
 										MarkdownDescription: "Use burst mode",
 										Computed:            true,
-								},
+									},
 									"iburst": schema.BoolAttribute{
 										MarkdownDescription: "Use initial burst mode",
 										Computed:            true,
-								},
+									},
 									"source": schema.StringAttribute{
 										MarkdownDescription: "Interface for source address",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -823,7 +818,6 @@ func (d *NTPDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
-
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

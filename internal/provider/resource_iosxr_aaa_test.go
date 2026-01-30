@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +35,8 @@ import (
 
 func TestAccIosxrAAA(t *testing.T) {
 	if os.Getenv("AAA") == "" {
-        t.Skip("skipping test, set environment variable AAA")
-    }
+		t.Skip("skipping test, set environment variable AAA")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_aaa.test", "default_taskgroup", "FULL-TGRP"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_aaa.test", "banner_login", "^C AAA Banner! ^C"))
@@ -453,23 +455,23 @@ func TestAccIosxrAAA(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrAAAPrerequisitesConfig+testAccIosxrAAAConfig_minimum(),
+			Config: testAccIosxrAAAPrerequisitesConfig + testAccIosxrAAAConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrAAAPrerequisitesConfig+testAccIosxrAAAConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrAAAPrerequisitesConfig + testAccIosxrAAAConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_aaa.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_aaa.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrAAAImportStateIdFunc("iosxr_aaa.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -480,7 +482,7 @@ func TestAccIosxrAAA(t *testing.T) {
 func iosxrAAAImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf("", ), nil
+		return fmt.Sprintf(""), nil
 	}
 }
 

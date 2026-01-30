@@ -59,8 +59,8 @@ func TestAccDataSourceIosxrLineDefault(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrLineDefaultPrerequisitesConfig+testAccDataSourceIosxrLineDefaultConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrLineDefaultPrerequisitesConfig + testAccDataSourceIosxrLineDefaultConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

@@ -39,8 +39,8 @@ func TestAccDataSourceIosxrSNMPServerVRFHost(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSNMPServerVRFHostPrerequisitesConfig+testAccDataSourceIosxrSNMPServerVRFHostConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrSNMPServerVRFHostPrerequisitesConfig + testAccDataSourceIosxrSNMPServerVRFHostConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

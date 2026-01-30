@@ -28,77 +28,77 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type MPLSLDPAddressFamily struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
-	AfName types.String `tfsdk:"af_name"`
-	DiscoveryTransportAddressIpv4 types.String `tfsdk:"discovery_transport_address_ipv4"`
-	DiscoveryTransportAddressIpv6 types.String `tfsdk:"discovery_transport_address_ipv6"`
-	DiscoveryTargetedHelloAccept types.Bool `tfsdk:"discovery_targeted_hello_accept"`
-	DiscoveryTargetedHelloAcceptFrom types.String `tfsdk:"discovery_targeted_hello_accept_from"`
-	NeighborIpv4Targeted []MPLSLDPAddressFamilyNeighborIpv4Targeted `tfsdk:"neighbor_ipv4_targeted"`
-	NeighborIpv6Targeted []MPLSLDPAddressFamilyNeighborIpv6Targeted `tfsdk:"neighbor_ipv6_targeted"`
-	NeighborSrPolicies []MPLSLDPAddressFamilyNeighborSrPolicies `tfsdk:"neighbor_sr_policies"`
-	TrafficEngAutoTunnelMeshGroups []MPLSLDPAddressFamilyTrafficEngAutoTunnelMeshGroups `tfsdk:"traffic_eng_auto_tunnel_mesh_groups"`
-	TrafficEngAutoTunnelMeshGroupsAll types.Bool `tfsdk:"traffic_eng_auto_tunnel_mesh_groups_all"`
-	RedistributeBgpAs types.String `tfsdk:"redistribute_bgp_as"`
-	RedistributeBgpAdvertiseTo types.String `tfsdk:"redistribute_bgp_advertise_to"`
-	LabelLocalAllocateForAccessList types.String `tfsdk:"label_local_allocate_for_access_list"`
-	LabelLocalAllocateForHostRoutes types.Bool `tfsdk:"label_local_allocate_for_host_routes"`
-	LabelLocalDefaultRoute types.Bool `tfsdk:"label_local_default_route"`
-	LabelLocalImplicitNullOverrideFor types.String `tfsdk:"label_local_implicit_null_override_for"`
-	LabelLocalAdvertiseExplicitNull types.Bool `tfsdk:"label_local_advertise_explicit_null"`
-	LabelLocalAdvertiseExplicitNullForAcl types.String `tfsdk:"label_local_advertise_explicit_null_for_acl"`
-	LabelLocalAdvertiseExplicitNullForAclToAcl types.String `tfsdk:"label_local_advertise_explicit_null_for_acl_to_acl"`
-	LabelLocalAdvertiseExplicitNullToAcl types.String `tfsdk:"label_local_advertise_explicit_null_to_acl"`
-	LabelLocalAdvertiseToNeighbors []MPLSLDPAddressFamilyLabelLocalAdvertiseToNeighbors `tfsdk:"label_local_advertise_to_neighbors"`
-	LabelLocalAdvertiseInterfaces []MPLSLDPAddressFamilyLabelLocalAdvertiseInterfaces `tfsdk:"label_local_advertise_interfaces"`
-	LabelLocalAdvertiseDisable types.Bool `tfsdk:"label_local_advertise_disable"`
-	LabelLocalAdvertiseForAccessLists []MPLSLDPAddressFamilyLabelLocalAdvertiseForAccessLists `tfsdk:"label_local_advertise_for_access_lists"`
-	LabelRemoteAcceptFromNeighbors []MPLSLDPAddressFamilyLabelRemoteAcceptFromNeighbors `tfsdk:"label_remote_accept_from_neighbors"`
+	Device                                     types.String                                            `tfsdk:"device"`
+	Id                                         types.String                                            `tfsdk:"id"`
+	DeleteMode                                 types.String                                            `tfsdk:"delete_mode"`
+	AfName                                     types.String                                            `tfsdk:"af_name"`
+	DiscoveryTransportAddressIpv4              types.String                                            `tfsdk:"discovery_transport_address_ipv4"`
+	DiscoveryTransportAddressIpv6              types.String                                            `tfsdk:"discovery_transport_address_ipv6"`
+	DiscoveryTargetedHelloAccept               types.Bool                                              `tfsdk:"discovery_targeted_hello_accept"`
+	DiscoveryTargetedHelloAcceptFrom           types.String                                            `tfsdk:"discovery_targeted_hello_accept_from"`
+	NeighborIpv4Targeted                       []MPLSLDPAddressFamilyNeighborIpv4Targeted              `tfsdk:"neighbor_ipv4_targeted"`
+	NeighborIpv6Targeted                       []MPLSLDPAddressFamilyNeighborIpv6Targeted              `tfsdk:"neighbor_ipv6_targeted"`
+	NeighborSrPolicies                         []MPLSLDPAddressFamilyNeighborSrPolicies                `tfsdk:"neighbor_sr_policies"`
+	TrafficEngAutoTunnelMeshGroups             []MPLSLDPAddressFamilyTrafficEngAutoTunnelMeshGroups    `tfsdk:"traffic_eng_auto_tunnel_mesh_groups"`
+	TrafficEngAutoTunnelMeshGroupsAll          types.Bool                                              `tfsdk:"traffic_eng_auto_tunnel_mesh_groups_all"`
+	RedistributeBgpAs                          types.String                                            `tfsdk:"redistribute_bgp_as"`
+	RedistributeBgpAdvertiseTo                 types.String                                            `tfsdk:"redistribute_bgp_advertise_to"`
+	LabelLocalAllocateForAccessList            types.String                                            `tfsdk:"label_local_allocate_for_access_list"`
+	LabelLocalAllocateForHostRoutes            types.Bool                                              `tfsdk:"label_local_allocate_for_host_routes"`
+	LabelLocalDefaultRoute                     types.Bool                                              `tfsdk:"label_local_default_route"`
+	LabelLocalImplicitNullOverrideFor          types.String                                            `tfsdk:"label_local_implicit_null_override_for"`
+	LabelLocalAdvertiseExplicitNull            types.Bool                                              `tfsdk:"label_local_advertise_explicit_null"`
+	LabelLocalAdvertiseExplicitNullForAcl      types.String                                            `tfsdk:"label_local_advertise_explicit_null_for_acl"`
+	LabelLocalAdvertiseExplicitNullForAclToAcl types.String                                            `tfsdk:"label_local_advertise_explicit_null_for_acl_to_acl"`
+	LabelLocalAdvertiseExplicitNullToAcl       types.String                                            `tfsdk:"label_local_advertise_explicit_null_to_acl"`
+	LabelLocalAdvertiseToNeighbors             []MPLSLDPAddressFamilyLabelLocalAdvertiseToNeighbors    `tfsdk:"label_local_advertise_to_neighbors"`
+	LabelLocalAdvertiseInterfaces              []MPLSLDPAddressFamilyLabelLocalAdvertiseInterfaces     `tfsdk:"label_local_advertise_interfaces"`
+	LabelLocalAdvertiseDisable                 types.Bool                                              `tfsdk:"label_local_advertise_disable"`
+	LabelLocalAdvertiseForAccessLists          []MPLSLDPAddressFamilyLabelLocalAdvertiseForAccessLists `tfsdk:"label_local_advertise_for_access_lists"`
+	LabelRemoteAcceptFromNeighbors             []MPLSLDPAddressFamilyLabelRemoteAcceptFromNeighbors    `tfsdk:"label_remote_accept_from_neighbors"`
 }
 
 type MPLSLDPAddressFamilyData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	AfName types.String `tfsdk:"af_name"`
-	DiscoveryTransportAddressIpv4 types.String `tfsdk:"discovery_transport_address_ipv4"`
-	DiscoveryTransportAddressIpv6 types.String `tfsdk:"discovery_transport_address_ipv6"`
-	DiscoveryTargetedHelloAccept types.Bool `tfsdk:"discovery_targeted_hello_accept"`
-	DiscoveryTargetedHelloAcceptFrom types.String `tfsdk:"discovery_targeted_hello_accept_from"`
-	NeighborIpv4Targeted []MPLSLDPAddressFamilyNeighborIpv4Targeted `tfsdk:"neighbor_ipv4_targeted"`
-	NeighborIpv6Targeted []MPLSLDPAddressFamilyNeighborIpv6Targeted `tfsdk:"neighbor_ipv6_targeted"`
-	NeighborSrPolicies []MPLSLDPAddressFamilyNeighborSrPolicies `tfsdk:"neighbor_sr_policies"`
-	TrafficEngAutoTunnelMeshGroups []MPLSLDPAddressFamilyTrafficEngAutoTunnelMeshGroups `tfsdk:"traffic_eng_auto_tunnel_mesh_groups"`
-	TrafficEngAutoTunnelMeshGroupsAll types.Bool `tfsdk:"traffic_eng_auto_tunnel_mesh_groups_all"`
-	RedistributeBgpAs types.String `tfsdk:"redistribute_bgp_as"`
-	RedistributeBgpAdvertiseTo types.String `tfsdk:"redistribute_bgp_advertise_to"`
-	LabelLocalAllocateForAccessList types.String `tfsdk:"label_local_allocate_for_access_list"`
-	LabelLocalAllocateForHostRoutes types.Bool `tfsdk:"label_local_allocate_for_host_routes"`
-	LabelLocalDefaultRoute types.Bool `tfsdk:"label_local_default_route"`
-	LabelLocalImplicitNullOverrideFor types.String `tfsdk:"label_local_implicit_null_override_for"`
-	LabelLocalAdvertiseExplicitNull types.Bool `tfsdk:"label_local_advertise_explicit_null"`
-	LabelLocalAdvertiseExplicitNullForAcl types.String `tfsdk:"label_local_advertise_explicit_null_for_acl"`
-	LabelLocalAdvertiseExplicitNullForAclToAcl types.String `tfsdk:"label_local_advertise_explicit_null_for_acl_to_acl"`
-	LabelLocalAdvertiseExplicitNullToAcl types.String `tfsdk:"label_local_advertise_explicit_null_to_acl"`
-	LabelLocalAdvertiseToNeighbors []MPLSLDPAddressFamilyLabelLocalAdvertiseToNeighbors `tfsdk:"label_local_advertise_to_neighbors"`
-	LabelLocalAdvertiseInterfaces []MPLSLDPAddressFamilyLabelLocalAdvertiseInterfaces `tfsdk:"label_local_advertise_interfaces"`
-	LabelLocalAdvertiseDisable types.Bool `tfsdk:"label_local_advertise_disable"`
-	LabelLocalAdvertiseForAccessLists []MPLSLDPAddressFamilyLabelLocalAdvertiseForAccessLists `tfsdk:"label_local_advertise_for_access_lists"`
-	LabelRemoteAcceptFromNeighbors []MPLSLDPAddressFamilyLabelRemoteAcceptFromNeighbors `tfsdk:"label_remote_accept_from_neighbors"`
+	Device                                     types.String                                            `tfsdk:"device"`
+	Id                                         types.String                                            `tfsdk:"id"`
+	AfName                                     types.String                                            `tfsdk:"af_name"`
+	DiscoveryTransportAddressIpv4              types.String                                            `tfsdk:"discovery_transport_address_ipv4"`
+	DiscoveryTransportAddressIpv6              types.String                                            `tfsdk:"discovery_transport_address_ipv6"`
+	DiscoveryTargetedHelloAccept               types.Bool                                              `tfsdk:"discovery_targeted_hello_accept"`
+	DiscoveryTargetedHelloAcceptFrom           types.String                                            `tfsdk:"discovery_targeted_hello_accept_from"`
+	NeighborIpv4Targeted                       []MPLSLDPAddressFamilyNeighborIpv4Targeted              `tfsdk:"neighbor_ipv4_targeted"`
+	NeighborIpv6Targeted                       []MPLSLDPAddressFamilyNeighborIpv6Targeted              `tfsdk:"neighbor_ipv6_targeted"`
+	NeighborSrPolicies                         []MPLSLDPAddressFamilyNeighborSrPolicies                `tfsdk:"neighbor_sr_policies"`
+	TrafficEngAutoTunnelMeshGroups             []MPLSLDPAddressFamilyTrafficEngAutoTunnelMeshGroups    `tfsdk:"traffic_eng_auto_tunnel_mesh_groups"`
+	TrafficEngAutoTunnelMeshGroupsAll          types.Bool                                              `tfsdk:"traffic_eng_auto_tunnel_mesh_groups_all"`
+	RedistributeBgpAs                          types.String                                            `tfsdk:"redistribute_bgp_as"`
+	RedistributeBgpAdvertiseTo                 types.String                                            `tfsdk:"redistribute_bgp_advertise_to"`
+	LabelLocalAllocateForAccessList            types.String                                            `tfsdk:"label_local_allocate_for_access_list"`
+	LabelLocalAllocateForHostRoutes            types.Bool                                              `tfsdk:"label_local_allocate_for_host_routes"`
+	LabelLocalDefaultRoute                     types.Bool                                              `tfsdk:"label_local_default_route"`
+	LabelLocalImplicitNullOverrideFor          types.String                                            `tfsdk:"label_local_implicit_null_override_for"`
+	LabelLocalAdvertiseExplicitNull            types.Bool                                              `tfsdk:"label_local_advertise_explicit_null"`
+	LabelLocalAdvertiseExplicitNullForAcl      types.String                                            `tfsdk:"label_local_advertise_explicit_null_for_acl"`
+	LabelLocalAdvertiseExplicitNullForAclToAcl types.String                                            `tfsdk:"label_local_advertise_explicit_null_for_acl_to_acl"`
+	LabelLocalAdvertiseExplicitNullToAcl       types.String                                            `tfsdk:"label_local_advertise_explicit_null_to_acl"`
+	LabelLocalAdvertiseToNeighbors             []MPLSLDPAddressFamilyLabelLocalAdvertiseToNeighbors    `tfsdk:"label_local_advertise_to_neighbors"`
+	LabelLocalAdvertiseInterfaces              []MPLSLDPAddressFamilyLabelLocalAdvertiseInterfaces     `tfsdk:"label_local_advertise_interfaces"`
+	LabelLocalAdvertiseDisable                 types.Bool                                              `tfsdk:"label_local_advertise_disable"`
+	LabelLocalAdvertiseForAccessLists          []MPLSLDPAddressFamilyLabelLocalAdvertiseForAccessLists `tfsdk:"label_local_advertise_for_access_lists"`
+	LabelRemoteAcceptFromNeighbors             []MPLSLDPAddressFamilyLabelRemoteAcceptFromNeighbors    `tfsdk:"label_remote_accept_from_neighbors"`
 }
 type MPLSLDPAddressFamilyNeighborIpv4Targeted struct {
 	NeighborAddress types.String `tfsdk:"neighbor_address"`
@@ -108,27 +108,27 @@ type MPLSLDPAddressFamilyNeighborIpv6Targeted struct {
 }
 type MPLSLDPAddressFamilyNeighborSrPolicies struct {
 	PolicyName types.String `tfsdk:"policy_name"`
-	Targeted types.Bool `tfsdk:"targeted"`
+	Targeted   types.Bool   `tfsdk:"targeted"`
 }
 type MPLSLDPAddressFamilyTrafficEngAutoTunnelMeshGroups struct {
 	GroupId types.Int64 `tfsdk:"group_id"`
 }
 type MPLSLDPAddressFamilyLabelLocalAdvertiseToNeighbors struct {
 	NeighborAddress types.String `tfsdk:"neighbor_address"`
-	LabelSpaceId types.Int64 `tfsdk:"label_space_id"`
-	For types.String `tfsdk:"for"`
+	LabelSpaceId    types.Int64  `tfsdk:"label_space_id"`
+	For             types.String `tfsdk:"for"`
 }
 type MPLSLDPAddressFamilyLabelLocalAdvertiseInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
 }
 type MPLSLDPAddressFamilyLabelLocalAdvertiseForAccessLists struct {
 	AccessListName types.String `tfsdk:"access_list_name"`
-	To types.String `tfsdk:"to"`
+	To             types.String `tfsdk:"to"`
 }
 type MPLSLDPAddressFamilyLabelRemoteAcceptFromNeighbors struct {
 	NeighborAddress types.String `tfsdk:"neighbor_address"`
-	LabelSpaceId types.Int64 `tfsdk:"label_space_id"`
-	For types.String `tfsdk:"for"`
+	LabelSpaceId    types.Int64  `tfsdk:"label_space_id"`
+	For             types.String `tfsdk:"for"`
 }
 
 // End of section. //template:end types
@@ -327,14 +327,13 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 	} else {
 		data.DiscoveryTransportAddressIpv6 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "discovery.targeted-hello.accept"); !data.DiscoveryTargetedHelloAccept.IsNull() {
-		if value.Exists() {
-			data.DiscoveryTargetedHelloAccept = types.BoolValue(true)
-		} else {
-			data.DiscoveryTargetedHelloAccept = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "discovery.targeted-hello.accept"); value.Exists() {
+		data.DiscoveryTargetedHelloAccept = types.BoolValue(true)
 	} else {
-		data.DiscoveryTargetedHelloAccept = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.DiscoveryTargetedHelloAccept.IsNull() {
+			data.DiscoveryTargetedHelloAccept = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "discovery.targeted-hello.accept.from"); value.Exists() && !data.DiscoveryTargetedHelloAcceptFrom.IsNull() {
 		data.DiscoveryTargetedHelloAcceptFrom = types.StringValue(value.String())
@@ -342,8 +341,8 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		data.DiscoveryTargetedHelloAcceptFrom = types.StringNull()
 	}
 	for i := range data.NeighborIpv4Targeted {
-		keys := [...]string{ "neighbor-address",  }
-		keyValues := [...]string{ data.NeighborIpv4Targeted[i].NeighborAddress.ValueString(),  }
+		keys := [...]string{"neighbor-address"}
+		keyValues := [...]string{data.NeighborIpv4Targeted[i].NeighborAddress.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "neighbor.ipv4-addresses.targeted").ForEach(
@@ -371,8 +370,8 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		}
 	}
 	for i := range data.NeighborIpv6Targeted {
-		keys := [...]string{ "neighbor-address",  }
-		keyValues := [...]string{ data.NeighborIpv6Targeted[i].NeighborAddress.ValueString(),  }
+		keys := [...]string{"neighbor-address"}
+		keyValues := [...]string{data.NeighborIpv6Targeted[i].NeighborAddress.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "neighbor.ipv6-addresses.targeted").ForEach(
@@ -400,8 +399,8 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		}
 	}
 	for i := range data.NeighborSrPolicies {
-		keys := [...]string{ "policy-name",  }
-		keyValues := [...]string{ data.NeighborSrPolicies[i].PolicyName.ValueString(),  }
+		keys := [...]string{"policy-name"}
+		keyValues := [...]string{data.NeighborSrPolicies[i].PolicyName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "neighbor.sr-policies.sr-policy").ForEach(
@@ -427,19 +426,19 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		} else {
 			data.NeighborSrPolicies[i].PolicyName = types.StringNull()
 		}
-		if value := r.Get("targeted"); !data.NeighborSrPolicies[i].Targeted.IsNull() {
-			if value.Exists() {
-				data.NeighborSrPolicies[i].Targeted = types.BoolValue(true)
-			} else {
-				data.NeighborSrPolicies[i].Targeted = types.BoolValue(false)
-			}
+		if value := r.Get("targeted"); value.Exists() {
+			data.NeighborSrPolicies[i].Targeted = types.BoolValue(true)
 		} else {
-			data.NeighborSrPolicies[i].Targeted = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.NeighborSrPolicies[i].Targeted.IsNull() {
+				data.NeighborSrPolicies[i].Targeted = types.BoolNull()
+			}
 		}
 	}
 	for i := range data.TrafficEngAutoTunnelMeshGroups {
-		keys := [...]string{ "group-id",  }
-		keyValues := [...]string{ strconv.FormatInt(data.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10),  }
+		keys := [...]string{"group-id"}
+		keyValues := [...]string{strconv.FormatInt(data.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "traffic-eng.auto-tunnel.mesh.groups.group").ForEach(
@@ -466,14 +465,13 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 			data.TrafficEngAutoTunnelMeshGroups[i].GroupId = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "traffic-eng.auto-tunnel.mesh.groups.all"); !data.TrafficEngAutoTunnelMeshGroupsAll.IsNull() {
-		if value.Exists() {
-			data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolValue(true)
-		} else {
-			data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "traffic-eng.auto-tunnel.mesh.groups.all"); value.Exists() {
+		data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolValue(true)
 	} else {
-		data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TrafficEngAutoTunnelMeshGroupsAll.IsNull() {
+			data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "redistribute.bgp.as"); value.Exists() && !data.RedistributeBgpAs.IsNull() {
 		data.RedistributeBgpAs = types.StringValue(value.String())
@@ -490,37 +488,34 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 	} else {
 		data.LabelLocalAllocateForAccessList = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "label.local.allocate.for.host-routes"); !data.LabelLocalAllocateForHostRoutes.IsNull() {
-		if value.Exists() {
-			data.LabelLocalAllocateForHostRoutes = types.BoolValue(true)
-		} else {
-			data.LabelLocalAllocateForHostRoutes = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "label.local.allocate.for.host-routes"); value.Exists() {
+		data.LabelLocalAllocateForHostRoutes = types.BoolValue(true)
 	} else {
-		data.LabelLocalAllocateForHostRoutes = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LabelLocalAllocateForHostRoutes.IsNull() {
+			data.LabelLocalAllocateForHostRoutes = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "label.local.default-route"); !data.LabelLocalDefaultRoute.IsNull() {
-		if value.Exists() {
-			data.LabelLocalDefaultRoute = types.BoolValue(true)
-		} else {
-			data.LabelLocalDefaultRoute = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "label.local.default-route"); value.Exists() {
+		data.LabelLocalDefaultRoute = types.BoolValue(true)
 	} else {
-		data.LabelLocalDefaultRoute = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LabelLocalDefaultRoute.IsNull() {
+			data.LabelLocalDefaultRoute = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "label.local.implicit-null-override.for"); value.Exists() && !data.LabelLocalImplicitNullOverrideFor.IsNull() {
 		data.LabelLocalImplicitNullOverrideFor = types.StringValue(value.String())
 	} else {
 		data.LabelLocalImplicitNullOverrideFor = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "label.local.advertise.explicit-null"); !data.LabelLocalAdvertiseExplicitNull.IsNull() {
-		if value.Exists() {
-			data.LabelLocalAdvertiseExplicitNull = types.BoolValue(true)
-		} else {
-			data.LabelLocalAdvertiseExplicitNull = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "label.local.advertise.explicit-null"); value.Exists() {
+		data.LabelLocalAdvertiseExplicitNull = types.BoolValue(true)
 	} else {
-		data.LabelLocalAdvertiseExplicitNull = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LabelLocalAdvertiseExplicitNull.IsNull() {
+			data.LabelLocalAdvertiseExplicitNull = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "label.local.advertise.explicit-null.for.access-list"); value.Exists() && !data.LabelLocalAdvertiseExplicitNullForAcl.IsNull() {
 		data.LabelLocalAdvertiseExplicitNullForAcl = types.StringValue(value.String())
@@ -538,8 +533,8 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		data.LabelLocalAdvertiseExplicitNullToAcl = types.StringNull()
 	}
 	for i := range data.LabelLocalAdvertiseToNeighbors {
-		keys := [...]string{ "neighbor-address", "label-space-id",  }
-		keyValues := [...]string{ data.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10),  }
+		keys := [...]string{"neighbor-address", "label-space-id"}
+		keyValues := [...]string{data.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "label.local.advertise.to.neighbor").ForEach(
@@ -577,8 +572,8 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		}
 	}
 	for i := range data.LabelLocalAdvertiseInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "label.local.advertise.interfaces.interface").ForEach(
@@ -605,18 +600,17 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 			data.LabelLocalAdvertiseInterfaces[i].InterfaceName = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "label.local.advertise.disable"); !data.LabelLocalAdvertiseDisable.IsNull() {
-		if value.Exists() {
-			data.LabelLocalAdvertiseDisable = types.BoolValue(true)
-		} else {
-			data.LabelLocalAdvertiseDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "label.local.advertise.disable"); value.Exists() {
+		data.LabelLocalAdvertiseDisable = types.BoolValue(true)
 	} else {
-		data.LabelLocalAdvertiseDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LabelLocalAdvertiseDisable.IsNull() {
+			data.LabelLocalAdvertiseDisable = types.BoolNull()
+		}
 	}
 	for i := range data.LabelLocalAdvertiseForAccessLists {
-		keys := [...]string{ "access-list-name",  }
-		keyValues := [...]string{ data.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString(),  }
+		keys := [...]string{"access-list-name"}
+		keyValues := [...]string{data.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "label.local.advertise.for.access-lists").ForEach(
@@ -649,8 +643,8 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		}
 	}
 	for i := range data.LabelRemoteAcceptFromNeighbors {
-		keys := [...]string{ "neighbor-address", "label-space-id",  }
-		keyValues := [...]string{ data.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10),  }
+		keys := [...]string{"neighbor-address", "label-space-id"}
+		keyValues := [...]string{data.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "label.remote.accept.from.neighbor").ForEach(
@@ -695,21 +689,21 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.AfName.IsNull() && !data.AfName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/af-name", data.AfName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/af-name", data.AfName.ValueString())
 	}
 	if !data.DiscoveryTransportAddressIpv4.IsNull() && !data.DiscoveryTransportAddressIpv4.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/discovery/transport-address/ipv4-address", data.DiscoveryTransportAddressIpv4.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/discovery/transport-address/ipv4-address", data.DiscoveryTransportAddressIpv4.ValueString())
 	}
 	if !data.DiscoveryTransportAddressIpv6.IsNull() && !data.DiscoveryTransportAddressIpv6.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/discovery/transport-address/ipv6-address", data.DiscoveryTransportAddressIpv6.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/discovery/transport-address/ipv6-address", data.DiscoveryTransportAddressIpv6.ValueString())
 	}
 	if !data.DiscoveryTargetedHelloAccept.IsNull() && !data.DiscoveryTargetedHelloAccept.IsUnknown() {
 		if data.DiscoveryTargetedHelloAccept.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/discovery/targeted-hello/accept", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/discovery/targeted-hello/accept", "")
 		}
 	}
 	if !data.DiscoveryTargetedHelloAcceptFrom.IsNull() && !data.DiscoveryTargetedHelloAcceptFrom.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/discovery/targeted-hello/accept/from", data.DiscoveryTargetedHelloAcceptFrom.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/discovery/targeted-hello/accept/from", data.DiscoveryTargetedHelloAcceptFrom.ValueString())
 	}
 	if len(data.NeighborIpv4Targeted) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -762,44 +756,44 @@ func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context) string {
 	}
 	if !data.TrafficEngAutoTunnelMeshGroupsAll.IsNull() && !data.TrafficEngAutoTunnelMeshGroupsAll.IsUnknown() {
 		if data.TrafficEngAutoTunnelMeshGroupsAll.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/traffic-eng/auto-tunnel/mesh/groups/all", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/traffic-eng/auto-tunnel/mesh/groups/all", "")
 		}
 	}
 	if !data.RedistributeBgpAs.IsNull() && !data.RedistributeBgpAs.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/redistribute/bgp/as", data.RedistributeBgpAs.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/redistribute/bgp/as", data.RedistributeBgpAs.ValueString())
 	}
 	if !data.RedistributeBgpAdvertiseTo.IsNull() && !data.RedistributeBgpAdvertiseTo.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/redistribute/bgp/advertise-to", data.RedistributeBgpAdvertiseTo.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/redistribute/bgp/advertise-to", data.RedistributeBgpAdvertiseTo.ValueString())
 	}
 	if !data.LabelLocalAllocateForAccessList.IsNull() && !data.LabelLocalAllocateForAccessList.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/label/local/allocate/for/access-list", data.LabelLocalAllocateForAccessList.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/label/local/allocate/for/access-list", data.LabelLocalAllocateForAccessList.ValueString())
 	}
 	if !data.LabelLocalAllocateForHostRoutes.IsNull() && !data.LabelLocalAllocateForHostRoutes.IsUnknown() {
 		if data.LabelLocalAllocateForHostRoutes.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/label/local/allocate/for/host-routes", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/label/local/allocate/for/host-routes", "")
 		}
 	}
 	if !data.LabelLocalDefaultRoute.IsNull() && !data.LabelLocalDefaultRoute.IsUnknown() {
 		if data.LabelLocalDefaultRoute.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/label/local/default-route", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/label/local/default-route", "")
 		}
 	}
 	if !data.LabelLocalImplicitNullOverrideFor.IsNull() && !data.LabelLocalImplicitNullOverrideFor.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/label/local/implicit-null-override/for", data.LabelLocalImplicitNullOverrideFor.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/label/local/implicit-null-override/for", data.LabelLocalImplicitNullOverrideFor.ValueString())
 	}
 	if !data.LabelLocalAdvertiseExplicitNull.IsNull() && !data.LabelLocalAdvertiseExplicitNull.IsUnknown() {
 		if data.LabelLocalAdvertiseExplicitNull.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/label/local/advertise/explicit-null", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/label/local/advertise/explicit-null", "")
 		}
 	}
 	if !data.LabelLocalAdvertiseExplicitNullForAcl.IsNull() && !data.LabelLocalAdvertiseExplicitNullForAcl.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/label/local/advertise/explicit-null/for/access-list", data.LabelLocalAdvertiseExplicitNullForAcl.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/label/local/advertise/explicit-null/for/access-list", data.LabelLocalAdvertiseExplicitNullForAcl.ValueString())
 	}
 	if !data.LabelLocalAdvertiseExplicitNullForAclToAcl.IsNull() && !data.LabelLocalAdvertiseExplicitNullForAclToAcl.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/label/local/advertise/explicit-null/for/to/access-list", data.LabelLocalAdvertiseExplicitNullForAclToAcl.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/label/local/advertise/explicit-null/for/to/access-list", data.LabelLocalAdvertiseExplicitNullForAclToAcl.ValueString())
 	}
 	if !data.LabelLocalAdvertiseExplicitNullToAcl.IsNull() && !data.LabelLocalAdvertiseExplicitNullToAcl.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/label/local/advertise/explicit-null/to/access-list", data.LabelLocalAdvertiseExplicitNullToAcl.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/label/local/advertise/explicit-null/to/access-list", data.LabelLocalAdvertiseExplicitNullToAcl.ValueString())
 	}
 	if len(data.LabelLocalAdvertiseToNeighbors) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -831,7 +825,7 @@ func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context) string {
 	}
 	if !data.LabelLocalAdvertiseDisable.IsNull() && !data.LabelLocalAdvertiseDisable.IsUnknown() {
 		if data.LabelLocalAdvertiseDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/label/local/advertise/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/label/local/advertise/disable", "")
 		}
 	}
 	if len(data.LabelLocalAdvertiseForAccessLists) > 0 {
@@ -876,22 +870,22 @@ func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *MPLSLDPAddressFamily) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/af-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/af-name"); value.Exists() {
 		data.AfName = types.StringValue(value.String())
 	} else if data.AfName.IsNull() {
 		data.AfName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/transport-address/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/transport-address/ipv4-address"); value.Exists() {
 		data.DiscoveryTransportAddressIpv4 = types.StringValue(value.String())
 	} else if data.DiscoveryTransportAddressIpv4.IsNull() {
 		data.DiscoveryTransportAddressIpv4 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/transport-address/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/transport-address/ipv6-address"); value.Exists() {
 		data.DiscoveryTransportAddressIpv6 = types.StringValue(value.String())
 	} else if data.DiscoveryTransportAddressIpv6.IsNull() {
 		data.DiscoveryTransportAddressIpv6 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/targeted-hello/accept"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/targeted-hello/accept"); value.Exists() {
 		data.DiscoveryTargetedHelloAccept = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -899,17 +893,17 @@ func (data *MPLSLDPAddressFamily) updateFromBodyXML(ctx context.Context, res xml
 			data.DiscoveryTargetedHelloAccept = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/targeted-hello/accept/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/targeted-hello/accept/from"); value.Exists() {
 		data.DiscoveryTargetedHelloAcceptFrom = types.StringValue(value.String())
 	} else if data.DiscoveryTargetedHelloAcceptFrom.IsNull() {
 		data.DiscoveryTargetedHelloAcceptFrom = types.StringNull()
 	}
 	for i := range data.NeighborIpv4Targeted {
-		keys := [...]string{ "neighbor-address",  }
-		keyValues := [...]string{ data.NeighborIpv4Targeted[i].NeighborAddress.ValueString(),  }
+		keys := [...]string{"neighbor-address"}
+		keyValues := [...]string{data.NeighborIpv4Targeted[i].NeighborAddress.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbor/ipv4-addresses/targeted").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/ipv4-addresses/targeted").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -934,11 +928,11 @@ func (data *MPLSLDPAddressFamily) updateFromBodyXML(ctx context.Context, res xml
 		}
 	}
 	for i := range data.NeighborIpv6Targeted {
-		keys := [...]string{ "neighbor-address",  }
-		keyValues := [...]string{ data.NeighborIpv6Targeted[i].NeighborAddress.ValueString(),  }
+		keys := [...]string{"neighbor-address"}
+		keyValues := [...]string{data.NeighborIpv6Targeted[i].NeighborAddress.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbor/ipv6-addresses/targeted").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/ipv6-addresses/targeted").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -963,11 +957,11 @@ func (data *MPLSLDPAddressFamily) updateFromBodyXML(ctx context.Context, res xml
 		}
 	}
 	for i := range data.NeighborSrPolicies {
-		keys := [...]string{ "policy-name",  }
-		keyValues := [...]string{ data.NeighborSrPolicies[i].PolicyName.ValueString(),  }
+		keys := [...]string{"policy-name"}
+		keyValues := [...]string{data.NeighborSrPolicies[i].PolicyName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbor/sr-policies/sr-policy").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/sr-policies/sr-policy").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1001,11 +995,11 @@ func (data *MPLSLDPAddressFamily) updateFromBodyXML(ctx context.Context, res xml
 		}
 	}
 	for i := range data.TrafficEngAutoTunnelMeshGroups {
-		keys := [...]string{ "group-id",  }
-		keyValues := [...]string{ strconv.FormatInt(data.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10),  }
+		keys := [...]string{"group-id"}
+		keyValues := [...]string{strconv.FormatInt(data.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/traffic-eng/auto-tunnel/mesh/groups/group").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/traffic-eng/auto-tunnel/mesh/groups/group").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1029,7 +1023,7 @@ func (data *MPLSLDPAddressFamily) updateFromBodyXML(ctx context.Context, res xml
 			data.TrafficEngAutoTunnelMeshGroups[i].GroupId = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/traffic-eng/auto-tunnel/mesh/groups/all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/traffic-eng/auto-tunnel/mesh/groups/all"); value.Exists() {
 		data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1037,22 +1031,22 @@ func (data *MPLSLDPAddressFamily) updateFromBodyXML(ctx context.Context, res xml
 			data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/redistribute/bgp/as"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/bgp/as"); value.Exists() {
 		data.RedistributeBgpAs = types.StringValue(value.String())
 	} else if data.RedistributeBgpAs.IsNull() {
 		data.RedistributeBgpAs = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/redistribute/bgp/advertise-to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/bgp/advertise-to"); value.Exists() {
 		data.RedistributeBgpAdvertiseTo = types.StringValue(value.String())
 	} else if data.RedistributeBgpAdvertiseTo.IsNull() {
 		data.RedistributeBgpAdvertiseTo = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/allocate/for/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/allocate/for/access-list"); value.Exists() {
 		data.LabelLocalAllocateForAccessList = types.StringValue(value.String())
 	} else if data.LabelLocalAllocateForAccessList.IsNull() {
 		data.LabelLocalAllocateForAccessList = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/allocate/for/host-routes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/allocate/for/host-routes"); value.Exists() {
 		data.LabelLocalAllocateForHostRoutes = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1060,7 +1054,7 @@ func (data *MPLSLDPAddressFamily) updateFromBodyXML(ctx context.Context, res xml
 			data.LabelLocalAllocateForHostRoutes = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/default-route"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/default-route"); value.Exists() {
 		data.LabelLocalDefaultRoute = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1068,12 +1062,12 @@ func (data *MPLSLDPAddressFamily) updateFromBodyXML(ctx context.Context, res xml
 			data.LabelLocalDefaultRoute = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/implicit-null-override/for"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/implicit-null-override/for"); value.Exists() {
 		data.LabelLocalImplicitNullOverrideFor = types.StringValue(value.String())
 	} else if data.LabelLocalImplicitNullOverrideFor.IsNull() {
 		data.LabelLocalImplicitNullOverrideFor = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/explicit-null"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/explicit-null"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNull = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1081,27 +1075,27 @@ func (data *MPLSLDPAddressFamily) updateFromBodyXML(ctx context.Context, res xml
 			data.LabelLocalAdvertiseExplicitNull = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/explicit-null/for/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/explicit-null/for/access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullForAcl = types.StringValue(value.String())
 	} else if data.LabelLocalAdvertiseExplicitNullForAcl.IsNull() {
 		data.LabelLocalAdvertiseExplicitNullForAcl = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/explicit-null/for/to/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/explicit-null/for/to/access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullForAclToAcl = types.StringValue(value.String())
 	} else if data.LabelLocalAdvertiseExplicitNullForAclToAcl.IsNull() {
 		data.LabelLocalAdvertiseExplicitNullForAclToAcl = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/explicit-null/to/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/explicit-null/to/access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullToAcl = types.StringValue(value.String())
 	} else if data.LabelLocalAdvertiseExplicitNullToAcl.IsNull() {
 		data.LabelLocalAdvertiseExplicitNullToAcl = types.StringNull()
 	}
 	for i := range data.LabelLocalAdvertiseToNeighbors {
-		keys := [...]string{ "neighbor-address", "label-space-id",  }
-		keyValues := [...]string{ data.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10),  }
+		keys := [...]string{"neighbor-address", "label-space-id"}
+		keyValues := [...]string{data.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/to/neighbor").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/to/neighbor").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1136,11 +1130,11 @@ func (data *MPLSLDPAddressFamily) updateFromBodyXML(ctx context.Context, res xml
 		}
 	}
 	for i := range data.LabelLocalAdvertiseInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1164,7 +1158,7 @@ func (data *MPLSLDPAddressFamily) updateFromBodyXML(ctx context.Context, res xml
 			data.LabelLocalAdvertiseInterfaces[i].InterfaceName = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/disable"); value.Exists() {
 		data.LabelLocalAdvertiseDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1173,11 +1167,11 @@ func (data *MPLSLDPAddressFamily) updateFromBodyXML(ctx context.Context, res xml
 		}
 	}
 	for i := range data.LabelLocalAdvertiseForAccessLists {
-		keys := [...]string{ "access-list-name",  }
-		keyValues := [...]string{ data.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString(),  }
+		keys := [...]string{"access-list-name"}
+		keyValues := [...]string{data.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/for/access-lists").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/for/access-lists").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1207,11 +1201,11 @@ func (data *MPLSLDPAddressFamily) updateFromBodyXML(ctx context.Context, res xml
 		}
 	}
 	for i := range data.LabelRemoteAcceptFromNeighbors {
-		keys := [...]string{ "neighbor-address", "label-space-id",  }
-		keyValues := [...]string{ data.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10),  }
+		keys := [...]string{"neighbor-address", "label-space-id"}
+		keyValues := [...]string{data.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/remote/accept/from/neighbor").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/remote/accept/from/neighbor").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1255,21 +1249,21 @@ func (data *MPLSLDPAddressFamily) fromBody(ctx context.Context, res gjson.Result
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"discovery.transport-address.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "discovery.transport-address.ipv4-address"); value.Exists() {
 		data.DiscoveryTransportAddressIpv4 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"discovery.transport-address.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "discovery.transport-address.ipv6-address"); value.Exists() {
 		data.DiscoveryTransportAddressIpv6 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"discovery.targeted-hello.accept"); value.Exists() {
+	if value := res.Get(prefix + "discovery.targeted-hello.accept"); value.Exists() {
 		data.DiscoveryTargetedHelloAccept = types.BoolValue(true)
 	} else {
 		data.DiscoveryTargetedHelloAccept = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"discovery.targeted-hello.accept.from"); value.Exists() {
+	if value := res.Get(prefix + "discovery.targeted-hello.accept.from"); value.Exists() {
 		data.DiscoveryTargetedHelloAcceptFrom = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"neighbor.ipv4-addresses.targeted"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.ipv4-addresses.targeted"); value.Exists() {
 		data.NeighborIpv4Targeted = make([]MPLSLDPAddressFamilyNeighborIpv4Targeted, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyNeighborIpv4Targeted{}
@@ -1280,7 +1274,7 @@ func (data *MPLSLDPAddressFamily) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix+"neighbor.ipv6-addresses.targeted"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.ipv6-addresses.targeted"); value.Exists() {
 		data.NeighborIpv6Targeted = make([]MPLSLDPAddressFamilyNeighborIpv6Targeted, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyNeighborIpv6Targeted{}
@@ -1291,7 +1285,7 @@ func (data *MPLSLDPAddressFamily) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix+"neighbor.sr-policies.sr-policy"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.sr-policies.sr-policy"); value.Exists() {
 		data.NeighborSrPolicies = make([]MPLSLDPAddressFamilyNeighborSrPolicies, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyNeighborSrPolicies{}
@@ -1307,7 +1301,7 @@ func (data *MPLSLDPAddressFamily) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix+"traffic-eng.auto-tunnel.mesh.groups.group"); value.Exists() {
+	if value := res.Get(prefix + "traffic-eng.auto-tunnel.mesh.groups.group"); value.Exists() {
 		data.TrafficEngAutoTunnelMeshGroups = make([]MPLSLDPAddressFamilyTrafficEngAutoTunnelMeshGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyTrafficEngAutoTunnelMeshGroups{}
@@ -1318,48 +1312,48 @@ func (data *MPLSLDPAddressFamily) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix+"traffic-eng.auto-tunnel.mesh.groups.all"); value.Exists() {
+	if value := res.Get(prefix + "traffic-eng.auto-tunnel.mesh.groups.all"); value.Exists() {
 		data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolValue(true)
 	} else {
 		data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"redistribute.bgp.as"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.bgp.as"); value.Exists() {
 		data.RedistributeBgpAs = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"redistribute.bgp.advertise-to"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.bgp.advertise-to"); value.Exists() {
 		data.RedistributeBgpAdvertiseTo = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"label.local.allocate.for.access-list"); value.Exists() {
+	if value := res.Get(prefix + "label.local.allocate.for.access-list"); value.Exists() {
 		data.LabelLocalAllocateForAccessList = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"label.local.allocate.for.host-routes"); value.Exists() {
+	if value := res.Get(prefix + "label.local.allocate.for.host-routes"); value.Exists() {
 		data.LabelLocalAllocateForHostRoutes = types.BoolValue(true)
 	} else {
 		data.LabelLocalAllocateForHostRoutes = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"label.local.default-route"); value.Exists() {
+	if value := res.Get(prefix + "label.local.default-route"); value.Exists() {
 		data.LabelLocalDefaultRoute = types.BoolValue(true)
 	} else {
 		data.LabelLocalDefaultRoute = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"label.local.implicit-null-override.for"); value.Exists() {
+	if value := res.Get(prefix + "label.local.implicit-null-override.for"); value.Exists() {
 		data.LabelLocalImplicitNullOverrideFor = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"label.local.advertise.explicit-null"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.explicit-null"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNull = types.BoolValue(true)
 	} else {
 		data.LabelLocalAdvertiseExplicitNull = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"label.local.advertise.explicit-null.for.access-list"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.explicit-null.for.access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullForAcl = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"label.local.advertise.explicit-null.for.to.access-list"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.explicit-null.for.to.access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullForAclToAcl = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"label.local.advertise.explicit-null.to.access-list"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.explicit-null.to.access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullToAcl = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"label.local.advertise.to.neighbor"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.to.neighbor"); value.Exists() {
 		data.LabelLocalAdvertiseToNeighbors = make([]MPLSLDPAddressFamilyLabelLocalAdvertiseToNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyLabelLocalAdvertiseToNeighbors{}
@@ -1376,7 +1370,7 @@ func (data *MPLSLDPAddressFamily) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix+"label.local.advertise.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.interfaces.interface"); value.Exists() {
 		data.LabelLocalAdvertiseInterfaces = make([]MPLSLDPAddressFamilyLabelLocalAdvertiseInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyLabelLocalAdvertiseInterfaces{}
@@ -1387,12 +1381,12 @@ func (data *MPLSLDPAddressFamily) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix+"label.local.advertise.disable"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.disable"); value.Exists() {
 		data.LabelLocalAdvertiseDisable = types.BoolValue(true)
 	} else {
 		data.LabelLocalAdvertiseDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"label.local.advertise.for.access-lists"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.for.access-lists"); value.Exists() {
 		data.LabelLocalAdvertiseForAccessLists = make([]MPLSLDPAddressFamilyLabelLocalAdvertiseForAccessLists, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyLabelLocalAdvertiseForAccessLists{}
@@ -1406,7 +1400,7 @@ func (data *MPLSLDPAddressFamily) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix+"label.remote.accept.from.neighbor"); value.Exists() {
+	if value := res.Get(prefix + "label.remote.accept.from.neighbor"); value.Exists() {
 		data.LabelRemoteAcceptFromNeighbors = make([]MPLSLDPAddressFamilyLabelRemoteAcceptFromNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyLabelRemoteAcceptFromNeighbors{}
@@ -1433,21 +1427,21 @@ func (data *MPLSLDPAddressFamilyData) fromBody(ctx context.Context, res gjson.Re
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"discovery.transport-address.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "discovery.transport-address.ipv4-address"); value.Exists() {
 		data.DiscoveryTransportAddressIpv4 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"discovery.transport-address.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "discovery.transport-address.ipv6-address"); value.Exists() {
 		data.DiscoveryTransportAddressIpv6 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"discovery.targeted-hello.accept"); value.Exists() {
+	if value := res.Get(prefix + "discovery.targeted-hello.accept"); value.Exists() {
 		data.DiscoveryTargetedHelloAccept = types.BoolValue(true)
 	} else {
 		data.DiscoveryTargetedHelloAccept = types.BoolNull()
 	}
-	if value := res.Get(prefix+"discovery.targeted-hello.accept.from"); value.Exists() {
+	if value := res.Get(prefix + "discovery.targeted-hello.accept.from"); value.Exists() {
 		data.DiscoveryTargetedHelloAcceptFrom = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"neighbor.ipv4-addresses.targeted"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.ipv4-addresses.targeted"); value.Exists() {
 		data.NeighborIpv4Targeted = make([]MPLSLDPAddressFamilyNeighborIpv4Targeted, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyNeighborIpv4Targeted{}
@@ -1458,7 +1452,7 @@ func (data *MPLSLDPAddressFamilyData) fromBody(ctx context.Context, res gjson.Re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"neighbor.ipv6-addresses.targeted"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.ipv6-addresses.targeted"); value.Exists() {
 		data.NeighborIpv6Targeted = make([]MPLSLDPAddressFamilyNeighborIpv6Targeted, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyNeighborIpv6Targeted{}
@@ -1469,7 +1463,7 @@ func (data *MPLSLDPAddressFamilyData) fromBody(ctx context.Context, res gjson.Re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"neighbor.sr-policies.sr-policy"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.sr-policies.sr-policy"); value.Exists() {
 		data.NeighborSrPolicies = make([]MPLSLDPAddressFamilyNeighborSrPolicies, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyNeighborSrPolicies{}
@@ -1485,7 +1479,7 @@ func (data *MPLSLDPAddressFamilyData) fromBody(ctx context.Context, res gjson.Re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"traffic-eng.auto-tunnel.mesh.groups.group"); value.Exists() {
+	if value := res.Get(prefix + "traffic-eng.auto-tunnel.mesh.groups.group"); value.Exists() {
 		data.TrafficEngAutoTunnelMeshGroups = make([]MPLSLDPAddressFamilyTrafficEngAutoTunnelMeshGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyTrafficEngAutoTunnelMeshGroups{}
@@ -1496,48 +1490,48 @@ func (data *MPLSLDPAddressFamilyData) fromBody(ctx context.Context, res gjson.Re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"traffic-eng.auto-tunnel.mesh.groups.all"); value.Exists() {
+	if value := res.Get(prefix + "traffic-eng.auto-tunnel.mesh.groups.all"); value.Exists() {
 		data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolValue(true)
 	} else {
 		data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolNull()
 	}
-	if value := res.Get(prefix+"redistribute.bgp.as"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.bgp.as"); value.Exists() {
 		data.RedistributeBgpAs = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"redistribute.bgp.advertise-to"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.bgp.advertise-to"); value.Exists() {
 		data.RedistributeBgpAdvertiseTo = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"label.local.allocate.for.access-list"); value.Exists() {
+	if value := res.Get(prefix + "label.local.allocate.for.access-list"); value.Exists() {
 		data.LabelLocalAllocateForAccessList = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"label.local.allocate.for.host-routes"); value.Exists() {
+	if value := res.Get(prefix + "label.local.allocate.for.host-routes"); value.Exists() {
 		data.LabelLocalAllocateForHostRoutes = types.BoolValue(true)
 	} else {
 		data.LabelLocalAllocateForHostRoutes = types.BoolNull()
 	}
-	if value := res.Get(prefix+"label.local.default-route"); value.Exists() {
+	if value := res.Get(prefix + "label.local.default-route"); value.Exists() {
 		data.LabelLocalDefaultRoute = types.BoolValue(true)
 	} else {
 		data.LabelLocalDefaultRoute = types.BoolNull()
 	}
-	if value := res.Get(prefix+"label.local.implicit-null-override.for"); value.Exists() {
+	if value := res.Get(prefix + "label.local.implicit-null-override.for"); value.Exists() {
 		data.LabelLocalImplicitNullOverrideFor = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"label.local.advertise.explicit-null"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.explicit-null"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNull = types.BoolValue(true)
 	} else {
 		data.LabelLocalAdvertiseExplicitNull = types.BoolNull()
 	}
-	if value := res.Get(prefix+"label.local.advertise.explicit-null.for.access-list"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.explicit-null.for.access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullForAcl = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"label.local.advertise.explicit-null.for.to.access-list"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.explicit-null.for.to.access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullForAclToAcl = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"label.local.advertise.explicit-null.to.access-list"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.explicit-null.to.access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullToAcl = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"label.local.advertise.to.neighbor"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.to.neighbor"); value.Exists() {
 		data.LabelLocalAdvertiseToNeighbors = make([]MPLSLDPAddressFamilyLabelLocalAdvertiseToNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyLabelLocalAdvertiseToNeighbors{}
@@ -1554,7 +1548,7 @@ func (data *MPLSLDPAddressFamilyData) fromBody(ctx context.Context, res gjson.Re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"label.local.advertise.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.interfaces.interface"); value.Exists() {
 		data.LabelLocalAdvertiseInterfaces = make([]MPLSLDPAddressFamilyLabelLocalAdvertiseInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyLabelLocalAdvertiseInterfaces{}
@@ -1565,12 +1559,12 @@ func (data *MPLSLDPAddressFamilyData) fromBody(ctx context.Context, res gjson.Re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"label.local.advertise.disable"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.disable"); value.Exists() {
 		data.LabelLocalAdvertiseDisable = types.BoolValue(true)
 	} else {
 		data.LabelLocalAdvertiseDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"label.local.advertise.for.access-lists"); value.Exists() {
+	if value := res.Get(prefix + "label.local.advertise.for.access-lists"); value.Exists() {
 		data.LabelLocalAdvertiseForAccessLists = make([]MPLSLDPAddressFamilyLabelLocalAdvertiseForAccessLists, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyLabelLocalAdvertiseForAccessLists{}
@@ -1584,7 +1578,7 @@ func (data *MPLSLDPAddressFamilyData) fromBody(ctx context.Context, res gjson.Re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"label.remote.accept.from.neighbor"); value.Exists() {
+	if value := res.Get(prefix + "label.remote.accept.from.neighbor"); value.Exists() {
 		data.LabelRemoteAcceptFromNeighbors = make([]MPLSLDPAddressFamilyLabelRemoteAcceptFromNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilyLabelRemoteAcceptFromNeighbors{}
@@ -1607,21 +1601,21 @@ func (data *MPLSLDPAddressFamilyData) fromBody(ctx context.Context, res gjson.Re
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *MPLSLDPAddressFamily) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/transport-address/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/transport-address/ipv4-address"); value.Exists() {
 		data.DiscoveryTransportAddressIpv4 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/transport-address/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/transport-address/ipv6-address"); value.Exists() {
 		data.DiscoveryTransportAddressIpv6 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/targeted-hello/accept"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/targeted-hello/accept"); value.Exists() {
 		data.DiscoveryTargetedHelloAccept = types.BoolValue(true)
 	} else {
 		data.DiscoveryTargetedHelloAccept = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/targeted-hello/accept/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/targeted-hello/accept/from"); value.Exists() {
 		data.DiscoveryTargetedHelloAcceptFrom = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbor/ipv4-addresses/targeted"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/ipv4-addresses/targeted"); value.Exists() {
 		data.NeighborIpv4Targeted = make([]MPLSLDPAddressFamilyNeighborIpv4Targeted, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyNeighborIpv4Targeted{}
@@ -1632,7 +1626,7 @@ func (data *MPLSLDPAddressFamily) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbor/ipv6-addresses/targeted"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/ipv6-addresses/targeted"); value.Exists() {
 		data.NeighborIpv6Targeted = make([]MPLSLDPAddressFamilyNeighborIpv6Targeted, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyNeighborIpv6Targeted{}
@@ -1643,7 +1637,7 @@ func (data *MPLSLDPAddressFamily) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbor/sr-policies/sr-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/sr-policies/sr-policy"); value.Exists() {
 		data.NeighborSrPolicies = make([]MPLSLDPAddressFamilyNeighborSrPolicies, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyNeighborSrPolicies{}
@@ -1659,7 +1653,7 @@ func (data *MPLSLDPAddressFamily) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/traffic-eng/auto-tunnel/mesh/groups/group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/traffic-eng/auto-tunnel/mesh/groups/group"); value.Exists() {
 		data.TrafficEngAutoTunnelMeshGroups = make([]MPLSLDPAddressFamilyTrafficEngAutoTunnelMeshGroups, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyTrafficEngAutoTunnelMeshGroups{}
@@ -1670,48 +1664,48 @@ func (data *MPLSLDPAddressFamily) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/traffic-eng/auto-tunnel/mesh/groups/all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/traffic-eng/auto-tunnel/mesh/groups/all"); value.Exists() {
 		data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolValue(true)
 	} else {
 		data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/redistribute/bgp/as"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/bgp/as"); value.Exists() {
 		data.RedistributeBgpAs = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/redistribute/bgp/advertise-to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/bgp/advertise-to"); value.Exists() {
 		data.RedistributeBgpAdvertiseTo = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/allocate/for/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/allocate/for/access-list"); value.Exists() {
 		data.LabelLocalAllocateForAccessList = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/allocate/for/host-routes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/allocate/for/host-routes"); value.Exists() {
 		data.LabelLocalAllocateForHostRoutes = types.BoolValue(true)
 	} else {
 		data.LabelLocalAllocateForHostRoutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/default-route"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/default-route"); value.Exists() {
 		data.LabelLocalDefaultRoute = types.BoolValue(true)
 	} else {
 		data.LabelLocalDefaultRoute = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/implicit-null-override/for"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/implicit-null-override/for"); value.Exists() {
 		data.LabelLocalImplicitNullOverrideFor = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/explicit-null"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/explicit-null"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNull = types.BoolValue(true)
 	} else {
 		data.LabelLocalAdvertiseExplicitNull = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/explicit-null/for/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/explicit-null/for/access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullForAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/explicit-null/for/to/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/explicit-null/for/to/access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullForAclToAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/explicit-null/to/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/explicit-null/to/access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullToAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/to/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/to/neighbor"); value.Exists() {
 		data.LabelLocalAdvertiseToNeighbors = make([]MPLSLDPAddressFamilyLabelLocalAdvertiseToNeighbors, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyLabelLocalAdvertiseToNeighbors{}
@@ -1728,7 +1722,7 @@ func (data *MPLSLDPAddressFamily) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/interfaces/interface"); value.Exists() {
 		data.LabelLocalAdvertiseInterfaces = make([]MPLSLDPAddressFamilyLabelLocalAdvertiseInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyLabelLocalAdvertiseInterfaces{}
@@ -1739,12 +1733,12 @@ func (data *MPLSLDPAddressFamily) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/disable"); value.Exists() {
 		data.LabelLocalAdvertiseDisable = types.BoolValue(true)
 	} else {
 		data.LabelLocalAdvertiseDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/for/access-lists"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/for/access-lists"); value.Exists() {
 		data.LabelLocalAdvertiseForAccessLists = make([]MPLSLDPAddressFamilyLabelLocalAdvertiseForAccessLists, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyLabelLocalAdvertiseForAccessLists{}
@@ -1758,7 +1752,7 @@ func (data *MPLSLDPAddressFamily) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/remote/accept/from/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/remote/accept/from/neighbor"); value.Exists() {
 		data.LabelRemoteAcceptFromNeighbors = make([]MPLSLDPAddressFamilyLabelRemoteAcceptFromNeighbors, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyLabelRemoteAcceptFromNeighbors{}
@@ -1781,21 +1775,21 @@ func (data *MPLSLDPAddressFamily) fromBodyXML(ctx context.Context, res xmldot.Re
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *MPLSLDPAddressFamilyData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/transport-address/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/transport-address/ipv4-address"); value.Exists() {
 		data.DiscoveryTransportAddressIpv4 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/transport-address/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/transport-address/ipv6-address"); value.Exists() {
 		data.DiscoveryTransportAddressIpv6 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/targeted-hello/accept"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/targeted-hello/accept"); value.Exists() {
 		data.DiscoveryTargetedHelloAccept = types.BoolValue(true)
 	} else {
 		data.DiscoveryTargetedHelloAccept = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/discovery/targeted-hello/accept/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/discovery/targeted-hello/accept/from"); value.Exists() {
 		data.DiscoveryTargetedHelloAcceptFrom = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbor/ipv4-addresses/targeted"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/ipv4-addresses/targeted"); value.Exists() {
 		data.NeighborIpv4Targeted = make([]MPLSLDPAddressFamilyNeighborIpv4Targeted, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyNeighborIpv4Targeted{}
@@ -1806,7 +1800,7 @@ func (data *MPLSLDPAddressFamilyData) fromBodyXML(ctx context.Context, res xmldo
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbor/ipv6-addresses/targeted"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/ipv6-addresses/targeted"); value.Exists() {
 		data.NeighborIpv6Targeted = make([]MPLSLDPAddressFamilyNeighborIpv6Targeted, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyNeighborIpv6Targeted{}
@@ -1817,23 +1811,23 @@ func (data *MPLSLDPAddressFamilyData) fromBodyXML(ctx context.Context, res xmldo
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbor/sr-policies/sr-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/sr-policies/sr-policy"); value.Exists() {
 		data.NeighborSrPolicies = make([]MPLSLDPAddressFamilyNeighborSrPolicies, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyNeighborSrPolicies{}
 			if cValue := helpers.GetFromXPath(v, "policy-name"); cValue.Exists() {
 				item.PolicyName = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "targeted"); cValue.Exists() {
-			item.Targeted = types.BoolValue(true)
-		} else {
-			item.Targeted = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "targeted"); cValue.Exists() {
+				item.Targeted = types.BoolValue(true)
+			} else {
+				item.Targeted = types.BoolValue(false)
+			}
 			data.NeighborSrPolicies = append(data.NeighborSrPolicies, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/traffic-eng/auto-tunnel/mesh/groups/group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/traffic-eng/auto-tunnel/mesh/groups/group"); value.Exists() {
 		data.TrafficEngAutoTunnelMeshGroups = make([]MPLSLDPAddressFamilyTrafficEngAutoTunnelMeshGroups, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyTrafficEngAutoTunnelMeshGroups{}
@@ -1844,48 +1838,48 @@ func (data *MPLSLDPAddressFamilyData) fromBodyXML(ctx context.Context, res xmldo
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/traffic-eng/auto-tunnel/mesh/groups/all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/traffic-eng/auto-tunnel/mesh/groups/all"); value.Exists() {
 		data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolValue(true)
 	} else {
 		data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/redistribute/bgp/as"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/bgp/as"); value.Exists() {
 		data.RedistributeBgpAs = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/redistribute/bgp/advertise-to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/bgp/advertise-to"); value.Exists() {
 		data.RedistributeBgpAdvertiseTo = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/allocate/for/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/allocate/for/access-list"); value.Exists() {
 		data.LabelLocalAllocateForAccessList = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/allocate/for/host-routes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/allocate/for/host-routes"); value.Exists() {
 		data.LabelLocalAllocateForHostRoutes = types.BoolValue(true)
 	} else {
 		data.LabelLocalAllocateForHostRoutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/default-route"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/default-route"); value.Exists() {
 		data.LabelLocalDefaultRoute = types.BoolValue(true)
 	} else {
 		data.LabelLocalDefaultRoute = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/implicit-null-override/for"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/implicit-null-override/for"); value.Exists() {
 		data.LabelLocalImplicitNullOverrideFor = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/explicit-null"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/explicit-null"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNull = types.BoolValue(true)
 	} else {
 		data.LabelLocalAdvertiseExplicitNull = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/explicit-null/for/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/explicit-null/for/access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullForAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/explicit-null/for/to/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/explicit-null/for/to/access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullForAclToAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/explicit-null/to/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/explicit-null/to/access-list"); value.Exists() {
 		data.LabelLocalAdvertiseExplicitNullToAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/to/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/to/neighbor"); value.Exists() {
 		data.LabelLocalAdvertiseToNeighbors = make([]MPLSLDPAddressFamilyLabelLocalAdvertiseToNeighbors, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyLabelLocalAdvertiseToNeighbors{}
@@ -1902,7 +1896,7 @@ func (data *MPLSLDPAddressFamilyData) fromBodyXML(ctx context.Context, res xmldo
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/interfaces/interface"); value.Exists() {
 		data.LabelLocalAdvertiseInterfaces = make([]MPLSLDPAddressFamilyLabelLocalAdvertiseInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyLabelLocalAdvertiseInterfaces{}
@@ -1913,12 +1907,12 @@ func (data *MPLSLDPAddressFamilyData) fromBodyXML(ctx context.Context, res xmldo
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/disable"); value.Exists() {
 		data.LabelLocalAdvertiseDisable = types.BoolValue(true)
 	} else {
 		data.LabelLocalAdvertiseDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/local/advertise/for/access-lists"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/local/advertise/for/access-lists"); value.Exists() {
 		data.LabelLocalAdvertiseForAccessLists = make([]MPLSLDPAddressFamilyLabelLocalAdvertiseForAccessLists, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyLabelLocalAdvertiseForAccessLists{}
@@ -1932,7 +1926,7 @@ func (data *MPLSLDPAddressFamilyData) fromBodyXML(ctx context.Context, res xmldo
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/label/remote/accept/from/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/label/remote/accept/from/neighbor"); value.Exists() {
 		data.LabelRemoteAcceptFromNeighbors = make([]MPLSLDPAddressFamilyLabelRemoteAcceptFromNeighbors, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MPLSLDPAddressFamilyLabelRemoteAcceptFromNeighbors{}
@@ -1957,11 +1951,11 @@ func (data *MPLSLDPAddressFamilyData) fromBodyXML(ctx context.Context, res xmldo
 func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPLSLDPAddressFamily) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.LabelRemoteAcceptFromNeighbors {
-		keys := [...]string{ "neighbor-address", "label-space-id",  }
-		stateKeyValues := [...]string{ state.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(state.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10),  }
+		keys := [...]string{"neighbor-address", "label-space-id"}
+		stateKeyValues := [...]string{state.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(state.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -1984,10 +1978,10 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 			if state.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64() != data.LabelRemoteAcceptFromNeighbors[j].LabelSpaceId.ValueInt64() {
 				found = false
 			}
-		if found {
-			if !state.LabelRemoteAcceptFromNeighbors[i].For.IsNull() && data.LabelRemoteAcceptFromNeighbors[j].For.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/label/remote/accept/from/neighbor%v/for", state.getPath(), keyString))
-			}
+			if found {
+				if !state.LabelRemoteAcceptFromNeighbors[i].For.IsNull() && data.LabelRemoteAcceptFromNeighbors[j].For.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/label/remote/accept/from/neighbor%v/for", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -1996,11 +1990,11 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 		}
 	}
 	for i := range state.LabelLocalAdvertiseForAccessLists {
-		keys := [...]string{ "access-list-name",  }
-		stateKeyValues := [...]string{ state.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString(),  }
+		keys := [...]string{"access-list-name"}
+		stateKeyValues := [...]string{state.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -2017,10 +2011,10 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 			if state.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString() != data.LabelLocalAdvertiseForAccessLists[j].AccessListName.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.LabelLocalAdvertiseForAccessLists[i].To.IsNull() && data.LabelLocalAdvertiseForAccessLists[j].To.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/label/local/advertise/for/access-lists%v/to", state.getPath(), keyString))
-			}
+			if found {
+				if !state.LabelLocalAdvertiseForAccessLists[i].To.IsNull() && data.LabelLocalAdvertiseForAccessLists[j].To.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/label/local/advertise/for/access-lists%v/to", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -2032,11 +2026,11 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/label/local/advertise/disable", state.getPath()))
 	}
 	for i := range state.LabelLocalAdvertiseInterfaces {
-		keys := [...]string{ "interface-name",  }
-		stateKeyValues := [...]string{ state.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -2053,7 +2047,7 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 			if state.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString() != data.LabelLocalAdvertiseInterfaces[j].InterfaceName.ValueString() {
 				found = false
 			}
-		if found {
+			if found {
 				break
 			}
 		}
@@ -2062,11 +2056,11 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 		}
 	}
 	for i := range state.LabelLocalAdvertiseToNeighbors {
-		keys := [...]string{ "neighbor-address", "label-space-id",  }
-		stateKeyValues := [...]string{ state.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(state.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10),  }
+		keys := [...]string{"neighbor-address", "label-space-id"}
+		stateKeyValues := [...]string{state.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(state.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -2089,10 +2083,10 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 			if state.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64() != data.LabelLocalAdvertiseToNeighbors[j].LabelSpaceId.ValueInt64() {
 				found = false
 			}
-		if found {
-			if !state.LabelLocalAdvertiseToNeighbors[i].For.IsNull() && data.LabelLocalAdvertiseToNeighbors[j].For.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/label/local/advertise/to/neighbor%v/for", state.getPath(), keyString))
-			}
+			if found {
+				if !state.LabelLocalAdvertiseToNeighbors[i].For.IsNull() && data.LabelLocalAdvertiseToNeighbors[j].For.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/label/local/advertise/to/neighbor%v/for", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -2134,11 +2128,11 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/traffic-eng/auto-tunnel/mesh/groups/all", state.getPath()))
 	}
 	for i := range state.TrafficEngAutoTunnelMeshGroups {
-		keys := [...]string{ "group-id",  }
-		stateKeyValues := [...]string{ strconv.FormatInt(state.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10),  }
+		keys := [...]string{"group-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -2155,7 +2149,7 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 			if state.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64() != data.TrafficEngAutoTunnelMeshGroups[j].GroupId.ValueInt64() {
 				found = false
 			}
-		if found {
+			if found {
 				break
 			}
 		}
@@ -2164,11 +2158,11 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 		}
 	}
 	for i := range state.NeighborSrPolicies {
-		keys := [...]string{ "policy-name",  }
-		stateKeyValues := [...]string{ state.NeighborSrPolicies[i].PolicyName.ValueString(),  }
+		keys := [...]string{"policy-name"}
+		stateKeyValues := [...]string{state.NeighborSrPolicies[i].PolicyName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -2185,10 +2179,10 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 			if state.NeighborSrPolicies[i].PolicyName.ValueString() != data.NeighborSrPolicies[j].PolicyName.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.NeighborSrPolicies[i].Targeted.IsNull() && data.NeighborSrPolicies[j].Targeted.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/sr-policies/sr-policy%v/targeted", state.getPath(), keyString))
-			}
+			if found {
+				if !state.NeighborSrPolicies[i].Targeted.IsNull() && data.NeighborSrPolicies[j].Targeted.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/sr-policies/sr-policy%v/targeted", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -2197,11 +2191,11 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 		}
 	}
 	for i := range state.NeighborIpv6Targeted {
-		keys := [...]string{ "neighbor-address",  }
-		stateKeyValues := [...]string{ state.NeighborIpv6Targeted[i].NeighborAddress.ValueString(),  }
+		keys := [...]string{"neighbor-address"}
+		stateKeyValues := [...]string{state.NeighborIpv6Targeted[i].NeighborAddress.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -2218,7 +2212,7 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 			if state.NeighborIpv6Targeted[i].NeighborAddress.ValueString() != data.NeighborIpv6Targeted[j].NeighborAddress.ValueString() {
 				found = false
 			}
-		if found {
+			if found {
 				break
 			}
 		}
@@ -2227,11 +2221,11 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 		}
 	}
 	for i := range state.NeighborIpv4Targeted {
-		keys := [...]string{ "neighbor-address",  }
-		stateKeyValues := [...]string{ state.NeighborIpv4Targeted[i].NeighborAddress.ValueString(),  }
+		keys := [...]string{"neighbor-address"}
+		stateKeyValues := [...]string{state.NeighborIpv4Targeted[i].NeighborAddress.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -2248,7 +2242,7 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 			if state.NeighborIpv4Targeted[i].NeighborAddress.ValueString() != data.NeighborIpv4Targeted[j].NeighborAddress.ValueString() {
 				found = false
 			}
-		if found {
+			if found {
 				break
 			}
 		}
@@ -2277,19 +2271,19 @@ func (data *MPLSLDPAddressFamily) getDeletedItems(ctx context.Context, state MPL
 func (data *MPLSLDPAddressFamily) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDPAddressFamily) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.LabelRemoteAcceptFromNeighbors {
-		keys := [...]string{ "neighbor-address", "label-space-id",  }
-		keyValues := [...]string{ data.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10),  }
+		keys := [...]string{"neighbor-address", "label-space-id"}
+		keyValues := [...]string{data.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	for i := range data.LabelLocalAdvertiseForAccessLists {
-		keys := [...]string{ "access-list-name",  }
-		keyValues := [...]string{ data.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString(),  }
+		keys := [...]string{"access-list-name"}
+		keyValues := [...]string{data.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -2299,19 +2293,19 @@ func (data *MPLSLDPAddressFamily) getEmptyLeafsDelete(ctx context.Context, state
 		}
 	}
 	for i := range data.LabelLocalAdvertiseInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	for i := range data.LabelLocalAdvertiseToNeighbors {
-		keys := [...]string{ "neighbor-address", "label-space-id",  }
-		keyValues := [...]string{ data.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10),  }
+		keys := [...]string{"neighbor-address", "label-space-id"}
+		keyValues := [...]string{data.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -2339,19 +2333,19 @@ func (data *MPLSLDPAddressFamily) getEmptyLeafsDelete(ctx context.Context, state
 		}
 	}
 	for i := range data.TrafficEngAutoTunnelMeshGroups {
-		keys := [...]string{ "group-id",  }
-		keyValues := [...]string{ strconv.FormatInt(data.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10),  }
+		keys := [...]string{"group-id"}
+		keyValues := [...]string{strconv.FormatInt(data.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	for i := range data.NeighborSrPolicies {
-		keys := [...]string{ "policy-name",  }
-		keyValues := [...]string{ data.NeighborSrPolicies[i].PolicyName.ValueString(),  }
+		keys := [...]string{"policy-name"}
+		keyValues := [...]string{data.NeighborSrPolicies[i].PolicyName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.NeighborSrPolicies[i].Targeted.IsNull() && !data.NeighborSrPolicies[i].Targeted.ValueBool() {
@@ -2362,19 +2356,19 @@ func (data *MPLSLDPAddressFamily) getEmptyLeafsDelete(ctx context.Context, state
 		}
 	}
 	for i := range data.NeighborIpv6Targeted {
-		keys := [...]string{ "neighbor-address",  }
-		keyValues := [...]string{ data.NeighborIpv6Targeted[i].NeighborAddress.ValueString(),  }
+		keys := [...]string{"neighbor-address"}
+		keyValues := [...]string{data.NeighborIpv6Targeted[i].NeighborAddress.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	for i := range data.NeighborIpv4Targeted {
-		keys := [...]string{ "neighbor-address",  }
-		keyValues := [...]string{ data.NeighborIpv4Targeted[i].NeighborAddress.ValueString(),  }
+		keys := [...]string{"neighbor-address"}
+		keyValues := [...]string{data.NeighborIpv4Targeted[i].NeighborAddress.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -2392,12 +2386,12 @@ func (data *MPLSLDPAddressFamily) getEmptyLeafsDelete(ctx context.Context, state
 func (data *MPLSLDPAddressFamily) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.LabelRemoteAcceptFromNeighbors {
-		keyValues := [...]string{ data.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10),  }
+		keyValues := [...]string{data.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/label/remote/accept/from/neighbor=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.LabelLocalAdvertiseForAccessLists {
-		keyValues := [...]string{ data.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString(),  }
+		keyValues := [...]string{data.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/label/local/advertise/for/access-lists=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2405,12 +2399,12 @@ func (data *MPLSLDPAddressFamily) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/label/local/advertise/disable", data.getPath()))
 	}
 	for i := range data.LabelLocalAdvertiseInterfaces {
-		keyValues := [...]string{ data.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString(),  }
+		keyValues := [...]string{data.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/label/local/advertise/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.LabelLocalAdvertiseToNeighbors {
-		keyValues := [...]string{ data.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10),  }
+		keyValues := [...]string{data.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/label/local/advertise/to/neighbor=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2448,22 +2442,22 @@ func (data *MPLSLDPAddressFamily) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/traffic-eng/auto-tunnel/mesh/groups/all", data.getPath()))
 	}
 	for i := range data.TrafficEngAutoTunnelMeshGroups {
-		keyValues := [...]string{ strconv.FormatInt(data.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10),  }
+		keyValues := [...]string{strconv.FormatInt(data.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10)}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/traffic-eng/auto-tunnel/mesh/groups/group=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.NeighborSrPolicies {
-		keyValues := [...]string{ data.NeighborSrPolicies[i].PolicyName.ValueString(),  }
+		keyValues := [...]string{data.NeighborSrPolicies[i].PolicyName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/sr-policies/sr-policy=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.NeighborIpv6Targeted {
-		keyValues := [...]string{ data.NeighborIpv6Targeted[i].NeighborAddress.ValueString(),  }
+		keyValues := [...]string{data.NeighborIpv6Targeted[i].NeighborAddress.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/ipv6-addresses/targeted=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.NeighborIpv4Targeted {
-		keyValues := [...]string{ data.NeighborIpv4Targeted[i].NeighborAddress.ValueString(),  }
+		keyValues := [...]string{data.NeighborIpv4Targeted[i].NeighborAddress.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/ipv4-addresses/targeted=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2491,8 +2485,8 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.LabelRemoteAcceptFromNeighbors {
-		stateKeys := [...]string{ "neighbor-address", "label-space-id",  }
-		stateKeyValues := [...]string{ state.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(state.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10),  }
+		stateKeys := [...]string{"neighbor-address", "label-space-id"}
+		stateKeyValues := [...]string{state.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(state.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2519,9 +2513,9 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 				found = false
 			}
 			if found {
-			if !state.LabelRemoteAcceptFromNeighbors[i].For.IsNull() && data.LabelRemoteAcceptFromNeighbors[j].For.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/label/remote/accept/from/neighbor%v/for", predicates))
-			}
+				if !state.LabelRemoteAcceptFromNeighbors[i].For.IsNull() && data.LabelRemoteAcceptFromNeighbors[j].For.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/label/remote/accept/from/neighbor%v/for", predicates))
+				}
 				break
 			}
 		}
@@ -2530,8 +2524,8 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 		}
 	}
 	for i := range state.LabelLocalAdvertiseForAccessLists {
-		stateKeys := [...]string{ "access-list-name",  }
-		stateKeyValues := [...]string{ state.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString(),  }
+		stateKeys := [...]string{"access-list-name"}
+		stateKeyValues := [...]string{state.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2552,9 +2546,9 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 				found = false
 			}
 			if found {
-			if !state.LabelLocalAdvertiseForAccessLists[i].To.IsNull() && data.LabelLocalAdvertiseForAccessLists[j].To.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/label/local/advertise/for/access-lists%v/to", predicates))
-			}
+				if !state.LabelLocalAdvertiseForAccessLists[i].To.IsNull() && data.LabelLocalAdvertiseForAccessLists[j].To.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/label/local/advertise/for/access-lists%v/to", predicates))
+				}
 				break
 			}
 		}
@@ -2564,15 +2558,15 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LabelLocalAdvertiseDisable.IsNull() && state.LabelLocalAdvertiseDisable.ValueBool() && data.LabelLocalAdvertiseDisable.IsNull() {
-		deletePath := state.getXPath()+"/label/local/advertise/disable"
+		deletePath := state.getXPath() + "/label/local/advertise/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.LabelLocalAdvertiseInterfaces {
-		stateKeys := [...]string{ "interface-name",  }
-		stateKeyValues := [...]string{ state.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString(),  }
+		stateKeys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2601,8 +2595,8 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 		}
 	}
 	for i := range state.LabelLocalAdvertiseToNeighbors {
-		stateKeys := [...]string{ "neighbor-address", "label-space-id",  }
-		stateKeyValues := [...]string{ state.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(state.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10),  }
+		stateKeys := [...]string{"neighbor-address", "label-space-id"}
+		stateKeyValues := [...]string{state.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(state.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2629,9 +2623,9 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 				found = false
 			}
 			if found {
-			if !state.LabelLocalAdvertiseToNeighbors[i].For.IsNull() && data.LabelLocalAdvertiseToNeighbors[j].For.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/label/local/advertise/to/neighbor%v/for", predicates))
-			}
+				if !state.LabelLocalAdvertiseToNeighbors[i].For.IsNull() && data.LabelLocalAdvertiseToNeighbors[j].For.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/label/local/advertise/to/neighbor%v/for", predicates))
+				}
 				break
 			}
 		}
@@ -2641,7 +2635,7 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 	}
 	if !state.LabelLocalAdvertiseExplicitNullToAcl.IsNull() && data.LabelLocalAdvertiseExplicitNullToAcl.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/label/local/advertise/explicit-null/to"
+		deletePath := state.getXPath() + "/label/local/advertise/explicit-null/to"
 		predicates := make(map[string]string)
 		predicates["access-list"] = fmt.Sprintf("%v", state.LabelLocalAdvertiseExplicitNullToAcl.ValueString())
 		// Sort keys to ensure consistent ordering
@@ -2660,7 +2654,7 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 	}
 	if !state.LabelLocalAdvertiseExplicitNullForAclToAcl.IsNull() && data.LabelLocalAdvertiseExplicitNullForAclToAcl.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/label/local/advertise/explicit-null/for"
+		deletePath := state.getXPath() + "/label/local/advertise/explicit-null/for"
 		predicates := make(map[string]string)
 		predicates["access-list"] = fmt.Sprintf("%v", state.LabelLocalAdvertiseExplicitNullForAclToAcl.ValueString())
 		// Sort keys to ensure consistent ordering
@@ -2679,7 +2673,7 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 	}
 	if !state.LabelLocalAdvertiseExplicitNullForAcl.IsNull() && data.LabelLocalAdvertiseExplicitNullForAcl.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/label/local/advertise/explicit-null"
+		deletePath := state.getXPath() + "/label/local/advertise/explicit-null"
 		predicates := make(map[string]string)
 		predicates["access-list"] = fmt.Sprintf("%v", state.LabelLocalAdvertiseExplicitNullForAcl.ValueString())
 		// Sort keys to ensure consistent ordering
@@ -2698,14 +2692,14 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LabelLocalAdvertiseExplicitNull.IsNull() && state.LabelLocalAdvertiseExplicitNull.ValueBool() && data.LabelLocalAdvertiseExplicitNull.IsNull() {
-		deletePath := state.getXPath()+"/label/local/advertise/explicit-null"
+		deletePath := state.getXPath() + "/label/local/advertise/explicit-null"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.LabelLocalImplicitNullOverrideFor.IsNull() && data.LabelLocalImplicitNullOverrideFor.IsNull() {
-		deletePath := state.getXPath()+"/label/local/implicit-null-override/for"
+		deletePath := state.getXPath() + "/label/local/implicit-null-override/for"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2713,7 +2707,7 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LabelLocalDefaultRoute.IsNull() && state.LabelLocalDefaultRoute.ValueBool() && data.LabelLocalDefaultRoute.IsNull() {
-		deletePath := state.getXPath()+"/label/local/default-route"
+		deletePath := state.getXPath() + "/label/local/default-route"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2721,28 +2715,28 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LabelLocalAllocateForHostRoutes.IsNull() && state.LabelLocalAllocateForHostRoutes.ValueBool() && data.LabelLocalAllocateForHostRoutes.IsNull() {
-		deletePath := state.getXPath()+"/label/local/allocate/for/host-routes"
+		deletePath := state.getXPath() + "/label/local/allocate/for/host-routes"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.LabelLocalAllocateForAccessList.IsNull() && data.LabelLocalAllocateForAccessList.IsNull() {
-		deletePath := state.getXPath()+"/label/local/allocate/for/access-list"
+		deletePath := state.getXPath() + "/label/local/allocate/for/access-list"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RedistributeBgpAdvertiseTo.IsNull() && data.RedistributeBgpAdvertiseTo.IsNull() {
-		deletePath := state.getXPath()+"/redistribute/bgp/advertise-to"
+		deletePath := state.getXPath() + "/redistribute/bgp/advertise-to"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RedistributeBgpAs.IsNull() && data.RedistributeBgpAs.IsNull() {
-		deletePath := state.getXPath()+"/redistribute/bgp/as"
+		deletePath := state.getXPath() + "/redistribute/bgp/as"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2750,15 +2744,15 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TrafficEngAutoTunnelMeshGroupsAll.IsNull() && state.TrafficEngAutoTunnelMeshGroupsAll.ValueBool() && data.TrafficEngAutoTunnelMeshGroupsAll.IsNull() {
-		deletePath := state.getXPath()+"/traffic-eng/auto-tunnel/mesh/groups/all"
+		deletePath := state.getXPath() + "/traffic-eng/auto-tunnel/mesh/groups/all"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.TrafficEngAutoTunnelMeshGroups {
-		stateKeys := [...]string{ "group-id",  }
-		stateKeyValues := [...]string{ strconv.FormatInt(state.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10),  }
+		stateKeys := [...]string{"group-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10)}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2787,8 +2781,8 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 		}
 	}
 	for i := range state.NeighborSrPolicies {
-		stateKeys := [...]string{ "policy-name",  }
-		stateKeyValues := [...]string{ state.NeighborSrPolicies[i].PolicyName.ValueString(),  }
+		stateKeys := [...]string{"policy-name"}
+		stateKeyValues := [...]string{state.NeighborSrPolicies[i].PolicyName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2809,10 +2803,10 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 				found = false
 			}
 			if found {
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.NeighborSrPolicies[i].Targeted.IsNull() && state.NeighborSrPolicies[i].Targeted.ValueBool() && data.NeighborSrPolicies[j].Targeted.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbor/sr-policies/sr-policy%v/targeted", predicates))
-			}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.NeighborSrPolicies[i].Targeted.IsNull() && state.NeighborSrPolicies[i].Targeted.ValueBool() && data.NeighborSrPolicies[j].Targeted.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbor/sr-policies/sr-policy%v/targeted", predicates))
+				}
 				break
 			}
 		}
@@ -2821,8 +2815,8 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 		}
 	}
 	for i := range state.NeighborIpv6Targeted {
-		stateKeys := [...]string{ "neighbor-address",  }
-		stateKeyValues := [...]string{ state.NeighborIpv6Targeted[i].NeighborAddress.ValueString(),  }
+		stateKeys := [...]string{"neighbor-address"}
+		stateKeyValues := [...]string{state.NeighborIpv6Targeted[i].NeighborAddress.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2851,8 +2845,8 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 		}
 	}
 	for i := range state.NeighborIpv4Targeted {
-		stateKeys := [...]string{ "neighbor-address",  }
-		stateKeyValues := [...]string{ state.NeighborIpv4Targeted[i].NeighborAddress.ValueString(),  }
+		stateKeys := [...]string{"neighbor-address"}
+		stateKeyValues := [...]string{state.NeighborIpv4Targeted[i].NeighborAddress.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2881,7 +2875,7 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 		}
 	}
 	if !state.DiscoveryTargetedHelloAcceptFrom.IsNull() && data.DiscoveryTargetedHelloAcceptFrom.IsNull() {
-		deletePath := state.getXPath()+"/discovery/targeted-hello/accept/from"
+		deletePath := state.getXPath() + "/discovery/targeted-hello/accept/from"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2889,21 +2883,21 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DiscoveryTargetedHelloAccept.IsNull() && state.DiscoveryTargetedHelloAccept.ValueBool() && data.DiscoveryTargetedHelloAccept.IsNull() {
-		deletePath := state.getXPath()+"/discovery/targeted-hello/accept"
+		deletePath := state.getXPath() + "/discovery/targeted-hello/accept"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DiscoveryTransportAddressIpv6.IsNull() && data.DiscoveryTransportAddressIpv6.IsNull() {
-		deletePath := state.getXPath()+"/discovery/transport-address/ipv6-address"
+		deletePath := state.getXPath() + "/discovery/transport-address/ipv6-address"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DiscoveryTransportAddressIpv4.IsNull() && data.DiscoveryTransportAddressIpv4.IsNull() {
-		deletePath := state.getXPath()+"/discovery/transport-address/ipv4-address"
+		deletePath := state.getXPath() + "/discovery/transport-address/ipv4-address"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2921,8 +2915,8 @@ func (data *MPLSLDPAddressFamily) addDeletedItemsXML(ctx context.Context, state 
 func (data *MPLSLDPAddressFamily) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.LabelRemoteAcceptFromNeighbors {
-		keys := [...]string{ "neighbor-address", "label-space-id",  }
-		keyValues := [...]string{ data.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10),  }
+		keys := [...]string{"neighbor-address", "label-space-id"}
+		keyValues := [...]string{data.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -2931,8 +2925,8 @@ func (data *MPLSLDPAddressFamily) addDeletePathsXML(ctx context.Context, body st
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/label/remote/accept/from/neighbor%v", predicates))
 	}
 	for i := range data.LabelLocalAdvertiseForAccessLists {
-		keys := [...]string{ "access-list-name",  }
-		keyValues := [...]string{ data.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString(),  }
+		keys := [...]string{"access-list-name"}
+		keyValues := [...]string{data.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -2944,8 +2938,8 @@ func (data *MPLSLDPAddressFamily) addDeletePathsXML(ctx context.Context, body st
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/label/local/advertise/disable")
 	}
 	for i := range data.LabelLocalAdvertiseInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -2954,8 +2948,8 @@ func (data *MPLSLDPAddressFamily) addDeletePathsXML(ctx context.Context, body st
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/label/local/advertise/interfaces/interface%v", predicates))
 	}
 	for i := range data.LabelLocalAdvertiseToNeighbors {
-		keys := [...]string{ "neighbor-address", "label-space-id",  }
-		keyValues := [...]string{ data.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10),  }
+		keys := [...]string{"neighbor-address", "label-space-id"}
+		keyValues := [...]string{data.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -2997,8 +2991,8 @@ func (data *MPLSLDPAddressFamily) addDeletePathsXML(ctx context.Context, body st
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/traffic-eng/auto-tunnel/mesh/groups/all")
 	}
 	for i := range data.TrafficEngAutoTunnelMeshGroups {
-		keys := [...]string{ "group-id",  }
-		keyValues := [...]string{ strconv.FormatInt(data.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10),  }
+		keys := [...]string{"group-id"}
+		keyValues := [...]string{strconv.FormatInt(data.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10)}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -3007,8 +3001,8 @@ func (data *MPLSLDPAddressFamily) addDeletePathsXML(ctx context.Context, body st
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/traffic-eng/auto-tunnel/mesh/groups/group%v", predicates))
 	}
 	for i := range data.NeighborSrPolicies {
-		keys := [...]string{ "policy-name",  }
-		keyValues := [...]string{ data.NeighborSrPolicies[i].PolicyName.ValueString(),  }
+		keys := [...]string{"policy-name"}
+		keyValues := [...]string{data.NeighborSrPolicies[i].PolicyName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -3017,8 +3011,8 @@ func (data *MPLSLDPAddressFamily) addDeletePathsXML(ctx context.Context, body st
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/neighbor/sr-policies/sr-policy%v", predicates))
 	}
 	for i := range data.NeighborIpv6Targeted {
-		keys := [...]string{ "neighbor-address",  }
-		keyValues := [...]string{ data.NeighborIpv6Targeted[i].NeighborAddress.ValueString(),  }
+		keys := [...]string{"neighbor-address"}
+		keyValues := [...]string{data.NeighborIpv6Targeted[i].NeighborAddress.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -3027,8 +3021,8 @@ func (data *MPLSLDPAddressFamily) addDeletePathsXML(ctx context.Context, body st
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/neighbor/ipv6-addresses/targeted%v", predicates))
 	}
 	for i := range data.NeighborIpv4Targeted {
-		keys := [...]string{ "neighbor-address",  }
-		keyValues := [...]string{ data.NeighborIpv4Targeted[i].NeighborAddress.ValueString(),  }
+		keys := [...]string{"neighbor-address"}
+		keyValues := [...]string{data.NeighborIpv4Targeted[i].NeighborAddress.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

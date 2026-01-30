@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -94,18 +96,18 @@ func TestAccIosxrRouterStaticIPv6Multicast(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrRouterStaticIPv6MulticastConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_router_static_ipv6_multicast.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_router_static_ipv6_multicast.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrRouterStaticIPv6MulticastImportStateIdFunc("iosxr_router_static_ipv6_multicast.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -214,7 +216,7 @@ func iosxrRouterStaticIPv6MulticastImportStateIdFunc(resourceName string) resour
 		PrefixAddress := primary.Attributes["prefix_address"]
 		PrefixLength := primary.Attributes["prefix_length"]
 
-		return fmt.Sprintf("%s,%s", PrefixAddress,PrefixLength), nil
+		return fmt.Sprintf("%s,%s", PrefixAddress, PrefixLength), nil
 	}
 }
 

@@ -150,8 +150,8 @@ func TestAccDataSourceIosxrRouterOSPFArea(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterOSPFAreaPrerequisitesConfig+testAccDataSourceIosxrRouterOSPFAreaConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrRouterOSPFAreaPrerequisitesConfig + testAccDataSourceIosxrRouterOSPFAreaConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

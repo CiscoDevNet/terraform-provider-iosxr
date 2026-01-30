@@ -285,8 +285,8 @@ func TestAccDataSourceIosxrRouterOSPF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterOSPFPrerequisitesConfig+testAccDataSourceIosxrRouterOSPFConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrRouterOSPFPrerequisitesConfig + testAccDataSourceIosxrRouterOSPFConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

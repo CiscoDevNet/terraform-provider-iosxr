@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -43,14 +45,14 @@ func TestAccIosxrL2VPN(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "redundancy_iccp_groups.0.interfaces.0.recovery_delay", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "redundancy_iccp_groups.0.multi_homing_node_id", "1"))
 	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "flexible_xconnect_service_vlan_unaware.0.service_name", "XC-1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "flexible_xconnect_service_vlan_unaware.0.interfaces.0.interface_name", "GigabitEthernet0/0/0/1.100"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "flexible_xconnect_service_vlan_unaware.0.neighbor_evpn_evis.0.vpn_id", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "flexible_xconnect_service_vlan_unaware.0.neighbor_evpn_evis.0.remote_ac_id", "1000"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "flexible_xconnect_service_vlan_unaware.0.service_name", "XC-1"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "flexible_xconnect_service_vlan_unaware.0.interfaces.0.interface_name", "GigabitEthernet0/0/0/1.100"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "flexible_xconnect_service_vlan_unaware.0.neighbor_evpn_evis.0.vpn_id", "100"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "flexible_xconnect_service_vlan_unaware.0.neighbor_evpn_evis.0.remote_ac_id", "1000"))
 	}
 	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "flexible_xconnect_service_vlan_aware_evis.0.vpn_id", "200"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "flexible_xconnect_service_vlan_aware_evis.0.interfaces.0.interface_name", "GigabitEthernet0/0/0/2.200"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "flexible_xconnect_service_vlan_aware_evis.0.vpn_id", "200"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "flexible_xconnect_service_vlan_aware_evis.0.interfaces.0.interface_name", "GigabitEthernet0/0/0/2.200"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "ignore_mtu_mismatch", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "ignore_mtu_mismatch_ad", "true"))
@@ -88,18 +90,18 @@ func TestAccIosxrL2VPN(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrL2VPNConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_l2vpn.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_l2vpn.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrL2VPNImportStateIdFunc("iosxr_l2vpn.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -133,24 +135,24 @@ func testAccIosxrL2VPNConfig_all() string {
 	config += `		multi_homing_node_id = 1` + "\n"
 	config += `		}]` + "\n"
 	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
-	config += `	flexible_xconnect_service_vlan_unaware = [{` + "\n"
-	config += `		service_name = "XC-1"` + "\n"
-	config += `		interfaces = [{` + "\n"
-	config += `			interface_name = "GigabitEthernet0/0/0/1.100"` + "\n"
-	config += `		}]` + "\n"
-	config += `		neighbor_evpn_evis = [{` + "\n"
-	config += `			vpn_id = 100` + "\n"
-	config += `			remote_ac_id = 1000` + "\n"
-	config += `		}]` + "\n"
-	config += `		}]` + "\n"
+		config += `	flexible_xconnect_service_vlan_unaware = [{` + "\n"
+		config += `		service_name = "XC-1"` + "\n"
+		config += `		interfaces = [{` + "\n"
+		config += `			interface_name = "GigabitEthernet0/0/0/1.100"` + "\n"
+		config += `		}]` + "\n"
+		config += `		neighbor_evpn_evis = [{` + "\n"
+		config += `			vpn_id = 100` + "\n"
+		config += `			remote_ac_id = 1000` + "\n"
+		config += `		}]` + "\n"
+		config += `		}]` + "\n"
 	}
 	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
-	config += `	flexible_xconnect_service_vlan_aware_evis = [{` + "\n"
-	config += `		vpn_id = 200` + "\n"
-	config += `		interfaces = [{` + "\n"
-	config += `			interface_name = "GigabitEthernet0/0/0/2.200"` + "\n"
-	config += `		}]` + "\n"
-	config += `		}]` + "\n"
+		config += `	flexible_xconnect_service_vlan_aware_evis = [{` + "\n"
+		config += `		vpn_id = 200` + "\n"
+		config += `		interfaces = [{` + "\n"
+		config += `			interface_name = "GigabitEthernet0/0/0/2.200"` + "\n"
+		config += `		}]` + "\n"
+		config += `		}]` + "\n"
 	}
 	config += `	ignore_mtu_mismatch = true` + "\n"
 	config += `	ignore_mtu_mismatch_ad = true` + "\n"
@@ -190,7 +192,7 @@ func testAccIosxrL2VPNConfig_all() string {
 func iosxrL2VPNImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf("", ), nil
+		return fmt.Sprintf(""), nil
 	}
 }
 

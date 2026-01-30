@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +35,8 @@ import (
 
 func TestAccIosxrLinuxNetworking(t *testing.T) {
 	if os.Getenv("LINUX") == "" {
-        t.Skip("skipping test, set environment variable LINUX")
-    }
+		t.Skip("skipping test, set environment variable LINUX")
+	}
 	var checks []resource.TestCheckFunc
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_linux_networking.test", "statistics_synchronization_sixty_seconds", "true"))
@@ -55,18 +57,18 @@ func TestAccIosxrLinuxNetworking(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrLinuxNetworkingConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_linux_networking.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_linux_networking.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrLinuxNetworkingImportStateIdFunc("iosxr_linux_networking.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -77,7 +79,7 @@ func TestAccIosxrLinuxNetworking(t *testing.T) {
 func iosxrLinuxNetworkingImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf("", ), nil
+		return fmt.Sprintf(""), nil
 	}
 }
 

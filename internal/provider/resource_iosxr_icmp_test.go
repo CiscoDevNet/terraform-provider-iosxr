@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -45,18 +47,18 @@ func TestAccIosxrICMP(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrICMPConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_icmp.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_icmp.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrICMPImportStateIdFunc("iosxr_icmp.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -67,7 +69,7 @@ func TestAccIosxrICMP(t *testing.T) {
 func iosxrICMPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf("", ), nil
+		return fmt.Sprintf(""), nil
 	}
 }
 

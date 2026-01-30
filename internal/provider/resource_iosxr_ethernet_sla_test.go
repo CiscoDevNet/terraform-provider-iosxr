@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +35,8 @@ import (
 
 func TestAccIosxrEthernetSLA(t *testing.T) {
 	if os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
-        t.Skip("skipping test, set environment variable NCS or C8000")
-    }
+		t.Skip("skipping test, set environment variable NCS or C8000")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ethernet_sla.test", "profile_name", "SLA-PROFILE-1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ethernet_sla.test", "type", "cfm-delay-measurement"))
@@ -75,18 +77,18 @@ func TestAccIosxrEthernetSLA(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrEthernetSLAConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_ethernet_sla.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_ethernet_sla.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrEthernetSLAImportStateIdFunc("iosxr_ethernet_sla.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 

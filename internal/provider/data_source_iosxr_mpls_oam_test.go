@@ -45,7 +45,7 @@ func TestAccDataSourceIosxrMPLSOAM(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrMPLSOAMConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

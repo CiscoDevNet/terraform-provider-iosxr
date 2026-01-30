@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -42,7 +44,7 @@ func TestAccIosxrBFD(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "echo_ipv4_bundle_per_member_minimum_interval", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "trap_singlehop_pre_mapped", "true"))
 	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "multipath_locations.0.location_id", "0/0/CPU0"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "multipath_locations.0.location_id", "0/0/CPU0"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "multihop_ttl_drop_threshold", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "dampening_initial_wait", "3600"))
@@ -74,18 +76,18 @@ func TestAccIosxrBFD(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrBFDConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_bfd.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_bfd.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrBFDImportStateIdFunc("iosxr_bfd.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -115,9 +117,9 @@ func testAccIosxrBFDConfig_all() string {
 	config += `	echo_ipv4_bundle_per_member_minimum_interval = 200` + "\n"
 	config += `	trap_singlehop_pre_mapped = true` + "\n"
 	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
-	config += `	multipath_locations = [{` + "\n"
-	config += `		location_id = "0/0/CPU0"` + "\n"
-	config += `		}]` + "\n"
+		config += `	multipath_locations = [{` + "\n"
+		config += `		location_id = "0/0/CPU0"` + "\n"
+		config += `		}]` + "\n"
 	}
 	config += `	multihop_ttl_drop_threshold = 200` + "\n"
 	config += `	dampening_initial_wait = 3600` + "\n"
@@ -153,7 +155,7 @@ func testAccIosxrBFDConfig_all() string {
 func iosxrBFDImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf("", ), nil
+		return fmt.Sprintf(""), nil
 	}
 }
 

@@ -24,106 +24,105 @@ import (
 	"context"
 	"fmt"
 	"reflect"
-	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type PolicyMapQoS struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	PolicyMapName types.String `tfsdk:"policy_map_name"`
-	Description types.String `tfsdk:"description"`
-	Classes []PolicyMapQoSClasses `tfsdk:"classes"`
+	Device        types.String          `tfsdk:"device"`
+	Id            types.String          `tfsdk:"id"`
+	PolicyMapName types.String          `tfsdk:"policy_map_name"`
+	Description   types.String          `tfsdk:"description"`
+	Classes       []PolicyMapQoSClasses `tfsdk:"classes"`
 }
 
 type PolicyMapQoSData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	PolicyMapName types.String `tfsdk:"policy_map_name"`
-	Description types.String `tfsdk:"description"`
-	Classes []PolicyMapQoSClasses `tfsdk:"classes"`
+	Device        types.String          `tfsdk:"device"`
+	Id            types.String          `tfsdk:"id"`
+	PolicyMapName types.String          `tfsdk:"policy_map_name"`
+	Description   types.String          `tfsdk:"description"`
+	Classes       []PolicyMapQoSClasses `tfsdk:"classes"`
 }
 type PolicyMapQoSClasses struct {
-	Name types.String `tfsdk:"name"`
-	Type types.String `tfsdk:"type"`
-	BandwidthValue types.String `tfsdk:"bandwidth_value"`
-	BandwidthUnit types.String `tfsdk:"bandwidth_unit"`
-	BandwidthRemainingValue types.String `tfsdk:"bandwidth_remaining_value"`
-	BandwidthRemainingUnit types.String `tfsdk:"bandwidth_remaining_unit"`
-	PoliceRateValue types.String `tfsdk:"police_rate_value"`
-	PoliceRateUnit types.String `tfsdk:"police_rate_unit"`
-	PoliceBurstValue types.Int64 `tfsdk:"police_burst_value"`
-	PoliceBurstUnit types.String `tfsdk:"police_burst_unit"`
-	PolicePeakRateValue types.String `tfsdk:"police_peak_rate_value"`
-	PolicePeakRateUnit types.String `tfsdk:"police_peak_rate_unit"`
-	PolicePeakBurstValue types.Int64 `tfsdk:"police_peak_burst_value"`
-	PolicePeakBurstUnit types.String `tfsdk:"police_peak_burst_unit"`
-	PoliceConformActionTransmit types.Bool `tfsdk:"police_conform_action_transmit"`
-	PoliceConformActionDrop types.Bool `tfsdk:"police_conform_action_drop"`
-	PoliceConformActionSetCos types.Int64 `tfsdk:"police_conform_action_set_cos"`
-	PoliceConformActionSetDiscardClass types.Int64 `tfsdk:"police_conform_action_set_discard_class"`
-	PoliceConformActionSetDscp types.String `tfsdk:"police_conform_action_set_dscp"`
-	PoliceConformActionSetMplsExperimentalImposition types.Int64 `tfsdk:"police_conform_action_set_mpls_experimental_imposition"`
-	PoliceConformActionSetMplsExperimentalTopmost types.Int64 `tfsdk:"police_conform_action_set_mpls_experimental_topmost"`
-	PoliceConformActionSetPrecedence types.String `tfsdk:"police_conform_action_set_precedence"`
-	PoliceConformActionSetQosGroup types.Int64 `tfsdk:"police_conform_action_set_qos_group"`
-	PoliceExceedActionTransmit types.Bool `tfsdk:"police_exceed_action_transmit"`
-	PoliceExceedActionDrop types.Bool `tfsdk:"police_exceed_action_drop"`
-	PoliceExceedActionSetCos types.Int64 `tfsdk:"police_exceed_action_set_cos"`
-	PoliceExceedActionSetDiscardClass types.Int64 `tfsdk:"police_exceed_action_set_discard_class"`
-	PoliceExceedActionSetDscp types.String `tfsdk:"police_exceed_action_set_dscp"`
-	PoliceExceedActionSetMplsExperimentalImposition types.Int64 `tfsdk:"police_exceed_action_set_mpls_experimental_imposition"`
-	PoliceExceedActionSetMplsExperimentalTopmost types.Int64 `tfsdk:"police_exceed_action_set_mpls_experimental_topmost"`
-	PoliceExceedActionSetPrecedence types.String `tfsdk:"police_exceed_action_set_precedence"`
-	PoliceExceedActionSetQosGroup types.Int64 `tfsdk:"police_exceed_action_set_qos_group"`
-	PoliceViolateActionTransmit types.Bool `tfsdk:"police_violate_action_transmit"`
-	PoliceViolateActionDrop types.Bool `tfsdk:"police_violate_action_drop"`
-	PoliceViolateActionSetCos types.Int64 `tfsdk:"police_violate_action_set_cos"`
-	PoliceViolateActionSetDiscardClass types.Int64 `tfsdk:"police_violate_action_set_discard_class"`
-	PoliceViolateActionSetDscp types.String `tfsdk:"police_violate_action_set_dscp"`
-	PoliceViolateActionSetMplsExperimentalImposition types.Int64 `tfsdk:"police_violate_action_set_mpls_experimental_imposition"`
-	PoliceViolateActionSetMplsExperimentalTopmost types.Int64 `tfsdk:"police_violate_action_set_mpls_experimental_topmost"`
-	PoliceViolateActionSetPrecedence types.String `tfsdk:"police_violate_action_set_precedence"`
-	PoliceViolateActionSetQosGroup types.Int64 `tfsdk:"police_violate_action_set_qos_group"`
-	PriorityLevel types.Int64 `tfsdk:"priority_level"`
-	QueueLimits []PolicyMapQoSClassesQueueLimits `tfsdk:"queue_limits"`
-	RandomDetectDefault types.Bool `tfsdk:"random_detect_default"`
-	RandomDetect []PolicyMapQoSClassesRandomDetect `tfsdk:"random_detect"`
-	ServicePolicyName types.String `tfsdk:"service_policy_name"`
-	SetTrafficClass types.Int64 `tfsdk:"set_traffic_class"`
-	SetCos types.Int64 `tfsdk:"set_cos"`
-	SetDiscardClass types.Int64 `tfsdk:"set_discard_class"`
-	SetDscp types.String `tfsdk:"set_dscp"`
-	SetMplsExperimentalImposition types.Int64 `tfsdk:"set_mpls_experimental_imposition"`
-	SetMplsExperimentalTopmost types.Int64 `tfsdk:"set_mpls_experimental_topmost"`
-	SetPrecedence types.String `tfsdk:"set_precedence"`
-	SetQosGroup types.Int64 `tfsdk:"set_qos_group"`
-	ShapeAverageRateValue types.String `tfsdk:"shape_average_rate_value"`
-	ShapeAverageRateUnit types.String `tfsdk:"shape_average_rate_unit"`
-	ShapeAverageExcessBurstSize types.Int64 `tfsdk:"shape_average_excess_burst_size"`
-	ShapeAverageExcessBurstUnit types.String `tfsdk:"shape_average_excess_burst_unit"`
+	Name                                             types.String                      `tfsdk:"name"`
+	Type                                             types.String                      `tfsdk:"type"`
+	BandwidthValue                                   types.String                      `tfsdk:"bandwidth_value"`
+	BandwidthUnit                                    types.String                      `tfsdk:"bandwidth_unit"`
+	BandwidthRemainingValue                          types.String                      `tfsdk:"bandwidth_remaining_value"`
+	BandwidthRemainingUnit                           types.String                      `tfsdk:"bandwidth_remaining_unit"`
+	PoliceRateValue                                  types.String                      `tfsdk:"police_rate_value"`
+	PoliceRateUnit                                   types.String                      `tfsdk:"police_rate_unit"`
+	PoliceBurstValue                                 types.Int64                       `tfsdk:"police_burst_value"`
+	PoliceBurstUnit                                  types.String                      `tfsdk:"police_burst_unit"`
+	PolicePeakRateValue                              types.String                      `tfsdk:"police_peak_rate_value"`
+	PolicePeakRateUnit                               types.String                      `tfsdk:"police_peak_rate_unit"`
+	PolicePeakBurstValue                             types.Int64                       `tfsdk:"police_peak_burst_value"`
+	PolicePeakBurstUnit                              types.String                      `tfsdk:"police_peak_burst_unit"`
+	PoliceConformActionTransmit                      types.Bool                        `tfsdk:"police_conform_action_transmit"`
+	PoliceConformActionDrop                          types.Bool                        `tfsdk:"police_conform_action_drop"`
+	PoliceConformActionSetCos                        types.Int64                       `tfsdk:"police_conform_action_set_cos"`
+	PoliceConformActionSetDiscardClass               types.Int64                       `tfsdk:"police_conform_action_set_discard_class"`
+	PoliceConformActionSetDscp                       types.String                      `tfsdk:"police_conform_action_set_dscp"`
+	PoliceConformActionSetMplsExperimentalImposition types.Int64                       `tfsdk:"police_conform_action_set_mpls_experimental_imposition"`
+	PoliceConformActionSetMplsExperimentalTopmost    types.Int64                       `tfsdk:"police_conform_action_set_mpls_experimental_topmost"`
+	PoliceConformActionSetPrecedence                 types.String                      `tfsdk:"police_conform_action_set_precedence"`
+	PoliceConformActionSetQosGroup                   types.Int64                       `tfsdk:"police_conform_action_set_qos_group"`
+	PoliceExceedActionTransmit                       types.Bool                        `tfsdk:"police_exceed_action_transmit"`
+	PoliceExceedActionDrop                           types.Bool                        `tfsdk:"police_exceed_action_drop"`
+	PoliceExceedActionSetCos                         types.Int64                       `tfsdk:"police_exceed_action_set_cos"`
+	PoliceExceedActionSetDiscardClass                types.Int64                       `tfsdk:"police_exceed_action_set_discard_class"`
+	PoliceExceedActionSetDscp                        types.String                      `tfsdk:"police_exceed_action_set_dscp"`
+	PoliceExceedActionSetMplsExperimentalImposition  types.Int64                       `tfsdk:"police_exceed_action_set_mpls_experimental_imposition"`
+	PoliceExceedActionSetMplsExperimentalTopmost     types.Int64                       `tfsdk:"police_exceed_action_set_mpls_experimental_topmost"`
+	PoliceExceedActionSetPrecedence                  types.String                      `tfsdk:"police_exceed_action_set_precedence"`
+	PoliceExceedActionSetQosGroup                    types.Int64                       `tfsdk:"police_exceed_action_set_qos_group"`
+	PoliceViolateActionTransmit                      types.Bool                        `tfsdk:"police_violate_action_transmit"`
+	PoliceViolateActionDrop                          types.Bool                        `tfsdk:"police_violate_action_drop"`
+	PoliceViolateActionSetCos                        types.Int64                       `tfsdk:"police_violate_action_set_cos"`
+	PoliceViolateActionSetDiscardClass               types.Int64                       `tfsdk:"police_violate_action_set_discard_class"`
+	PoliceViolateActionSetDscp                       types.String                      `tfsdk:"police_violate_action_set_dscp"`
+	PoliceViolateActionSetMplsExperimentalImposition types.Int64                       `tfsdk:"police_violate_action_set_mpls_experimental_imposition"`
+	PoliceViolateActionSetMplsExperimentalTopmost    types.Int64                       `tfsdk:"police_violate_action_set_mpls_experimental_topmost"`
+	PoliceViolateActionSetPrecedence                 types.String                      `tfsdk:"police_violate_action_set_precedence"`
+	PoliceViolateActionSetQosGroup                   types.Int64                       `tfsdk:"police_violate_action_set_qos_group"`
+	PriorityLevel                                    types.Int64                       `tfsdk:"priority_level"`
+	QueueLimits                                      []PolicyMapQoSClassesQueueLimits  `tfsdk:"queue_limits"`
+	RandomDetectDefault                              types.Bool                        `tfsdk:"random_detect_default"`
+	RandomDetect                                     []PolicyMapQoSClassesRandomDetect `tfsdk:"random_detect"`
+	ServicePolicyName                                types.String                      `tfsdk:"service_policy_name"`
+	SetTrafficClass                                  types.Int64                       `tfsdk:"set_traffic_class"`
+	SetCos                                           types.Int64                       `tfsdk:"set_cos"`
+	SetDiscardClass                                  types.Int64                       `tfsdk:"set_discard_class"`
+	SetDscp                                          types.String                      `tfsdk:"set_dscp"`
+	SetMplsExperimentalImposition                    types.Int64                       `tfsdk:"set_mpls_experimental_imposition"`
+	SetMplsExperimentalTopmost                       types.Int64                       `tfsdk:"set_mpls_experimental_topmost"`
+	SetPrecedence                                    types.String                      `tfsdk:"set_precedence"`
+	SetQosGroup                                      types.Int64                       `tfsdk:"set_qos_group"`
+	ShapeAverageRateValue                            types.String                      `tfsdk:"shape_average_rate_value"`
+	ShapeAverageRateUnit                             types.String                      `tfsdk:"shape_average_rate_unit"`
+	ShapeAverageExcessBurstSize                      types.Int64                       `tfsdk:"shape_average_excess_burst_size"`
+	ShapeAverageExcessBurstUnit                      types.String                      `tfsdk:"shape_average_excess_burst_unit"`
 }
 type PolicyMapQoSClassesQueueLimits struct {
 	Value types.String `tfsdk:"value"`
-	Unit types.String `tfsdk:"unit"`
+	Unit  types.String `tfsdk:"unit"`
 }
 type PolicyMapQoSClassesRandomDetect struct {
-	MinimumThresholdValue types.Int64 `tfsdk:"minimum_threshold_value"`
-	MinimumThresholdUnit types.String `tfsdk:"minimum_threshold_unit"`
-	MaximumThresholdValue types.Int64 `tfsdk:"maximum_threshold_value"`
-	MaximumThresholdUnit types.String `tfsdk:"maximum_threshold_unit"`
+	MinimumThresholdValue types.Int64  `tfsdk:"minimum_threshold_value"`
+	MinimumThresholdUnit  types.String `tfsdk:"minimum_threshold_unit"`
+	MaximumThresholdValue types.Int64  `tfsdk:"maximum_threshold_value"`
+	MaximumThresholdUnit  types.String `tfsdk:"maximum_threshold_unit"`
 }
 
 // End of section. //template:end types
@@ -392,8 +391,8 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte) {
 		data.Description = types.StringNull()
 	}
 	for i := range data.Classes {
-		keys := [...]string{ "name", "type",  }
-		keyValues := [...]string{ data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString(),  }
+		keys := [...]string{"name", "type"}
+		keyValues := [...]string{data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "class").ForEach(
@@ -484,23 +483,23 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Classes[i].PolicePeakBurstUnit = types.StringNull()
 		}
-		if value := r.Get("police.conform-action.transmit"); !data.Classes[i].PoliceConformActionTransmit.IsNull() {
-			if value.Exists() {
-				data.Classes[i].PoliceConformActionTransmit = types.BoolValue(true)
-			} else {
-				data.Classes[i].PoliceConformActionTransmit = types.BoolValue(false)
-			}
+		if value := r.Get("police.conform-action.transmit"); value.Exists() {
+			data.Classes[i].PoliceConformActionTransmit = types.BoolValue(true)
 		} else {
-			data.Classes[i].PoliceConformActionTransmit = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Classes[i].PoliceConformActionTransmit.IsNull() {
+				data.Classes[i].PoliceConformActionTransmit = types.BoolNull()
+			}
 		}
-		if value := r.Get("police.conform-action.drop"); !data.Classes[i].PoliceConformActionDrop.IsNull() {
-			if value.Exists() {
-				data.Classes[i].PoliceConformActionDrop = types.BoolValue(true)
-			} else {
-				data.Classes[i].PoliceConformActionDrop = types.BoolValue(false)
-			}
+		if value := r.Get("police.conform-action.drop"); value.Exists() {
+			data.Classes[i].PoliceConformActionDrop = types.BoolValue(true)
 		} else {
-			data.Classes[i].PoliceConformActionDrop = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Classes[i].PoliceConformActionDrop.IsNull() {
+				data.Classes[i].PoliceConformActionDrop = types.BoolNull()
+			}
 		}
 		if value := r.Get("police.conform-action.set.cos"); value.Exists() && !data.Classes[i].PoliceConformActionSetCos.IsNull() {
 			data.Classes[i].PoliceConformActionSetCos = types.Int64Value(value.Int())
@@ -537,23 +536,23 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Classes[i].PoliceConformActionSetQosGroup = types.Int64Null()
 		}
-		if value := r.Get("police.exceed-action.transmit"); !data.Classes[i].PoliceExceedActionTransmit.IsNull() {
-			if value.Exists() {
-				data.Classes[i].PoliceExceedActionTransmit = types.BoolValue(true)
-			} else {
-				data.Classes[i].PoliceExceedActionTransmit = types.BoolValue(false)
-			}
+		if value := r.Get("police.exceed-action.transmit"); value.Exists() {
+			data.Classes[i].PoliceExceedActionTransmit = types.BoolValue(true)
 		} else {
-			data.Classes[i].PoliceExceedActionTransmit = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Classes[i].PoliceExceedActionTransmit.IsNull() {
+				data.Classes[i].PoliceExceedActionTransmit = types.BoolNull()
+			}
 		}
-		if value := r.Get("police.exceed-action.drop"); !data.Classes[i].PoliceExceedActionDrop.IsNull() {
-			if value.Exists() {
-				data.Classes[i].PoliceExceedActionDrop = types.BoolValue(true)
-			} else {
-				data.Classes[i].PoliceExceedActionDrop = types.BoolValue(false)
-			}
+		if value := r.Get("police.exceed-action.drop"); value.Exists() {
+			data.Classes[i].PoliceExceedActionDrop = types.BoolValue(true)
 		} else {
-			data.Classes[i].PoliceExceedActionDrop = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Classes[i].PoliceExceedActionDrop.IsNull() {
+				data.Classes[i].PoliceExceedActionDrop = types.BoolNull()
+			}
 		}
 		if value := r.Get("police.exceed-action.set.cos"); value.Exists() && !data.Classes[i].PoliceExceedActionSetCos.IsNull() {
 			data.Classes[i].PoliceExceedActionSetCos = types.Int64Value(value.Int())
@@ -590,23 +589,23 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Classes[i].PoliceExceedActionSetQosGroup = types.Int64Null()
 		}
-		if value := r.Get("police.violate-action.transmit"); !data.Classes[i].PoliceViolateActionTransmit.IsNull() {
-			if value.Exists() {
-				data.Classes[i].PoliceViolateActionTransmit = types.BoolValue(true)
-			} else {
-				data.Classes[i].PoliceViolateActionTransmit = types.BoolValue(false)
-			}
+		if value := r.Get("police.violate-action.transmit"); value.Exists() {
+			data.Classes[i].PoliceViolateActionTransmit = types.BoolValue(true)
 		} else {
-			data.Classes[i].PoliceViolateActionTransmit = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Classes[i].PoliceViolateActionTransmit.IsNull() {
+				data.Classes[i].PoliceViolateActionTransmit = types.BoolNull()
+			}
 		}
-		if value := r.Get("police.violate-action.drop"); !data.Classes[i].PoliceViolateActionDrop.IsNull() {
-			if value.Exists() {
-				data.Classes[i].PoliceViolateActionDrop = types.BoolValue(true)
-			} else {
-				data.Classes[i].PoliceViolateActionDrop = types.BoolValue(false)
-			}
+		if value := r.Get("police.violate-action.drop"); value.Exists() {
+			data.Classes[i].PoliceViolateActionDrop = types.BoolValue(true)
 		} else {
-			data.Classes[i].PoliceViolateActionDrop = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Classes[i].PoliceViolateActionDrop.IsNull() {
+				data.Classes[i].PoliceViolateActionDrop = types.BoolNull()
+			}
 		}
 		if value := r.Get("police.violate-action.set.cos"); value.Exists() && !data.Classes[i].PoliceViolateActionSetCos.IsNull() {
 			data.Classes[i].PoliceViolateActionSetCos = types.Int64Value(value.Int())
@@ -649,8 +648,8 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte) {
 			data.Classes[i].PriorityLevel = types.Int64Null()
 		}
 		for ci := range data.Classes[i].QueueLimits {
-			keys := [...]string{ "value", "unit",  }
-			keyValues := [...]string{ data.Classes[i].QueueLimits[ci].Value.ValueString(), data.Classes[i].QueueLimits[ci].Unit.ValueString(),  }
+			keys := [...]string{"value", "unit"}
+			keyValues := [...]string{data.Classes[i].QueueLimits[ci].Value.ValueString(), data.Classes[i].QueueLimits[ci].Unit.ValueString()}
 
 			var cr gjson.Result
 			r.Get("queue-limits.queue-limit").ForEach(
@@ -682,18 +681,18 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte) {
 				data.Classes[i].QueueLimits[ci].Unit = types.StringNull()
 			}
 		}
-		if value := r.Get("random-detect-default"); !data.Classes[i].RandomDetectDefault.IsNull() {
-			if value.Exists() {
-				data.Classes[i].RandomDetectDefault = types.BoolValue(true)
-			} else {
-				data.Classes[i].RandomDetectDefault = types.BoolValue(false)
-			}
+		if value := r.Get("random-detect-default"); value.Exists() {
+			data.Classes[i].RandomDetectDefault = types.BoolValue(true)
 		} else {
-			data.Classes[i].RandomDetectDefault = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Classes[i].RandomDetectDefault.IsNull() {
+				data.Classes[i].RandomDetectDefault = types.BoolNull()
+			}
 		}
 		for ci := range data.Classes[i].RandomDetect {
-			keys := [...]string{ "minimum-threshold-value", "minimum-threshold-unit", "maximum-threshold-value", "maximum-threshold-unit",  }
-			keyValues := [...]string{ strconv.FormatInt(data.Classes[i].RandomDetect[ci].MinimumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MinimumThresholdUnit.ValueString(), strconv.FormatInt(data.Classes[i].RandomDetect[ci].MaximumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MaximumThresholdUnit.ValueString(),  }
+			keys := [...]string{"minimum-threshold-value", "minimum-threshold-unit", "maximum-threshold-value", "maximum-threshold-unit"}
+			keyValues := [...]string{strconv.FormatInt(data.Classes[i].RandomDetect[ci].MinimumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MinimumThresholdUnit.ValueString(), strconv.FormatInt(data.Classes[i].RandomDetect[ci].MaximumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MaximumThresholdUnit.ValueString()}
 
 			var cr gjson.Result
 			r.Get("random-detect").ForEach(
@@ -809,10 +808,10 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte) {
 func (data PolicyMapQoS) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.PolicyMapName.IsNull() && !data.PolicyMapName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/policy-map-name", data.PolicyMapName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/policy-map-name", data.PolicyMapName.ValueString())
 	}
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/description", data.Description.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/description", data.Description.ValueString())
 	}
 	if len(data.Classes) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -1045,22 +1044,22 @@ func (data PolicyMapQoS) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *PolicyMapQoS) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/policy-map-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/policy-map-name"); value.Exists() {
 		data.PolicyMapName = types.StringValue(value.String())
 	} else if data.PolicyMapName.IsNull() {
 		data.PolicyMapName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
 	for i := range data.Classes {
-		keys := [...]string{ "name", "type",  }
-		keyValues := [...]string{ data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString(),  }
+		keys := [...]string{"name", "type"}
+		keyValues := [...]string{data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/class").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/class").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1313,8 +1312,8 @@ func (data *PolicyMapQoS) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.Classes[i].PriorityLevel = types.Int64Null()
 		}
 		for ci := range data.Classes[i].QueueLimits {
-			keys := [...]string{ "value", "unit",  }
-			keyValues := [...]string{ data.Classes[i].QueueLimits[ci].Value.ValueString(), data.Classes[i].QueueLimits[ci].Unit.ValueString(),  }
+			keys := [...]string{"value", "unit"}
+			keyValues := [...]string{data.Classes[i].QueueLimits[ci].Value.ValueString(), data.Classes[i].QueueLimits[ci].Unit.ValueString()}
 
 			var cr xmldot.Result
 			helpers.GetFromXPath(r, "queue-limits/queue-limit").ForEach(
@@ -1338,12 +1337,14 @@ func (data *PolicyMapQoS) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			if value := helpers.GetFromXPath(cr, "value"); value.Exists() {
 				data.Classes[i].QueueLimits[ci].Value = types.StringValue(value.String())
 			} else {
-				data.Classes[i].QueueLimits[ci].Value = types.StringNull()
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
 			}
 			if value := helpers.GetFromXPath(cr, "unit"); value.Exists() {
 				data.Classes[i].QueueLimits[ci].Unit = types.StringValue(value.String())
 			} else {
-				data.Classes[i].QueueLimits[ci].Unit = types.StringNull()
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
 			}
 		}
 		if value := helpers.GetFromXPath(r, "random-detect-default"); value.Exists() {
@@ -1356,8 +1357,8 @@ func (data *PolicyMapQoS) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			}
 		}
 		for ci := range data.Classes[i].RandomDetect {
-			keys := [...]string{ "minimum-threshold-value", "minimum-threshold-unit", "maximum-threshold-value", "maximum-threshold-unit",  }
-			keyValues := [...]string{ strconv.FormatInt(data.Classes[i].RandomDetect[ci].MinimumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MinimumThresholdUnit.ValueString(), strconv.FormatInt(data.Classes[i].RandomDetect[ci].MaximumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MaximumThresholdUnit.ValueString(),  }
+			keys := [...]string{"minimum-threshold-value", "minimum-threshold-unit", "maximum-threshold-value", "maximum-threshold-unit"}
+			keyValues := [...]string{strconv.FormatInt(data.Classes[i].RandomDetect[ci].MinimumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MinimumThresholdUnit.ValueString(), strconv.FormatInt(data.Classes[i].RandomDetect[ci].MaximumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MaximumThresholdUnit.ValueString()}
 
 			var cr xmldot.Result
 			helpers.GetFromXPath(r, "random-detect").ForEach(
@@ -1380,23 +1381,25 @@ func (data *PolicyMapQoS) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			)
 			if value := helpers.GetFromXPath(cr, "minimum-threshold-value"); value.Exists() {
 				data.Classes[i].RandomDetect[ci].MinimumThresholdValue = types.Int64Value(value.Int())
-			} else {
+			} else if data.Classes[i].RandomDetect[ci].MinimumThresholdValue.IsNull() {
 				data.Classes[i].RandomDetect[ci].MinimumThresholdValue = types.Int64Null()
 			}
 			if value := helpers.GetFromXPath(cr, "minimum-threshold-unit"); value.Exists() {
 				data.Classes[i].RandomDetect[ci].MinimumThresholdUnit = types.StringValue(value.String())
 			} else {
-				data.Classes[i].RandomDetect[ci].MinimumThresholdUnit = types.StringNull()
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
 			}
 			if value := helpers.GetFromXPath(cr, "maximum-threshold-value"); value.Exists() {
 				data.Classes[i].RandomDetect[ci].MaximumThresholdValue = types.Int64Value(value.Int())
-			} else {
+			} else if data.Classes[i].RandomDetect[ci].MaximumThresholdValue.IsNull() {
 				data.Classes[i].RandomDetect[ci].MaximumThresholdValue = types.Int64Null()
 			}
 			if value := helpers.GetFromXPath(cr, "maximum-threshold-unit"); value.Exists() {
 				data.Classes[i].RandomDetect[ci].MaximumThresholdUnit = types.StringValue(value.String())
 			} else {
-				data.Classes[i].RandomDetect[ci].MaximumThresholdUnit = types.StringNull()
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
 			}
 		}
 		if value := helpers.GetFromXPath(r, "service-policy/name"); value.Exists() {
@@ -1475,10 +1478,10 @@ func (data *PolicyMapQoS) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"description"); value.Exists() {
+	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"class"); value.Exists() {
+	if value := res.Get(prefix + "class"); value.Exists() {
 		data.Classes = make([]PolicyMapQoSClasses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := PolicyMapQoSClasses{}
@@ -1630,10 +1633,10 @@ func (data *PolicyMapQoS) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("unit"); ccValue.Exists() {
 						cItem.Unit = types.StringValue(ccValue.String())
 					}
-				item.QueueLimits = append(item.QueueLimits, cItem)
-				return true
-			})
-		}
+					item.QueueLimits = append(item.QueueLimits, cItem)
+					return true
+				})
+			}
 			if cValue := v.Get("random-detect-default"); cValue.Exists() {
 				item.RandomDetectDefault = types.BoolValue(true)
 			} else {
@@ -1643,22 +1646,22 @@ func (data *PolicyMapQoS) fromBody(ctx context.Context, res gjson.Result) {
 				item.RandomDetect = make([]PolicyMapQoSClassesRandomDetect, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := PolicyMapQoSClassesRandomDetect{}
-				if ccValue := cv.Get("minimum-threshold-value"); ccValue.Exists() {
-					cItem.MinimumThresholdValue = types.Int64Value(ccValue.Int())
-				}
+					if ccValue := cv.Get("minimum-threshold-value"); ccValue.Exists() {
+						cItem.MinimumThresholdValue = types.Int64Value(ccValue.Int())
+					}
 					if ccValue := cv.Get("minimum-threshold-unit"); ccValue.Exists() {
 						cItem.MinimumThresholdUnit = types.StringValue(ccValue.String())
 					}
-				if ccValue := cv.Get("maximum-threshold-value"); ccValue.Exists() {
-					cItem.MaximumThresholdValue = types.Int64Value(ccValue.Int())
-				}
+					if ccValue := cv.Get("maximum-threshold-value"); ccValue.Exists() {
+						cItem.MaximumThresholdValue = types.Int64Value(ccValue.Int())
+					}
 					if ccValue := cv.Get("maximum-threshold-unit"); ccValue.Exists() {
 						cItem.MaximumThresholdUnit = types.StringValue(ccValue.String())
 					}
-				item.RandomDetect = append(item.RandomDetect, cItem)
-				return true
-			})
-		}
+					item.RandomDetect = append(item.RandomDetect, cItem)
+					return true
+				})
+			}
 			if cValue := v.Get("service-policy.name"); cValue.Exists() {
 				item.ServicePolicyName = types.StringValue(cValue.String())
 			}
@@ -1712,10 +1715,10 @@ func (data *PolicyMapQoSData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"description"); value.Exists() {
+	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"class"); value.Exists() {
+	if value := res.Get(prefix + "class"); value.Exists() {
 		data.Classes = make([]PolicyMapQoSClasses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := PolicyMapQoSClasses{}
@@ -1945,10 +1948,10 @@ func (data *PolicyMapQoSData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *PolicyMapQoS) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/class"); value.Exists() {
 		data.Classes = make([]PolicyMapQoSClasses, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PolicyMapQoSClasses{}
@@ -2178,10 +2181,10 @@ func (data *PolicyMapQoS) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *PolicyMapQoSData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/class"); value.Exists() {
 		data.Classes = make([]PolicyMapQoSClasses, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PolicyMapQoSClasses{}
@@ -2227,16 +2230,16 @@ func (data *PolicyMapQoSData) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "police/peak-burst/unit"); cValue.Exists() {
 				item.PolicePeakBurstUnit = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "police/conform-action/transmit"); cValue.Exists() {
-			item.PoliceConformActionTransmit = types.BoolValue(true)
-		} else {
-			item.PoliceConformActionTransmit = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "police/conform-action/drop"); cValue.Exists() {
-			item.PoliceConformActionDrop = types.BoolValue(true)
-		} else {
-			item.PoliceConformActionDrop = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "police/conform-action/transmit"); cValue.Exists() {
+				item.PoliceConformActionTransmit = types.BoolValue(true)
+			} else {
+				item.PoliceConformActionTransmit = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "police/conform-action/drop"); cValue.Exists() {
+				item.PoliceConformActionDrop = types.BoolValue(true)
+			} else {
+				item.PoliceConformActionDrop = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "police/conform-action/set/cos"); cValue.Exists() {
 				item.PoliceConformActionSetCos = types.Int64Value(cValue.Int())
 			}
@@ -2258,16 +2261,16 @@ func (data *PolicyMapQoSData) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "police/conform-action/set/qos-group"); cValue.Exists() {
 				item.PoliceConformActionSetQosGroup = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "police/exceed-action/transmit"); cValue.Exists() {
-			item.PoliceExceedActionTransmit = types.BoolValue(true)
-		} else {
-			item.PoliceExceedActionTransmit = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "police/exceed-action/drop"); cValue.Exists() {
-			item.PoliceExceedActionDrop = types.BoolValue(true)
-		} else {
-			item.PoliceExceedActionDrop = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "police/exceed-action/transmit"); cValue.Exists() {
+				item.PoliceExceedActionTransmit = types.BoolValue(true)
+			} else {
+				item.PoliceExceedActionTransmit = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "police/exceed-action/drop"); cValue.Exists() {
+				item.PoliceExceedActionDrop = types.BoolValue(true)
+			} else {
+				item.PoliceExceedActionDrop = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "police/exceed-action/set/cos"); cValue.Exists() {
 				item.PoliceExceedActionSetCos = types.Int64Value(cValue.Int())
 			}
@@ -2289,16 +2292,16 @@ func (data *PolicyMapQoSData) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "police/exceed-action/set/qos-group"); cValue.Exists() {
 				item.PoliceExceedActionSetQosGroup = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "police/violate-action/transmit"); cValue.Exists() {
-			item.PoliceViolateActionTransmit = types.BoolValue(true)
-		} else {
-			item.PoliceViolateActionTransmit = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "police/violate-action/drop"); cValue.Exists() {
-			item.PoliceViolateActionDrop = types.BoolValue(true)
-		} else {
-			item.PoliceViolateActionDrop = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "police/violate-action/transmit"); cValue.Exists() {
+				item.PoliceViolateActionTransmit = types.BoolValue(true)
+			} else {
+				item.PoliceViolateActionTransmit = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "police/violate-action/drop"); cValue.Exists() {
+				item.PoliceViolateActionDrop = types.BoolValue(true)
+			} else {
+				item.PoliceViolateActionDrop = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "police/violate-action/set/cos"); cValue.Exists() {
 				item.PoliceViolateActionSetCos = types.Int64Value(cValue.Int())
 			}
@@ -2337,11 +2340,11 @@ func (data *PolicyMapQoSData) fromBodyXML(ctx context.Context, res xmldot.Result
 					return true
 				})
 			}
-		if cValue := helpers.GetFromXPath(v, "random-detect-default"); cValue.Exists() {
-			item.RandomDetectDefault = types.BoolValue(true)
-		} else {
-			item.RandomDetectDefault = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "random-detect-default"); cValue.Exists() {
+				item.RandomDetectDefault = types.BoolValue(true)
+			} else {
+				item.RandomDetectDefault = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "random-detect"); cValue.Exists() {
 				item.RandomDetect = make([]PolicyMapQoSClassesRandomDetect, 0)
 				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
@@ -2413,11 +2416,11 @@ func (data *PolicyMapQoSData) fromBodyXML(ctx context.Context, res xmldot.Result
 func (data *PolicyMapQoS) getDeletedItems(ctx context.Context, state PolicyMapQoS) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.Classes {
-		keys := [...]string{ "name", "type",  }
-		stateKeyValues := [...]string{ state.Classes[i].Name.ValueString(), state.Classes[i].Type.ValueString(),  }
+		keys := [...]string{"name", "type"}
+		stateKeyValues := [...]string{state.Classes[i].Name.ValueString(), state.Classes[i].Type.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -2440,52 +2443,52 @@ func (data *PolicyMapQoS) getDeletedItems(ctx context.Context, state PolicyMapQo
 			if state.Classes[i].Type.ValueString() != data.Classes[j].Type.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.Classes[i].ShapeAverageExcessBurstUnit.IsNull() && data.Classes[j].ShapeAverageExcessBurstUnit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/shape/average/excess-burst/unit", state.getPath(), keyString))
-			}
-			if !state.Classes[i].ShapeAverageExcessBurstSize.IsNull() && data.Classes[j].ShapeAverageExcessBurstSize.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/shape/average/excess-burst/size", state.getPath(), keyString))
-			}
-			if !state.Classes[i].ShapeAverageRateUnit.IsNull() && data.Classes[j].ShapeAverageRateUnit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/shape/average/rate/unit", state.getPath(), keyString))
-			}
-			if !state.Classes[i].ShapeAverageRateValue.IsNull() && data.Classes[j].ShapeAverageRateValue.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/shape/average/rate/value", state.getPath(), keyString))
-			}
-			if !state.Classes[i].SetQosGroup.IsNull() && data.Classes[j].SetQosGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/qos-group", state.getPath(), keyString))
-			}
-			if !state.Classes[i].SetPrecedence.IsNull() && data.Classes[j].SetPrecedence.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/precedence", state.getPath(), keyString))
-			}
-			if !state.Classes[i].SetMplsExperimentalTopmost.IsNull() && data.Classes[j].SetMplsExperimentalTopmost.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/mpls/experimental/topmost", state.getPath(), keyString))
-			}
-			if !state.Classes[i].SetMplsExperimentalImposition.IsNull() && data.Classes[j].SetMplsExperimentalImposition.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/mpls/experimental/imposition", state.getPath(), keyString))
-			}
-			if !state.Classes[i].SetDscp.IsNull() && data.Classes[j].SetDscp.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/dscp", state.getPath(), keyString))
-			}
-			if !state.Classes[i].SetDiscardClass.IsNull() && data.Classes[j].SetDiscardClass.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/discard-class", state.getPath(), keyString))
-			}
-			if !state.Classes[i].SetCos.IsNull() && data.Classes[j].SetCos.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/cos", state.getPath(), keyString))
-			}
-			if !state.Classes[i].SetTrafficClass.IsNull() && data.Classes[j].SetTrafficClass.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/traffic-class", state.getPath(), keyString))
-			}
-			if !state.Classes[i].ServicePolicyName.IsNull() && data.Classes[j].ServicePolicyName.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/service-policy/name", state.getPath(), keyString))
-			}
+			if found {
+				if !state.Classes[i].ShapeAverageExcessBurstUnit.IsNull() && data.Classes[j].ShapeAverageExcessBurstUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/shape/average/excess-burst/unit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].ShapeAverageExcessBurstSize.IsNull() && data.Classes[j].ShapeAverageExcessBurstSize.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/shape/average/excess-burst/size", state.getPath(), keyString))
+				}
+				if !state.Classes[i].ShapeAverageRateUnit.IsNull() && data.Classes[j].ShapeAverageRateUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/shape/average/rate/unit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].ShapeAverageRateValue.IsNull() && data.Classes[j].ShapeAverageRateValue.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/shape/average/rate/value", state.getPath(), keyString))
+				}
+				if !state.Classes[i].SetQosGroup.IsNull() && data.Classes[j].SetQosGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/qos-group", state.getPath(), keyString))
+				}
+				if !state.Classes[i].SetPrecedence.IsNull() && data.Classes[j].SetPrecedence.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/precedence", state.getPath(), keyString))
+				}
+				if !state.Classes[i].SetMplsExperimentalTopmost.IsNull() && data.Classes[j].SetMplsExperimentalTopmost.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/mpls/experimental/topmost", state.getPath(), keyString))
+				}
+				if !state.Classes[i].SetMplsExperimentalImposition.IsNull() && data.Classes[j].SetMplsExperimentalImposition.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/mpls/experimental/imposition", state.getPath(), keyString))
+				}
+				if !state.Classes[i].SetDscp.IsNull() && data.Classes[j].SetDscp.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/dscp", state.getPath(), keyString))
+				}
+				if !state.Classes[i].SetDiscardClass.IsNull() && data.Classes[j].SetDiscardClass.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/discard-class", state.getPath(), keyString))
+				}
+				if !state.Classes[i].SetCos.IsNull() && data.Classes[j].SetCos.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/cos", state.getPath(), keyString))
+				}
+				if !state.Classes[i].SetTrafficClass.IsNull() && data.Classes[j].SetTrafficClass.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/traffic-class", state.getPath(), keyString))
+				}
+				if !state.Classes[i].ServicePolicyName.IsNull() && data.Classes[j].ServicePolicyName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/service-policy/name", state.getPath(), keyString))
+				}
 				for ci := range state.Classes[i].RandomDetect {
-					ckeys := [...]string{ "minimum-threshold-value", "minimum-threshold-unit", "maximum-threshold-value", "maximum-threshold-unit",  }
-					cstateKeyValues := [...]string{ strconv.FormatInt(state.Classes[i].RandomDetect[ci].MinimumThresholdValue.ValueInt64(), 10), state.Classes[i].RandomDetect[ci].MinimumThresholdUnit.ValueString(), strconv.FormatInt(state.Classes[i].RandomDetect[ci].MaximumThresholdValue.ValueInt64(), 10), state.Classes[i].RandomDetect[ci].MaximumThresholdUnit.ValueString(),  }
+					ckeys := [...]string{"minimum-threshold-value", "minimum-threshold-unit", "maximum-threshold-value", "maximum-threshold-unit"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Classes[i].RandomDetect[ci].MinimumThresholdValue.ValueInt64(), 10), state.Classes[i].RandomDetect[ci].MinimumThresholdUnit.ValueString(), strconv.FormatInt(state.Classes[i].RandomDetect[ci].MaximumThresholdValue.ValueInt64(), 10), state.Classes[i].RandomDetect[ci].MaximumThresholdUnit.ValueString()}
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 					}
 
 					cemptyKeys := true
@@ -2520,23 +2523,23 @@ func (data *PolicyMapQoS) getDeletedItems(ctx context.Context, state PolicyMapQo
 						if state.Classes[i].RandomDetect[ci].MaximumThresholdUnit.ValueString() != data.Classes[j].RandomDetect[cj].MaximumThresholdUnit.ValueString() {
 							found = false
 						}
-					if found {
-						break
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/random-detect%v", state.getPath(), keyString, ckeyString))
 					}
 				}
-				if !found {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/random-detect%v", state.getPath(), keyString, ckeyString))
+				if !state.Classes[i].RandomDetectDefault.IsNull() && data.Classes[j].RandomDetectDefault.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/random-detect-default", state.getPath(), keyString))
 				}
-			}
-			if !state.Classes[i].RandomDetectDefault.IsNull() && data.Classes[j].RandomDetectDefault.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/random-detect-default", state.getPath(), keyString))
-			}
 				for ci := range state.Classes[i].QueueLimits {
-					ckeys := [...]string{ "value", "unit",  }
-					cstateKeyValues := [...]string{ state.Classes[i].QueueLimits[ci].Value.ValueString(), state.Classes[i].QueueLimits[ci].Unit.ValueString(),  }
+					ckeys := [...]string{"value", "unit"}
+					cstateKeyValues := [...]string{state.Classes[i].QueueLimits[ci].Value.ValueString(), state.Classes[i].QueueLimits[ci].Unit.ValueString()}
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 					}
 
 					cemptyKeys := true
@@ -2559,134 +2562,134 @@ func (data *PolicyMapQoS) getDeletedItems(ctx context.Context, state PolicyMapQo
 						if state.Classes[i].QueueLimits[ci].Unit.ValueString() != data.Classes[j].QueueLimits[cj].Unit.ValueString() {
 							found = false
 						}
-					if found {
-						break
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/queue-limits/queue-limit%v", state.getPath(), keyString, ckeyString))
 					}
 				}
-				if !found {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/queue-limits/queue-limit%v", state.getPath(), keyString, ckeyString))
+				if !state.Classes[i].PriorityLevel.IsNull() && data.Classes[j].PriorityLevel.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/priority/level", state.getPath(), keyString))
 				}
-			}
-			if !state.Classes[i].PriorityLevel.IsNull() && data.Classes[j].PriorityLevel.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/priority/level", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceViolateActionSetQosGroup.IsNull() && data.Classes[j].PoliceViolateActionSetQosGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/set/qos-group", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceViolateActionSetPrecedence.IsNull() && data.Classes[j].PoliceViolateActionSetPrecedence.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/set/precedence", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceViolateActionSetMplsExperimentalTopmost.IsNull() && data.Classes[j].PoliceViolateActionSetMplsExperimentalTopmost.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/set/mpls/experimental/topmost", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceViolateActionSetMplsExperimentalImposition.IsNull() && data.Classes[j].PoliceViolateActionSetMplsExperimentalImposition.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/set/mpls/experimental/imposition", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceViolateActionSetDscp.IsNull() && data.Classes[j].PoliceViolateActionSetDscp.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/set/dscp", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceViolateActionSetDiscardClass.IsNull() && data.Classes[j].PoliceViolateActionSetDiscardClass.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/set/discard-class", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceViolateActionSetCos.IsNull() && data.Classes[j].PoliceViolateActionSetCos.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/set/cos", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceViolateActionDrop.IsNull() && data.Classes[j].PoliceViolateActionDrop.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/drop", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceViolateActionTransmit.IsNull() && data.Classes[j].PoliceViolateActionTransmit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/transmit", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceExceedActionSetQosGroup.IsNull() && data.Classes[j].PoliceExceedActionSetQosGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/set/qos-group", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceExceedActionSetPrecedence.IsNull() && data.Classes[j].PoliceExceedActionSetPrecedence.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/set/precedence", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceExceedActionSetMplsExperimentalTopmost.IsNull() && data.Classes[j].PoliceExceedActionSetMplsExperimentalTopmost.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/set/mpls/experimental/topmost", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceExceedActionSetMplsExperimentalImposition.IsNull() && data.Classes[j].PoliceExceedActionSetMplsExperimentalImposition.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/set/mpls/experimental/imposition", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceExceedActionSetDscp.IsNull() && data.Classes[j].PoliceExceedActionSetDscp.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/set/dscp", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceExceedActionSetDiscardClass.IsNull() && data.Classes[j].PoliceExceedActionSetDiscardClass.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/set/discard-class", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceExceedActionSetCos.IsNull() && data.Classes[j].PoliceExceedActionSetCos.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/set/cos", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceExceedActionDrop.IsNull() && data.Classes[j].PoliceExceedActionDrop.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/drop", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceExceedActionTransmit.IsNull() && data.Classes[j].PoliceExceedActionTransmit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/transmit", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceConformActionSetQosGroup.IsNull() && data.Classes[j].PoliceConformActionSetQosGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/set/qos-group", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceConformActionSetPrecedence.IsNull() && data.Classes[j].PoliceConformActionSetPrecedence.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/set/precedence", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceConformActionSetMplsExperimentalTopmost.IsNull() && data.Classes[j].PoliceConformActionSetMplsExperimentalTopmost.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/set/mpls/experimental/topmost", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceConformActionSetMplsExperimentalImposition.IsNull() && data.Classes[j].PoliceConformActionSetMplsExperimentalImposition.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/set/mpls/experimental/imposition", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceConformActionSetDscp.IsNull() && data.Classes[j].PoliceConformActionSetDscp.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/set/dscp", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceConformActionSetDiscardClass.IsNull() && data.Classes[j].PoliceConformActionSetDiscardClass.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/set/discard-class", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceConformActionSetCos.IsNull() && data.Classes[j].PoliceConformActionSetCos.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/set/cos", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceConformActionDrop.IsNull() && data.Classes[j].PoliceConformActionDrop.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/drop", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceConformActionTransmit.IsNull() && data.Classes[j].PoliceConformActionTransmit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/transmit", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PolicePeakBurstUnit.IsNull() && data.Classes[j].PolicePeakBurstUnit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/peak-burst/unit", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PolicePeakBurstValue.IsNull() && data.Classes[j].PolicePeakBurstValue.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/peak-burst/value", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PolicePeakRateUnit.IsNull() && data.Classes[j].PolicePeakRateUnit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/peak-rate/unit", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PolicePeakRateValue.IsNull() && data.Classes[j].PolicePeakRateValue.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/peak-rate/value", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceBurstUnit.IsNull() && data.Classes[j].PoliceBurstUnit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/burst/unit", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceBurstValue.IsNull() && data.Classes[j].PoliceBurstValue.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/burst/value", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceRateUnit.IsNull() && data.Classes[j].PoliceRateUnit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/rate/unit", state.getPath(), keyString))
-			}
-			if !state.Classes[i].PoliceRateValue.IsNull() && data.Classes[j].PoliceRateValue.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/rate/value", state.getPath(), keyString))
-			}
-			if !state.Classes[i].BandwidthRemainingUnit.IsNull() && data.Classes[j].BandwidthRemainingUnit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/bandwidth-remaining/unit", state.getPath(), keyString))
-			}
-			if !state.Classes[i].BandwidthRemainingValue.IsNull() && data.Classes[j].BandwidthRemainingValue.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/bandwidth-remaining/value", state.getPath(), keyString))
-			}
-			if !state.Classes[i].BandwidthUnit.IsNull() && data.Classes[j].BandwidthUnit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/bandwidth/unit", state.getPath(), keyString))
-			}
-			if !state.Classes[i].BandwidthValue.IsNull() && data.Classes[j].BandwidthValue.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/bandwidth/value", state.getPath(), keyString))
-			}
+				if !state.Classes[i].PoliceViolateActionSetQosGroup.IsNull() && data.Classes[j].PoliceViolateActionSetQosGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/set/qos-group", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceViolateActionSetPrecedence.IsNull() && data.Classes[j].PoliceViolateActionSetPrecedence.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/set/precedence", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceViolateActionSetMplsExperimentalTopmost.IsNull() && data.Classes[j].PoliceViolateActionSetMplsExperimentalTopmost.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/set/mpls/experimental/topmost", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceViolateActionSetMplsExperimentalImposition.IsNull() && data.Classes[j].PoliceViolateActionSetMplsExperimentalImposition.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/set/mpls/experimental/imposition", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceViolateActionSetDscp.IsNull() && data.Classes[j].PoliceViolateActionSetDscp.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/set/dscp", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceViolateActionSetDiscardClass.IsNull() && data.Classes[j].PoliceViolateActionSetDiscardClass.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/set/discard-class", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceViolateActionSetCos.IsNull() && data.Classes[j].PoliceViolateActionSetCos.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/set/cos", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceViolateActionDrop.IsNull() && data.Classes[j].PoliceViolateActionDrop.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/drop", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceViolateActionTransmit.IsNull() && data.Classes[j].PoliceViolateActionTransmit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/transmit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceExceedActionSetQosGroup.IsNull() && data.Classes[j].PoliceExceedActionSetQosGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/set/qos-group", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceExceedActionSetPrecedence.IsNull() && data.Classes[j].PoliceExceedActionSetPrecedence.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/set/precedence", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceExceedActionSetMplsExperimentalTopmost.IsNull() && data.Classes[j].PoliceExceedActionSetMplsExperimentalTopmost.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/set/mpls/experimental/topmost", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceExceedActionSetMplsExperimentalImposition.IsNull() && data.Classes[j].PoliceExceedActionSetMplsExperimentalImposition.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/set/mpls/experimental/imposition", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceExceedActionSetDscp.IsNull() && data.Classes[j].PoliceExceedActionSetDscp.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/set/dscp", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceExceedActionSetDiscardClass.IsNull() && data.Classes[j].PoliceExceedActionSetDiscardClass.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/set/discard-class", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceExceedActionSetCos.IsNull() && data.Classes[j].PoliceExceedActionSetCos.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/set/cos", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceExceedActionDrop.IsNull() && data.Classes[j].PoliceExceedActionDrop.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/drop", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceExceedActionTransmit.IsNull() && data.Classes[j].PoliceExceedActionTransmit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/transmit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceConformActionSetQosGroup.IsNull() && data.Classes[j].PoliceConformActionSetQosGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/set/qos-group", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceConformActionSetPrecedence.IsNull() && data.Classes[j].PoliceConformActionSetPrecedence.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/set/precedence", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceConformActionSetMplsExperimentalTopmost.IsNull() && data.Classes[j].PoliceConformActionSetMplsExperimentalTopmost.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/set/mpls/experimental/topmost", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceConformActionSetMplsExperimentalImposition.IsNull() && data.Classes[j].PoliceConformActionSetMplsExperimentalImposition.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/set/mpls/experimental/imposition", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceConformActionSetDscp.IsNull() && data.Classes[j].PoliceConformActionSetDscp.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/set/dscp", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceConformActionSetDiscardClass.IsNull() && data.Classes[j].PoliceConformActionSetDiscardClass.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/set/discard-class", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceConformActionSetCos.IsNull() && data.Classes[j].PoliceConformActionSetCos.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/set/cos", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceConformActionDrop.IsNull() && data.Classes[j].PoliceConformActionDrop.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/drop", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceConformActionTransmit.IsNull() && data.Classes[j].PoliceConformActionTransmit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/transmit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PolicePeakBurstUnit.IsNull() && data.Classes[j].PolicePeakBurstUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/peak-burst/unit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PolicePeakBurstValue.IsNull() && data.Classes[j].PolicePeakBurstValue.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/peak-burst/value", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PolicePeakRateUnit.IsNull() && data.Classes[j].PolicePeakRateUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/peak-rate/unit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PolicePeakRateValue.IsNull() && data.Classes[j].PolicePeakRateValue.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/peak-rate/value", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceBurstUnit.IsNull() && data.Classes[j].PoliceBurstUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/burst/unit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceBurstValue.IsNull() && data.Classes[j].PoliceBurstValue.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/burst/value", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceRateUnit.IsNull() && data.Classes[j].PoliceRateUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/rate/unit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceRateValue.IsNull() && data.Classes[j].PoliceRateValue.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/rate/value", state.getPath(), keyString))
+				}
+				if !state.Classes[i].BandwidthRemainingUnit.IsNull() && data.Classes[j].BandwidthRemainingUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/bandwidth-remaining/unit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].BandwidthRemainingValue.IsNull() && data.Classes[j].BandwidthRemainingValue.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/bandwidth-remaining/value", state.getPath(), keyString))
+				}
+				if !state.Classes[i].BandwidthUnit.IsNull() && data.Classes[j].BandwidthUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/bandwidth/unit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].BandwidthValue.IsNull() && data.Classes[j].BandwidthValue.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/bandwidth/value", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -2706,18 +2709,18 @@ func (data *PolicyMapQoS) getDeletedItems(ctx context.Context, state PolicyMapQo
 func (data *PolicyMapQoS) getEmptyLeafsDelete(ctx context.Context, state *PolicyMapQoS) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Classes {
-		keys := [...]string{ "name", "type",  }
-		keyValues := [...]string{ data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString(),  }
+		keys := [...]string{"name", "type"}
+		keyValues := [...]string{data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		for ci := range data.Classes[i].RandomDetect {
-			ckeys := [...]string{ "minimum-threshold-value", "minimum-threshold-unit", "maximum-threshold-value", "maximum-threshold-unit",  }
-			ckeyValues := [...]string{ strconv.FormatInt(data.Classes[i].RandomDetect[ci].MinimumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MinimumThresholdUnit.ValueString(), strconv.FormatInt(data.Classes[i].RandomDetect[ci].MaximumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MaximumThresholdUnit.ValueString(),  }
+			ckeys := [...]string{"minimum-threshold-value", "minimum-threshold-unit", "maximum-threshold-value", "maximum-threshold-unit"}
+			ckeyValues := [...]string{strconv.FormatInt(data.Classes[i].RandomDetect[ci].MinimumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MinimumThresholdUnit.ValueString(), strconv.FormatInt(data.Classes[i].RandomDetect[ci].MaximumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MaximumThresholdUnit.ValueString()}
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
 		// Only delete if state has true and plan has false
@@ -2728,11 +2731,11 @@ func (data *PolicyMapQoS) getEmptyLeafsDelete(ctx context.Context, state *Policy
 			}
 		}
 		for ci := range data.Classes[i].QueueLimits {
-			ckeys := [...]string{ "value", "unit",  }
-			ckeyValues := [...]string{ data.Classes[i].QueueLimits[ci].Value.ValueString(), data.Classes[i].QueueLimits[ci].Unit.ValueString(),  }
+			ckeys := [...]string{"value", "unit"}
+			ckeyValues := [...]string{data.Classes[i].QueueLimits[ci].Value.ValueString(), data.Classes[i].QueueLimits[ci].Unit.ValueString()}
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
 		// Only delete if state has true and plan has false
@@ -2787,7 +2790,7 @@ func (data *PolicyMapQoS) getEmptyLeafsDelete(ctx context.Context, state *Policy
 func (data *PolicyMapQoS) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Classes {
-		keyValues := [...]string{ data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString(),  }
+		keyValues := [...]string{data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/class=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2806,8 +2809,8 @@ func (data *PolicyMapQoS) addDeletedItemsXML(ctx context.Context, state PolicyMa
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.Classes {
-		stateKeys := [...]string{ "name", "type",  }
-		stateKeyValues := [...]string{ state.Classes[i].Name.ValueString(), state.Classes[i].Type.ValueString(),  }
+		stateKeys := [...]string{"name", "type"}
+		stateKeyValues := [...]string{state.Classes[i].Name.ValueString(), state.Classes[i].Type.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2834,48 +2837,48 @@ func (data *PolicyMapQoS) addDeletedItemsXML(ctx context.Context, state PolicyMa
 				found = false
 			}
 			if found {
-			if !state.Classes[i].ShapeAverageExcessBurstUnit.IsNull() && data.Classes[j].ShapeAverageExcessBurstUnit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/shape/average/excess-burst/unit", predicates))
-			}
-			if !state.Classes[i].ShapeAverageExcessBurstSize.IsNull() && data.Classes[j].ShapeAverageExcessBurstSize.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/shape/average/excess-burst/size", predicates))
-			}
-			if !state.Classes[i].ShapeAverageRateUnit.IsNull() && data.Classes[j].ShapeAverageRateUnit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/shape/average/rate/unit", predicates))
-			}
-			if !state.Classes[i].ShapeAverageRateValue.IsNull() && data.Classes[j].ShapeAverageRateValue.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/shape/average/rate/value", predicates))
-			}
-			if !state.Classes[i].SetQosGroup.IsNull() && data.Classes[j].SetQosGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/qos-group", predicates))
-			}
-			if !state.Classes[i].SetPrecedence.IsNull() && data.Classes[j].SetPrecedence.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/precedence", predicates))
-			}
-			if !state.Classes[i].SetMplsExperimentalTopmost.IsNull() && data.Classes[j].SetMplsExperimentalTopmost.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/mpls/experimental/topmost", predicates))
-			}
-			if !state.Classes[i].SetMplsExperimentalImposition.IsNull() && data.Classes[j].SetMplsExperimentalImposition.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/mpls/experimental/imposition", predicates))
-			}
-			if !state.Classes[i].SetDscp.IsNull() && data.Classes[j].SetDscp.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/dscp", predicates))
-			}
-			if !state.Classes[i].SetDiscardClass.IsNull() && data.Classes[j].SetDiscardClass.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/discard-class", predicates))
-			}
-			if !state.Classes[i].SetCos.IsNull() && data.Classes[j].SetCos.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/cos", predicates))
-			}
-			if !state.Classes[i].SetTrafficClass.IsNull() && data.Classes[j].SetTrafficClass.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/traffic-class", predicates))
-			}
-			if !state.Classes[i].ServicePolicyName.IsNull() && data.Classes[j].ServicePolicyName.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/service-policy/name", predicates))
-			}
-			for ci := range state.Classes[i].RandomDetect {
-					cstateKeys := [...]string{ "minimum-threshold-value", "minimum-threshold-unit", "maximum-threshold-value", "maximum-threshold-unit",  }
-					cstateKeyValues := [...]string{ strconv.FormatInt(state.Classes[i].RandomDetect[ci].MinimumThresholdValue.ValueInt64(), 10), state.Classes[i].RandomDetect[ci].MinimumThresholdUnit.ValueString(), strconv.FormatInt(state.Classes[i].RandomDetect[ci].MaximumThresholdValue.ValueInt64(), 10), state.Classes[i].RandomDetect[ci].MaximumThresholdUnit.ValueString(),  }
+				if !state.Classes[i].ShapeAverageExcessBurstUnit.IsNull() && data.Classes[j].ShapeAverageExcessBurstUnit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/shape/average/excess-burst/unit", predicates))
+				}
+				if !state.Classes[i].ShapeAverageExcessBurstSize.IsNull() && data.Classes[j].ShapeAverageExcessBurstSize.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/shape/average/excess-burst/size", predicates))
+				}
+				if !state.Classes[i].ShapeAverageRateUnit.IsNull() && data.Classes[j].ShapeAverageRateUnit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/shape/average/rate/unit", predicates))
+				}
+				if !state.Classes[i].ShapeAverageRateValue.IsNull() && data.Classes[j].ShapeAverageRateValue.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/shape/average/rate/value", predicates))
+				}
+				if !state.Classes[i].SetQosGroup.IsNull() && data.Classes[j].SetQosGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/qos-group", predicates))
+				}
+				if !state.Classes[i].SetPrecedence.IsNull() && data.Classes[j].SetPrecedence.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/precedence", predicates))
+				}
+				if !state.Classes[i].SetMplsExperimentalTopmost.IsNull() && data.Classes[j].SetMplsExperimentalTopmost.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/mpls/experimental/topmost", predicates))
+				}
+				if !state.Classes[i].SetMplsExperimentalImposition.IsNull() && data.Classes[j].SetMplsExperimentalImposition.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/mpls/experimental/imposition", predicates))
+				}
+				if !state.Classes[i].SetDscp.IsNull() && data.Classes[j].SetDscp.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/dscp", predicates))
+				}
+				if !state.Classes[i].SetDiscardClass.IsNull() && data.Classes[j].SetDiscardClass.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/discard-class", predicates))
+				}
+				if !state.Classes[i].SetCos.IsNull() && data.Classes[j].SetCos.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/cos", predicates))
+				}
+				if !state.Classes[i].SetTrafficClass.IsNull() && data.Classes[j].SetTrafficClass.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/set/traffic-class", predicates))
+				}
+				if !state.Classes[i].ServicePolicyName.IsNull() && data.Classes[j].ServicePolicyName.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/service-policy/name", predicates))
+				}
+				for ci := range state.Classes[i].RandomDetect {
+					cstateKeys := [...]string{"minimum-threshold-value", "minimum-threshold-unit", "maximum-threshold-value", "maximum-threshold-unit"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Classes[i].RandomDetect[ci].MinimumThresholdValue.ValueInt64(), 10), state.Classes[i].RandomDetect[ci].MinimumThresholdUnit.ValueString(), strconv.FormatInt(state.Classes[i].RandomDetect[ci].MaximumThresholdValue.ValueInt64(), 10), state.Classes[i].RandomDetect[ci].MaximumThresholdUnit.ValueString()}
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -2921,13 +2924,13 @@ func (data *PolicyMapQoS) addDeletedItemsXML(ctx context.Context, state PolicyMa
 						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/random-detect%v", predicates, cpredicates))
 					}
 				}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Classes[i].RandomDetectDefault.IsNull() && state.Classes[i].RandomDetectDefault.ValueBool() && data.Classes[j].RandomDetectDefault.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/random-detect-default", predicates))
-			}
-			for ci := range state.Classes[i].QueueLimits {
-					cstateKeys := [...]string{ "value", "unit",  }
-					cstateKeyValues := [...]string{ state.Classes[i].QueueLimits[ci].Value.ValueString(), state.Classes[i].QueueLimits[ci].Unit.ValueString(),  }
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Classes[i].RandomDetectDefault.IsNull() && state.Classes[i].RandomDetectDefault.ValueBool() && data.Classes[j].RandomDetectDefault.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/random-detect-default", predicates))
+				}
+				for ci := range state.Classes[i].QueueLimits {
+					cstateKeys := [...]string{"value", "unit"}
+					cstateKeyValues := [...]string{state.Classes[i].QueueLimits[ci].Value.ValueString(), state.Classes[i].QueueLimits[ci].Unit.ValueString()}
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -2961,132 +2964,132 @@ func (data *PolicyMapQoS) addDeletedItemsXML(ctx context.Context, state PolicyMa
 						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/queue-limits/queue-limit%v", predicates, cpredicates))
 					}
 				}
-			if !state.Classes[i].PriorityLevel.IsNull() && data.Classes[j].PriorityLevel.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/priority/level", predicates))
-			}
-			if !state.Classes[i].PoliceViolateActionSetQosGroup.IsNull() && data.Classes[j].PoliceViolateActionSetQosGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/qos-group", predicates))
-			}
-			if !state.Classes[i].PoliceViolateActionSetPrecedence.IsNull() && data.Classes[j].PoliceViolateActionSetPrecedence.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/precedence", predicates))
-			}
-			if !state.Classes[i].PoliceViolateActionSetMplsExperimentalTopmost.IsNull() && data.Classes[j].PoliceViolateActionSetMplsExperimentalTopmost.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/mpls/experimental/topmost", predicates))
-			}
-			if !state.Classes[i].PoliceViolateActionSetMplsExperimentalImposition.IsNull() && data.Classes[j].PoliceViolateActionSetMplsExperimentalImposition.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/mpls/experimental/imposition", predicates))
-			}
-			if !state.Classes[i].PoliceViolateActionSetDscp.IsNull() && data.Classes[j].PoliceViolateActionSetDscp.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/dscp", predicates))
-			}
-			if !state.Classes[i].PoliceViolateActionSetDiscardClass.IsNull() && data.Classes[j].PoliceViolateActionSetDiscardClass.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/discard-class", predicates))
-			}
-			if !state.Classes[i].PoliceViolateActionSetCos.IsNull() && data.Classes[j].PoliceViolateActionSetCos.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/cos", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Classes[i].PoliceViolateActionDrop.IsNull() && state.Classes[i].PoliceViolateActionDrop.ValueBool() && data.Classes[j].PoliceViolateActionDrop.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/drop", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Classes[i].PoliceViolateActionTransmit.IsNull() && state.Classes[i].PoliceViolateActionTransmit.ValueBool() && data.Classes[j].PoliceViolateActionTransmit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/transmit", predicates))
-			}
-			if !state.Classes[i].PoliceExceedActionSetQosGroup.IsNull() && data.Classes[j].PoliceExceedActionSetQosGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/qos-group", predicates))
-			}
-			if !state.Classes[i].PoliceExceedActionSetPrecedence.IsNull() && data.Classes[j].PoliceExceedActionSetPrecedence.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/precedence", predicates))
-			}
-			if !state.Classes[i].PoliceExceedActionSetMplsExperimentalTopmost.IsNull() && data.Classes[j].PoliceExceedActionSetMplsExperimentalTopmost.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/mpls/experimental/topmost", predicates))
-			}
-			if !state.Classes[i].PoliceExceedActionSetMplsExperimentalImposition.IsNull() && data.Classes[j].PoliceExceedActionSetMplsExperimentalImposition.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/mpls/experimental/imposition", predicates))
-			}
-			if !state.Classes[i].PoliceExceedActionSetDscp.IsNull() && data.Classes[j].PoliceExceedActionSetDscp.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/dscp", predicates))
-			}
-			if !state.Classes[i].PoliceExceedActionSetDiscardClass.IsNull() && data.Classes[j].PoliceExceedActionSetDiscardClass.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/discard-class", predicates))
-			}
-			if !state.Classes[i].PoliceExceedActionSetCos.IsNull() && data.Classes[j].PoliceExceedActionSetCos.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/cos", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Classes[i].PoliceExceedActionDrop.IsNull() && state.Classes[i].PoliceExceedActionDrop.ValueBool() && data.Classes[j].PoliceExceedActionDrop.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/drop", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Classes[i].PoliceExceedActionTransmit.IsNull() && state.Classes[i].PoliceExceedActionTransmit.ValueBool() && data.Classes[j].PoliceExceedActionTransmit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/transmit", predicates))
-			}
-			if !state.Classes[i].PoliceConformActionSetQosGroup.IsNull() && data.Classes[j].PoliceConformActionSetQosGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/qos-group", predicates))
-			}
-			if !state.Classes[i].PoliceConformActionSetPrecedence.IsNull() && data.Classes[j].PoliceConformActionSetPrecedence.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/precedence", predicates))
-			}
-			if !state.Classes[i].PoliceConformActionSetMplsExperimentalTopmost.IsNull() && data.Classes[j].PoliceConformActionSetMplsExperimentalTopmost.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/mpls/experimental/topmost", predicates))
-			}
-			if !state.Classes[i].PoliceConformActionSetMplsExperimentalImposition.IsNull() && data.Classes[j].PoliceConformActionSetMplsExperimentalImposition.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/mpls/experimental/imposition", predicates))
-			}
-			if !state.Classes[i].PoliceConformActionSetDscp.IsNull() && data.Classes[j].PoliceConformActionSetDscp.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/dscp", predicates))
-			}
-			if !state.Classes[i].PoliceConformActionSetDiscardClass.IsNull() && data.Classes[j].PoliceConformActionSetDiscardClass.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/discard-class", predicates))
-			}
-			if !state.Classes[i].PoliceConformActionSetCos.IsNull() && data.Classes[j].PoliceConformActionSetCos.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/cos", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Classes[i].PoliceConformActionDrop.IsNull() && state.Classes[i].PoliceConformActionDrop.ValueBool() && data.Classes[j].PoliceConformActionDrop.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/drop", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Classes[i].PoliceConformActionTransmit.IsNull() && state.Classes[i].PoliceConformActionTransmit.ValueBool() && data.Classes[j].PoliceConformActionTransmit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/transmit", predicates))
-			}
-			if !state.Classes[i].PolicePeakBurstUnit.IsNull() && data.Classes[j].PolicePeakBurstUnit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/peak-burst/unit", predicates))
-			}
-			if !state.Classes[i].PolicePeakBurstValue.IsNull() && data.Classes[j].PolicePeakBurstValue.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/peak-burst/value", predicates))
-			}
-			if !state.Classes[i].PolicePeakRateUnit.IsNull() && data.Classes[j].PolicePeakRateUnit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/peak-rate/unit", predicates))
-			}
-			if !state.Classes[i].PolicePeakRateValue.IsNull() && data.Classes[j].PolicePeakRateValue.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/peak-rate/value", predicates))
-			}
-			if !state.Classes[i].PoliceBurstUnit.IsNull() && data.Classes[j].PoliceBurstUnit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/burst/unit", predicates))
-			}
-			if !state.Classes[i].PoliceBurstValue.IsNull() && data.Classes[j].PoliceBurstValue.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/burst/value", predicates))
-			}
-			if !state.Classes[i].PoliceRateUnit.IsNull() && data.Classes[j].PoliceRateUnit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/rate/unit", predicates))
-			}
-			if !state.Classes[i].PoliceRateValue.IsNull() && data.Classes[j].PoliceRateValue.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/rate/value", predicates))
-			}
-			if !state.Classes[i].BandwidthRemainingUnit.IsNull() && data.Classes[j].BandwidthRemainingUnit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/bandwidth-remaining/unit", predicates))
-			}
-			if !state.Classes[i].BandwidthRemainingValue.IsNull() && data.Classes[j].BandwidthRemainingValue.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/bandwidth-remaining/value", predicates))
-			}
-			if !state.Classes[i].BandwidthUnit.IsNull() && data.Classes[j].BandwidthUnit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/bandwidth/unit", predicates))
-			}
-			if !state.Classes[i].BandwidthValue.IsNull() && data.Classes[j].BandwidthValue.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/bandwidth/value", predicates))
-			}
+				if !state.Classes[i].PriorityLevel.IsNull() && data.Classes[j].PriorityLevel.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/priority/level", predicates))
+				}
+				if !state.Classes[i].PoliceViolateActionSetQosGroup.IsNull() && data.Classes[j].PoliceViolateActionSetQosGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/qos-group", predicates))
+				}
+				if !state.Classes[i].PoliceViolateActionSetPrecedence.IsNull() && data.Classes[j].PoliceViolateActionSetPrecedence.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/precedence", predicates))
+				}
+				if !state.Classes[i].PoliceViolateActionSetMplsExperimentalTopmost.IsNull() && data.Classes[j].PoliceViolateActionSetMplsExperimentalTopmost.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/mpls/experimental/topmost", predicates))
+				}
+				if !state.Classes[i].PoliceViolateActionSetMplsExperimentalImposition.IsNull() && data.Classes[j].PoliceViolateActionSetMplsExperimentalImposition.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/mpls/experimental/imposition", predicates))
+				}
+				if !state.Classes[i].PoliceViolateActionSetDscp.IsNull() && data.Classes[j].PoliceViolateActionSetDscp.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/dscp", predicates))
+				}
+				if !state.Classes[i].PoliceViolateActionSetDiscardClass.IsNull() && data.Classes[j].PoliceViolateActionSetDiscardClass.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/discard-class", predicates))
+				}
+				if !state.Classes[i].PoliceViolateActionSetCos.IsNull() && data.Classes[j].PoliceViolateActionSetCos.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/cos", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Classes[i].PoliceViolateActionDrop.IsNull() && state.Classes[i].PoliceViolateActionDrop.ValueBool() && data.Classes[j].PoliceViolateActionDrop.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/drop", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Classes[i].PoliceViolateActionTransmit.IsNull() && state.Classes[i].PoliceViolateActionTransmit.ValueBool() && data.Classes[j].PoliceViolateActionTransmit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/transmit", predicates))
+				}
+				if !state.Classes[i].PoliceExceedActionSetQosGroup.IsNull() && data.Classes[j].PoliceExceedActionSetQosGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/qos-group", predicates))
+				}
+				if !state.Classes[i].PoliceExceedActionSetPrecedence.IsNull() && data.Classes[j].PoliceExceedActionSetPrecedence.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/precedence", predicates))
+				}
+				if !state.Classes[i].PoliceExceedActionSetMplsExperimentalTopmost.IsNull() && data.Classes[j].PoliceExceedActionSetMplsExperimentalTopmost.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/mpls/experimental/topmost", predicates))
+				}
+				if !state.Classes[i].PoliceExceedActionSetMplsExperimentalImposition.IsNull() && data.Classes[j].PoliceExceedActionSetMplsExperimentalImposition.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/mpls/experimental/imposition", predicates))
+				}
+				if !state.Classes[i].PoliceExceedActionSetDscp.IsNull() && data.Classes[j].PoliceExceedActionSetDscp.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/dscp", predicates))
+				}
+				if !state.Classes[i].PoliceExceedActionSetDiscardClass.IsNull() && data.Classes[j].PoliceExceedActionSetDiscardClass.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/discard-class", predicates))
+				}
+				if !state.Classes[i].PoliceExceedActionSetCos.IsNull() && data.Classes[j].PoliceExceedActionSetCos.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/cos", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Classes[i].PoliceExceedActionDrop.IsNull() && state.Classes[i].PoliceExceedActionDrop.ValueBool() && data.Classes[j].PoliceExceedActionDrop.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/drop", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Classes[i].PoliceExceedActionTransmit.IsNull() && state.Classes[i].PoliceExceedActionTransmit.ValueBool() && data.Classes[j].PoliceExceedActionTransmit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/transmit", predicates))
+				}
+				if !state.Classes[i].PoliceConformActionSetQosGroup.IsNull() && data.Classes[j].PoliceConformActionSetQosGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/qos-group", predicates))
+				}
+				if !state.Classes[i].PoliceConformActionSetPrecedence.IsNull() && data.Classes[j].PoliceConformActionSetPrecedence.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/precedence", predicates))
+				}
+				if !state.Classes[i].PoliceConformActionSetMplsExperimentalTopmost.IsNull() && data.Classes[j].PoliceConformActionSetMplsExperimentalTopmost.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/mpls/experimental/topmost", predicates))
+				}
+				if !state.Classes[i].PoliceConformActionSetMplsExperimentalImposition.IsNull() && data.Classes[j].PoliceConformActionSetMplsExperimentalImposition.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/mpls/experimental/imposition", predicates))
+				}
+				if !state.Classes[i].PoliceConformActionSetDscp.IsNull() && data.Classes[j].PoliceConformActionSetDscp.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/dscp", predicates))
+				}
+				if !state.Classes[i].PoliceConformActionSetDiscardClass.IsNull() && data.Classes[j].PoliceConformActionSetDiscardClass.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/discard-class", predicates))
+				}
+				if !state.Classes[i].PoliceConformActionSetCos.IsNull() && data.Classes[j].PoliceConformActionSetCos.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/cos", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Classes[i].PoliceConformActionDrop.IsNull() && state.Classes[i].PoliceConformActionDrop.ValueBool() && data.Classes[j].PoliceConformActionDrop.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/drop", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Classes[i].PoliceConformActionTransmit.IsNull() && state.Classes[i].PoliceConformActionTransmit.ValueBool() && data.Classes[j].PoliceConformActionTransmit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/transmit", predicates))
+				}
+				if !state.Classes[i].PolicePeakBurstUnit.IsNull() && data.Classes[j].PolicePeakBurstUnit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/peak-burst/unit", predicates))
+				}
+				if !state.Classes[i].PolicePeakBurstValue.IsNull() && data.Classes[j].PolicePeakBurstValue.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/peak-burst/value", predicates))
+				}
+				if !state.Classes[i].PolicePeakRateUnit.IsNull() && data.Classes[j].PolicePeakRateUnit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/peak-rate/unit", predicates))
+				}
+				if !state.Classes[i].PolicePeakRateValue.IsNull() && data.Classes[j].PolicePeakRateValue.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/peak-rate/value", predicates))
+				}
+				if !state.Classes[i].PoliceBurstUnit.IsNull() && data.Classes[j].PoliceBurstUnit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/burst/unit", predicates))
+				}
+				if !state.Classes[i].PoliceBurstValue.IsNull() && data.Classes[j].PoliceBurstValue.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/burst/value", predicates))
+				}
+				if !state.Classes[i].PoliceRateUnit.IsNull() && data.Classes[j].PoliceRateUnit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/rate/unit", predicates))
+				}
+				if !state.Classes[i].PoliceRateValue.IsNull() && data.Classes[j].PoliceRateValue.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/police/rate/value", predicates))
+				}
+				if !state.Classes[i].BandwidthRemainingUnit.IsNull() && data.Classes[j].BandwidthRemainingUnit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/bandwidth-remaining/unit", predicates))
+				}
+				if !state.Classes[i].BandwidthRemainingValue.IsNull() && data.Classes[j].BandwidthRemainingValue.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/bandwidth-remaining/value", predicates))
+				}
+				if !state.Classes[i].BandwidthUnit.IsNull() && data.Classes[j].BandwidthUnit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/bandwidth/unit", predicates))
+				}
+				if !state.Classes[i].BandwidthValue.IsNull() && data.Classes[j].BandwidthValue.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/class%v/bandwidth/value", predicates))
+				}
 				break
 			}
 		}
@@ -3095,7 +3098,7 @@ func (data *PolicyMapQoS) addDeletedItemsXML(ctx context.Context, state PolicyMa
 		}
 	}
 	if !state.Description.IsNull() && data.Description.IsNull() {
-		deletePath := state.getXPath()+"/description"
+		deletePath := state.getXPath() + "/description"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -3113,8 +3116,8 @@ func (data *PolicyMapQoS) addDeletedItemsXML(ctx context.Context, state PolicyMa
 func (data *PolicyMapQoS) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.Classes {
-		keys := [...]string{ "name", "type",  }
-		keyValues := [...]string{ data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString(),  }
+		keys := [...]string{"name", "type"}
+		keyValues := [...]string{data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

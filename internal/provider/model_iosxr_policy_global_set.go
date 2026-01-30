@@ -23,18 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
-	"reflect"
-	"sort"
-	"strconv"
-	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
@@ -43,13 +39,13 @@ import (
 type PolicyGlobalSet struct {
 	Device types.String `tfsdk:"device"`
 	Id     types.String `tfsdk:"id"`
-	Rpl types.String `tfsdk:"rpl"`
+	Rpl    types.String `tfsdk:"rpl"`
 }
 
 type PolicyGlobalSetData struct {
 	Device types.String `tfsdk:"device"`
 	Id     types.String `tfsdk:"id"`
-	Rpl types.String `tfsdk:"rpl"`
+	Rpl    types.String `tfsdk:"rpl"`
 }
 
 // End of section. //template:end types
@@ -105,7 +101,7 @@ func (data *PolicyGlobalSet) updateFromBody(ctx context.Context, res []byte) {
 func (data PolicyGlobalSet) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/policy-global-set", data.Rpl.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/policy-global-set", data.Rpl.ValueString())
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -118,7 +114,7 @@ func (data PolicyGlobalSet) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *PolicyGlobalSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/policy-global-set"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/policy-global-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
@@ -133,7 +129,7 @@ func (data *PolicyGlobalSet) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"policy-global-set"); value.Exists() {
+	if value := res.Get(prefix + "policy-global-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
@@ -146,7 +142,7 @@ func (data *PolicyGlobalSetData) fromBody(ctx context.Context, res gjson.Result)
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"policy-global-set"); value.Exists() {
+	if value := res.Get(prefix + "policy-global-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
@@ -155,7 +151,7 @@ func (data *PolicyGlobalSetData) fromBody(ctx context.Context, res gjson.Result)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *PolicyGlobalSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/policy-global-set"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/policy-global-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
@@ -164,7 +160,7 @@ func (data *PolicyGlobalSet) fromBodyXML(ctx context.Context, res xmldot.Result)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *PolicyGlobalSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/policy-global-set"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/policy-global-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
@@ -208,7 +204,7 @@ func (data *PolicyGlobalSet) addDeletedItemsXML(ctx context.Context, state Polic
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
-		deletePath := state.getXPath()+"/policy-global-set"
+		deletePath := state.getXPath() + "/policy-global-set"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true

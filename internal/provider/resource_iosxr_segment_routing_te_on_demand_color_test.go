@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -73,23 +75,23 @@ func TestAccIosxrSegmentRoutingTEOnDemandColor(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrSegmentRoutingTEOnDemandColorPrerequisitesConfig+testAccIosxrSegmentRoutingTEOnDemandColorConfig_minimum(),
+			Config: testAccIosxrSegmentRoutingTEOnDemandColorPrerequisitesConfig + testAccIosxrSegmentRoutingTEOnDemandColorConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrSegmentRoutingTEOnDemandColorPrerequisitesConfig+testAccIosxrSegmentRoutingTEOnDemandColorConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrSegmentRoutingTEOnDemandColorPrerequisitesConfig + testAccIosxrSegmentRoutingTEOnDemandColorConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_segment_routing_te_on_demand_color.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_segment_routing_te_on_demand_color.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrSegmentRoutingTEOnDemandColorImportStateIdFunc("iosxr_segment_routing_te_on_demand_color.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 

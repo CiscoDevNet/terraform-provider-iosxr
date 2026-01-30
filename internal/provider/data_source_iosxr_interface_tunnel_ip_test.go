@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -32,8 +33,8 @@ import (
 
 func TestAccDataSourceIosxrInterfaceTunnelIP(t *testing.T) {
 	if os.Getenv("XRV9K") == "" && os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
-        t.Skip("skipping test, set environment variable XRV9K or NCS or C8000")
-    }
+		t.Skip("skipping test, set environment variable XRV9K or NCS or C8000")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_tunnel_ip.test", "shutdown", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_tunnel_ip.test", "mtu", "1400"))
@@ -101,8 +102,8 @@ func TestAccDataSourceIosxrInterfaceTunnelIP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrInterfaceTunnelIPPrerequisitesConfig+testAccDataSourceIosxrInterfaceTunnelIPConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrInterfaceTunnelIPPrerequisitesConfig + testAccDataSourceIosxrInterfaceTunnelIPConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

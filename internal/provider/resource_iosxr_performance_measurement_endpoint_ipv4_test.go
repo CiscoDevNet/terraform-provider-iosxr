@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -47,23 +49,23 @@ func TestAccIosxrPerformanceMeasurementEndpointIPv4(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrPerformanceMeasurementEndpointIPv4PrerequisitesConfig+testAccIosxrPerformanceMeasurementEndpointIPv4Config_minimum(),
+			Config: testAccIosxrPerformanceMeasurementEndpointIPv4PrerequisitesConfig + testAccIosxrPerformanceMeasurementEndpointIPv4Config_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrPerformanceMeasurementEndpointIPv4PrerequisitesConfig+testAccIosxrPerformanceMeasurementEndpointIPv4Config_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrPerformanceMeasurementEndpointIPv4PrerequisitesConfig + testAccIosxrPerformanceMeasurementEndpointIPv4Config_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_performance_measurement_endpoint_ipv4.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_performance_measurement_endpoint_ipv4.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrPerformanceMeasurementEndpointIPv4ImportStateIdFunc("iosxr_performance_measurement_endpoint_ipv4.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -77,7 +79,7 @@ func iosxrPerformanceMeasurementEndpointIPv4ImportStateIdFunc(resourceName strin
 		Address := primary.Attributes["address"]
 		VrfName := primary.Attributes["vrf_name"]
 
-		return fmt.Sprintf("%s,%s", Address,VrfName), nil
+		return fmt.Sprintf("%s,%s", Address, VrfName), nil
 	}
 }
 

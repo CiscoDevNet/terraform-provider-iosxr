@@ -42,7 +42,7 @@ func TestAccDataSourceIosxrNetconfAgentTTY(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrNetconfAgentTTYConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

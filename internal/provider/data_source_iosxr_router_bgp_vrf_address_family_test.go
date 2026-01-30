@@ -112,8 +112,8 @@ func TestAccDataSourceIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig+testAccDataSourceIosxrRouterBGPVRFAddressFamilyConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig + testAccDataSourceIosxrRouterBGPVRFAddressFamilyConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

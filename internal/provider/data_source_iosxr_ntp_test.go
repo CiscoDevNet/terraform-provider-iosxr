@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -32,8 +33,8 @@ import (
 
 func TestAccDataSourceIosxrNTP(t *testing.T) {
 	if os.Getenv("NCS") == "" && os.Getenv("XRV9K") == "" && os.Getenv("C8000") == "" {
-        t.Skip("skipping test, set environment variable NCS or XRV9K or C8000")
-    }
+		t.Skip("skipping test, set environment variable NCS or XRV9K or C8000")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv4_precedence", "network"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv6_dscp", "af11"))
@@ -145,7 +146,7 @@ func TestAccDataSourceIosxrNTP(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrNTPConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

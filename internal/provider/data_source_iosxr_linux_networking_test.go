@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -32,8 +33,8 @@ import (
 
 func TestAccDataSourceIosxrLinuxNetworking(t *testing.T) {
 	if os.Getenv("LINUX") == "" {
-        t.Skip("skipping test, set environment variable LINUX")
-    }
+		t.Skip("skipping test, set environment variable LINUX")
+	}
 	var checks []resource.TestCheckFunc
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_linux_networking.test", "statistics_synchronization_sixty_seconds", "true"))
@@ -52,7 +53,7 @@ func TestAccDataSourceIosxrLinuxNetworking(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrLinuxNetworkingConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

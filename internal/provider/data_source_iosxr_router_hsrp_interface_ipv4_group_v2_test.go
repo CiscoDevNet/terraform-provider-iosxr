@@ -52,8 +52,8 @@ func TestAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV2(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV2PrerequisitesConfig+testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV2Config(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV2PrerequisitesConfig + testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV2Config(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

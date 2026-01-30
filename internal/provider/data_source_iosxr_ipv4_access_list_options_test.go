@@ -43,7 +43,7 @@ func TestAccDataSourceIosxrIPv4AccessListOptions(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrIPv4AccessListOptionsConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

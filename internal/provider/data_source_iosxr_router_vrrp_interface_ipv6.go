@@ -23,19 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/netascode/go-gnmi"
-	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -52,7 +47,7 @@ func NewRouterVRRPInterfaceIPv6DataSource() datasource.DataSource {
 	return &RouterVRRPInterfaceIPv6DataSource{}
 }
 
-type RouterVRRPInterfaceIPv6DataSource struct{
+type RouterVRRPInterfaceIPv6DataSource struct {
 	data *IosxrProviderData
 }
 
@@ -251,7 +246,6 @@ func (d *RouterVRRPInterfaceIPv6DataSource) Read(ctx context.Context, req dataso
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
-
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

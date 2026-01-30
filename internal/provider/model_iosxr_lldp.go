@@ -23,78 +23,75 @@ package provider
 import (
 	"context"
 	"fmt"
-	"reflect"
-	"sort"
 	"strconv"
-	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type LLDP struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
-	Holdtime types.Int64 `tfsdk:"holdtime"`
-	Timer types.Int64 `tfsdk:"timer"`
-	Reinit types.Int64 `tfsdk:"reinit"`
-	SystemName types.String `tfsdk:"system_name"`
-	SystemDescription types.String `tfsdk:"system_description"`
-	ChassisId types.String `tfsdk:"chassis_id"`
-	ChassisIdTypeChassisComponent types.Bool `tfsdk:"chassis_id_type_chassis_component"`
-	ChassisIdTypeInterfaceAlias types.Bool `tfsdk:"chassis_id_type_interface_alias"`
-	ChassisIdTypePortComponent types.Bool `tfsdk:"chassis_id_type_port_component"`
-	ChassisIdTypeMacAddress types.Bool `tfsdk:"chassis_id_type_mac_address"`
-	ChassisIdTypeNetworkAddress types.Bool `tfsdk:"chassis_id_type_network_address"`
-	ChassisIdTypeInterfaceName types.Bool `tfsdk:"chassis_id_type_interface_name"`
-	ChassisIdTypeLocal types.Bool `tfsdk:"chassis_id_type_local"`
-	SubinterfacesEnable types.Bool `tfsdk:"subinterfaces_enable"`
-	SubinterfacesTagged types.Bool `tfsdk:"subinterfaces_tagged"`
-	ManagementEnable types.Bool `tfsdk:"management_enable"`
-	PriorityaddrEnable types.Bool `tfsdk:"priorityaddr_enable"`
-	ExtendedShowWidthEnable types.Bool `tfsdk:"extended_show_width_enable"`
-	TlvSelectManagementAddressDisable types.Bool `tfsdk:"tlv_select_management_address_disable"`
-	TlvSelectPortDescriptionDisable types.Bool `tfsdk:"tlv_select_port_description_disable"`
-	TlvSelectSystemCapabilitiesDisable types.Bool `tfsdk:"tlv_select_system_capabilities_disable"`
-	TlvSelectSystemDescriptionDisable types.Bool `tfsdk:"tlv_select_system_description_disable"`
-	TlvSelectSystemNameDisable types.Bool `tfsdk:"tlv_select_system_name_disable"`
+	Device                             types.String `tfsdk:"device"`
+	Id                                 types.String `tfsdk:"id"`
+	DeleteMode                         types.String `tfsdk:"delete_mode"`
+	Holdtime                           types.Int64  `tfsdk:"holdtime"`
+	Timer                              types.Int64  `tfsdk:"timer"`
+	Reinit                             types.Int64  `tfsdk:"reinit"`
+	SystemName                         types.String `tfsdk:"system_name"`
+	SystemDescription                  types.String `tfsdk:"system_description"`
+	ChassisId                          types.String `tfsdk:"chassis_id"`
+	ChassisIdTypeChassisComponent      types.Bool   `tfsdk:"chassis_id_type_chassis_component"`
+	ChassisIdTypeInterfaceAlias        types.Bool   `tfsdk:"chassis_id_type_interface_alias"`
+	ChassisIdTypePortComponent         types.Bool   `tfsdk:"chassis_id_type_port_component"`
+	ChassisIdTypeMacAddress            types.Bool   `tfsdk:"chassis_id_type_mac_address"`
+	ChassisIdTypeNetworkAddress        types.Bool   `tfsdk:"chassis_id_type_network_address"`
+	ChassisIdTypeInterfaceName         types.Bool   `tfsdk:"chassis_id_type_interface_name"`
+	ChassisIdTypeLocal                 types.Bool   `tfsdk:"chassis_id_type_local"`
+	SubinterfacesEnable                types.Bool   `tfsdk:"subinterfaces_enable"`
+	SubinterfacesTagged                types.Bool   `tfsdk:"subinterfaces_tagged"`
+	ManagementEnable                   types.Bool   `tfsdk:"management_enable"`
+	PriorityaddrEnable                 types.Bool   `tfsdk:"priorityaddr_enable"`
+	ExtendedShowWidthEnable            types.Bool   `tfsdk:"extended_show_width_enable"`
+	TlvSelectManagementAddressDisable  types.Bool   `tfsdk:"tlv_select_management_address_disable"`
+	TlvSelectPortDescriptionDisable    types.Bool   `tfsdk:"tlv_select_port_description_disable"`
+	TlvSelectSystemCapabilitiesDisable types.Bool   `tfsdk:"tlv_select_system_capabilities_disable"`
+	TlvSelectSystemDescriptionDisable  types.Bool   `tfsdk:"tlv_select_system_description_disable"`
+	TlvSelectSystemNameDisable         types.Bool   `tfsdk:"tlv_select_system_name_disable"`
 }
 
 type LLDPData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	Holdtime types.Int64 `tfsdk:"holdtime"`
-	Timer types.Int64 `tfsdk:"timer"`
-	Reinit types.Int64 `tfsdk:"reinit"`
-	SystemName types.String `tfsdk:"system_name"`
-	SystemDescription types.String `tfsdk:"system_description"`
-	ChassisId types.String `tfsdk:"chassis_id"`
-	ChassisIdTypeChassisComponent types.Bool `tfsdk:"chassis_id_type_chassis_component"`
-	ChassisIdTypeInterfaceAlias types.Bool `tfsdk:"chassis_id_type_interface_alias"`
-	ChassisIdTypePortComponent types.Bool `tfsdk:"chassis_id_type_port_component"`
-	ChassisIdTypeMacAddress types.Bool `tfsdk:"chassis_id_type_mac_address"`
-	ChassisIdTypeNetworkAddress types.Bool `tfsdk:"chassis_id_type_network_address"`
-	ChassisIdTypeInterfaceName types.Bool `tfsdk:"chassis_id_type_interface_name"`
-	ChassisIdTypeLocal types.Bool `tfsdk:"chassis_id_type_local"`
-	SubinterfacesEnable types.Bool `tfsdk:"subinterfaces_enable"`
-	SubinterfacesTagged types.Bool `tfsdk:"subinterfaces_tagged"`
-	ManagementEnable types.Bool `tfsdk:"management_enable"`
-	PriorityaddrEnable types.Bool `tfsdk:"priorityaddr_enable"`
-	ExtendedShowWidthEnable types.Bool `tfsdk:"extended_show_width_enable"`
-	TlvSelectManagementAddressDisable types.Bool `tfsdk:"tlv_select_management_address_disable"`
-	TlvSelectPortDescriptionDisable types.Bool `tfsdk:"tlv_select_port_description_disable"`
-	TlvSelectSystemCapabilitiesDisable types.Bool `tfsdk:"tlv_select_system_capabilities_disable"`
-	TlvSelectSystemDescriptionDisable types.Bool `tfsdk:"tlv_select_system_description_disable"`
-	TlvSelectSystemNameDisable types.Bool `tfsdk:"tlv_select_system_name_disable"`
+	Device                             types.String `tfsdk:"device"`
+	Id                                 types.String `tfsdk:"id"`
+	Holdtime                           types.Int64  `tfsdk:"holdtime"`
+	Timer                              types.Int64  `tfsdk:"timer"`
+	Reinit                             types.Int64  `tfsdk:"reinit"`
+	SystemName                         types.String `tfsdk:"system_name"`
+	SystemDescription                  types.String `tfsdk:"system_description"`
+	ChassisId                          types.String `tfsdk:"chassis_id"`
+	ChassisIdTypeChassisComponent      types.Bool   `tfsdk:"chassis_id_type_chassis_component"`
+	ChassisIdTypeInterfaceAlias        types.Bool   `tfsdk:"chassis_id_type_interface_alias"`
+	ChassisIdTypePortComponent         types.Bool   `tfsdk:"chassis_id_type_port_component"`
+	ChassisIdTypeMacAddress            types.Bool   `tfsdk:"chassis_id_type_mac_address"`
+	ChassisIdTypeNetworkAddress        types.Bool   `tfsdk:"chassis_id_type_network_address"`
+	ChassisIdTypeInterfaceName         types.Bool   `tfsdk:"chassis_id_type_interface_name"`
+	ChassisIdTypeLocal                 types.Bool   `tfsdk:"chassis_id_type_local"`
+	SubinterfacesEnable                types.Bool   `tfsdk:"subinterfaces_enable"`
+	SubinterfacesTagged                types.Bool   `tfsdk:"subinterfaces_tagged"`
+	ManagementEnable                   types.Bool   `tfsdk:"management_enable"`
+	PriorityaddrEnable                 types.Bool   `tfsdk:"priorityaddr_enable"`
+	ExtendedShowWidthEnable            types.Bool   `tfsdk:"extended_show_width_enable"`
+	TlvSelectManagementAddressDisable  types.Bool   `tfsdk:"tlv_select_management_address_disable"`
+	TlvSelectPortDescriptionDisable    types.Bool   `tfsdk:"tlv_select_port_description_disable"`
+	TlvSelectSystemCapabilitiesDisable types.Bool   `tfsdk:"tlv_select_system_capabilities_disable"`
+	TlvSelectSystemDescriptionDisable  types.Bool   `tfsdk:"tlv_select_system_description_disable"`
+	TlvSelectSystemNameDisable         types.Bool   `tfsdk:"tlv_select_system_name_disable"`
 }
 
 // End of section. //template:end types
@@ -267,158 +264,141 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.ChassisId = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "chassis-id-type.chassis-component"); !data.ChassisIdTypeChassisComponent.IsNull() {
-		if value.Exists() {
-			data.ChassisIdTypeChassisComponent = types.BoolValue(true)
-		} else {
-			data.ChassisIdTypeChassisComponent = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "chassis-id-type.chassis-component"); value.Exists() {
+		data.ChassisIdTypeChassisComponent = types.BoolValue(true)
 	} else {
-		data.ChassisIdTypeChassisComponent = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ChassisIdTypeChassisComponent.IsNull() {
+			data.ChassisIdTypeChassisComponent = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "chassis-id-type.interface-alias"); !data.ChassisIdTypeInterfaceAlias.IsNull() {
-		if value.Exists() {
-			data.ChassisIdTypeInterfaceAlias = types.BoolValue(true)
-		} else {
-			data.ChassisIdTypeInterfaceAlias = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "chassis-id-type.interface-alias"); value.Exists() {
+		data.ChassisIdTypeInterfaceAlias = types.BoolValue(true)
 	} else {
-		data.ChassisIdTypeInterfaceAlias = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ChassisIdTypeInterfaceAlias.IsNull() {
+			data.ChassisIdTypeInterfaceAlias = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "chassis-id-type.port-component"); !data.ChassisIdTypePortComponent.IsNull() {
-		if value.Exists() {
-			data.ChassisIdTypePortComponent = types.BoolValue(true)
-		} else {
-			data.ChassisIdTypePortComponent = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "chassis-id-type.port-component"); value.Exists() {
+		data.ChassisIdTypePortComponent = types.BoolValue(true)
 	} else {
-		data.ChassisIdTypePortComponent = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ChassisIdTypePortComponent.IsNull() {
+			data.ChassisIdTypePortComponent = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "chassis-id-type.mac-address"); !data.ChassisIdTypeMacAddress.IsNull() {
-		if value.Exists() {
-			data.ChassisIdTypeMacAddress = types.BoolValue(true)
-		} else {
-			data.ChassisIdTypeMacAddress = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "chassis-id-type.mac-address"); value.Exists() {
+		data.ChassisIdTypeMacAddress = types.BoolValue(true)
 	} else {
-		data.ChassisIdTypeMacAddress = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ChassisIdTypeMacAddress.IsNull() {
+			data.ChassisIdTypeMacAddress = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "chassis-id-type.network-address"); !data.ChassisIdTypeNetworkAddress.IsNull() {
-		if value.Exists() {
-			data.ChassisIdTypeNetworkAddress = types.BoolValue(true)
-		} else {
-			data.ChassisIdTypeNetworkAddress = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "chassis-id-type.network-address"); value.Exists() {
+		data.ChassisIdTypeNetworkAddress = types.BoolValue(true)
 	} else {
-		data.ChassisIdTypeNetworkAddress = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ChassisIdTypeNetworkAddress.IsNull() {
+			data.ChassisIdTypeNetworkAddress = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "chassis-id-type.interface-name"); !data.ChassisIdTypeInterfaceName.IsNull() {
-		if value.Exists() {
-			data.ChassisIdTypeInterfaceName = types.BoolValue(true)
-		} else {
-			data.ChassisIdTypeInterfaceName = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "chassis-id-type.interface-name"); value.Exists() {
+		data.ChassisIdTypeInterfaceName = types.BoolValue(true)
 	} else {
-		data.ChassisIdTypeInterfaceName = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ChassisIdTypeInterfaceName.IsNull() {
+			data.ChassisIdTypeInterfaceName = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "chassis-id-type.local"); !data.ChassisIdTypeLocal.IsNull() {
-		if value.Exists() {
-			data.ChassisIdTypeLocal = types.BoolValue(true)
-		} else {
-			data.ChassisIdTypeLocal = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "chassis-id-type.local"); value.Exists() {
+		data.ChassisIdTypeLocal = types.BoolValue(true)
 	} else {
-		data.ChassisIdTypeLocal = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ChassisIdTypeLocal.IsNull() {
+			data.ChassisIdTypeLocal = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "subinterfaces.enable"); !data.SubinterfacesEnable.IsNull() {
-		if value.Exists() {
-			data.SubinterfacesEnable = types.BoolValue(true)
-		} else {
-			data.SubinterfacesEnable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "subinterfaces.enable"); value.Exists() {
+		data.SubinterfacesEnable = types.BoolValue(true)
 	} else {
-		data.SubinterfacesEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SubinterfacesEnable.IsNull() {
+			data.SubinterfacesEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "subinterfaces-tagged"); !data.SubinterfacesTagged.IsNull() {
-		if value.Exists() {
-			data.SubinterfacesTagged = types.BoolValue(true)
-		} else {
-			data.SubinterfacesTagged = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "subinterfaces-tagged"); value.Exists() {
+		data.SubinterfacesTagged = types.BoolValue(true)
 	} else {
-		data.SubinterfacesTagged = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SubinterfacesTagged.IsNull() {
+			data.SubinterfacesTagged = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "management.enable"); !data.ManagementEnable.IsNull() {
-		if value.Exists() {
-			data.ManagementEnable = types.BoolValue(true)
-		} else {
-			data.ManagementEnable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "management.enable"); value.Exists() {
+		data.ManagementEnable = types.BoolValue(true)
 	} else {
-		data.ManagementEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ManagementEnable.IsNull() {
+			data.ManagementEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "priorityaddr.enable"); !data.PriorityaddrEnable.IsNull() {
-		if value.Exists() {
-			data.PriorityaddrEnable = types.BoolValue(true)
-		} else {
-			data.PriorityaddrEnable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "priorityaddr.enable"); value.Exists() {
+		data.PriorityaddrEnable = types.BoolValue(true)
 	} else {
-		data.PriorityaddrEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.PriorityaddrEnable.IsNull() {
+			data.PriorityaddrEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "extended-show-width.enable"); !data.ExtendedShowWidthEnable.IsNull() {
-		if value.Exists() {
-			data.ExtendedShowWidthEnable = types.BoolValue(true)
-		} else {
-			data.ExtendedShowWidthEnable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "extended-show-width.enable"); value.Exists() {
+		data.ExtendedShowWidthEnable = types.BoolValue(true)
 	} else {
-		data.ExtendedShowWidthEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ExtendedShowWidthEnable.IsNull() {
+			data.ExtendedShowWidthEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "tlv-select.management-address.disable"); !data.TlvSelectManagementAddressDisable.IsNull() {
-		if value.Exists() {
-			data.TlvSelectManagementAddressDisable = types.BoolValue(true)
-		} else {
-			data.TlvSelectManagementAddressDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "tlv-select.management-address.disable"); value.Exists() {
+		data.TlvSelectManagementAddressDisable = types.BoolValue(true)
 	} else {
-		data.TlvSelectManagementAddressDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TlvSelectManagementAddressDisable.IsNull() {
+			data.TlvSelectManagementAddressDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "tlv-select.port-description.disable"); !data.TlvSelectPortDescriptionDisable.IsNull() {
-		if value.Exists() {
-			data.TlvSelectPortDescriptionDisable = types.BoolValue(true)
-		} else {
-			data.TlvSelectPortDescriptionDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "tlv-select.port-description.disable"); value.Exists() {
+		data.TlvSelectPortDescriptionDisable = types.BoolValue(true)
 	} else {
-		data.TlvSelectPortDescriptionDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TlvSelectPortDescriptionDisable.IsNull() {
+			data.TlvSelectPortDescriptionDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "tlv-select.system-capabilities.disable"); !data.TlvSelectSystemCapabilitiesDisable.IsNull() {
-		if value.Exists() {
-			data.TlvSelectSystemCapabilitiesDisable = types.BoolValue(true)
-		} else {
-			data.TlvSelectSystemCapabilitiesDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "tlv-select.system-capabilities.disable"); value.Exists() {
+		data.TlvSelectSystemCapabilitiesDisable = types.BoolValue(true)
 	} else {
-		data.TlvSelectSystemCapabilitiesDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TlvSelectSystemCapabilitiesDisable.IsNull() {
+			data.TlvSelectSystemCapabilitiesDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "tlv-select.system-description.disable"); !data.TlvSelectSystemDescriptionDisable.IsNull() {
-		if value.Exists() {
-			data.TlvSelectSystemDescriptionDisable = types.BoolValue(true)
-		} else {
-			data.TlvSelectSystemDescriptionDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "tlv-select.system-description.disable"); value.Exists() {
+		data.TlvSelectSystemDescriptionDisable = types.BoolValue(true)
 	} else {
-		data.TlvSelectSystemDescriptionDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TlvSelectSystemDescriptionDisable.IsNull() {
+			data.TlvSelectSystemDescriptionDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "tlv-select.system-name.disable"); !data.TlvSelectSystemNameDisable.IsNull() {
-		if value.Exists() {
-			data.TlvSelectSystemNameDisable = types.BoolValue(true)
-		} else {
-			data.TlvSelectSystemNameDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "tlv-select.system-name.disable"); value.Exists() {
+		data.TlvSelectSystemNameDisable = types.BoolValue(true)
 	} else {
-		data.TlvSelectSystemNameDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TlvSelectSystemNameDisable.IsNull() {
+			data.TlvSelectSystemNameDisable = types.BoolNull()
+		}
 	}
 }
 
@@ -428,106 +408,106 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 func (data LLDP) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.Holdtime.IsNull() && !data.Holdtime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/holdtime", strconv.FormatInt(data.Holdtime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/holdtime", strconv.FormatInt(data.Holdtime.ValueInt64(), 10))
 	}
 	if !data.Timer.IsNull() && !data.Timer.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/timer", strconv.FormatInt(data.Timer.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timer", strconv.FormatInt(data.Timer.ValueInt64(), 10))
 	}
 	if !data.Reinit.IsNull() && !data.Reinit.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/reinit", strconv.FormatInt(data.Reinit.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/reinit", strconv.FormatInt(data.Reinit.ValueInt64(), 10))
 	}
 	if !data.SystemName.IsNull() && !data.SystemName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/system-name", data.SystemName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/system-name", data.SystemName.ValueString())
 	}
 	if !data.SystemDescription.IsNull() && !data.SystemDescription.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/system-description", data.SystemDescription.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/system-description", data.SystemDescription.ValueString())
 	}
 	if !data.ChassisId.IsNull() && !data.ChassisId.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/chassis-id", data.ChassisId.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/chassis-id", data.ChassisId.ValueString())
 	}
 	if !data.ChassisIdTypeChassisComponent.IsNull() && !data.ChassisIdTypeChassisComponent.IsUnknown() {
 		if data.ChassisIdTypeChassisComponent.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/chassis-id-type/chassis-component", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/chassis-id-type/chassis-component", "")
 		}
 	}
 	if !data.ChassisIdTypeInterfaceAlias.IsNull() && !data.ChassisIdTypeInterfaceAlias.IsUnknown() {
 		if data.ChassisIdTypeInterfaceAlias.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/chassis-id-type/interface-alias", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/chassis-id-type/interface-alias", "")
 		}
 	}
 	if !data.ChassisIdTypePortComponent.IsNull() && !data.ChassisIdTypePortComponent.IsUnknown() {
 		if data.ChassisIdTypePortComponent.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/chassis-id-type/port-component", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/chassis-id-type/port-component", "")
 		}
 	}
 	if !data.ChassisIdTypeMacAddress.IsNull() && !data.ChassisIdTypeMacAddress.IsUnknown() {
 		if data.ChassisIdTypeMacAddress.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/chassis-id-type/mac-address", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/chassis-id-type/mac-address", "")
 		}
 	}
 	if !data.ChassisIdTypeNetworkAddress.IsNull() && !data.ChassisIdTypeNetworkAddress.IsUnknown() {
 		if data.ChassisIdTypeNetworkAddress.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/chassis-id-type/network-address", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/chassis-id-type/network-address", "")
 		}
 	}
 	if !data.ChassisIdTypeInterfaceName.IsNull() && !data.ChassisIdTypeInterfaceName.IsUnknown() {
 		if data.ChassisIdTypeInterfaceName.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/chassis-id-type/interface-name", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/chassis-id-type/interface-name", "")
 		}
 	}
 	if !data.ChassisIdTypeLocal.IsNull() && !data.ChassisIdTypeLocal.IsUnknown() {
 		if data.ChassisIdTypeLocal.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/chassis-id-type/local", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/chassis-id-type/local", "")
 		}
 	}
 	if !data.SubinterfacesEnable.IsNull() && !data.SubinterfacesEnable.IsUnknown() {
 		if data.SubinterfacesEnable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/subinterfaces/enable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/subinterfaces/enable", "")
 		}
 	}
 	if !data.SubinterfacesTagged.IsNull() && !data.SubinterfacesTagged.IsUnknown() {
 		if data.SubinterfacesTagged.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/subinterfaces-tagged", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/subinterfaces-tagged", "")
 		}
 	}
 	if !data.ManagementEnable.IsNull() && !data.ManagementEnable.IsUnknown() {
 		if data.ManagementEnable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/management/enable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management/enable", "")
 		}
 	}
 	if !data.PriorityaddrEnable.IsNull() && !data.PriorityaddrEnable.IsUnknown() {
 		if data.PriorityaddrEnable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/priorityaddr/enable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/priorityaddr/enable", "")
 		}
 	}
 	if !data.ExtendedShowWidthEnable.IsNull() && !data.ExtendedShowWidthEnable.IsUnknown() {
 		if data.ExtendedShowWidthEnable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/extended-show-width/enable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/extended-show-width/enable", "")
 		}
 	}
 	if !data.TlvSelectManagementAddressDisable.IsNull() && !data.TlvSelectManagementAddressDisable.IsUnknown() {
 		if data.TlvSelectManagementAddressDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/tlv-select/management-address/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/tlv-select/management-address/disable", "")
 		}
 	}
 	if !data.TlvSelectPortDescriptionDisable.IsNull() && !data.TlvSelectPortDescriptionDisable.IsUnknown() {
 		if data.TlvSelectPortDescriptionDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/tlv-select/port-description/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/tlv-select/port-description/disable", "")
 		}
 	}
 	if !data.TlvSelectSystemCapabilitiesDisable.IsNull() && !data.TlvSelectSystemCapabilitiesDisable.IsUnknown() {
 		if data.TlvSelectSystemCapabilitiesDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/tlv-select/system-capabilities/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/tlv-select/system-capabilities/disable", "")
 		}
 	}
 	if !data.TlvSelectSystemDescriptionDisable.IsNull() && !data.TlvSelectSystemDescriptionDisable.IsUnknown() {
 		if data.TlvSelectSystemDescriptionDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/tlv-select/system-description/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/tlv-select/system-description/disable", "")
 		}
 	}
 	if !data.TlvSelectSystemNameDisable.IsNull() && !data.TlvSelectSystemNameDisable.IsUnknown() {
 		if data.TlvSelectSystemNameDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/tlv-select/system-name/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/tlv-select/system-name/disable", "")
 		}
 	}
 	bodyString, err := body.String()
@@ -541,37 +521,37 @@ func (data LLDP) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdtime"); value.Exists() {
 		data.Holdtime = types.Int64Value(value.Int())
 	} else if data.Holdtime.IsNull() {
 		data.Holdtime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer"); value.Exists() {
 		data.Timer = types.Int64Value(value.Int())
 	} else if data.Timer.IsNull() {
 		data.Timer = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/reinit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/reinit"); value.Exists() {
 		data.Reinit = types.Int64Value(value.Int())
 	} else if data.Reinit.IsNull() {
 		data.Reinit = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system-name"); value.Exists() {
 		data.SystemName = types.StringValue(value.String())
 	} else if data.SystemName.IsNull() {
 		data.SystemName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system-description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system-description"); value.Exists() {
 		data.SystemDescription = types.StringValue(value.String())
 	} else if data.SystemDescription.IsNull() {
 		data.SystemDescription = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id"); value.Exists() {
 		data.ChassisId = types.StringValue(value.String())
 	} else if data.ChassisId.IsNull() {
 		data.ChassisId = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/chassis-component"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/chassis-component"); value.Exists() {
 		data.ChassisIdTypeChassisComponent = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -579,7 +559,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ChassisIdTypeChassisComponent = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/interface-alias"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/interface-alias"); value.Exists() {
 		data.ChassisIdTypeInterfaceAlias = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -587,7 +567,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ChassisIdTypeInterfaceAlias = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/port-component"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/port-component"); value.Exists() {
 		data.ChassisIdTypePortComponent = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -595,7 +575,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ChassisIdTypePortComponent = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/mac-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/mac-address"); value.Exists() {
 		data.ChassisIdTypeMacAddress = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -603,7 +583,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ChassisIdTypeMacAddress = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/network-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/network-address"); value.Exists() {
 		data.ChassisIdTypeNetworkAddress = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -611,7 +591,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ChassisIdTypeNetworkAddress = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/interface-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/interface-name"); value.Exists() {
 		data.ChassisIdTypeInterfaceName = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -619,7 +599,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ChassisIdTypeInterfaceName = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/local"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/local"); value.Exists() {
 		data.ChassisIdTypeLocal = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -627,7 +607,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ChassisIdTypeLocal = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/subinterfaces/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/subinterfaces/enable"); value.Exists() {
 		data.SubinterfacesEnable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -635,7 +615,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.SubinterfacesEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/subinterfaces-tagged"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/subinterfaces-tagged"); value.Exists() {
 		data.SubinterfacesTagged = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -643,7 +623,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.SubinterfacesTagged = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/management/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/management/enable"); value.Exists() {
 		data.ManagementEnable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -651,7 +631,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ManagementEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/priorityaddr/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priorityaddr/enable"); value.Exists() {
 		data.PriorityaddrEnable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -659,7 +639,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.PriorityaddrEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/extended-show-width/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/extended-show-width/enable"); value.Exists() {
 		data.ExtendedShowWidthEnable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -667,7 +647,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ExtendedShowWidthEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/management-address/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/management-address/disable"); value.Exists() {
 		data.TlvSelectManagementAddressDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -675,7 +655,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.TlvSelectManagementAddressDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/port-description/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/port-description/disable"); value.Exists() {
 		data.TlvSelectPortDescriptionDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -683,7 +663,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.TlvSelectPortDescriptionDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/system-capabilities/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/system-capabilities/disable"); value.Exists() {
 		data.TlvSelectSystemCapabilitiesDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -691,7 +671,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.TlvSelectSystemCapabilitiesDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/system-description/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/system-description/disable"); value.Exists() {
 		data.TlvSelectSystemDescriptionDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -699,7 +679,7 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.TlvSelectSystemDescriptionDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/system-name/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/system-name/disable"); value.Exists() {
 		data.TlvSelectSystemNameDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -717,105 +697,105 @@ func (data *LLDP) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"holdtime"); value.Exists() {
+	if value := res.Get(prefix + "holdtime"); value.Exists() {
 		data.Holdtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timer"); value.Exists() {
+	if value := res.Get(prefix + "timer"); value.Exists() {
 		data.Timer = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"reinit"); value.Exists() {
+	if value := res.Get(prefix + "reinit"); value.Exists() {
 		data.Reinit = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"system-name"); value.Exists() {
+	if value := res.Get(prefix + "system-name"); value.Exists() {
 		data.SystemName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"system-description"); value.Exists() {
+	if value := res.Get(prefix + "system-description"); value.Exists() {
 		data.SystemDescription = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"chassis-id"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id"); value.Exists() {
 		data.ChassisId = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"chassis-id-type.chassis-component"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id-type.chassis-component"); value.Exists() {
 		data.ChassisIdTypeChassisComponent = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeChassisComponent = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"chassis-id-type.interface-alias"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id-type.interface-alias"); value.Exists() {
 		data.ChassisIdTypeInterfaceAlias = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeInterfaceAlias = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"chassis-id-type.port-component"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id-type.port-component"); value.Exists() {
 		data.ChassisIdTypePortComponent = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypePortComponent = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"chassis-id-type.mac-address"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id-type.mac-address"); value.Exists() {
 		data.ChassisIdTypeMacAddress = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeMacAddress = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"chassis-id-type.network-address"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id-type.network-address"); value.Exists() {
 		data.ChassisIdTypeNetworkAddress = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeNetworkAddress = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"chassis-id-type.interface-name"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id-type.interface-name"); value.Exists() {
 		data.ChassisIdTypeInterfaceName = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeInterfaceName = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"chassis-id-type.local"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id-type.local"); value.Exists() {
 		data.ChassisIdTypeLocal = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeLocal = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"subinterfaces.enable"); value.Exists() {
+	if value := res.Get(prefix + "subinterfaces.enable"); value.Exists() {
 		data.SubinterfacesEnable = types.BoolValue(true)
 	} else {
 		data.SubinterfacesEnable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"subinterfaces-tagged"); value.Exists() {
+	if value := res.Get(prefix + "subinterfaces-tagged"); value.Exists() {
 		data.SubinterfacesTagged = types.BoolValue(true)
 	} else {
 		data.SubinterfacesTagged = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"management.enable"); value.Exists() {
+	if value := res.Get(prefix + "management.enable"); value.Exists() {
 		data.ManagementEnable = types.BoolValue(true)
 	} else {
 		data.ManagementEnable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"priorityaddr.enable"); value.Exists() {
+	if value := res.Get(prefix + "priorityaddr.enable"); value.Exists() {
 		data.PriorityaddrEnable = types.BoolValue(true)
 	} else {
 		data.PriorityaddrEnable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"extended-show-width.enable"); value.Exists() {
+	if value := res.Get(prefix + "extended-show-width.enable"); value.Exists() {
 		data.ExtendedShowWidthEnable = types.BoolValue(true)
 	} else {
 		data.ExtendedShowWidthEnable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"tlv-select.management-address.disable"); value.Exists() {
+	if value := res.Get(prefix + "tlv-select.management-address.disable"); value.Exists() {
 		data.TlvSelectManagementAddressDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectManagementAddressDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"tlv-select.port-description.disable"); value.Exists() {
+	if value := res.Get(prefix + "tlv-select.port-description.disable"); value.Exists() {
 		data.TlvSelectPortDescriptionDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectPortDescriptionDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"tlv-select.system-capabilities.disable"); value.Exists() {
+	if value := res.Get(prefix + "tlv-select.system-capabilities.disable"); value.Exists() {
 		data.TlvSelectSystemCapabilitiesDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectSystemCapabilitiesDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"tlv-select.system-description.disable"); value.Exists() {
+	if value := res.Get(prefix + "tlv-select.system-description.disable"); value.Exists() {
 		data.TlvSelectSystemDescriptionDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectSystemDescriptionDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"tlv-select.system-name.disable"); value.Exists() {
+	if value := res.Get(prefix + "tlv-select.system-name.disable"); value.Exists() {
 		data.TlvSelectSystemNameDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectSystemNameDisable = types.BoolValue(false)
@@ -830,105 +810,105 @@ func (data *LLDPData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"holdtime"); value.Exists() {
+	if value := res.Get(prefix + "holdtime"); value.Exists() {
 		data.Holdtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timer"); value.Exists() {
+	if value := res.Get(prefix + "timer"); value.Exists() {
 		data.Timer = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"reinit"); value.Exists() {
+	if value := res.Get(prefix + "reinit"); value.Exists() {
 		data.Reinit = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"system-name"); value.Exists() {
+	if value := res.Get(prefix + "system-name"); value.Exists() {
 		data.SystemName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"system-description"); value.Exists() {
+	if value := res.Get(prefix + "system-description"); value.Exists() {
 		data.SystemDescription = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"chassis-id"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id"); value.Exists() {
 		data.ChassisId = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"chassis-id-type.chassis-component"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id-type.chassis-component"); value.Exists() {
 		data.ChassisIdTypeChassisComponent = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeChassisComponent = types.BoolNull()
 	}
-	if value := res.Get(prefix+"chassis-id-type.interface-alias"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id-type.interface-alias"); value.Exists() {
 		data.ChassisIdTypeInterfaceAlias = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeInterfaceAlias = types.BoolNull()
 	}
-	if value := res.Get(prefix+"chassis-id-type.port-component"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id-type.port-component"); value.Exists() {
 		data.ChassisIdTypePortComponent = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypePortComponent = types.BoolNull()
 	}
-	if value := res.Get(prefix+"chassis-id-type.mac-address"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id-type.mac-address"); value.Exists() {
 		data.ChassisIdTypeMacAddress = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeMacAddress = types.BoolNull()
 	}
-	if value := res.Get(prefix+"chassis-id-type.network-address"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id-type.network-address"); value.Exists() {
 		data.ChassisIdTypeNetworkAddress = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeNetworkAddress = types.BoolNull()
 	}
-	if value := res.Get(prefix+"chassis-id-type.interface-name"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id-type.interface-name"); value.Exists() {
 		data.ChassisIdTypeInterfaceName = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeInterfaceName = types.BoolNull()
 	}
-	if value := res.Get(prefix+"chassis-id-type.local"); value.Exists() {
+	if value := res.Get(prefix + "chassis-id-type.local"); value.Exists() {
 		data.ChassisIdTypeLocal = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeLocal = types.BoolNull()
 	}
-	if value := res.Get(prefix+"subinterfaces.enable"); value.Exists() {
+	if value := res.Get(prefix + "subinterfaces.enable"); value.Exists() {
 		data.SubinterfacesEnable = types.BoolValue(true)
 	} else {
 		data.SubinterfacesEnable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"subinterfaces-tagged"); value.Exists() {
+	if value := res.Get(prefix + "subinterfaces-tagged"); value.Exists() {
 		data.SubinterfacesTagged = types.BoolValue(true)
 	} else {
 		data.SubinterfacesTagged = types.BoolNull()
 	}
-	if value := res.Get(prefix+"management.enable"); value.Exists() {
+	if value := res.Get(prefix + "management.enable"); value.Exists() {
 		data.ManagementEnable = types.BoolValue(true)
 	} else {
 		data.ManagementEnable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"priorityaddr.enable"); value.Exists() {
+	if value := res.Get(prefix + "priorityaddr.enable"); value.Exists() {
 		data.PriorityaddrEnable = types.BoolValue(true)
 	} else {
 		data.PriorityaddrEnable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"extended-show-width.enable"); value.Exists() {
+	if value := res.Get(prefix + "extended-show-width.enable"); value.Exists() {
 		data.ExtendedShowWidthEnable = types.BoolValue(true)
 	} else {
 		data.ExtendedShowWidthEnable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"tlv-select.management-address.disable"); value.Exists() {
+	if value := res.Get(prefix + "tlv-select.management-address.disable"); value.Exists() {
 		data.TlvSelectManagementAddressDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectManagementAddressDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"tlv-select.port-description.disable"); value.Exists() {
+	if value := res.Get(prefix + "tlv-select.port-description.disable"); value.Exists() {
 		data.TlvSelectPortDescriptionDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectPortDescriptionDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"tlv-select.system-capabilities.disable"); value.Exists() {
+	if value := res.Get(prefix + "tlv-select.system-capabilities.disable"); value.Exists() {
 		data.TlvSelectSystemCapabilitiesDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectSystemCapabilitiesDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"tlv-select.system-description.disable"); value.Exists() {
+	if value := res.Get(prefix + "tlv-select.system-description.disable"); value.Exists() {
 		data.TlvSelectSystemDescriptionDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectSystemDescriptionDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"tlv-select.system-name.disable"); value.Exists() {
+	if value := res.Get(prefix + "tlv-select.system-name.disable"); value.Exists() {
 		data.TlvSelectSystemNameDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectSystemNameDisable = types.BoolNull()
@@ -939,105 +919,105 @@ func (data *LLDPData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *LLDP) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdtime"); value.Exists() {
 		data.Holdtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer"); value.Exists() {
 		data.Timer = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/reinit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/reinit"); value.Exists() {
 		data.Reinit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system-name"); value.Exists() {
 		data.SystemName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system-description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system-description"); value.Exists() {
 		data.SystemDescription = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id"); value.Exists() {
 		data.ChassisId = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/chassis-component"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/chassis-component"); value.Exists() {
 		data.ChassisIdTypeChassisComponent = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeChassisComponent = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/interface-alias"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/interface-alias"); value.Exists() {
 		data.ChassisIdTypeInterfaceAlias = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeInterfaceAlias = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/port-component"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/port-component"); value.Exists() {
 		data.ChassisIdTypePortComponent = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypePortComponent = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/mac-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/mac-address"); value.Exists() {
 		data.ChassisIdTypeMacAddress = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeMacAddress = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/network-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/network-address"); value.Exists() {
 		data.ChassisIdTypeNetworkAddress = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeNetworkAddress = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/interface-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/interface-name"); value.Exists() {
 		data.ChassisIdTypeInterfaceName = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeInterfaceName = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/local"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/local"); value.Exists() {
 		data.ChassisIdTypeLocal = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeLocal = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/subinterfaces/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/subinterfaces/enable"); value.Exists() {
 		data.SubinterfacesEnable = types.BoolValue(true)
 	} else {
 		data.SubinterfacesEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/subinterfaces-tagged"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/subinterfaces-tagged"); value.Exists() {
 		data.SubinterfacesTagged = types.BoolValue(true)
 	} else {
 		data.SubinterfacesTagged = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/management/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/management/enable"); value.Exists() {
 		data.ManagementEnable = types.BoolValue(true)
 	} else {
 		data.ManagementEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/priorityaddr/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priorityaddr/enable"); value.Exists() {
 		data.PriorityaddrEnable = types.BoolValue(true)
 	} else {
 		data.PriorityaddrEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/extended-show-width/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/extended-show-width/enable"); value.Exists() {
 		data.ExtendedShowWidthEnable = types.BoolValue(true)
 	} else {
 		data.ExtendedShowWidthEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/management-address/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/management-address/disable"); value.Exists() {
 		data.TlvSelectManagementAddressDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectManagementAddressDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/port-description/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/port-description/disable"); value.Exists() {
 		data.TlvSelectPortDescriptionDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectPortDescriptionDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/system-capabilities/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/system-capabilities/disable"); value.Exists() {
 		data.TlvSelectSystemCapabilitiesDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectSystemCapabilitiesDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/system-description/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/system-description/disable"); value.Exists() {
 		data.TlvSelectSystemDescriptionDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectSystemDescriptionDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/system-name/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/system-name/disable"); value.Exists() {
 		data.TlvSelectSystemNameDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectSystemNameDisable = types.BoolValue(false)
@@ -1048,105 +1028,105 @@ func (data *LLDP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *LLDPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdtime"); value.Exists() {
 		data.Holdtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer"); value.Exists() {
 		data.Timer = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/reinit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/reinit"); value.Exists() {
 		data.Reinit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system-name"); value.Exists() {
 		data.SystemName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system-description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system-description"); value.Exists() {
 		data.SystemDescription = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id"); value.Exists() {
 		data.ChassisId = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/chassis-component"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/chassis-component"); value.Exists() {
 		data.ChassisIdTypeChassisComponent = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeChassisComponent = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/interface-alias"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/interface-alias"); value.Exists() {
 		data.ChassisIdTypeInterfaceAlias = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeInterfaceAlias = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/port-component"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/port-component"); value.Exists() {
 		data.ChassisIdTypePortComponent = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypePortComponent = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/mac-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/mac-address"); value.Exists() {
 		data.ChassisIdTypeMacAddress = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeMacAddress = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/network-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/network-address"); value.Exists() {
 		data.ChassisIdTypeNetworkAddress = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeNetworkAddress = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/interface-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/interface-name"); value.Exists() {
 		data.ChassisIdTypeInterfaceName = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeInterfaceName = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/chassis-id-type/local"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/chassis-id-type/local"); value.Exists() {
 		data.ChassisIdTypeLocal = types.BoolValue(true)
 	} else {
 		data.ChassisIdTypeLocal = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/subinterfaces/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/subinterfaces/enable"); value.Exists() {
 		data.SubinterfacesEnable = types.BoolValue(true)
 	} else {
 		data.SubinterfacesEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/subinterfaces-tagged"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/subinterfaces-tagged"); value.Exists() {
 		data.SubinterfacesTagged = types.BoolValue(true)
 	} else {
 		data.SubinterfacesTagged = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/management/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/management/enable"); value.Exists() {
 		data.ManagementEnable = types.BoolValue(true)
 	} else {
 		data.ManagementEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/priorityaddr/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priorityaddr/enable"); value.Exists() {
 		data.PriorityaddrEnable = types.BoolValue(true)
 	} else {
 		data.PriorityaddrEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/extended-show-width/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/extended-show-width/enable"); value.Exists() {
 		data.ExtendedShowWidthEnable = types.BoolValue(true)
 	} else {
 		data.ExtendedShowWidthEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/management-address/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/management-address/disable"); value.Exists() {
 		data.TlvSelectManagementAddressDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectManagementAddressDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/port-description/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/port-description/disable"); value.Exists() {
 		data.TlvSelectPortDescriptionDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectPortDescriptionDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/system-capabilities/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/system-capabilities/disable"); value.Exists() {
 		data.TlvSelectSystemCapabilitiesDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectSystemCapabilitiesDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/system-description/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/system-description/disable"); value.Exists() {
 		data.TlvSelectSystemDescriptionDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectSystemDescriptionDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/tlv-select/system-name/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tlv-select/system-name/disable"); value.Exists() {
 		data.TlvSelectSystemNameDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectSystemNameDisable = types.BoolValue(false)
@@ -1427,7 +1407,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TlvSelectSystemNameDisable.IsNull() && state.TlvSelectSystemNameDisable.ValueBool() && data.TlvSelectSystemNameDisable.IsNull() {
-		deletePath := state.getXPath()+"/tlv-select/system-name/disable"
+		deletePath := state.getXPath() + "/tlv-select/system-name/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1435,7 +1415,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TlvSelectSystemDescriptionDisable.IsNull() && state.TlvSelectSystemDescriptionDisable.ValueBool() && data.TlvSelectSystemDescriptionDisable.IsNull() {
-		deletePath := state.getXPath()+"/tlv-select/system-description/disable"
+		deletePath := state.getXPath() + "/tlv-select/system-description/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1443,7 +1423,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TlvSelectSystemCapabilitiesDisable.IsNull() && state.TlvSelectSystemCapabilitiesDisable.ValueBool() && data.TlvSelectSystemCapabilitiesDisable.IsNull() {
-		deletePath := state.getXPath()+"/tlv-select/system-capabilities/disable"
+		deletePath := state.getXPath() + "/tlv-select/system-capabilities/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1451,7 +1431,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TlvSelectPortDescriptionDisable.IsNull() && state.TlvSelectPortDescriptionDisable.ValueBool() && data.TlvSelectPortDescriptionDisable.IsNull() {
-		deletePath := state.getXPath()+"/tlv-select/port-description/disable"
+		deletePath := state.getXPath() + "/tlv-select/port-description/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1459,7 +1439,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TlvSelectManagementAddressDisable.IsNull() && state.TlvSelectManagementAddressDisable.ValueBool() && data.TlvSelectManagementAddressDisable.IsNull() {
-		deletePath := state.getXPath()+"/tlv-select/management-address/disable"
+		deletePath := state.getXPath() + "/tlv-select/management-address/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1467,7 +1447,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ExtendedShowWidthEnable.IsNull() && state.ExtendedShowWidthEnable.ValueBool() && data.ExtendedShowWidthEnable.IsNull() {
-		deletePath := state.getXPath()+"/extended-show-width/enable"
+		deletePath := state.getXPath() + "/extended-show-width/enable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1475,7 +1455,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PriorityaddrEnable.IsNull() && state.PriorityaddrEnable.ValueBool() && data.PriorityaddrEnable.IsNull() {
-		deletePath := state.getXPath()+"/priorityaddr/enable"
+		deletePath := state.getXPath() + "/priorityaddr/enable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1483,7 +1463,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ManagementEnable.IsNull() && state.ManagementEnable.ValueBool() && data.ManagementEnable.IsNull() {
-		deletePath := state.getXPath()+"/management/enable"
+		deletePath := state.getXPath() + "/management/enable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1491,7 +1471,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SubinterfacesTagged.IsNull() && state.SubinterfacesTagged.ValueBool() && data.SubinterfacesTagged.IsNull() {
-		deletePath := state.getXPath()+"/subinterfaces-tagged"
+		deletePath := state.getXPath() + "/subinterfaces-tagged"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1499,7 +1479,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SubinterfacesEnable.IsNull() && state.SubinterfacesEnable.ValueBool() && data.SubinterfacesEnable.IsNull() {
-		deletePath := state.getXPath()+"/subinterfaces/enable"
+		deletePath := state.getXPath() + "/subinterfaces/enable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1507,7 +1487,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ChassisIdTypeLocal.IsNull() && state.ChassisIdTypeLocal.ValueBool() && data.ChassisIdTypeLocal.IsNull() {
-		deletePath := state.getXPath()+"/chassis-id-type/local"
+		deletePath := state.getXPath() + "/chassis-id-type/local"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1515,7 +1495,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ChassisIdTypeInterfaceName.IsNull() && state.ChassisIdTypeInterfaceName.ValueBool() && data.ChassisIdTypeInterfaceName.IsNull() {
-		deletePath := state.getXPath()+"/chassis-id-type/interface-name"
+		deletePath := state.getXPath() + "/chassis-id-type/interface-name"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1523,7 +1503,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ChassisIdTypeNetworkAddress.IsNull() && state.ChassisIdTypeNetworkAddress.ValueBool() && data.ChassisIdTypeNetworkAddress.IsNull() {
-		deletePath := state.getXPath()+"/chassis-id-type/network-address"
+		deletePath := state.getXPath() + "/chassis-id-type/network-address"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1531,7 +1511,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ChassisIdTypeMacAddress.IsNull() && state.ChassisIdTypeMacAddress.ValueBool() && data.ChassisIdTypeMacAddress.IsNull() {
-		deletePath := state.getXPath()+"/chassis-id-type/mac-address"
+		deletePath := state.getXPath() + "/chassis-id-type/mac-address"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1539,7 +1519,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ChassisIdTypePortComponent.IsNull() && state.ChassisIdTypePortComponent.ValueBool() && data.ChassisIdTypePortComponent.IsNull() {
-		deletePath := state.getXPath()+"/chassis-id-type/port-component"
+		deletePath := state.getXPath() + "/chassis-id-type/port-component"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1547,7 +1527,7 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ChassisIdTypeInterfaceAlias.IsNull() && state.ChassisIdTypeInterfaceAlias.ValueBool() && data.ChassisIdTypeInterfaceAlias.IsNull() {
-		deletePath := state.getXPath()+"/chassis-id-type/interface-alias"
+		deletePath := state.getXPath() + "/chassis-id-type/interface-alias"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1555,49 +1535,49 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ChassisIdTypeChassisComponent.IsNull() && state.ChassisIdTypeChassisComponent.ValueBool() && data.ChassisIdTypeChassisComponent.IsNull() {
-		deletePath := state.getXPath()+"/chassis-id-type/chassis-component"
+		deletePath := state.getXPath() + "/chassis-id-type/chassis-component"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ChassisId.IsNull() && data.ChassisId.IsNull() {
-		deletePath := state.getXPath()+"/chassis-id"
+		deletePath := state.getXPath() + "/chassis-id"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SystemDescription.IsNull() && data.SystemDescription.IsNull() {
-		deletePath := state.getXPath()+"/system-description"
+		deletePath := state.getXPath() + "/system-description"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SystemName.IsNull() && data.SystemName.IsNull() {
-		deletePath := state.getXPath()+"/system-name"
+		deletePath := state.getXPath() + "/system-name"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Reinit.IsNull() && data.Reinit.IsNull() {
-		deletePath := state.getXPath()+"/reinit"
+		deletePath := state.getXPath() + "/reinit"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Timer.IsNull() && data.Timer.IsNull() {
-		deletePath := state.getXPath()+"/timer"
+		deletePath := state.getXPath() + "/timer"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Holdtime.IsNull() && data.Holdtime.IsNull() {
-		deletePath := state.getXPath()+"/holdtime"
+		deletePath := state.getXPath() + "/holdtime"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true

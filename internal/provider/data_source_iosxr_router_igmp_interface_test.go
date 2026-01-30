@@ -55,8 +55,8 @@ func TestAccDataSourceIosxrRouterIGMPInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterIGMPInterfacePrerequisitesConfig+testAccDataSourceIosxrRouterIGMPInterfaceConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrRouterIGMPInterfacePrerequisitesConfig + testAccDataSourceIosxrRouterIGMPInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

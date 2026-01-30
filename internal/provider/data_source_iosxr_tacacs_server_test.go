@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -32,8 +33,8 @@ import (
 
 func TestAccDataSourceIosxrTACACSServer(t *testing.T) {
 	if os.Getenv("AAA") == "" {
-        t.Skip("skipping test, set environment variable AAA")
-    }
+		t.Skip("skipping test, set environment variable AAA")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_tacacs_server.test", "hosts.0.ordering_index", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_tacacs_server.test", "hosts.0.address", "9.0.1.68"))
@@ -52,7 +53,7 @@ func TestAccDataSourceIosxrTACACSServer(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrTACACSServerConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

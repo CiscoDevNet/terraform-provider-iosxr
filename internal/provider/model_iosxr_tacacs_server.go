@@ -24,56 +24,55 @@ import (
 	"context"
 	"fmt"
 	"reflect"
-	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type TACACSServer struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
-	Hosts []TACACSServerHosts `tfsdk:"hosts"`
-	KeyType7 types.String `tfsdk:"key_type_7"`
-	KeyType6 types.String `tfsdk:"key_type_6"`
-	Timeout types.Int64 `tfsdk:"timeout"`
-	HolddownTime types.Int64 `tfsdk:"holddown_time"`
-	Ipv4Dscp types.String `tfsdk:"ipv4_dscp"`
-	Ipv6Dscp types.String `tfsdk:"ipv6_dscp"`
+	Device       types.String        `tfsdk:"device"`
+	Id           types.String        `tfsdk:"id"`
+	DeleteMode   types.String        `tfsdk:"delete_mode"`
+	Hosts        []TACACSServerHosts `tfsdk:"hosts"`
+	KeyType7     types.String        `tfsdk:"key_type_7"`
+	KeyType6     types.String        `tfsdk:"key_type_6"`
+	Timeout      types.Int64         `tfsdk:"timeout"`
+	HolddownTime types.Int64         `tfsdk:"holddown_time"`
+	Ipv4Dscp     types.String        `tfsdk:"ipv4_dscp"`
+	Ipv6Dscp     types.String        `tfsdk:"ipv6_dscp"`
 }
 
 type TACACSServerData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	Hosts []TACACSServerHosts `tfsdk:"hosts"`
-	KeyType7 types.String `tfsdk:"key_type_7"`
-	KeyType6 types.String `tfsdk:"key_type_6"`
-	Timeout types.Int64 `tfsdk:"timeout"`
-	HolddownTime types.Int64 `tfsdk:"holddown_time"`
-	Ipv4Dscp types.String `tfsdk:"ipv4_dscp"`
-	Ipv6Dscp types.String `tfsdk:"ipv6_dscp"`
+	Device       types.String        `tfsdk:"device"`
+	Id           types.String        `tfsdk:"id"`
+	Hosts        []TACACSServerHosts `tfsdk:"hosts"`
+	KeyType7     types.String        `tfsdk:"key_type_7"`
+	KeyType6     types.String        `tfsdk:"key_type_6"`
+	Timeout      types.Int64         `tfsdk:"timeout"`
+	HolddownTime types.Int64         `tfsdk:"holddown_time"`
+	Ipv4Dscp     types.String        `tfsdk:"ipv4_dscp"`
+	Ipv6Dscp     types.String        `tfsdk:"ipv6_dscp"`
 }
 type TACACSServerHosts struct {
-	OrderingIndex types.Int64 `tfsdk:"ordering_index"`
-	Address types.String `tfsdk:"address"`
-	Port types.Int64 `tfsdk:"port"`
-	Timeout types.Int64 `tfsdk:"timeout"`
-	HolddownTime types.Int64 `tfsdk:"holddown_time"`
-	KeyType7 types.String `tfsdk:"key_type_7"`
-	KeyType6 types.String `tfsdk:"key_type_6"`
-	SingleConnection types.Bool `tfsdk:"single_connection"`
-	SingleConnectionIdleTimeout types.Int64 `tfsdk:"single_connection_idle_timeout"`
+	OrderingIndex               types.Int64  `tfsdk:"ordering_index"`
+	Address                     types.String `tfsdk:"address"`
+	Port                        types.Int64  `tfsdk:"port"`
+	Timeout                     types.Int64  `tfsdk:"timeout"`
+	HolddownTime                types.Int64  `tfsdk:"holddown_time"`
+	KeyType7                    types.String `tfsdk:"key_type_7"`
+	KeyType6                    types.String `tfsdk:"key_type_6"`
+	SingleConnection            types.Bool   `tfsdk:"single_connection"`
+	SingleConnectionIdleTimeout types.Int64  `tfsdk:"single_connection_idle_timeout"`
 }
 
 // End of section. //template:end types
@@ -166,8 +165,8 @@ func (data TACACSServer) toBody(ctx context.Context) string {
 
 func (data *TACACSServer) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Hosts {
-		keys := [...]string{ "ordering-index", "address", "port",  }
-		keyValues := [...]string{ strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10),  }
+		keys := [...]string{"ordering-index", "address", "port"}
+		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "hosts.host").ForEach(
@@ -213,14 +212,14 @@ func (data *TACACSServer) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Hosts[i].HolddownTime = types.Int64Null()
 		}
-		if value := r.Get("single-connection"); !data.Hosts[i].SingleConnection.IsNull() {
-			if value.Exists() {
-				data.Hosts[i].SingleConnection = types.BoolValue(true)
-			} else {
-				data.Hosts[i].SingleConnection = types.BoolValue(false)
-			}
+		if value := r.Get("single-connection"); value.Exists() {
+			data.Hosts[i].SingleConnection = types.BoolValue(true)
 		} else {
-			data.Hosts[i].SingleConnection = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Hosts[i].SingleConnection.IsNull() {
+				data.Hosts[i].SingleConnection = types.BoolNull()
+			}
 		}
 		if value := r.Get("single-connection-idle-timeout"); value.Exists() && !data.Hosts[i].SingleConnectionIdleTimeout.IsNull() {
 			data.Hosts[i].SingleConnectionIdleTimeout = types.Int64Value(value.Int())
@@ -293,22 +292,22 @@ func (data TACACSServer) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.KeyType7.IsNull() && !data.KeyType7.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/key/seven", data.KeyType7.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/key/seven", data.KeyType7.ValueString())
 	}
 	if !data.KeyType6.IsNull() && !data.KeyType6.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/key/six", data.KeyType6.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/key/six", data.KeyType6.ValueString())
 	}
 	if !data.Timeout.IsNull() && !data.Timeout.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/timeout", strconv.FormatInt(data.Timeout.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timeout", strconv.FormatInt(data.Timeout.ValueInt64(), 10))
 	}
 	if !data.HolddownTime.IsNull() && !data.HolddownTime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/holddown-time", strconv.FormatInt(data.HolddownTime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/holddown-time", strconv.FormatInt(data.HolddownTime.ValueInt64(), 10))
 	}
 	if !data.Ipv4Dscp.IsNull() && !data.Ipv4Dscp.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/ipv4/dscp", data.Ipv4Dscp.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/dscp", data.Ipv4Dscp.ValueString())
 	}
 	if !data.Ipv6Dscp.IsNull() && !data.Ipv6Dscp.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/ipv6/dscp", data.Ipv6Dscp.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv6/dscp", data.Ipv6Dscp.ValueString())
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -322,11 +321,11 @@ func (data TACACSServer) toBodyXML(ctx context.Context) string {
 
 func (data *TACACSServer) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	for i := range data.Hosts {
-		keys := [...]string{ "ordering-index", "address", "port",  }
-		keyValues := [...]string{ strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10),  }
+		keys := [...]string{"ordering-index", "address", "port"}
+		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/hosts/host").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/hosts/host").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -384,22 +383,22 @@ func (data *TACACSServer) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.Hosts[i].SingleConnectionIdleTimeout = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timeout"); value.Exists() {
 		data.Timeout = types.Int64Value(value.Int())
 	} else if data.Timeout.IsNull() {
 		data.Timeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/holddown-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holddown-time"); value.Exists() {
 		data.HolddownTime = types.Int64Value(value.Int())
 	} else if data.HolddownTime.IsNull() {
 		data.HolddownTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv4/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	} else if data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv6/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	} else if data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringNull()
@@ -414,7 +413,7 @@ func (data *TACACSServer) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"hosts.host"); value.Exists() {
+	if value := res.Get(prefix + "hosts.host"); value.Exists() {
 		data.Hosts = make([]TACACSServerHosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TACACSServerHosts{}
@@ -445,16 +444,16 @@ func (data *TACACSServer) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"timeout"); value.Exists() {
+	if value := res.Get(prefix + "timeout"); value.Exists() {
 		data.Timeout = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"holddown-time"); value.Exists() {
+	if value := res.Get(prefix + "holddown-time"); value.Exists() {
 		data.HolddownTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"ipv4.dscp"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"ipv6.dscp"); value.Exists() {
+	if value := res.Get(prefix + "ipv6.dscp"); value.Exists() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	}
 }
@@ -467,7 +466,7 @@ func (data *TACACSServerData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"hosts.host"); value.Exists() {
+	if value := res.Get(prefix + "hosts.host"); value.Exists() {
 		data.Hosts = make([]TACACSServerHosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TACACSServerHosts{}
@@ -504,22 +503,22 @@ func (data *TACACSServerData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"key.seven"); value.Exists() {
+	if value := res.Get(prefix + "key.seven"); value.Exists() {
 		data.KeyType7 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"key.six"); value.Exists() {
+	if value := res.Get(prefix + "key.six"); value.Exists() {
 		data.KeyType6 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"timeout"); value.Exists() {
+	if value := res.Get(prefix + "timeout"); value.Exists() {
 		data.Timeout = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"holddown-time"); value.Exists() {
+	if value := res.Get(prefix + "holddown-time"); value.Exists() {
 		data.HolddownTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"ipv4.dscp"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"ipv6.dscp"); value.Exists() {
+	if value := res.Get(prefix + "ipv6.dscp"); value.Exists() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	}
 }
@@ -528,7 +527,7 @@ func (data *TACACSServerData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *TACACSServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hosts/host"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hosts/host"); value.Exists() {
 		data.Hosts = make([]TACACSServerHosts, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TACACSServerHosts{}
@@ -565,22 +564,22 @@ func (data *TACACSServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/key/seven"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/key/seven"); value.Exists() {
 		data.KeyType7 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/key/six"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/key/six"); value.Exists() {
 		data.KeyType6 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timeout"); value.Exists() {
 		data.Timeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/holddown-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holddown-time"); value.Exists() {
 		data.HolddownTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv4/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv6/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	}
 }
@@ -589,7 +588,7 @@ func (data *TACACSServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *TACACSServerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hosts/host"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hosts/host"); value.Exists() {
 		data.Hosts = make([]TACACSServerHosts, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TACACSServerHosts{}
@@ -614,11 +613,11 @@ func (data *TACACSServerData) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "key/six"); cValue.Exists() {
 				item.KeyType6 = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "single-connection"); cValue.Exists() {
-			item.SingleConnection = types.BoolValue(true)
-		} else {
-			item.SingleConnection = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "single-connection"); cValue.Exists() {
+				item.SingleConnection = types.BoolValue(true)
+			} else {
+				item.SingleConnection = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "single-connection-idle-timeout"); cValue.Exists() {
 				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
 			}
@@ -626,22 +625,22 @@ func (data *TACACSServerData) fromBodyXML(ctx context.Context, res xmldot.Result
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/key/seven"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/key/seven"); value.Exists() {
 		data.KeyType7 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/key/six"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/key/six"); value.Exists() {
 		data.KeyType6 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timeout"); value.Exists() {
 		data.Timeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/holddown-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holddown-time"); value.Exists() {
 		data.HolddownTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv4/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ipv6/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	}
 }
@@ -670,11 +669,11 @@ func (data *TACACSServer) getDeletedItems(ctx context.Context, state TACACSServe
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/key/seven", state.getPath()))
 	}
 	for i := range state.Hosts {
-		keys := [...]string{ "ordering-index", "address", "port",  }
-		stateKeyValues := [...]string{ strconv.FormatInt(state.Hosts[i].OrderingIndex.ValueInt64(), 10), state.Hosts[i].Address.ValueString(), strconv.FormatInt(state.Hosts[i].Port.ValueInt64(), 10),  }
+		keys := [...]string{"ordering-index", "address", "port"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Hosts[i].OrderingIndex.ValueInt64(), 10), state.Hosts[i].Address.ValueString(), strconv.FormatInt(state.Hosts[i].Port.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -703,25 +702,25 @@ func (data *TACACSServer) getDeletedItems(ctx context.Context, state TACACSServe
 			if state.Hosts[i].Port.ValueInt64() != data.Hosts[j].Port.ValueInt64() {
 				found = false
 			}
-		if found {
-			if !state.Hosts[i].SingleConnectionIdleTimeout.IsNull() && data.Hosts[j].SingleConnectionIdleTimeout.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/single-connection-idle-timeout", state.getPath(), keyString))
-			}
-			if !state.Hosts[i].SingleConnection.IsNull() && data.Hosts[j].SingleConnection.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/single-connection", state.getPath(), keyString))
-			}
-			if !state.Hosts[i].KeyType6.IsNull() && data.Hosts[j].KeyType6.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/key/six", state.getPath(), keyString))
-			}
-			if !state.Hosts[i].KeyType7.IsNull() && data.Hosts[j].KeyType7.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/key/seven", state.getPath(), keyString))
-			}
-			if !state.Hosts[i].HolddownTime.IsNull() && data.Hosts[j].HolddownTime.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/holddown-time", state.getPath(), keyString))
-			}
-			if !state.Hosts[i].Timeout.IsNull() && data.Hosts[j].Timeout.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/timeout", state.getPath(), keyString))
-			}
+			if found {
+				if !state.Hosts[i].SingleConnectionIdleTimeout.IsNull() && data.Hosts[j].SingleConnectionIdleTimeout.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/single-connection-idle-timeout", state.getPath(), keyString))
+				}
+				if !state.Hosts[i].SingleConnection.IsNull() && data.Hosts[j].SingleConnection.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/single-connection", state.getPath(), keyString))
+				}
+				if !state.Hosts[i].KeyType6.IsNull() && data.Hosts[j].KeyType6.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/key/six", state.getPath(), keyString))
+				}
+				if !state.Hosts[i].KeyType7.IsNull() && data.Hosts[j].KeyType7.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/key/seven", state.getPath(), keyString))
+				}
+				if !state.Hosts[i].HolddownTime.IsNull() && data.Hosts[j].HolddownTime.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/holddown-time", state.getPath(), keyString))
+				}
+				if !state.Hosts[i].Timeout.IsNull() && data.Hosts[j].Timeout.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/timeout", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -738,11 +737,11 @@ func (data *TACACSServer) getDeletedItems(ctx context.Context, state TACACSServe
 func (data *TACACSServer) getEmptyLeafsDelete(ctx context.Context, state *TACACSServer) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Hosts {
-		keys := [...]string{ "ordering-index", "address", "port",  }
-		keyValues := [...]string{ strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10),  }
+		keys := [...]string{"ordering-index", "address", "port"}
+		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.Hosts[i].SingleConnection.IsNull() && !data.Hosts[i].SingleConnection.ValueBool() {
@@ -779,7 +778,7 @@ func (data *TACACSServer) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/key/seven", data.getPath()))
 	}
 	for i := range data.Hosts {
-		keyValues := [...]string{ strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10),  }
+		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10)}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hosts/host=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -795,50 +794,50 @@ func (data *TACACSServer) addDeletedItemsXML(ctx context.Context, state TACACSSe
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.Ipv6Dscp.IsNull() && data.Ipv6Dscp.IsNull() {
-		deletePath := state.getXPath()+"/ipv6/dscp"
+		deletePath := state.getXPath() + "/ipv6/dscp"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Ipv4Dscp.IsNull() && data.Ipv4Dscp.IsNull() {
-		deletePath := state.getXPath()+"/ipv4/dscp"
+		deletePath := state.getXPath() + "/ipv4/dscp"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.HolddownTime.IsNull() && data.HolddownTime.IsNull() {
-		deletePath := state.getXPath()+"/holddown-time"
+		deletePath := state.getXPath() + "/holddown-time"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Timeout.IsNull() && data.Timeout.IsNull() {
-		deletePath := state.getXPath()+"/timeout"
+		deletePath := state.getXPath() + "/timeout"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.KeyType6.IsNull() && data.KeyType6.IsNull() {
-		deletePath := state.getXPath()+"/key/six"
+		deletePath := state.getXPath() + "/key/six"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.KeyType7.IsNull() && data.KeyType7.IsNull() {
-		deletePath := state.getXPath()+"/key/seven"
+		deletePath := state.getXPath() + "/key/seven"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.Hosts {
-		stateKeys := [...]string{ "ordering-index", "address", "port",  }
-		stateKeyValues := [...]string{ strconv.FormatInt(state.Hosts[i].OrderingIndex.ValueInt64(), 10), state.Hosts[i].Address.ValueString(), strconv.FormatInt(state.Hosts[i].Port.ValueInt64(), 10),  }
+		stateKeys := [...]string{"ordering-index", "address", "port"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Hosts[i].OrderingIndex.ValueInt64(), 10), state.Hosts[i].Address.ValueString(), strconv.FormatInt(state.Hosts[i].Port.ValueInt64(), 10)}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -871,25 +870,25 @@ func (data *TACACSServer) addDeletedItemsXML(ctx context.Context, state TACACSSe
 				found = false
 			}
 			if found {
-			if !state.Hosts[i].SingleConnectionIdleTimeout.IsNull() && data.Hosts[j].SingleConnectionIdleTimeout.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hosts/host%v/single-connection-idle-timeout", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Hosts[i].SingleConnection.IsNull() && state.Hosts[i].SingleConnection.ValueBool() && data.Hosts[j].SingleConnection.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hosts/host%v/single-connection", predicates))
-			}
-			if !state.Hosts[i].KeyType6.IsNull() && data.Hosts[j].KeyType6.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hosts/host%v/key/six", predicates))
-			}
-			if !state.Hosts[i].KeyType7.IsNull() && data.Hosts[j].KeyType7.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hosts/host%v/key/seven", predicates))
-			}
-			if !state.Hosts[i].HolddownTime.IsNull() && data.Hosts[j].HolddownTime.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hosts/host%v/holddown-time", predicates))
-			}
-			if !state.Hosts[i].Timeout.IsNull() && data.Hosts[j].Timeout.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hosts/host%v/timeout", predicates))
-			}
+				if !state.Hosts[i].SingleConnectionIdleTimeout.IsNull() && data.Hosts[j].SingleConnectionIdleTimeout.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hosts/host%v/single-connection-idle-timeout", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Hosts[i].SingleConnection.IsNull() && state.Hosts[i].SingleConnection.ValueBool() && data.Hosts[j].SingleConnection.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hosts/host%v/single-connection", predicates))
+				}
+				if !state.Hosts[i].KeyType6.IsNull() && data.Hosts[j].KeyType6.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hosts/host%v/key/six", predicates))
+				}
+				if !state.Hosts[i].KeyType7.IsNull() && data.Hosts[j].KeyType7.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hosts/host%v/key/seven", predicates))
+				}
+				if !state.Hosts[i].HolddownTime.IsNull() && data.Hosts[j].HolddownTime.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hosts/host%v/holddown-time", predicates))
+				}
+				if !state.Hosts[i].Timeout.IsNull() && data.Hosts[j].Timeout.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/hosts/host%v/timeout", predicates))
+				}
 				break
 			}
 		}
@@ -927,8 +926,8 @@ func (data *TACACSServer) addDeletePathsXML(ctx context.Context, body string) st
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/key/seven")
 	}
 	for i := range data.Hosts {
-		keys := [...]string{ "ordering-index", "address", "port",  }
-		keyValues := [...]string{ strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10),  }
+		keys := [...]string{"ordering-index", "address", "port"}
+		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10)}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

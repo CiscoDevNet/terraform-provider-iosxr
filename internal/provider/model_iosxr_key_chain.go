@@ -24,98 +24,97 @@ import (
 	"context"
 	"fmt"
 	"reflect"
-	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type KeyChain struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	Name types.String `tfsdk:"name"`
-	AcceptToleranceValue types.Int64 `tfsdk:"accept_tolerance_value"`
-	AcceptToleranceInfinite types.Bool `tfsdk:"accept_tolerance_infinite"`
-	MacsecKeys []KeyChainMacsecKeys `tfsdk:"macsec_keys"`
-	Keys []KeyChainKeys `tfsdk:"keys"`
-	TimezoneLocal types.Bool `tfsdk:"timezone_local"`
-	TimezoneGmt types.Bool `tfsdk:"timezone_gmt"`
+	Device                  types.String         `tfsdk:"device"`
+	Id                      types.String         `tfsdk:"id"`
+	Name                    types.String         `tfsdk:"name"`
+	AcceptToleranceValue    types.Int64          `tfsdk:"accept_tolerance_value"`
+	AcceptToleranceInfinite types.Bool           `tfsdk:"accept_tolerance_infinite"`
+	MacsecKeys              []KeyChainMacsecKeys `tfsdk:"macsec_keys"`
+	Keys                    []KeyChainKeys       `tfsdk:"keys"`
+	TimezoneLocal           types.Bool           `tfsdk:"timezone_local"`
+	TimezoneGmt             types.Bool           `tfsdk:"timezone_gmt"`
 }
 
 type KeyChainData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	Name types.String `tfsdk:"name"`
-	AcceptToleranceValue types.Int64 `tfsdk:"accept_tolerance_value"`
-	AcceptToleranceInfinite types.Bool `tfsdk:"accept_tolerance_infinite"`
-	MacsecKeys []KeyChainMacsecKeys `tfsdk:"macsec_keys"`
-	Keys []KeyChainKeys `tfsdk:"keys"`
-	TimezoneLocal types.Bool `tfsdk:"timezone_local"`
-	TimezoneGmt types.Bool `tfsdk:"timezone_gmt"`
+	Device                  types.String         `tfsdk:"device"`
+	Id                      types.String         `tfsdk:"id"`
+	Name                    types.String         `tfsdk:"name"`
+	AcceptToleranceValue    types.Int64          `tfsdk:"accept_tolerance_value"`
+	AcceptToleranceInfinite types.Bool           `tfsdk:"accept_tolerance_infinite"`
+	MacsecKeys              []KeyChainMacsecKeys `tfsdk:"macsec_keys"`
+	Keys                    []KeyChainKeys       `tfsdk:"keys"`
+	TimezoneLocal           types.Bool           `tfsdk:"timezone_local"`
+	TimezoneGmt             types.Bool           `tfsdk:"timezone_gmt"`
 }
 type KeyChainMacsecKeys struct {
-	Ckn types.String `tfsdk:"ckn"`
-	KeyStringPassword types.String `tfsdk:"key_string_password"`
-	KeyStringPassword6 types.String `tfsdk:"key_string_password6"`
+	Ckn                             types.String `tfsdk:"ckn"`
+	KeyStringPassword               types.String `tfsdk:"key_string_password"`
+	KeyStringPassword6              types.String `tfsdk:"key_string_password6"`
 	KeyStringCryptographicAlgorithm types.String `tfsdk:"key_string_cryptographic_algorithm"`
-	LifetimeStartTimeHour types.Int64 `tfsdk:"lifetime_start_time_hour"`
-	LifetimeStartTimeMinute types.Int64 `tfsdk:"lifetime_start_time_minute"`
-	LifetimeStartTimeSecond types.Int64 `tfsdk:"lifetime_start_time_second"`
-	LifetimeStartTimeMonth types.String `tfsdk:"lifetime_start_time_month"`
-	LifetimeStartTimeDayOfMonth types.Int64 `tfsdk:"lifetime_start_time_day_of_month"`
-	LifetimeStartTimeYear types.Int64 `tfsdk:"lifetime_start_time_year"`
-	LifetimeEndTimeHour types.Int64 `tfsdk:"lifetime_end_time_hour"`
-	LifetimeEndTimeMinute types.Int64 `tfsdk:"lifetime_end_time_minute"`
-	LifetimeEndTimeSecond types.Int64 `tfsdk:"lifetime_end_time_second"`
-	LifetimeEndTimeMonth types.String `tfsdk:"lifetime_end_time_month"`
-	LifetimeEndTimeDayOfMonth types.Int64 `tfsdk:"lifetime_end_time_day_of_month"`
-	LifetimeEndTimeYear types.Int64 `tfsdk:"lifetime_end_time_year"`
-	LifetimeDuration types.Int64 `tfsdk:"lifetime_duration"`
-	LifetimeInfinite types.Bool `tfsdk:"lifetime_infinite"`
+	LifetimeStartTimeHour           types.Int64  `tfsdk:"lifetime_start_time_hour"`
+	LifetimeStartTimeMinute         types.Int64  `tfsdk:"lifetime_start_time_minute"`
+	LifetimeStartTimeSecond         types.Int64  `tfsdk:"lifetime_start_time_second"`
+	LifetimeStartTimeMonth          types.String `tfsdk:"lifetime_start_time_month"`
+	LifetimeStartTimeDayOfMonth     types.Int64  `tfsdk:"lifetime_start_time_day_of_month"`
+	LifetimeStartTimeYear           types.Int64  `tfsdk:"lifetime_start_time_year"`
+	LifetimeEndTimeHour             types.Int64  `tfsdk:"lifetime_end_time_hour"`
+	LifetimeEndTimeMinute           types.Int64  `tfsdk:"lifetime_end_time_minute"`
+	LifetimeEndTimeSecond           types.Int64  `tfsdk:"lifetime_end_time_second"`
+	LifetimeEndTimeMonth            types.String `tfsdk:"lifetime_end_time_month"`
+	LifetimeEndTimeDayOfMonth       types.Int64  `tfsdk:"lifetime_end_time_day_of_month"`
+	LifetimeEndTimeYear             types.Int64  `tfsdk:"lifetime_end_time_year"`
+	LifetimeDuration                types.Int64  `tfsdk:"lifetime_duration"`
+	LifetimeInfinite                types.Bool   `tfsdk:"lifetime_infinite"`
 }
 type KeyChainKeys struct {
-	KeyName types.String `tfsdk:"key_name"`
-	KeyStringPassword types.String `tfsdk:"key_string_password"`
-	KeyStringPassword6 types.String `tfsdk:"key_string_password6"`
-	CryptographicAlgorithm types.String `tfsdk:"cryptographic_algorithm"`
-	AcceptLifetimeStartTimeHour types.Int64 `tfsdk:"accept_lifetime_start_time_hour"`
-	AcceptLifetimeStartTimeMinute types.Int64 `tfsdk:"accept_lifetime_start_time_minute"`
-	AcceptLifetimeStartTimeSecond types.Int64 `tfsdk:"accept_lifetime_start_time_second"`
-	AcceptLifetimeStartTimeMonth types.String `tfsdk:"accept_lifetime_start_time_month"`
-	AcceptLifetimeStartTimeDayOfMonth types.Int64 `tfsdk:"accept_lifetime_start_time_day_of_month"`
-	AcceptLifetimeStartTimeYear types.Int64 `tfsdk:"accept_lifetime_start_time_year"`
-	AcceptLifetimeEndTimeHour types.Int64 `tfsdk:"accept_lifetime_end_time_hour"`
-	AcceptLifetimeEndTimeMinute types.Int64 `tfsdk:"accept_lifetime_end_time_minute"`
-	AcceptLifetimeEndTimeSecond types.Int64 `tfsdk:"accept_lifetime_end_time_second"`
-	AcceptLifetimeEndTimeMonth types.String `tfsdk:"accept_lifetime_end_time_month"`
-	AcceptLifetimeEndTimeDayOfMonth types.Int64 `tfsdk:"accept_lifetime_end_time_day_of_month"`
-	AcceptLifetimeEndTimeYear types.Int64 `tfsdk:"accept_lifetime_end_time_year"`
-	AcceptLifetimeDuration types.Int64 `tfsdk:"accept_lifetime_duration"`
-	AcceptLifetimeInfinite types.Bool `tfsdk:"accept_lifetime_infinite"`
-	SendLifetimeStartTimeHour types.Int64 `tfsdk:"send_lifetime_start_time_hour"`
-	SendLifetimeStartTimeMinute types.Int64 `tfsdk:"send_lifetime_start_time_minute"`
-	SendLifetimeStartTimeSecond types.Int64 `tfsdk:"send_lifetime_start_time_second"`
-	SendLifetimeStartTimeMonth types.String `tfsdk:"send_lifetime_start_time_month"`
-	SendLifetimeStartTimeDayOfMonth types.Int64 `tfsdk:"send_lifetime_start_time_day_of_month"`
-	SendLifetimeStartTimeYear types.Int64 `tfsdk:"send_lifetime_start_time_year"`
-	SendLifetimeEndTimeHour types.Int64 `tfsdk:"send_lifetime_end_time_hour"`
-	SendLifetimeEndTimeMinute types.Int64 `tfsdk:"send_lifetime_end_time_minute"`
-	SendLifetimeEndTimeSecond types.Int64 `tfsdk:"send_lifetime_end_time_second"`
-	SendLifetimeEndTimeMonth types.String `tfsdk:"send_lifetime_end_time_month"`
-	SendLifetimeEndTimeDayOfMonth types.Int64 `tfsdk:"send_lifetime_end_time_day_of_month"`
-	SendLifetimeEndTimeYear types.Int64 `tfsdk:"send_lifetime_end_time_year"`
-	SendLifetimeDuration types.Int64 `tfsdk:"send_lifetime_duration"`
-	SendLifetimeInfinite types.Bool `tfsdk:"send_lifetime_infinite"`
+	KeyName                           types.String `tfsdk:"key_name"`
+	KeyStringPassword                 types.String `tfsdk:"key_string_password"`
+	KeyStringPassword6                types.String `tfsdk:"key_string_password6"`
+	CryptographicAlgorithm            types.String `tfsdk:"cryptographic_algorithm"`
+	AcceptLifetimeStartTimeHour       types.Int64  `tfsdk:"accept_lifetime_start_time_hour"`
+	AcceptLifetimeStartTimeMinute     types.Int64  `tfsdk:"accept_lifetime_start_time_minute"`
+	AcceptLifetimeStartTimeSecond     types.Int64  `tfsdk:"accept_lifetime_start_time_second"`
+	AcceptLifetimeStartTimeMonth      types.String `tfsdk:"accept_lifetime_start_time_month"`
+	AcceptLifetimeStartTimeDayOfMonth types.Int64  `tfsdk:"accept_lifetime_start_time_day_of_month"`
+	AcceptLifetimeStartTimeYear       types.Int64  `tfsdk:"accept_lifetime_start_time_year"`
+	AcceptLifetimeEndTimeHour         types.Int64  `tfsdk:"accept_lifetime_end_time_hour"`
+	AcceptLifetimeEndTimeMinute       types.Int64  `tfsdk:"accept_lifetime_end_time_minute"`
+	AcceptLifetimeEndTimeSecond       types.Int64  `tfsdk:"accept_lifetime_end_time_second"`
+	AcceptLifetimeEndTimeMonth        types.String `tfsdk:"accept_lifetime_end_time_month"`
+	AcceptLifetimeEndTimeDayOfMonth   types.Int64  `tfsdk:"accept_lifetime_end_time_day_of_month"`
+	AcceptLifetimeEndTimeYear         types.Int64  `tfsdk:"accept_lifetime_end_time_year"`
+	AcceptLifetimeDuration            types.Int64  `tfsdk:"accept_lifetime_duration"`
+	AcceptLifetimeInfinite            types.Bool   `tfsdk:"accept_lifetime_infinite"`
+	SendLifetimeStartTimeHour         types.Int64  `tfsdk:"send_lifetime_start_time_hour"`
+	SendLifetimeStartTimeMinute       types.Int64  `tfsdk:"send_lifetime_start_time_minute"`
+	SendLifetimeStartTimeSecond       types.Int64  `tfsdk:"send_lifetime_start_time_second"`
+	SendLifetimeStartTimeMonth        types.String `tfsdk:"send_lifetime_start_time_month"`
+	SendLifetimeStartTimeDayOfMonth   types.Int64  `tfsdk:"send_lifetime_start_time_day_of_month"`
+	SendLifetimeStartTimeYear         types.Int64  `tfsdk:"send_lifetime_start_time_year"`
+	SendLifetimeEndTimeHour           types.Int64  `tfsdk:"send_lifetime_end_time_hour"`
+	SendLifetimeEndTimeMinute         types.Int64  `tfsdk:"send_lifetime_end_time_minute"`
+	SendLifetimeEndTimeSecond         types.Int64  `tfsdk:"send_lifetime_end_time_second"`
+	SendLifetimeEndTimeMonth          types.String `tfsdk:"send_lifetime_end_time_month"`
+	SendLifetimeEndTimeDayOfMonth     types.Int64  `tfsdk:"send_lifetime_end_time_day_of_month"`
+	SendLifetimeEndTimeYear           types.Int64  `tfsdk:"send_lifetime_end_time_year"`
+	SendLifetimeDuration              types.Int64  `tfsdk:"send_lifetime_duration"`
+	SendLifetimeInfinite              types.Bool   `tfsdk:"send_lifetime_infinite"`
 }
 
 // End of section. //template:end types
@@ -349,18 +348,17 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.AcceptToleranceValue = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "accept-tolerance.infinite"); !data.AcceptToleranceInfinite.IsNull() {
-		if value.Exists() {
-			data.AcceptToleranceInfinite = types.BoolValue(true)
-		} else {
-			data.AcceptToleranceInfinite = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "accept-tolerance.infinite"); value.Exists() {
+		data.AcceptToleranceInfinite = types.BoolValue(true)
 	} else {
-		data.AcceptToleranceInfinite = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.AcceptToleranceInfinite.IsNull() {
+			data.AcceptToleranceInfinite = types.BoolNull()
+		}
 	}
 	for i := range data.MacsecKeys {
-		keys := [...]string{ "ckn",  }
-		keyValues := [...]string{ data.MacsecKeys[i].Ckn.ValueString(),  }
+		keys := [...]string{"ckn"}
+		keyValues := [...]string{data.MacsecKeys[i].Ckn.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "macsec.keys.key").ForEach(
@@ -456,19 +454,19 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.MacsecKeys[i].LifetimeDuration = types.Int64Null()
 		}
-		if value := r.Get("lifetime.infinite"); !data.MacsecKeys[i].LifetimeInfinite.IsNull() {
-			if value.Exists() {
-				data.MacsecKeys[i].LifetimeInfinite = types.BoolValue(true)
-			} else {
-				data.MacsecKeys[i].LifetimeInfinite = types.BoolValue(false)
-			}
+		if value := r.Get("lifetime.infinite"); value.Exists() {
+			data.MacsecKeys[i].LifetimeInfinite = types.BoolValue(true)
 		} else {
-			data.MacsecKeys[i].LifetimeInfinite = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MacsecKeys[i].LifetimeInfinite.IsNull() {
+				data.MacsecKeys[i].LifetimeInfinite = types.BoolNull()
+			}
 		}
 	}
 	for i := range data.Keys {
-		keys := [...]string{ "key-name",  }
-		keyValues := [...]string{ data.Keys[i].KeyName.ValueString(),  }
+		keys := [...]string{"key-name"}
+		keyValues := [...]string{data.Keys[i].KeyName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "keys.key").ForEach(
@@ -564,14 +562,14 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Keys[i].AcceptLifetimeDuration = types.Int64Null()
 		}
-		if value := r.Get("accept-lifetime.infinite"); !data.Keys[i].AcceptLifetimeInfinite.IsNull() {
-			if value.Exists() {
-				data.Keys[i].AcceptLifetimeInfinite = types.BoolValue(true)
-			} else {
-				data.Keys[i].AcceptLifetimeInfinite = types.BoolValue(false)
-			}
+		if value := r.Get("accept-lifetime.infinite"); value.Exists() {
+			data.Keys[i].AcceptLifetimeInfinite = types.BoolValue(true)
 		} else {
-			data.Keys[i].AcceptLifetimeInfinite = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Keys[i].AcceptLifetimeInfinite.IsNull() {
+				data.Keys[i].AcceptLifetimeInfinite = types.BoolNull()
+			}
 		}
 		if value := r.Get("send-lifetime.start-time.hour"); value.Exists() && !data.Keys[i].SendLifetimeStartTimeHour.IsNull() {
 			data.Keys[i].SendLifetimeStartTimeHour = types.Int64Value(value.Int())
@@ -638,33 +636,31 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Keys[i].SendLifetimeDuration = types.Int64Null()
 		}
-		if value := r.Get("send-lifetime.infinite"); !data.Keys[i].SendLifetimeInfinite.IsNull() {
-			if value.Exists() {
-				data.Keys[i].SendLifetimeInfinite = types.BoolValue(true)
-			} else {
-				data.Keys[i].SendLifetimeInfinite = types.BoolValue(false)
+		if value := r.Get("send-lifetime.infinite"); value.Exists() {
+			data.Keys[i].SendLifetimeInfinite = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Keys[i].SendLifetimeInfinite.IsNull() {
+				data.Keys[i].SendLifetimeInfinite = types.BoolNull()
 			}
-		} else {
-			data.Keys[i].SendLifetimeInfinite = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "timezone.local"); !data.TimezoneLocal.IsNull() {
-		if value.Exists() {
-			data.TimezoneLocal = types.BoolValue(true)
-		} else {
-			data.TimezoneLocal = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "timezone.local"); value.Exists() {
+		data.TimezoneLocal = types.BoolValue(true)
 	} else {
-		data.TimezoneLocal = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TimezoneLocal.IsNull() {
+			data.TimezoneLocal = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "timezone.gmt"); !data.TimezoneGmt.IsNull() {
-		if value.Exists() {
-			data.TimezoneGmt = types.BoolValue(true)
-		} else {
-			data.TimezoneGmt = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "timezone.gmt"); value.Exists() {
+		data.TimezoneGmt = types.BoolValue(true)
 	} else {
-		data.TimezoneGmt = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TimezoneGmt.IsNull() {
+			data.TimezoneGmt = types.BoolNull()
+		}
 	}
 }
 
@@ -674,14 +670,14 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 func (data KeyChain) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.Name.IsNull() && !data.Name.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/key-chain-name", data.Name.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/key-chain-name", data.Name.ValueString())
 	}
 	if !data.AcceptToleranceValue.IsNull() && !data.AcceptToleranceValue.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/accept-tolerance/tolerance-value", strconv.FormatInt(data.AcceptToleranceValue.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/accept-tolerance/tolerance-value", strconv.FormatInt(data.AcceptToleranceValue.ValueInt64(), 10))
 	}
 	if !data.AcceptToleranceInfinite.IsNull() && !data.AcceptToleranceInfinite.IsUnknown() {
 		if data.AcceptToleranceInfinite.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/accept-tolerance/infinite", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/accept-tolerance/infinite", "")
 		}
 	}
 	if len(data.MacsecKeys) > 0 {
@@ -858,12 +854,12 @@ func (data KeyChain) toBodyXML(ctx context.Context) string {
 	}
 	if !data.TimezoneLocal.IsNull() && !data.TimezoneLocal.IsUnknown() {
 		if data.TimezoneLocal.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/timezone/local", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/timezone/local", "")
 		}
 	}
 	if !data.TimezoneGmt.IsNull() && !data.TimezoneGmt.IsUnknown() {
 		if data.TimezoneGmt.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/timezone/gmt", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/timezone/gmt", "")
 		}
 	}
 	bodyString, err := body.String()
@@ -877,17 +873,17 @@ func (data KeyChain) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *KeyChain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/key-chain-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/key-chain-name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	} else if data.Name.IsNull() {
 		data.Name = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/accept-tolerance/tolerance-value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-tolerance/tolerance-value"); value.Exists() {
 		data.AcceptToleranceValue = types.Int64Value(value.Int())
 	} else if data.AcceptToleranceValue.IsNull() {
 		data.AcceptToleranceValue = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/accept-tolerance/infinite"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-tolerance/infinite"); value.Exists() {
 		data.AcceptToleranceInfinite = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -896,11 +892,11 @@ func (data *KeyChain) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 		}
 	}
 	for i := range data.MacsecKeys {
-		keys := [...]string{ "ckn",  }
-		keyValues := [...]string{ data.MacsecKeys[i].Ckn.ValueString(),  }
+		keys := [...]string{"ckn"}
+		keyValues := [...]string{data.MacsecKeys[i].Ckn.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/macsec/keys/key").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/macsec/keys/key").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1004,11 +1000,11 @@ func (data *KeyChain) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 		}
 	}
 	for i := range data.Keys {
-		keys := [...]string{ "key-name",  }
-		keyValues := [...]string{ data.Keys[i].KeyName.ValueString(),  }
+		keys := [...]string{"key-name"}
+		keyValues := [...]string{data.Keys[i].KeyName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/keys/key").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/keys/key").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1185,7 +1181,7 @@ func (data *KeyChain) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timezone/local"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timezone/local"); value.Exists() {
 		data.TimezoneLocal = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1193,7 +1189,7 @@ func (data *KeyChain) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			data.TimezoneLocal = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timezone/gmt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timezone/gmt"); value.Exists() {
 		data.TimezoneGmt = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1211,15 +1207,15 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"accept-tolerance.tolerance-value"); value.Exists() {
+	if value := res.Get(prefix + "accept-tolerance.tolerance-value"); value.Exists() {
 		data.AcceptToleranceValue = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"accept-tolerance.infinite"); value.Exists() {
+	if value := res.Get(prefix + "accept-tolerance.infinite"); value.Exists() {
 		data.AcceptToleranceInfinite = types.BoolValue(true)
 	} else {
 		data.AcceptToleranceInfinite = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"macsec.keys.key"); value.Exists() {
+	if value := res.Get(prefix + "macsec.keys.key"); value.Exists() {
 		data.MacsecKeys = make([]KeyChainMacsecKeys, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := KeyChainMacsecKeys{}
@@ -1277,7 +1273,7 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"keys.key"); value.Exists() {
+	if value := res.Get(prefix + "keys.key"); value.Exists() {
 		data.Keys = make([]KeyChainKeys, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := KeyChainKeys{}
@@ -1379,12 +1375,12 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"timezone.local"); value.Exists() {
+	if value := res.Get(prefix + "timezone.local"); value.Exists() {
 		data.TimezoneLocal = types.BoolValue(true)
 	} else {
 		data.TimezoneLocal = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"timezone.gmt"); value.Exists() {
+	if value := res.Get(prefix + "timezone.gmt"); value.Exists() {
 		data.TimezoneGmt = types.BoolValue(true)
 	} else {
 		data.TimezoneGmt = types.BoolValue(false)
@@ -1399,15 +1395,15 @@ func (data *KeyChainData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"accept-tolerance.tolerance-value"); value.Exists() {
+	if value := res.Get(prefix + "accept-tolerance.tolerance-value"); value.Exists() {
 		data.AcceptToleranceValue = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"accept-tolerance.infinite"); value.Exists() {
+	if value := res.Get(prefix + "accept-tolerance.infinite"); value.Exists() {
 		data.AcceptToleranceInfinite = types.BoolValue(true)
 	} else {
 		data.AcceptToleranceInfinite = types.BoolNull()
 	}
-	if value := res.Get(prefix+"macsec.keys.key"); value.Exists() {
+	if value := res.Get(prefix + "macsec.keys.key"); value.Exists() {
 		data.MacsecKeys = make([]KeyChainMacsecKeys, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := KeyChainMacsecKeys{}
@@ -1471,7 +1467,7 @@ func (data *KeyChainData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"keys.key"); value.Exists() {
+	if value := res.Get(prefix + "keys.key"); value.Exists() {
 		data.Keys = make([]KeyChainKeys, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := KeyChainKeys{}
@@ -1579,12 +1575,12 @@ func (data *KeyChainData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"timezone.local"); value.Exists() {
+	if value := res.Get(prefix + "timezone.local"); value.Exists() {
 		data.TimezoneLocal = types.BoolValue(true)
 	} else {
 		data.TimezoneLocal = types.BoolNull()
 	}
-	if value := res.Get(prefix+"timezone.gmt"); value.Exists() {
+	if value := res.Get(prefix + "timezone.gmt"); value.Exists() {
 		data.TimezoneGmt = types.BoolValue(true)
 	} else {
 		data.TimezoneGmt = types.BoolNull()
@@ -1595,15 +1591,15 @@ func (data *KeyChainData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *KeyChain) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/accept-tolerance/tolerance-value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-tolerance/tolerance-value"); value.Exists() {
 		data.AcceptToleranceValue = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/accept-tolerance/infinite"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-tolerance/infinite"); value.Exists() {
 		data.AcceptToleranceInfinite = types.BoolValue(true)
 	} else {
 		data.AcceptToleranceInfinite = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/macsec/keys/key"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/macsec/keys/key"); value.Exists() {
 		data.MacsecKeys = make([]KeyChainMacsecKeys, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := KeyChainMacsecKeys{}
@@ -1667,7 +1663,7 @@ func (data *KeyChain) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/keys/key"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/keys/key"); value.Exists() {
 		data.Keys = make([]KeyChainKeys, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := KeyChainKeys{}
@@ -1775,12 +1771,12 @@ func (data *KeyChain) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timezone/local"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timezone/local"); value.Exists() {
 		data.TimezoneLocal = types.BoolValue(true)
 	} else {
 		data.TimezoneLocal = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timezone/gmt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timezone/gmt"); value.Exists() {
 		data.TimezoneGmt = types.BoolValue(true)
 	} else {
 		data.TimezoneGmt = types.BoolValue(false)
@@ -1791,15 +1787,15 @@ func (data *KeyChain) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *KeyChainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/accept-tolerance/tolerance-value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-tolerance/tolerance-value"); value.Exists() {
 		data.AcceptToleranceValue = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/accept-tolerance/infinite"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-tolerance/infinite"); value.Exists() {
 		data.AcceptToleranceInfinite = types.BoolValue(true)
 	} else {
 		data.AcceptToleranceInfinite = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/macsec/keys/key"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/macsec/keys/key"); value.Exists() {
 		data.MacsecKeys = make([]KeyChainMacsecKeys, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := KeyChainMacsecKeys{}
@@ -1854,16 +1850,16 @@ func (data *KeyChainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "lifetime/duration"); cValue.Exists() {
 				item.LifetimeDuration = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "lifetime/infinite"); cValue.Exists() {
-			item.LifetimeInfinite = types.BoolValue(true)
-		} else {
-			item.LifetimeInfinite = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "lifetime/infinite"); cValue.Exists() {
+				item.LifetimeInfinite = types.BoolValue(true)
+			} else {
+				item.LifetimeInfinite = types.BoolValue(false)
+			}
 			data.MacsecKeys = append(data.MacsecKeys, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/keys/key"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/keys/key"); value.Exists() {
 		data.Keys = make([]KeyChainKeys, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := KeyChainKeys{}
@@ -1918,11 +1914,11 @@ func (data *KeyChainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "accept-lifetime/duration"); cValue.Exists() {
 				item.AcceptLifetimeDuration = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "accept-lifetime/infinite"); cValue.Exists() {
-			item.AcceptLifetimeInfinite = types.BoolValue(true)
-		} else {
-			item.AcceptLifetimeInfinite = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/infinite"); cValue.Exists() {
+				item.AcceptLifetimeInfinite = types.BoolValue(true)
+			} else {
+				item.AcceptLifetimeInfinite = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "send-lifetime/start-time/hour"); cValue.Exists() {
 				item.SendLifetimeStartTimeHour = types.Int64Value(cValue.Int())
 			}
@@ -1962,21 +1958,21 @@ func (data *KeyChainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "send-lifetime/duration"); cValue.Exists() {
 				item.SendLifetimeDuration = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "send-lifetime/infinite"); cValue.Exists() {
-			item.SendLifetimeInfinite = types.BoolValue(true)
-		} else {
-			item.SendLifetimeInfinite = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/infinite"); cValue.Exists() {
+				item.SendLifetimeInfinite = types.BoolValue(true)
+			} else {
+				item.SendLifetimeInfinite = types.BoolValue(false)
+			}
 			data.Keys = append(data.Keys, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timezone/local"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timezone/local"); value.Exists() {
 		data.TimezoneLocal = types.BoolValue(true)
 	} else {
 		data.TimezoneLocal = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timezone/gmt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timezone/gmt"); value.Exists() {
 		data.TimezoneGmt = types.BoolValue(true)
 	} else {
 		data.TimezoneGmt = types.BoolValue(false)
@@ -1995,11 +1991,11 @@ func (data *KeyChain) getDeletedItems(ctx context.Context, state KeyChain) []str
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/timezone/local", state.getPath()))
 	}
 	for i := range state.Keys {
-		keys := [...]string{ "key-name",  }
-		stateKeyValues := [...]string{ state.Keys[i].KeyName.ValueString(),  }
+		keys := [...]string{"key-name"}
+		stateKeyValues := [...]string{state.Keys[i].KeyName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -2016,100 +2012,100 @@ func (data *KeyChain) getDeletedItems(ctx context.Context, state KeyChain) []str
 			if state.Keys[i].KeyName.ValueString() != data.Keys[j].KeyName.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.Keys[i].SendLifetimeInfinite.IsNull() && data.Keys[j].SendLifetimeInfinite.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/infinite", state.getPath(), keyString))
-			}
-			if !state.Keys[i].SendLifetimeDuration.IsNull() && data.Keys[j].SendLifetimeDuration.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/duration", state.getPath(), keyString))
-			}
-			if !state.Keys[i].SendLifetimeEndTimeYear.IsNull() && data.Keys[j].SendLifetimeEndTimeYear.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/end-time/year", state.getPath(), keyString))
-			}
-			if !state.Keys[i].SendLifetimeEndTimeDayOfMonth.IsNull() && data.Keys[j].SendLifetimeEndTimeDayOfMonth.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/end-time/day-of-month", state.getPath(), keyString))
-			}
-			if !state.Keys[i].SendLifetimeEndTimeMonth.IsNull() && data.Keys[j].SendLifetimeEndTimeMonth.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/end-time/month", state.getPath(), keyString))
-			}
-			if !state.Keys[i].SendLifetimeEndTimeSecond.IsNull() && data.Keys[j].SendLifetimeEndTimeSecond.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/end-time/second", state.getPath(), keyString))
-			}
-			if !state.Keys[i].SendLifetimeEndTimeMinute.IsNull() && data.Keys[j].SendLifetimeEndTimeMinute.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/end-time/minute", state.getPath(), keyString))
-			}
-			if !state.Keys[i].SendLifetimeEndTimeHour.IsNull() && data.Keys[j].SendLifetimeEndTimeHour.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/end-time/hour", state.getPath(), keyString))
-			}
-			if !state.Keys[i].SendLifetimeStartTimeYear.IsNull() && data.Keys[j].SendLifetimeStartTimeYear.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/year", state.getPath(), keyString))
-			}
-			if !state.Keys[i].SendLifetimeStartTimeDayOfMonth.IsNull() && data.Keys[j].SendLifetimeStartTimeDayOfMonth.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/day-of-month", state.getPath(), keyString))
-			}
-			if !state.Keys[i].SendLifetimeStartTimeMonth.IsNull() && data.Keys[j].SendLifetimeStartTimeMonth.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/month", state.getPath(), keyString))
-			}
-			if !state.Keys[i].SendLifetimeStartTimeSecond.IsNull() && data.Keys[j].SendLifetimeStartTimeSecond.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/second", state.getPath(), keyString))
-			}
-			if !state.Keys[i].SendLifetimeStartTimeMinute.IsNull() && data.Keys[j].SendLifetimeStartTimeMinute.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/minute", state.getPath(), keyString))
-			}
-			if !state.Keys[i].SendLifetimeStartTimeHour.IsNull() && data.Keys[j].SendLifetimeStartTimeHour.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/hour", state.getPath(), keyString))
-			}
-			if !state.Keys[i].AcceptLifetimeInfinite.IsNull() && data.Keys[j].AcceptLifetimeInfinite.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/infinite", state.getPath(), keyString))
-			}
-			if !state.Keys[i].AcceptLifetimeDuration.IsNull() && data.Keys[j].AcceptLifetimeDuration.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/duration", state.getPath(), keyString))
-			}
-			if !state.Keys[i].AcceptLifetimeEndTimeYear.IsNull() && data.Keys[j].AcceptLifetimeEndTimeYear.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/end-time/year", state.getPath(), keyString))
-			}
-			if !state.Keys[i].AcceptLifetimeEndTimeDayOfMonth.IsNull() && data.Keys[j].AcceptLifetimeEndTimeDayOfMonth.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/end-time/day-of-month", state.getPath(), keyString))
-			}
-			if !state.Keys[i].AcceptLifetimeEndTimeMonth.IsNull() && data.Keys[j].AcceptLifetimeEndTimeMonth.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/end-time/month", state.getPath(), keyString))
-			}
-			if !state.Keys[i].AcceptLifetimeEndTimeSecond.IsNull() && data.Keys[j].AcceptLifetimeEndTimeSecond.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/end-time/second", state.getPath(), keyString))
-			}
-			if !state.Keys[i].AcceptLifetimeEndTimeMinute.IsNull() && data.Keys[j].AcceptLifetimeEndTimeMinute.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/end-time/minute", state.getPath(), keyString))
-			}
-			if !state.Keys[i].AcceptLifetimeEndTimeHour.IsNull() && data.Keys[j].AcceptLifetimeEndTimeHour.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/end-time/hour", state.getPath(), keyString))
-			}
-			if !state.Keys[i].AcceptLifetimeStartTimeYear.IsNull() && data.Keys[j].AcceptLifetimeStartTimeYear.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/year", state.getPath(), keyString))
-			}
-			if !state.Keys[i].AcceptLifetimeStartTimeDayOfMonth.IsNull() && data.Keys[j].AcceptLifetimeStartTimeDayOfMonth.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/day-of-month", state.getPath(), keyString))
-			}
-			if !state.Keys[i].AcceptLifetimeStartTimeMonth.IsNull() && data.Keys[j].AcceptLifetimeStartTimeMonth.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/month", state.getPath(), keyString))
-			}
-			if !state.Keys[i].AcceptLifetimeStartTimeSecond.IsNull() && data.Keys[j].AcceptLifetimeStartTimeSecond.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/second", state.getPath(), keyString))
-			}
-			if !state.Keys[i].AcceptLifetimeStartTimeMinute.IsNull() && data.Keys[j].AcceptLifetimeStartTimeMinute.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/minute", state.getPath(), keyString))
-			}
-			if !state.Keys[i].AcceptLifetimeStartTimeHour.IsNull() && data.Keys[j].AcceptLifetimeStartTimeHour.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/hour", state.getPath(), keyString))
-			}
-			if !state.Keys[i].CryptographicAlgorithm.IsNull() && data.Keys[j].CryptographicAlgorithm.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/cryptographic-algorithm", state.getPath(), keyString))
-			}
-			if !state.Keys[i].KeyStringPassword6.IsNull() && data.Keys[j].KeyStringPassword6.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/key-string/password6", state.getPath(), keyString))
-			}
-			if !state.Keys[i].KeyStringPassword.IsNull() && data.Keys[j].KeyStringPassword.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/key-string/password", state.getPath(), keyString))
-			}
+			if found {
+				if !state.Keys[i].SendLifetimeInfinite.IsNull() && data.Keys[j].SendLifetimeInfinite.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/infinite", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeDuration.IsNull() && data.Keys[j].SendLifetimeDuration.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/duration", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeEndTimeYear.IsNull() && data.Keys[j].SendLifetimeEndTimeYear.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/end-time/year", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeEndTimeDayOfMonth.IsNull() && data.Keys[j].SendLifetimeEndTimeDayOfMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/end-time/day-of-month", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeEndTimeMonth.IsNull() && data.Keys[j].SendLifetimeEndTimeMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/end-time/month", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeEndTimeSecond.IsNull() && data.Keys[j].SendLifetimeEndTimeSecond.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/end-time/second", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeEndTimeMinute.IsNull() && data.Keys[j].SendLifetimeEndTimeMinute.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/end-time/minute", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeEndTimeHour.IsNull() && data.Keys[j].SendLifetimeEndTimeHour.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/end-time/hour", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeYear.IsNull() && data.Keys[j].SendLifetimeStartTimeYear.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/year", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeDayOfMonth.IsNull() && data.Keys[j].SendLifetimeStartTimeDayOfMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/day-of-month", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeMonth.IsNull() && data.Keys[j].SendLifetimeStartTimeMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/month", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeSecond.IsNull() && data.Keys[j].SendLifetimeStartTimeSecond.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/second", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeMinute.IsNull() && data.Keys[j].SendLifetimeStartTimeMinute.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/minute", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeHour.IsNull() && data.Keys[j].SendLifetimeStartTimeHour.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/hour", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeInfinite.IsNull() && data.Keys[j].AcceptLifetimeInfinite.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/infinite", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeDuration.IsNull() && data.Keys[j].AcceptLifetimeDuration.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/duration", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeEndTimeYear.IsNull() && data.Keys[j].AcceptLifetimeEndTimeYear.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/end-time/year", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeEndTimeDayOfMonth.IsNull() && data.Keys[j].AcceptLifetimeEndTimeDayOfMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/end-time/day-of-month", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeEndTimeMonth.IsNull() && data.Keys[j].AcceptLifetimeEndTimeMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/end-time/month", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeEndTimeSecond.IsNull() && data.Keys[j].AcceptLifetimeEndTimeSecond.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/end-time/second", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeEndTimeMinute.IsNull() && data.Keys[j].AcceptLifetimeEndTimeMinute.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/end-time/minute", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeEndTimeHour.IsNull() && data.Keys[j].AcceptLifetimeEndTimeHour.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/end-time/hour", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeYear.IsNull() && data.Keys[j].AcceptLifetimeStartTimeYear.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/year", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeDayOfMonth.IsNull() && data.Keys[j].AcceptLifetimeStartTimeDayOfMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/day-of-month", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeMonth.IsNull() && data.Keys[j].AcceptLifetimeStartTimeMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/month", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeSecond.IsNull() && data.Keys[j].AcceptLifetimeStartTimeSecond.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/second", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeMinute.IsNull() && data.Keys[j].AcceptLifetimeStartTimeMinute.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/minute", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeHour.IsNull() && data.Keys[j].AcceptLifetimeStartTimeHour.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/hour", state.getPath(), keyString))
+				}
+				if !state.Keys[i].CryptographicAlgorithm.IsNull() && data.Keys[j].CryptographicAlgorithm.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/cryptographic-algorithm", state.getPath(), keyString))
+				}
+				if !state.Keys[i].KeyStringPassword6.IsNull() && data.Keys[j].KeyStringPassword6.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/key-string/password6", state.getPath(), keyString))
+				}
+				if !state.Keys[i].KeyStringPassword.IsNull() && data.Keys[j].KeyStringPassword.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/key-string/password", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -2118,11 +2114,11 @@ func (data *KeyChain) getDeletedItems(ctx context.Context, state KeyChain) []str
 		}
 	}
 	for i := range state.MacsecKeys {
-		keys := [...]string{ "ckn",  }
-		stateKeyValues := [...]string{ state.MacsecKeys[i].Ckn.ValueString(),  }
+		keys := [...]string{"ckn"}
+		stateKeyValues := [...]string{state.MacsecKeys[i].Ckn.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -2139,58 +2135,58 @@ func (data *KeyChain) getDeletedItems(ctx context.Context, state KeyChain) []str
 			if state.MacsecKeys[i].Ckn.ValueString() != data.MacsecKeys[j].Ckn.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.MacsecKeys[i].LifetimeInfinite.IsNull() && data.MacsecKeys[j].LifetimeInfinite.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/infinite", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].LifetimeDuration.IsNull() && data.MacsecKeys[j].LifetimeDuration.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/duration", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].LifetimeEndTimeYear.IsNull() && data.MacsecKeys[j].LifetimeEndTimeYear.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/end-time/year", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].LifetimeEndTimeDayOfMonth.IsNull() && data.MacsecKeys[j].LifetimeEndTimeDayOfMonth.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/end-time/day-of-month", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].LifetimeEndTimeMonth.IsNull() && data.MacsecKeys[j].LifetimeEndTimeMonth.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/end-time/month", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].LifetimeEndTimeSecond.IsNull() && data.MacsecKeys[j].LifetimeEndTimeSecond.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/end-time/second", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].LifetimeEndTimeMinute.IsNull() && data.MacsecKeys[j].LifetimeEndTimeMinute.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/end-time/minute", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].LifetimeEndTimeHour.IsNull() && data.MacsecKeys[j].LifetimeEndTimeHour.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/end-time/hour", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].LifetimeStartTimeYear.IsNull() && data.MacsecKeys[j].LifetimeStartTimeYear.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/start-time/year", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].LifetimeStartTimeDayOfMonth.IsNull() && data.MacsecKeys[j].LifetimeStartTimeDayOfMonth.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/start-time/day-of-month", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].LifetimeStartTimeMonth.IsNull() && data.MacsecKeys[j].LifetimeStartTimeMonth.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/start-time/month", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].LifetimeStartTimeSecond.IsNull() && data.MacsecKeys[j].LifetimeStartTimeSecond.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/start-time/second", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].LifetimeStartTimeMinute.IsNull() && data.MacsecKeys[j].LifetimeStartTimeMinute.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/start-time/minute", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].LifetimeStartTimeHour.IsNull() && data.MacsecKeys[j].LifetimeStartTimeHour.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/start-time/hour", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].KeyStringCryptographicAlgorithm.IsNull() && data.MacsecKeys[j].KeyStringCryptographicAlgorithm.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/key-string/cryptographic-algorithm", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].KeyStringPassword6.IsNull() && data.MacsecKeys[j].KeyStringPassword6.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/key-string/password6", state.getPath(), keyString))
-			}
-			if !state.MacsecKeys[i].KeyStringPassword.IsNull() && data.MacsecKeys[j].KeyStringPassword.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/key-string/password", state.getPath(), keyString))
-			}
+			if found {
+				if !state.MacsecKeys[i].LifetimeInfinite.IsNull() && data.MacsecKeys[j].LifetimeInfinite.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/infinite", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].LifetimeDuration.IsNull() && data.MacsecKeys[j].LifetimeDuration.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/duration", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].LifetimeEndTimeYear.IsNull() && data.MacsecKeys[j].LifetimeEndTimeYear.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/end-time/year", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].LifetimeEndTimeDayOfMonth.IsNull() && data.MacsecKeys[j].LifetimeEndTimeDayOfMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/end-time/day-of-month", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].LifetimeEndTimeMonth.IsNull() && data.MacsecKeys[j].LifetimeEndTimeMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/end-time/month", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].LifetimeEndTimeSecond.IsNull() && data.MacsecKeys[j].LifetimeEndTimeSecond.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/end-time/second", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].LifetimeEndTimeMinute.IsNull() && data.MacsecKeys[j].LifetimeEndTimeMinute.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/end-time/minute", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].LifetimeEndTimeHour.IsNull() && data.MacsecKeys[j].LifetimeEndTimeHour.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/end-time/hour", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].LifetimeStartTimeYear.IsNull() && data.MacsecKeys[j].LifetimeStartTimeYear.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/start-time/year", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].LifetimeStartTimeDayOfMonth.IsNull() && data.MacsecKeys[j].LifetimeStartTimeDayOfMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/start-time/day-of-month", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].LifetimeStartTimeMonth.IsNull() && data.MacsecKeys[j].LifetimeStartTimeMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/start-time/month", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].LifetimeStartTimeSecond.IsNull() && data.MacsecKeys[j].LifetimeStartTimeSecond.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/start-time/second", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].LifetimeStartTimeMinute.IsNull() && data.MacsecKeys[j].LifetimeStartTimeMinute.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/start-time/minute", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].LifetimeStartTimeHour.IsNull() && data.MacsecKeys[j].LifetimeStartTimeHour.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/lifetime/start-time/hour", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].KeyStringCryptographicAlgorithm.IsNull() && data.MacsecKeys[j].KeyStringCryptographicAlgorithm.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/key-string/cryptographic-algorithm", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].KeyStringPassword6.IsNull() && data.MacsecKeys[j].KeyStringPassword6.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/key-string/password6", state.getPath(), keyString))
+				}
+				if !state.MacsecKeys[i].KeyStringPassword.IsNull() && data.MacsecKeys[j].KeyStringPassword.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/macsec/keys/key%v/key-string/password", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -2225,11 +2221,11 @@ func (data *KeyChain) getEmptyLeafsDelete(ctx context.Context, state *KeyChain) 
 		}
 	}
 	for i := range data.Keys {
-		keys := [...]string{ "key-name",  }
-		keyValues := [...]string{ data.Keys[i].KeyName.ValueString(),  }
+		keys := [...]string{"key-name"}
+		keyValues := [...]string{data.Keys[i].KeyName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.Keys[i].SendLifetimeInfinite.IsNull() && !data.Keys[i].SendLifetimeInfinite.ValueBool() {
@@ -2247,11 +2243,11 @@ func (data *KeyChain) getEmptyLeafsDelete(ctx context.Context, state *KeyChain) 
 		}
 	}
 	for i := range data.MacsecKeys {
-		keys := [...]string{ "ckn",  }
-		keyValues := [...]string{ data.MacsecKeys[i].Ckn.ValueString(),  }
+		keys := [...]string{"ckn"}
+		keyValues := [...]string{data.MacsecKeys[i].Ckn.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.MacsecKeys[i].LifetimeInfinite.IsNull() && !data.MacsecKeys[i].LifetimeInfinite.ValueBool() {
@@ -2282,12 +2278,12 @@ func (data *KeyChain) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timezone/local", data.getPath()))
 	}
 	for i := range data.Keys {
-		keyValues := [...]string{ data.Keys[i].KeyName.ValueString(),  }
+		keyValues := [...]string{data.Keys[i].KeyName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/keys/key=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.MacsecKeys {
-		keyValues := [...]string{ data.MacsecKeys[i].Ckn.ValueString(),  }
+		keyValues := [...]string{data.MacsecKeys[i].Ckn.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/macsec/keys/key=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2310,7 +2306,7 @@ func (data *KeyChain) addDeletedItemsXML(ctx context.Context, state KeyChain, bo
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TimezoneGmt.IsNull() && state.TimezoneGmt.ValueBool() && data.TimezoneGmt.IsNull() {
-		deletePath := state.getXPath()+"/timezone/gmt"
+		deletePath := state.getXPath() + "/timezone/gmt"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2318,15 +2314,15 @@ func (data *KeyChain) addDeletedItemsXML(ctx context.Context, state KeyChain, bo
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TimezoneLocal.IsNull() && state.TimezoneLocal.ValueBool() && data.TimezoneLocal.IsNull() {
-		deletePath := state.getXPath()+"/timezone/local"
+		deletePath := state.getXPath() + "/timezone/local"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.Keys {
-		stateKeys := [...]string{ "key-name",  }
-		stateKeyValues := [...]string{ state.Keys[i].KeyName.ValueString(),  }
+		stateKeys := [...]string{"key-name"}
+		stateKeyValues := [...]string{state.Keys[i].KeyName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2347,101 +2343,101 @@ func (data *KeyChain) addDeletedItemsXML(ctx context.Context, state KeyChain, bo
 				found = false
 			}
 			if found {
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Keys[i].SendLifetimeInfinite.IsNull() && state.Keys[i].SendLifetimeInfinite.ValueBool() && data.Keys[j].SendLifetimeInfinite.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/infinite", predicates))
-			}
-			if !state.Keys[i].SendLifetimeDuration.IsNull() && data.Keys[j].SendLifetimeDuration.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/duration", predicates))
-			}
-			if !state.Keys[i].SendLifetimeEndTimeYear.IsNull() && data.Keys[j].SendLifetimeEndTimeYear.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/end-time/year", predicates))
-			}
-			if !state.Keys[i].SendLifetimeEndTimeDayOfMonth.IsNull() && data.Keys[j].SendLifetimeEndTimeDayOfMonth.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/end-time/day-of-month", predicates))
-			}
-			if !state.Keys[i].SendLifetimeEndTimeMonth.IsNull() && data.Keys[j].SendLifetimeEndTimeMonth.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/end-time/month", predicates))
-			}
-			if !state.Keys[i].SendLifetimeEndTimeSecond.IsNull() && data.Keys[j].SendLifetimeEndTimeSecond.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/end-time/second", predicates))
-			}
-			if !state.Keys[i].SendLifetimeEndTimeMinute.IsNull() && data.Keys[j].SendLifetimeEndTimeMinute.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/end-time/minute", predicates))
-			}
-			if !state.Keys[i].SendLifetimeEndTimeHour.IsNull() && data.Keys[j].SendLifetimeEndTimeHour.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/end-time/hour", predicates))
-			}
-			if !state.Keys[i].SendLifetimeStartTimeYear.IsNull() && data.Keys[j].SendLifetimeStartTimeYear.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/start-time/year", predicates))
-			}
-			if !state.Keys[i].SendLifetimeStartTimeDayOfMonth.IsNull() && data.Keys[j].SendLifetimeStartTimeDayOfMonth.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/start-time/day-of-month", predicates))
-			}
-			if !state.Keys[i].SendLifetimeStartTimeMonth.IsNull() && data.Keys[j].SendLifetimeStartTimeMonth.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/start-time/month", predicates))
-			}
-			if !state.Keys[i].SendLifetimeStartTimeSecond.IsNull() && data.Keys[j].SendLifetimeStartTimeSecond.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/start-time/second", predicates))
-			}
-			if !state.Keys[i].SendLifetimeStartTimeMinute.IsNull() && data.Keys[j].SendLifetimeStartTimeMinute.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/start-time/minute", predicates))
-			}
-			if !state.Keys[i].SendLifetimeStartTimeHour.IsNull() && data.Keys[j].SendLifetimeStartTimeHour.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/start-time/hour", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Keys[i].AcceptLifetimeInfinite.IsNull() && state.Keys[i].AcceptLifetimeInfinite.ValueBool() && data.Keys[j].AcceptLifetimeInfinite.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/infinite", predicates))
-			}
-			if !state.Keys[i].AcceptLifetimeDuration.IsNull() && data.Keys[j].AcceptLifetimeDuration.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/duration", predicates))
-			}
-			if !state.Keys[i].AcceptLifetimeEndTimeYear.IsNull() && data.Keys[j].AcceptLifetimeEndTimeYear.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/end-time/year", predicates))
-			}
-			if !state.Keys[i].AcceptLifetimeEndTimeDayOfMonth.IsNull() && data.Keys[j].AcceptLifetimeEndTimeDayOfMonth.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/end-time/day-of-month", predicates))
-			}
-			if !state.Keys[i].AcceptLifetimeEndTimeMonth.IsNull() && data.Keys[j].AcceptLifetimeEndTimeMonth.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/end-time/month", predicates))
-			}
-			if !state.Keys[i].AcceptLifetimeEndTimeSecond.IsNull() && data.Keys[j].AcceptLifetimeEndTimeSecond.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/end-time/second", predicates))
-			}
-			if !state.Keys[i].AcceptLifetimeEndTimeMinute.IsNull() && data.Keys[j].AcceptLifetimeEndTimeMinute.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/end-time/minute", predicates))
-			}
-			if !state.Keys[i].AcceptLifetimeEndTimeHour.IsNull() && data.Keys[j].AcceptLifetimeEndTimeHour.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/end-time/hour", predicates))
-			}
-			if !state.Keys[i].AcceptLifetimeStartTimeYear.IsNull() && data.Keys[j].AcceptLifetimeStartTimeYear.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/start-time/year", predicates))
-			}
-			if !state.Keys[i].AcceptLifetimeStartTimeDayOfMonth.IsNull() && data.Keys[j].AcceptLifetimeStartTimeDayOfMonth.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/start-time/day-of-month", predicates))
-			}
-			if !state.Keys[i].AcceptLifetimeStartTimeMonth.IsNull() && data.Keys[j].AcceptLifetimeStartTimeMonth.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/start-time/month", predicates))
-			}
-			if !state.Keys[i].AcceptLifetimeStartTimeSecond.IsNull() && data.Keys[j].AcceptLifetimeStartTimeSecond.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/start-time/second", predicates))
-			}
-			if !state.Keys[i].AcceptLifetimeStartTimeMinute.IsNull() && data.Keys[j].AcceptLifetimeStartTimeMinute.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/start-time/minute", predicates))
-			}
-			if !state.Keys[i].AcceptLifetimeStartTimeHour.IsNull() && data.Keys[j].AcceptLifetimeStartTimeHour.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/start-time/hour", predicates))
-			}
-			if !state.Keys[i].CryptographicAlgorithm.IsNull() && data.Keys[j].CryptographicAlgorithm.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/cryptographic-algorithm", predicates))
-			}
-			if !state.Keys[i].KeyStringPassword6.IsNull() && data.Keys[j].KeyStringPassword6.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/key-string/password6", predicates))
-			}
-			if !state.Keys[i].KeyStringPassword.IsNull() && data.Keys[j].KeyStringPassword.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/key-string/password", predicates))
-			}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Keys[i].SendLifetimeInfinite.IsNull() && state.Keys[i].SendLifetimeInfinite.ValueBool() && data.Keys[j].SendLifetimeInfinite.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/infinite", predicates))
+				}
+				if !state.Keys[i].SendLifetimeDuration.IsNull() && data.Keys[j].SendLifetimeDuration.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/duration", predicates))
+				}
+				if !state.Keys[i].SendLifetimeEndTimeYear.IsNull() && data.Keys[j].SendLifetimeEndTimeYear.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/end-time/year", predicates))
+				}
+				if !state.Keys[i].SendLifetimeEndTimeDayOfMonth.IsNull() && data.Keys[j].SendLifetimeEndTimeDayOfMonth.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/end-time/day-of-month", predicates))
+				}
+				if !state.Keys[i].SendLifetimeEndTimeMonth.IsNull() && data.Keys[j].SendLifetimeEndTimeMonth.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/end-time/month", predicates))
+				}
+				if !state.Keys[i].SendLifetimeEndTimeSecond.IsNull() && data.Keys[j].SendLifetimeEndTimeSecond.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/end-time/second", predicates))
+				}
+				if !state.Keys[i].SendLifetimeEndTimeMinute.IsNull() && data.Keys[j].SendLifetimeEndTimeMinute.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/end-time/minute", predicates))
+				}
+				if !state.Keys[i].SendLifetimeEndTimeHour.IsNull() && data.Keys[j].SendLifetimeEndTimeHour.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/end-time/hour", predicates))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeYear.IsNull() && data.Keys[j].SendLifetimeStartTimeYear.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/start-time/year", predicates))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeDayOfMonth.IsNull() && data.Keys[j].SendLifetimeStartTimeDayOfMonth.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/start-time/day-of-month", predicates))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeMonth.IsNull() && data.Keys[j].SendLifetimeStartTimeMonth.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/start-time/month", predicates))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeSecond.IsNull() && data.Keys[j].SendLifetimeStartTimeSecond.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/start-time/second", predicates))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeMinute.IsNull() && data.Keys[j].SendLifetimeStartTimeMinute.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/start-time/minute", predicates))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeHour.IsNull() && data.Keys[j].SendLifetimeStartTimeHour.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/send-lifetime/start-time/hour", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Keys[i].AcceptLifetimeInfinite.IsNull() && state.Keys[i].AcceptLifetimeInfinite.ValueBool() && data.Keys[j].AcceptLifetimeInfinite.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/infinite", predicates))
+				}
+				if !state.Keys[i].AcceptLifetimeDuration.IsNull() && data.Keys[j].AcceptLifetimeDuration.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/duration", predicates))
+				}
+				if !state.Keys[i].AcceptLifetimeEndTimeYear.IsNull() && data.Keys[j].AcceptLifetimeEndTimeYear.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/end-time/year", predicates))
+				}
+				if !state.Keys[i].AcceptLifetimeEndTimeDayOfMonth.IsNull() && data.Keys[j].AcceptLifetimeEndTimeDayOfMonth.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/end-time/day-of-month", predicates))
+				}
+				if !state.Keys[i].AcceptLifetimeEndTimeMonth.IsNull() && data.Keys[j].AcceptLifetimeEndTimeMonth.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/end-time/month", predicates))
+				}
+				if !state.Keys[i].AcceptLifetimeEndTimeSecond.IsNull() && data.Keys[j].AcceptLifetimeEndTimeSecond.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/end-time/second", predicates))
+				}
+				if !state.Keys[i].AcceptLifetimeEndTimeMinute.IsNull() && data.Keys[j].AcceptLifetimeEndTimeMinute.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/end-time/minute", predicates))
+				}
+				if !state.Keys[i].AcceptLifetimeEndTimeHour.IsNull() && data.Keys[j].AcceptLifetimeEndTimeHour.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/end-time/hour", predicates))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeYear.IsNull() && data.Keys[j].AcceptLifetimeStartTimeYear.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/start-time/year", predicates))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeDayOfMonth.IsNull() && data.Keys[j].AcceptLifetimeStartTimeDayOfMonth.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/start-time/day-of-month", predicates))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeMonth.IsNull() && data.Keys[j].AcceptLifetimeStartTimeMonth.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/start-time/month", predicates))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeSecond.IsNull() && data.Keys[j].AcceptLifetimeStartTimeSecond.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/start-time/second", predicates))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeMinute.IsNull() && data.Keys[j].AcceptLifetimeStartTimeMinute.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/start-time/minute", predicates))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeHour.IsNull() && data.Keys[j].AcceptLifetimeStartTimeHour.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/accept-lifetime/start-time/hour", predicates))
+				}
+				if !state.Keys[i].CryptographicAlgorithm.IsNull() && data.Keys[j].CryptographicAlgorithm.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/cryptographic-algorithm", predicates))
+				}
+				if !state.Keys[i].KeyStringPassword6.IsNull() && data.Keys[j].KeyStringPassword6.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/key-string/password6", predicates))
+				}
+				if !state.Keys[i].KeyStringPassword.IsNull() && data.Keys[j].KeyStringPassword.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/keys/key%v/key-string/password", predicates))
+				}
 				break
 			}
 		}
@@ -2450,8 +2446,8 @@ func (data *KeyChain) addDeletedItemsXML(ctx context.Context, state KeyChain, bo
 		}
 	}
 	for i := range state.MacsecKeys {
-		stateKeys := [...]string{ "ckn",  }
-		stateKeyValues := [...]string{ state.MacsecKeys[i].Ckn.ValueString(),  }
+		stateKeys := [...]string{"ckn"}
+		stateKeyValues := [...]string{state.MacsecKeys[i].Ckn.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2472,58 +2468,58 @@ func (data *KeyChain) addDeletedItemsXML(ctx context.Context, state KeyChain, bo
 				found = false
 			}
 			if found {
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.MacsecKeys[i].LifetimeInfinite.IsNull() && state.MacsecKeys[i].LifetimeInfinite.ValueBool() && data.MacsecKeys[j].LifetimeInfinite.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/infinite", predicates))
-			}
-			if !state.MacsecKeys[i].LifetimeDuration.IsNull() && data.MacsecKeys[j].LifetimeDuration.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/duration", predicates))
-			}
-			if !state.MacsecKeys[i].LifetimeEndTimeYear.IsNull() && data.MacsecKeys[j].LifetimeEndTimeYear.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/end-time/year", predicates))
-			}
-			if !state.MacsecKeys[i].LifetimeEndTimeDayOfMonth.IsNull() && data.MacsecKeys[j].LifetimeEndTimeDayOfMonth.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/end-time/day-of-month", predicates))
-			}
-			if !state.MacsecKeys[i].LifetimeEndTimeMonth.IsNull() && data.MacsecKeys[j].LifetimeEndTimeMonth.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/end-time/month", predicates))
-			}
-			if !state.MacsecKeys[i].LifetimeEndTimeSecond.IsNull() && data.MacsecKeys[j].LifetimeEndTimeSecond.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/end-time/second", predicates))
-			}
-			if !state.MacsecKeys[i].LifetimeEndTimeMinute.IsNull() && data.MacsecKeys[j].LifetimeEndTimeMinute.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/end-time/minute", predicates))
-			}
-			if !state.MacsecKeys[i].LifetimeEndTimeHour.IsNull() && data.MacsecKeys[j].LifetimeEndTimeHour.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/end-time/hour", predicates))
-			}
-			if !state.MacsecKeys[i].LifetimeStartTimeYear.IsNull() && data.MacsecKeys[j].LifetimeStartTimeYear.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/start-time/year", predicates))
-			}
-			if !state.MacsecKeys[i].LifetimeStartTimeDayOfMonth.IsNull() && data.MacsecKeys[j].LifetimeStartTimeDayOfMonth.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/start-time/day-of-month", predicates))
-			}
-			if !state.MacsecKeys[i].LifetimeStartTimeMonth.IsNull() && data.MacsecKeys[j].LifetimeStartTimeMonth.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/start-time/month", predicates))
-			}
-			if !state.MacsecKeys[i].LifetimeStartTimeSecond.IsNull() && data.MacsecKeys[j].LifetimeStartTimeSecond.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/start-time/second", predicates))
-			}
-			if !state.MacsecKeys[i].LifetimeStartTimeMinute.IsNull() && data.MacsecKeys[j].LifetimeStartTimeMinute.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/start-time/minute", predicates))
-			}
-			if !state.MacsecKeys[i].LifetimeStartTimeHour.IsNull() && data.MacsecKeys[j].LifetimeStartTimeHour.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/start-time/hour", predicates))
-			}
-			if !state.MacsecKeys[i].KeyStringCryptographicAlgorithm.IsNull() && data.MacsecKeys[j].KeyStringCryptographicAlgorithm.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/key-string/cryptographic-algorithm", predicates))
-			}
-			if !state.MacsecKeys[i].KeyStringPassword6.IsNull() && data.MacsecKeys[j].KeyStringPassword6.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/key-string/password6", predicates))
-			}
-			if !state.MacsecKeys[i].KeyStringPassword.IsNull() && data.MacsecKeys[j].KeyStringPassword.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/key-string/password", predicates))
-			}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MacsecKeys[i].LifetimeInfinite.IsNull() && state.MacsecKeys[i].LifetimeInfinite.ValueBool() && data.MacsecKeys[j].LifetimeInfinite.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/infinite", predicates))
+				}
+				if !state.MacsecKeys[i].LifetimeDuration.IsNull() && data.MacsecKeys[j].LifetimeDuration.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/duration", predicates))
+				}
+				if !state.MacsecKeys[i].LifetimeEndTimeYear.IsNull() && data.MacsecKeys[j].LifetimeEndTimeYear.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/end-time/year", predicates))
+				}
+				if !state.MacsecKeys[i].LifetimeEndTimeDayOfMonth.IsNull() && data.MacsecKeys[j].LifetimeEndTimeDayOfMonth.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/end-time/day-of-month", predicates))
+				}
+				if !state.MacsecKeys[i].LifetimeEndTimeMonth.IsNull() && data.MacsecKeys[j].LifetimeEndTimeMonth.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/end-time/month", predicates))
+				}
+				if !state.MacsecKeys[i].LifetimeEndTimeSecond.IsNull() && data.MacsecKeys[j].LifetimeEndTimeSecond.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/end-time/second", predicates))
+				}
+				if !state.MacsecKeys[i].LifetimeEndTimeMinute.IsNull() && data.MacsecKeys[j].LifetimeEndTimeMinute.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/end-time/minute", predicates))
+				}
+				if !state.MacsecKeys[i].LifetimeEndTimeHour.IsNull() && data.MacsecKeys[j].LifetimeEndTimeHour.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/end-time/hour", predicates))
+				}
+				if !state.MacsecKeys[i].LifetimeStartTimeYear.IsNull() && data.MacsecKeys[j].LifetimeStartTimeYear.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/start-time/year", predicates))
+				}
+				if !state.MacsecKeys[i].LifetimeStartTimeDayOfMonth.IsNull() && data.MacsecKeys[j].LifetimeStartTimeDayOfMonth.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/start-time/day-of-month", predicates))
+				}
+				if !state.MacsecKeys[i].LifetimeStartTimeMonth.IsNull() && data.MacsecKeys[j].LifetimeStartTimeMonth.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/start-time/month", predicates))
+				}
+				if !state.MacsecKeys[i].LifetimeStartTimeSecond.IsNull() && data.MacsecKeys[j].LifetimeStartTimeSecond.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/start-time/second", predicates))
+				}
+				if !state.MacsecKeys[i].LifetimeStartTimeMinute.IsNull() && data.MacsecKeys[j].LifetimeStartTimeMinute.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/start-time/minute", predicates))
+				}
+				if !state.MacsecKeys[i].LifetimeStartTimeHour.IsNull() && data.MacsecKeys[j].LifetimeStartTimeHour.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/lifetime/start-time/hour", predicates))
+				}
+				if !state.MacsecKeys[i].KeyStringCryptographicAlgorithm.IsNull() && data.MacsecKeys[j].KeyStringCryptographicAlgorithm.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/key-string/cryptographic-algorithm", predicates))
+				}
+				if !state.MacsecKeys[i].KeyStringPassword6.IsNull() && data.MacsecKeys[j].KeyStringPassword6.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/key-string/password6", predicates))
+				}
+				if !state.MacsecKeys[i].KeyStringPassword.IsNull() && data.MacsecKeys[j].KeyStringPassword.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/macsec/keys/key%v/key-string/password", predicates))
+				}
 				break
 			}
 		}
@@ -2533,14 +2529,14 @@ func (data *KeyChain) addDeletedItemsXML(ctx context.Context, state KeyChain, bo
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AcceptToleranceInfinite.IsNull() && state.AcceptToleranceInfinite.ValueBool() && data.AcceptToleranceInfinite.IsNull() {
-		deletePath := state.getXPath()+"/accept-tolerance/infinite"
+		deletePath := state.getXPath() + "/accept-tolerance/infinite"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AcceptToleranceValue.IsNull() && data.AcceptToleranceValue.IsNull() {
-		deletePath := state.getXPath()+"/accept-tolerance/tolerance-value"
+		deletePath := state.getXPath() + "/accept-tolerance/tolerance-value"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2564,8 +2560,8 @@ func (data *KeyChain) addDeletePathsXML(ctx context.Context, body string) string
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timezone/local")
 	}
 	for i := range data.Keys {
-		keys := [...]string{ "key-name",  }
-		keyValues := [...]string{ data.Keys[i].KeyName.ValueString(),  }
+		keys := [...]string{"key-name"}
+		keyValues := [...]string{data.Keys[i].KeyName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -2574,8 +2570,8 @@ func (data *KeyChain) addDeletePathsXML(ctx context.Context, body string) string
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/keys/key%v", predicates))
 	}
 	for i := range data.MacsecKeys {
-		keys := [...]string{ "ckn",  }
-		keyValues := [...]string{ data.MacsecKeys[i].Ckn.ValueString(),  }
+		keys := [...]string{"ckn"}
+		keyValues := [...]string{data.MacsecKeys[i].Ckn.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

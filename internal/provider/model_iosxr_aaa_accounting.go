@@ -24,131 +24,130 @@ import (
 	"context"
 	"fmt"
 	"reflect"
-	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type AAAAccounting struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
-	UpdateNewinfo types.Bool `tfsdk:"update_newinfo"`
-	UpdatePeriodic types.Int64 `tfsdk:"update_periodic"`
-	Exec []AAAAccountingExec `tfsdk:"exec"`
-	Commands []AAAAccountingCommands `tfsdk:"commands"`
-	System []AAAAccountingSystem `tfsdk:"system"`
-	Network []AAAAccountingNetwork `tfsdk:"network"`
+	Device         types.String            `tfsdk:"device"`
+	Id             types.String            `tfsdk:"id"`
+	DeleteMode     types.String            `tfsdk:"delete_mode"`
+	UpdateNewinfo  types.Bool              `tfsdk:"update_newinfo"`
+	UpdatePeriodic types.Int64             `tfsdk:"update_periodic"`
+	Exec           []AAAAccountingExec     `tfsdk:"exec"`
+	Commands       []AAAAccountingCommands `tfsdk:"commands"`
+	System         []AAAAccountingSystem   `tfsdk:"system"`
+	Network        []AAAAccountingNetwork  `tfsdk:"network"`
 }
 
 type AAAAccountingData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	UpdateNewinfo types.Bool `tfsdk:"update_newinfo"`
-	UpdatePeriodic types.Int64 `tfsdk:"update_periodic"`
-	Exec []AAAAccountingExec `tfsdk:"exec"`
-	Commands []AAAAccountingCommands `tfsdk:"commands"`
-	System []AAAAccountingSystem `tfsdk:"system"`
-	Network []AAAAccountingNetwork `tfsdk:"network"`
+	Device         types.String            `tfsdk:"device"`
+	Id             types.String            `tfsdk:"id"`
+	UpdateNewinfo  types.Bool              `tfsdk:"update_newinfo"`
+	UpdatePeriodic types.Int64             `tfsdk:"update_periodic"`
+	Exec           []AAAAccountingExec     `tfsdk:"exec"`
+	Commands       []AAAAccountingCommands `tfsdk:"commands"`
+	System         []AAAAccountingSystem   `tfsdk:"system"`
+	Network        []AAAAccountingNetwork  `tfsdk:"network"`
 }
 type AAAAccountingExec struct {
-	List types.String `tfsdk:"list"`
-	StartStop types.Bool `tfsdk:"start_stop"`
-	StopOnly types.Bool `tfsdk:"stop_only"`
-	A1None types.Bool `tfsdk:"a1_none"`
-	A1Tacacs types.Bool `tfsdk:"a1_tacacs"`
-	A1Radius types.Bool `tfsdk:"a1_radius"`
-	A1Group types.String `tfsdk:"a1_group"`
-	A2None types.Bool `tfsdk:"a2_none"`
-	A2Tacacs types.Bool `tfsdk:"a2_tacacs"`
-	A2Radius types.Bool `tfsdk:"a2_radius"`
-	A2Group types.String `tfsdk:"a2_group"`
-	A3None types.Bool `tfsdk:"a3_none"`
-	A3Tacacs types.Bool `tfsdk:"a3_tacacs"`
-	A3Radius types.Bool `tfsdk:"a3_radius"`
-	A3Group types.String `tfsdk:"a3_group"`
-	A4None types.Bool `tfsdk:"a4_none"`
-	A4Tacacs types.Bool `tfsdk:"a4_tacacs"`
-	A4Radius types.Bool `tfsdk:"a4_radius"`
-	A4Group types.String `tfsdk:"a4_group"`
+	List      types.String `tfsdk:"list"`
+	StartStop types.Bool   `tfsdk:"start_stop"`
+	StopOnly  types.Bool   `tfsdk:"stop_only"`
+	A1None    types.Bool   `tfsdk:"a1_none"`
+	A1Tacacs  types.Bool   `tfsdk:"a1_tacacs"`
+	A1Radius  types.Bool   `tfsdk:"a1_radius"`
+	A1Group   types.String `tfsdk:"a1_group"`
+	A2None    types.Bool   `tfsdk:"a2_none"`
+	A2Tacacs  types.Bool   `tfsdk:"a2_tacacs"`
+	A2Radius  types.Bool   `tfsdk:"a2_radius"`
+	A2Group   types.String `tfsdk:"a2_group"`
+	A3None    types.Bool   `tfsdk:"a3_none"`
+	A3Tacacs  types.Bool   `tfsdk:"a3_tacacs"`
+	A3Radius  types.Bool   `tfsdk:"a3_radius"`
+	A3Group   types.String `tfsdk:"a3_group"`
+	A4None    types.Bool   `tfsdk:"a4_none"`
+	A4Tacacs  types.Bool   `tfsdk:"a4_tacacs"`
+	A4Radius  types.Bool   `tfsdk:"a4_radius"`
+	A4Group   types.String `tfsdk:"a4_group"`
 }
 type AAAAccountingCommands struct {
-	List types.String `tfsdk:"list"`
-	StartStop types.Bool `tfsdk:"start_stop"`
-	StopOnly types.Bool `tfsdk:"stop_only"`
-	A1None types.Bool `tfsdk:"a1_none"`
-	A1Local types.Bool `tfsdk:"a1_local"`
-	A1Tacacs types.Bool `tfsdk:"a1_tacacs"`
-	A1Radius types.Bool `tfsdk:"a1_radius"`
-	A1Group types.String `tfsdk:"a1_group"`
-	A2Local types.Bool `tfsdk:"a2_local"`
-	A2None types.Bool `tfsdk:"a2_none"`
-	A2Tacacs types.Bool `tfsdk:"a2_tacacs"`
-	A2Radius types.Bool `tfsdk:"a2_radius"`
-	A2Group types.String `tfsdk:"a2_group"`
-	A3Local types.Bool `tfsdk:"a3_local"`
-	A3None types.Bool `tfsdk:"a3_none"`
-	A3Tacacs types.Bool `tfsdk:"a3_tacacs"`
-	A3Radius types.Bool `tfsdk:"a3_radius"`
-	A3Group types.String `tfsdk:"a3_group"`
-	A4Local types.Bool `tfsdk:"a4_local"`
-	A4None types.Bool `tfsdk:"a4_none"`
-	A4Tacacs types.Bool `tfsdk:"a4_tacacs"`
-	A4Radius types.Bool `tfsdk:"a4_radius"`
-	A4Group types.String `tfsdk:"a4_group"`
+	List      types.String `tfsdk:"list"`
+	StartStop types.Bool   `tfsdk:"start_stop"`
+	StopOnly  types.Bool   `tfsdk:"stop_only"`
+	A1None    types.Bool   `tfsdk:"a1_none"`
+	A1Local   types.Bool   `tfsdk:"a1_local"`
+	A1Tacacs  types.Bool   `tfsdk:"a1_tacacs"`
+	A1Radius  types.Bool   `tfsdk:"a1_radius"`
+	A1Group   types.String `tfsdk:"a1_group"`
+	A2Local   types.Bool   `tfsdk:"a2_local"`
+	A2None    types.Bool   `tfsdk:"a2_none"`
+	A2Tacacs  types.Bool   `tfsdk:"a2_tacacs"`
+	A2Radius  types.Bool   `tfsdk:"a2_radius"`
+	A2Group   types.String `tfsdk:"a2_group"`
+	A3Local   types.Bool   `tfsdk:"a3_local"`
+	A3None    types.Bool   `tfsdk:"a3_none"`
+	A3Tacacs  types.Bool   `tfsdk:"a3_tacacs"`
+	A3Radius  types.Bool   `tfsdk:"a3_radius"`
+	A3Group   types.String `tfsdk:"a3_group"`
+	A4Local   types.Bool   `tfsdk:"a4_local"`
+	A4None    types.Bool   `tfsdk:"a4_none"`
+	A4Tacacs  types.Bool   `tfsdk:"a4_tacacs"`
+	A4Radius  types.Bool   `tfsdk:"a4_radius"`
+	A4Group   types.String `tfsdk:"a4_group"`
 }
 type AAAAccountingSystem struct {
-	List types.String `tfsdk:"list"`
-	StartStop types.Bool `tfsdk:"start_stop"`
-	Broadcast types.Bool `tfsdk:"broadcast"`
-	A1None types.Bool `tfsdk:"a1_none"`
-	A1Tacacs types.Bool `tfsdk:"a1_tacacs"`
-	A1Radius types.Bool `tfsdk:"a1_radius"`
-	A1Group types.String `tfsdk:"a1_group"`
-	A2None types.Bool `tfsdk:"a2_none"`
-	A2Tacacs types.Bool `tfsdk:"a2_tacacs"`
-	A2Radius types.Bool `tfsdk:"a2_radius"`
-	A2Group types.String `tfsdk:"a2_group"`
-	A3None types.Bool `tfsdk:"a3_none"`
-	A3Tacacs types.Bool `tfsdk:"a3_tacacs"`
-	A3Radius types.Bool `tfsdk:"a3_radius"`
-	A3Group types.String `tfsdk:"a3_group"`
-	A4None types.Bool `tfsdk:"a4_none"`
-	A4Tacacs types.Bool `tfsdk:"a4_tacacs"`
-	A4Radius types.Bool `tfsdk:"a4_radius"`
-	A4Group types.String `tfsdk:"a4_group"`
+	List      types.String `tfsdk:"list"`
+	StartStop types.Bool   `tfsdk:"start_stop"`
+	Broadcast types.Bool   `tfsdk:"broadcast"`
+	A1None    types.Bool   `tfsdk:"a1_none"`
+	A1Tacacs  types.Bool   `tfsdk:"a1_tacacs"`
+	A1Radius  types.Bool   `tfsdk:"a1_radius"`
+	A1Group   types.String `tfsdk:"a1_group"`
+	A2None    types.Bool   `tfsdk:"a2_none"`
+	A2Tacacs  types.Bool   `tfsdk:"a2_tacacs"`
+	A2Radius  types.Bool   `tfsdk:"a2_radius"`
+	A2Group   types.String `tfsdk:"a2_group"`
+	A3None    types.Bool   `tfsdk:"a3_none"`
+	A3Tacacs  types.Bool   `tfsdk:"a3_tacacs"`
+	A3Radius  types.Bool   `tfsdk:"a3_radius"`
+	A3Group   types.String `tfsdk:"a3_group"`
+	A4None    types.Bool   `tfsdk:"a4_none"`
+	A4Tacacs  types.Bool   `tfsdk:"a4_tacacs"`
+	A4Radius  types.Bool   `tfsdk:"a4_radius"`
+	A4Group   types.String `tfsdk:"a4_group"`
 }
 type AAAAccountingNetwork struct {
-	List types.String `tfsdk:"list"`
-	StartStop types.Bool `tfsdk:"start_stop"`
-	StopOnly types.Bool `tfsdk:"stop_only"`
-	A1None types.Bool `tfsdk:"a1_none"`
-	A1Tacacs types.Bool `tfsdk:"a1_tacacs"`
-	A1Radius types.Bool `tfsdk:"a1_radius"`
-	A1Group types.String `tfsdk:"a1_group"`
-	A2None types.Bool `tfsdk:"a2_none"`
-	A2Tacacs types.Bool `tfsdk:"a2_tacacs"`
-	A2Radius types.Bool `tfsdk:"a2_radius"`
-	A2Group types.String `tfsdk:"a2_group"`
-	A3None types.Bool `tfsdk:"a3_none"`
-	A3Tacacs types.Bool `tfsdk:"a3_tacacs"`
-	A3Radius types.Bool `tfsdk:"a3_radius"`
-	A3Group types.String `tfsdk:"a3_group"`
-	A4None types.Bool `tfsdk:"a4_none"`
-	A4Tacacs types.Bool `tfsdk:"a4_tacacs"`
-	A4Radius types.Bool `tfsdk:"a4_radius"`
-	A4Group types.String `tfsdk:"a4_group"`
+	List      types.String `tfsdk:"list"`
+	StartStop types.Bool   `tfsdk:"start_stop"`
+	StopOnly  types.Bool   `tfsdk:"stop_only"`
+	A1None    types.Bool   `tfsdk:"a1_none"`
+	A1Tacacs  types.Bool   `tfsdk:"a1_tacacs"`
+	A1Radius  types.Bool   `tfsdk:"a1_radius"`
+	A1Group   types.String `tfsdk:"a1_group"`
+	A2None    types.Bool   `tfsdk:"a2_none"`
+	A2Tacacs  types.Bool   `tfsdk:"a2_tacacs"`
+	A2Radius  types.Bool   `tfsdk:"a2_radius"`
+	A2Group   types.String `tfsdk:"a2_group"`
+	A3None    types.Bool   `tfsdk:"a3_none"`
+	A3Tacacs  types.Bool   `tfsdk:"a3_tacacs"`
+	A3Radius  types.Bool   `tfsdk:"a3_radius"`
+	A3Group   types.String `tfsdk:"a3_group"`
+	A4None    types.Bool   `tfsdk:"a4_none"`
+	A4Tacacs  types.Bool   `tfsdk:"a4_tacacs"`
+	A4Radius  types.Bool   `tfsdk:"a4_radius"`
+	A4Group   types.String `tfsdk:"a4_group"`
 }
 
 // End of section. //template:end types
@@ -579,11 +578,11 @@ func (data AAAAccounting) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.UpdateNewinfo.IsNull() && !data.UpdateNewinfo.IsUnknown() {
 		if data.UpdateNewinfo.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/update/newinfo", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/update/newinfo", "")
 		}
 	}
 	if !data.UpdatePeriodic.IsNull() && !data.UpdatePeriodic.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/update/periodic", strconv.FormatInt(data.UpdatePeriodic.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/update/periodic", strconv.FormatInt(data.UpdatePeriodic.ValueInt64(), 10))
 	}
 	if len(data.Exec) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -989,14 +988,13 @@ func (data AAAAccounting) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "update.newinfo"); !data.UpdateNewinfo.IsNull() {
-		if value.Exists() {
-			data.UpdateNewinfo = types.BoolValue(true)
-		} else {
-			data.UpdateNewinfo = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "update.newinfo"); value.Exists() {
+		data.UpdateNewinfo = types.BoolValue(true)
 	} else {
-		data.UpdateNewinfo = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.UpdateNewinfo.IsNull() {
+			data.UpdateNewinfo = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "update.periodic"); value.Exists() && !data.UpdatePeriodic.IsNull() {
 		data.UpdatePeriodic = types.Int64Value(value.Int())
@@ -1004,8 +1002,8 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 		data.UpdatePeriodic = types.Int64Null()
 	}
 	for i := range data.Exec {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.Exec[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.Exec[i].List.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "exec.accounting-list").ForEach(
@@ -1031,146 +1029,146 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Exec[i].List = types.StringNull()
 		}
-		if value := r.Get("start-stop"); !data.Exec[i].StartStop.IsNull() {
-			if value.Exists() {
-				data.Exec[i].StartStop = types.BoolValue(true)
-			} else {
-				data.Exec[i].StartStop = types.BoolValue(false)
-			}
+		if value := r.Get("start-stop"); value.Exists() {
+			data.Exec[i].StartStop = types.BoolValue(true)
 		} else {
-			data.Exec[i].StartStop = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Exec[i].StartStop.IsNull() {
+				data.Exec[i].StartStop = types.BoolNull()
+			}
 		}
-		if value := r.Get("stop-only"); !data.Exec[i].StopOnly.IsNull() {
-			if value.Exists() {
-				data.Exec[i].StopOnly = types.BoolValue(true)
-			} else {
-				data.Exec[i].StopOnly = types.BoolValue(false)
-			}
+		if value := r.Get("stop-only"); value.Exists() {
+			data.Exec[i].StopOnly = types.BoolValue(true)
 		} else {
-			data.Exec[i].StopOnly = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Exec[i].StopOnly.IsNull() {
+				data.Exec[i].StopOnly = types.BoolNull()
+			}
 		}
-		if value := r.Get("none"); !data.Exec[i].A1None.IsNull() {
-			if value.Exists() {
-				data.Exec[i].A1None = types.BoolValue(true)
-			} else {
-				data.Exec[i].A1None = types.BoolValue(false)
-			}
+		if value := r.Get("none"); value.Exists() {
+			data.Exec[i].A1None = types.BoolValue(true)
 		} else {
-			data.Exec[i].A1None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Exec[i].A1None.IsNull() {
+				data.Exec[i].A1None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-1.tacacs"); !data.Exec[i].A1Tacacs.IsNull() {
-			if value.Exists() {
-				data.Exec[i].A1Tacacs = types.BoolValue(true)
-			} else {
-				data.Exec[i].A1Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
+			data.Exec[i].A1Tacacs = types.BoolValue(true)
 		} else {
-			data.Exec[i].A1Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Exec[i].A1Tacacs.IsNull() {
+				data.Exec[i].A1Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-1.radius"); !data.Exec[i].A1Radius.IsNull() {
-			if value.Exists() {
-				data.Exec[i].A1Radius = types.BoolValue(true)
-			} else {
-				data.Exec[i].A1Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-1.radius"); value.Exists() {
+			data.Exec[i].A1Radius = types.BoolValue(true)
 		} else {
-			data.Exec[i].A1Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Exec[i].A1Radius.IsNull() {
+				data.Exec[i].A1Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Exec[i].A1Group.IsNull() {
 			data.Exec[i].A1Group = types.StringValue(value.String())
 		} else {
 			data.Exec[i].A1Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-2.none"); !data.Exec[i].A2None.IsNull() {
-			if value.Exists() {
-				data.Exec[i].A2None = types.BoolValue(true)
-			} else {
-				data.Exec[i].A2None = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-2.none"); value.Exists() {
+			data.Exec[i].A2None = types.BoolValue(true)
 		} else {
-			data.Exec[i].A2None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Exec[i].A2None.IsNull() {
+				data.Exec[i].A2None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-2.tacacs"); !data.Exec[i].A2Tacacs.IsNull() {
-			if value.Exists() {
-				data.Exec[i].A2Tacacs = types.BoolValue(true)
-			} else {
-				data.Exec[i].A2Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
+			data.Exec[i].A2Tacacs = types.BoolValue(true)
 		} else {
-			data.Exec[i].A2Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Exec[i].A2Tacacs.IsNull() {
+				data.Exec[i].A2Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-2.radius"); !data.Exec[i].A2Radius.IsNull() {
-			if value.Exists() {
-				data.Exec[i].A2Radius = types.BoolValue(true)
-			} else {
-				data.Exec[i].A2Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-2.radius"); value.Exists() {
+			data.Exec[i].A2Radius = types.BoolValue(true)
 		} else {
-			data.Exec[i].A2Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Exec[i].A2Radius.IsNull() {
+				data.Exec[i].A2Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Exec[i].A2Group.IsNull() {
 			data.Exec[i].A2Group = types.StringValue(value.String())
 		} else {
 			data.Exec[i].A2Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-3.none"); !data.Exec[i].A3None.IsNull() {
-			if value.Exists() {
-				data.Exec[i].A3None = types.BoolValue(true)
-			} else {
-				data.Exec[i].A3None = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-3.none"); value.Exists() {
+			data.Exec[i].A3None = types.BoolValue(true)
 		} else {
-			data.Exec[i].A3None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Exec[i].A3None.IsNull() {
+				data.Exec[i].A3None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-3.tacacs"); !data.Exec[i].A3Tacacs.IsNull() {
-			if value.Exists() {
-				data.Exec[i].A3Tacacs = types.BoolValue(true)
-			} else {
-				data.Exec[i].A3Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
+			data.Exec[i].A3Tacacs = types.BoolValue(true)
 		} else {
-			data.Exec[i].A3Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Exec[i].A3Tacacs.IsNull() {
+				data.Exec[i].A3Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-3.radius"); !data.Exec[i].A3Radius.IsNull() {
-			if value.Exists() {
-				data.Exec[i].A3Radius = types.BoolValue(true)
-			} else {
-				data.Exec[i].A3Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-3.radius"); value.Exists() {
+			data.Exec[i].A3Radius = types.BoolValue(true)
 		} else {
-			data.Exec[i].A3Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Exec[i].A3Radius.IsNull() {
+				data.Exec[i].A3Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.Exec[i].A3Group.IsNull() {
 			data.Exec[i].A3Group = types.StringValue(value.String())
 		} else {
 			data.Exec[i].A3Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-4.none"); !data.Exec[i].A4None.IsNull() {
-			if value.Exists() {
-				data.Exec[i].A4None = types.BoolValue(true)
-			} else {
-				data.Exec[i].A4None = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-4.none"); value.Exists() {
+			data.Exec[i].A4None = types.BoolValue(true)
 		} else {
-			data.Exec[i].A4None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Exec[i].A4None.IsNull() {
+				data.Exec[i].A4None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-4.tacacs"); !data.Exec[i].A4Tacacs.IsNull() {
-			if value.Exists() {
-				data.Exec[i].A4Tacacs = types.BoolValue(true)
-			} else {
-				data.Exec[i].A4Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
+			data.Exec[i].A4Tacacs = types.BoolValue(true)
 		} else {
-			data.Exec[i].A4Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Exec[i].A4Tacacs.IsNull() {
+				data.Exec[i].A4Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-4.radius"); !data.Exec[i].A4Radius.IsNull() {
-			if value.Exists() {
-				data.Exec[i].A4Radius = types.BoolValue(true)
-			} else {
-				data.Exec[i].A4Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-4.radius"); value.Exists() {
+			data.Exec[i].A4Radius = types.BoolValue(true)
 		} else {
-			data.Exec[i].A4Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Exec[i].A4Radius.IsNull() {
+				data.Exec[i].A4Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.Exec[i].A4Group.IsNull() {
 			data.Exec[i].A4Group = types.StringValue(value.String())
@@ -1179,8 +1177,8 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.Commands {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.Commands[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.Commands[i].List.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "commands.accounting-list").ForEach(
@@ -1206,182 +1204,182 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Commands[i].List = types.StringNull()
 		}
-		if value := r.Get("start-stop"); !data.Commands[i].StartStop.IsNull() {
-			if value.Exists() {
-				data.Commands[i].StartStop = types.BoolValue(true)
-			} else {
-				data.Commands[i].StartStop = types.BoolValue(false)
-			}
+		if value := r.Get("start-stop"); value.Exists() {
+			data.Commands[i].StartStop = types.BoolValue(true)
 		} else {
-			data.Commands[i].StartStop = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].StartStop.IsNull() {
+				data.Commands[i].StartStop = types.BoolNull()
+			}
 		}
-		if value := r.Get("stop-only"); !data.Commands[i].StopOnly.IsNull() {
-			if value.Exists() {
-				data.Commands[i].StopOnly = types.BoolValue(true)
-			} else {
-				data.Commands[i].StopOnly = types.BoolValue(false)
-			}
+		if value := r.Get("stop-only"); value.Exists() {
+			data.Commands[i].StopOnly = types.BoolValue(true)
 		} else {
-			data.Commands[i].StopOnly = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].StopOnly.IsNull() {
+				data.Commands[i].StopOnly = types.BoolNull()
+			}
 		}
-		if value := r.Get("none"); !data.Commands[i].A1None.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A1None = types.BoolValue(true)
-			} else {
-				data.Commands[i].A1None = types.BoolValue(false)
-			}
+		if value := r.Get("none"); value.Exists() {
+			data.Commands[i].A1None = types.BoolValue(true)
 		} else {
-			data.Commands[i].A1None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A1None.IsNull() {
+				data.Commands[i].A1None = types.BoolNull()
+			}
 		}
-		if value := r.Get("local"); !data.Commands[i].A1Local.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A1Local = types.BoolValue(true)
-			} else {
-				data.Commands[i].A1Local = types.BoolValue(false)
-			}
+		if value := r.Get("local"); value.Exists() {
+			data.Commands[i].A1Local = types.BoolValue(true)
 		} else {
-			data.Commands[i].A1Local = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A1Local.IsNull() {
+				data.Commands[i].A1Local = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-1.tacacs"); !data.Commands[i].A1Tacacs.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A1Tacacs = types.BoolValue(true)
-			} else {
-				data.Commands[i].A1Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
+			data.Commands[i].A1Tacacs = types.BoolValue(true)
 		} else {
-			data.Commands[i].A1Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A1Tacacs.IsNull() {
+				data.Commands[i].A1Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-1.radius"); !data.Commands[i].A1Radius.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A1Radius = types.BoolValue(true)
-			} else {
-				data.Commands[i].A1Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-1.radius"); value.Exists() {
+			data.Commands[i].A1Radius = types.BoolValue(true)
 		} else {
-			data.Commands[i].A1Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A1Radius.IsNull() {
+				data.Commands[i].A1Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Commands[i].A1Group.IsNull() {
 			data.Commands[i].A1Group = types.StringValue(value.String())
 		} else {
 			data.Commands[i].A1Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-2.local"); !data.Commands[i].A2Local.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A2Local = types.BoolValue(true)
-			} else {
-				data.Commands[i].A2Local = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-2.local"); value.Exists() {
+			data.Commands[i].A2Local = types.BoolValue(true)
 		} else {
-			data.Commands[i].A2Local = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A2Local.IsNull() {
+				data.Commands[i].A2Local = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-2.none"); !data.Commands[i].A2None.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A2None = types.BoolValue(true)
-			} else {
-				data.Commands[i].A2None = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-2.none"); value.Exists() {
+			data.Commands[i].A2None = types.BoolValue(true)
 		} else {
-			data.Commands[i].A2None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A2None.IsNull() {
+				data.Commands[i].A2None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-2.tacacs"); !data.Commands[i].A2Tacacs.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A2Tacacs = types.BoolValue(true)
-			} else {
-				data.Commands[i].A2Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
+			data.Commands[i].A2Tacacs = types.BoolValue(true)
 		} else {
-			data.Commands[i].A2Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A2Tacacs.IsNull() {
+				data.Commands[i].A2Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-2.radius"); !data.Commands[i].A2Radius.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A2Radius = types.BoolValue(true)
-			} else {
-				data.Commands[i].A2Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-2.radius"); value.Exists() {
+			data.Commands[i].A2Radius = types.BoolValue(true)
 		} else {
-			data.Commands[i].A2Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A2Radius.IsNull() {
+				data.Commands[i].A2Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Commands[i].A2Group.IsNull() {
 			data.Commands[i].A2Group = types.StringValue(value.String())
 		} else {
 			data.Commands[i].A2Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-3.local"); !data.Commands[i].A3Local.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A3Local = types.BoolValue(true)
-			} else {
-				data.Commands[i].A3Local = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-3.local"); value.Exists() {
+			data.Commands[i].A3Local = types.BoolValue(true)
 		} else {
-			data.Commands[i].A3Local = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A3Local.IsNull() {
+				data.Commands[i].A3Local = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-3.none"); !data.Commands[i].A3None.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A3None = types.BoolValue(true)
-			} else {
-				data.Commands[i].A3None = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-3.none"); value.Exists() {
+			data.Commands[i].A3None = types.BoolValue(true)
 		} else {
-			data.Commands[i].A3None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A3None.IsNull() {
+				data.Commands[i].A3None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-3.tacacs"); !data.Commands[i].A3Tacacs.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A3Tacacs = types.BoolValue(true)
-			} else {
-				data.Commands[i].A3Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
+			data.Commands[i].A3Tacacs = types.BoolValue(true)
 		} else {
-			data.Commands[i].A3Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A3Tacacs.IsNull() {
+				data.Commands[i].A3Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-3.radius"); !data.Commands[i].A3Radius.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A3Radius = types.BoolValue(true)
-			} else {
-				data.Commands[i].A3Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-3.radius"); value.Exists() {
+			data.Commands[i].A3Radius = types.BoolValue(true)
 		} else {
-			data.Commands[i].A3Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A3Radius.IsNull() {
+				data.Commands[i].A3Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.Commands[i].A3Group.IsNull() {
 			data.Commands[i].A3Group = types.StringValue(value.String())
 		} else {
 			data.Commands[i].A3Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-4.local"); !data.Commands[i].A4Local.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A4Local = types.BoolValue(true)
-			} else {
-				data.Commands[i].A4Local = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-4.local"); value.Exists() {
+			data.Commands[i].A4Local = types.BoolValue(true)
 		} else {
-			data.Commands[i].A4Local = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A4Local.IsNull() {
+				data.Commands[i].A4Local = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-4.none"); !data.Commands[i].A4None.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A4None = types.BoolValue(true)
-			} else {
-				data.Commands[i].A4None = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-4.none"); value.Exists() {
+			data.Commands[i].A4None = types.BoolValue(true)
 		} else {
-			data.Commands[i].A4None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A4None.IsNull() {
+				data.Commands[i].A4None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-4.tacacs"); !data.Commands[i].A4Tacacs.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A4Tacacs = types.BoolValue(true)
-			} else {
-				data.Commands[i].A4Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
+			data.Commands[i].A4Tacacs = types.BoolValue(true)
 		} else {
-			data.Commands[i].A4Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A4Tacacs.IsNull() {
+				data.Commands[i].A4Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-4.radius"); !data.Commands[i].A4Radius.IsNull() {
-			if value.Exists() {
-				data.Commands[i].A4Radius = types.BoolValue(true)
-			} else {
-				data.Commands[i].A4Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-4.radius"); value.Exists() {
+			data.Commands[i].A4Radius = types.BoolValue(true)
 		} else {
-			data.Commands[i].A4Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Commands[i].A4Radius.IsNull() {
+				data.Commands[i].A4Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.Commands[i].A4Group.IsNull() {
 			data.Commands[i].A4Group = types.StringValue(value.String())
@@ -1390,8 +1388,8 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.System {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.System[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.System[i].List.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "system.accounting-list").ForEach(
@@ -1417,146 +1415,146 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.System[i].List = types.StringNull()
 		}
-		if value := r.Get("start-stop"); !data.System[i].StartStop.IsNull() {
-			if value.Exists() {
-				data.System[i].StartStop = types.BoolValue(true)
-			} else {
-				data.System[i].StartStop = types.BoolValue(false)
-			}
+		if value := r.Get("start-stop"); value.Exists() {
+			data.System[i].StartStop = types.BoolValue(true)
 		} else {
-			data.System[i].StartStop = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.System[i].StartStop.IsNull() {
+				data.System[i].StartStop = types.BoolNull()
+			}
 		}
-		if value := r.Get("broadcast"); !data.System[i].Broadcast.IsNull() {
-			if value.Exists() {
-				data.System[i].Broadcast = types.BoolValue(true)
-			} else {
-				data.System[i].Broadcast = types.BoolValue(false)
-			}
+		if value := r.Get("broadcast"); value.Exists() {
+			data.System[i].Broadcast = types.BoolValue(true)
 		} else {
-			data.System[i].Broadcast = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.System[i].Broadcast.IsNull() {
+				data.System[i].Broadcast = types.BoolNull()
+			}
 		}
-		if value := r.Get("none"); !data.System[i].A1None.IsNull() {
-			if value.Exists() {
-				data.System[i].A1None = types.BoolValue(true)
-			} else {
-				data.System[i].A1None = types.BoolValue(false)
-			}
+		if value := r.Get("none"); value.Exists() {
+			data.System[i].A1None = types.BoolValue(true)
 		} else {
-			data.System[i].A1None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.System[i].A1None.IsNull() {
+				data.System[i].A1None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-1.tacacs"); !data.System[i].A1Tacacs.IsNull() {
-			if value.Exists() {
-				data.System[i].A1Tacacs = types.BoolValue(true)
-			} else {
-				data.System[i].A1Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
+			data.System[i].A1Tacacs = types.BoolValue(true)
 		} else {
-			data.System[i].A1Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.System[i].A1Tacacs.IsNull() {
+				data.System[i].A1Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-1.radius"); !data.System[i].A1Radius.IsNull() {
-			if value.Exists() {
-				data.System[i].A1Radius = types.BoolValue(true)
-			} else {
-				data.System[i].A1Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-1.radius"); value.Exists() {
+			data.System[i].A1Radius = types.BoolValue(true)
 		} else {
-			data.System[i].A1Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.System[i].A1Radius.IsNull() {
+				data.System[i].A1Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.System[i].A1Group.IsNull() {
 			data.System[i].A1Group = types.StringValue(value.String())
 		} else {
 			data.System[i].A1Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-2.none"); !data.System[i].A2None.IsNull() {
-			if value.Exists() {
-				data.System[i].A2None = types.BoolValue(true)
-			} else {
-				data.System[i].A2None = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-2.none"); value.Exists() {
+			data.System[i].A2None = types.BoolValue(true)
 		} else {
-			data.System[i].A2None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.System[i].A2None.IsNull() {
+				data.System[i].A2None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-2.tacacs"); !data.System[i].A2Tacacs.IsNull() {
-			if value.Exists() {
-				data.System[i].A2Tacacs = types.BoolValue(true)
-			} else {
-				data.System[i].A2Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
+			data.System[i].A2Tacacs = types.BoolValue(true)
 		} else {
-			data.System[i].A2Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.System[i].A2Tacacs.IsNull() {
+				data.System[i].A2Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-2.radius"); !data.System[i].A2Radius.IsNull() {
-			if value.Exists() {
-				data.System[i].A2Radius = types.BoolValue(true)
-			} else {
-				data.System[i].A2Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-2.radius"); value.Exists() {
+			data.System[i].A2Radius = types.BoolValue(true)
 		} else {
-			data.System[i].A2Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.System[i].A2Radius.IsNull() {
+				data.System[i].A2Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.System[i].A2Group.IsNull() {
 			data.System[i].A2Group = types.StringValue(value.String())
 		} else {
 			data.System[i].A2Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-3.none"); !data.System[i].A3None.IsNull() {
-			if value.Exists() {
-				data.System[i].A3None = types.BoolValue(true)
-			} else {
-				data.System[i].A3None = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-3.none"); value.Exists() {
+			data.System[i].A3None = types.BoolValue(true)
 		} else {
-			data.System[i].A3None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.System[i].A3None.IsNull() {
+				data.System[i].A3None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-3.tacacs"); !data.System[i].A3Tacacs.IsNull() {
-			if value.Exists() {
-				data.System[i].A3Tacacs = types.BoolValue(true)
-			} else {
-				data.System[i].A3Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
+			data.System[i].A3Tacacs = types.BoolValue(true)
 		} else {
-			data.System[i].A3Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.System[i].A3Tacacs.IsNull() {
+				data.System[i].A3Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-3.radius"); !data.System[i].A3Radius.IsNull() {
-			if value.Exists() {
-				data.System[i].A3Radius = types.BoolValue(true)
-			} else {
-				data.System[i].A3Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-3.radius"); value.Exists() {
+			data.System[i].A3Radius = types.BoolValue(true)
 		} else {
-			data.System[i].A3Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.System[i].A3Radius.IsNull() {
+				data.System[i].A3Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.System[i].A3Group.IsNull() {
 			data.System[i].A3Group = types.StringValue(value.String())
 		} else {
 			data.System[i].A3Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-4.none"); !data.System[i].A4None.IsNull() {
-			if value.Exists() {
-				data.System[i].A4None = types.BoolValue(true)
-			} else {
-				data.System[i].A4None = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-4.none"); value.Exists() {
+			data.System[i].A4None = types.BoolValue(true)
 		} else {
-			data.System[i].A4None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.System[i].A4None.IsNull() {
+				data.System[i].A4None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-4.tacacs"); !data.System[i].A4Tacacs.IsNull() {
-			if value.Exists() {
-				data.System[i].A4Tacacs = types.BoolValue(true)
-			} else {
-				data.System[i].A4Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
+			data.System[i].A4Tacacs = types.BoolValue(true)
 		} else {
-			data.System[i].A4Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.System[i].A4Tacacs.IsNull() {
+				data.System[i].A4Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-4.radius"); !data.System[i].A4Radius.IsNull() {
-			if value.Exists() {
-				data.System[i].A4Radius = types.BoolValue(true)
-			} else {
-				data.System[i].A4Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-4.radius"); value.Exists() {
+			data.System[i].A4Radius = types.BoolValue(true)
 		} else {
-			data.System[i].A4Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.System[i].A4Radius.IsNull() {
+				data.System[i].A4Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.System[i].A4Group.IsNull() {
 			data.System[i].A4Group = types.StringValue(value.String())
@@ -1565,8 +1563,8 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.Network {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.Network[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.Network[i].List.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "network.accounting-list").ForEach(
@@ -1592,146 +1590,146 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Network[i].List = types.StringNull()
 		}
-		if value := r.Get("start-stop"); !data.Network[i].StartStop.IsNull() {
-			if value.Exists() {
-				data.Network[i].StartStop = types.BoolValue(true)
-			} else {
-				data.Network[i].StartStop = types.BoolValue(false)
-			}
+		if value := r.Get("start-stop"); value.Exists() {
+			data.Network[i].StartStop = types.BoolValue(true)
 		} else {
-			data.Network[i].StartStop = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Network[i].StartStop.IsNull() {
+				data.Network[i].StartStop = types.BoolNull()
+			}
 		}
-		if value := r.Get("stop-only"); !data.Network[i].StopOnly.IsNull() {
-			if value.Exists() {
-				data.Network[i].StopOnly = types.BoolValue(true)
-			} else {
-				data.Network[i].StopOnly = types.BoolValue(false)
-			}
+		if value := r.Get("stop-only"); value.Exists() {
+			data.Network[i].StopOnly = types.BoolValue(true)
 		} else {
-			data.Network[i].StopOnly = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Network[i].StopOnly.IsNull() {
+				data.Network[i].StopOnly = types.BoolNull()
+			}
 		}
-		if value := r.Get("none"); !data.Network[i].A1None.IsNull() {
-			if value.Exists() {
-				data.Network[i].A1None = types.BoolValue(true)
-			} else {
-				data.Network[i].A1None = types.BoolValue(false)
-			}
+		if value := r.Get("none"); value.Exists() {
+			data.Network[i].A1None = types.BoolValue(true)
 		} else {
-			data.Network[i].A1None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Network[i].A1None.IsNull() {
+				data.Network[i].A1None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-1.tacacs"); !data.Network[i].A1Tacacs.IsNull() {
-			if value.Exists() {
-				data.Network[i].A1Tacacs = types.BoolValue(true)
-			} else {
-				data.Network[i].A1Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
+			data.Network[i].A1Tacacs = types.BoolValue(true)
 		} else {
-			data.Network[i].A1Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Network[i].A1Tacacs.IsNull() {
+				data.Network[i].A1Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-1.radius"); !data.Network[i].A1Radius.IsNull() {
-			if value.Exists() {
-				data.Network[i].A1Radius = types.BoolValue(true)
-			} else {
-				data.Network[i].A1Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-1.radius"); value.Exists() {
+			data.Network[i].A1Radius = types.BoolValue(true)
 		} else {
-			data.Network[i].A1Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Network[i].A1Radius.IsNull() {
+				data.Network[i].A1Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Network[i].A1Group.IsNull() {
 			data.Network[i].A1Group = types.StringValue(value.String())
 		} else {
 			data.Network[i].A1Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-2.none"); !data.Network[i].A2None.IsNull() {
-			if value.Exists() {
-				data.Network[i].A2None = types.BoolValue(true)
-			} else {
-				data.Network[i].A2None = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-2.none"); value.Exists() {
+			data.Network[i].A2None = types.BoolValue(true)
 		} else {
-			data.Network[i].A2None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Network[i].A2None.IsNull() {
+				data.Network[i].A2None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-2.tacacs"); !data.Network[i].A2Tacacs.IsNull() {
-			if value.Exists() {
-				data.Network[i].A2Tacacs = types.BoolValue(true)
-			} else {
-				data.Network[i].A2Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
+			data.Network[i].A2Tacacs = types.BoolValue(true)
 		} else {
-			data.Network[i].A2Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Network[i].A2Tacacs.IsNull() {
+				data.Network[i].A2Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-2.radius"); !data.Network[i].A2Radius.IsNull() {
-			if value.Exists() {
-				data.Network[i].A2Radius = types.BoolValue(true)
-			} else {
-				data.Network[i].A2Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-2.radius"); value.Exists() {
+			data.Network[i].A2Radius = types.BoolValue(true)
 		} else {
-			data.Network[i].A2Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Network[i].A2Radius.IsNull() {
+				data.Network[i].A2Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Network[i].A2Group.IsNull() {
 			data.Network[i].A2Group = types.StringValue(value.String())
 		} else {
 			data.Network[i].A2Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-3.none"); !data.Network[i].A3None.IsNull() {
-			if value.Exists() {
-				data.Network[i].A3None = types.BoolValue(true)
-			} else {
-				data.Network[i].A3None = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-3.none"); value.Exists() {
+			data.Network[i].A3None = types.BoolValue(true)
 		} else {
-			data.Network[i].A3None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Network[i].A3None.IsNull() {
+				data.Network[i].A3None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-3.tacacs"); !data.Network[i].A3Tacacs.IsNull() {
-			if value.Exists() {
-				data.Network[i].A3Tacacs = types.BoolValue(true)
-			} else {
-				data.Network[i].A3Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
+			data.Network[i].A3Tacacs = types.BoolValue(true)
 		} else {
-			data.Network[i].A3Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Network[i].A3Tacacs.IsNull() {
+				data.Network[i].A3Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-3.radius"); !data.Network[i].A3Radius.IsNull() {
-			if value.Exists() {
-				data.Network[i].A3Radius = types.BoolValue(true)
-			} else {
-				data.Network[i].A3Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-3.radius"); value.Exists() {
+			data.Network[i].A3Radius = types.BoolValue(true)
 		} else {
-			data.Network[i].A3Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Network[i].A3Radius.IsNull() {
+				data.Network[i].A3Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.Network[i].A3Group.IsNull() {
 			data.Network[i].A3Group = types.StringValue(value.String())
 		} else {
 			data.Network[i].A3Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-4.none"); !data.Network[i].A4None.IsNull() {
-			if value.Exists() {
-				data.Network[i].A4None = types.BoolValue(true)
-			} else {
-				data.Network[i].A4None = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-4.none"); value.Exists() {
+			data.Network[i].A4None = types.BoolValue(true)
 		} else {
-			data.Network[i].A4None = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Network[i].A4None.IsNull() {
+				data.Network[i].A4None = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-4.tacacs"); !data.Network[i].A4Tacacs.IsNull() {
-			if value.Exists() {
-				data.Network[i].A4Tacacs = types.BoolValue(true)
-			} else {
-				data.Network[i].A4Tacacs = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
+			data.Network[i].A4Tacacs = types.BoolValue(true)
 		} else {
-			data.Network[i].A4Tacacs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Network[i].A4Tacacs.IsNull() {
+				data.Network[i].A4Tacacs = types.BoolNull()
+			}
 		}
-		if value := r.Get("groups.group-4.radius"); !data.Network[i].A4Radius.IsNull() {
-			if value.Exists() {
-				data.Network[i].A4Radius = types.BoolValue(true)
-			} else {
-				data.Network[i].A4Radius = types.BoolValue(false)
-			}
+		if value := r.Get("groups.group-4.radius"); value.Exists() {
+			data.Network[i].A4Radius = types.BoolValue(true)
 		} else {
-			data.Network[i].A4Radius = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Network[i].A4Radius.IsNull() {
+				data.Network[i].A4Radius = types.BoolNull()
+			}
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.Network[i].A4Group.IsNull() {
 			data.Network[i].A4Group = types.StringValue(value.String())
@@ -1746,7 +1744,7 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/newinfo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/newinfo"); value.Exists() {
 		data.UpdateNewinfo = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1754,17 +1752,17 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.UpdateNewinfo = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/periodic"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/periodic"); value.Exists() {
 		data.UpdatePeriodic = types.Int64Value(value.Int())
 	} else if data.UpdatePeriodic.IsNull() {
 		data.UpdatePeriodic = types.Int64Null()
 	}
 	for i := range data.Exec {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.Exec[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.Exec[i].List.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/exec/accounting-list").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/exec/accounting-list").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1935,11 +1933,11 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 		}
 	}
 	for i := range data.Commands {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.Commands[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.Commands[i].List.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/commands/accounting-list").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/commands/accounting-list").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2146,11 +2144,11 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 		}
 	}
 	for i := range data.System {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.System[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.System[i].List.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/system/accounting-list").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/system/accounting-list").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2321,11 +2319,11 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 		}
 	}
 	for i := range data.Network {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.Network[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.Network[i].List.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/network/accounting-list").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/network/accounting-list").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2506,15 +2504,15 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"update.newinfo"); value.Exists() {
+	if value := res.Get(prefix + "update.newinfo"); value.Exists() {
 		data.UpdateNewinfo = types.BoolValue(true)
 	} else {
 		data.UpdateNewinfo = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"update.periodic"); value.Exists() {
+	if value := res.Get(prefix + "update.periodic"); value.Exists() {
 		data.UpdatePeriodic = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"exec.accounting-list"); value.Exists() {
+	if value := res.Get(prefix + "exec.accounting-list"); value.Exists() {
 		data.Exec = make([]AAAAccountingExec, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAccountingExec{}
@@ -2607,7 +2605,7 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"commands.accounting-list"); value.Exists() {
+	if value := res.Get(prefix + "commands.accounting-list"); value.Exists() {
 		data.Commands = make([]AAAAccountingCommands, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAccountingCommands{}
@@ -2720,7 +2718,7 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"system.accounting-list"); value.Exists() {
+	if value := res.Get(prefix + "system.accounting-list"); value.Exists() {
 		data.System = make([]AAAAccountingSystem, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAccountingSystem{}
@@ -2813,7 +2811,7 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"network.accounting-list"); value.Exists() {
+	if value := res.Get(prefix + "network.accounting-list"); value.Exists() {
 		data.Network = make([]AAAAccountingNetwork, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAccountingNetwork{}
@@ -2917,15 +2915,15 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"update.newinfo"); value.Exists() {
+	if value := res.Get(prefix + "update.newinfo"); value.Exists() {
 		data.UpdateNewinfo = types.BoolValue(true)
 	} else {
 		data.UpdateNewinfo = types.BoolNull()
 	}
-	if value := res.Get(prefix+"update.periodic"); value.Exists() {
+	if value := res.Get(prefix + "update.periodic"); value.Exists() {
 		data.UpdatePeriodic = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"exec.accounting-list"); value.Exists() {
+	if value := res.Get(prefix + "exec.accounting-list"); value.Exists() {
 		data.Exec = make([]AAAAccountingExec, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAccountingExec{}
@@ -3018,7 +3016,7 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"commands.accounting-list"); value.Exists() {
+	if value := res.Get(prefix + "commands.accounting-list"); value.Exists() {
 		data.Commands = make([]AAAAccountingCommands, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAccountingCommands{}
@@ -3131,7 +3129,7 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"system.accounting-list"); value.Exists() {
+	if value := res.Get(prefix + "system.accounting-list"); value.Exists() {
 		data.System = make([]AAAAccountingSystem, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAccountingSystem{}
@@ -3224,7 +3222,7 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"network.accounting-list"); value.Exists() {
+	if value := res.Get(prefix + "network.accounting-list"); value.Exists() {
 		data.Network = make([]AAAAccountingNetwork, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAccountingNetwork{}
@@ -3324,15 +3322,15 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *AAAAccounting) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/newinfo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/newinfo"); value.Exists() {
 		data.UpdateNewinfo = types.BoolValue(true)
 	} else {
 		data.UpdateNewinfo = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/periodic"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/periodic"); value.Exists() {
 		data.UpdatePeriodic = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/exec/accounting-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/exec/accounting-list"); value.Exists() {
 		data.Exec = make([]AAAAccountingExec, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAccountingExec{}
@@ -3425,7 +3423,7 @@ func (data *AAAAccounting) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/commands/accounting-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/commands/accounting-list"); value.Exists() {
 		data.Commands = make([]AAAAccountingCommands, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAccountingCommands{}
@@ -3538,7 +3536,7 @@ func (data *AAAAccounting) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system/accounting-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system/accounting-list"); value.Exists() {
 		data.System = make([]AAAAccountingSystem, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAccountingSystem{}
@@ -3631,7 +3629,7 @@ func (data *AAAAccounting) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/network/accounting-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/network/accounting-list"); value.Exists() {
 		data.Network = make([]AAAAccountingNetwork, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAccountingNetwork{}
@@ -3731,100 +3729,100 @@ func (data *AAAAccounting) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *AAAAccountingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/newinfo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/newinfo"); value.Exists() {
 		data.UpdateNewinfo = types.BoolValue(true)
 	} else {
 		data.UpdateNewinfo = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/periodic"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/periodic"); value.Exists() {
 		data.UpdatePeriodic = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/exec/accounting-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/exec/accounting-list"); value.Exists() {
 		data.Exec = make([]AAAAccountingExec, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAccountingExec{}
 			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
 				item.List = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
-			item.StartStop = types.BoolValue(true)
-		} else {
-			item.StartStop = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "stop-only"); cValue.Exists() {
-			item.StopOnly = types.BoolValue(true)
-		} else {
-			item.StopOnly = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
-			item.A1None = types.BoolValue(true)
-		} else {
-			item.A1None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
-			item.A1Tacacs = types.BoolValue(true)
-		} else {
-			item.A1Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
-			item.A1Radius = types.BoolValue(true)
-		} else {
-			item.A1Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
+				item.StartStop = types.BoolValue(true)
+			} else {
+				item.StartStop = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "stop-only"); cValue.Exists() {
+				item.StopOnly = types.BoolValue(true)
+			} else {
+				item.StopOnly = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
+				item.A1None = types.BoolValue(true)
+			} else {
+				item.A1None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
+				item.A1Tacacs = types.BoolValue(true)
+			} else {
+				item.A1Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
+				item.A1Radius = types.BoolValue(true)
+			} else {
+				item.A1Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
-			item.A2None = types.BoolValue(true)
-		} else {
-			item.A2None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
-			item.A2Tacacs = types.BoolValue(true)
-		} else {
-			item.A2Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
-			item.A2Radius = types.BoolValue(true)
-		} else {
-			item.A2Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
+				item.A2None = types.BoolValue(true)
+			} else {
+				item.A2None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
+				item.A2Tacacs = types.BoolValue(true)
+			} else {
+				item.A2Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
+				item.A2Radius = types.BoolValue(true)
+			} else {
+				item.A2Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
-			item.A3None = types.BoolValue(true)
-		} else {
-			item.A3None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
-			item.A3Tacacs = types.BoolValue(true)
-		} else {
-			item.A3Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
-			item.A3Radius = types.BoolValue(true)
-		} else {
-			item.A3Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
+				item.A3None = types.BoolValue(true)
+			} else {
+				item.A3None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
+				item.A3Tacacs = types.BoolValue(true)
+			} else {
+				item.A3Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
+				item.A3Radius = types.BoolValue(true)
+			} else {
+				item.A3Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
-			item.A4None = types.BoolValue(true)
-		} else {
-			item.A4None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
-			item.A4Tacacs = types.BoolValue(true)
-		} else {
-			item.A4Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
-			item.A4Radius = types.BoolValue(true)
-		} else {
-			item.A4Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
+				item.A4None = types.BoolValue(true)
+			} else {
+				item.A4None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
+				item.A4Tacacs = types.BoolValue(true)
+			} else {
+				item.A4Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
+				item.A4Radius = types.BoolValue(true)
+			} else {
+				item.A4Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
 			}
@@ -3832,112 +3830,112 @@ func (data *AAAAccountingData) fromBodyXML(ctx context.Context, res xmldot.Resul
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/commands/accounting-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/commands/accounting-list"); value.Exists() {
 		data.Commands = make([]AAAAccountingCommands, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAccountingCommands{}
 			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
 				item.List = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
-			item.StartStop = types.BoolValue(true)
-		} else {
-			item.StartStop = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "stop-only"); cValue.Exists() {
-			item.StopOnly = types.BoolValue(true)
-		} else {
-			item.StopOnly = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
-			item.A1None = types.BoolValue(true)
-		} else {
-			item.A1None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
-			item.A1Local = types.BoolValue(true)
-		} else {
-			item.A1Local = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
-			item.A1Tacacs = types.BoolValue(true)
-		} else {
-			item.A1Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
-			item.A1Radius = types.BoolValue(true)
-		} else {
-			item.A1Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
+				item.StartStop = types.BoolValue(true)
+			} else {
+				item.StartStop = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "stop-only"); cValue.Exists() {
+				item.StopOnly = types.BoolValue(true)
+			} else {
+				item.StopOnly = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
+				item.A1None = types.BoolValue(true)
+			} else {
+				item.A1None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
+				item.A1Local = types.BoolValue(true)
+			} else {
+				item.A1Local = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
+				item.A1Tacacs = types.BoolValue(true)
+			} else {
+				item.A1Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
+				item.A1Radius = types.BoolValue(true)
+			} else {
+				item.A1Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
-			item.A2Local = types.BoolValue(true)
-		} else {
-			item.A2Local = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
-			item.A2None = types.BoolValue(true)
-		} else {
-			item.A2None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
-			item.A2Tacacs = types.BoolValue(true)
-		} else {
-			item.A2Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
-			item.A2Radius = types.BoolValue(true)
-		} else {
-			item.A2Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
+				item.A2Local = types.BoolValue(true)
+			} else {
+				item.A2Local = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
+				item.A2None = types.BoolValue(true)
+			} else {
+				item.A2None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
+				item.A2Tacacs = types.BoolValue(true)
+			} else {
+				item.A2Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
+				item.A2Radius = types.BoolValue(true)
+			} else {
+				item.A2Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
-			item.A3Local = types.BoolValue(true)
-		} else {
-			item.A3Local = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
-			item.A3None = types.BoolValue(true)
-		} else {
-			item.A3None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
-			item.A3Tacacs = types.BoolValue(true)
-		} else {
-			item.A3Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
-			item.A3Radius = types.BoolValue(true)
-		} else {
-			item.A3Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
+				item.A3Local = types.BoolValue(true)
+			} else {
+				item.A3Local = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
+				item.A3None = types.BoolValue(true)
+			} else {
+				item.A3None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
+				item.A3Tacacs = types.BoolValue(true)
+			} else {
+				item.A3Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
+				item.A3Radius = types.BoolValue(true)
+			} else {
+				item.A3Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
-			item.A4Local = types.BoolValue(true)
-		} else {
-			item.A4Local = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
-			item.A4None = types.BoolValue(true)
-		} else {
-			item.A4None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
-			item.A4Tacacs = types.BoolValue(true)
-		} else {
-			item.A4Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
-			item.A4Radius = types.BoolValue(true)
-		} else {
-			item.A4Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
+				item.A4Local = types.BoolValue(true)
+			} else {
+				item.A4Local = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
+				item.A4None = types.BoolValue(true)
+			} else {
+				item.A4None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
+				item.A4Tacacs = types.BoolValue(true)
+			} else {
+				item.A4Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
+				item.A4Radius = types.BoolValue(true)
+			} else {
+				item.A4Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
 			}
@@ -3945,92 +3943,92 @@ func (data *AAAAccountingData) fromBodyXML(ctx context.Context, res xmldot.Resul
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system/accounting-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system/accounting-list"); value.Exists() {
 		data.System = make([]AAAAccountingSystem, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAccountingSystem{}
 			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
 				item.List = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
-			item.StartStop = types.BoolValue(true)
-		} else {
-			item.StartStop = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "broadcast"); cValue.Exists() {
-			item.Broadcast = types.BoolValue(true)
-		} else {
-			item.Broadcast = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
-			item.A1None = types.BoolValue(true)
-		} else {
-			item.A1None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
-			item.A1Tacacs = types.BoolValue(true)
-		} else {
-			item.A1Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
-			item.A1Radius = types.BoolValue(true)
-		} else {
-			item.A1Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
+				item.StartStop = types.BoolValue(true)
+			} else {
+				item.StartStop = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "broadcast"); cValue.Exists() {
+				item.Broadcast = types.BoolValue(true)
+			} else {
+				item.Broadcast = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
+				item.A1None = types.BoolValue(true)
+			} else {
+				item.A1None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
+				item.A1Tacacs = types.BoolValue(true)
+			} else {
+				item.A1Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
+				item.A1Radius = types.BoolValue(true)
+			} else {
+				item.A1Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
-			item.A2None = types.BoolValue(true)
-		} else {
-			item.A2None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
-			item.A2Tacacs = types.BoolValue(true)
-		} else {
-			item.A2Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
-			item.A2Radius = types.BoolValue(true)
-		} else {
-			item.A2Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
+				item.A2None = types.BoolValue(true)
+			} else {
+				item.A2None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
+				item.A2Tacacs = types.BoolValue(true)
+			} else {
+				item.A2Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
+				item.A2Radius = types.BoolValue(true)
+			} else {
+				item.A2Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
-			item.A3None = types.BoolValue(true)
-		} else {
-			item.A3None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
-			item.A3Tacacs = types.BoolValue(true)
-		} else {
-			item.A3Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
-			item.A3Radius = types.BoolValue(true)
-		} else {
-			item.A3Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
+				item.A3None = types.BoolValue(true)
+			} else {
+				item.A3None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
+				item.A3Tacacs = types.BoolValue(true)
+			} else {
+				item.A3Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
+				item.A3Radius = types.BoolValue(true)
+			} else {
+				item.A3Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
-			item.A4None = types.BoolValue(true)
-		} else {
-			item.A4None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
-			item.A4Tacacs = types.BoolValue(true)
-		} else {
-			item.A4Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
-			item.A4Radius = types.BoolValue(true)
-		} else {
-			item.A4Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
+				item.A4None = types.BoolValue(true)
+			} else {
+				item.A4None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
+				item.A4Tacacs = types.BoolValue(true)
+			} else {
+				item.A4Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
+				item.A4Radius = types.BoolValue(true)
+			} else {
+				item.A4Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
 			}
@@ -4038,92 +4036,92 @@ func (data *AAAAccountingData) fromBodyXML(ctx context.Context, res xmldot.Resul
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/network/accounting-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/network/accounting-list"); value.Exists() {
 		data.Network = make([]AAAAccountingNetwork, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAccountingNetwork{}
 			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
 				item.List = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
-			item.StartStop = types.BoolValue(true)
-		} else {
-			item.StartStop = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "stop-only"); cValue.Exists() {
-			item.StopOnly = types.BoolValue(true)
-		} else {
-			item.StopOnly = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
-			item.A1None = types.BoolValue(true)
-		} else {
-			item.A1None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
-			item.A1Tacacs = types.BoolValue(true)
-		} else {
-			item.A1Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
-			item.A1Radius = types.BoolValue(true)
-		} else {
-			item.A1Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
+				item.StartStop = types.BoolValue(true)
+			} else {
+				item.StartStop = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "stop-only"); cValue.Exists() {
+				item.StopOnly = types.BoolValue(true)
+			} else {
+				item.StopOnly = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
+				item.A1None = types.BoolValue(true)
+			} else {
+				item.A1None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
+				item.A1Tacacs = types.BoolValue(true)
+			} else {
+				item.A1Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
+				item.A1Radius = types.BoolValue(true)
+			} else {
+				item.A1Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
-			item.A2None = types.BoolValue(true)
-		} else {
-			item.A2None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
-			item.A2Tacacs = types.BoolValue(true)
-		} else {
-			item.A2Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
-			item.A2Radius = types.BoolValue(true)
-		} else {
-			item.A2Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
+				item.A2None = types.BoolValue(true)
+			} else {
+				item.A2None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
+				item.A2Tacacs = types.BoolValue(true)
+			} else {
+				item.A2Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
+				item.A2Radius = types.BoolValue(true)
+			} else {
+				item.A2Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
-			item.A3None = types.BoolValue(true)
-		} else {
-			item.A3None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
-			item.A3Tacacs = types.BoolValue(true)
-		} else {
-			item.A3Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
-			item.A3Radius = types.BoolValue(true)
-		} else {
-			item.A3Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
+				item.A3None = types.BoolValue(true)
+			} else {
+				item.A3None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
+				item.A3Tacacs = types.BoolValue(true)
+			} else {
+				item.A3Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
+				item.A3Radius = types.BoolValue(true)
+			} else {
+				item.A3Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
-			item.A4None = types.BoolValue(true)
-		} else {
-			item.A4None = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
-			item.A4Tacacs = types.BoolValue(true)
-		} else {
-			item.A4Tacacs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
-			item.A4Radius = types.BoolValue(true)
-		} else {
-			item.A4Radius = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
+				item.A4None = types.BoolValue(true)
+			} else {
+				item.A4None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
+				item.A4Tacacs = types.BoolValue(true)
+			} else {
+				item.A4Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
+				item.A4Radius = types.BoolValue(true)
+			} else {
+				item.A4Radius = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
 			}
@@ -4140,11 +4138,11 @@ func (data *AAAAccountingData) fromBodyXML(ctx context.Context, res xmldot.Resul
 func (data *AAAAccounting) getDeletedItems(ctx context.Context, state AAAAccounting) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.Network {
-		keys := [...]string{ "list-name",  }
-		stateKeyValues := [...]string{ state.Network[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		stateKeyValues := [...]string{state.Network[i].List.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -4161,61 +4159,61 @@ func (data *AAAAccounting) getDeletedItems(ctx context.Context, state AAAAccount
 			if state.Network[i].List.ValueString() != data.Network[j].List.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.Network[i].A4Group.IsNull() && data.Network[j].A4Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-4/server-group-name", state.getPath(), keyString))
-			}
-			if !state.Network[i].A4Radius.IsNull() && data.Network[j].A4Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-4/radius", state.getPath(), keyString))
-			}
-			if !state.Network[i].A4Tacacs.IsNull() && data.Network[j].A4Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-4/tacacs", state.getPath(), keyString))
-			}
-			if !state.Network[i].A4None.IsNull() && data.Network[j].A4None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-4/none", state.getPath(), keyString))
-			}
-			if !state.Network[i].A3Group.IsNull() && data.Network[j].A3Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-3/server-group-name", state.getPath(), keyString))
-			}
-			if !state.Network[i].A3Radius.IsNull() && data.Network[j].A3Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-3/radius", state.getPath(), keyString))
-			}
-			if !state.Network[i].A3Tacacs.IsNull() && data.Network[j].A3Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-3/tacacs", state.getPath(), keyString))
-			}
-			if !state.Network[i].A3None.IsNull() && data.Network[j].A3None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-3/none", state.getPath(), keyString))
-			}
-			if !state.Network[i].A2Group.IsNull() && data.Network[j].A2Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
-			}
-			if !state.Network[i].A2Radius.IsNull() && data.Network[j].A2Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-2/radius", state.getPath(), keyString))
-			}
-			if !state.Network[i].A2Tacacs.IsNull() && data.Network[j].A2Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-2/tacacs", state.getPath(), keyString))
-			}
-			if !state.Network[i].A2None.IsNull() && data.Network[j].A2None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-2/none", state.getPath(), keyString))
-			}
-			if !state.Network[i].A1Group.IsNull() && data.Network[j].A1Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
-			}
-			if !state.Network[i].A1Radius.IsNull() && data.Network[j].A1Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-1/radius", state.getPath(), keyString))
-			}
-			if !state.Network[i].A1Tacacs.IsNull() && data.Network[j].A1Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-1/tacacs", state.getPath(), keyString))
-			}
-			if !state.Network[i].A1None.IsNull() && data.Network[j].A1None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/none", state.getPath(), keyString))
-			}
-			if !state.Network[i].StopOnly.IsNull() && data.Network[j].StopOnly.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/stop-only", state.getPath(), keyString))
-			}
-			if !state.Network[i].StartStop.IsNull() && data.Network[j].StartStop.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/start-stop", state.getPath(), keyString))
-			}
+			if found {
+				if !state.Network[i].A4Group.IsNull() && data.Network[j].A4Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-4/server-group-name", state.getPath(), keyString))
+				}
+				if !state.Network[i].A4Radius.IsNull() && data.Network[j].A4Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-4/radius", state.getPath(), keyString))
+				}
+				if !state.Network[i].A4Tacacs.IsNull() && data.Network[j].A4Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-4/tacacs", state.getPath(), keyString))
+				}
+				if !state.Network[i].A4None.IsNull() && data.Network[j].A4None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-4/none", state.getPath(), keyString))
+				}
+				if !state.Network[i].A3Group.IsNull() && data.Network[j].A3Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-3/server-group-name", state.getPath(), keyString))
+				}
+				if !state.Network[i].A3Radius.IsNull() && data.Network[j].A3Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-3/radius", state.getPath(), keyString))
+				}
+				if !state.Network[i].A3Tacacs.IsNull() && data.Network[j].A3Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-3/tacacs", state.getPath(), keyString))
+				}
+				if !state.Network[i].A3None.IsNull() && data.Network[j].A3None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-3/none", state.getPath(), keyString))
+				}
+				if !state.Network[i].A2Group.IsNull() && data.Network[j].A2Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
+				}
+				if !state.Network[i].A2Radius.IsNull() && data.Network[j].A2Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-2/radius", state.getPath(), keyString))
+				}
+				if !state.Network[i].A2Tacacs.IsNull() && data.Network[j].A2Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-2/tacacs", state.getPath(), keyString))
+				}
+				if !state.Network[i].A2None.IsNull() && data.Network[j].A2None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-2/none", state.getPath(), keyString))
+				}
+				if !state.Network[i].A1Group.IsNull() && data.Network[j].A1Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
+				}
+				if !state.Network[i].A1Radius.IsNull() && data.Network[j].A1Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-1/radius", state.getPath(), keyString))
+				}
+				if !state.Network[i].A1Tacacs.IsNull() && data.Network[j].A1Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/groups/group-1/tacacs", state.getPath(), keyString))
+				}
+				if !state.Network[i].A1None.IsNull() && data.Network[j].A1None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/none", state.getPath(), keyString))
+				}
+				if !state.Network[i].StopOnly.IsNull() && data.Network[j].StopOnly.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/stop-only", state.getPath(), keyString))
+				}
+				if !state.Network[i].StartStop.IsNull() && data.Network[j].StartStop.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/network/accounting-list%v/start-stop", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -4224,11 +4222,11 @@ func (data *AAAAccounting) getDeletedItems(ctx context.Context, state AAAAccount
 		}
 	}
 	for i := range state.System {
-		keys := [...]string{ "list-name",  }
-		stateKeyValues := [...]string{ state.System[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		stateKeyValues := [...]string{state.System[i].List.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -4245,61 +4243,61 @@ func (data *AAAAccounting) getDeletedItems(ctx context.Context, state AAAAccount
 			if state.System[i].List.ValueString() != data.System[j].List.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.System[i].A4Group.IsNull() && data.System[j].A4Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-4/server-group-name", state.getPath(), keyString))
-			}
-			if !state.System[i].A4Radius.IsNull() && data.System[j].A4Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-4/radius", state.getPath(), keyString))
-			}
-			if !state.System[i].A4Tacacs.IsNull() && data.System[j].A4Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-4/tacacs", state.getPath(), keyString))
-			}
-			if !state.System[i].A4None.IsNull() && data.System[j].A4None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-4/none", state.getPath(), keyString))
-			}
-			if !state.System[i].A3Group.IsNull() && data.System[j].A3Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-3/server-group-name", state.getPath(), keyString))
-			}
-			if !state.System[i].A3Radius.IsNull() && data.System[j].A3Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-3/radius", state.getPath(), keyString))
-			}
-			if !state.System[i].A3Tacacs.IsNull() && data.System[j].A3Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-3/tacacs", state.getPath(), keyString))
-			}
-			if !state.System[i].A3None.IsNull() && data.System[j].A3None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-3/none", state.getPath(), keyString))
-			}
-			if !state.System[i].A2Group.IsNull() && data.System[j].A2Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
-			}
-			if !state.System[i].A2Radius.IsNull() && data.System[j].A2Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-2/radius", state.getPath(), keyString))
-			}
-			if !state.System[i].A2Tacacs.IsNull() && data.System[j].A2Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-2/tacacs", state.getPath(), keyString))
-			}
-			if !state.System[i].A2None.IsNull() && data.System[j].A2None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-2/none", state.getPath(), keyString))
-			}
-			if !state.System[i].A1Group.IsNull() && data.System[j].A1Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
-			}
-			if !state.System[i].A1Radius.IsNull() && data.System[j].A1Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-1/radius", state.getPath(), keyString))
-			}
-			if !state.System[i].A1Tacacs.IsNull() && data.System[j].A1Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-1/tacacs", state.getPath(), keyString))
-			}
-			if !state.System[i].A1None.IsNull() && data.System[j].A1None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/none", state.getPath(), keyString))
-			}
-			if !state.System[i].Broadcast.IsNull() && data.System[j].Broadcast.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/broadcast", state.getPath(), keyString))
-			}
-			if !state.System[i].StartStop.IsNull() && data.System[j].StartStop.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/start-stop", state.getPath(), keyString))
-			}
+			if found {
+				if !state.System[i].A4Group.IsNull() && data.System[j].A4Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-4/server-group-name", state.getPath(), keyString))
+				}
+				if !state.System[i].A4Radius.IsNull() && data.System[j].A4Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-4/radius", state.getPath(), keyString))
+				}
+				if !state.System[i].A4Tacacs.IsNull() && data.System[j].A4Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-4/tacacs", state.getPath(), keyString))
+				}
+				if !state.System[i].A4None.IsNull() && data.System[j].A4None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-4/none", state.getPath(), keyString))
+				}
+				if !state.System[i].A3Group.IsNull() && data.System[j].A3Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-3/server-group-name", state.getPath(), keyString))
+				}
+				if !state.System[i].A3Radius.IsNull() && data.System[j].A3Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-3/radius", state.getPath(), keyString))
+				}
+				if !state.System[i].A3Tacacs.IsNull() && data.System[j].A3Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-3/tacacs", state.getPath(), keyString))
+				}
+				if !state.System[i].A3None.IsNull() && data.System[j].A3None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-3/none", state.getPath(), keyString))
+				}
+				if !state.System[i].A2Group.IsNull() && data.System[j].A2Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
+				}
+				if !state.System[i].A2Radius.IsNull() && data.System[j].A2Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-2/radius", state.getPath(), keyString))
+				}
+				if !state.System[i].A2Tacacs.IsNull() && data.System[j].A2Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-2/tacacs", state.getPath(), keyString))
+				}
+				if !state.System[i].A2None.IsNull() && data.System[j].A2None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-2/none", state.getPath(), keyString))
+				}
+				if !state.System[i].A1Group.IsNull() && data.System[j].A1Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
+				}
+				if !state.System[i].A1Radius.IsNull() && data.System[j].A1Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-1/radius", state.getPath(), keyString))
+				}
+				if !state.System[i].A1Tacacs.IsNull() && data.System[j].A1Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/groups/group-1/tacacs", state.getPath(), keyString))
+				}
+				if !state.System[i].A1None.IsNull() && data.System[j].A1None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/none", state.getPath(), keyString))
+				}
+				if !state.System[i].Broadcast.IsNull() && data.System[j].Broadcast.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/broadcast", state.getPath(), keyString))
+				}
+				if !state.System[i].StartStop.IsNull() && data.System[j].StartStop.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/system/accounting-list%v/start-stop", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -4308,11 +4306,11 @@ func (data *AAAAccounting) getDeletedItems(ctx context.Context, state AAAAccount
 		}
 	}
 	for i := range state.Commands {
-		keys := [...]string{ "list-name",  }
-		stateKeyValues := [...]string{ state.Commands[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		stateKeyValues := [...]string{state.Commands[i].List.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -4329,73 +4327,73 @@ func (data *AAAAccounting) getDeletedItems(ctx context.Context, state AAAAccount
 			if state.Commands[i].List.ValueString() != data.Commands[j].List.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.Commands[i].A4Group.IsNull() && data.Commands[j].A4Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-4/server-group-name", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A4Radius.IsNull() && data.Commands[j].A4Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-4/radius", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A4Tacacs.IsNull() && data.Commands[j].A4Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-4/tacacs", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A4None.IsNull() && data.Commands[j].A4None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-4/none", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A4Local.IsNull() && data.Commands[j].A4Local.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-4/local", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A3Group.IsNull() && data.Commands[j].A3Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-3/server-group-name", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A3Radius.IsNull() && data.Commands[j].A3Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-3/radius", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A3Tacacs.IsNull() && data.Commands[j].A3Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-3/tacacs", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A3None.IsNull() && data.Commands[j].A3None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-3/none", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A3Local.IsNull() && data.Commands[j].A3Local.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-3/local", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A2Group.IsNull() && data.Commands[j].A2Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A2Radius.IsNull() && data.Commands[j].A2Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-2/radius", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A2Tacacs.IsNull() && data.Commands[j].A2Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-2/tacacs", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A2None.IsNull() && data.Commands[j].A2None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-2/none", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A2Local.IsNull() && data.Commands[j].A2Local.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-2/local", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A1Group.IsNull() && data.Commands[j].A1Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A1Radius.IsNull() && data.Commands[j].A1Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-1/radius", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A1Tacacs.IsNull() && data.Commands[j].A1Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-1/tacacs", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A1Local.IsNull() && data.Commands[j].A1Local.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/local", state.getPath(), keyString))
-			}
-			if !state.Commands[i].A1None.IsNull() && data.Commands[j].A1None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/none", state.getPath(), keyString))
-			}
-			if !state.Commands[i].StopOnly.IsNull() && data.Commands[j].StopOnly.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/stop-only", state.getPath(), keyString))
-			}
-			if !state.Commands[i].StartStop.IsNull() && data.Commands[j].StartStop.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/start-stop", state.getPath(), keyString))
-			}
+			if found {
+				if !state.Commands[i].A4Group.IsNull() && data.Commands[j].A4Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-4/server-group-name", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A4Radius.IsNull() && data.Commands[j].A4Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-4/radius", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A4Tacacs.IsNull() && data.Commands[j].A4Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-4/tacacs", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A4None.IsNull() && data.Commands[j].A4None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-4/none", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A4Local.IsNull() && data.Commands[j].A4Local.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-4/local", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A3Group.IsNull() && data.Commands[j].A3Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-3/server-group-name", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A3Radius.IsNull() && data.Commands[j].A3Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-3/radius", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A3Tacacs.IsNull() && data.Commands[j].A3Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-3/tacacs", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A3None.IsNull() && data.Commands[j].A3None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-3/none", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A3Local.IsNull() && data.Commands[j].A3Local.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-3/local", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A2Group.IsNull() && data.Commands[j].A2Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A2Radius.IsNull() && data.Commands[j].A2Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-2/radius", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A2Tacacs.IsNull() && data.Commands[j].A2Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-2/tacacs", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A2None.IsNull() && data.Commands[j].A2None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-2/none", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A2Local.IsNull() && data.Commands[j].A2Local.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-2/local", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A1Group.IsNull() && data.Commands[j].A1Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A1Radius.IsNull() && data.Commands[j].A1Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-1/radius", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A1Tacacs.IsNull() && data.Commands[j].A1Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/groups/group-1/tacacs", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A1Local.IsNull() && data.Commands[j].A1Local.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/local", state.getPath(), keyString))
+				}
+				if !state.Commands[i].A1None.IsNull() && data.Commands[j].A1None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/none", state.getPath(), keyString))
+				}
+				if !state.Commands[i].StopOnly.IsNull() && data.Commands[j].StopOnly.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/stop-only", state.getPath(), keyString))
+				}
+				if !state.Commands[i].StartStop.IsNull() && data.Commands[j].StartStop.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/commands/accounting-list%v/start-stop", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -4404,11 +4402,11 @@ func (data *AAAAccounting) getDeletedItems(ctx context.Context, state AAAAccount
 		}
 	}
 	for i := range state.Exec {
-		keys := [...]string{ "list-name",  }
-		stateKeyValues := [...]string{ state.Exec[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		stateKeyValues := [...]string{state.Exec[i].List.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -4425,61 +4423,61 @@ func (data *AAAAccounting) getDeletedItems(ctx context.Context, state AAAAccount
 			if state.Exec[i].List.ValueString() != data.Exec[j].List.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.Exec[i].A4Group.IsNull() && data.Exec[j].A4Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-4/server-group-name", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A4Radius.IsNull() && data.Exec[j].A4Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-4/radius", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A4Tacacs.IsNull() && data.Exec[j].A4Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-4/tacacs", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A4None.IsNull() && data.Exec[j].A4None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-4/none", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A3Group.IsNull() && data.Exec[j].A3Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-3/server-group-name", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A3Radius.IsNull() && data.Exec[j].A3Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-3/radius", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A3Tacacs.IsNull() && data.Exec[j].A3Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-3/tacacs", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A3None.IsNull() && data.Exec[j].A3None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-3/none", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A2Group.IsNull() && data.Exec[j].A2Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A2Radius.IsNull() && data.Exec[j].A2Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-2/radius", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A2Tacacs.IsNull() && data.Exec[j].A2Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-2/tacacs", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A2None.IsNull() && data.Exec[j].A2None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-2/none", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A1Group.IsNull() && data.Exec[j].A1Group.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A1Radius.IsNull() && data.Exec[j].A1Radius.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-1/radius", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A1Tacacs.IsNull() && data.Exec[j].A1Tacacs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-1/tacacs", state.getPath(), keyString))
-			}
-			if !state.Exec[i].A1None.IsNull() && data.Exec[j].A1None.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/none", state.getPath(), keyString))
-			}
-			if !state.Exec[i].StopOnly.IsNull() && data.Exec[j].StopOnly.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/stop-only", state.getPath(), keyString))
-			}
-			if !state.Exec[i].StartStop.IsNull() && data.Exec[j].StartStop.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/start-stop", state.getPath(), keyString))
-			}
+			if found {
+				if !state.Exec[i].A4Group.IsNull() && data.Exec[j].A4Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-4/server-group-name", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A4Radius.IsNull() && data.Exec[j].A4Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-4/radius", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A4Tacacs.IsNull() && data.Exec[j].A4Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-4/tacacs", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A4None.IsNull() && data.Exec[j].A4None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-4/none", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A3Group.IsNull() && data.Exec[j].A3Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-3/server-group-name", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A3Radius.IsNull() && data.Exec[j].A3Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-3/radius", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A3Tacacs.IsNull() && data.Exec[j].A3Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-3/tacacs", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A3None.IsNull() && data.Exec[j].A3None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-3/none", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A2Group.IsNull() && data.Exec[j].A2Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-2/server-group-name", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A2Radius.IsNull() && data.Exec[j].A2Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-2/radius", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A2Tacacs.IsNull() && data.Exec[j].A2Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-2/tacacs", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A2None.IsNull() && data.Exec[j].A2None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-2/none", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A1Group.IsNull() && data.Exec[j].A1Group.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-1/server-group-name", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A1Radius.IsNull() && data.Exec[j].A1Radius.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-1/radius", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A1Tacacs.IsNull() && data.Exec[j].A1Tacacs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/groups/group-1/tacacs", state.getPath(), keyString))
+				}
+				if !state.Exec[i].A1None.IsNull() && data.Exec[j].A1None.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/none", state.getPath(), keyString))
+				}
+				if !state.Exec[i].StopOnly.IsNull() && data.Exec[j].StopOnly.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/stop-only", state.getPath(), keyString))
+				}
+				if !state.Exec[i].StartStop.IsNull() && data.Exec[j].StartStop.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exec/accounting-list%v/start-stop", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -4503,11 +4501,11 @@ func (data *AAAAccounting) getDeletedItems(ctx context.Context, state AAAAccount
 func (data *AAAAccounting) getEmptyLeafsDelete(ctx context.Context, state *AAAAccounting) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Network {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.Network[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.Network[i].List.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.Network[i].A4Radius.IsNull() && !data.Network[i].A4Radius.ValueBool() {
@@ -4609,11 +4607,11 @@ func (data *AAAAccounting) getEmptyLeafsDelete(ctx context.Context, state *AAAAc
 		}
 	}
 	for i := range data.System {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.System[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.System[i].List.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.System[i].A4Radius.IsNull() && !data.System[i].A4Radius.ValueBool() {
@@ -4715,11 +4713,11 @@ func (data *AAAAccounting) getEmptyLeafsDelete(ctx context.Context, state *AAAAc
 		}
 	}
 	for i := range data.Commands {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.Commands[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.Commands[i].List.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.Commands[i].A4Radius.IsNull() && !data.Commands[i].A4Radius.ValueBool() {
@@ -4849,11 +4847,11 @@ func (data *AAAAccounting) getEmptyLeafsDelete(ctx context.Context, state *AAAAc
 		}
 	}
 	for i := range data.Exec {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.Exec[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.Exec[i].List.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.Exec[i].A4Radius.IsNull() && !data.Exec[i].A4Radius.ValueBool() {
@@ -4970,22 +4968,22 @@ func (data *AAAAccounting) getEmptyLeafsDelete(ctx context.Context, state *AAAAc
 func (data *AAAAccounting) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Network {
-		keyValues := [...]string{ data.Network[i].List.ValueString(),  }
+		keyValues := [...]string{data.Network[i].List.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/network/accounting-list=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.System {
-		keyValues := [...]string{ data.System[i].List.ValueString(),  }
+		keyValues := [...]string{data.System[i].List.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/system/accounting-list=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Commands {
-		keyValues := [...]string{ data.Commands[i].List.ValueString(),  }
+		keyValues := [...]string{data.Commands[i].List.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/commands/accounting-list=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Exec {
-		keyValues := [...]string{ data.Exec[i].List.ValueString(),  }
+		keyValues := [...]string{data.Exec[i].List.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/exec/accounting-list=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -5008,8 +5006,8 @@ func (data *AAAAccounting) addDeletedItemsXML(ctx context.Context, state AAAAcco
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.Network {
-		stateKeys := [...]string{ "list-name",  }
-		stateKeyValues := [...]string{ state.Network[i].List.ValueString(),  }
+		stateKeys := [...]string{"list-name"}
+		stateKeyValues := [...]string{state.Network[i].List.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -5030,74 +5028,74 @@ func (data *AAAAccounting) addDeletedItemsXML(ctx context.Context, state AAAAcco
 				found = false
 			}
 			if found {
-			if !state.Network[i].A4Group.IsNull() && data.Network[j].A4Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-4/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Network[i].A4Radius.IsNull() && state.Network[i].A4Radius.ValueBool() && data.Network[j].A4Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-4/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Network[i].A4Tacacs.IsNull() && state.Network[i].A4Tacacs.ValueBool() && data.Network[j].A4Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-4/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Network[i].A4None.IsNull() && state.Network[i].A4None.ValueBool() && data.Network[j].A4None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-4/none", predicates))
-			}
-			if !state.Network[i].A3Group.IsNull() && data.Network[j].A3Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-3/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Network[i].A3Radius.IsNull() && state.Network[i].A3Radius.ValueBool() && data.Network[j].A3Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-3/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Network[i].A3Tacacs.IsNull() && state.Network[i].A3Tacacs.ValueBool() && data.Network[j].A3Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-3/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Network[i].A3None.IsNull() && state.Network[i].A3None.ValueBool() && data.Network[j].A3None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-3/none", predicates))
-			}
-			if !state.Network[i].A2Group.IsNull() && data.Network[j].A2Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-2/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Network[i].A2Radius.IsNull() && state.Network[i].A2Radius.ValueBool() && data.Network[j].A2Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-2/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Network[i].A2Tacacs.IsNull() && state.Network[i].A2Tacacs.ValueBool() && data.Network[j].A2Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-2/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Network[i].A2None.IsNull() && state.Network[i].A2None.ValueBool() && data.Network[j].A2None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-2/none", predicates))
-			}
-			if !state.Network[i].A1Group.IsNull() && data.Network[j].A1Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-1/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Network[i].A1Radius.IsNull() && state.Network[i].A1Radius.ValueBool() && data.Network[j].A1Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-1/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Network[i].A1Tacacs.IsNull() && state.Network[i].A1Tacacs.ValueBool() && data.Network[j].A1Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-1/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Network[i].A1None.IsNull() && state.Network[i].A1None.ValueBool() && data.Network[j].A1None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/none", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Network[i].StopOnly.IsNull() && state.Network[i].StopOnly.ValueBool() && data.Network[j].StopOnly.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/stop-only", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Network[i].StartStop.IsNull() && state.Network[i].StartStop.ValueBool() && data.Network[j].StartStop.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/start-stop", predicates))
-			}
+				if !state.Network[i].A4Group.IsNull() && data.Network[j].A4Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-4/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Network[i].A4Radius.IsNull() && state.Network[i].A4Radius.ValueBool() && data.Network[j].A4Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-4/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Network[i].A4Tacacs.IsNull() && state.Network[i].A4Tacacs.ValueBool() && data.Network[j].A4Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-4/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Network[i].A4None.IsNull() && state.Network[i].A4None.ValueBool() && data.Network[j].A4None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-4/none", predicates))
+				}
+				if !state.Network[i].A3Group.IsNull() && data.Network[j].A3Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-3/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Network[i].A3Radius.IsNull() && state.Network[i].A3Radius.ValueBool() && data.Network[j].A3Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-3/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Network[i].A3Tacacs.IsNull() && state.Network[i].A3Tacacs.ValueBool() && data.Network[j].A3Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-3/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Network[i].A3None.IsNull() && state.Network[i].A3None.ValueBool() && data.Network[j].A3None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-3/none", predicates))
+				}
+				if !state.Network[i].A2Group.IsNull() && data.Network[j].A2Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-2/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Network[i].A2Radius.IsNull() && state.Network[i].A2Radius.ValueBool() && data.Network[j].A2Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-2/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Network[i].A2Tacacs.IsNull() && state.Network[i].A2Tacacs.ValueBool() && data.Network[j].A2Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-2/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Network[i].A2None.IsNull() && state.Network[i].A2None.ValueBool() && data.Network[j].A2None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-2/none", predicates))
+				}
+				if !state.Network[i].A1Group.IsNull() && data.Network[j].A1Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-1/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Network[i].A1Radius.IsNull() && state.Network[i].A1Radius.ValueBool() && data.Network[j].A1Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-1/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Network[i].A1Tacacs.IsNull() && state.Network[i].A1Tacacs.ValueBool() && data.Network[j].A1Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/groups/group-1/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Network[i].A1None.IsNull() && state.Network[i].A1None.ValueBool() && data.Network[j].A1None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/none", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Network[i].StopOnly.IsNull() && state.Network[i].StopOnly.ValueBool() && data.Network[j].StopOnly.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/stop-only", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Network[i].StartStop.IsNull() && state.Network[i].StartStop.ValueBool() && data.Network[j].StartStop.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/network/accounting-list%v/start-stop", predicates))
+				}
 				break
 			}
 		}
@@ -5106,8 +5104,8 @@ func (data *AAAAccounting) addDeletedItemsXML(ctx context.Context, state AAAAcco
 		}
 	}
 	for i := range state.System {
-		stateKeys := [...]string{ "list-name",  }
-		stateKeyValues := [...]string{ state.System[i].List.ValueString(),  }
+		stateKeys := [...]string{"list-name"}
+		stateKeyValues := [...]string{state.System[i].List.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -5128,74 +5126,74 @@ func (data *AAAAccounting) addDeletedItemsXML(ctx context.Context, state AAAAcco
 				found = false
 			}
 			if found {
-			if !state.System[i].A4Group.IsNull() && data.System[j].A4Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-4/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.System[i].A4Radius.IsNull() && state.System[i].A4Radius.ValueBool() && data.System[j].A4Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-4/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.System[i].A4Tacacs.IsNull() && state.System[i].A4Tacacs.ValueBool() && data.System[j].A4Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-4/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.System[i].A4None.IsNull() && state.System[i].A4None.ValueBool() && data.System[j].A4None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-4/none", predicates))
-			}
-			if !state.System[i].A3Group.IsNull() && data.System[j].A3Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-3/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.System[i].A3Radius.IsNull() && state.System[i].A3Radius.ValueBool() && data.System[j].A3Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-3/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.System[i].A3Tacacs.IsNull() && state.System[i].A3Tacacs.ValueBool() && data.System[j].A3Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-3/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.System[i].A3None.IsNull() && state.System[i].A3None.ValueBool() && data.System[j].A3None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-3/none", predicates))
-			}
-			if !state.System[i].A2Group.IsNull() && data.System[j].A2Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-2/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.System[i].A2Radius.IsNull() && state.System[i].A2Radius.ValueBool() && data.System[j].A2Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-2/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.System[i].A2Tacacs.IsNull() && state.System[i].A2Tacacs.ValueBool() && data.System[j].A2Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-2/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.System[i].A2None.IsNull() && state.System[i].A2None.ValueBool() && data.System[j].A2None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-2/none", predicates))
-			}
-			if !state.System[i].A1Group.IsNull() && data.System[j].A1Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-1/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.System[i].A1Radius.IsNull() && state.System[i].A1Radius.ValueBool() && data.System[j].A1Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-1/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.System[i].A1Tacacs.IsNull() && state.System[i].A1Tacacs.ValueBool() && data.System[j].A1Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-1/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.System[i].A1None.IsNull() && state.System[i].A1None.ValueBool() && data.System[j].A1None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/none", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.System[i].Broadcast.IsNull() && state.System[i].Broadcast.ValueBool() && data.System[j].Broadcast.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/broadcast", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.System[i].StartStop.IsNull() && state.System[i].StartStop.ValueBool() && data.System[j].StartStop.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/start-stop", predicates))
-			}
+				if !state.System[i].A4Group.IsNull() && data.System[j].A4Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-4/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.System[i].A4Radius.IsNull() && state.System[i].A4Radius.ValueBool() && data.System[j].A4Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-4/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.System[i].A4Tacacs.IsNull() && state.System[i].A4Tacacs.ValueBool() && data.System[j].A4Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-4/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.System[i].A4None.IsNull() && state.System[i].A4None.ValueBool() && data.System[j].A4None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-4/none", predicates))
+				}
+				if !state.System[i].A3Group.IsNull() && data.System[j].A3Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-3/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.System[i].A3Radius.IsNull() && state.System[i].A3Radius.ValueBool() && data.System[j].A3Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-3/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.System[i].A3Tacacs.IsNull() && state.System[i].A3Tacacs.ValueBool() && data.System[j].A3Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-3/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.System[i].A3None.IsNull() && state.System[i].A3None.ValueBool() && data.System[j].A3None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-3/none", predicates))
+				}
+				if !state.System[i].A2Group.IsNull() && data.System[j].A2Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-2/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.System[i].A2Radius.IsNull() && state.System[i].A2Radius.ValueBool() && data.System[j].A2Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-2/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.System[i].A2Tacacs.IsNull() && state.System[i].A2Tacacs.ValueBool() && data.System[j].A2Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-2/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.System[i].A2None.IsNull() && state.System[i].A2None.ValueBool() && data.System[j].A2None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-2/none", predicates))
+				}
+				if !state.System[i].A1Group.IsNull() && data.System[j].A1Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-1/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.System[i].A1Radius.IsNull() && state.System[i].A1Radius.ValueBool() && data.System[j].A1Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-1/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.System[i].A1Tacacs.IsNull() && state.System[i].A1Tacacs.ValueBool() && data.System[j].A1Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/groups/group-1/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.System[i].A1None.IsNull() && state.System[i].A1None.ValueBool() && data.System[j].A1None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/none", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.System[i].Broadcast.IsNull() && state.System[i].Broadcast.ValueBool() && data.System[j].Broadcast.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/broadcast", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.System[i].StartStop.IsNull() && state.System[i].StartStop.ValueBool() && data.System[j].StartStop.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/system/accounting-list%v/start-stop", predicates))
+				}
 				break
 			}
 		}
@@ -5204,8 +5202,8 @@ func (data *AAAAccounting) addDeletedItemsXML(ctx context.Context, state AAAAcco
 		}
 	}
 	for i := range state.Commands {
-		stateKeys := [...]string{ "list-name",  }
-		stateKeyValues := [...]string{ state.Commands[i].List.ValueString(),  }
+		stateKeys := [...]string{"list-name"}
+		stateKeyValues := [...]string{state.Commands[i].List.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -5226,90 +5224,90 @@ func (data *AAAAccounting) addDeletedItemsXML(ctx context.Context, state AAAAcco
 				found = false
 			}
 			if found {
-			if !state.Commands[i].A4Group.IsNull() && data.Commands[j].A4Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-4/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A4Radius.IsNull() && state.Commands[i].A4Radius.ValueBool() && data.Commands[j].A4Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-4/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A4Tacacs.IsNull() && state.Commands[i].A4Tacacs.ValueBool() && data.Commands[j].A4Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-4/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A4None.IsNull() && state.Commands[i].A4None.ValueBool() && data.Commands[j].A4None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-4/none", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A4Local.IsNull() && state.Commands[i].A4Local.ValueBool() && data.Commands[j].A4Local.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-4/local", predicates))
-			}
-			if !state.Commands[i].A3Group.IsNull() && data.Commands[j].A3Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-3/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A3Radius.IsNull() && state.Commands[i].A3Radius.ValueBool() && data.Commands[j].A3Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-3/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A3Tacacs.IsNull() && state.Commands[i].A3Tacacs.ValueBool() && data.Commands[j].A3Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-3/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A3None.IsNull() && state.Commands[i].A3None.ValueBool() && data.Commands[j].A3None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-3/none", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A3Local.IsNull() && state.Commands[i].A3Local.ValueBool() && data.Commands[j].A3Local.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-3/local", predicates))
-			}
-			if !state.Commands[i].A2Group.IsNull() && data.Commands[j].A2Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-2/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A2Radius.IsNull() && state.Commands[i].A2Radius.ValueBool() && data.Commands[j].A2Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-2/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A2Tacacs.IsNull() && state.Commands[i].A2Tacacs.ValueBool() && data.Commands[j].A2Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-2/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A2None.IsNull() && state.Commands[i].A2None.ValueBool() && data.Commands[j].A2None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-2/none", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A2Local.IsNull() && state.Commands[i].A2Local.ValueBool() && data.Commands[j].A2Local.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-2/local", predicates))
-			}
-			if !state.Commands[i].A1Group.IsNull() && data.Commands[j].A1Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-1/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A1Radius.IsNull() && state.Commands[i].A1Radius.ValueBool() && data.Commands[j].A1Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-1/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A1Tacacs.IsNull() && state.Commands[i].A1Tacacs.ValueBool() && data.Commands[j].A1Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-1/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A1Local.IsNull() && state.Commands[i].A1Local.ValueBool() && data.Commands[j].A1Local.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/local", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].A1None.IsNull() && state.Commands[i].A1None.ValueBool() && data.Commands[j].A1None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/none", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].StopOnly.IsNull() && state.Commands[i].StopOnly.ValueBool() && data.Commands[j].StopOnly.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/stop-only", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Commands[i].StartStop.IsNull() && state.Commands[i].StartStop.ValueBool() && data.Commands[j].StartStop.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/start-stop", predicates))
-			}
+				if !state.Commands[i].A4Group.IsNull() && data.Commands[j].A4Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-4/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A4Radius.IsNull() && state.Commands[i].A4Radius.ValueBool() && data.Commands[j].A4Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-4/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A4Tacacs.IsNull() && state.Commands[i].A4Tacacs.ValueBool() && data.Commands[j].A4Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-4/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A4None.IsNull() && state.Commands[i].A4None.ValueBool() && data.Commands[j].A4None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-4/none", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A4Local.IsNull() && state.Commands[i].A4Local.ValueBool() && data.Commands[j].A4Local.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-4/local", predicates))
+				}
+				if !state.Commands[i].A3Group.IsNull() && data.Commands[j].A3Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-3/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A3Radius.IsNull() && state.Commands[i].A3Radius.ValueBool() && data.Commands[j].A3Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-3/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A3Tacacs.IsNull() && state.Commands[i].A3Tacacs.ValueBool() && data.Commands[j].A3Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-3/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A3None.IsNull() && state.Commands[i].A3None.ValueBool() && data.Commands[j].A3None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-3/none", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A3Local.IsNull() && state.Commands[i].A3Local.ValueBool() && data.Commands[j].A3Local.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-3/local", predicates))
+				}
+				if !state.Commands[i].A2Group.IsNull() && data.Commands[j].A2Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-2/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A2Radius.IsNull() && state.Commands[i].A2Radius.ValueBool() && data.Commands[j].A2Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-2/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A2Tacacs.IsNull() && state.Commands[i].A2Tacacs.ValueBool() && data.Commands[j].A2Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-2/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A2None.IsNull() && state.Commands[i].A2None.ValueBool() && data.Commands[j].A2None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-2/none", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A2Local.IsNull() && state.Commands[i].A2Local.ValueBool() && data.Commands[j].A2Local.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-2/local", predicates))
+				}
+				if !state.Commands[i].A1Group.IsNull() && data.Commands[j].A1Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-1/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A1Radius.IsNull() && state.Commands[i].A1Radius.ValueBool() && data.Commands[j].A1Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-1/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A1Tacacs.IsNull() && state.Commands[i].A1Tacacs.ValueBool() && data.Commands[j].A1Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/groups/group-1/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A1Local.IsNull() && state.Commands[i].A1Local.ValueBool() && data.Commands[j].A1Local.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/local", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].A1None.IsNull() && state.Commands[i].A1None.ValueBool() && data.Commands[j].A1None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/none", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].StopOnly.IsNull() && state.Commands[i].StopOnly.ValueBool() && data.Commands[j].StopOnly.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/stop-only", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Commands[i].StartStop.IsNull() && state.Commands[i].StartStop.ValueBool() && data.Commands[j].StartStop.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/commands/accounting-list%v/start-stop", predicates))
+				}
 				break
 			}
 		}
@@ -5318,8 +5316,8 @@ func (data *AAAAccounting) addDeletedItemsXML(ctx context.Context, state AAAAcco
 		}
 	}
 	for i := range state.Exec {
-		stateKeys := [...]string{ "list-name",  }
-		stateKeyValues := [...]string{ state.Exec[i].List.ValueString(),  }
+		stateKeys := [...]string{"list-name"}
+		stateKeyValues := [...]string{state.Exec[i].List.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -5340,74 +5338,74 @@ func (data *AAAAccounting) addDeletedItemsXML(ctx context.Context, state AAAAcco
 				found = false
 			}
 			if found {
-			if !state.Exec[i].A4Group.IsNull() && data.Exec[j].A4Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-4/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Exec[i].A4Radius.IsNull() && state.Exec[i].A4Radius.ValueBool() && data.Exec[j].A4Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-4/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Exec[i].A4Tacacs.IsNull() && state.Exec[i].A4Tacacs.ValueBool() && data.Exec[j].A4Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-4/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Exec[i].A4None.IsNull() && state.Exec[i].A4None.ValueBool() && data.Exec[j].A4None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-4/none", predicates))
-			}
-			if !state.Exec[i].A3Group.IsNull() && data.Exec[j].A3Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-3/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Exec[i].A3Radius.IsNull() && state.Exec[i].A3Radius.ValueBool() && data.Exec[j].A3Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-3/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Exec[i].A3Tacacs.IsNull() && state.Exec[i].A3Tacacs.ValueBool() && data.Exec[j].A3Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-3/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Exec[i].A3None.IsNull() && state.Exec[i].A3None.ValueBool() && data.Exec[j].A3None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-3/none", predicates))
-			}
-			if !state.Exec[i].A2Group.IsNull() && data.Exec[j].A2Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-2/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Exec[i].A2Radius.IsNull() && state.Exec[i].A2Radius.ValueBool() && data.Exec[j].A2Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-2/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Exec[i].A2Tacacs.IsNull() && state.Exec[i].A2Tacacs.ValueBool() && data.Exec[j].A2Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-2/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Exec[i].A2None.IsNull() && state.Exec[i].A2None.ValueBool() && data.Exec[j].A2None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-2/none", predicates))
-			}
-			if !state.Exec[i].A1Group.IsNull() && data.Exec[j].A1Group.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-1/server-group-name", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Exec[i].A1Radius.IsNull() && state.Exec[i].A1Radius.ValueBool() && data.Exec[j].A1Radius.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-1/radius", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Exec[i].A1Tacacs.IsNull() && state.Exec[i].A1Tacacs.ValueBool() && data.Exec[j].A1Tacacs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-1/tacacs", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Exec[i].A1None.IsNull() && state.Exec[i].A1None.ValueBool() && data.Exec[j].A1None.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/none", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Exec[i].StopOnly.IsNull() && state.Exec[i].StopOnly.ValueBool() && data.Exec[j].StopOnly.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/stop-only", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Exec[i].StartStop.IsNull() && state.Exec[i].StartStop.ValueBool() && data.Exec[j].StartStop.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/start-stop", predicates))
-			}
+				if !state.Exec[i].A4Group.IsNull() && data.Exec[j].A4Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-4/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Exec[i].A4Radius.IsNull() && state.Exec[i].A4Radius.ValueBool() && data.Exec[j].A4Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-4/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Exec[i].A4Tacacs.IsNull() && state.Exec[i].A4Tacacs.ValueBool() && data.Exec[j].A4Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-4/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Exec[i].A4None.IsNull() && state.Exec[i].A4None.ValueBool() && data.Exec[j].A4None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-4/none", predicates))
+				}
+				if !state.Exec[i].A3Group.IsNull() && data.Exec[j].A3Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-3/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Exec[i].A3Radius.IsNull() && state.Exec[i].A3Radius.ValueBool() && data.Exec[j].A3Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-3/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Exec[i].A3Tacacs.IsNull() && state.Exec[i].A3Tacacs.ValueBool() && data.Exec[j].A3Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-3/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Exec[i].A3None.IsNull() && state.Exec[i].A3None.ValueBool() && data.Exec[j].A3None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-3/none", predicates))
+				}
+				if !state.Exec[i].A2Group.IsNull() && data.Exec[j].A2Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-2/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Exec[i].A2Radius.IsNull() && state.Exec[i].A2Radius.ValueBool() && data.Exec[j].A2Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-2/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Exec[i].A2Tacacs.IsNull() && state.Exec[i].A2Tacacs.ValueBool() && data.Exec[j].A2Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-2/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Exec[i].A2None.IsNull() && state.Exec[i].A2None.ValueBool() && data.Exec[j].A2None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-2/none", predicates))
+				}
+				if !state.Exec[i].A1Group.IsNull() && data.Exec[j].A1Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-1/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Exec[i].A1Radius.IsNull() && state.Exec[i].A1Radius.ValueBool() && data.Exec[j].A1Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-1/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Exec[i].A1Tacacs.IsNull() && state.Exec[i].A1Tacacs.ValueBool() && data.Exec[j].A1Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/groups/group-1/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Exec[i].A1None.IsNull() && state.Exec[i].A1None.ValueBool() && data.Exec[j].A1None.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/none", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Exec[i].StopOnly.IsNull() && state.Exec[i].StopOnly.ValueBool() && data.Exec[j].StopOnly.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/stop-only", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Exec[i].StartStop.IsNull() && state.Exec[i].StartStop.ValueBool() && data.Exec[j].StartStop.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/accounting-list%v/start-stop", predicates))
+				}
 				break
 			}
 		}
@@ -5416,7 +5414,7 @@ func (data *AAAAccounting) addDeletedItemsXML(ctx context.Context, state AAAAcco
 		}
 	}
 	if !state.UpdatePeriodic.IsNull() && data.UpdatePeriodic.IsNull() {
-		deletePath := state.getXPath()+"/update/periodic"
+		deletePath := state.getXPath() + "/update/periodic"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -5424,7 +5422,7 @@ func (data *AAAAccounting) addDeletedItemsXML(ctx context.Context, state AAAAcco
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.UpdateNewinfo.IsNull() && state.UpdateNewinfo.ValueBool() && data.UpdateNewinfo.IsNull() {
-		deletePath := state.getXPath()+"/update/newinfo"
+		deletePath := state.getXPath() + "/update/newinfo"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -5443,8 +5441,8 @@ func (data *AAAAccounting) addDeletedItemsXML(ctx context.Context, state AAAAcco
 func (data *AAAAccounting) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.Network {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.Network[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.Network[i].List.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -5453,8 +5451,8 @@ func (data *AAAAccounting) addDeletePathsXML(ctx context.Context, body string) s
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/network/accounting-list%v", predicates))
 	}
 	for i := range data.System {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.System[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.System[i].List.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -5463,8 +5461,8 @@ func (data *AAAAccounting) addDeletePathsXML(ctx context.Context, body string) s
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/system/accounting-list%v", predicates))
 	}
 	for i := range data.Commands {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.Commands[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.Commands[i].List.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -5473,8 +5471,8 @@ func (data *AAAAccounting) addDeletePathsXML(ctx context.Context, body string) s
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/commands/accounting-list%v", predicates))
 	}
 	for i := range data.Exec {
-		keys := [...]string{ "list-name",  }
-		keyValues := [...]string{ data.Exec[i].List.ValueString(),  }
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.Exec[i].List.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

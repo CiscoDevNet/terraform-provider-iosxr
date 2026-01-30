@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -104,8 +105,8 @@ func TestAccDataSourceIosxrSegmentRoutingTEPolicy(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSegmentRoutingTEPolicyPrerequisitesConfig+testAccDataSourceIosxrSegmentRoutingTEPolicyConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrSegmentRoutingTEPolicyPrerequisitesConfig + testAccDataSourceIosxrSegmentRoutingTEPolicyConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

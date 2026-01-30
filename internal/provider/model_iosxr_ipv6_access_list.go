@@ -24,179 +24,178 @@ import (
 	"context"
 	"fmt"
 	"reflect"
-	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type IPv6AccessList struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	AccessListName types.String `tfsdk:"access_list_name"`
-	Sequences []IPv6AccessListSequences `tfsdk:"sequences"`
+	Device         types.String              `tfsdk:"device"`
+	Id             types.String              `tfsdk:"id"`
+	AccessListName types.String              `tfsdk:"access_list_name"`
+	Sequences      []IPv6AccessListSequences `tfsdk:"sequences"`
 }
 
 type IPv6AccessListData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	AccessListName types.String `tfsdk:"access_list_name"`
-	Sequences []IPv6AccessListSequences `tfsdk:"sequences"`
+	Device         types.String              `tfsdk:"device"`
+	Id             types.String              `tfsdk:"id"`
+	AccessListName types.String              `tfsdk:"access_list_name"`
+	Sequences      []IPv6AccessListSequences `tfsdk:"sequences"`
 }
 type IPv6AccessListSequences struct {
-	SequenceNumber types.Int64 `tfsdk:"sequence_number"`
-	Remark types.String `tfsdk:"remark"`
-	PermitProtocol types.String `tfsdk:"permit_protocol"`
-	PermitEq types.String `tfsdk:"permit_eq"`
-	PermitPrecedence types.String `tfsdk:"permit_precedence"`
-	PermitFragmentType types.String `tfsdk:"permit_fragment_type"`
-	PermitCounter types.String `tfsdk:"permit_counter"`
-	PermitRangeStartProtocol types.String `tfsdk:"permit_range_start_protocol"`
-	PermitRangeEndProtocol types.String `tfsdk:"permit_range_end_protocol"`
-	PermitSourceAddress types.String `tfsdk:"permit_source_address"`
-	PermitSourceWildcardMask types.String `tfsdk:"permit_source_wildcard_mask"`
-	PermitSourcePrefixLength types.Int64 `tfsdk:"permit_source_prefix_length"`
-	PermitSourceAny types.Bool `tfsdk:"permit_source_any"`
-	PermitSourceHost types.String `tfsdk:"permit_source_host"`
-	PermitSourceNetGroup types.String `tfsdk:"permit_source_net_group"`
-	PermitSourcePortGroup types.String `tfsdk:"permit_source_port_group"`
-	PermitSourcePortEq types.String `tfsdk:"permit_source_port_eq"`
-	PermitSourcePortGt types.String `tfsdk:"permit_source_port_gt"`
-	PermitSourcePortLt types.String `tfsdk:"permit_source_port_lt"`
-	PermitSourcePortNeq types.String `tfsdk:"permit_source_port_neq"`
-	PermitSourcePortRangeStart types.String `tfsdk:"permit_source_port_range_start"`
-	PermitSourcePortRangeEnd types.String `tfsdk:"permit_source_port_range_end"`
-	PermitDestinationAddress types.String `tfsdk:"permit_destination_address"`
-	PermitDestinationWildcardMask types.String `tfsdk:"permit_destination_wildcard_mask"`
-	PermitDestinationPrefixLength types.Int64 `tfsdk:"permit_destination_prefix_length"`
-	PermitDestinationAny types.Bool `tfsdk:"permit_destination_any"`
-	PermitDestinationHost types.String `tfsdk:"permit_destination_host"`
-	PermitDestinationNetGroup types.String `tfsdk:"permit_destination_net_group"`
-	PermitDestinationPortGroup types.String `tfsdk:"permit_destination_port_group"`
-	PermitDestinationPortEq types.String `tfsdk:"permit_destination_port_eq"`
-	PermitDestinationPortGt types.String `tfsdk:"permit_destination_port_gt"`
-	PermitDestinationPortLt types.String `tfsdk:"permit_destination_port_lt"`
-	PermitDestinationPortNeq types.String `tfsdk:"permit_destination_port_neq"`
+	SequenceNumber                  types.Int64  `tfsdk:"sequence_number"`
+	Remark                          types.String `tfsdk:"remark"`
+	PermitProtocol                  types.String `tfsdk:"permit_protocol"`
+	PermitEq                        types.String `tfsdk:"permit_eq"`
+	PermitPrecedence                types.String `tfsdk:"permit_precedence"`
+	PermitFragmentType              types.String `tfsdk:"permit_fragment_type"`
+	PermitCounter                   types.String `tfsdk:"permit_counter"`
+	PermitRangeStartProtocol        types.String `tfsdk:"permit_range_start_protocol"`
+	PermitRangeEndProtocol          types.String `tfsdk:"permit_range_end_protocol"`
+	PermitSourceAddress             types.String `tfsdk:"permit_source_address"`
+	PermitSourceWildcardMask        types.String `tfsdk:"permit_source_wildcard_mask"`
+	PermitSourcePrefixLength        types.Int64  `tfsdk:"permit_source_prefix_length"`
+	PermitSourceAny                 types.Bool   `tfsdk:"permit_source_any"`
+	PermitSourceHost                types.String `tfsdk:"permit_source_host"`
+	PermitSourceNetGroup            types.String `tfsdk:"permit_source_net_group"`
+	PermitSourcePortGroup           types.String `tfsdk:"permit_source_port_group"`
+	PermitSourcePortEq              types.String `tfsdk:"permit_source_port_eq"`
+	PermitSourcePortGt              types.String `tfsdk:"permit_source_port_gt"`
+	PermitSourcePortLt              types.String `tfsdk:"permit_source_port_lt"`
+	PermitSourcePortNeq             types.String `tfsdk:"permit_source_port_neq"`
+	PermitSourcePortRangeStart      types.String `tfsdk:"permit_source_port_range_start"`
+	PermitSourcePortRangeEnd        types.String `tfsdk:"permit_source_port_range_end"`
+	PermitDestinationAddress        types.String `tfsdk:"permit_destination_address"`
+	PermitDestinationWildcardMask   types.String `tfsdk:"permit_destination_wildcard_mask"`
+	PermitDestinationPrefixLength   types.Int64  `tfsdk:"permit_destination_prefix_length"`
+	PermitDestinationAny            types.Bool   `tfsdk:"permit_destination_any"`
+	PermitDestinationHost           types.String `tfsdk:"permit_destination_host"`
+	PermitDestinationNetGroup       types.String `tfsdk:"permit_destination_net_group"`
+	PermitDestinationPortGroup      types.String `tfsdk:"permit_destination_port_group"`
+	PermitDestinationPortEq         types.String `tfsdk:"permit_destination_port_eq"`
+	PermitDestinationPortGt         types.String `tfsdk:"permit_destination_port_gt"`
+	PermitDestinationPortLt         types.String `tfsdk:"permit_destination_port_lt"`
+	PermitDestinationPortNeq        types.String `tfsdk:"permit_destination_port_neq"`
 	PermitDestinationPortRangeStart types.String `tfsdk:"permit_destination_port_range_start"`
-	PermitDestinationPortRangeEnd types.String `tfsdk:"permit_destination_port_range_end"`
-	PermitIcmpMessageTypeName types.String `tfsdk:"permit_icmp_message_type_name"`
-	PermitIcmpMessageType types.Int64 `tfsdk:"permit_icmp_message_type"`
-	PermitIcmpMessageCode types.Int64 `tfsdk:"permit_icmp_message_code"`
-	PermitDscp types.String `tfsdk:"permit_dscp"`
-	PermitDscpEq types.String `tfsdk:"permit_dscp_eq"`
-	PermitDscpGt types.String `tfsdk:"permit_dscp_gt"`
-	PermitDscpLt types.String `tfsdk:"permit_dscp_lt"`
-	PermitDscpNeq types.String `tfsdk:"permit_dscp_neq"`
-	PermitDscpRangeStart types.String `tfsdk:"permit_dscp_range_start"`
-	PermitDscpRangeEnd types.String `tfsdk:"permit_dscp_range_end"`
-	PermitPacketLengthEq types.Int64 `tfsdk:"permit_packet_length_eq"`
-	PermitPacketLengthGt types.Int64 `tfsdk:"permit_packet_length_gt"`
-	PermitPacketLengthLt types.Int64 `tfsdk:"permit_packet_length_lt"`
-	PermitPacketLengthNeq types.Int64 `tfsdk:"permit_packet_length_neq"`
-	PermitPacketLengthRangeStart types.Int64 `tfsdk:"permit_packet_length_range_start"`
-	PermitPacketLengthRangeEnd types.Int64 `tfsdk:"permit_packet_length_range_end"`
-	PermitTtlEq types.Int64 `tfsdk:"permit_ttl_eq"`
-	PermitTtlGt types.Int64 `tfsdk:"permit_ttl_gt"`
-	PermitTtlLt types.Int64 `tfsdk:"permit_ttl_lt"`
-	PermitTtlNeq types.Int64 `tfsdk:"permit_ttl_neq"`
-	PermitTtlRangeStart types.Int64 `tfsdk:"permit_ttl_range_start"`
-	PermitTtlRangeEnd types.Int64 `tfsdk:"permit_ttl_range_end"`
-	PermitPoliceValue types.Int64 `tfsdk:"permit_police_value"`
-	PermitPoliceUnit types.String `tfsdk:"permit_police_unit"`
-	PermitPolicePeakRate types.Int64 `tfsdk:"permit_police_peak_rate"`
-	PermitPolicePeakUnit types.String `tfsdk:"permit_police_peak_unit"`
-	PermitPolicePriority types.String `tfsdk:"permit_police_priority"`
-	PermitNexthop1Ipv6 types.String `tfsdk:"permit_nexthop1_ipv6"`
-	PermitNexthop1Track types.String `tfsdk:"permit_nexthop1_track"`
-	PermitNexthop1Vrf types.String `tfsdk:"permit_nexthop1_vrf"`
-	PermitNexthop2Ipv6 types.String `tfsdk:"permit_nexthop2_ipv6"`
-	PermitNexthop2Track types.String `tfsdk:"permit_nexthop2_track"`
-	PermitNexthop2Vrf types.String `tfsdk:"permit_nexthop2_vrf"`
-	PermitNexthop3Ipv6 types.String `tfsdk:"permit_nexthop3_ipv6"`
-	PermitNexthop3Track types.String `tfsdk:"permit_nexthop3_track"`
-	PermitNexthop3Vrf types.String `tfsdk:"permit_nexthop3_vrf"`
-	PermitCapture types.Bool `tfsdk:"permit_capture"`
-	PermitLog types.Bool `tfsdk:"permit_log"`
-	PermitLogInput types.Bool `tfsdk:"permit_log_input"`
-	PermitSetQosGroup types.Int64 `tfsdk:"permit_set_qos_group"`
-	PermitSetTtl types.Int64 `tfsdk:"permit_set_ttl"`
-	DenyProtocol types.String `tfsdk:"deny_protocol"`
-	DenyEq types.String `tfsdk:"deny_eq"`
-	DenyPrecedence types.String `tfsdk:"deny_precedence"`
-	DenyFragmentType types.String `tfsdk:"deny_fragment_type"`
-	DenyCounter types.String `tfsdk:"deny_counter"`
-	DenyRangeStartProtocol types.String `tfsdk:"deny_range_start_protocol"`
-	DenyRangeEndProtocol types.String `tfsdk:"deny_range_end_protocol"`
-	DenySourceAddress types.String `tfsdk:"deny_source_address"`
-	DenySourceWildcardMask types.String `tfsdk:"deny_source_wildcard_mask"`
-	DenySourcePrefixLength types.Int64 `tfsdk:"deny_source_prefix_length"`
-	DenySourceAny types.Bool `tfsdk:"deny_source_any"`
-	DenySourceHost types.String `tfsdk:"deny_source_host"`
-	DenySourceNetGroup types.String `tfsdk:"deny_source_net_group"`
-	DenySourcePortGroup types.String `tfsdk:"deny_source_port_group"`
-	DenySourcePortEq types.String `tfsdk:"deny_source_port_eq"`
-	DenySourcePortGt types.String `tfsdk:"deny_source_port_gt"`
-	DenySourcePortLt types.String `tfsdk:"deny_source_port_lt"`
-	DenySourcePortNeq types.String `tfsdk:"deny_source_port_neq"`
-	DenySourcePortRangeStart types.String `tfsdk:"deny_source_port_range_start"`
-	DenySourcePortRangeEnd types.String `tfsdk:"deny_source_port_range_end"`
-	DenyDestinationAddress types.String `tfsdk:"deny_destination_address"`
-	DenyDestinationWildcardMask types.String `tfsdk:"deny_destination_wildcard_mask"`
-	DenyDestinationPrefixLength types.Int64 `tfsdk:"deny_destination_prefix_length"`
-	DenyDestinationAny types.Bool `tfsdk:"deny_destination_any"`
-	DenyDestinationHost types.String `tfsdk:"deny_destination_host"`
-	DenyDestinationNetGroup types.String `tfsdk:"deny_destination_net_group"`
-	DenyDestinationPortGroup types.String `tfsdk:"deny_destination_port_group"`
-	DenyDestinationPortEq types.String `tfsdk:"deny_destination_port_eq"`
-	DenyDestinationPortGt types.String `tfsdk:"deny_destination_port_gt"`
-	DenyDestinationPortLt types.String `tfsdk:"deny_destination_port_lt"`
-	DenyDestinationPortNeq types.String `tfsdk:"deny_destination_port_neq"`
-	DenyDestinationPortRangeStart types.String `tfsdk:"deny_destination_port_range_start"`
-	DenyDestinationPortRangeEnd types.String `tfsdk:"deny_destination_port_range_end"`
-	DenyIcmpMessageTypeName types.String `tfsdk:"deny_icmp_message_type_name"`
-	DenyIcmpMessageType types.Int64 `tfsdk:"deny_icmp_message_type"`
-	DenyIcmpMessageCode types.Int64 `tfsdk:"deny_icmp_message_code"`
-	DenyDscp types.String `tfsdk:"deny_dscp"`
-	DenyDscpEq types.String `tfsdk:"deny_dscp_eq"`
-	DenyDscpGt types.String `tfsdk:"deny_dscp_gt"`
-	DenyDscpLt types.String `tfsdk:"deny_dscp_lt"`
-	DenyDscpNeq types.String `tfsdk:"deny_dscp_neq"`
-	DenyDscpRangeStart types.String `tfsdk:"deny_dscp_range_start"`
-	DenyDscpRangeEnd types.String `tfsdk:"deny_dscp_range_end"`
-	DenyPacketLengthEq types.Int64 `tfsdk:"deny_packet_length_eq"`
-	DenyPacketLengthGt types.Int64 `tfsdk:"deny_packet_length_gt"`
-	DenyPacketLengthLt types.Int64 `tfsdk:"deny_packet_length_lt"`
-	DenyPacketLengthNeq types.Int64 `tfsdk:"deny_packet_length_neq"`
-	DenyPacketLengthRangeStart types.Int64 `tfsdk:"deny_packet_length_range_start"`
-	DenyPacketLengthRangeEnd types.Int64 `tfsdk:"deny_packet_length_range_end"`
-	DenyTtlEq types.Int64 `tfsdk:"deny_ttl_eq"`
-	DenyTtlGt types.Int64 `tfsdk:"deny_ttl_gt"`
-	DenyTtlLt types.Int64 `tfsdk:"deny_ttl_lt"`
-	DenyTtlNeq types.Int64 `tfsdk:"deny_ttl_neq"`
-	DenyTtlRangeStart types.Int64 `tfsdk:"deny_ttl_range_start"`
-	DenyTtlRangeEnd types.Int64 `tfsdk:"deny_ttl_range_end"`
-	DenyPoliceValue types.Int64 `tfsdk:"deny_police_value"`
-	DenyPoliceUnit types.String `tfsdk:"deny_police_unit"`
-	DenyPolicePeakRate types.Int64 `tfsdk:"deny_police_peak_rate"`
-	DenyPolicePeakUnit types.String `tfsdk:"deny_police_peak_unit"`
-	DenyPolicePriority types.String `tfsdk:"deny_police_priority"`
-	DenyCapture types.Bool `tfsdk:"deny_capture"`
-	DenyLog types.Bool `tfsdk:"deny_log"`
-	DenyLogInput types.Bool `tfsdk:"deny_log_input"`
-	DenySetQosGroup types.Int64 `tfsdk:"deny_set_qos_group"`
-	DenySetTtl types.Int64 `tfsdk:"deny_set_ttl"`
-	DenyIcmpOff types.Bool `tfsdk:"deny_icmp_off"`
-	DenyIcmpOn types.Bool `tfsdk:"deny_icmp_on"`
+	PermitDestinationPortRangeEnd   types.String `tfsdk:"permit_destination_port_range_end"`
+	PermitIcmpMessageTypeName       types.String `tfsdk:"permit_icmp_message_type_name"`
+	PermitIcmpMessageType           types.Int64  `tfsdk:"permit_icmp_message_type"`
+	PermitIcmpMessageCode           types.Int64  `tfsdk:"permit_icmp_message_code"`
+	PermitDscp                      types.String `tfsdk:"permit_dscp"`
+	PermitDscpEq                    types.String `tfsdk:"permit_dscp_eq"`
+	PermitDscpGt                    types.String `tfsdk:"permit_dscp_gt"`
+	PermitDscpLt                    types.String `tfsdk:"permit_dscp_lt"`
+	PermitDscpNeq                   types.String `tfsdk:"permit_dscp_neq"`
+	PermitDscpRangeStart            types.String `tfsdk:"permit_dscp_range_start"`
+	PermitDscpRangeEnd              types.String `tfsdk:"permit_dscp_range_end"`
+	PermitPacketLengthEq            types.Int64  `tfsdk:"permit_packet_length_eq"`
+	PermitPacketLengthGt            types.Int64  `tfsdk:"permit_packet_length_gt"`
+	PermitPacketLengthLt            types.Int64  `tfsdk:"permit_packet_length_lt"`
+	PermitPacketLengthNeq           types.Int64  `tfsdk:"permit_packet_length_neq"`
+	PermitPacketLengthRangeStart    types.Int64  `tfsdk:"permit_packet_length_range_start"`
+	PermitPacketLengthRangeEnd      types.Int64  `tfsdk:"permit_packet_length_range_end"`
+	PermitTtlEq                     types.Int64  `tfsdk:"permit_ttl_eq"`
+	PermitTtlGt                     types.Int64  `tfsdk:"permit_ttl_gt"`
+	PermitTtlLt                     types.Int64  `tfsdk:"permit_ttl_lt"`
+	PermitTtlNeq                    types.Int64  `tfsdk:"permit_ttl_neq"`
+	PermitTtlRangeStart             types.Int64  `tfsdk:"permit_ttl_range_start"`
+	PermitTtlRangeEnd               types.Int64  `tfsdk:"permit_ttl_range_end"`
+	PermitPoliceValue               types.Int64  `tfsdk:"permit_police_value"`
+	PermitPoliceUnit                types.String `tfsdk:"permit_police_unit"`
+	PermitPolicePeakRate            types.Int64  `tfsdk:"permit_police_peak_rate"`
+	PermitPolicePeakUnit            types.String `tfsdk:"permit_police_peak_unit"`
+	PermitPolicePriority            types.String `tfsdk:"permit_police_priority"`
+	PermitNexthop1Ipv6              types.String `tfsdk:"permit_nexthop1_ipv6"`
+	PermitNexthop1Track             types.String `tfsdk:"permit_nexthop1_track"`
+	PermitNexthop1Vrf               types.String `tfsdk:"permit_nexthop1_vrf"`
+	PermitNexthop2Ipv6              types.String `tfsdk:"permit_nexthop2_ipv6"`
+	PermitNexthop2Track             types.String `tfsdk:"permit_nexthop2_track"`
+	PermitNexthop2Vrf               types.String `tfsdk:"permit_nexthop2_vrf"`
+	PermitNexthop3Ipv6              types.String `tfsdk:"permit_nexthop3_ipv6"`
+	PermitNexthop3Track             types.String `tfsdk:"permit_nexthop3_track"`
+	PermitNexthop3Vrf               types.String `tfsdk:"permit_nexthop3_vrf"`
+	PermitCapture                   types.Bool   `tfsdk:"permit_capture"`
+	PermitLog                       types.Bool   `tfsdk:"permit_log"`
+	PermitLogInput                  types.Bool   `tfsdk:"permit_log_input"`
+	PermitSetQosGroup               types.Int64  `tfsdk:"permit_set_qos_group"`
+	PermitSetTtl                    types.Int64  `tfsdk:"permit_set_ttl"`
+	DenyProtocol                    types.String `tfsdk:"deny_protocol"`
+	DenyEq                          types.String `tfsdk:"deny_eq"`
+	DenyPrecedence                  types.String `tfsdk:"deny_precedence"`
+	DenyFragmentType                types.String `tfsdk:"deny_fragment_type"`
+	DenyCounter                     types.String `tfsdk:"deny_counter"`
+	DenyRangeStartProtocol          types.String `tfsdk:"deny_range_start_protocol"`
+	DenyRangeEndProtocol            types.String `tfsdk:"deny_range_end_protocol"`
+	DenySourceAddress               types.String `tfsdk:"deny_source_address"`
+	DenySourceWildcardMask          types.String `tfsdk:"deny_source_wildcard_mask"`
+	DenySourcePrefixLength          types.Int64  `tfsdk:"deny_source_prefix_length"`
+	DenySourceAny                   types.Bool   `tfsdk:"deny_source_any"`
+	DenySourceHost                  types.String `tfsdk:"deny_source_host"`
+	DenySourceNetGroup              types.String `tfsdk:"deny_source_net_group"`
+	DenySourcePortGroup             types.String `tfsdk:"deny_source_port_group"`
+	DenySourcePortEq                types.String `tfsdk:"deny_source_port_eq"`
+	DenySourcePortGt                types.String `tfsdk:"deny_source_port_gt"`
+	DenySourcePortLt                types.String `tfsdk:"deny_source_port_lt"`
+	DenySourcePortNeq               types.String `tfsdk:"deny_source_port_neq"`
+	DenySourcePortRangeStart        types.String `tfsdk:"deny_source_port_range_start"`
+	DenySourcePortRangeEnd          types.String `tfsdk:"deny_source_port_range_end"`
+	DenyDestinationAddress          types.String `tfsdk:"deny_destination_address"`
+	DenyDestinationWildcardMask     types.String `tfsdk:"deny_destination_wildcard_mask"`
+	DenyDestinationPrefixLength     types.Int64  `tfsdk:"deny_destination_prefix_length"`
+	DenyDestinationAny              types.Bool   `tfsdk:"deny_destination_any"`
+	DenyDestinationHost             types.String `tfsdk:"deny_destination_host"`
+	DenyDestinationNetGroup         types.String `tfsdk:"deny_destination_net_group"`
+	DenyDestinationPortGroup        types.String `tfsdk:"deny_destination_port_group"`
+	DenyDestinationPortEq           types.String `tfsdk:"deny_destination_port_eq"`
+	DenyDestinationPortGt           types.String `tfsdk:"deny_destination_port_gt"`
+	DenyDestinationPortLt           types.String `tfsdk:"deny_destination_port_lt"`
+	DenyDestinationPortNeq          types.String `tfsdk:"deny_destination_port_neq"`
+	DenyDestinationPortRangeStart   types.String `tfsdk:"deny_destination_port_range_start"`
+	DenyDestinationPortRangeEnd     types.String `tfsdk:"deny_destination_port_range_end"`
+	DenyIcmpMessageTypeName         types.String `tfsdk:"deny_icmp_message_type_name"`
+	DenyIcmpMessageType             types.Int64  `tfsdk:"deny_icmp_message_type"`
+	DenyIcmpMessageCode             types.Int64  `tfsdk:"deny_icmp_message_code"`
+	DenyDscp                        types.String `tfsdk:"deny_dscp"`
+	DenyDscpEq                      types.String `tfsdk:"deny_dscp_eq"`
+	DenyDscpGt                      types.String `tfsdk:"deny_dscp_gt"`
+	DenyDscpLt                      types.String `tfsdk:"deny_dscp_lt"`
+	DenyDscpNeq                     types.String `tfsdk:"deny_dscp_neq"`
+	DenyDscpRangeStart              types.String `tfsdk:"deny_dscp_range_start"`
+	DenyDscpRangeEnd                types.String `tfsdk:"deny_dscp_range_end"`
+	DenyPacketLengthEq              types.Int64  `tfsdk:"deny_packet_length_eq"`
+	DenyPacketLengthGt              types.Int64  `tfsdk:"deny_packet_length_gt"`
+	DenyPacketLengthLt              types.Int64  `tfsdk:"deny_packet_length_lt"`
+	DenyPacketLengthNeq             types.Int64  `tfsdk:"deny_packet_length_neq"`
+	DenyPacketLengthRangeStart      types.Int64  `tfsdk:"deny_packet_length_range_start"`
+	DenyPacketLengthRangeEnd        types.Int64  `tfsdk:"deny_packet_length_range_end"`
+	DenyTtlEq                       types.Int64  `tfsdk:"deny_ttl_eq"`
+	DenyTtlGt                       types.Int64  `tfsdk:"deny_ttl_gt"`
+	DenyTtlLt                       types.Int64  `tfsdk:"deny_ttl_lt"`
+	DenyTtlNeq                      types.Int64  `tfsdk:"deny_ttl_neq"`
+	DenyTtlRangeStart               types.Int64  `tfsdk:"deny_ttl_range_start"`
+	DenyTtlRangeEnd                 types.Int64  `tfsdk:"deny_ttl_range_end"`
+	DenyPoliceValue                 types.Int64  `tfsdk:"deny_police_value"`
+	DenyPoliceUnit                  types.String `tfsdk:"deny_police_unit"`
+	DenyPolicePeakRate              types.Int64  `tfsdk:"deny_police_peak_rate"`
+	DenyPolicePeakUnit              types.String `tfsdk:"deny_police_peak_unit"`
+	DenyPolicePriority              types.String `tfsdk:"deny_police_priority"`
+	DenyCapture                     types.Bool   `tfsdk:"deny_capture"`
+	DenyLog                         types.Bool   `tfsdk:"deny_log"`
+	DenyLogInput                    types.Bool   `tfsdk:"deny_log_input"`
+	DenySetQosGroup                 types.Int64  `tfsdk:"deny_set_qos_group"`
+	DenySetTtl                      types.Int64  `tfsdk:"deny_set_ttl"`
+	DenyIcmpOff                     types.Bool   `tfsdk:"deny_icmp_off"`
+	DenyIcmpOn                      types.Bool   `tfsdk:"deny_icmp_on"`
 }
 
 // End of section. //template:end types
@@ -700,8 +699,8 @@ func (data IPv6AccessList) toBody(ctx context.Context) string {
 
 func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Sequences {
-		keys := [...]string{ "sequence-number",  }
-		keyValues := [...]string{ strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10),  }
+		keys := [...]string{"sequence-number"}
+		keyValues := [...]string{strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "sequences.sequence").ForEach(
@@ -782,14 +781,14 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitSourcePrefixLength = types.Int64Null()
 		}
-		if value := r.Get("permit.source.any"); !data.Sequences[i].PermitSourceAny.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].PermitSourceAny = types.BoolValue(true)
-			} else {
-				data.Sequences[i].PermitSourceAny = types.BoolValue(false)
-			}
+		if value := r.Get("permit.source.any"); value.Exists() {
+			data.Sequences[i].PermitSourceAny = types.BoolValue(true)
 		} else {
-			data.Sequences[i].PermitSourceAny = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Sequences[i].PermitSourceAny.IsNull() {
+				data.Sequences[i].PermitSourceAny = types.BoolNull()
+			}
 		}
 		if value := r.Get("permit.source.host"); value.Exists() && !data.Sequences[i].PermitSourceHost.IsNull() {
 			data.Sequences[i].PermitSourceHost = types.StringValue(value.String())
@@ -851,14 +850,14 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitDestinationPrefixLength = types.Int64Null()
 		}
-		if value := r.Get("permit.destination.any"); !data.Sequences[i].PermitDestinationAny.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].PermitDestinationAny = types.BoolValue(true)
-			} else {
-				data.Sequences[i].PermitDestinationAny = types.BoolValue(false)
-			}
+		if value := r.Get("permit.destination.any"); value.Exists() {
+			data.Sequences[i].PermitDestinationAny = types.BoolValue(true)
 		} else {
-			data.Sequences[i].PermitDestinationAny = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Sequences[i].PermitDestinationAny.IsNull() {
+				data.Sequences[i].PermitDestinationAny = types.BoolNull()
+			}
 		}
 		if value := r.Get("permit.destination.host"); value.Exists() && !data.Sequences[i].PermitDestinationHost.IsNull() {
 			data.Sequences[i].PermitDestinationHost = types.StringValue(value.String())
@@ -1085,32 +1084,32 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitNexthop3Vrf = types.StringNull()
 		}
-		if value := r.Get("permit.capture"); !data.Sequences[i].PermitCapture.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].PermitCapture = types.BoolValue(true)
-			} else {
-				data.Sequences[i].PermitCapture = types.BoolValue(false)
-			}
+		if value := r.Get("permit.capture"); value.Exists() {
+			data.Sequences[i].PermitCapture = types.BoolValue(true)
 		} else {
-			data.Sequences[i].PermitCapture = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Sequences[i].PermitCapture.IsNull() {
+				data.Sequences[i].PermitCapture = types.BoolNull()
+			}
 		}
-		if value := r.Get("permit.log"); !data.Sequences[i].PermitLog.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].PermitLog = types.BoolValue(true)
-			} else {
-				data.Sequences[i].PermitLog = types.BoolValue(false)
-			}
+		if value := r.Get("permit.log"); value.Exists() {
+			data.Sequences[i].PermitLog = types.BoolValue(true)
 		} else {
-			data.Sequences[i].PermitLog = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Sequences[i].PermitLog.IsNull() {
+				data.Sequences[i].PermitLog = types.BoolNull()
+			}
 		}
-		if value := r.Get("permit.log-input"); !data.Sequences[i].PermitLogInput.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].PermitLogInput = types.BoolValue(true)
-			} else {
-				data.Sequences[i].PermitLogInput = types.BoolValue(false)
-			}
+		if value := r.Get("permit.log-input"); value.Exists() {
+			data.Sequences[i].PermitLogInput = types.BoolValue(true)
 		} else {
-			data.Sequences[i].PermitLogInput = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Sequences[i].PermitLogInput.IsNull() {
+				data.Sequences[i].PermitLogInput = types.BoolNull()
+			}
 		}
 		if value := r.Get("permit.set.qos-group"); value.Exists() && !data.Sequences[i].PermitSetQosGroup.IsNull() {
 			data.Sequences[i].PermitSetQosGroup = types.Int64Value(value.Int())
@@ -1172,14 +1171,14 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenySourcePrefixLength = types.Int64Null()
 		}
-		if value := r.Get("deny.source.any"); !data.Sequences[i].DenySourceAny.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenySourceAny = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenySourceAny = types.BoolValue(false)
-			}
+		if value := r.Get("deny.source.any"); value.Exists() {
+			data.Sequences[i].DenySourceAny = types.BoolValue(true)
 		} else {
-			data.Sequences[i].DenySourceAny = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Sequences[i].DenySourceAny.IsNull() {
+				data.Sequences[i].DenySourceAny = types.BoolNull()
+			}
 		}
 		if value := r.Get("deny.source.host"); value.Exists() && !data.Sequences[i].DenySourceHost.IsNull() {
 			data.Sequences[i].DenySourceHost = types.StringValue(value.String())
@@ -1241,14 +1240,14 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenyDestinationPrefixLength = types.Int64Null()
 		}
-		if value := r.Get("deny.destination.any"); !data.Sequences[i].DenyDestinationAny.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenyDestinationAny = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenyDestinationAny = types.BoolValue(false)
-			}
+		if value := r.Get("deny.destination.any"); value.Exists() {
+			data.Sequences[i].DenyDestinationAny = types.BoolValue(true)
 		} else {
-			data.Sequences[i].DenyDestinationAny = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Sequences[i].DenyDestinationAny.IsNull() {
+				data.Sequences[i].DenyDestinationAny = types.BoolNull()
+			}
 		}
 		if value := r.Get("deny.destination.host"); value.Exists() && !data.Sequences[i].DenyDestinationHost.IsNull() {
 			data.Sequences[i].DenyDestinationHost = types.StringValue(value.String())
@@ -1430,32 +1429,32 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenyPolicePriority = types.StringNull()
 		}
-		if value := r.Get("deny.capture"); !data.Sequences[i].DenyCapture.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenyCapture = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenyCapture = types.BoolValue(false)
-			}
+		if value := r.Get("deny.capture"); value.Exists() {
+			data.Sequences[i].DenyCapture = types.BoolValue(true)
 		} else {
-			data.Sequences[i].DenyCapture = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Sequences[i].DenyCapture.IsNull() {
+				data.Sequences[i].DenyCapture = types.BoolNull()
+			}
 		}
-		if value := r.Get("deny.log"); !data.Sequences[i].DenyLog.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenyLog = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenyLog = types.BoolValue(false)
-			}
+		if value := r.Get("deny.log"); value.Exists() {
+			data.Sequences[i].DenyLog = types.BoolValue(true)
 		} else {
-			data.Sequences[i].DenyLog = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Sequences[i].DenyLog.IsNull() {
+				data.Sequences[i].DenyLog = types.BoolNull()
+			}
 		}
-		if value := r.Get("deny.log-input"); !data.Sequences[i].DenyLogInput.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenyLogInput = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenyLogInput = types.BoolValue(false)
-			}
+		if value := r.Get("deny.log-input"); value.Exists() {
+			data.Sequences[i].DenyLogInput = types.BoolValue(true)
 		} else {
-			data.Sequences[i].DenyLogInput = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Sequences[i].DenyLogInput.IsNull() {
+				data.Sequences[i].DenyLogInput = types.BoolNull()
+			}
 		}
 		if value := r.Get("deny.set.qos-group"); value.Exists() && !data.Sequences[i].DenySetQosGroup.IsNull() {
 			data.Sequences[i].DenySetQosGroup = types.Int64Value(value.Int())
@@ -1467,23 +1466,23 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenySetTtl = types.Int64Null()
 		}
-		if value := r.Get("deny.icmp-off"); !data.Sequences[i].DenyIcmpOff.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenyIcmpOff = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenyIcmpOff = types.BoolValue(false)
-			}
+		if value := r.Get("deny.icmp-off"); value.Exists() {
+			data.Sequences[i].DenyIcmpOff = types.BoolValue(true)
 		} else {
-			data.Sequences[i].DenyIcmpOff = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Sequences[i].DenyIcmpOff.IsNull() {
+				data.Sequences[i].DenyIcmpOff = types.BoolNull()
+			}
 		}
-		if value := r.Get("deny.icmp-on"); !data.Sequences[i].DenyIcmpOn.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenyIcmpOn = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenyIcmpOn = types.BoolValue(false)
-			}
+		if value := r.Get("deny.icmp-on"); value.Exists() {
+			data.Sequences[i].DenyIcmpOn = types.BoolValue(true)
 		} else {
-			data.Sequences[i].DenyIcmpOn = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Sequences[i].DenyIcmpOn.IsNull() {
+				data.Sequences[i].DenyIcmpOn = types.BoolNull()
+			}
 		}
 	}
 }
@@ -1494,7 +1493,7 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 func (data IPv6AccessList) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.AccessListName.IsNull() && !data.AccessListName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/access-list-name", data.AccessListName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/access-list-name", data.AccessListName.ValueString())
 	}
 	if len(data.Sequences) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -1968,17 +1967,17 @@ func (data IPv6AccessList) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/access-list-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-list-name"); value.Exists() {
 		data.AccessListName = types.StringValue(value.String())
 	} else if data.AccessListName.IsNull() {
 		data.AccessListName = types.StringNull()
 	}
 	for i := range data.Sequences {
-		keys := [...]string{ "sequence-number",  }
-		keyValues := [...]string{ strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10),  }
+		keys := [...]string{"sequence-number"}
+		keyValues := [...]string{strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/sequences/sequence").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/sequences/sequence").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2770,7 +2769,7 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"sequences.sequence"); value.Exists() {
+	if value := res.Get(prefix + "sequences.sequence"); value.Exists() {
 		data.Sequences = make([]IPv6AccessListSequences, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := IPv6AccessListSequences{}
@@ -3241,7 +3240,7 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res gjson.Result) 
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"sequences.sequence"); value.Exists() {
+	if value := res.Get(prefix + "sequences.sequence"); value.Exists() {
 		data.Sequences = make([]IPv6AccessListSequences, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := IPv6AccessListSequences{}
@@ -3708,7 +3707,7 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res gjson.Result) 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *IPv6AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/sequences/sequence"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sequences/sequence"); value.Exists() {
 		data.Sequences = make([]IPv6AccessListSequences, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := IPv6AccessListSequences{}
@@ -4175,7 +4174,7 @@ func (data *IPv6AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *IPv6AccessListData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/sequences/sequence"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sequences/sequence"); value.Exists() {
 		data.Sequences = make([]IPv6AccessListSequences, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := IPv6AccessListSequences{}
@@ -4215,11 +4214,11 @@ func (data *IPv6AccessListData) fromBodyXML(ctx context.Context, res xmldot.Resu
 			if cValue := helpers.GetFromXPath(v, "permit/source/prefix-length"); cValue.Exists() {
 				item.PermitSourcePrefixLength = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "permit/source/any"); cValue.Exists() {
-			item.PermitSourceAny = types.BoolValue(true)
-		} else {
-			item.PermitSourceAny = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "permit/source/any"); cValue.Exists() {
+				item.PermitSourceAny = types.BoolValue(true)
+			} else {
+				item.PermitSourceAny = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "permit/source/host"); cValue.Exists() {
 				item.PermitSourceHost = types.StringValue(cValue.String())
 			}
@@ -4256,11 +4255,11 @@ func (data *IPv6AccessListData) fromBodyXML(ctx context.Context, res xmldot.Resu
 			if cValue := helpers.GetFromXPath(v, "permit/destination/prefix-length"); cValue.Exists() {
 				item.PermitDestinationPrefixLength = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "permit/destination/any"); cValue.Exists() {
-			item.PermitDestinationAny = types.BoolValue(true)
-		} else {
-			item.PermitDestinationAny = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "permit/destination/any"); cValue.Exists() {
+				item.PermitDestinationAny = types.BoolValue(true)
+			} else {
+				item.PermitDestinationAny = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "permit/destination/host"); cValue.Exists() {
 				item.PermitDestinationHost = types.StringValue(cValue.String())
 			}
@@ -4396,21 +4395,21 @@ func (data *IPv6AccessListData) fromBodyXML(ctx context.Context, res xmldot.Resu
 			if cValue := helpers.GetFromXPath(v, "permit/nexthop3/vrf"); cValue.Exists() {
 				item.PermitNexthop3Vrf = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "permit/capture"); cValue.Exists() {
-			item.PermitCapture = types.BoolValue(true)
-		} else {
-			item.PermitCapture = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "permit/log"); cValue.Exists() {
-			item.PermitLog = types.BoolValue(true)
-		} else {
-			item.PermitLog = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "permit/log-input"); cValue.Exists() {
-			item.PermitLogInput = types.BoolValue(true)
-		} else {
-			item.PermitLogInput = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "permit/capture"); cValue.Exists() {
+				item.PermitCapture = types.BoolValue(true)
+			} else {
+				item.PermitCapture = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "permit/log"); cValue.Exists() {
+				item.PermitLog = types.BoolValue(true)
+			} else {
+				item.PermitLog = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "permit/log-input"); cValue.Exists() {
+				item.PermitLogInput = types.BoolValue(true)
+			} else {
+				item.PermitLogInput = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "permit/set/qos-group"); cValue.Exists() {
 				item.PermitSetQosGroup = types.Int64Value(cValue.Int())
 			}
@@ -4447,11 +4446,11 @@ func (data *IPv6AccessListData) fromBodyXML(ctx context.Context, res xmldot.Resu
 			if cValue := helpers.GetFromXPath(v, "deny/source/prefix-length"); cValue.Exists() {
 				item.DenySourcePrefixLength = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "deny/source/any"); cValue.Exists() {
-			item.DenySourceAny = types.BoolValue(true)
-		} else {
-			item.DenySourceAny = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "deny/source/any"); cValue.Exists() {
+				item.DenySourceAny = types.BoolValue(true)
+			} else {
+				item.DenySourceAny = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "deny/source/host"); cValue.Exists() {
 				item.DenySourceHost = types.StringValue(cValue.String())
 			}
@@ -4488,11 +4487,11 @@ func (data *IPv6AccessListData) fromBodyXML(ctx context.Context, res xmldot.Resu
 			if cValue := helpers.GetFromXPath(v, "deny/destination/prefix-length"); cValue.Exists() {
 				item.DenyDestinationPrefixLength = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "deny/destination/any"); cValue.Exists() {
-			item.DenyDestinationAny = types.BoolValue(true)
-		} else {
-			item.DenyDestinationAny = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "deny/destination/any"); cValue.Exists() {
+				item.DenyDestinationAny = types.BoolValue(true)
+			} else {
+				item.DenyDestinationAny = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "deny/destination/host"); cValue.Exists() {
 				item.DenyDestinationHost = types.StringValue(cValue.String())
 			}
@@ -4601,37 +4600,37 @@ func (data *IPv6AccessListData) fromBodyXML(ctx context.Context, res xmldot.Resu
 			if cValue := helpers.GetFromXPath(v, "deny/police/priority"); cValue.Exists() {
 				item.DenyPolicePriority = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "deny/capture"); cValue.Exists() {
-			item.DenyCapture = types.BoolValue(true)
-		} else {
-			item.DenyCapture = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "deny/log"); cValue.Exists() {
-			item.DenyLog = types.BoolValue(true)
-		} else {
-			item.DenyLog = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "deny/log-input"); cValue.Exists() {
-			item.DenyLogInput = types.BoolValue(true)
-		} else {
-			item.DenyLogInput = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "deny/capture"); cValue.Exists() {
+				item.DenyCapture = types.BoolValue(true)
+			} else {
+				item.DenyCapture = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "deny/log"); cValue.Exists() {
+				item.DenyLog = types.BoolValue(true)
+			} else {
+				item.DenyLog = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "deny/log-input"); cValue.Exists() {
+				item.DenyLogInput = types.BoolValue(true)
+			} else {
+				item.DenyLogInput = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "deny/set/qos-group"); cValue.Exists() {
 				item.DenySetQosGroup = types.Int64Value(cValue.Int())
 			}
 			if cValue := helpers.GetFromXPath(v, "deny/set/ttl"); cValue.Exists() {
 				item.DenySetTtl = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "deny/icmp-off"); cValue.Exists() {
-			item.DenyIcmpOff = types.BoolValue(true)
-		} else {
-			item.DenyIcmpOff = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "deny/icmp-on"); cValue.Exists() {
-			item.DenyIcmpOn = types.BoolValue(true)
-		} else {
-			item.DenyIcmpOn = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "deny/icmp-off"); cValue.Exists() {
+				item.DenyIcmpOff = types.BoolValue(true)
+			} else {
+				item.DenyIcmpOff = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "deny/icmp-on"); cValue.Exists() {
+				item.DenyIcmpOn = types.BoolValue(true)
+			} else {
+				item.DenyIcmpOn = types.BoolValue(false)
+			}
 			data.Sequences = append(data.Sequences, item)
 			return true
 		})
@@ -4644,11 +4643,11 @@ func (data *IPv6AccessListData) fromBodyXML(ctx context.Context, res xmldot.Resu
 func (data *IPv6AccessList) getDeletedItems(ctx context.Context, state IPv6AccessList) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.Sequences {
-		keys := [...]string{ "sequence-number",  }
-		stateKeyValues := [...]string{ strconv.FormatInt(state.Sequences[i].SequenceNumber.ValueInt64(), 10),  }
+		keys := [...]string{"sequence-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Sequences[i].SequenceNumber.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -4665,433 +4664,433 @@ func (data *IPv6AccessList) getDeletedItems(ctx context.Context, state IPv6Acces
 			if state.Sequences[i].SequenceNumber.ValueInt64() != data.Sequences[j].SequenceNumber.ValueInt64() {
 				found = false
 			}
-		if found {
-			if !state.Sequences[i].DenyIcmpOn.IsNull() && data.Sequences[j].DenyIcmpOn.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-on", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyIcmpOff.IsNull() && data.Sequences[j].DenyIcmpOff.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-off", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySetTtl.IsNull() && data.Sequences[j].DenySetTtl.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/set/ttl", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySetQosGroup.IsNull() && data.Sequences[j].DenySetQosGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/set/qos-group", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyLogInput.IsNull() && data.Sequences[j].DenyLogInput.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/log-input", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyLog.IsNull() && data.Sequences[j].DenyLog.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/log", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyCapture.IsNull() && data.Sequences[j].DenyCapture.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/capture", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyPolicePriority.IsNull() && data.Sequences[j].DenyPolicePriority.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/police/priority", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyPolicePeakUnit.IsNull() && data.Sequences[j].DenyPolicePeakUnit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/police/peak-unit", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyPolicePeakRate.IsNull() && data.Sequences[j].DenyPolicePeakRate.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/police/peak-rate", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyPoliceUnit.IsNull() && data.Sequences[j].DenyPoliceUnit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/police/unit", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyPoliceValue.IsNull() && data.Sequences[j].DenyPoliceValue.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/police/value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyTtlRangeEnd.IsNull() && data.Sequences[j].DenyTtlRangeEnd.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/ttl/range/end-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyTtlRangeStart.IsNull() && data.Sequences[j].DenyTtlRangeStart.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/ttl/range/start-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyTtlNeq.IsNull() && data.Sequences[j].DenyTtlNeq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/ttl/neq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyTtlLt.IsNull() && data.Sequences[j].DenyTtlLt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/ttl/lt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyTtlGt.IsNull() && data.Sequences[j].DenyTtlGt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/ttl/gt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyTtlEq.IsNull() && data.Sequences[j].DenyTtlEq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/ttl/eq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyPacketLengthRangeEnd.IsNull() && data.Sequences[j].DenyPacketLengthRangeEnd.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/packet-length/range/end-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyPacketLengthRangeStart.IsNull() && data.Sequences[j].DenyPacketLengthRangeStart.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/packet-length/range/start-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyPacketLengthNeq.IsNull() && data.Sequences[j].DenyPacketLengthNeq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/packet-length/neq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyPacketLengthLt.IsNull() && data.Sequences[j].DenyPacketLengthLt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/packet-length/lt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyPacketLengthGt.IsNull() && data.Sequences[j].DenyPacketLengthGt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/packet-length/gt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyPacketLengthEq.IsNull() && data.Sequences[j].DenyPacketLengthEq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/packet-length/eq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDscpRangeEnd.IsNull() && data.Sequences[j].DenyDscpRangeEnd.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/range/end-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDscpRangeStart.IsNull() && data.Sequences[j].DenyDscpRangeStart.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/range/start-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDscpNeq.IsNull() && data.Sequences[j].DenyDscpNeq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/neq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDscpLt.IsNull() && data.Sequences[j].DenyDscpLt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/lt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDscpGt.IsNull() && data.Sequences[j].DenyDscpGt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/gt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDscpEq.IsNull() && data.Sequences[j].DenyDscpEq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/eq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDscp.IsNull() && data.Sequences[j].DenyDscp.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/dscp-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyIcmpMessageCode.IsNull() && data.Sequences[j].DenyIcmpMessageCode.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp/message-code", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyIcmpMessageType.IsNull() && data.Sequences[j].DenyIcmpMessageType.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp/message-type", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyIcmpMessageTypeName.IsNull() && data.Sequences[j].DenyIcmpMessageTypeName.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp/message-type-name", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDestinationPortRangeEnd.IsNull() && data.Sequences[j].DenyDestinationPortRangeEnd.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port/range/end-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDestinationPortRangeStart.IsNull() && data.Sequences[j].DenyDestinationPortRangeStart.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port/range/start-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDestinationPortNeq.IsNull() && data.Sequences[j].DenyDestinationPortNeq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port/neq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDestinationPortLt.IsNull() && data.Sequences[j].DenyDestinationPortLt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port/lt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDestinationPortGt.IsNull() && data.Sequences[j].DenyDestinationPortGt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port/gt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDestinationPortEq.IsNull() && data.Sequences[j].DenyDestinationPortEq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port/eq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDestinationPortGroup.IsNull() && data.Sequences[j].DenyDestinationPortGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port-group", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDestinationNetGroup.IsNull() && data.Sequences[j].DenyDestinationNetGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/net-group", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDestinationHost.IsNull() && data.Sequences[j].DenyDestinationHost.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/host", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDestinationAny.IsNull() && data.Sequences[j].DenyDestinationAny.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/any", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDestinationPrefixLength.IsNull() && data.Sequences[j].DenyDestinationPrefixLength.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/prefix-length", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDestinationWildcardMask.IsNull() && data.Sequences[j].DenyDestinationWildcardMask.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/wildcard-mask", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyDestinationAddress.IsNull() && data.Sequences[j].DenyDestinationAddress.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/address", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySourcePortRangeEnd.IsNull() && data.Sequences[j].DenySourcePortRangeEnd.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/port/range/end-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySourcePortRangeStart.IsNull() && data.Sequences[j].DenySourcePortRangeStart.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/port/range/start-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySourcePortNeq.IsNull() && data.Sequences[j].DenySourcePortNeq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/port/neq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySourcePortLt.IsNull() && data.Sequences[j].DenySourcePortLt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/port/lt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySourcePortGt.IsNull() && data.Sequences[j].DenySourcePortGt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/port/gt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySourcePortEq.IsNull() && data.Sequences[j].DenySourcePortEq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/port/eq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySourcePortGroup.IsNull() && data.Sequences[j].DenySourcePortGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/port-group", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySourceNetGroup.IsNull() && data.Sequences[j].DenySourceNetGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/net-group", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySourceHost.IsNull() && data.Sequences[j].DenySourceHost.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/host", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySourceAny.IsNull() && data.Sequences[j].DenySourceAny.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/any", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySourcePrefixLength.IsNull() && data.Sequences[j].DenySourcePrefixLength.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/prefix-length", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySourceWildcardMask.IsNull() && data.Sequences[j].DenySourceWildcardMask.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/wildcard-mask", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenySourceAddress.IsNull() && data.Sequences[j].DenySourceAddress.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/address", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyRangeEndProtocol.IsNull() && data.Sequences[j].DenyRangeEndProtocol.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/range/end-protocol", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyRangeStartProtocol.IsNull() && data.Sequences[j].DenyRangeStartProtocol.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/range/start-protocol", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyCounter.IsNull() && data.Sequences[j].DenyCounter.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/counter", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyFragmentType.IsNull() && data.Sequences[j].DenyFragmentType.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/fragment-type", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyPrecedence.IsNull() && data.Sequences[j].DenyPrecedence.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/precedence", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyEq.IsNull() && data.Sequences[j].DenyEq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/eq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].DenyProtocol.IsNull() && data.Sequences[j].DenyProtocol.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/protocol", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSetTtl.IsNull() && data.Sequences[j].PermitSetTtl.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/set/ttl", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSetQosGroup.IsNull() && data.Sequences[j].PermitSetQosGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/set/qos-group", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitLogInput.IsNull() && data.Sequences[j].PermitLogInput.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/log-input", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitLog.IsNull() && data.Sequences[j].PermitLog.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/log", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitCapture.IsNull() && data.Sequences[j].PermitCapture.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/capture", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitNexthop3Vrf.IsNull() && data.Sequences[j].PermitNexthop3Vrf.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop3/vrf", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitNexthop3Track.IsNull() && data.Sequences[j].PermitNexthop3Track.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop3/track", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitNexthop3Ipv6.IsNull() && data.Sequences[j].PermitNexthop3Ipv6.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop3/ipv6", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitNexthop2Vrf.IsNull() && data.Sequences[j].PermitNexthop2Vrf.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop2/vrf", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitNexthop2Track.IsNull() && data.Sequences[j].PermitNexthop2Track.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop2/track", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitNexthop2Ipv6.IsNull() && data.Sequences[j].PermitNexthop2Ipv6.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop2/ipv6", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitNexthop1Vrf.IsNull() && data.Sequences[j].PermitNexthop1Vrf.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop1/vrf", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitNexthop1Track.IsNull() && data.Sequences[j].PermitNexthop1Track.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop1/track", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitNexthop1Ipv6.IsNull() && data.Sequences[j].PermitNexthop1Ipv6.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop1/ipv6", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitPolicePriority.IsNull() && data.Sequences[j].PermitPolicePriority.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/police/priority", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitPolicePeakUnit.IsNull() && data.Sequences[j].PermitPolicePeakUnit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/police/peak-unit", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitPolicePeakRate.IsNull() && data.Sequences[j].PermitPolicePeakRate.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/police/peak-rate", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitPoliceUnit.IsNull() && data.Sequences[j].PermitPoliceUnit.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/police/unit", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitPoliceValue.IsNull() && data.Sequences[j].PermitPoliceValue.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/police/value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitTtlRangeEnd.IsNull() && data.Sequences[j].PermitTtlRangeEnd.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/ttl/range/end-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitTtlRangeStart.IsNull() && data.Sequences[j].PermitTtlRangeStart.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/ttl/range/start-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitTtlNeq.IsNull() && data.Sequences[j].PermitTtlNeq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/ttl/neq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitTtlLt.IsNull() && data.Sequences[j].PermitTtlLt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/ttl/lt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitTtlGt.IsNull() && data.Sequences[j].PermitTtlGt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/ttl/gt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitTtlEq.IsNull() && data.Sequences[j].PermitTtlEq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/ttl/eq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitPacketLengthRangeEnd.IsNull() && data.Sequences[j].PermitPacketLengthRangeEnd.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/packet-length/range/end-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitPacketLengthRangeStart.IsNull() && data.Sequences[j].PermitPacketLengthRangeStart.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/packet-length/range/start-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitPacketLengthNeq.IsNull() && data.Sequences[j].PermitPacketLengthNeq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/packet-length/neq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitPacketLengthLt.IsNull() && data.Sequences[j].PermitPacketLengthLt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/packet-length/lt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitPacketLengthGt.IsNull() && data.Sequences[j].PermitPacketLengthGt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/packet-length/gt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitPacketLengthEq.IsNull() && data.Sequences[j].PermitPacketLengthEq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/packet-length/eq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDscpRangeEnd.IsNull() && data.Sequences[j].PermitDscpRangeEnd.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/range/end-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDscpRangeStart.IsNull() && data.Sequences[j].PermitDscpRangeStart.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/range/start-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDscpNeq.IsNull() && data.Sequences[j].PermitDscpNeq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/neq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDscpLt.IsNull() && data.Sequences[j].PermitDscpLt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/lt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDscpGt.IsNull() && data.Sequences[j].PermitDscpGt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/gt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDscpEq.IsNull() && data.Sequences[j].PermitDscpEq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/eq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDscp.IsNull() && data.Sequences[j].PermitDscp.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/dscp-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitIcmpMessageCode.IsNull() && data.Sequences[j].PermitIcmpMessageCode.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/icmp/message-code", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitIcmpMessageType.IsNull() && data.Sequences[j].PermitIcmpMessageType.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/icmp/message-type", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitIcmpMessageTypeName.IsNull() && data.Sequences[j].PermitIcmpMessageTypeName.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/icmp/message-type-name", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDestinationPortRangeEnd.IsNull() && data.Sequences[j].PermitDestinationPortRangeEnd.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/port/range/end-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDestinationPortRangeStart.IsNull() && data.Sequences[j].PermitDestinationPortRangeStart.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/port/range/start-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDestinationPortNeq.IsNull() && data.Sequences[j].PermitDestinationPortNeq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/port/neq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDestinationPortLt.IsNull() && data.Sequences[j].PermitDestinationPortLt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/port/lt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDestinationPortGt.IsNull() && data.Sequences[j].PermitDestinationPortGt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/port/gt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDestinationPortEq.IsNull() && data.Sequences[j].PermitDestinationPortEq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/port/eq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDestinationPortGroup.IsNull() && data.Sequences[j].PermitDestinationPortGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/port-group", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDestinationNetGroup.IsNull() && data.Sequences[j].PermitDestinationNetGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/net-group", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDestinationHost.IsNull() && data.Sequences[j].PermitDestinationHost.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/host", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDestinationAny.IsNull() && data.Sequences[j].PermitDestinationAny.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/any", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDestinationPrefixLength.IsNull() && data.Sequences[j].PermitDestinationPrefixLength.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/prefix-length", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDestinationWildcardMask.IsNull() && data.Sequences[j].PermitDestinationWildcardMask.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/wildcard-mask", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitDestinationAddress.IsNull() && data.Sequences[j].PermitDestinationAddress.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/address", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSourcePortRangeEnd.IsNull() && data.Sequences[j].PermitSourcePortRangeEnd.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/port/range/end-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSourcePortRangeStart.IsNull() && data.Sequences[j].PermitSourcePortRangeStart.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/port/range/start-value", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSourcePortNeq.IsNull() && data.Sequences[j].PermitSourcePortNeq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/port/neq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSourcePortLt.IsNull() && data.Sequences[j].PermitSourcePortLt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/port/lt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSourcePortGt.IsNull() && data.Sequences[j].PermitSourcePortGt.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/port/gt", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSourcePortEq.IsNull() && data.Sequences[j].PermitSourcePortEq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/port/eq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSourcePortGroup.IsNull() && data.Sequences[j].PermitSourcePortGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/port-group", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSourceNetGroup.IsNull() && data.Sequences[j].PermitSourceNetGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/net-group", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSourceHost.IsNull() && data.Sequences[j].PermitSourceHost.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/host", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSourceAny.IsNull() && data.Sequences[j].PermitSourceAny.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/any", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSourcePrefixLength.IsNull() && data.Sequences[j].PermitSourcePrefixLength.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/prefix-length", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSourceWildcardMask.IsNull() && data.Sequences[j].PermitSourceWildcardMask.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/wildcard-mask", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitSourceAddress.IsNull() && data.Sequences[j].PermitSourceAddress.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/address", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitRangeEndProtocol.IsNull() && data.Sequences[j].PermitRangeEndProtocol.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/range/end-protocol", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitRangeStartProtocol.IsNull() && data.Sequences[j].PermitRangeStartProtocol.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/range/start-protocol", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitCounter.IsNull() && data.Sequences[j].PermitCounter.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/counter", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitFragmentType.IsNull() && data.Sequences[j].PermitFragmentType.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/fragment-type", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitPrecedence.IsNull() && data.Sequences[j].PermitPrecedence.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/precedence", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitEq.IsNull() && data.Sequences[j].PermitEq.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/eq", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].PermitProtocol.IsNull() && data.Sequences[j].PermitProtocol.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/protocol", state.getPath(), keyString))
-			}
-			if !state.Sequences[i].Remark.IsNull() && data.Sequences[j].Remark.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/remark", state.getPath(), keyString))
-			}
+			if found {
+				if !state.Sequences[i].DenyIcmpOn.IsNull() && data.Sequences[j].DenyIcmpOn.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-on", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyIcmpOff.IsNull() && data.Sequences[j].DenyIcmpOff.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-off", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySetTtl.IsNull() && data.Sequences[j].DenySetTtl.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/set/ttl", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySetQosGroup.IsNull() && data.Sequences[j].DenySetQosGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/set/qos-group", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyLogInput.IsNull() && data.Sequences[j].DenyLogInput.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/log-input", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyLog.IsNull() && data.Sequences[j].DenyLog.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/log", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyCapture.IsNull() && data.Sequences[j].DenyCapture.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/capture", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyPolicePriority.IsNull() && data.Sequences[j].DenyPolicePriority.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/police/priority", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyPolicePeakUnit.IsNull() && data.Sequences[j].DenyPolicePeakUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/police/peak-unit", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyPolicePeakRate.IsNull() && data.Sequences[j].DenyPolicePeakRate.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/police/peak-rate", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyPoliceUnit.IsNull() && data.Sequences[j].DenyPoliceUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/police/unit", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyPoliceValue.IsNull() && data.Sequences[j].DenyPoliceValue.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/police/value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyTtlRangeEnd.IsNull() && data.Sequences[j].DenyTtlRangeEnd.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/ttl/range/end-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyTtlRangeStart.IsNull() && data.Sequences[j].DenyTtlRangeStart.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/ttl/range/start-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyTtlNeq.IsNull() && data.Sequences[j].DenyTtlNeq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/ttl/neq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyTtlLt.IsNull() && data.Sequences[j].DenyTtlLt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/ttl/lt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyTtlGt.IsNull() && data.Sequences[j].DenyTtlGt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/ttl/gt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyTtlEq.IsNull() && data.Sequences[j].DenyTtlEq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/ttl/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyPacketLengthRangeEnd.IsNull() && data.Sequences[j].DenyPacketLengthRangeEnd.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/packet-length/range/end-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyPacketLengthRangeStart.IsNull() && data.Sequences[j].DenyPacketLengthRangeStart.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/packet-length/range/start-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyPacketLengthNeq.IsNull() && data.Sequences[j].DenyPacketLengthNeq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/packet-length/neq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyPacketLengthLt.IsNull() && data.Sequences[j].DenyPacketLengthLt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/packet-length/lt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyPacketLengthGt.IsNull() && data.Sequences[j].DenyPacketLengthGt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/packet-length/gt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyPacketLengthEq.IsNull() && data.Sequences[j].DenyPacketLengthEq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/packet-length/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDscpRangeEnd.IsNull() && data.Sequences[j].DenyDscpRangeEnd.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/range/end-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDscpRangeStart.IsNull() && data.Sequences[j].DenyDscpRangeStart.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/range/start-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDscpNeq.IsNull() && data.Sequences[j].DenyDscpNeq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/neq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDscpLt.IsNull() && data.Sequences[j].DenyDscpLt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/lt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDscpGt.IsNull() && data.Sequences[j].DenyDscpGt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/gt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDscpEq.IsNull() && data.Sequences[j].DenyDscpEq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDscp.IsNull() && data.Sequences[j].DenyDscp.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/dscp-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyIcmpMessageCode.IsNull() && data.Sequences[j].DenyIcmpMessageCode.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp/message-code", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyIcmpMessageType.IsNull() && data.Sequences[j].DenyIcmpMessageType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp/message-type", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyIcmpMessageTypeName.IsNull() && data.Sequences[j].DenyIcmpMessageTypeName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp/message-type-name", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDestinationPortRangeEnd.IsNull() && data.Sequences[j].DenyDestinationPortRangeEnd.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port/range/end-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDestinationPortRangeStart.IsNull() && data.Sequences[j].DenyDestinationPortRangeStart.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port/range/start-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDestinationPortNeq.IsNull() && data.Sequences[j].DenyDestinationPortNeq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port/neq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDestinationPortLt.IsNull() && data.Sequences[j].DenyDestinationPortLt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port/lt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDestinationPortGt.IsNull() && data.Sequences[j].DenyDestinationPortGt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port/gt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDestinationPortEq.IsNull() && data.Sequences[j].DenyDestinationPortEq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDestinationPortGroup.IsNull() && data.Sequences[j].DenyDestinationPortGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port-group", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDestinationNetGroup.IsNull() && data.Sequences[j].DenyDestinationNetGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/net-group", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDestinationHost.IsNull() && data.Sequences[j].DenyDestinationHost.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/host", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDestinationAny.IsNull() && data.Sequences[j].DenyDestinationAny.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/any", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDestinationPrefixLength.IsNull() && data.Sequences[j].DenyDestinationPrefixLength.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/prefix-length", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDestinationWildcardMask.IsNull() && data.Sequences[j].DenyDestinationWildcardMask.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/wildcard-mask", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyDestinationAddress.IsNull() && data.Sequences[j].DenyDestinationAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/address", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySourcePortRangeEnd.IsNull() && data.Sequences[j].DenySourcePortRangeEnd.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/port/range/end-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySourcePortRangeStart.IsNull() && data.Sequences[j].DenySourcePortRangeStart.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/port/range/start-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySourcePortNeq.IsNull() && data.Sequences[j].DenySourcePortNeq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/port/neq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySourcePortLt.IsNull() && data.Sequences[j].DenySourcePortLt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/port/lt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySourcePortGt.IsNull() && data.Sequences[j].DenySourcePortGt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/port/gt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySourcePortEq.IsNull() && data.Sequences[j].DenySourcePortEq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/port/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySourcePortGroup.IsNull() && data.Sequences[j].DenySourcePortGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/port-group", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySourceNetGroup.IsNull() && data.Sequences[j].DenySourceNetGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/net-group", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySourceHost.IsNull() && data.Sequences[j].DenySourceHost.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/host", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySourceAny.IsNull() && data.Sequences[j].DenySourceAny.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/any", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySourcePrefixLength.IsNull() && data.Sequences[j].DenySourcePrefixLength.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/prefix-length", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySourceWildcardMask.IsNull() && data.Sequences[j].DenySourceWildcardMask.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/wildcard-mask", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenySourceAddress.IsNull() && data.Sequences[j].DenySourceAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/address", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyRangeEndProtocol.IsNull() && data.Sequences[j].DenyRangeEndProtocol.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/range/end-protocol", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyRangeStartProtocol.IsNull() && data.Sequences[j].DenyRangeStartProtocol.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/range/start-protocol", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyCounter.IsNull() && data.Sequences[j].DenyCounter.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/counter", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyFragmentType.IsNull() && data.Sequences[j].DenyFragmentType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/fragment-type", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyPrecedence.IsNull() && data.Sequences[j].DenyPrecedence.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/precedence", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyEq.IsNull() && data.Sequences[j].DenyEq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyProtocol.IsNull() && data.Sequences[j].DenyProtocol.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/protocol", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSetTtl.IsNull() && data.Sequences[j].PermitSetTtl.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/set/ttl", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSetQosGroup.IsNull() && data.Sequences[j].PermitSetQosGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/set/qos-group", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitLogInput.IsNull() && data.Sequences[j].PermitLogInput.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/log-input", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitLog.IsNull() && data.Sequences[j].PermitLog.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/log", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitCapture.IsNull() && data.Sequences[j].PermitCapture.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/capture", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitNexthop3Vrf.IsNull() && data.Sequences[j].PermitNexthop3Vrf.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop3/vrf", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitNexthop3Track.IsNull() && data.Sequences[j].PermitNexthop3Track.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop3/track", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitNexthop3Ipv6.IsNull() && data.Sequences[j].PermitNexthop3Ipv6.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop3/ipv6", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitNexthop2Vrf.IsNull() && data.Sequences[j].PermitNexthop2Vrf.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop2/vrf", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitNexthop2Track.IsNull() && data.Sequences[j].PermitNexthop2Track.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop2/track", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitNexthop2Ipv6.IsNull() && data.Sequences[j].PermitNexthop2Ipv6.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop2/ipv6", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitNexthop1Vrf.IsNull() && data.Sequences[j].PermitNexthop1Vrf.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop1/vrf", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitNexthop1Track.IsNull() && data.Sequences[j].PermitNexthop1Track.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop1/track", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitNexthop1Ipv6.IsNull() && data.Sequences[j].PermitNexthop1Ipv6.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop1/ipv6", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitPolicePriority.IsNull() && data.Sequences[j].PermitPolicePriority.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/police/priority", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitPolicePeakUnit.IsNull() && data.Sequences[j].PermitPolicePeakUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/police/peak-unit", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitPolicePeakRate.IsNull() && data.Sequences[j].PermitPolicePeakRate.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/police/peak-rate", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitPoliceUnit.IsNull() && data.Sequences[j].PermitPoliceUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/police/unit", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitPoliceValue.IsNull() && data.Sequences[j].PermitPoliceValue.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/police/value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitTtlRangeEnd.IsNull() && data.Sequences[j].PermitTtlRangeEnd.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/ttl/range/end-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitTtlRangeStart.IsNull() && data.Sequences[j].PermitTtlRangeStart.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/ttl/range/start-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitTtlNeq.IsNull() && data.Sequences[j].PermitTtlNeq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/ttl/neq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitTtlLt.IsNull() && data.Sequences[j].PermitTtlLt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/ttl/lt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitTtlGt.IsNull() && data.Sequences[j].PermitTtlGt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/ttl/gt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitTtlEq.IsNull() && data.Sequences[j].PermitTtlEq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/ttl/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitPacketLengthRangeEnd.IsNull() && data.Sequences[j].PermitPacketLengthRangeEnd.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/packet-length/range/end-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitPacketLengthRangeStart.IsNull() && data.Sequences[j].PermitPacketLengthRangeStart.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/packet-length/range/start-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitPacketLengthNeq.IsNull() && data.Sequences[j].PermitPacketLengthNeq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/packet-length/neq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitPacketLengthLt.IsNull() && data.Sequences[j].PermitPacketLengthLt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/packet-length/lt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitPacketLengthGt.IsNull() && data.Sequences[j].PermitPacketLengthGt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/packet-length/gt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitPacketLengthEq.IsNull() && data.Sequences[j].PermitPacketLengthEq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/packet-length/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDscpRangeEnd.IsNull() && data.Sequences[j].PermitDscpRangeEnd.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/range/end-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDscpRangeStart.IsNull() && data.Sequences[j].PermitDscpRangeStart.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/range/start-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDscpNeq.IsNull() && data.Sequences[j].PermitDscpNeq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/neq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDscpLt.IsNull() && data.Sequences[j].PermitDscpLt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/lt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDscpGt.IsNull() && data.Sequences[j].PermitDscpGt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/gt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDscpEq.IsNull() && data.Sequences[j].PermitDscpEq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDscp.IsNull() && data.Sequences[j].PermitDscp.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/dscp-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitIcmpMessageCode.IsNull() && data.Sequences[j].PermitIcmpMessageCode.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/icmp/message-code", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitIcmpMessageType.IsNull() && data.Sequences[j].PermitIcmpMessageType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/icmp/message-type", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitIcmpMessageTypeName.IsNull() && data.Sequences[j].PermitIcmpMessageTypeName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/icmp/message-type-name", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDestinationPortRangeEnd.IsNull() && data.Sequences[j].PermitDestinationPortRangeEnd.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/port/range/end-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDestinationPortRangeStart.IsNull() && data.Sequences[j].PermitDestinationPortRangeStart.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/port/range/start-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDestinationPortNeq.IsNull() && data.Sequences[j].PermitDestinationPortNeq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/port/neq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDestinationPortLt.IsNull() && data.Sequences[j].PermitDestinationPortLt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/port/lt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDestinationPortGt.IsNull() && data.Sequences[j].PermitDestinationPortGt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/port/gt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDestinationPortEq.IsNull() && data.Sequences[j].PermitDestinationPortEq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/port/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDestinationPortGroup.IsNull() && data.Sequences[j].PermitDestinationPortGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/port-group", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDestinationNetGroup.IsNull() && data.Sequences[j].PermitDestinationNetGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/net-group", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDestinationHost.IsNull() && data.Sequences[j].PermitDestinationHost.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/host", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDestinationAny.IsNull() && data.Sequences[j].PermitDestinationAny.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/any", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDestinationPrefixLength.IsNull() && data.Sequences[j].PermitDestinationPrefixLength.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/prefix-length", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDestinationWildcardMask.IsNull() && data.Sequences[j].PermitDestinationWildcardMask.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/wildcard-mask", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitDestinationAddress.IsNull() && data.Sequences[j].PermitDestinationAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/address", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSourcePortRangeEnd.IsNull() && data.Sequences[j].PermitSourcePortRangeEnd.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/port/range/end-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSourcePortRangeStart.IsNull() && data.Sequences[j].PermitSourcePortRangeStart.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/port/range/start-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSourcePortNeq.IsNull() && data.Sequences[j].PermitSourcePortNeq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/port/neq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSourcePortLt.IsNull() && data.Sequences[j].PermitSourcePortLt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/port/lt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSourcePortGt.IsNull() && data.Sequences[j].PermitSourcePortGt.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/port/gt", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSourcePortEq.IsNull() && data.Sequences[j].PermitSourcePortEq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/port/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSourcePortGroup.IsNull() && data.Sequences[j].PermitSourcePortGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/port-group", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSourceNetGroup.IsNull() && data.Sequences[j].PermitSourceNetGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/net-group", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSourceHost.IsNull() && data.Sequences[j].PermitSourceHost.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/host", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSourceAny.IsNull() && data.Sequences[j].PermitSourceAny.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/any", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSourcePrefixLength.IsNull() && data.Sequences[j].PermitSourcePrefixLength.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/prefix-length", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSourceWildcardMask.IsNull() && data.Sequences[j].PermitSourceWildcardMask.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/wildcard-mask", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitSourceAddress.IsNull() && data.Sequences[j].PermitSourceAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/address", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitRangeEndProtocol.IsNull() && data.Sequences[j].PermitRangeEndProtocol.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/range/end-protocol", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitRangeStartProtocol.IsNull() && data.Sequences[j].PermitRangeStartProtocol.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/range/start-protocol", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitCounter.IsNull() && data.Sequences[j].PermitCounter.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/counter", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitFragmentType.IsNull() && data.Sequences[j].PermitFragmentType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/fragment-type", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitPrecedence.IsNull() && data.Sequences[j].PermitPrecedence.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/precedence", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitEq.IsNull() && data.Sequences[j].PermitEq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitProtocol.IsNull() && data.Sequences[j].PermitProtocol.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/protocol", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].Remark.IsNull() && data.Sequences[j].Remark.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/remark", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -5108,11 +5107,11 @@ func (data *IPv6AccessList) getDeletedItems(ctx context.Context, state IPv6Acces
 func (data *IPv6AccessList) getEmptyLeafsDelete(ctx context.Context, state *IPv6AccessList) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Sequences {
-		keys := [...]string{ "sequence-number",  }
-		keyValues := [...]string{ strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10),  }
+		keys := [...]string{"sequence-number"}
+		keyValues := [...]string{strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.Sequences[i].DenyIcmpOn.IsNull() && !data.Sequences[i].DenyIcmpOn.ValueBool() {
@@ -5208,7 +5207,7 @@ func (data *IPv6AccessList) getEmptyLeafsDelete(ctx context.Context, state *IPv6
 func (data *IPv6AccessList) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Sequences {
-		keyValues := [...]string{ strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10),  }
+		keyValues := [...]string{strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10)}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/sequences/sequence=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -5224,8 +5223,8 @@ func (data *IPv6AccessList) addDeletedItemsXML(ctx context.Context, state IPv6Ac
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.Sequences {
-		stateKeys := [...]string{ "sequence-number",  }
-		stateKeyValues := [...]string{ strconv.FormatInt(state.Sequences[i].SequenceNumber.ValueInt64(), 10),  }
+		stateKeys := [...]string{"sequence-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Sequences[i].SequenceNumber.ValueInt64(), 10)}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -5246,444 +5245,444 @@ func (data *IPv6AccessList) addDeletedItemsXML(ctx context.Context, state IPv6Ac
 				found = false
 			}
 			if found {
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Sequences[i].DenyIcmpOn.IsNull() && state.Sequences[i].DenyIcmpOn.ValueBool() && data.Sequences[j].DenyIcmpOn.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/icmp-on", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Sequences[i].DenyIcmpOff.IsNull() && state.Sequences[i].DenyIcmpOff.ValueBool() && data.Sequences[j].DenyIcmpOff.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/icmp-off", predicates))
-			}
-			if !state.Sequences[i].DenySetTtl.IsNull() && data.Sequences[j].DenySetTtl.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/set/ttl", predicates))
-			}
-			if !state.Sequences[i].DenySetQosGroup.IsNull() && data.Sequences[j].DenySetQosGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/set/qos-group", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Sequences[i].DenyLogInput.IsNull() && state.Sequences[i].DenyLogInput.ValueBool() && data.Sequences[j].DenyLogInput.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/log-input", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Sequences[i].DenyLog.IsNull() && state.Sequences[i].DenyLog.ValueBool() && data.Sequences[j].DenyLog.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/log", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Sequences[i].DenyCapture.IsNull() && state.Sequences[i].DenyCapture.ValueBool() && data.Sequences[j].DenyCapture.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/capture", predicates))
-			}
-			if !state.Sequences[i].DenyPolicePriority.IsNull() && data.Sequences[j].DenyPolicePriority.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/police/priority", predicates))
-			}
-			if !state.Sequences[i].DenyPolicePeakUnit.IsNull() && data.Sequences[j].DenyPolicePeakUnit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/police/peak-unit", predicates))
-			}
-			if !state.Sequences[i].DenyPolicePeakRate.IsNull() && data.Sequences[j].DenyPolicePeakRate.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/police/peak-rate", predicates))
-			}
-			if !state.Sequences[i].DenyPoliceUnit.IsNull() && data.Sequences[j].DenyPoliceUnit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/police/unit", predicates))
-			}
-			if !state.Sequences[i].DenyPoliceValue.IsNull() && data.Sequences[j].DenyPoliceValue.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/police/value", predicates))
-			}
-			if !state.Sequences[i].DenyTtlRangeEnd.IsNull() && data.Sequences[j].DenyTtlRangeEnd.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/ttl/range/end-value", predicates))
-			}
-			if !state.Sequences[i].DenyTtlRangeStart.IsNull() && data.Sequences[j].DenyTtlRangeStart.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/ttl/range/start-value", predicates))
-			}
-			if !state.Sequences[i].DenyTtlNeq.IsNull() && data.Sequences[j].DenyTtlNeq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/ttl/neq", predicates))
-			}
-			if !state.Sequences[i].DenyTtlLt.IsNull() && data.Sequences[j].DenyTtlLt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/ttl/lt", predicates))
-			}
-			if !state.Sequences[i].DenyTtlGt.IsNull() && data.Sequences[j].DenyTtlGt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/ttl/gt", predicates))
-			}
-			if !state.Sequences[i].DenyTtlEq.IsNull() && data.Sequences[j].DenyTtlEq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/ttl/eq", predicates))
-			}
-			if !state.Sequences[i].DenyPacketLengthRangeEnd.IsNull() && data.Sequences[j].DenyPacketLengthRangeEnd.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/packet-length/range/end-value", predicates))
-			}
-			if !state.Sequences[i].DenyPacketLengthRangeStart.IsNull() && data.Sequences[j].DenyPacketLengthRangeStart.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/packet-length/range/start-value", predicates))
-			}
-			if !state.Sequences[i].DenyPacketLengthNeq.IsNull() && data.Sequences[j].DenyPacketLengthNeq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/packet-length/neq", predicates))
-			}
-			if !state.Sequences[i].DenyPacketLengthLt.IsNull() && data.Sequences[j].DenyPacketLengthLt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/packet-length/lt", predicates))
-			}
-			if !state.Sequences[i].DenyPacketLengthGt.IsNull() && data.Sequences[j].DenyPacketLengthGt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/packet-length/gt", predicates))
-			}
-			if !state.Sequences[i].DenyPacketLengthEq.IsNull() && data.Sequences[j].DenyPacketLengthEq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/packet-length/eq", predicates))
-			}
-			if !state.Sequences[i].DenyDscpRangeEnd.IsNull() && data.Sequences[j].DenyDscpRangeEnd.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/range/end-value", predicates))
-			}
-			if !state.Sequences[i].DenyDscpRangeStart.IsNull() && data.Sequences[j].DenyDscpRangeStart.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/range/start-value", predicates))
-			}
-			if !state.Sequences[i].DenyDscpNeq.IsNull() && data.Sequences[j].DenyDscpNeq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/neq", predicates))
-			}
-			if !state.Sequences[i].DenyDscpLt.IsNull() && data.Sequences[j].DenyDscpLt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/lt", predicates))
-			}
-			if !state.Sequences[i].DenyDscpGt.IsNull() && data.Sequences[j].DenyDscpGt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/gt", predicates))
-			}
-			if !state.Sequences[i].DenyDscpEq.IsNull() && data.Sequences[j].DenyDscpEq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/eq", predicates))
-			}
-			if !state.Sequences[i].DenyDscp.IsNull() && data.Sequences[j].DenyDscp.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/dscp-value", predicates))
-			}
-			if !state.Sequences[i].DenyIcmpMessageCode.IsNull() && data.Sequences[j].DenyIcmpMessageCode.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/icmp/message-code", predicates))
-			}
-			if !state.Sequences[i].DenyIcmpMessageType.IsNull() && data.Sequences[j].DenyIcmpMessageType.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/icmp/message-type", predicates))
-			}
-			if !state.Sequences[i].DenyIcmpMessageTypeName.IsNull() && data.Sequences[j].DenyIcmpMessageTypeName.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/icmp/message-type-name", predicates))
-			}
-			if !state.Sequences[i].DenyDestinationPortRangeEnd.IsNull() && data.Sequences[j].DenyDestinationPortRangeEnd.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/port/range/end-value", predicates))
-			}
-			if !state.Sequences[i].DenyDestinationPortRangeStart.IsNull() && data.Sequences[j].DenyDestinationPortRangeStart.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/port/range/start-value", predicates))
-			}
-			if !state.Sequences[i].DenyDestinationPortNeq.IsNull() && data.Sequences[j].DenyDestinationPortNeq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/port/neq", predicates))
-			}
-			if !state.Sequences[i].DenyDestinationPortLt.IsNull() && data.Sequences[j].DenyDestinationPortLt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/port/lt", predicates))
-			}
-			if !state.Sequences[i].DenyDestinationPortGt.IsNull() && data.Sequences[j].DenyDestinationPortGt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/port/gt", predicates))
-			}
-			if !state.Sequences[i].DenyDestinationPortEq.IsNull() && data.Sequences[j].DenyDestinationPortEq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/port/eq", predicates))
-			}
-			if !state.Sequences[i].DenyDestinationPortGroup.IsNull() && data.Sequences[j].DenyDestinationPortGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/port-group", predicates))
-			}
-			if !state.Sequences[i].DenyDestinationNetGroup.IsNull() && data.Sequences[j].DenyDestinationNetGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/net-group", predicates))
-			}
-			if !state.Sequences[i].DenyDestinationHost.IsNull() && data.Sequences[j].DenyDestinationHost.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/host", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Sequences[i].DenyDestinationAny.IsNull() && state.Sequences[i].DenyDestinationAny.ValueBool() && data.Sequences[j].DenyDestinationAny.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/any", predicates))
-			}
-			if !state.Sequences[i].DenyDestinationPrefixLength.IsNull() && data.Sequences[j].DenyDestinationPrefixLength.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/prefix-length", predicates))
-			}
-			if !state.Sequences[i].DenyDestinationWildcardMask.IsNull() && data.Sequences[j].DenyDestinationWildcardMask.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/wildcard-mask", predicates))
-			}
-			if !state.Sequences[i].DenyDestinationAddress.IsNull() && data.Sequences[j].DenyDestinationAddress.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/address", predicates))
-			}
-			if !state.Sequences[i].DenySourcePortRangeEnd.IsNull() && data.Sequences[j].DenySourcePortRangeEnd.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/port/range/end-value", predicates))
-			}
-			if !state.Sequences[i].DenySourcePortRangeStart.IsNull() && data.Sequences[j].DenySourcePortRangeStart.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/port/range/start-value", predicates))
-			}
-			if !state.Sequences[i].DenySourcePortNeq.IsNull() && data.Sequences[j].DenySourcePortNeq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/port/neq", predicates))
-			}
-			if !state.Sequences[i].DenySourcePortLt.IsNull() && data.Sequences[j].DenySourcePortLt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/port/lt", predicates))
-			}
-			if !state.Sequences[i].DenySourcePortGt.IsNull() && data.Sequences[j].DenySourcePortGt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/port/gt", predicates))
-			}
-			if !state.Sequences[i].DenySourcePortEq.IsNull() && data.Sequences[j].DenySourcePortEq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/port/eq", predicates))
-			}
-			if !state.Sequences[i].DenySourcePortGroup.IsNull() && data.Sequences[j].DenySourcePortGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/port-group", predicates))
-			}
-			if !state.Sequences[i].DenySourceNetGroup.IsNull() && data.Sequences[j].DenySourceNetGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/net-group", predicates))
-			}
-			if !state.Sequences[i].DenySourceHost.IsNull() && data.Sequences[j].DenySourceHost.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/host", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Sequences[i].DenySourceAny.IsNull() && state.Sequences[i].DenySourceAny.ValueBool() && data.Sequences[j].DenySourceAny.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/any", predicates))
-			}
-			if !state.Sequences[i].DenySourcePrefixLength.IsNull() && data.Sequences[j].DenySourcePrefixLength.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/prefix-length", predicates))
-			}
-			if !state.Sequences[i].DenySourceWildcardMask.IsNull() && data.Sequences[j].DenySourceWildcardMask.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/wildcard-mask", predicates))
-			}
-			if !state.Sequences[i].DenySourceAddress.IsNull() && data.Sequences[j].DenySourceAddress.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/address", predicates))
-			}
-			if !state.Sequences[i].DenyRangeEndProtocol.IsNull() && data.Sequences[j].DenyRangeEndProtocol.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/range/end-protocol", predicates))
-			}
-			if !state.Sequences[i].DenyRangeStartProtocol.IsNull() && data.Sequences[j].DenyRangeStartProtocol.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/range/start-protocol", predicates))
-			}
-			if !state.Sequences[i].DenyCounter.IsNull() && data.Sequences[j].DenyCounter.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/counter", predicates))
-			}
-			if !state.Sequences[i].DenyFragmentType.IsNull() && data.Sequences[j].DenyFragmentType.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/fragment-type", predicates))
-			}
-			if !state.Sequences[i].DenyPrecedence.IsNull() && data.Sequences[j].DenyPrecedence.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/precedence", predicates))
-			}
-			if !state.Sequences[i].DenyEq.IsNull() && data.Sequences[j].DenyEq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/eq", predicates))
-			}
-			if !state.Sequences[i].DenyProtocol.IsNull() && data.Sequences[j].DenyProtocol.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/protocol", predicates))
-			}
-			if !state.Sequences[i].PermitSetTtl.IsNull() && data.Sequences[j].PermitSetTtl.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/set/ttl", predicates))
-			}
-			if !state.Sequences[i].PermitSetQosGroup.IsNull() && data.Sequences[j].PermitSetQosGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/set/qos-group", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Sequences[i].PermitLogInput.IsNull() && state.Sequences[i].PermitLogInput.ValueBool() && data.Sequences[j].PermitLogInput.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/log-input", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Sequences[i].PermitLog.IsNull() && state.Sequences[i].PermitLog.ValueBool() && data.Sequences[j].PermitLog.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/log", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Sequences[i].PermitCapture.IsNull() && state.Sequences[i].PermitCapture.ValueBool() && data.Sequences[j].PermitCapture.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/capture", predicates))
-			}
-			if !state.Sequences[i].PermitNexthop3Vrf.IsNull() && data.Sequences[j].PermitNexthop3Vrf.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop3/vrf", predicates))
-			}
-			if !state.Sequences[i].PermitNexthop3Track.IsNull() && data.Sequences[j].PermitNexthop3Track.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop3/track", predicates))
-			}
-			if !state.Sequences[i].PermitNexthop3Ipv6.IsNull() && data.Sequences[j].PermitNexthop3Ipv6.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop3/ipv6", predicates))
-			}
-			if !state.Sequences[i].PermitNexthop2Vrf.IsNull() && data.Sequences[j].PermitNexthop2Vrf.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop2/vrf", predicates))
-			}
-			if !state.Sequences[i].PermitNexthop2Track.IsNull() && data.Sequences[j].PermitNexthop2Track.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop2/track", predicates))
-			}
-			if !state.Sequences[i].PermitNexthop2Ipv6.IsNull() && data.Sequences[j].PermitNexthop2Ipv6.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop2/ipv6", predicates))
-			}
-			if !state.Sequences[i].PermitNexthop1Vrf.IsNull() && data.Sequences[j].PermitNexthop1Vrf.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop1/vrf", predicates))
-			}
-			if !state.Sequences[i].PermitNexthop1Track.IsNull() && data.Sequences[j].PermitNexthop1Track.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop1/track", predicates))
-			}
-			if !state.Sequences[i].PermitNexthop1Ipv6.IsNull() && data.Sequences[j].PermitNexthop1Ipv6.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop1/ipv6", predicates))
-			}
-			if !state.Sequences[i].PermitPolicePriority.IsNull() && data.Sequences[j].PermitPolicePriority.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/police/priority", predicates))
-			}
-			if !state.Sequences[i].PermitPolicePeakUnit.IsNull() && data.Sequences[j].PermitPolicePeakUnit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/police/peak-unit", predicates))
-			}
-			if !state.Sequences[i].PermitPolicePeakRate.IsNull() && data.Sequences[j].PermitPolicePeakRate.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/police/peak-rate", predicates))
-			}
-			if !state.Sequences[i].PermitPoliceUnit.IsNull() && data.Sequences[j].PermitPoliceUnit.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/police/unit", predicates))
-			}
-			if !state.Sequences[i].PermitPoliceValue.IsNull() && data.Sequences[j].PermitPoliceValue.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/police/value", predicates))
-			}
-			if !state.Sequences[i].PermitTtlRangeEnd.IsNull() && data.Sequences[j].PermitTtlRangeEnd.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/ttl/range/end-value", predicates))
-			}
-			if !state.Sequences[i].PermitTtlRangeStart.IsNull() && data.Sequences[j].PermitTtlRangeStart.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/ttl/range/start-value", predicates))
-			}
-			if !state.Sequences[i].PermitTtlNeq.IsNull() && data.Sequences[j].PermitTtlNeq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/ttl/neq", predicates))
-			}
-			if !state.Sequences[i].PermitTtlLt.IsNull() && data.Sequences[j].PermitTtlLt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/ttl/lt", predicates))
-			}
-			if !state.Sequences[i].PermitTtlGt.IsNull() && data.Sequences[j].PermitTtlGt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/ttl/gt", predicates))
-			}
-			if !state.Sequences[i].PermitTtlEq.IsNull() && data.Sequences[j].PermitTtlEq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/ttl/eq", predicates))
-			}
-			if !state.Sequences[i].PermitPacketLengthRangeEnd.IsNull() && data.Sequences[j].PermitPacketLengthRangeEnd.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/packet-length/range/end-value", predicates))
-			}
-			if !state.Sequences[i].PermitPacketLengthRangeStart.IsNull() && data.Sequences[j].PermitPacketLengthRangeStart.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/packet-length/range/start-value", predicates))
-			}
-			if !state.Sequences[i].PermitPacketLengthNeq.IsNull() && data.Sequences[j].PermitPacketLengthNeq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/packet-length/neq", predicates))
-			}
-			if !state.Sequences[i].PermitPacketLengthLt.IsNull() && data.Sequences[j].PermitPacketLengthLt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/packet-length/lt", predicates))
-			}
-			if !state.Sequences[i].PermitPacketLengthGt.IsNull() && data.Sequences[j].PermitPacketLengthGt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/packet-length/gt", predicates))
-			}
-			if !state.Sequences[i].PermitPacketLengthEq.IsNull() && data.Sequences[j].PermitPacketLengthEq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/packet-length/eq", predicates))
-			}
-			if !state.Sequences[i].PermitDscpRangeEnd.IsNull() && data.Sequences[j].PermitDscpRangeEnd.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/range/end-value", predicates))
-			}
-			if !state.Sequences[i].PermitDscpRangeStart.IsNull() && data.Sequences[j].PermitDscpRangeStart.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/range/start-value", predicates))
-			}
-			if !state.Sequences[i].PermitDscpNeq.IsNull() && data.Sequences[j].PermitDscpNeq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/neq", predicates))
-			}
-			if !state.Sequences[i].PermitDscpLt.IsNull() && data.Sequences[j].PermitDscpLt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/lt", predicates))
-			}
-			if !state.Sequences[i].PermitDscpGt.IsNull() && data.Sequences[j].PermitDscpGt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/gt", predicates))
-			}
-			if !state.Sequences[i].PermitDscpEq.IsNull() && data.Sequences[j].PermitDscpEq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/eq", predicates))
-			}
-			if !state.Sequences[i].PermitDscp.IsNull() && data.Sequences[j].PermitDscp.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/dscp-value", predicates))
-			}
-			if !state.Sequences[i].PermitIcmpMessageCode.IsNull() && data.Sequences[j].PermitIcmpMessageCode.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/icmp/message-code", predicates))
-			}
-			if !state.Sequences[i].PermitIcmpMessageType.IsNull() && data.Sequences[j].PermitIcmpMessageType.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/icmp/message-type", predicates))
-			}
-			if !state.Sequences[i].PermitIcmpMessageTypeName.IsNull() && data.Sequences[j].PermitIcmpMessageTypeName.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/icmp/message-type-name", predicates))
-			}
-			if !state.Sequences[i].PermitDestinationPortRangeEnd.IsNull() && data.Sequences[j].PermitDestinationPortRangeEnd.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/port/range/end-value", predicates))
-			}
-			if !state.Sequences[i].PermitDestinationPortRangeStart.IsNull() && data.Sequences[j].PermitDestinationPortRangeStart.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/port/range/start-value", predicates))
-			}
-			if !state.Sequences[i].PermitDestinationPortNeq.IsNull() && data.Sequences[j].PermitDestinationPortNeq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/port/neq", predicates))
-			}
-			if !state.Sequences[i].PermitDestinationPortLt.IsNull() && data.Sequences[j].PermitDestinationPortLt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/port/lt", predicates))
-			}
-			if !state.Sequences[i].PermitDestinationPortGt.IsNull() && data.Sequences[j].PermitDestinationPortGt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/port/gt", predicates))
-			}
-			if !state.Sequences[i].PermitDestinationPortEq.IsNull() && data.Sequences[j].PermitDestinationPortEq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/port/eq", predicates))
-			}
-			if !state.Sequences[i].PermitDestinationPortGroup.IsNull() && data.Sequences[j].PermitDestinationPortGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/port-group", predicates))
-			}
-			if !state.Sequences[i].PermitDestinationNetGroup.IsNull() && data.Sequences[j].PermitDestinationNetGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/net-group", predicates))
-			}
-			if !state.Sequences[i].PermitDestinationHost.IsNull() && data.Sequences[j].PermitDestinationHost.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/host", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Sequences[i].PermitDestinationAny.IsNull() && state.Sequences[i].PermitDestinationAny.ValueBool() && data.Sequences[j].PermitDestinationAny.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/any", predicates))
-			}
-			if !state.Sequences[i].PermitDestinationPrefixLength.IsNull() && data.Sequences[j].PermitDestinationPrefixLength.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/prefix-length", predicates))
-			}
-			if !state.Sequences[i].PermitDestinationWildcardMask.IsNull() && data.Sequences[j].PermitDestinationWildcardMask.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/wildcard-mask", predicates))
-			}
-			if !state.Sequences[i].PermitDestinationAddress.IsNull() && data.Sequences[j].PermitDestinationAddress.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/address", predicates))
-			}
-			if !state.Sequences[i].PermitSourcePortRangeEnd.IsNull() && data.Sequences[j].PermitSourcePortRangeEnd.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/port/range/end-value", predicates))
-			}
-			if !state.Sequences[i].PermitSourcePortRangeStart.IsNull() && data.Sequences[j].PermitSourcePortRangeStart.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/port/range/start-value", predicates))
-			}
-			if !state.Sequences[i].PermitSourcePortNeq.IsNull() && data.Sequences[j].PermitSourcePortNeq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/port/neq", predicates))
-			}
-			if !state.Sequences[i].PermitSourcePortLt.IsNull() && data.Sequences[j].PermitSourcePortLt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/port/lt", predicates))
-			}
-			if !state.Sequences[i].PermitSourcePortGt.IsNull() && data.Sequences[j].PermitSourcePortGt.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/port/gt", predicates))
-			}
-			if !state.Sequences[i].PermitSourcePortEq.IsNull() && data.Sequences[j].PermitSourcePortEq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/port/eq", predicates))
-			}
-			if !state.Sequences[i].PermitSourcePortGroup.IsNull() && data.Sequences[j].PermitSourcePortGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/port-group", predicates))
-			}
-			if !state.Sequences[i].PermitSourceNetGroup.IsNull() && data.Sequences[j].PermitSourceNetGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/net-group", predicates))
-			}
-			if !state.Sequences[i].PermitSourceHost.IsNull() && data.Sequences[j].PermitSourceHost.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/host", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Sequences[i].PermitSourceAny.IsNull() && state.Sequences[i].PermitSourceAny.ValueBool() && data.Sequences[j].PermitSourceAny.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/any", predicates))
-			}
-			if !state.Sequences[i].PermitSourcePrefixLength.IsNull() && data.Sequences[j].PermitSourcePrefixLength.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/prefix-length", predicates))
-			}
-			if !state.Sequences[i].PermitSourceWildcardMask.IsNull() && data.Sequences[j].PermitSourceWildcardMask.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/wildcard-mask", predicates))
-			}
-			if !state.Sequences[i].PermitSourceAddress.IsNull() && data.Sequences[j].PermitSourceAddress.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/address", predicates))
-			}
-			if !state.Sequences[i].PermitRangeEndProtocol.IsNull() && data.Sequences[j].PermitRangeEndProtocol.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/range/end-protocol", predicates))
-			}
-			if !state.Sequences[i].PermitRangeStartProtocol.IsNull() && data.Sequences[j].PermitRangeStartProtocol.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/range/start-protocol", predicates))
-			}
-			if !state.Sequences[i].PermitCounter.IsNull() && data.Sequences[j].PermitCounter.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/counter", predicates))
-			}
-			if !state.Sequences[i].PermitFragmentType.IsNull() && data.Sequences[j].PermitFragmentType.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/fragment-type", predicates))
-			}
-			if !state.Sequences[i].PermitPrecedence.IsNull() && data.Sequences[j].PermitPrecedence.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/precedence", predicates))
-			}
-			if !state.Sequences[i].PermitEq.IsNull() && data.Sequences[j].PermitEq.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/eq", predicates))
-			}
-			if !state.Sequences[i].PermitProtocol.IsNull() && data.Sequences[j].PermitProtocol.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/protocol", predicates))
-			}
-			if !state.Sequences[i].Remark.IsNull() && data.Sequences[j].Remark.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/remark", predicates))
-			}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Sequences[i].DenyIcmpOn.IsNull() && state.Sequences[i].DenyIcmpOn.ValueBool() && data.Sequences[j].DenyIcmpOn.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/icmp-on", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Sequences[i].DenyIcmpOff.IsNull() && state.Sequences[i].DenyIcmpOff.ValueBool() && data.Sequences[j].DenyIcmpOff.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/icmp-off", predicates))
+				}
+				if !state.Sequences[i].DenySetTtl.IsNull() && data.Sequences[j].DenySetTtl.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/set/ttl", predicates))
+				}
+				if !state.Sequences[i].DenySetQosGroup.IsNull() && data.Sequences[j].DenySetQosGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/set/qos-group", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Sequences[i].DenyLogInput.IsNull() && state.Sequences[i].DenyLogInput.ValueBool() && data.Sequences[j].DenyLogInput.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/log-input", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Sequences[i].DenyLog.IsNull() && state.Sequences[i].DenyLog.ValueBool() && data.Sequences[j].DenyLog.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/log", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Sequences[i].DenyCapture.IsNull() && state.Sequences[i].DenyCapture.ValueBool() && data.Sequences[j].DenyCapture.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/capture", predicates))
+				}
+				if !state.Sequences[i].DenyPolicePriority.IsNull() && data.Sequences[j].DenyPolicePriority.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/police/priority", predicates))
+				}
+				if !state.Sequences[i].DenyPolicePeakUnit.IsNull() && data.Sequences[j].DenyPolicePeakUnit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/police/peak-unit", predicates))
+				}
+				if !state.Sequences[i].DenyPolicePeakRate.IsNull() && data.Sequences[j].DenyPolicePeakRate.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/police/peak-rate", predicates))
+				}
+				if !state.Sequences[i].DenyPoliceUnit.IsNull() && data.Sequences[j].DenyPoliceUnit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/police/unit", predicates))
+				}
+				if !state.Sequences[i].DenyPoliceValue.IsNull() && data.Sequences[j].DenyPoliceValue.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/police/value", predicates))
+				}
+				if !state.Sequences[i].DenyTtlRangeEnd.IsNull() && data.Sequences[j].DenyTtlRangeEnd.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/ttl/range/end-value", predicates))
+				}
+				if !state.Sequences[i].DenyTtlRangeStart.IsNull() && data.Sequences[j].DenyTtlRangeStart.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/ttl/range/start-value", predicates))
+				}
+				if !state.Sequences[i].DenyTtlNeq.IsNull() && data.Sequences[j].DenyTtlNeq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/ttl/neq", predicates))
+				}
+				if !state.Sequences[i].DenyTtlLt.IsNull() && data.Sequences[j].DenyTtlLt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/ttl/lt", predicates))
+				}
+				if !state.Sequences[i].DenyTtlGt.IsNull() && data.Sequences[j].DenyTtlGt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/ttl/gt", predicates))
+				}
+				if !state.Sequences[i].DenyTtlEq.IsNull() && data.Sequences[j].DenyTtlEq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/ttl/eq", predicates))
+				}
+				if !state.Sequences[i].DenyPacketLengthRangeEnd.IsNull() && data.Sequences[j].DenyPacketLengthRangeEnd.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/packet-length/range/end-value", predicates))
+				}
+				if !state.Sequences[i].DenyPacketLengthRangeStart.IsNull() && data.Sequences[j].DenyPacketLengthRangeStart.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/packet-length/range/start-value", predicates))
+				}
+				if !state.Sequences[i].DenyPacketLengthNeq.IsNull() && data.Sequences[j].DenyPacketLengthNeq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/packet-length/neq", predicates))
+				}
+				if !state.Sequences[i].DenyPacketLengthLt.IsNull() && data.Sequences[j].DenyPacketLengthLt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/packet-length/lt", predicates))
+				}
+				if !state.Sequences[i].DenyPacketLengthGt.IsNull() && data.Sequences[j].DenyPacketLengthGt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/packet-length/gt", predicates))
+				}
+				if !state.Sequences[i].DenyPacketLengthEq.IsNull() && data.Sequences[j].DenyPacketLengthEq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/packet-length/eq", predicates))
+				}
+				if !state.Sequences[i].DenyDscpRangeEnd.IsNull() && data.Sequences[j].DenyDscpRangeEnd.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/range/end-value", predicates))
+				}
+				if !state.Sequences[i].DenyDscpRangeStart.IsNull() && data.Sequences[j].DenyDscpRangeStart.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/range/start-value", predicates))
+				}
+				if !state.Sequences[i].DenyDscpNeq.IsNull() && data.Sequences[j].DenyDscpNeq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/neq", predicates))
+				}
+				if !state.Sequences[i].DenyDscpLt.IsNull() && data.Sequences[j].DenyDscpLt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/lt", predicates))
+				}
+				if !state.Sequences[i].DenyDscpGt.IsNull() && data.Sequences[j].DenyDscpGt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/gt", predicates))
+				}
+				if !state.Sequences[i].DenyDscpEq.IsNull() && data.Sequences[j].DenyDscpEq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/eq", predicates))
+				}
+				if !state.Sequences[i].DenyDscp.IsNull() && data.Sequences[j].DenyDscp.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/dscp-value", predicates))
+				}
+				if !state.Sequences[i].DenyIcmpMessageCode.IsNull() && data.Sequences[j].DenyIcmpMessageCode.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/icmp/message-code", predicates))
+				}
+				if !state.Sequences[i].DenyIcmpMessageType.IsNull() && data.Sequences[j].DenyIcmpMessageType.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/icmp/message-type", predicates))
+				}
+				if !state.Sequences[i].DenyIcmpMessageTypeName.IsNull() && data.Sequences[j].DenyIcmpMessageTypeName.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/icmp/message-type-name", predicates))
+				}
+				if !state.Sequences[i].DenyDestinationPortRangeEnd.IsNull() && data.Sequences[j].DenyDestinationPortRangeEnd.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/port/range/end-value", predicates))
+				}
+				if !state.Sequences[i].DenyDestinationPortRangeStart.IsNull() && data.Sequences[j].DenyDestinationPortRangeStart.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/port/range/start-value", predicates))
+				}
+				if !state.Sequences[i].DenyDestinationPortNeq.IsNull() && data.Sequences[j].DenyDestinationPortNeq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/port/neq", predicates))
+				}
+				if !state.Sequences[i].DenyDestinationPortLt.IsNull() && data.Sequences[j].DenyDestinationPortLt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/port/lt", predicates))
+				}
+				if !state.Sequences[i].DenyDestinationPortGt.IsNull() && data.Sequences[j].DenyDestinationPortGt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/port/gt", predicates))
+				}
+				if !state.Sequences[i].DenyDestinationPortEq.IsNull() && data.Sequences[j].DenyDestinationPortEq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/port/eq", predicates))
+				}
+				if !state.Sequences[i].DenyDestinationPortGroup.IsNull() && data.Sequences[j].DenyDestinationPortGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/port-group", predicates))
+				}
+				if !state.Sequences[i].DenyDestinationNetGroup.IsNull() && data.Sequences[j].DenyDestinationNetGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/net-group", predicates))
+				}
+				if !state.Sequences[i].DenyDestinationHost.IsNull() && data.Sequences[j].DenyDestinationHost.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/host", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Sequences[i].DenyDestinationAny.IsNull() && state.Sequences[i].DenyDestinationAny.ValueBool() && data.Sequences[j].DenyDestinationAny.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/any", predicates))
+				}
+				if !state.Sequences[i].DenyDestinationPrefixLength.IsNull() && data.Sequences[j].DenyDestinationPrefixLength.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/prefix-length", predicates))
+				}
+				if !state.Sequences[i].DenyDestinationWildcardMask.IsNull() && data.Sequences[j].DenyDestinationWildcardMask.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/wildcard-mask", predicates))
+				}
+				if !state.Sequences[i].DenyDestinationAddress.IsNull() && data.Sequences[j].DenyDestinationAddress.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/destination/address", predicates))
+				}
+				if !state.Sequences[i].DenySourcePortRangeEnd.IsNull() && data.Sequences[j].DenySourcePortRangeEnd.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/port/range/end-value", predicates))
+				}
+				if !state.Sequences[i].DenySourcePortRangeStart.IsNull() && data.Sequences[j].DenySourcePortRangeStart.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/port/range/start-value", predicates))
+				}
+				if !state.Sequences[i].DenySourcePortNeq.IsNull() && data.Sequences[j].DenySourcePortNeq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/port/neq", predicates))
+				}
+				if !state.Sequences[i].DenySourcePortLt.IsNull() && data.Sequences[j].DenySourcePortLt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/port/lt", predicates))
+				}
+				if !state.Sequences[i].DenySourcePortGt.IsNull() && data.Sequences[j].DenySourcePortGt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/port/gt", predicates))
+				}
+				if !state.Sequences[i].DenySourcePortEq.IsNull() && data.Sequences[j].DenySourcePortEq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/port/eq", predicates))
+				}
+				if !state.Sequences[i].DenySourcePortGroup.IsNull() && data.Sequences[j].DenySourcePortGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/port-group", predicates))
+				}
+				if !state.Sequences[i].DenySourceNetGroup.IsNull() && data.Sequences[j].DenySourceNetGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/net-group", predicates))
+				}
+				if !state.Sequences[i].DenySourceHost.IsNull() && data.Sequences[j].DenySourceHost.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/host", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Sequences[i].DenySourceAny.IsNull() && state.Sequences[i].DenySourceAny.ValueBool() && data.Sequences[j].DenySourceAny.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/any", predicates))
+				}
+				if !state.Sequences[i].DenySourcePrefixLength.IsNull() && data.Sequences[j].DenySourcePrefixLength.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/prefix-length", predicates))
+				}
+				if !state.Sequences[i].DenySourceWildcardMask.IsNull() && data.Sequences[j].DenySourceWildcardMask.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/wildcard-mask", predicates))
+				}
+				if !state.Sequences[i].DenySourceAddress.IsNull() && data.Sequences[j].DenySourceAddress.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/source/address", predicates))
+				}
+				if !state.Sequences[i].DenyRangeEndProtocol.IsNull() && data.Sequences[j].DenyRangeEndProtocol.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/range/end-protocol", predicates))
+				}
+				if !state.Sequences[i].DenyRangeStartProtocol.IsNull() && data.Sequences[j].DenyRangeStartProtocol.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/range/start-protocol", predicates))
+				}
+				if !state.Sequences[i].DenyCounter.IsNull() && data.Sequences[j].DenyCounter.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/counter", predicates))
+				}
+				if !state.Sequences[i].DenyFragmentType.IsNull() && data.Sequences[j].DenyFragmentType.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/fragment-type", predicates))
+				}
+				if !state.Sequences[i].DenyPrecedence.IsNull() && data.Sequences[j].DenyPrecedence.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/precedence", predicates))
+				}
+				if !state.Sequences[i].DenyEq.IsNull() && data.Sequences[j].DenyEq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/eq", predicates))
+				}
+				if !state.Sequences[i].DenyProtocol.IsNull() && data.Sequences[j].DenyProtocol.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/protocol", predicates))
+				}
+				if !state.Sequences[i].PermitSetTtl.IsNull() && data.Sequences[j].PermitSetTtl.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/set/ttl", predicates))
+				}
+				if !state.Sequences[i].PermitSetQosGroup.IsNull() && data.Sequences[j].PermitSetQosGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/set/qos-group", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Sequences[i].PermitLogInput.IsNull() && state.Sequences[i].PermitLogInput.ValueBool() && data.Sequences[j].PermitLogInput.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/log-input", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Sequences[i].PermitLog.IsNull() && state.Sequences[i].PermitLog.ValueBool() && data.Sequences[j].PermitLog.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/log", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Sequences[i].PermitCapture.IsNull() && state.Sequences[i].PermitCapture.ValueBool() && data.Sequences[j].PermitCapture.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/capture", predicates))
+				}
+				if !state.Sequences[i].PermitNexthop3Vrf.IsNull() && data.Sequences[j].PermitNexthop3Vrf.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop3/vrf", predicates))
+				}
+				if !state.Sequences[i].PermitNexthop3Track.IsNull() && data.Sequences[j].PermitNexthop3Track.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop3/track", predicates))
+				}
+				if !state.Sequences[i].PermitNexthop3Ipv6.IsNull() && data.Sequences[j].PermitNexthop3Ipv6.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop3/ipv6", predicates))
+				}
+				if !state.Sequences[i].PermitNexthop2Vrf.IsNull() && data.Sequences[j].PermitNexthop2Vrf.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop2/vrf", predicates))
+				}
+				if !state.Sequences[i].PermitNexthop2Track.IsNull() && data.Sequences[j].PermitNexthop2Track.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop2/track", predicates))
+				}
+				if !state.Sequences[i].PermitNexthop2Ipv6.IsNull() && data.Sequences[j].PermitNexthop2Ipv6.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop2/ipv6", predicates))
+				}
+				if !state.Sequences[i].PermitNexthop1Vrf.IsNull() && data.Sequences[j].PermitNexthop1Vrf.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop1/vrf", predicates))
+				}
+				if !state.Sequences[i].PermitNexthop1Track.IsNull() && data.Sequences[j].PermitNexthop1Track.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop1/track", predicates))
+				}
+				if !state.Sequences[i].PermitNexthop1Ipv6.IsNull() && data.Sequences[j].PermitNexthop1Ipv6.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/nexthop1/ipv6", predicates))
+				}
+				if !state.Sequences[i].PermitPolicePriority.IsNull() && data.Sequences[j].PermitPolicePriority.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/police/priority", predicates))
+				}
+				if !state.Sequences[i].PermitPolicePeakUnit.IsNull() && data.Sequences[j].PermitPolicePeakUnit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/police/peak-unit", predicates))
+				}
+				if !state.Sequences[i].PermitPolicePeakRate.IsNull() && data.Sequences[j].PermitPolicePeakRate.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/police/peak-rate", predicates))
+				}
+				if !state.Sequences[i].PermitPoliceUnit.IsNull() && data.Sequences[j].PermitPoliceUnit.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/police/unit", predicates))
+				}
+				if !state.Sequences[i].PermitPoliceValue.IsNull() && data.Sequences[j].PermitPoliceValue.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/police/value", predicates))
+				}
+				if !state.Sequences[i].PermitTtlRangeEnd.IsNull() && data.Sequences[j].PermitTtlRangeEnd.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/ttl/range/end-value", predicates))
+				}
+				if !state.Sequences[i].PermitTtlRangeStart.IsNull() && data.Sequences[j].PermitTtlRangeStart.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/ttl/range/start-value", predicates))
+				}
+				if !state.Sequences[i].PermitTtlNeq.IsNull() && data.Sequences[j].PermitTtlNeq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/ttl/neq", predicates))
+				}
+				if !state.Sequences[i].PermitTtlLt.IsNull() && data.Sequences[j].PermitTtlLt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/ttl/lt", predicates))
+				}
+				if !state.Sequences[i].PermitTtlGt.IsNull() && data.Sequences[j].PermitTtlGt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/ttl/gt", predicates))
+				}
+				if !state.Sequences[i].PermitTtlEq.IsNull() && data.Sequences[j].PermitTtlEq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/ttl/eq", predicates))
+				}
+				if !state.Sequences[i].PermitPacketLengthRangeEnd.IsNull() && data.Sequences[j].PermitPacketLengthRangeEnd.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/packet-length/range/end-value", predicates))
+				}
+				if !state.Sequences[i].PermitPacketLengthRangeStart.IsNull() && data.Sequences[j].PermitPacketLengthRangeStart.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/packet-length/range/start-value", predicates))
+				}
+				if !state.Sequences[i].PermitPacketLengthNeq.IsNull() && data.Sequences[j].PermitPacketLengthNeq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/packet-length/neq", predicates))
+				}
+				if !state.Sequences[i].PermitPacketLengthLt.IsNull() && data.Sequences[j].PermitPacketLengthLt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/packet-length/lt", predicates))
+				}
+				if !state.Sequences[i].PermitPacketLengthGt.IsNull() && data.Sequences[j].PermitPacketLengthGt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/packet-length/gt", predicates))
+				}
+				if !state.Sequences[i].PermitPacketLengthEq.IsNull() && data.Sequences[j].PermitPacketLengthEq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/packet-length/eq", predicates))
+				}
+				if !state.Sequences[i].PermitDscpRangeEnd.IsNull() && data.Sequences[j].PermitDscpRangeEnd.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/range/end-value", predicates))
+				}
+				if !state.Sequences[i].PermitDscpRangeStart.IsNull() && data.Sequences[j].PermitDscpRangeStart.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/range/start-value", predicates))
+				}
+				if !state.Sequences[i].PermitDscpNeq.IsNull() && data.Sequences[j].PermitDscpNeq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/neq", predicates))
+				}
+				if !state.Sequences[i].PermitDscpLt.IsNull() && data.Sequences[j].PermitDscpLt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/lt", predicates))
+				}
+				if !state.Sequences[i].PermitDscpGt.IsNull() && data.Sequences[j].PermitDscpGt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/gt", predicates))
+				}
+				if !state.Sequences[i].PermitDscpEq.IsNull() && data.Sequences[j].PermitDscpEq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/eq", predicates))
+				}
+				if !state.Sequences[i].PermitDscp.IsNull() && data.Sequences[j].PermitDscp.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/dscp-value", predicates))
+				}
+				if !state.Sequences[i].PermitIcmpMessageCode.IsNull() && data.Sequences[j].PermitIcmpMessageCode.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/icmp/message-code", predicates))
+				}
+				if !state.Sequences[i].PermitIcmpMessageType.IsNull() && data.Sequences[j].PermitIcmpMessageType.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/icmp/message-type", predicates))
+				}
+				if !state.Sequences[i].PermitIcmpMessageTypeName.IsNull() && data.Sequences[j].PermitIcmpMessageTypeName.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/icmp/message-type-name", predicates))
+				}
+				if !state.Sequences[i].PermitDestinationPortRangeEnd.IsNull() && data.Sequences[j].PermitDestinationPortRangeEnd.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/port/range/end-value", predicates))
+				}
+				if !state.Sequences[i].PermitDestinationPortRangeStart.IsNull() && data.Sequences[j].PermitDestinationPortRangeStart.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/port/range/start-value", predicates))
+				}
+				if !state.Sequences[i].PermitDestinationPortNeq.IsNull() && data.Sequences[j].PermitDestinationPortNeq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/port/neq", predicates))
+				}
+				if !state.Sequences[i].PermitDestinationPortLt.IsNull() && data.Sequences[j].PermitDestinationPortLt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/port/lt", predicates))
+				}
+				if !state.Sequences[i].PermitDestinationPortGt.IsNull() && data.Sequences[j].PermitDestinationPortGt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/port/gt", predicates))
+				}
+				if !state.Sequences[i].PermitDestinationPortEq.IsNull() && data.Sequences[j].PermitDestinationPortEq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/port/eq", predicates))
+				}
+				if !state.Sequences[i].PermitDestinationPortGroup.IsNull() && data.Sequences[j].PermitDestinationPortGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/port-group", predicates))
+				}
+				if !state.Sequences[i].PermitDestinationNetGroup.IsNull() && data.Sequences[j].PermitDestinationNetGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/net-group", predicates))
+				}
+				if !state.Sequences[i].PermitDestinationHost.IsNull() && data.Sequences[j].PermitDestinationHost.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/host", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Sequences[i].PermitDestinationAny.IsNull() && state.Sequences[i].PermitDestinationAny.ValueBool() && data.Sequences[j].PermitDestinationAny.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/any", predicates))
+				}
+				if !state.Sequences[i].PermitDestinationPrefixLength.IsNull() && data.Sequences[j].PermitDestinationPrefixLength.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/prefix-length", predicates))
+				}
+				if !state.Sequences[i].PermitDestinationWildcardMask.IsNull() && data.Sequences[j].PermitDestinationWildcardMask.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/wildcard-mask", predicates))
+				}
+				if !state.Sequences[i].PermitDestinationAddress.IsNull() && data.Sequences[j].PermitDestinationAddress.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/destination/address", predicates))
+				}
+				if !state.Sequences[i].PermitSourcePortRangeEnd.IsNull() && data.Sequences[j].PermitSourcePortRangeEnd.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/port/range/end-value", predicates))
+				}
+				if !state.Sequences[i].PermitSourcePortRangeStart.IsNull() && data.Sequences[j].PermitSourcePortRangeStart.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/port/range/start-value", predicates))
+				}
+				if !state.Sequences[i].PermitSourcePortNeq.IsNull() && data.Sequences[j].PermitSourcePortNeq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/port/neq", predicates))
+				}
+				if !state.Sequences[i].PermitSourcePortLt.IsNull() && data.Sequences[j].PermitSourcePortLt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/port/lt", predicates))
+				}
+				if !state.Sequences[i].PermitSourcePortGt.IsNull() && data.Sequences[j].PermitSourcePortGt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/port/gt", predicates))
+				}
+				if !state.Sequences[i].PermitSourcePortEq.IsNull() && data.Sequences[j].PermitSourcePortEq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/port/eq", predicates))
+				}
+				if !state.Sequences[i].PermitSourcePortGroup.IsNull() && data.Sequences[j].PermitSourcePortGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/port-group", predicates))
+				}
+				if !state.Sequences[i].PermitSourceNetGroup.IsNull() && data.Sequences[j].PermitSourceNetGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/net-group", predicates))
+				}
+				if !state.Sequences[i].PermitSourceHost.IsNull() && data.Sequences[j].PermitSourceHost.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/host", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Sequences[i].PermitSourceAny.IsNull() && state.Sequences[i].PermitSourceAny.ValueBool() && data.Sequences[j].PermitSourceAny.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/any", predicates))
+				}
+				if !state.Sequences[i].PermitSourcePrefixLength.IsNull() && data.Sequences[j].PermitSourcePrefixLength.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/prefix-length", predicates))
+				}
+				if !state.Sequences[i].PermitSourceWildcardMask.IsNull() && data.Sequences[j].PermitSourceWildcardMask.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/wildcard-mask", predicates))
+				}
+				if !state.Sequences[i].PermitSourceAddress.IsNull() && data.Sequences[j].PermitSourceAddress.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/source/address", predicates))
+				}
+				if !state.Sequences[i].PermitRangeEndProtocol.IsNull() && data.Sequences[j].PermitRangeEndProtocol.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/range/end-protocol", predicates))
+				}
+				if !state.Sequences[i].PermitRangeStartProtocol.IsNull() && data.Sequences[j].PermitRangeStartProtocol.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/range/start-protocol", predicates))
+				}
+				if !state.Sequences[i].PermitCounter.IsNull() && data.Sequences[j].PermitCounter.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/counter", predicates))
+				}
+				if !state.Sequences[i].PermitFragmentType.IsNull() && data.Sequences[j].PermitFragmentType.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/fragment-type", predicates))
+				}
+				if !state.Sequences[i].PermitPrecedence.IsNull() && data.Sequences[j].PermitPrecedence.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/precedence", predicates))
+				}
+				if !state.Sequences[i].PermitEq.IsNull() && data.Sequences[j].PermitEq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/eq", predicates))
+				}
+				if !state.Sequences[i].PermitProtocol.IsNull() && data.Sequences[j].PermitProtocol.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/protocol", predicates))
+				}
+				if !state.Sequences[i].Remark.IsNull() && data.Sequences[j].Remark.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/remark", predicates))
+				}
 				break
 			}
 		}
@@ -5703,8 +5702,8 @@ func (data *IPv6AccessList) addDeletedItemsXML(ctx context.Context, state IPv6Ac
 func (data *IPv6AccessList) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.Sequences {
-		keys := [...]string{ "sequence-number",  }
-		keyValues := [...]string{ strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10),  }
+		keys := [...]string{"sequence-number"}
+		keyValues := [...]string{strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10)}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

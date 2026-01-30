@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -41,10 +42,10 @@ func TestAccDataSourceIosxrInterfaceEthernet(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "dampening_suppress_threshold", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "dampening_max_suppress_time", "30"))
 	if os.Getenv("XRV9K") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "service_policy_input.0.name", "PMAP-IN"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "service_policy_input.0.name", "PMAP-IN"))
 	}
 	if os.Getenv("XRV9K") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "service_policy_output.0.name", "PMAP-OUT"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "service_policy_output.0.name", "PMAP-OUT"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "shutdown", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "mtu", "9000"))
@@ -150,17 +151,17 @@ func TestAccDataSourceIosxrInterfaceEthernet(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ipv6_nd_redirects", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ipv6_nd_prefix_default_no_adv", "true"))
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.domain_name", "DOMAIN1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.service", "SERVICE1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.mep_id", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.propagate_remote_status", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.cos", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.loss_measurement_counters_priority_cos_range_start", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.loss_measurement_counters_priority_cos_range_end", "7"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.sla_operation_profile_target_mep_ids.0.profile_name", "SLA-PROFILE-1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.sla_operation_profile_target_mep_ids.0.mep_id", "2"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.sla_operation_profile_target_mac_addresses.0.profile_name", "SLA-PROFILE-2"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.sla_operation_profile_target_mac_addresses.0.mac_address", "00:11:22:33:44:55"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.domain_name", "DOMAIN1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.service", "SERVICE1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.mep_id", "1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.propagate_remote_status", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.cos", "5"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.loss_measurement_counters_priority_cos_range_start", "1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.loss_measurement_counters_priority_cos_range_end", "7"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.sla_operation_profile_target_mep_ids.0.profile_name", "SLA-PROFILE-1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.sla_operation_profile_target_mep_ids.0.mep_id", "2"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.sla_operation_profile_target_mac_addresses.0.profile_name", "SLA-PROFILE-2"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_mep_domains.0.sla_operation_profile_target_mac_addresses.0.mac_address", "00:11:22:33:44:55"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_ais_transmission_up_interval", "1s"))
@@ -181,12 +182,12 @@ func TestAccDataSourceIosxrInterfaceEthernet(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ethernet_cfm_bandwidth_notifications_log_changes", "true"))
 	}
 	if os.Getenv("FLOW") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "flow_ipv4_ingress_monitor_samplers.0.monitor_map_name", "MMAP1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "flow_ipv4_ingress_monitor_samplers.0.sampler_map_name", "SMAP1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "flow_ipv4_ingress_monitor_samplers.0.monitor_map_name", "MMAP1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "flow_ipv4_ingress_monitor_samplers.0.sampler_map_name", "SMAP1"))
 	}
 	if os.Getenv("FLOW") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "flow_ipv6_ingress_monitor_samplers.0.monitor_map_name", "MMAP2"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "flow_ipv6_ingress_monitor_samplers.0.sampler_map_name", "SMAP1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "flow_ipv6_ingress_monitor_samplers.0.monitor_map_name", "MMAP2"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "flow_ipv6_ingress_monitor_samplers.0.sampler_map_name", "SMAP1"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "frequency_synchronization", "true"))
@@ -233,13 +234,13 @@ func TestAccDataSourceIosxrInterfaceEthernet(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "lldp_transmit_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "lldp_receive_disable", "true"))
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "monitor_sessions.0.session_name", "SESSION-1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "monitor_sessions.0.ethernet", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "monitor_sessions.0.direction_rx_only", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "monitor_sessions.0.port_level", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "monitor_sessions.0.acl", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "monitor_sessions.0.acl_ipv4_name", "ACL1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "monitor_sessions.0.acl_ipv6_name", "ACL2"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "monitor_sessions.0.session_name", "SESSION-1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "monitor_sessions.0.ethernet", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "monitor_sessions.0.direction_rx_only", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "monitor_sessions.0.port_level", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "monitor_sessions.0.acl", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "monitor_sessions.0.acl_ipv4_name", "ACL1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "monitor_sessions.0.acl_ipv6_name", "ACL2"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp", "true"))
@@ -329,46 +330,46 @@ func TestAccDataSourceIosxrInterfaceEthernet(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_local_priority", "128"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_slave_ipv4s.0.address", "10.2.2.2"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_slave_ipv4s.0.non_negotiated", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_slave_ipv4s.0.address", "10.2.2.2"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_slave_ipv4s.0.non_negotiated", "true"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_slave_ipv6s.0.address", "2001:db8::2"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_slave_ipv6s.0.non_negotiated", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_slave_ipv6s.0.address", "2001:db8::2"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_slave_ipv6s.0.non_negotiated", "true"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_slave_ethernets.0.address", "00:11:22:33:44:55"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_slave_ethernets.0.non_negotiated", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_slave_ethernets.0.address", "00:11:22:33:44:55"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_slave_ethernets.0.non_negotiated", "true"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.address", "10.3.3.3"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.priority", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.clock_class", "6"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.multicast", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.multicast_mixed", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.non_negotiated", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.delay_asymmetry", "50"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.microseconds", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.address", "10.3.3.3"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.priority", "100"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.clock_class", "6"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.multicast", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.multicast_mixed", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.non_negotiated", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.delay_asymmetry", "50"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.microseconds", "true"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.address", "2001:db8::3"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.priority", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.clock_class", "6"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.multicast", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.multicast_mixed", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.non_negotiated", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.delay_asymmetry", "50"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.microseconds", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.address", "2001:db8::3"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.priority", "100"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.clock_class", "6"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.multicast", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.multicast_mixed", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.non_negotiated", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.delay_asymmetry", "50"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.microseconds", "true"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.address", "aa:bb:cc:dd:ee:f4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.priority", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.clock_class", "6"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.multicast", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.multicast_mixed", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.non_negotiated", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.delay_asymmetry", "50"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.microseconds", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.address", "aa:bb:cc:dd:ee:f4"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.priority", "100"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.clock_class", "6"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.multicast", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.multicast_mixed", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.non_negotiated", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.delay_asymmetry", "50"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_master_ethernets.0.microseconds", "true"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_interop_profile_g_8275_2", "true"))
@@ -392,8 +393,8 @@ func TestAccDataSourceIosxrInterfaceEthernet(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_interop_egress_conversion_clock_class_default", "6"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_interop_egress_conversion_clock_class_mappings.0.clock_class_to_map_from", "6"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_interop_egress_conversion_clock_class_mappings.0.clock_class_to_map_to", "13"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_interop_egress_conversion_clock_class_mappings.0.clock_class_to_map_from", "6"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_interop_egress_conversion_clock_class_mappings.0.clock_class_to_map_to", "13"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_interop_ingress_conversion_priority1", "128"))
@@ -411,16 +412,16 @@ func TestAccDataSourceIosxrInterfaceEthernet(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_interop_ingress_conversion_clock_class_default", "6"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_from", "13"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_to", "6"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_from", "13"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_to", "6"))
 	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrInterfaceEthernetPrerequisitesConfig+testAccDataSourceIosxrInterfaceEthernetConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrInterfaceEthernetPrerequisitesConfig + testAccDataSourceIosxrInterfaceEthernetConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -532,14 +533,14 @@ func testAccDataSourceIosxrInterfaceEthernetConfig() string {
 	config += `	dampening_suppress_threshold = 20` + "\n"
 	config += `	dampening_max_suppress_time = 30` + "\n"
 	if os.Getenv("XRV9K") != "" {
-	config += `	service_policy_input = [{` + "\n"
-	config += `		name = "PMAP-IN"` + "\n"
-	config += `	}]` + "\n"
+		config += `	service_policy_input = [{` + "\n"
+		config += `		name = "PMAP-IN"` + "\n"
+		config += `	}]` + "\n"
 	}
 	if os.Getenv("XRV9K") != "" {
-	config += `	service_policy_output = [{` + "\n"
-	config += `		name = "PMAP-OUT"` + "\n"
-	config += `	}]` + "\n"
+		config += `	service_policy_output = [{` + "\n"
+		config += `		name = "PMAP-OUT"` + "\n"
+		config += `	}]` + "\n"
 	}
 	config += `	shutdown = true` + "\n"
 	config += `	mtu = 9000` + "\n"
@@ -653,23 +654,23 @@ func testAccDataSourceIosxrInterfaceEthernetConfig() string {
 	config += `	ipv6_nd_redirects = true` + "\n"
 	config += `	ipv6_nd_prefix_default_no_adv = true` + "\n"
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	config += `	ethernet_cfm_mep_domains = [{` + "\n"
-	config += `		domain_name = "DOMAIN1"` + "\n"
-	config += `		service = "SERVICE1"` + "\n"
-	config += `		mep_id = 1` + "\n"
-	config += `		propagate_remote_status = true` + "\n"
-	config += `		cos = 5` + "\n"
-	config += `		loss_measurement_counters_priority_cos_range_start = 1` + "\n"
-	config += `		loss_measurement_counters_priority_cos_range_end = 7` + "\n"
-	config += `		sla_operation_profile_target_mep_ids = [{` + "\n"
-	config += `			profile_name = "SLA-PROFILE-1"` + "\n"
-	config += `			mep_id = 2` + "\n"
-	config += `		}]` + "\n"
-	config += `		sla_operation_profile_target_mac_addresses = [{` + "\n"
-	config += `			profile_name = "SLA-PROFILE-2"` + "\n"
-	config += `			mac_address = "00:11:22:33:44:55"` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+		config += `	ethernet_cfm_mep_domains = [{` + "\n"
+		config += `		domain_name = "DOMAIN1"` + "\n"
+		config += `		service = "SERVICE1"` + "\n"
+		config += `		mep_id = 1` + "\n"
+		config += `		propagate_remote_status = true` + "\n"
+		config += `		cos = 5` + "\n"
+		config += `		loss_measurement_counters_priority_cos_range_start = 1` + "\n"
+		config += `		loss_measurement_counters_priority_cos_range_end = 7` + "\n"
+		config += `		sla_operation_profile_target_mep_ids = [{` + "\n"
+		config += `			profile_name = "SLA-PROFILE-1"` + "\n"
+		config += `			mep_id = 2` + "\n"
+		config += `		}]` + "\n"
+		config += `		sla_operation_profile_target_mac_addresses = [{` + "\n"
+		config += `			profile_name = "SLA-PROFILE-2"` + "\n"
+		config += `			mac_address = "00:11:22:33:44:55"` + "\n"
+		config += `		}]` + "\n"
+		config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	ethernet_cfm_ais_transmission_up_interval = "1s"` + "\n"
@@ -690,16 +691,16 @@ func testAccDataSourceIosxrInterfaceEthernetConfig() string {
 		config += `	ethernet_cfm_bandwidth_notifications_log_changes = true` + "\n"
 	}
 	if os.Getenv("FLOW") != "" {
-	config += `	flow_ipv4_ingress_monitor_samplers = [{` + "\n"
-	config += `		monitor_map_name = "MMAP1"` + "\n"
-	config += `		sampler_map_name = "SMAP1"` + "\n"
-	config += `	}]` + "\n"
+		config += `	flow_ipv4_ingress_monitor_samplers = [{` + "\n"
+		config += `		monitor_map_name = "MMAP1"` + "\n"
+		config += `		sampler_map_name = "SMAP1"` + "\n"
+		config += `	}]` + "\n"
 	}
 	if os.Getenv("FLOW") != "" {
-	config += `	flow_ipv6_ingress_monitor_samplers = [{` + "\n"
-	config += `		monitor_map_name = "MMAP2"` + "\n"
-	config += `		sampler_map_name = "SMAP1"` + "\n"
-	config += `	}]` + "\n"
+		config += `	flow_ipv6_ingress_monitor_samplers = [{` + "\n"
+		config += `		monitor_map_name = "MMAP2"` + "\n"
+		config += `		sampler_map_name = "SMAP1"` + "\n"
+		config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	frequency_synchronization = true` + "\n"
@@ -746,15 +747,15 @@ func testAccDataSourceIosxrInterfaceEthernetConfig() string {
 	config += `	lldp_transmit_disable = true` + "\n"
 	config += `	lldp_receive_disable = true` + "\n"
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	config += `	monitor_sessions = [{` + "\n"
-	config += `		session_name = "SESSION-1"` + "\n"
-	config += `		ethernet = true` + "\n"
-	config += `		direction_rx_only = true` + "\n"
-	config += `		port_level = true` + "\n"
-	config += `		acl = true` + "\n"
-	config += `		acl_ipv4_name = "ACL1"` + "\n"
-	config += `		acl_ipv6_name = "ACL2"` + "\n"
-	config += `	}]` + "\n"
+		config += `	monitor_sessions = [{` + "\n"
+		config += `		session_name = "SESSION-1"` + "\n"
+		config += `		ethernet = true` + "\n"
+		config += `		direction_rx_only = true` + "\n"
+		config += `		port_level = true` + "\n"
+		config += `		acl = true` + "\n"
+		config += `		acl_ipv4_name = "ACL1"` + "\n"
+		config += `		acl_ipv6_name = "ACL2"` + "\n"
+		config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	ptp = true` + "\n"
@@ -844,58 +845,58 @@ func testAccDataSourceIosxrInterfaceEthernetConfig() string {
 		config += `	ptp_local_priority = 128` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	config += `	ptp_slave_ipv4s = [{` + "\n"
-	config += `		address = "10.2.2.2"` + "\n"
-	config += `		non_negotiated = true` + "\n"
-	config += `	}]` + "\n"
+		config += `	ptp_slave_ipv4s = [{` + "\n"
+		config += `		address = "10.2.2.2"` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	config += `	ptp_slave_ipv6s = [{` + "\n"
-	config += `		address = "2001:db8::2"` + "\n"
-	config += `		non_negotiated = true` + "\n"
-	config += `	}]` + "\n"
+		config += `	ptp_slave_ipv6s = [{` + "\n"
+		config += `		address = "2001:db8::2"` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	config += `	ptp_slave_ethernets = [{` + "\n"
-	config += `		address = "00:11:22:33:44:55"` + "\n"
-	config += `		non_negotiated = true` + "\n"
-	config += `	}]` + "\n"
+		config += `	ptp_slave_ethernets = [{` + "\n"
+		config += `		address = "00:11:22:33:44:55"` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	config += `	ptp_master_ipv4s = [{` + "\n"
-	config += `		address = "10.3.3.3"` + "\n"
-	config += `		priority = 100` + "\n"
-	config += `		clock_class = 6` + "\n"
-	config += `		multicast = true` + "\n"
-	config += `		multicast_mixed = true` + "\n"
-	config += `		non_negotiated = true` + "\n"
-	config += `		delay_asymmetry = 50` + "\n"
-	config += `		microseconds = true` + "\n"
-	config += `	}]` + "\n"
+		config += `	ptp_master_ipv4s = [{` + "\n"
+		config += `		address = "10.3.3.3"` + "\n"
+		config += `		priority = 100` + "\n"
+		config += `		clock_class = 6` + "\n"
+		config += `		multicast = true` + "\n"
+		config += `		multicast_mixed = true` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `		delay_asymmetry = 50` + "\n"
+		config += `		microseconds = true` + "\n"
+		config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	config += `	ptp_master_ipv6s = [{` + "\n"
-	config += `		address = "2001:db8::3"` + "\n"
-	config += `		priority = 100` + "\n"
-	config += `		clock_class = 6` + "\n"
-	config += `		multicast = true` + "\n"
-	config += `		multicast_mixed = true` + "\n"
-	config += `		non_negotiated = true` + "\n"
-	config += `		delay_asymmetry = 50` + "\n"
-	config += `		microseconds = true` + "\n"
-	config += `	}]` + "\n"
+		config += `	ptp_master_ipv6s = [{` + "\n"
+		config += `		address = "2001:db8::3"` + "\n"
+		config += `		priority = 100` + "\n"
+		config += `		clock_class = 6` + "\n"
+		config += `		multicast = true` + "\n"
+		config += `		multicast_mixed = true` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `		delay_asymmetry = 50` + "\n"
+		config += `		microseconds = true` + "\n"
+		config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	config += `	ptp_master_ethernets = [{` + "\n"
-	config += `		address = "aa:bb:cc:dd:ee:f4"` + "\n"
-	config += `		priority = 100` + "\n"
-	config += `		clock_class = 6` + "\n"
-	config += `		multicast = true` + "\n"
-	config += `		multicast_mixed = true` + "\n"
-	config += `		non_negotiated = true` + "\n"
-	config += `		delay_asymmetry = 50` + "\n"
-	config += `		microseconds = true` + "\n"
-	config += `	}]` + "\n"
+		config += `	ptp_master_ethernets = [{` + "\n"
+		config += `		address = "aa:bb:cc:dd:ee:f4"` + "\n"
+		config += `		priority = 100` + "\n"
+		config += `		clock_class = 6` + "\n"
+		config += `		multicast = true` + "\n"
+		config += `		multicast_mixed = true` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `		delay_asymmetry = 50` + "\n"
+		config += `		microseconds = true` + "\n"
+		config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	ptp_interop_profile_g_8275_2 = true` + "\n"
@@ -919,10 +920,10 @@ func testAccDataSourceIosxrInterfaceEthernetConfig() string {
 		config += `	ptp_interop_egress_conversion_clock_class_default = 6` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	config += `	ptp_interop_egress_conversion_clock_class_mappings = [{` + "\n"
-	config += `		clock_class_to_map_from = 6` + "\n"
-	config += `		clock_class_to_map_to = 13` + "\n"
-	config += `	}]` + "\n"
+		config += `	ptp_interop_egress_conversion_clock_class_mappings = [{` + "\n"
+		config += `		clock_class_to_map_from = 6` + "\n"
+		config += `		clock_class_to_map_to = 13` + "\n"
+		config += `	}]` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	ptp_interop_ingress_conversion_priority1 = 128` + "\n"
@@ -940,10 +941,10 @@ func testAccDataSourceIosxrInterfaceEthernetConfig() string {
 		config += `	ptp_interop_ingress_conversion_clock_class_default = 6` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	config += `	ptp_interop_ingress_conversion_clock_class_mappings = [{` + "\n"
-	config += `		clock_class_to_map_from = 13` + "\n"
-	config += `		clock_class_to_map_to = 6` + "\n"
-	config += `	}]` + "\n"
+		config += `	ptp_interop_ingress_conversion_clock_class_mappings = [{` + "\n"
+		config += `		clock_class_to_map_from = 13` + "\n"
+		config += `		clock_class_to_map_to = 6` + "\n"
+		config += `	}]` + "\n"
 	}
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"

@@ -23,19 +23,15 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/netascode/go-gnmi"
-	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -52,7 +48,7 @@ func NewRouterPIMIPv4DataSource() datasource.DataSource {
 	return &RouterPIMIPv4DataSource{}
 }
 
-type RouterPIMIPv4DataSource struct{
+type RouterPIMIPv4DataSource struct {
 	data *IosxrProviderData
 }
 
@@ -637,7 +633,7 @@ func (d *RouterPIMIPv4DataSource) Schema(ctx context.Context, req datasource.Sch
 									"primary_address": schema.StringAttribute{
 										MarkdownDescription: "Source S1",
 										Computed:            true,
-								},
+									},
 									"and": schema.ListNestedAttribute{
 										MarkdownDescription: "and",
 										Computed:            true,
@@ -646,7 +642,7 @@ func (d *RouterPIMIPv4DataSource) Schema(ctx context.Context, req datasource.Sch
 												"backup_address": schema.StringAttribute{
 													MarkdownDescription: "Source S2",
 													Computed:            true,
-											},
+												},
 												"masklen": schema.ListNestedAttribute{
 													MarkdownDescription: "",
 													Computed:            true,
@@ -655,13 +651,13 @@ func (d *RouterPIMIPv4DataSource) Schema(ctx context.Context, req datasource.Sch
 															"mask_length": schema.Int64Attribute{
 																MarkdownDescription: "",
 																Computed:            true,
-														},
+															},
 														},
 													},
-											},
+												},
 											},
 										},
-								},
+									},
 								},
 							},
 						},
@@ -685,7 +681,7 @@ func (d *RouterPIMIPv4DataSource) Schema(ctx context.Context, req datasource.Sch
 									"primary_address": schema.StringAttribute{
 										MarkdownDescription: "Source S1",
 										Computed:            true,
-								},
+									},
 									"and": schema.ListNestedAttribute{
 										MarkdownDescription: "and",
 										Computed:            true,
@@ -694,7 +690,7 @@ func (d *RouterPIMIPv4DataSource) Schema(ctx context.Context, req datasource.Sch
 												"backup_address": schema.StringAttribute{
 													MarkdownDescription: "Source S2",
 													Computed:            true,
-											},
+												},
 												"masklen": schema.ListNestedAttribute{
 													MarkdownDescription: "",
 													Computed:            true,
@@ -703,13 +699,13 @@ func (d *RouterPIMIPv4DataSource) Schema(ctx context.Context, req datasource.Sch
 															"mask_length": schema.Int64Attribute{
 																MarkdownDescription: "",
 																Computed:            true,
-														},
+															},
 														},
 													},
-											},
+												},
 											},
 										},
-								},
+									},
 								},
 							},
 						},
@@ -733,11 +729,11 @@ func (d *RouterPIMIPv4DataSource) Schema(ctx context.Context, req datasource.Sch
 									"group_address": schema.StringAttribute{
 										MarkdownDescription: "ipv4 static multicast group",
 										Computed:            true,
-								},
+									},
 									"group_address_only": schema.BoolAttribute{
 										MarkdownDescription: "Group-address without increment mask/source-address",
 										Computed:            true,
-								},
+									},
 									"group_masks": schema.ListNestedAttribute{
 										MarkdownDescription: "Increment mask for group address",
 										Computed:            true,
@@ -746,14 +742,14 @@ func (d *RouterPIMIPv4DataSource) Schema(ctx context.Context, req datasource.Sch
 												"group_inc_mask": schema.StringAttribute{
 													MarkdownDescription: "Increment mask for group address",
 													Computed:            true,
-											},
+												},
 												"group_count": schema.Int64Attribute{
 													MarkdownDescription: "No. of group addresses to join",
 													Computed:            true,
-											},
+												},
 											},
 										},
-								},
+									},
 									"group_masks_source_addresses": schema.ListNestedAttribute{
 										MarkdownDescription: "Increment mask for group address",
 										Computed:            true,
@@ -762,18 +758,18 @@ func (d *RouterPIMIPv4DataSource) Schema(ctx context.Context, req datasource.Sch
 												"group_inc_mask": schema.StringAttribute{
 													MarkdownDescription: "Increment mask for group address",
 													Computed:            true,
-											},
+												},
 												"source_ip": schema.StringAttribute{
 													MarkdownDescription: "Source address to join",
 													Computed:            true,
-											},
+												},
 												"group_count": schema.Int64Attribute{
 													MarkdownDescription: "No. of group addresses to join",
 													Computed:            true,
-											},
+												},
 											},
 										},
-								},
+									},
 									"source_masks": schema.ListNestedAttribute{
 										MarkdownDescription: "Increment mask for group address",
 										Computed:            true,
@@ -782,18 +778,18 @@ func (d *RouterPIMIPv4DataSource) Schema(ctx context.Context, req datasource.Sch
 												"source_ip": schema.StringAttribute{
 													MarkdownDescription: "Source address to join",
 													Computed:            true,
-											},
+												},
 												"source_inc_mask": schema.StringAttribute{
 													MarkdownDescription: "Increment mask for source address",
 													Computed:            true,
-											},
+												},
 												"source_count": schema.Int64Attribute{
 													MarkdownDescription: "No. of source addresses to join",
 													Computed:            true,
-											},
+												},
 											},
 										},
-								},
+									},
 									"group_masks_source_masks": schema.ListNestedAttribute{
 										MarkdownDescription: "Increment mask for group address",
 										Computed:            true,
@@ -802,26 +798,26 @@ func (d *RouterPIMIPv4DataSource) Schema(ctx context.Context, req datasource.Sch
 												"group_inc_mask": schema.StringAttribute{
 													MarkdownDescription: "Increment mask for group address",
 													Computed:            true,
-											},
+												},
 												"source_ip": schema.StringAttribute{
 													MarkdownDescription: "Source address to join",
 													Computed:            true,
-											},
+												},
 												"source_inc_mask": schema.StringAttribute{
 													MarkdownDescription: "Increment mask for source address",
 													Computed:            true,
-											},
+												},
 												"group_count": schema.Int64Attribute{
 													MarkdownDescription: "No. of group addresses to join",
 													Computed:            true,
-											},
+												},
 												"source_count": schema.Int64Attribute{
 													MarkdownDescription: "No. of source addresses to join",
 													Computed:            true,
-											},
+												},
 											},
 										},
-								},
+									},
 								},
 							},
 						},
@@ -981,7 +977,6 @@ func (d *RouterPIMIPv4DataSource) Read(ctx context.Context, req datasource.ReadR
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
-
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

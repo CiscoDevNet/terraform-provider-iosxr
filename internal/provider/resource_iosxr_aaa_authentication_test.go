@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +35,8 @@ import (
 
 func TestAccIosxrAAAAuthentication(t *testing.T) {
 	if os.Getenv("AAA") == "" {
-        t.Skip("skipping test, set environment variable AAA")
-    }
+		t.Skip("skipping test, set environment variable AAA")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_aaa_authentication.test", "login.0.list", "AAA-LIST"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_aaa_authentication.test", "login.0.a1_tacacs", "true"))
@@ -44,23 +46,23 @@ func TestAccIosxrAAAAuthentication(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrAAAAuthenticationPrerequisitesConfig+testAccIosxrAAAAuthenticationConfig_minimum(),
+			Config: testAccIosxrAAAAuthenticationPrerequisitesConfig + testAccIosxrAAAAuthenticationConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrAAAAuthenticationPrerequisitesConfig+testAccIosxrAAAAuthenticationConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrAAAAuthenticationPrerequisitesConfig + testAccIosxrAAAAuthenticationConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_aaa_authentication.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_aaa_authentication.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrAAAAuthenticationImportStateIdFunc("iosxr_aaa_authentication.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -71,7 +73,7 @@ func TestAccIosxrAAAAuthentication(t *testing.T) {
 func iosxrAAAAuthenticationImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf("", ), nil
+		return fmt.Sprintf(""), nil
 	}
 }
 

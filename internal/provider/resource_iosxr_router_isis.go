@@ -24,28 +24,21 @@ import (
 	"context"
 	"fmt"
 	"regexp"
-	"strconv"
 	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -56,7 +49,7 @@ func NewRouterISISResource() resource.Resource {
 	return &RouterISISResource{}
 }
 
-type RouterISISResource struct{
+type RouterISISResource struct {
 	data *IosxrProviderData
 }
 
@@ -237,10 +230,10 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"extended_admin_group": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Code-point for Extended Administrative Group subTLV").AddStringEnumDescription("both", "cisco", "ietf", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Code-point for Extended Administrative Group subTLV").AddStringEnumDescription("both", "cisco", "ietf").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("both", "cisco", "ietf", ),
+					stringvalidator.OneOf("both", "cisco", "ietf"),
 				},
 			},
 			"nsr": schema.BoolAttribute{
@@ -392,10 +385,10 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional:            true,
 			},
 			"is_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Area type (level)").AddStringEnumDescription("level-1", "level-1-2", "level-2-only", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Area type (level)").AddStringEnumDescription("level-1", "level-1-2", "level-2-only").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("level-1", "level-1-2", "level-2-only", ),
+					stringvalidator.OneOf("level-1", "level-1-2", "level-2-only"),
 				},
 			},
 			"multi_part_tlv_disable": schema.BoolAttribute{
@@ -459,10 +452,10 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"log_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Log type").AddStringEnumDescription("adjacency", "database", "error", "lsp", "microloop-avoidance", "route", "spf", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Log type").AddStringEnumDescription("adjacency", "database", "error", "lsp", "microloop-avoidance", "route", "spf").String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("adjacency", "database", "error", "lsp", "microloop-avoidance", "route", "spf", ),
+								stringvalidator.OneOf("adjacency", "database", "error", "lsp", "microloop-avoidance", "route", "spf"),
 							},
 						},
 						"size_number": schema.Int64Attribute{
@@ -885,10 +878,10 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"hello_padding": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Add padding to IS-IS hello packets").AddStringEnumDescription("adaptive", "disable", "sometimes", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Add padding to IS-IS hello packets").AddStringEnumDescription("adaptive", "disable", "sometimes").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("adaptive", "disable", "sometimes", ),
+					stringvalidator.OneOf("adaptive", "disable", "sometimes"),
 				},
 			},
 			"lsp_fast_flooding": schema.BoolAttribute{
@@ -963,10 +956,10 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional:            true,
 			},
 			"purge_transmit_strict_value": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Only authentication TLV is allowed").AddStringEnumDescription("level-1", "level-2", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Only authentication TLV is allowed").AddStringEnumDescription("level-1", "level-2").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("level-1", "level-2", ),
+					stringvalidator.OneOf("level-1", "level-2"),
 				},
 			},
 			"srlg_admin_weight": schema.Int64Attribute{
@@ -1147,17 +1140,17 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"af_name": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("af-name").AddStringEnumDescription("ipv4", "ipv6", ).String,
+										MarkdownDescription: helpers.NewAttributeDescription("af-name").AddStringEnumDescription("ipv4", "ipv6").String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4", "ipv6", ),
+											stringvalidator.OneOf("ipv4", "ipv6"),
 										},
 									},
 									"saf_name": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("saf-name").AddStringEnumDescription("multicast", "unicast", ).String,
+										MarkdownDescription: helpers.NewAttributeDescription("saf-name").AddStringEnumDescription("multicast", "unicast").String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("multicast", "unicast", ),
+											stringvalidator.OneOf("multicast", "unicast"),
 										},
 									},
 									"maximum_paths": schema.Int64Attribute{
@@ -1216,14 +1209,14 @@ func (r *RouterISISResource) Create(ctx context.Context, req resource.CreateRequ
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-		var ops []gnmi.SetOperation
+			var ops []gnmi.SetOperation
 
-		// Create object
-		body := plan.toBody(ctx)
-		ops = append(ops, gnmi.Update(plan.getPath(), body))
+			// Create object
+			body := plan.toBody(ctx)
+			ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -1444,11 +1437,11 @@ func (r *RouterISISResource) Update(ctx context.Context, req resource.UpdateRequ
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			 // Combine update and delete operations into a single transaction
-		 	combinedBody := body + deleteBody
-		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-		 		resp.Diagnostics.AddError("Client Error", err.Error())
-		 		return
+			// Combine update and delete operations into a single transaction
+			combinedBody := body + deleteBody
+			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+				resp.Diagnostics.AddError("Client Error", err.Error())
+				return
 			}
 		}
 	}

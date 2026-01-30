@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +35,8 @@ import (
 
 func TestAccIosxrCEFLoadBalancing8000(t *testing.T) {
 	if os.Getenv("C8000") == "" {
-        t.Skip("skipping test, set environment variable C8000")
-    }
+		t.Skip("skipping test, set environment variable C8000")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cef_load_balancing_8000.test", "platform_load_balance_hash_rotate", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cef_load_balancing_8000.test", "platform_load_balance_fields_userdata_ipv6_udp.0.location_string", "0_RP0_CPU0"))
@@ -52,18 +54,18 @@ func TestAccIosxrCEFLoadBalancing8000(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrCEFLoadBalancing8000Config_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_cef_load_balancing_8000.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_cef_load_balancing_8000.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrCEFLoadBalancing8000ImportStateIdFunc("iosxr_cef_load_balancing_8000.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -74,7 +76,7 @@ func TestAccIosxrCEFLoadBalancing8000(t *testing.T) {
 func iosxrCEFLoadBalancing8000ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf("", ), nil
+		return fmt.Sprintf(""), nil
 	}
 }
 

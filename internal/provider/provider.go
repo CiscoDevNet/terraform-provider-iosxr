@@ -39,7 +39,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
 )
@@ -50,7 +49,7 @@ func New() provider.Provider {
 
 // provider satisfies the tfsdk.Provider interface and usually is included
 // with all Resource and DataSource implementations.
-type iosxrProvider struct {}
+type iosxrProvider struct{}
 
 // providerData can be used to store data from the Terraform configuration.
 type providerData struct {

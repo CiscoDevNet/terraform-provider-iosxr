@@ -24,77 +24,76 @@ import (
 	"context"
 	"fmt"
 	"reflect"
-	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type CEFLoadBalancing8000 struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
-	PlatformLoadBalanceHashRotate types.Int64 `tfsdk:"platform_load_balance_hash_rotate"`
-	PlatformLoadBalanceFieldsUserdataIpv6Udp []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp `tfsdk:"platform_load_balance_fields_userdata_ipv6_udp"`
-	PlatformLoadBalanceFieldsUserdataIpv6Tcp []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp `tfsdk:"platform_load_balance_fields_userdata_ipv6_tcp"`
-	PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp `tfsdk:"platform_load_balance_fields_userdata_ipv6_non_tcp_udp"`
-	PlatformLoadBalanceFieldsUserdataIpv4Udp []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp `tfsdk:"platform_load_balance_fields_userdata_ipv4_udp"`
-	PlatformLoadBalanceFieldsUserdataIpv4Tcp []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp `tfsdk:"platform_load_balance_fields_userdata_ipv4_tcp"`
-	PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp `tfsdk:"platform_load_balance_fields_userdata_ipv4_non_tcp_udp"`
-	PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly types.Bool `tfsdk:"platform_load_balance_mpls_hashing_inner_non_ip_label_only"`
+	Device                                            types.String                                                         `tfsdk:"device"`
+	Id                                                types.String                                                         `tfsdk:"id"`
+	DeleteMode                                        types.String                                                         `tfsdk:"delete_mode"`
+	PlatformLoadBalanceHashRotate                     types.Int64                                                          `tfsdk:"platform_load_balance_hash_rotate"`
+	PlatformLoadBalanceFieldsUserdataIpv6Udp          []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp       `tfsdk:"platform_load_balance_fields_userdata_ipv6_udp"`
+	PlatformLoadBalanceFieldsUserdataIpv6Tcp          []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp       `tfsdk:"platform_load_balance_fields_userdata_ipv6_tcp"`
+	PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp    []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp `tfsdk:"platform_load_balance_fields_userdata_ipv6_non_tcp_udp"`
+	PlatformLoadBalanceFieldsUserdataIpv4Udp          []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp       `tfsdk:"platform_load_balance_fields_userdata_ipv4_udp"`
+	PlatformLoadBalanceFieldsUserdataIpv4Tcp          []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp       `tfsdk:"platform_load_balance_fields_userdata_ipv4_tcp"`
+	PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp    []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp `tfsdk:"platform_load_balance_fields_userdata_ipv4_non_tcp_udp"`
+	PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly types.Bool                                                           `tfsdk:"platform_load_balance_mpls_hashing_inner_non_ip_label_only"`
 }
 
 type CEFLoadBalancing8000Data struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	PlatformLoadBalanceHashRotate types.Int64 `tfsdk:"platform_load_balance_hash_rotate"`
-	PlatformLoadBalanceFieldsUserdataIpv6Udp []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp `tfsdk:"platform_load_balance_fields_userdata_ipv6_udp"`
-	PlatformLoadBalanceFieldsUserdataIpv6Tcp []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp `tfsdk:"platform_load_balance_fields_userdata_ipv6_tcp"`
-	PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp `tfsdk:"platform_load_balance_fields_userdata_ipv6_non_tcp_udp"`
-	PlatformLoadBalanceFieldsUserdataIpv4Udp []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp `tfsdk:"platform_load_balance_fields_userdata_ipv4_udp"`
-	PlatformLoadBalanceFieldsUserdataIpv4Tcp []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp `tfsdk:"platform_load_balance_fields_userdata_ipv4_tcp"`
-	PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp `tfsdk:"platform_load_balance_fields_userdata_ipv4_non_tcp_udp"`
-	PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly types.Bool `tfsdk:"platform_load_balance_mpls_hashing_inner_non_ip_label_only"`
+	Device                                            types.String                                                         `tfsdk:"device"`
+	Id                                                types.String                                                         `tfsdk:"id"`
+	PlatformLoadBalanceHashRotate                     types.Int64                                                          `tfsdk:"platform_load_balance_hash_rotate"`
+	PlatformLoadBalanceFieldsUserdataIpv6Udp          []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp       `tfsdk:"platform_load_balance_fields_userdata_ipv6_udp"`
+	PlatformLoadBalanceFieldsUserdataIpv6Tcp          []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp       `tfsdk:"platform_load_balance_fields_userdata_ipv6_tcp"`
+	PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp    []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp `tfsdk:"platform_load_balance_fields_userdata_ipv6_non_tcp_udp"`
+	PlatformLoadBalanceFieldsUserdataIpv4Udp          []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp       `tfsdk:"platform_load_balance_fields_userdata_ipv4_udp"`
+	PlatformLoadBalanceFieldsUserdataIpv4Tcp          []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp       `tfsdk:"platform_load_balance_fields_userdata_ipv4_tcp"`
+	PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp    []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp `tfsdk:"platform_load_balance_fields_userdata_ipv4_non_tcp_udp"`
+	PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly types.Bool                                                           `tfsdk:"platform_load_balance_mpls_hashing_inner_non_ip_label_only"`
 }
 type CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp struct {
-	LocationString types.String `tfsdk:"location_string"`
-	Ipv6UdpHashOffset types.Int64 `tfsdk:"ipv6_udp_hash_offset"`
-	Ipv6UdpHashSize types.Int64 `tfsdk:"ipv6_udp_hash_size"`
+	LocationString    types.String `tfsdk:"location_string"`
+	Ipv6UdpHashOffset types.Int64  `tfsdk:"ipv6_udp_hash_offset"`
+	Ipv6UdpHashSize   types.Int64  `tfsdk:"ipv6_udp_hash_size"`
 }
 type CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp struct {
-	LocationString types.String `tfsdk:"location_string"`
-	Ipv6TcpHashOffset types.Int64 `tfsdk:"ipv6_tcp_hash_offset"`
-	Ipv6TcpHashSize types.Int64 `tfsdk:"ipv6_tcp_hash_size"`
+	LocationString    types.String `tfsdk:"location_string"`
+	Ipv6TcpHashOffset types.Int64  `tfsdk:"ipv6_tcp_hash_offset"`
+	Ipv6TcpHashSize   types.Int64  `tfsdk:"ipv6_tcp_hash_size"`
 }
 type CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp struct {
 	LocationString types.String `tfsdk:"location_string"`
-	Ipv6HashOffset types.Int64 `tfsdk:"ipv6_hash_offset"`
-	Ipv6HashSize types.Int64 `tfsdk:"ipv6_hash_size"`
+	Ipv6HashOffset types.Int64  `tfsdk:"ipv6_hash_offset"`
+	Ipv6HashSize   types.Int64  `tfsdk:"ipv6_hash_size"`
 }
 type CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp struct {
-	LocationString types.String `tfsdk:"location_string"`
-	Ipv4UdpHashOffset types.Int64 `tfsdk:"ipv4_udp_hash_offset"`
-	Ipv4UdpHashSize types.Int64 `tfsdk:"ipv4_udp_hash_size"`
+	LocationString    types.String `tfsdk:"location_string"`
+	Ipv4UdpHashOffset types.Int64  `tfsdk:"ipv4_udp_hash_offset"`
+	Ipv4UdpHashSize   types.Int64  `tfsdk:"ipv4_udp_hash_size"`
 }
 type CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp struct {
-	LocationString types.String `tfsdk:"location_string"`
-	Ipv4TcpHashOffset types.Int64 `tfsdk:"ipv4_tcp_hash_offset"`
-	Ipv4TcpHashSize types.Int64 `tfsdk:"ipv4_tcp_hash_size"`
+	LocationString    types.String `tfsdk:"location_string"`
+	Ipv4TcpHashOffset types.Int64  `tfsdk:"ipv4_tcp_hash_offset"`
+	Ipv4TcpHashSize   types.Int64  `tfsdk:"ipv4_tcp_hash_size"`
 }
 type CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp struct {
 	LocationString types.String `tfsdk:"location_string"`
-	Ipv4HashOffset types.Int64 `tfsdk:"ipv4_hash_offset"`
-	Ipv4HashSize types.Int64 `tfsdk:"ipv4_hash_size"`
+	Ipv4HashOffset types.Int64  `tfsdk:"ipv4_hash_offset"`
+	Ipv4HashSize   types.Int64  `tfsdk:"ipv4_hash_size"`
 }
 
 // End of section. //template:end types
@@ -228,7 +227,7 @@ func (data CEFLoadBalancing8000) toBody(ctx context.Context) string {
 func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.PlatformLoadBalanceHashRotate.IsNull() && !data.PlatformLoadBalanceHashRotate.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/platform/load-balance/hash/rotate", strconv.FormatInt(data.PlatformLoadBalanceHashRotate.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/platform/load-balance/hash/rotate", strconv.FormatInt(data.PlatformLoadBalanceHashRotate.ValueInt64(), 10))
 	}
 	if len(data.PlatformLoadBalanceFieldsUserdataIpv6Udp) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -334,7 +333,7 @@ func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context) string {
 	}
 	if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsUnknown() {
 		if data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/platform-load-balance/mpls-hash-non-ip-lbl-only", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/platform-load-balance/mpls-hash-non-ip-lbl-only", "")
 		}
 	}
 	bodyString, err := body.String()
@@ -355,8 +354,8 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 		data.PlatformLoadBalanceHashRotate = types.Int64Null()
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Udp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-udps.ipv6-udp").ForEach(
@@ -394,8 +393,8 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-tcps.ipv6-tcp").ForEach(
@@ -433,8 +432,8 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-nontcpudps.ipv6-nontcpudp").ForEach(
@@ -472,8 +471,8 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Udp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-udps.ipv4-udp").ForEach(
@@ -511,8 +510,8 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-tcps.ipv4-tcp").ForEach(
@@ -550,8 +549,8 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-nontcpudps.ipv4-nontcpudp").ForEach(
@@ -588,14 +587,13 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "platform-load-balance.mpls-hash-non-ip-lbl-only"); !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
-		if value.Exists() {
-			data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
-		} else {
-			data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "platform-load-balance.mpls-hash-non-ip-lbl-only"); value.Exists() {
+		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
 	} else {
-		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
+			data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolNull()
+		}
 	}
 }
 
@@ -604,17 +602,17 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *CEFLoadBalancing8000) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/hash/rotate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/hash/rotate"); value.Exists() {
 		data.PlatformLoadBalanceHashRotate = types.Int64Value(value.Int())
 	} else if data.PlatformLoadBalanceHashRotate.IsNull() {
 		data.PlatformLoadBalanceHashRotate = types.Int64Null()
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Udp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -649,11 +647,11 @@ func (data *CEFLoadBalancing8000) updateFromBodyXML(ctx context.Context, res xml
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -688,11 +686,11 @@ func (data *CEFLoadBalancing8000) updateFromBodyXML(ctx context.Context, res xml
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -727,11 +725,11 @@ func (data *CEFLoadBalancing8000) updateFromBodyXML(ctx context.Context, res xml
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Udp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -766,11 +764,11 @@ func (data *CEFLoadBalancing8000) updateFromBodyXML(ctx context.Context, res xml
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -805,11 +803,11 @@ func (data *CEFLoadBalancing8000) updateFromBodyXML(ctx context.Context, res xml
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -843,7 +841,7 @@ func (data *CEFLoadBalancing8000) updateFromBodyXML(ctx context.Context, res xml
 			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform-load-balance/mpls-hash-non-ip-lbl-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform-load-balance/mpls-hash-non-ip-lbl-only"); value.Exists() {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -862,10 +860,10 @@ func (data *CEFLoadBalancing8000) fromBody(ctx context.Context, res gjson.Result
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"platform.load-balance.hash.rotate"); value.Exists() {
+	if value := res.Get(prefix + "platform.load-balance.hash.rotate"); value.Exists() {
 		data.PlatformLoadBalanceHashRotate = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"platform.load-balance.fields.userdata.ipv6-udps.ipv6-udp"); value.Exists() {
+	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv6-udps.ipv6-udp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv6Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp{}
@@ -882,7 +880,7 @@ func (data *CEFLoadBalancing8000) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix+"platform.load-balance.fields.userdata.ipv6-tcps.ipv6-tcp"); value.Exists() {
+	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv6-tcps.ipv6-tcp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv6Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp{}
@@ -899,7 +897,7 @@ func (data *CEFLoadBalancing8000) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix+"platform.load-balance.fields.userdata.ipv6-nontcpudps.ipv6-nontcpudp"); value.Exists() {
+	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv6-nontcpudps.ipv6-nontcpudp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp{}
@@ -916,7 +914,7 @@ func (data *CEFLoadBalancing8000) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix+"platform.load-balance.fields.userdata.ipv4-udps.ipv4-udp"); value.Exists() {
+	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv4-udps.ipv4-udp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv4Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp{}
@@ -933,7 +931,7 @@ func (data *CEFLoadBalancing8000) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix+"platform.load-balance.fields.userdata.ipv4-tcps.ipv4-tcp"); value.Exists() {
+	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv4-tcps.ipv4-tcp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv4Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp{}
@@ -950,7 +948,7 @@ func (data *CEFLoadBalancing8000) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix+"platform.load-balance.fields.userdata.ipv4-nontcpudps.ipv4-nontcpudp"); value.Exists() {
+	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv4-nontcpudps.ipv4-nontcpudp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp{}
@@ -967,7 +965,7 @@ func (data *CEFLoadBalancing8000) fromBody(ctx context.Context, res gjson.Result
 			return true
 		})
 	}
-	if value := res.Get(prefix+"platform-load-balance.mpls-hash-non-ip-lbl-only"); value.Exists() {
+	if value := res.Get(prefix + "platform-load-balance.mpls-hash-non-ip-lbl-only"); value.Exists() {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
 	} else {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
@@ -983,10 +981,10 @@ func (data *CEFLoadBalancing8000Data) fromBody(ctx context.Context, res gjson.Re
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"platform.load-balance.hash.rotate"); value.Exists() {
+	if value := res.Get(prefix + "platform.load-balance.hash.rotate"); value.Exists() {
 		data.PlatformLoadBalanceHashRotate = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"platform.load-balance.fields.userdata.ipv6-udps.ipv6-udp"); value.Exists() {
+	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv6-udps.ipv6-udp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv6Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp{}
@@ -1003,7 +1001,7 @@ func (data *CEFLoadBalancing8000Data) fromBody(ctx context.Context, res gjson.Re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"platform.load-balance.fields.userdata.ipv6-tcps.ipv6-tcp"); value.Exists() {
+	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv6-tcps.ipv6-tcp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv6Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp{}
@@ -1020,7 +1018,7 @@ func (data *CEFLoadBalancing8000Data) fromBody(ctx context.Context, res gjson.Re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"platform.load-balance.fields.userdata.ipv6-nontcpudps.ipv6-nontcpudp"); value.Exists() {
+	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv6-nontcpudps.ipv6-nontcpudp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp{}
@@ -1037,7 +1035,7 @@ func (data *CEFLoadBalancing8000Data) fromBody(ctx context.Context, res gjson.Re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"platform.load-balance.fields.userdata.ipv4-udps.ipv4-udp"); value.Exists() {
+	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv4-udps.ipv4-udp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv4Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp{}
@@ -1054,7 +1052,7 @@ func (data *CEFLoadBalancing8000Data) fromBody(ctx context.Context, res gjson.Re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"platform.load-balance.fields.userdata.ipv4-tcps.ipv4-tcp"); value.Exists() {
+	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv4-tcps.ipv4-tcp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv4Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp{}
@@ -1071,7 +1069,7 @@ func (data *CEFLoadBalancing8000Data) fromBody(ctx context.Context, res gjson.Re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"platform.load-balance.fields.userdata.ipv4-nontcpudps.ipv4-nontcpudp"); value.Exists() {
+	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv4-nontcpudps.ipv4-nontcpudp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp{}
@@ -1088,7 +1086,7 @@ func (data *CEFLoadBalancing8000Data) fromBody(ctx context.Context, res gjson.Re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"platform-load-balance.mpls-hash-non-ip-lbl-only"); value.Exists() {
+	if value := res.Get(prefix + "platform-load-balance.mpls-hash-non-ip-lbl-only"); value.Exists() {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
 	} else {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolNull()
@@ -1100,10 +1098,10 @@ func (data *CEFLoadBalancing8000Data) fromBody(ctx context.Context, res gjson.Re
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *CEFLoadBalancing8000) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/hash/rotate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/hash/rotate"); value.Exists() {
 		data.PlatformLoadBalanceHashRotate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv6Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp{}
@@ -1120,7 +1118,7 @@ func (data *CEFLoadBalancing8000) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv6Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp{}
@@ -1137,7 +1135,7 @@ func (data *CEFLoadBalancing8000) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp{}
@@ -1154,7 +1152,7 @@ func (data *CEFLoadBalancing8000) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv4Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp{}
@@ -1171,7 +1169,7 @@ func (data *CEFLoadBalancing8000) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv4Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp{}
@@ -1188,7 +1186,7 @@ func (data *CEFLoadBalancing8000) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp{}
@@ -1205,7 +1203,7 @@ func (data *CEFLoadBalancing8000) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform-load-balance/mpls-hash-non-ip-lbl-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform-load-balance/mpls-hash-non-ip-lbl-only"); value.Exists() {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
 	} else {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
@@ -1217,10 +1215,10 @@ func (data *CEFLoadBalancing8000) fromBodyXML(ctx context.Context, res xmldot.Re
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *CEFLoadBalancing8000Data) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/hash/rotate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/hash/rotate"); value.Exists() {
 		data.PlatformLoadBalanceHashRotate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv6Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp{}
@@ -1237,7 +1235,7 @@ func (data *CEFLoadBalancing8000Data) fromBodyXML(ctx context.Context, res xmldo
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv6Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp{}
@@ -1254,7 +1252,7 @@ func (data *CEFLoadBalancing8000Data) fromBodyXML(ctx context.Context, res xmldo
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp{}
@@ -1271,7 +1269,7 @@ func (data *CEFLoadBalancing8000Data) fromBodyXML(ctx context.Context, res xmldo
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv4Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp{}
@@ -1288,7 +1286,7 @@ func (data *CEFLoadBalancing8000Data) fromBodyXML(ctx context.Context, res xmldo
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv4Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp{}
@@ -1305,7 +1303,7 @@ func (data *CEFLoadBalancing8000Data) fromBodyXML(ctx context.Context, res xmldo
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp"); value.Exists() {
 		data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp{}
@@ -1322,7 +1320,7 @@ func (data *CEFLoadBalancing8000Data) fromBodyXML(ctx context.Context, res xmldo
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/platform-load-balance/mpls-hash-non-ip-lbl-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/platform-load-balance/mpls-hash-non-ip-lbl-only"); value.Exists() {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
 	} else {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
@@ -1339,11 +1337,11 @@ func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEF
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/platform-load-balance/mpls-hash-non-ip-lbl-only", state.getPath()))
 	}
 	for i := range state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
-		keys := [...]string{ "location-string",  }
-		stateKeyValues := [...]string{ state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -1360,13 +1358,13 @@ func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEF
 			if state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].LocationString.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].Ipv4HashSize.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp%v/ipv4-hash/size", state.getPath(), keyString))
-			}
-			if !state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].Ipv4HashOffset.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp%v/ipv4-hash/offset", state.getPath(), keyString))
-			}
+			if found {
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].Ipv4HashSize.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp%v/ipv4-hash/size", state.getPath(), keyString))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].Ipv4HashOffset.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp%v/ipv4-hash/offset", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -1375,11 +1373,11 @@ func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEF
 		}
 	}
 	for i := range state.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
-		keys := [...]string{ "location-string",  }
-		stateKeyValues := [...]string{ state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -1396,13 +1394,13 @@ func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEF
 			if state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].LocationString.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].Ipv4TcpHashSize.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp%v/ipv4-tcp-hash/size", state.getPath(), keyString))
-			}
-			if !state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].Ipv4TcpHashOffset.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp%v/ipv4-tcp-hash/offset", state.getPath(), keyString))
-			}
+			if found {
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].Ipv4TcpHashSize.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp%v/ipv4-tcp-hash/size", state.getPath(), keyString))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].Ipv4TcpHashOffset.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp%v/ipv4-tcp-hash/offset", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -1411,11 +1409,11 @@ func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEF
 		}
 	}
 	for i := range state.PlatformLoadBalanceFieldsUserdataIpv4Udp {
-		keys := [...]string{ "location-string",  }
-		stateKeyValues := [...]string{ state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -1432,13 +1430,13 @@ func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEF
 			if state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].LocationString.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].Ipv4UdpHashSize.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp%v/ipv4-udp-hash/size", state.getPath(), keyString))
-			}
-			if !state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].Ipv4UdpHashOffset.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp%v/ipv4-udp-hash/offset", state.getPath(), keyString))
-			}
+			if found {
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].Ipv4UdpHashSize.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp%v/ipv4-udp-hash/size", state.getPath(), keyString))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].Ipv4UdpHashOffset.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp%v/ipv4-udp-hash/offset", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -1447,11 +1445,11 @@ func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEF
 		}
 	}
 	for i := range state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
-		keys := [...]string{ "location-string",  }
-		stateKeyValues := [...]string{ state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -1468,13 +1466,13 @@ func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEF
 			if state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].LocationString.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].Ipv6HashSize.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp%v/ipv6-hash/size", state.getPath(), keyString))
-			}
-			if !state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].Ipv6HashOffset.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp%v/ipv6-hash/offset", state.getPath(), keyString))
-			}
+			if found {
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].Ipv6HashSize.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp%v/ipv6-hash/size", state.getPath(), keyString))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].Ipv6HashOffset.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp%v/ipv6-hash/offset", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -1483,11 +1481,11 @@ func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEF
 		}
 	}
 	for i := range state.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
-		keys := [...]string{ "location-string",  }
-		stateKeyValues := [...]string{ state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -1504,13 +1502,13 @@ func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEF
 			if state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].LocationString.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].Ipv6TcpHashSize.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp%v/ipv6-tcp-hash/size", state.getPath(), keyString))
-			}
-			if !state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].Ipv6TcpHashOffset.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp%v/ipv6-tcp-hash/offset", state.getPath(), keyString))
-			}
+			if found {
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].Ipv6TcpHashSize.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp%v/ipv6-tcp-hash/size", state.getPath(), keyString))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].Ipv6TcpHashOffset.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp%v/ipv6-tcp-hash/offset", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -1519,11 +1517,11 @@ func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEF
 		}
 	}
 	for i := range state.PlatformLoadBalanceFieldsUserdataIpv6Udp {
-		keys := [...]string{ "location-string",  }
-		stateKeyValues := [...]string{ state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -1540,13 +1538,13 @@ func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEF
 			if state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].LocationString.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].Ipv6UdpHashSize.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp%v/ipv6-udp-hash/size", state.getPath(), keyString))
-			}
-			if !state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].Ipv6UdpHashOffset.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp%v/ipv6-udp-hash/offset", state.getPath(), keyString))
-			}
+			if found {
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].Ipv6UdpHashSize.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp%v/ipv6-udp-hash/size", state.getPath(), keyString))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].Ipv6UdpHashOffset.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp%v/ipv6-udp-hash/offset", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -1573,51 +1571,51 @@ func (data *CEFLoadBalancing8000) getEmptyLeafsDelete(ctx context.Context, state
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Udp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Udp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	return emptyLeafsDelete
@@ -1633,32 +1631,32 @@ func (data *CEFLoadBalancing8000) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform-load-balance/mpls-hash-non-ip-lbl-only", data.getPath()))
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString(),  }
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString(),  }
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Udp {
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString(),  }
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString(),  }
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString(),  }
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Udp {
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString(),  }
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -1679,15 +1677,15 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() && data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
-		deletePath := state.getXPath()+"/platform-load-balance/mpls-hash-non-ip-lbl-only"
+		deletePath := state.getXPath() + "/platform-load-balance/mpls-hash-non-ip-lbl-only"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
-		stateKeys := [...]string{ "location-string",  }
-		stateKeyValues := [...]string{ state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString(),  }
+		stateKeys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -1708,12 +1706,12 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 				found = false
 			}
 			if found {
-			if !state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].Ipv4HashSize.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp%v/ipv4-hash/size", predicates))
-			}
-			if !state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].Ipv4HashOffset.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp%v/ipv4-hash/offset", predicates))
-			}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].Ipv4HashSize.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp%v/ipv4-hash/size", predicates))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].Ipv4HashOffset.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp%v/ipv4-hash/offset", predicates))
+				}
 				break
 			}
 		}
@@ -1722,8 +1720,8 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 		}
 	}
 	for i := range state.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
-		stateKeys := [...]string{ "location-string",  }
-		stateKeyValues := [...]string{ state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString(),  }
+		stateKeys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -1744,12 +1742,12 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 				found = false
 			}
 			if found {
-			if !state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].Ipv4TcpHashSize.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp%v/ipv4-tcp-hash/size", predicates))
-			}
-			if !state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].Ipv4TcpHashOffset.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp%v/ipv4-tcp-hash/offset", predicates))
-			}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].Ipv4TcpHashSize.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp%v/ipv4-tcp-hash/size", predicates))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].Ipv4TcpHashOffset.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp%v/ipv4-tcp-hash/offset", predicates))
+				}
 				break
 			}
 		}
@@ -1758,8 +1756,8 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 		}
 	}
 	for i := range state.PlatformLoadBalanceFieldsUserdataIpv4Udp {
-		stateKeys := [...]string{ "location-string",  }
-		stateKeyValues := [...]string{ state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString(),  }
+		stateKeys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -1780,12 +1778,12 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 				found = false
 			}
 			if found {
-			if !state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].Ipv4UdpHashSize.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp%v/ipv4-udp-hash/size", predicates))
-			}
-			if !state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].Ipv4UdpHashOffset.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp%v/ipv4-udp-hash/offset", predicates))
-			}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].Ipv4UdpHashSize.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp%v/ipv4-udp-hash/size", predicates))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].Ipv4UdpHashOffset.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp%v/ipv4-udp-hash/offset", predicates))
+				}
 				break
 			}
 		}
@@ -1794,8 +1792,8 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 		}
 	}
 	for i := range state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
-		stateKeys := [...]string{ "location-string",  }
-		stateKeyValues := [...]string{ state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString(),  }
+		stateKeys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -1816,12 +1814,12 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 				found = false
 			}
 			if found {
-			if !state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].Ipv6HashSize.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp%v/ipv6-hash/size", predicates))
-			}
-			if !state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].Ipv6HashOffset.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp%v/ipv6-hash/offset", predicates))
-			}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].Ipv6HashSize.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp%v/ipv6-hash/size", predicates))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].Ipv6HashOffset.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp%v/ipv6-hash/offset", predicates))
+				}
 				break
 			}
 		}
@@ -1830,8 +1828,8 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 		}
 	}
 	for i := range state.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
-		stateKeys := [...]string{ "location-string",  }
-		stateKeyValues := [...]string{ state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString(),  }
+		stateKeys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -1852,12 +1850,12 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 				found = false
 			}
 			if found {
-			if !state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].Ipv6TcpHashSize.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp%v/ipv6-tcp-hash/size", predicates))
-			}
-			if !state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].Ipv6TcpHashOffset.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp%v/ipv6-tcp-hash/offset", predicates))
-			}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].Ipv6TcpHashSize.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp%v/ipv6-tcp-hash/size", predicates))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].Ipv6TcpHashOffset.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp%v/ipv6-tcp-hash/offset", predicates))
+				}
 				break
 			}
 		}
@@ -1866,8 +1864,8 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 		}
 	}
 	for i := range state.PlatformLoadBalanceFieldsUserdataIpv6Udp {
-		stateKeys := [...]string{ "location-string",  }
-		stateKeyValues := [...]string{ state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString(),  }
+		stateKeys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -1888,12 +1886,12 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 				found = false
 			}
 			if found {
-			if !state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].Ipv6UdpHashSize.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp%v/ipv6-udp-hash/size", predicates))
-			}
-			if !state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].Ipv6UdpHashOffset.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp%v/ipv6-udp-hash/offset", predicates))
-			}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].Ipv6UdpHashSize.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp%v/ipv6-udp-hash/size", predicates))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].Ipv6UdpHashOffset.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp%v/ipv6-udp-hash/offset", predicates))
+				}
 				break
 			}
 		}
@@ -1902,7 +1900,7 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 		}
 	}
 	if !state.PlatformLoadBalanceHashRotate.IsNull() && data.PlatformLoadBalanceHashRotate.IsNull() {
-		deletePath := state.getXPath()+"/platform/load-balance/hash/rotate"
+		deletePath := state.getXPath() + "/platform/load-balance/hash/rotate"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1924,8 +1922,8 @@ func (data *CEFLoadBalancing8000) addDeletePathsXML(ctx context.Context, body st
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/platform-load-balance/mpls-hash-non-ip-lbl-only")
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -1934,8 +1932,8 @@ func (data *CEFLoadBalancing8000) addDeletePathsXML(ctx context.Context, body st
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp%v", predicates))
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -1944,8 +1942,8 @@ func (data *CEFLoadBalancing8000) addDeletePathsXML(ctx context.Context, body st
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp%v", predicates))
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Udp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -1954,8 +1952,8 @@ func (data *CEFLoadBalancing8000) addDeletePathsXML(ctx context.Context, body st
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp%v", predicates))
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -1964,8 +1962,8 @@ func (data *CEFLoadBalancing8000) addDeletePathsXML(ctx context.Context, body st
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp%v", predicates))
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -1974,8 +1972,8 @@ func (data *CEFLoadBalancing8000) addDeletePathsXML(ctx context.Context, body st
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp%v", predicates))
 	}
 	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Udp {
-		keys := [...]string{ "location-string",  }
-		keyValues := [...]string{ data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString(),  }
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

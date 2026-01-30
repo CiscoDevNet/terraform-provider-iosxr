@@ -24,28 +24,21 @@ import (
 	"context"
 	"fmt"
 	"regexp"
-	"strconv"
 	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -56,7 +49,7 @@ func NewHWModuleProfile8000Resource() resource.Resource {
 	return &HWModuleProfile8000Resource{}
 }
 
-type HWModuleProfile8000Resource struct{
+type HWModuleProfile8000Resource struct {
 	data *IosxrProviderData
 }
 
@@ -343,24 +336,24 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"profile_qos_l2_mode": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure QOS mode for L2 interfaces").AddStringEnumDescription("L2", "L3", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure QOS mode for L2 interfaces").AddStringEnumDescription("L2", "L3").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("L2", "L3", ),
+					stringvalidator.OneOf("L2", "L3"),
 				},
 			},
 			"profile_qos_low_latency_mode": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure QOS low-latency").AddStringEnumDescription("1", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure QOS low-latency").AddStringEnumDescription("1").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("1", ),
+					stringvalidator.OneOf("1"),
 				},
 			},
 			"profile_qos_intra_npu_over_fabric": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure QOS intra-npu-over-fabric").AddStringEnumDescription("disable", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure QOS intra-npu-over-fabric").AddStringEnumDescription("disable").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("disable", ),
+					stringvalidator.OneOf("disable"),
 				},
 			},
 			"profile_qos_qos_stats_push_collection": schema.BoolAttribute{
@@ -372,38 +365,38 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"profile_cef_dark_bw": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure dark-bandwidth").AddStringEnumDescription("enable", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure dark-bandwidth").AddStringEnumDescription("enable").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("enable", ),
+					stringvalidator.OneOf("enable"),
 				},
 			},
 			"profile_cef_sropt": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable debug message for SROPT").AddStringEnumDescription("enable", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Enable debug message for SROPT").AddStringEnumDescription("enable").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("enable", ),
+					stringvalidator.OneOf("enable"),
 				},
 			},
 			"profile_cef_bgplu": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure bgplu attribute").AddStringEnumDescription("enable", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure bgplu attribute").AddStringEnumDescription("enable").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("enable", ),
+					stringvalidator.OneOf("enable"),
 				},
 			},
 			"profile_cef_bgplu_over_rsvpte": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure bgplu over rsvpte attribute").AddStringEnumDescription("enable", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure bgplu over rsvpte attribute").AddStringEnumDescription("enable").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("enable", ),
+					stringvalidator.OneOf("enable"),
 				},
 			},
 			"profile_cef_cbf": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable cbf").AddStringEnumDescription("enable", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Enable cbf").AddStringEnumDescription("enable").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("enable", ),
+					stringvalidator.OneOf("enable"),
 				},
 			},
 			"profile_cef_cbf_forward_class_list": schema.ListAttribute{
@@ -412,10 +405,10 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"profile_cef_ipv6_hop_limit": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Hop-limit 0 packets").AddStringEnumDescription("punt", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Hop-limit 0 packets").AddStringEnumDescription("punt").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("punt", ),
+					stringvalidator.OneOf("punt"),
 				},
 			},
 			"profile_cef_lpts_acl": schema.BoolAttribute{
@@ -438,17 +431,17 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"profile_cef_stats_label_app_default": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Applies to - LDP and SR").AddStringEnumDescription("dynamic", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Applies to - LDP and SR").AddStringEnumDescription("dynamic").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("dynamic", ),
+					stringvalidator.OneOf("dynamic"),
 				},
 			},
 			"profile_cef_ttl_tunnel_ip_decrement": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure tunnel-ip ttl decrement behaviour").AddStringEnumDescription("disable", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure tunnel-ip ttl decrement behaviour").AddStringEnumDescription("disable").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("disable", ),
+					stringvalidator.OneOf("disable"),
 				},
 			},
 			"profile_cef_te_tunnel_highscale_no_ldp_over_te": schema.BoolAttribute{
@@ -464,10 +457,10 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"profile_cef_ip_redirect": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IP redirect").AddStringEnumDescription("enable", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("IP redirect").AddStringEnumDescription("enable").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("enable", ),
+					stringvalidator.OneOf("enable"),
 				},
 			},
 			"profile_cef_unipath_surpf_enable": schema.BoolAttribute{
@@ -517,10 +510,10 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"profile_stats_voqs_sharing_counters": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure number of voqs (1, 2, 4) sharing counters").AddStringEnumDescription("1", "2", "4", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure number of voqs (1, 2, 4) sharing counters").AddStringEnumDescription("1", "2", "4").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("1", "2", "4", ),
+					stringvalidator.OneOf("1", "2", "4"),
 				},
 			},
 			"profile_stats_no_bvi_ingress": schema.BoolAttribute{
@@ -739,10 +732,10 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"profile_npu_compatibility": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure npu-compatibility mode for chassis type").AddStringEnumDescription("P100", "Q100", "Q200", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure npu-compatibility mode for chassis type").AddStringEnumDescription("P100", "Q100", "Q200").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("P100", "Q100", "Q200", ),
+					stringvalidator.OneOf("P100", "Q100", "Q200"),
 				},
 			},
 			"profile_route_scale_ipv6_unicast_connected_prefix_high": schema.BoolAttribute{
@@ -793,14 +786,14 @@ func (r *HWModuleProfile8000Resource) Create(ctx context.Context, req resource.C
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-		var ops []gnmi.SetOperation
+			var ops []gnmi.SetOperation
 
-		// Create object
-		body := plan.toBody(ctx)
-		ops = append(ops, gnmi.Update(plan.getPath(), body))
+			// Create object
+			body := plan.toBody(ctx)
+			ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -1021,11 +1014,11 @@ func (r *HWModuleProfile8000Resource) Update(ctx context.Context, req resource.U
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			 // Combine update and delete operations into a single transaction
-		 	combinedBody := body + deleteBody
-		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-		 		resp.Diagnostics.AddError("Client Error", err.Error())
-		 		return
+			// Combine update and delete operations into a single transaction
+			combinedBody := body + deleteBody
+			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+				resp.Diagnostics.AddError("Client Error", err.Error())
+				return
 			}
 		}
 	}

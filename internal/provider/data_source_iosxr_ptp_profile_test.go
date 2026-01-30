@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -32,8 +33,8 @@ import (
 
 func TestAccDataSourceIosxrPTPProfile(t *testing.T) {
 	if os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
-        t.Skip("skipping test, set environment variable NCS or C8000")
-    }
+		t.Skip("skipping test, set environment variable NCS or C8000")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ptp_profile.test", "port_state_master_only", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ptp_profile.test", "source_ipv4_address", "10.1.1.1"))
@@ -113,8 +114,8 @@ func TestAccDataSourceIosxrPTPProfile(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrPTPProfilePrerequisitesConfig+testAccDataSourceIosxrPTPProfileConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrPTPProfilePrerequisitesConfig + testAccDataSourceIosxrPTPProfileConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

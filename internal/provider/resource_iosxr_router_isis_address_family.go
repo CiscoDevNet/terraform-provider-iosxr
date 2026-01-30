@@ -24,28 +24,21 @@ import (
 	"context"
 	"fmt"
 	"regexp"
-	"strconv"
 	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -56,7 +49,7 @@ func NewRouterISISAddressFamilyResource() resource.Resource {
 	return &RouterISISAddressFamilyResource{}
 }
 
-type RouterISISAddressFamilyResource struct{
+type RouterISISAddressFamilyResource struct {
 	data *IosxrProviderData
 }
 
@@ -100,20 +93,20 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				},
 			},
 			"af_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("af-name").AddStringEnumDescription("ipv4", "ipv6", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("af-name").AddStringEnumDescription("ipv4", "ipv6").String,
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("ipv4", "ipv6", ),
+					stringvalidator.OneOf("ipv4", "ipv6"),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"saf_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("saf-name").AddStringEnumDescription("multicast", "unicast", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("saf-name").AddStringEnumDescription("multicast", "unicast").String,
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("multicast", "unicast", ),
+					stringvalidator.OneOf("multicast", "unicast"),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -178,10 +171,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				Optional:            true,
 			},
 			"redistribute_connected_level": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("level-1", "level-1-2", "level-2", ),
+					stringvalidator.OneOf("level-1", "level-1-2", "level-2"),
 				},
 			},
 			"redistribute_connected_metric": schema.Int64Attribute{
@@ -199,10 +192,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				},
 			},
 			"redistribute_connected_metric_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type for redistributed routes").AddStringEnumDescription("external", "internal", "rib-metric-as-external", "rib-metric-as-internal", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type for redistributed routes").AddStringEnumDescription("external", "internal", "rib-metric-as-external", "rib-metric-as-internal").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("external", "internal", "rib-metric-as-external", "rib-metric-as-internal", ),
+					stringvalidator.OneOf("external", "internal", "rib-metric-as-external", "rib-metric-as-internal"),
 				},
 			},
 			"redistribute_static": schema.BoolAttribute{
@@ -210,10 +203,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				Optional:            true,
 			},
 			"redistribute_static_level": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("level-1", "level-1-2", "level-2", ),
+					stringvalidator.OneOf("level-1", "level-1-2", "level-2"),
 				},
 			},
 			"redistribute_static_metric": schema.Int64Attribute{
@@ -231,10 +224,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				},
 			},
 			"redistribute_static_metric_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type for redistributed routes").AddStringEnumDescription("external", "internal", "rib-metric-as-external", "rib-metric-as-internal", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type for redistributed routes").AddStringEnumDescription("external", "internal", "rib-metric-as-external", "rib-metric-as-internal").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("external", "internal", "rib-metric-as-external", "rib-metric-as-internal", ),
+					stringvalidator.OneOf("external", "internal", "rib-metric-as-external", "rib-metric-as-internal"),
 				},
 			},
 			"redistribute_isis": schema.ListNestedAttribute{
@@ -251,10 +244,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 							},
 						},
 						"level": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("level-1", "level-1-2", "level-2", ),
+								stringvalidator.OneOf("level-1", "level-1-2", "level-2"),
 							},
 						},
 						"metric": schema.Int64Attribute{
@@ -272,10 +265,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 							},
 						},
 						"metric_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type for redistributed routes").AddStringEnumDescription("external", "internal", "rib-metric-as-external", "rib-metric-as-internal", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type for redistributed routes").AddStringEnumDescription("external", "internal", "rib-metric-as-external", "rib-metric-as-internal").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("external", "internal", "rib-metric-as-external", "rib-metric-as-internal", ),
+								stringvalidator.OneOf("external", "internal", "rib-metric-as-external", "rib-metric-as-internal"),
 							},
 						},
 						"down_flag_clear": schema.BoolAttribute{
@@ -295,10 +288,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 							Required:            true,
 						},
 						"level": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("level-1", "level-1-2", "level-2", ),
+								stringvalidator.OneOf("level-1", "level-1-2", "level-2"),
 							},
 						},
 						"metric": schema.Int64Attribute{
@@ -316,10 +309,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 							},
 						},
 						"metric_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type for redistributed routes").AddStringEnumDescription("external", "internal", "rib-metric-as-external", "rib-metric-as-internal", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type for redistributed routes").AddStringEnumDescription("external", "internal", "rib-metric-as-external", "rib-metric-as-internal").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("external", "internal", "rib-metric-as-external", "rib-metric-as-internal", ),
+								stringvalidator.OneOf("external", "internal", "rib-metric-as-external", "rib-metric-as-internal"),
 							},
 						},
 					},
@@ -347,10 +340,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 							Optional:            true,
 						},
 						"level": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("level-1", "level-1-2", "level-2", ),
+								stringvalidator.OneOf("level-1", "level-1-2", "level-2"),
 							},
 						},
 						"metric": schema.Int64Attribute{
@@ -368,10 +361,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 							},
 						},
 						"metric_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type for redistributed routes").AddStringEnumDescription("external", "internal", "rib-metric-as-external", "rib-metric-as-internal", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type for redistributed routes").AddStringEnumDescription("external", "internal", "rib-metric-as-external", "rib-metric-as-internal").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("external", "internal", "rib-metric-as-external", "rib-metric-as-internal", ),
+								stringvalidator.OneOf("external", "internal", "rib-metric-as-external", "rib-metric-as-internal"),
 							},
 						},
 					},
@@ -399,10 +392,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 							Optional:            true,
 						},
 						"level": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("level-1", "level-1-2", "level-2", ),
+								stringvalidator.OneOf("level-1", "level-1-2", "level-2"),
 							},
 						},
 						"metric": schema.Int64Attribute{
@@ -420,10 +413,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 							},
 						},
 						"metric_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type for redistributed routes").AddStringEnumDescription("external", "internal", "rib-metric-as-external", "rib-metric-as-internal", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type for redistributed routes").AddStringEnumDescription("external", "internal", "rib-metric-as-external", "rib-metric-as-internal").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("external", "internal", "rib-metric-as-external", "rib-metric-as-internal", ),
+								stringvalidator.OneOf("external", "internal", "rib-metric-as-external", "rib-metric-as-internal"),
 							},
 						},
 					},
@@ -959,10 +952,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				Optional:            true,
 			},
 			"attached_bit_send": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Modify how we set the attached bit").AddStringEnumDescription("always-set", "never-set", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Modify how we set the attached bit").AddStringEnumDescription("always-set", "never-set").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("always-set", "never-set", ),
+					stringvalidator.OneOf("always-set", "never-set"),
 				},
 			},
 			"fast_reroute_delay_interval": schema.Int64Attribute{
@@ -973,10 +966,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				},
 			},
 			"fast_reroute_per_prefix_priority_limit": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Limit backup computation upto the prefix priority").AddStringEnumDescription("critical", "high", "medium", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Limit backup computation upto the prefix priority").AddStringEnumDescription("critical", "high", "medium").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("critical", "high", "medium", ),
+					stringvalidator.OneOf("critical", "high", "medium"),
 				},
 			},
 			"fast_reroute_per_prefix_priority_limit_levels": schema.ListNestedAttribute{
@@ -992,10 +985,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 							},
 						},
 						"priority_limit": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Limit backup computation upto the prefix priority").AddStringEnumDescription("critical", "high", "medium", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Limit backup computation upto the prefix priority").AddStringEnumDescription("critical", "high", "medium").String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("critical", "high", "medium", ),
+								stringvalidator.OneOf("critical", "high", "medium"),
 							},
 						},
 					},
@@ -1141,10 +1134,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				},
 			},
 			"fast_reroute_per_link_priority_limit": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Limit backup computation upto the prefix priority").AddStringEnumDescription("critical", "high", "medium", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Limit backup computation upto the prefix priority").AddStringEnumDescription("critical", "high", "medium").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("critical", "high", "medium", ),
+					stringvalidator.OneOf("critical", "high", "medium"),
 				},
 			},
 			"fast_reroute_per_link_priority_limit_levels": schema.ListNestedAttribute{
@@ -1160,10 +1153,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 							},
 						},
 						"priority_limit": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Limit backup computation upto the prefix priority").AddStringEnumDescription("critical", "high", "medium", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Limit backup computation upto the prefix priority").AddStringEnumDescription("critical", "high", "medium").String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("critical", "high", "medium", ),
+								stringvalidator.OneOf("critical", "high", "medium"),
 							},
 						},
 					},
@@ -1703,14 +1696,14 @@ func (r *RouterISISAddressFamilyResource) Create(ctx context.Context, req resour
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-		var ops []gnmi.SetOperation
+			var ops []gnmi.SetOperation
 
-		// Create object
-		body := plan.toBody(ctx)
-		ops = append(ops, gnmi.Update(plan.getPath(), body))
+			// Create object
+			body := plan.toBody(ctx)
+			ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -1931,11 +1924,11 @@ func (r *RouterISISAddressFamilyResource) Update(ctx context.Context, req resour
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			 // Combine update and delete operations into a single transaction
-		 	combinedBody := body + deleteBody
-		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-		 		resp.Diagnostics.AddError("Client Error", err.Error())
-		 		return
+			// Combine update and delete operations into a single transaction
+			combinedBody := body + deleteBody
+			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+				resp.Diagnostics.AddError("Client Error", err.Error())
+				return
 			}
 		}
 	}

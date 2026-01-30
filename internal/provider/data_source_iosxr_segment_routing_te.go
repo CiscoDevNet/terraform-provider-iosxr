@@ -23,19 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/netascode/go-gnmi"
-	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -52,7 +47,7 @@ func NewSegmentRoutingTEDataSource() datasource.DataSource {
 	return &SegmentRoutingTEDataSource{}
 }
 
-type SegmentRoutingTEDataSource struct{
+type SegmentRoutingTEDataSource struct {
 	data *IosxrProviderData
 }
 
@@ -171,15 +166,15 @@ func (d *SegmentRoutingTEDataSource) Schema(ctx context.Context, req datasource.
 									"index": schema.Int64Attribute{
 										MarkdownDescription: "Segment index",
 										Computed:            true,
-								},
+									},
 									"address": schema.StringAttribute{
 										MarkdownDescription: "IPv6 Address",
 										Computed:            true,
-								},
+									},
 									"hop_type": schema.StringAttribute{
 										MarkdownDescription: "SRv6 hop type",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -207,39 +202,39 @@ func (d *SegmentRoutingTEDataSource) Schema(ctx context.Context, req datasource.
 									"index": schema.Int64Attribute{
 										MarkdownDescription: "Segment index",
 										Computed:            true,
-								},
+									},
 									"type": schema.StringAttribute{
 										MarkdownDescription: "Segment/hop type",
 										Computed:            true,
-								},
+									},
 									"address": schema.StringAttribute{
 										MarkdownDescription: "IP Address",
 										Computed:            true,
-								},
+									},
 									"mpls_label": schema.Int64Attribute{
 										MarkdownDescription: "MPLS Label",
 										Computed:            true,
-								},
+									},
 									"adjacency_address": schema.StringAttribute{
 										MarkdownDescription: "IP Adjacency Address",
 										Computed:            true,
-								},
+									},
 									"address_type": schema.Int64Attribute{
 										MarkdownDescription: "IP address types",
 										Computed:            true,
-								},
+									},
 									"interface_identifier": schema.Int64Attribute{
 										MarkdownDescription: "Interface Identifier",
 										Computed:            true,
-								},
+									},
 									"prefix_length": schema.Int64Attribute{
 										MarkdownDescription: "Prefix Length",
 										Computed:            true,
-								},
+									},
 									"validate_flag": schema.Int64Attribute{
 										MarkdownDescription: "Validate No Validate",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -307,15 +302,15 @@ func (d *SegmentRoutingTEDataSource) Schema(ctx context.Context, req datasource.
 									"index": schema.Int64Attribute{
 										MarkdownDescription: "Resource index",
 										Computed:            true,
-								},
+									},
 									"type": schema.StringAttribute{
 										MarkdownDescription: "Resource type",
 										Computed:            true,
-								},
+									},
 									"address": schema.StringAttribute{
 										MarkdownDescription: "IPv4 Address",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -363,7 +358,7 @@ func (d *SegmentRoutingTEDataSource) Schema(ctx context.Context, req datasource.
 									"affinity_name": schema.StringAttribute{
 										MarkdownDescription: "Interface affinity names",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -693,7 +688,6 @@ func (d *SegmentRoutingTEDataSource) Read(ctx context.Context, req datasource.Re
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
-
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

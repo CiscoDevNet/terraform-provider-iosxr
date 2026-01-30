@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -32,8 +33,8 @@ import (
 
 func TestAccDataSourceIosxrTACACSSourceInterface(t *testing.T) {
 	if os.Getenv("AAA") == "" {
-        t.Skip("skipping test, set environment variable AAA")
-    }
+		t.Skip("skipping test, set environment variable AAA")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_tacacs_source_interface.test", "source_interface", "MgmtEth0/RP0/CPU0/0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_tacacs_source_interface.test", "source_interfaces.0.vrf", "VRF1"))
@@ -43,8 +44,8 @@ func TestAccDataSourceIosxrTACACSSourceInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrTACACSSourceInterfacePrerequisitesConfig+testAccDataSourceIosxrTACACSSourceInterfaceConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrTACACSSourceInterfacePrerequisitesConfig + testAccDataSourceIosxrTACACSSourceInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -37,9 +39,9 @@ func TestAccIosxrRouterPIMVRFIPv4(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_pim_vrf_ipv4.test", "rp_addresses.0.access_list", "RP_ACL"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_pim_vrf_ipv4.test", "rp_addresses.0.override", "true"))
 	if os.Getenv("XRV9K") != "" || os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_pim_vrf_ipv4.test", "rp_addresses_bidir.0.address", "10.1.1.2"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_pim_vrf_ipv4.test", "rp_addresses_bidir.0.access_list", "BIDIR_ACL"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_pim_vrf_ipv4.test", "rp_addresses_bidir.0.override", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_pim_vrf_ipv4.test", "rp_addresses_bidir.0.address", "10.1.1.2"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_pim_vrf_ipv4.test", "rp_addresses_bidir.0.access_list", "BIDIR_ACL"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_pim_vrf_ipv4.test", "rp_addresses_bidir.0.override", "true"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_pim_vrf_ipv4.test", "rp_static_deny", "DENY_ACL"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_pim_vrf_ipv4.test", "accept_register", "REGISTER_ACL"))
@@ -141,23 +143,23 @@ func TestAccIosxrRouterPIMVRFIPv4(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterPIMVRFIPv4PrerequisitesConfig+testAccIosxrRouterPIMVRFIPv4Config_minimum(),
+			Config: testAccIosxrRouterPIMVRFIPv4PrerequisitesConfig + testAccIosxrRouterPIMVRFIPv4Config_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterPIMVRFIPv4PrerequisitesConfig+testAccIosxrRouterPIMVRFIPv4Config_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrRouterPIMVRFIPv4PrerequisitesConfig + testAccIosxrRouterPIMVRFIPv4Config_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_router_pim_vrf_ipv4.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_router_pim_vrf_ipv4.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrRouterPIMVRFIPv4ImportStateIdFunc("iosxr_router_pim_vrf_ipv4.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -238,11 +240,11 @@ func testAccIosxrRouterPIMVRFIPv4Config_all() string {
 	config += `		override = true` + "\n"
 	config += `		}]` + "\n"
 	if os.Getenv("XRV9K") != "" || os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
-	config += `	rp_addresses_bidir = [{` + "\n"
-	config += `		address = "10.1.1.2"` + "\n"
-	config += `		access_list = "BIDIR_ACL"` + "\n"
-	config += `		override = true` + "\n"
-	config += `		}]` + "\n"
+		config += `	rp_addresses_bidir = [{` + "\n"
+		config += `		address = "10.1.1.2"` + "\n"
+		config += `		access_list = "BIDIR_ACL"` + "\n"
+		config += `		override = true` + "\n"
+		config += `		}]` + "\n"
 	}
 	config += `	rp_static_deny = "DENY_ACL"` + "\n"
 	config += `	accept_register = "REGISTER_ACL"` + "\n"

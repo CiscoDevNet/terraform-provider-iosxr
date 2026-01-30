@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +35,8 @@ import (
 
 func TestAccIosxrFlowExporterMap(t *testing.T) {
 	if os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
-        t.Skip("skipping test, set environment variable NCS or C8000")
-    }
+		t.Skip("skipping test, set environment variable NCS or C8000")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "name", "exporter_map1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "destination_ipv4_address", "192.0.2.1"))
@@ -55,23 +57,23 @@ func TestAccIosxrFlowExporterMap(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrFlowExporterMapPrerequisitesConfig+testAccIosxrFlowExporterMapConfig_minimum(),
+			Config: testAccIosxrFlowExporterMapPrerequisitesConfig + testAccIosxrFlowExporterMapConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrFlowExporterMapPrerequisitesConfig+testAccIosxrFlowExporterMapConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrFlowExporterMapPrerequisitesConfig + testAccIosxrFlowExporterMapConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_flow_exporter_map.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_flow_exporter_map.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrFlowExporterMapImportStateIdFunc("iosxr_flow_exporter_map.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 

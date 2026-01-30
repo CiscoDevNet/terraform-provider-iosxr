@@ -24,78 +24,77 @@ import (
 	"context"
 	"fmt"
 	"reflect"
-	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterHSRPInterfaceIPv6GroupV2 struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
-	InterfaceName types.String `tfsdk:"interface_name"`
-	GroupId types.Int64 `tfsdk:"group_id"`
-	Addresses []RouterHSRPInterfaceIPv6GroupV2Addresses `tfsdk:"addresses"`
-	AddressLinkLocalIpv6Address types.String `tfsdk:"address_link_local_ipv6_address"`
-	AddressLinkLocalAutoconfig types.Bool `tfsdk:"address_link_local_autoconfig"`
-	AddressLinkLocalAutoconfigLegacyCompatible types.Bool `tfsdk:"address_link_local_autoconfig_legacy_compatible"`
-	Priority types.Int64 `tfsdk:"priority"`
-	PreemptDelay types.Int64 `tfsdk:"preempt_delay"`
-	TrackInterfaces []RouterHSRPInterfaceIPv6GroupV2TrackInterfaces `tfsdk:"track_interfaces"`
-	TrackObjects []RouterHSRPInterfaceIPv6GroupV2TrackObjects `tfsdk:"track_objects"`
-	TimersSeconds types.Int64 `tfsdk:"timers_seconds"`
-	TimersSecondsHoldtime types.Int64 `tfsdk:"timers_seconds_holdtime"`
-	TimersMsec types.Int64 `tfsdk:"timers_msec"`
-	TimersMsecHoldtime types.Int64 `tfsdk:"timers_msec_holdtime"`
-	MacAddress types.String `tfsdk:"mac_address"`
-	Name types.String `tfsdk:"name"`
-	BfdFastDetectPeerIpv6 types.String `tfsdk:"bfd_fast_detect_peer_ipv6"`
-	BfdFastDetectPeerInterface types.String `tfsdk:"bfd_fast_detect_peer_interface"`
+	Device                                     types.String                                    `tfsdk:"device"`
+	Id                                         types.String                                    `tfsdk:"id"`
+	DeleteMode                                 types.String                                    `tfsdk:"delete_mode"`
+	InterfaceName                              types.String                                    `tfsdk:"interface_name"`
+	GroupId                                    types.Int64                                     `tfsdk:"group_id"`
+	Addresses                                  []RouterHSRPInterfaceIPv6GroupV2Addresses       `tfsdk:"addresses"`
+	AddressLinkLocalIpv6Address                types.String                                    `tfsdk:"address_link_local_ipv6_address"`
+	AddressLinkLocalAutoconfig                 types.Bool                                      `tfsdk:"address_link_local_autoconfig"`
+	AddressLinkLocalAutoconfigLegacyCompatible types.Bool                                      `tfsdk:"address_link_local_autoconfig_legacy_compatible"`
+	Priority                                   types.Int64                                     `tfsdk:"priority"`
+	PreemptDelay                               types.Int64                                     `tfsdk:"preempt_delay"`
+	TrackInterfaces                            []RouterHSRPInterfaceIPv6GroupV2TrackInterfaces `tfsdk:"track_interfaces"`
+	TrackObjects                               []RouterHSRPInterfaceIPv6GroupV2TrackObjects    `tfsdk:"track_objects"`
+	TimersSeconds                              types.Int64                                     `tfsdk:"timers_seconds"`
+	TimersSecondsHoldtime                      types.Int64                                     `tfsdk:"timers_seconds_holdtime"`
+	TimersMsec                                 types.Int64                                     `tfsdk:"timers_msec"`
+	TimersMsecHoldtime                         types.Int64                                     `tfsdk:"timers_msec_holdtime"`
+	MacAddress                                 types.String                                    `tfsdk:"mac_address"`
+	Name                                       types.String                                    `tfsdk:"name"`
+	BfdFastDetectPeerIpv6                      types.String                                    `tfsdk:"bfd_fast_detect_peer_ipv6"`
+	BfdFastDetectPeerInterface                 types.String                                    `tfsdk:"bfd_fast_detect_peer_interface"`
 }
 
 type RouterHSRPInterfaceIPv6GroupV2Data struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	InterfaceName types.String `tfsdk:"interface_name"`
-	GroupId types.Int64 `tfsdk:"group_id"`
-	Addresses []RouterHSRPInterfaceIPv6GroupV2Addresses `tfsdk:"addresses"`
-	AddressLinkLocalIpv6Address types.String `tfsdk:"address_link_local_ipv6_address"`
-	AddressLinkLocalAutoconfig types.Bool `tfsdk:"address_link_local_autoconfig"`
-	AddressLinkLocalAutoconfigLegacyCompatible types.Bool `tfsdk:"address_link_local_autoconfig_legacy_compatible"`
-	Priority types.Int64 `tfsdk:"priority"`
-	PreemptDelay types.Int64 `tfsdk:"preempt_delay"`
-	TrackInterfaces []RouterHSRPInterfaceIPv6GroupV2TrackInterfaces `tfsdk:"track_interfaces"`
-	TrackObjects []RouterHSRPInterfaceIPv6GroupV2TrackObjects `tfsdk:"track_objects"`
-	TimersSeconds types.Int64 `tfsdk:"timers_seconds"`
-	TimersSecondsHoldtime types.Int64 `tfsdk:"timers_seconds_holdtime"`
-	TimersMsec types.Int64 `tfsdk:"timers_msec"`
-	TimersMsecHoldtime types.Int64 `tfsdk:"timers_msec_holdtime"`
-	MacAddress types.String `tfsdk:"mac_address"`
-	Name types.String `tfsdk:"name"`
-	BfdFastDetectPeerIpv6 types.String `tfsdk:"bfd_fast_detect_peer_ipv6"`
-	BfdFastDetectPeerInterface types.String `tfsdk:"bfd_fast_detect_peer_interface"`
+	Device                                     types.String                                    `tfsdk:"device"`
+	Id                                         types.String                                    `tfsdk:"id"`
+	InterfaceName                              types.String                                    `tfsdk:"interface_name"`
+	GroupId                                    types.Int64                                     `tfsdk:"group_id"`
+	Addresses                                  []RouterHSRPInterfaceIPv6GroupV2Addresses       `tfsdk:"addresses"`
+	AddressLinkLocalIpv6Address                types.String                                    `tfsdk:"address_link_local_ipv6_address"`
+	AddressLinkLocalAutoconfig                 types.Bool                                      `tfsdk:"address_link_local_autoconfig"`
+	AddressLinkLocalAutoconfigLegacyCompatible types.Bool                                      `tfsdk:"address_link_local_autoconfig_legacy_compatible"`
+	Priority                                   types.Int64                                     `tfsdk:"priority"`
+	PreemptDelay                               types.Int64                                     `tfsdk:"preempt_delay"`
+	TrackInterfaces                            []RouterHSRPInterfaceIPv6GroupV2TrackInterfaces `tfsdk:"track_interfaces"`
+	TrackObjects                               []RouterHSRPInterfaceIPv6GroupV2TrackObjects    `tfsdk:"track_objects"`
+	TimersSeconds                              types.Int64                                     `tfsdk:"timers_seconds"`
+	TimersSecondsHoldtime                      types.Int64                                     `tfsdk:"timers_seconds_holdtime"`
+	TimersMsec                                 types.Int64                                     `tfsdk:"timers_msec"`
+	TimersMsecHoldtime                         types.Int64                                     `tfsdk:"timers_msec_holdtime"`
+	MacAddress                                 types.String                                    `tfsdk:"mac_address"`
+	Name                                       types.String                                    `tfsdk:"name"`
+	BfdFastDetectPeerIpv6                      types.String                                    `tfsdk:"bfd_fast_detect_peer_ipv6"`
+	BfdFastDetectPeerInterface                 types.String                                    `tfsdk:"bfd_fast_detect_peer_interface"`
 }
 type RouterHSRPInterfaceIPv6GroupV2Addresses struct {
 	Address types.String `tfsdk:"address"`
 }
 type RouterHSRPInterfaceIPv6GroupV2TrackInterfaces struct {
-	TrackName types.String `tfsdk:"track_name"`
-	PriorityDecrement types.Int64 `tfsdk:"priority_decrement"`
+	TrackName         types.String `tfsdk:"track_name"`
+	PriorityDecrement types.Int64  `tfsdk:"priority_decrement"`
 }
 type RouterHSRPInterfaceIPv6GroupV2TrackObjects struct {
-	ObjectName types.String `tfsdk:"object_name"`
-	PriorityDecrement types.Int64 `tfsdk:"priority_decrement"`
+	ObjectName        types.String `tfsdk:"object_name"`
+	PriorityDecrement types.Int64  `tfsdk:"priority_decrement"`
 }
 
 // End of section. //template:end types
@@ -214,8 +213,8 @@ func (data RouterHSRPInterfaceIPv6GroupV2) toBody(ctx context.Context) string {
 
 func (data *RouterHSRPInterfaceIPv6GroupV2) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Addresses {
-		keys := [...]string{ "address",  }
-		keyValues := [...]string{ data.Addresses[i].Address.ValueString(),  }
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.Addresses[i].Address.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address.globals.global").ForEach(
@@ -247,23 +246,21 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) updateFromBody(ctx context.Context, 
 	} else {
 		data.AddressLinkLocalIpv6Address = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "address.link-local.autoconfig"); !data.AddressLinkLocalAutoconfig.IsNull() {
-		if value.Exists() {
-			data.AddressLinkLocalAutoconfig = types.BoolValue(true)
-		} else {
-			data.AddressLinkLocalAutoconfig = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "address.link-local.autoconfig"); value.Exists() {
+		data.AddressLinkLocalAutoconfig = types.BoolValue(true)
 	} else {
-		data.AddressLinkLocalAutoconfig = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.AddressLinkLocalAutoconfig.IsNull() {
+			data.AddressLinkLocalAutoconfig = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "address.link-local.autoconfig.legacy-compatible"); !data.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() {
-		if value.Exists() {
-			data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolValue(true)
-		} else {
-			data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "address.link-local.autoconfig.legacy-compatible"); value.Exists() {
+		data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolValue(true)
 	} else {
-		data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() {
+			data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "priority"); value.Exists() && !data.Priority.IsNull() {
 		data.Priority = types.Int64Value(value.Int())
@@ -276,8 +273,8 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) updateFromBody(ctx context.Context, 
 		data.PreemptDelay = types.Int64Null()
 	}
 	for i := range data.TrackInterfaces {
-		keys := [...]string{ "track-name",  }
-		keyValues := [...]string{ data.TrackInterfaces[i].TrackName.ValueString(),  }
+		keys := [...]string{"track-name"}
+		keyValues := [...]string{data.TrackInterfaces[i].TrackName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "track-interfaces.track-interface").ForEach(
@@ -310,8 +307,8 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) updateFromBody(ctx context.Context, 
 		}
 	}
 	for i := range data.TrackObjects {
-		keys := [...]string{ "object-name",  }
-		keyValues := [...]string{ data.TrackObjects[i].ObjectName.ValueString(),  }
+		keys := [...]string{"object-name"}
+		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "track-objects.track-object").ForEach(
@@ -391,7 +388,7 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) updateFromBody(ctx context.Context, 
 func (data RouterHSRPInterfaceIPv6GroupV2) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.GroupId.IsNull() && !data.GroupId.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/group-number-version-2-id", strconv.FormatInt(data.GroupId.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/group-number-version-2-id", strconv.FormatInt(data.GroupId.ValueInt64(), 10))
 	}
 	if len(data.Addresses) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -405,23 +402,23 @@ func (data RouterHSRPInterfaceIPv6GroupV2) toBodyXML(ctx context.Context) string
 		}
 	}
 	if !data.AddressLinkLocalIpv6Address.IsNull() && !data.AddressLinkLocalIpv6Address.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/address/link-local/ipv6-address", data.AddressLinkLocalIpv6Address.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/address/link-local/ipv6-address", data.AddressLinkLocalIpv6Address.ValueString())
 	}
 	if !data.AddressLinkLocalAutoconfig.IsNull() && !data.AddressLinkLocalAutoconfig.IsUnknown() {
 		if data.AddressLinkLocalAutoconfig.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/address/link-local/autoconfig", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/address/link-local/autoconfig", "")
 		}
 	}
 	if !data.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() && !data.AddressLinkLocalAutoconfigLegacyCompatible.IsUnknown() {
 		if data.AddressLinkLocalAutoconfigLegacyCompatible.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/address/link-local/autoconfig/legacy-compatible", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/address/link-local/autoconfig/legacy-compatible", "")
 		}
 	}
 	if !data.Priority.IsNull() && !data.Priority.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/priority", strconv.FormatInt(data.Priority.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/priority", strconv.FormatInt(data.Priority.ValueInt64(), 10))
 	}
 	if !data.PreemptDelay.IsNull() && !data.PreemptDelay.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/preempt/delay", strconv.FormatInt(data.PreemptDelay.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/preempt/delay", strconv.FormatInt(data.PreemptDelay.ValueInt64(), 10))
 	}
 	if len(data.TrackInterfaces) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -452,28 +449,28 @@ func (data RouterHSRPInterfaceIPv6GroupV2) toBodyXML(ctx context.Context) string
 		}
 	}
 	if !data.TimersSeconds.IsNull() && !data.TimersSeconds.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/timers/hold-time", strconv.FormatInt(data.TimersSeconds.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/hold-time", strconv.FormatInt(data.TimersSeconds.ValueInt64(), 10))
 	}
 	if !data.TimersSecondsHoldtime.IsNull() && !data.TimersSecondsHoldtime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/timers/hold-time2", strconv.FormatInt(data.TimersSecondsHoldtime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/hold-time2", strconv.FormatInt(data.TimersSecondsHoldtime.ValueInt64(), 10))
 	}
 	if !data.TimersMsec.IsNull() && !data.TimersMsec.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/timers/msec", strconv.FormatInt(data.TimersMsec.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/msec", strconv.FormatInt(data.TimersMsec.ValueInt64(), 10))
 	}
 	if !data.TimersMsecHoldtime.IsNull() && !data.TimersMsecHoldtime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/timers/msec2", strconv.FormatInt(data.TimersMsecHoldtime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/msec2", strconv.FormatInt(data.TimersMsecHoldtime.ValueInt64(), 10))
 	}
 	if !data.MacAddress.IsNull() && !data.MacAddress.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/mac-address", data.MacAddress.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/mac-address", data.MacAddress.ValueString())
 	}
 	if !data.Name.IsNull() && !data.Name.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/name", data.Name.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/name", data.Name.ValueString())
 	}
 	if !data.BfdFastDetectPeerIpv6.IsNull() && !data.BfdFastDetectPeerIpv6.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bfd/fast-detect/peer/ipv6", data.BfdFastDetectPeerIpv6.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/fast-detect/peer/ipv6", data.BfdFastDetectPeerIpv6.ValueString())
 	}
 	if !data.BfdFastDetectPeerInterface.IsNull() && !data.BfdFastDetectPeerInterface.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bfd/fast-detect/peer/interface", data.BfdFastDetectPeerInterface.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/fast-detect/peer/interface", data.BfdFastDetectPeerInterface.ValueString())
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -486,17 +483,17 @@ func (data RouterHSRPInterfaceIPv6GroupV2) toBodyXML(ctx context.Context) string
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RouterHSRPInterfaceIPv6GroupV2) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/group-number-version-2-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/group-number-version-2-id"); value.Exists() {
 		data.GroupId = types.Int64Value(value.Int())
 	} else if data.GroupId.IsNull() {
 		data.GroupId = types.Int64Null()
 	}
 	for i := range data.Addresses {
-		keys := [...]string{ "address",  }
-		keyValues := [...]string{ data.Addresses[i].Address.ValueString(),  }
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.Addresses[i].Address.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/address/globals/global").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/globals/global").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -520,12 +517,12 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) updateFromBodyXML(ctx context.Contex
 			data.Addresses[i].Address = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/address/link-local/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/link-local/ipv6-address"); value.Exists() {
 		data.AddressLinkLocalIpv6Address = types.StringValue(value.String())
 	} else if data.AddressLinkLocalIpv6Address.IsNull() {
 		data.AddressLinkLocalIpv6Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/address/link-local/autoconfig"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/link-local/autoconfig"); value.Exists() {
 		data.AddressLinkLocalAutoconfig = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -533,7 +530,7 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) updateFromBodyXML(ctx context.Contex
 			data.AddressLinkLocalAutoconfig = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/address/link-local/autoconfig/legacy-compatible"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/link-local/autoconfig/legacy-compatible"); value.Exists() {
 		data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -541,22 +538,22 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) updateFromBodyXML(ctx context.Contex
 			data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	} else if data.Priority.IsNull() {
 		data.Priority = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/preempt/delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preempt/delay"); value.Exists() {
 		data.PreemptDelay = types.Int64Value(value.Int())
 	} else if data.PreemptDelay.IsNull() {
 		data.PreemptDelay = types.Int64Null()
 	}
 	for i := range data.TrackInterfaces {
-		keys := [...]string{ "track-name",  }
-		keyValues := [...]string{ data.TrackInterfaces[i].TrackName.ValueString(),  }
+		keys := [...]string{"track-name"}
+		keyValues := [...]string{data.TrackInterfaces[i].TrackName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/track-interfaces/track-interface").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/track-interfaces/track-interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -586,11 +583,11 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) updateFromBodyXML(ctx context.Contex
 		}
 	}
 	for i := range data.TrackObjects {
-		keys := [...]string{ "object-name",  }
-		keyValues := [...]string{ data.TrackObjects[i].ObjectName.ValueString(),  }
+		keys := [...]string{"object-name"}
+		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/track-objects/track-object").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/track-objects/track-object").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -619,42 +616,42 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) updateFromBodyXML(ctx context.Contex
 			data.TrackObjects[i].PriorityDecrement = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/hold-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/hold-time"); value.Exists() {
 		data.TimersSeconds = types.Int64Value(value.Int())
 	} else if data.TimersSeconds.IsNull() {
 		data.TimersSeconds = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/hold-time2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/hold-time2"); value.Exists() {
 		data.TimersSecondsHoldtime = types.Int64Value(value.Int())
 	} else if data.TimersSecondsHoldtime.IsNull() {
 		data.TimersSecondsHoldtime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/msec"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/msec"); value.Exists() {
 		data.TimersMsec = types.Int64Value(value.Int())
 	} else if data.TimersMsec.IsNull() {
 		data.TimersMsec = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/msec2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/msec2"); value.Exists() {
 		data.TimersMsecHoldtime = types.Int64Value(value.Int())
 	} else if data.TimersMsecHoldtime.IsNull() {
 		data.TimersMsecHoldtime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac-address"); value.Exists() {
 		data.MacAddress = types.StringValue(value.String())
 	} else if data.MacAddress.IsNull() {
 		data.MacAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	} else if data.Name.IsNull() {
 		data.Name = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/fast-detect/peer/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/peer/ipv6"); value.Exists() {
 		data.BfdFastDetectPeerIpv6 = types.StringValue(value.String())
 	} else if data.BfdFastDetectPeerIpv6.IsNull() {
 		data.BfdFastDetectPeerIpv6 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/fast-detect/peer/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/peer/interface"); value.Exists() {
 		data.BfdFastDetectPeerInterface = types.StringValue(value.String())
 	} else if data.BfdFastDetectPeerInterface.IsNull() {
 		data.BfdFastDetectPeerInterface = types.StringNull()
@@ -669,7 +666,7 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) fromBody(ctx context.Context, res gj
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"address.globals.global"); value.Exists() {
+	if value := res.Get(prefix + "address.globals.global"); value.Exists() {
 		data.Addresses = make([]RouterHSRPInterfaceIPv6GroupV2Addresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterHSRPInterfaceIPv6GroupV2Addresses{}
@@ -680,26 +677,26 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) fromBody(ctx context.Context, res gj
 			return true
 		})
 	}
-	if value := res.Get(prefix+"address.link-local.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "address.link-local.ipv6-address"); value.Exists() {
 		data.AddressLinkLocalIpv6Address = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"address.link-local.autoconfig"); value.Exists() {
+	if value := res.Get(prefix + "address.link-local.autoconfig"); value.Exists() {
 		data.AddressLinkLocalAutoconfig = types.BoolValue(true)
 	} else {
 		data.AddressLinkLocalAutoconfig = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"address.link-local.autoconfig.legacy-compatible"); value.Exists() {
+	if value := res.Get(prefix + "address.link-local.autoconfig.legacy-compatible"); value.Exists() {
 		data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolValue(true)
 	} else {
 		data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"priority"); value.Exists() {
+	if value := res.Get(prefix + "priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"preempt.delay"); value.Exists() {
+	if value := res.Get(prefix + "preempt.delay"); value.Exists() {
 		data.PreemptDelay = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"track-interfaces.track-interface"); value.Exists() {
+	if value := res.Get(prefix + "track-interfaces.track-interface"); value.Exists() {
 		data.TrackInterfaces = make([]RouterHSRPInterfaceIPv6GroupV2TrackInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterHSRPInterfaceIPv6GroupV2TrackInterfaces{}
@@ -713,7 +710,7 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) fromBody(ctx context.Context, res gj
 			return true
 		})
 	}
-	if value := res.Get(prefix+"track-objects.track-object"); value.Exists() {
+	if value := res.Get(prefix + "track-objects.track-object"); value.Exists() {
 		data.TrackObjects = make([]RouterHSRPInterfaceIPv6GroupV2TrackObjects, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterHSRPInterfaceIPv6GroupV2TrackObjects{}
@@ -727,28 +724,28 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) fromBody(ctx context.Context, res gj
 			return true
 		})
 	}
-	if value := res.Get(prefix+"timers.hold-time"); value.Exists() {
+	if value := res.Get(prefix + "timers.hold-time"); value.Exists() {
 		data.TimersSeconds = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timers.hold-time2"); value.Exists() {
+	if value := res.Get(prefix + "timers.hold-time2"); value.Exists() {
 		data.TimersSecondsHoldtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timers.msec"); value.Exists() {
+	if value := res.Get(prefix + "timers.msec"); value.Exists() {
 		data.TimersMsec = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timers.msec2"); value.Exists() {
+	if value := res.Get(prefix + "timers.msec2"); value.Exists() {
 		data.TimersMsecHoldtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"mac-address"); value.Exists() {
+	if value := res.Get(prefix + "mac-address"); value.Exists() {
 		data.MacAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"name"); value.Exists() {
+	if value := res.Get(prefix + "name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"bfd.fast-detect.peer.ipv6"); value.Exists() {
+	if value := res.Get(prefix + "bfd.fast-detect.peer.ipv6"); value.Exists() {
 		data.BfdFastDetectPeerIpv6 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"bfd.fast-detect.peer.interface"); value.Exists() {
+	if value := res.Get(prefix + "bfd.fast-detect.peer.interface"); value.Exists() {
 		data.BfdFastDetectPeerInterface = types.StringValue(value.String())
 	}
 }
@@ -761,7 +758,7 @@ func (data *RouterHSRPInterfaceIPv6GroupV2Data) fromBody(ctx context.Context, re
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"address.globals.global"); value.Exists() {
+	if value := res.Get(prefix + "address.globals.global"); value.Exists() {
 		data.Addresses = make([]RouterHSRPInterfaceIPv6GroupV2Addresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterHSRPInterfaceIPv6GroupV2Addresses{}
@@ -772,26 +769,26 @@ func (data *RouterHSRPInterfaceIPv6GroupV2Data) fromBody(ctx context.Context, re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"address.link-local.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "address.link-local.ipv6-address"); value.Exists() {
 		data.AddressLinkLocalIpv6Address = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"address.link-local.autoconfig"); value.Exists() {
+	if value := res.Get(prefix + "address.link-local.autoconfig"); value.Exists() {
 		data.AddressLinkLocalAutoconfig = types.BoolValue(true)
 	} else {
 		data.AddressLinkLocalAutoconfig = types.BoolNull()
 	}
-	if value := res.Get(prefix+"address.link-local.autoconfig.legacy-compatible"); value.Exists() {
+	if value := res.Get(prefix + "address.link-local.autoconfig.legacy-compatible"); value.Exists() {
 		data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolValue(true)
 	} else {
 		data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolNull()
 	}
-	if value := res.Get(prefix+"priority"); value.Exists() {
+	if value := res.Get(prefix + "priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"preempt.delay"); value.Exists() {
+	if value := res.Get(prefix + "preempt.delay"); value.Exists() {
 		data.PreemptDelay = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"track-interfaces.track-interface"); value.Exists() {
+	if value := res.Get(prefix + "track-interfaces.track-interface"); value.Exists() {
 		data.TrackInterfaces = make([]RouterHSRPInterfaceIPv6GroupV2TrackInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterHSRPInterfaceIPv6GroupV2TrackInterfaces{}
@@ -805,7 +802,7 @@ func (data *RouterHSRPInterfaceIPv6GroupV2Data) fromBody(ctx context.Context, re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"track-objects.track-object"); value.Exists() {
+	if value := res.Get(prefix + "track-objects.track-object"); value.Exists() {
 		data.TrackObjects = make([]RouterHSRPInterfaceIPv6GroupV2TrackObjects, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterHSRPInterfaceIPv6GroupV2TrackObjects{}
@@ -819,28 +816,28 @@ func (data *RouterHSRPInterfaceIPv6GroupV2Data) fromBody(ctx context.Context, re
 			return true
 		})
 	}
-	if value := res.Get(prefix+"timers.hold-time"); value.Exists() {
+	if value := res.Get(prefix + "timers.hold-time"); value.Exists() {
 		data.TimersSeconds = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timers.hold-time2"); value.Exists() {
+	if value := res.Get(prefix + "timers.hold-time2"); value.Exists() {
 		data.TimersSecondsHoldtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timers.msec"); value.Exists() {
+	if value := res.Get(prefix + "timers.msec"); value.Exists() {
 		data.TimersMsec = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timers.msec2"); value.Exists() {
+	if value := res.Get(prefix + "timers.msec2"); value.Exists() {
 		data.TimersMsecHoldtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"mac-address"); value.Exists() {
+	if value := res.Get(prefix + "mac-address"); value.Exists() {
 		data.MacAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"name"); value.Exists() {
+	if value := res.Get(prefix + "name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"bfd.fast-detect.peer.ipv6"); value.Exists() {
+	if value := res.Get(prefix + "bfd.fast-detect.peer.ipv6"); value.Exists() {
 		data.BfdFastDetectPeerIpv6 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"bfd.fast-detect.peer.interface"); value.Exists() {
+	if value := res.Get(prefix + "bfd.fast-detect.peer.interface"); value.Exists() {
 		data.BfdFastDetectPeerInterface = types.StringValue(value.String())
 	}
 }
@@ -849,7 +846,7 @@ func (data *RouterHSRPInterfaceIPv6GroupV2Data) fromBody(ctx context.Context, re
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterHSRPInterfaceIPv6GroupV2) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/address/globals/global"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/globals/global"); value.Exists() {
 		data.Addresses = make([]RouterHSRPInterfaceIPv6GroupV2Addresses, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterHSRPInterfaceIPv6GroupV2Addresses{}
@@ -860,26 +857,26 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) fromBodyXML(ctx context.Context, res
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/address/link-local/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/link-local/ipv6-address"); value.Exists() {
 		data.AddressLinkLocalIpv6Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/address/link-local/autoconfig"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/link-local/autoconfig"); value.Exists() {
 		data.AddressLinkLocalAutoconfig = types.BoolValue(true)
 	} else {
 		data.AddressLinkLocalAutoconfig = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/address/link-local/autoconfig/legacy-compatible"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/link-local/autoconfig/legacy-compatible"); value.Exists() {
 		data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolValue(true)
 	} else {
 		data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/preempt/delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preempt/delay"); value.Exists() {
 		data.PreemptDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/track-interfaces/track-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/track-interfaces/track-interface"); value.Exists() {
 		data.TrackInterfaces = make([]RouterHSRPInterfaceIPv6GroupV2TrackInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterHSRPInterfaceIPv6GroupV2TrackInterfaces{}
@@ -893,7 +890,7 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) fromBodyXML(ctx context.Context, res
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/track-objects/track-object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/track-objects/track-object"); value.Exists() {
 		data.TrackObjects = make([]RouterHSRPInterfaceIPv6GroupV2TrackObjects, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterHSRPInterfaceIPv6GroupV2TrackObjects{}
@@ -907,28 +904,28 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) fromBodyXML(ctx context.Context, res
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/hold-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/hold-time"); value.Exists() {
 		data.TimersSeconds = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/hold-time2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/hold-time2"); value.Exists() {
 		data.TimersSecondsHoldtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/msec"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/msec"); value.Exists() {
 		data.TimersMsec = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/msec2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/msec2"); value.Exists() {
 		data.TimersMsecHoldtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac-address"); value.Exists() {
 		data.MacAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/fast-detect/peer/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/peer/ipv6"); value.Exists() {
 		data.BfdFastDetectPeerIpv6 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/fast-detect/peer/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/peer/interface"); value.Exists() {
 		data.BfdFastDetectPeerInterface = types.StringValue(value.String())
 	}
 }
@@ -937,7 +934,7 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) fromBodyXML(ctx context.Context, res
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RouterHSRPInterfaceIPv6GroupV2Data) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/address/globals/global"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/globals/global"); value.Exists() {
 		data.Addresses = make([]RouterHSRPInterfaceIPv6GroupV2Addresses, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterHSRPInterfaceIPv6GroupV2Addresses{}
@@ -948,26 +945,26 @@ func (data *RouterHSRPInterfaceIPv6GroupV2Data) fromBodyXML(ctx context.Context,
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/address/link-local/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/link-local/ipv6-address"); value.Exists() {
 		data.AddressLinkLocalIpv6Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/address/link-local/autoconfig"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/link-local/autoconfig"); value.Exists() {
 		data.AddressLinkLocalAutoconfig = types.BoolValue(true)
 	} else {
 		data.AddressLinkLocalAutoconfig = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/address/link-local/autoconfig/legacy-compatible"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/link-local/autoconfig/legacy-compatible"); value.Exists() {
 		data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolValue(true)
 	} else {
 		data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/preempt/delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preempt/delay"); value.Exists() {
 		data.PreemptDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/track-interfaces/track-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/track-interfaces/track-interface"); value.Exists() {
 		data.TrackInterfaces = make([]RouterHSRPInterfaceIPv6GroupV2TrackInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterHSRPInterfaceIPv6GroupV2TrackInterfaces{}
@@ -981,7 +978,7 @@ func (data *RouterHSRPInterfaceIPv6GroupV2Data) fromBodyXML(ctx context.Context,
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/track-objects/track-object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/track-objects/track-object"); value.Exists() {
 		data.TrackObjects = make([]RouterHSRPInterfaceIPv6GroupV2TrackObjects, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterHSRPInterfaceIPv6GroupV2TrackObjects{}
@@ -995,28 +992,28 @@ func (data *RouterHSRPInterfaceIPv6GroupV2Data) fromBodyXML(ctx context.Context,
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/hold-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/hold-time"); value.Exists() {
 		data.TimersSeconds = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/hold-time2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/hold-time2"); value.Exists() {
 		data.TimersSecondsHoldtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/msec"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/msec"); value.Exists() {
 		data.TimersMsec = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/msec2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/msec2"); value.Exists() {
 		data.TimersMsecHoldtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mac-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac-address"); value.Exists() {
 		data.MacAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/fast-detect/peer/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/peer/ipv6"); value.Exists() {
 		data.BfdFastDetectPeerIpv6 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/fast-detect/peer/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/peer/interface"); value.Exists() {
 		data.BfdFastDetectPeerInterface = types.StringValue(value.String())
 	}
 }
@@ -1051,11 +1048,11 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) getDeletedItems(ctx context.Context,
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/hold-time", state.getPath()))
 	}
 	for i := range state.TrackObjects {
-		keys := [...]string{ "object-name",  }
-		stateKeyValues := [...]string{ state.TrackObjects[i].ObjectName.ValueString(),  }
+		keys := [...]string{"object-name"}
+		stateKeyValues := [...]string{state.TrackObjects[i].ObjectName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -1072,10 +1069,10 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) getDeletedItems(ctx context.Context,
 			if state.TrackObjects[i].ObjectName.ValueString() != data.TrackObjects[j].ObjectName.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.TrackObjects[i].PriorityDecrement.IsNull() && data.TrackObjects[j].PriorityDecrement.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/track-objects/track-object%v/priority-decrement", state.getPath(), keyString))
-			}
+			if found {
+				if !state.TrackObjects[i].PriorityDecrement.IsNull() && data.TrackObjects[j].PriorityDecrement.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/track-objects/track-object%v/priority-decrement", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -1084,11 +1081,11 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) getDeletedItems(ctx context.Context,
 		}
 	}
 	for i := range state.TrackInterfaces {
-		keys := [...]string{ "track-name",  }
-		stateKeyValues := [...]string{ state.TrackInterfaces[i].TrackName.ValueString(),  }
+		keys := [...]string{"track-name"}
+		stateKeyValues := [...]string{state.TrackInterfaces[i].TrackName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -1105,10 +1102,10 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) getDeletedItems(ctx context.Context,
 			if state.TrackInterfaces[i].TrackName.ValueString() != data.TrackInterfaces[j].TrackName.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.TrackInterfaces[i].PriorityDecrement.IsNull() && data.TrackInterfaces[j].PriorityDecrement.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/track-interfaces/track-interface%v/priority-decrement", state.getPath(), keyString))
-			}
+			if found {
+				if !state.TrackInterfaces[i].PriorityDecrement.IsNull() && data.TrackInterfaces[j].PriorityDecrement.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/track-interfaces/track-interface%v/priority-decrement", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -1132,11 +1129,11 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) getDeletedItems(ctx context.Context,
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/link-local/ipv6-address", state.getPath()))
 	}
 	for i := range state.Addresses {
-		keys := [...]string{ "address",  }
-		stateKeyValues := [...]string{ state.Addresses[i].Address.ValueString(),  }
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.Addresses[i].Address.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -1153,7 +1150,7 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) getDeletedItems(ctx context.Context,
 			if state.Addresses[i].Address.ValueString() != data.Addresses[j].Address.ValueString() {
 				found = false
 			}
-		if found {
+			if found {
 				break
 			}
 		}
@@ -1170,19 +1167,19 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) getDeletedItems(ctx context.Context,
 func (data *RouterHSRPInterfaceIPv6GroupV2) getEmptyLeafsDelete(ctx context.Context, state *RouterHSRPInterfaceIPv6GroupV2) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.TrackObjects {
-		keys := [...]string{ "object-name",  }
-		keyValues := [...]string{ data.TrackObjects[i].ObjectName.ValueString(),  }
+		keys := [...]string{"object-name"}
+		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	for i := range data.TrackInterfaces {
-		keys := [...]string{ "track-name",  }
-		keyValues := [...]string{ data.TrackInterfaces[i].TrackName.ValueString(),  }
+		keys := [...]string{"track-name"}
+		keyValues := [...]string{data.TrackInterfaces[i].TrackName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -1198,11 +1195,11 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) getEmptyLeafsDelete(ctx context.Cont
 		}
 	}
 	for i := range data.Addresses {
-		keys := [...]string{ "address",  }
-		keyValues := [...]string{ data.Addresses[i].Address.ValueString(),  }
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.Addresses[i].Address.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	return emptyLeafsDelete
@@ -1238,12 +1235,12 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) getDeletePaths(ctx context.Context) 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/hold-time", data.getPath()))
 	}
 	for i := range data.TrackObjects {
-		keyValues := [...]string{ data.TrackObjects[i].ObjectName.ValueString(),  }
+		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/track-objects/track-object=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.TrackInterfaces {
-		keyValues := [...]string{ data.TrackInterfaces[i].TrackName.ValueString(),  }
+		keyValues := [...]string{data.TrackInterfaces[i].TrackName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/track-interfaces/track-interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -1263,7 +1260,7 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) getDeletePaths(ctx context.Context) 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/link-local/ipv6-address", data.getPath()))
 	}
 	for i := range data.Addresses {
-		keyValues := [...]string{ data.Addresses[i].Address.ValueString(),  }
+		keyValues := [...]string{data.Addresses[i].Address.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/globals/global=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -1279,64 +1276,64 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) addDeletedItemsXML(ctx context.Conte
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.BfdFastDetectPeerInterface.IsNull() && data.BfdFastDetectPeerInterface.IsNull() {
-		deletePath := state.getXPath()+"/bfd/fast-detect/peer/interface"
+		deletePath := state.getXPath() + "/bfd/fast-detect/peer/interface"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdFastDetectPeerIpv6.IsNull() && data.BfdFastDetectPeerIpv6.IsNull() {
-		deletePath := state.getXPath()+"/bfd/fast-detect/peer/ipv6"
+		deletePath := state.getXPath() + "/bfd/fast-detect/peer/ipv6"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Name.IsNull() && data.Name.IsNull() {
-		deletePath := state.getXPath()+"/name"
+		deletePath := state.getXPath() + "/name"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MacAddress.IsNull() && data.MacAddress.IsNull() {
-		deletePath := state.getXPath()+"/mac-address"
+		deletePath := state.getXPath() + "/mac-address"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.TimersMsecHoldtime.IsNull() && data.TimersMsecHoldtime.IsNull() {
-		deletePath := state.getXPath()+"/timers/msec2"
+		deletePath := state.getXPath() + "/timers/msec2"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.TimersMsec.IsNull() && data.TimersMsec.IsNull() {
-		deletePath := state.getXPath()+"/timers/msec"
+		deletePath := state.getXPath() + "/timers/msec"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.TimersSecondsHoldtime.IsNull() && data.TimersSecondsHoldtime.IsNull() {
-		deletePath := state.getXPath()+"/timers/hold-time2"
+		deletePath := state.getXPath() + "/timers/hold-time2"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.TimersSeconds.IsNull() && data.TimersSeconds.IsNull() {
-		deletePath := state.getXPath()+"/timers/hold-time"
+		deletePath := state.getXPath() + "/timers/hold-time"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.TrackObjects {
-		stateKeys := [...]string{ "object-name",  }
-		stateKeyValues := [...]string{ state.TrackObjects[i].ObjectName.ValueString(),  }
+		stateKeys := [...]string{"object-name"}
+		stateKeyValues := [...]string{state.TrackObjects[i].ObjectName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -1357,9 +1354,9 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) addDeletedItemsXML(ctx context.Conte
 				found = false
 			}
 			if found {
-			if !state.TrackObjects[i].PriorityDecrement.IsNull() && data.TrackObjects[j].PriorityDecrement.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/track-objects/track-object%v/priority-decrement", predicates))
-			}
+				if !state.TrackObjects[i].PriorityDecrement.IsNull() && data.TrackObjects[j].PriorityDecrement.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/track-objects/track-object%v/priority-decrement", predicates))
+				}
 				break
 			}
 		}
@@ -1368,8 +1365,8 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) addDeletedItemsXML(ctx context.Conte
 		}
 	}
 	for i := range state.TrackInterfaces {
-		stateKeys := [...]string{ "track-name",  }
-		stateKeyValues := [...]string{ state.TrackInterfaces[i].TrackName.ValueString(),  }
+		stateKeys := [...]string{"track-name"}
+		stateKeyValues := [...]string{state.TrackInterfaces[i].TrackName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -1390,9 +1387,9 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) addDeletedItemsXML(ctx context.Conte
 				found = false
 			}
 			if found {
-			if !state.TrackInterfaces[i].PriorityDecrement.IsNull() && data.TrackInterfaces[j].PriorityDecrement.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/track-interfaces/track-interface%v/priority-decrement", predicates))
-			}
+				if !state.TrackInterfaces[i].PriorityDecrement.IsNull() && data.TrackInterfaces[j].PriorityDecrement.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/track-interfaces/track-interface%v/priority-decrement", predicates))
+				}
 				break
 			}
 		}
@@ -1401,14 +1398,14 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) addDeletedItemsXML(ctx context.Conte
 		}
 	}
 	if !state.PreemptDelay.IsNull() && data.PreemptDelay.IsNull() {
-		deletePath := state.getXPath()+"/preempt/delay"
+		deletePath := state.getXPath() + "/preempt/delay"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Priority.IsNull() && data.Priority.IsNull() {
-		deletePath := state.getXPath()+"/priority"
+		deletePath := state.getXPath() + "/priority"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1416,7 +1413,7 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) addDeletedItemsXML(ctx context.Conte
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() && state.AddressLinkLocalAutoconfigLegacyCompatible.ValueBool() && data.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() {
-		deletePath := state.getXPath()+"/address/link-local/autoconfig/legacy-compatible"
+		deletePath := state.getXPath() + "/address/link-local/autoconfig/legacy-compatible"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1424,22 +1421,22 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) addDeletedItemsXML(ctx context.Conte
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AddressLinkLocalAutoconfig.IsNull() && state.AddressLinkLocalAutoconfig.ValueBool() && data.AddressLinkLocalAutoconfig.IsNull() {
-		deletePath := state.getXPath()+"/address/link-local/autoconfig"
+		deletePath := state.getXPath() + "/address/link-local/autoconfig"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AddressLinkLocalIpv6Address.IsNull() && data.AddressLinkLocalIpv6Address.IsNull() {
-		deletePath := state.getXPath()+"/address/link-local/ipv6-address"
+		deletePath := state.getXPath() + "/address/link-local/ipv6-address"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.Addresses {
-		stateKeys := [...]string{ "address",  }
-		stateKeyValues := [...]string{ state.Addresses[i].Address.ValueString(),  }
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.Addresses[i].Address.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -1503,8 +1500,8 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) addDeletePathsXML(ctx context.Contex
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/hold-time")
 	}
 	for i := range data.TrackObjects {
-		keys := [...]string{ "object-name",  }
-		keyValues := [...]string{ data.TrackObjects[i].ObjectName.ValueString(),  }
+		keys := [...]string{"object-name"}
+		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -1513,8 +1510,8 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) addDeletePathsXML(ctx context.Contex
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/track-objects/track-object%v", predicates))
 	}
 	for i := range data.TrackInterfaces {
-		keys := [...]string{ "track-name",  }
-		keyValues := [...]string{ data.TrackInterfaces[i].TrackName.ValueString(),  }
+		keys := [...]string{"track-name"}
+		keyValues := [...]string{data.TrackInterfaces[i].TrackName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -1538,8 +1535,8 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) addDeletePathsXML(ctx context.Contex
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/address/link-local/ipv6-address")
 	}
 	for i := range data.Addresses {
-		keys := [...]string{ "address",  }
-		keyValues := [...]string{ data.Addresses[i].Address.ValueString(),  }
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.Addresses[i].Address.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

@@ -23,19 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/netascode/go-gnmi"
-	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -52,7 +47,7 @@ func NewRouterBGPDataSource() datasource.DataSource {
 	return &RouterBGPDataSource{}
 }
 
-type RouterBGPDataSource struct{
+type RouterBGPDataSource struct {
 	data *IosxrProviderData
 }
 
@@ -187,7 +182,7 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 									"server_number": schema.Int64Attribute{
 										MarkdownDescription: "Enable BMP connection to particular server",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -512,7 +507,7 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 									"peer": schema.Int64Attribute{
 										MarkdownDescription: "Identity value of peer-set",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -720,19 +715,19 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 									"start": schema.Int64Attribute{
 										MarkdownDescription: "Attribute code range start",
 										Computed:            true,
-								},
+									},
 									"end": schema.Int64Attribute{
 										MarkdownDescription: "Attribute code range end",
 										Computed:            true,
-								},
+									},
 									"discard": schema.BoolAttribute{
 										MarkdownDescription: "Discard this attribute",
 										Computed:            true,
-								},
+									},
 									"treat_as_withdraw": schema.BoolAttribute{
 										MarkdownDescription: "Treat the update message as a Withdraw",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -756,7 +751,7 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 									"as_value": schema.StringAttribute{
 										MarkdownDescription: "AS number",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -1253,7 +1248,6 @@ func (d *RouterBGPDataSource) Read(ctx context.Context, req datasource.ReadReque
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
-
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

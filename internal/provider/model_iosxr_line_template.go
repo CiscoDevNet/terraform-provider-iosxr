@@ -28,109 +28,109 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type LineTemplate struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
-	TemplateName types.String `tfsdk:"template_name"`
-	Autocommand types.String `tfsdk:"autocommand"`
-	AccessClassIngress types.String `tfsdk:"access_class_ingress"`
-	AccessClassEgress types.String `tfsdk:"access_class_egress"`
-	DisconnectCharacter types.String `tfsdk:"disconnect_character"`
-	EscapeCharacter types.String `tfsdk:"escape_character"`
-	SessionTimeout types.Int64 `tfsdk:"session_timeout"`
-	SessionTimeoutOutput types.Bool `tfsdk:"session_timeout_output"`
-	TransportInputNone types.Bool `tfsdk:"transport_input_none"`
-	TransportInputSsh types.Bool `tfsdk:"transport_input_ssh"`
-	TransportInputSshTelnet types.Bool `tfsdk:"transport_input_ssh_telnet"`
-	TransportInputTelnet types.Bool `tfsdk:"transport_input_telnet"`
-	TransportInputAll types.Bool `tfsdk:"transport_input_all"`
-	TransportOutputAll types.Bool `tfsdk:"transport_output_all"`
-	TransportOutputNone types.Bool `tfsdk:"transport_output_none"`
-	TransportOutputSsh types.Bool `tfsdk:"transport_output_ssh"`
-	TransportOutputSshTelnet types.Bool `tfsdk:"transport_output_ssh_telnet"`
-	TransportOutputTelnet types.Bool `tfsdk:"transport_output_telnet"`
-	TransportPreferredNone types.Bool `tfsdk:"transport_preferred_none"`
-	TransportPreferredTelnet types.Bool `tfsdk:"transport_preferred_telnet"`
-	TransportPreferredSsh types.Bool `tfsdk:"transport_preferred_ssh"`
-	SessionLimit types.Int64 `tfsdk:"session_limit"`
-	CliWhitespaceCompletion types.Bool `tfsdk:"cli_whitespace_completion"`
-	LoginAuthentication types.String `tfsdk:"login_authentication"`
-	AuthorizationExec types.String `tfsdk:"authorization_exec"`
-	AuthorizationEventmanager types.String `tfsdk:"authorization_eventmanager"`
-	AuthorizationCommands types.String `tfsdk:"authorization_commands"`
-	AccountingExec types.String `tfsdk:"accounting_exec"`
-	AccountingCommands types.String `tfsdk:"accounting_commands"`
-	PasswordEncrypted types.String `tfsdk:"password_encrypted"`
-	SecretEncrypted types.String `tfsdk:"secret_encrypted"`
-	TimeoutLoginResponse types.Int64 `tfsdk:"timeout_login_response"`
-	UsersGroup []LineTemplateUsersGroup `tfsdk:"users_group"`
-	ExecTimeoutMinutes types.Int64 `tfsdk:"exec_timeout_minutes"`
-	ExecTimeoutSeconds types.Int64 `tfsdk:"exec_timeout_seconds"`
-	AbsoluteTimeout types.Int64 `tfsdk:"absolute_timeout"`
-	Width types.Int64 `tfsdk:"width"`
-	Length types.Int64 `tfsdk:"length"`
-	TimestampDisable types.Bool `tfsdk:"timestamp_disable"`
-	Pager types.String `tfsdk:"pager"`
-	TelnetTransparent types.Bool `tfsdk:"telnet_transparent"`
+	Device                    types.String             `tfsdk:"device"`
+	Id                        types.String             `tfsdk:"id"`
+	DeleteMode                types.String             `tfsdk:"delete_mode"`
+	TemplateName              types.String             `tfsdk:"template_name"`
+	Autocommand               types.String             `tfsdk:"autocommand"`
+	AccessClassIngress        types.String             `tfsdk:"access_class_ingress"`
+	AccessClassEgress         types.String             `tfsdk:"access_class_egress"`
+	DisconnectCharacter       types.String             `tfsdk:"disconnect_character"`
+	EscapeCharacter           types.String             `tfsdk:"escape_character"`
+	SessionTimeout            types.Int64              `tfsdk:"session_timeout"`
+	SessionTimeoutOutput      types.Bool               `tfsdk:"session_timeout_output"`
+	TransportInputNone        types.Bool               `tfsdk:"transport_input_none"`
+	TransportInputSsh         types.Bool               `tfsdk:"transport_input_ssh"`
+	TransportInputSshTelnet   types.Bool               `tfsdk:"transport_input_ssh_telnet"`
+	TransportInputTelnet      types.Bool               `tfsdk:"transport_input_telnet"`
+	TransportInputAll         types.Bool               `tfsdk:"transport_input_all"`
+	TransportOutputAll        types.Bool               `tfsdk:"transport_output_all"`
+	TransportOutputNone       types.Bool               `tfsdk:"transport_output_none"`
+	TransportOutputSsh        types.Bool               `tfsdk:"transport_output_ssh"`
+	TransportOutputSshTelnet  types.Bool               `tfsdk:"transport_output_ssh_telnet"`
+	TransportOutputTelnet     types.Bool               `tfsdk:"transport_output_telnet"`
+	TransportPreferredNone    types.Bool               `tfsdk:"transport_preferred_none"`
+	TransportPreferredTelnet  types.Bool               `tfsdk:"transport_preferred_telnet"`
+	TransportPreferredSsh     types.Bool               `tfsdk:"transport_preferred_ssh"`
+	SessionLimit              types.Int64              `tfsdk:"session_limit"`
+	CliWhitespaceCompletion   types.Bool               `tfsdk:"cli_whitespace_completion"`
+	LoginAuthentication       types.String             `tfsdk:"login_authentication"`
+	AuthorizationExec         types.String             `tfsdk:"authorization_exec"`
+	AuthorizationEventmanager types.String             `tfsdk:"authorization_eventmanager"`
+	AuthorizationCommands     types.String             `tfsdk:"authorization_commands"`
+	AccountingExec            types.String             `tfsdk:"accounting_exec"`
+	AccountingCommands        types.String             `tfsdk:"accounting_commands"`
+	PasswordEncrypted         types.String             `tfsdk:"password_encrypted"`
+	SecretEncrypted           types.String             `tfsdk:"secret_encrypted"`
+	TimeoutLoginResponse      types.Int64              `tfsdk:"timeout_login_response"`
+	UsersGroup                []LineTemplateUsersGroup `tfsdk:"users_group"`
+	ExecTimeoutMinutes        types.Int64              `tfsdk:"exec_timeout_minutes"`
+	ExecTimeoutSeconds        types.Int64              `tfsdk:"exec_timeout_seconds"`
+	AbsoluteTimeout           types.Int64              `tfsdk:"absolute_timeout"`
+	Width                     types.Int64              `tfsdk:"width"`
+	Length                    types.Int64              `tfsdk:"length"`
+	TimestampDisable          types.Bool               `tfsdk:"timestamp_disable"`
+	Pager                     types.String             `tfsdk:"pager"`
+	TelnetTransparent         types.Bool               `tfsdk:"telnet_transparent"`
 }
 
 type LineTemplateData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	TemplateName types.String `tfsdk:"template_name"`
-	Autocommand types.String `tfsdk:"autocommand"`
-	AccessClassIngress types.String `tfsdk:"access_class_ingress"`
-	AccessClassEgress types.String `tfsdk:"access_class_egress"`
-	DisconnectCharacter types.String `tfsdk:"disconnect_character"`
-	EscapeCharacter types.String `tfsdk:"escape_character"`
-	SessionTimeout types.Int64 `tfsdk:"session_timeout"`
-	SessionTimeoutOutput types.Bool `tfsdk:"session_timeout_output"`
-	TransportInputNone types.Bool `tfsdk:"transport_input_none"`
-	TransportInputSsh types.Bool `tfsdk:"transport_input_ssh"`
-	TransportInputSshTelnet types.Bool `tfsdk:"transport_input_ssh_telnet"`
-	TransportInputTelnet types.Bool `tfsdk:"transport_input_telnet"`
-	TransportInputAll types.Bool `tfsdk:"transport_input_all"`
-	TransportOutputAll types.Bool `tfsdk:"transport_output_all"`
-	TransportOutputNone types.Bool `tfsdk:"transport_output_none"`
-	TransportOutputSsh types.Bool `tfsdk:"transport_output_ssh"`
-	TransportOutputSshTelnet types.Bool `tfsdk:"transport_output_ssh_telnet"`
-	TransportOutputTelnet types.Bool `tfsdk:"transport_output_telnet"`
-	TransportPreferredNone types.Bool `tfsdk:"transport_preferred_none"`
-	TransportPreferredTelnet types.Bool `tfsdk:"transport_preferred_telnet"`
-	TransportPreferredSsh types.Bool `tfsdk:"transport_preferred_ssh"`
-	SessionLimit types.Int64 `tfsdk:"session_limit"`
-	CliWhitespaceCompletion types.Bool `tfsdk:"cli_whitespace_completion"`
-	LoginAuthentication types.String `tfsdk:"login_authentication"`
-	AuthorizationExec types.String `tfsdk:"authorization_exec"`
-	AuthorizationEventmanager types.String `tfsdk:"authorization_eventmanager"`
-	AuthorizationCommands types.String `tfsdk:"authorization_commands"`
-	AccountingExec types.String `tfsdk:"accounting_exec"`
-	AccountingCommands types.String `tfsdk:"accounting_commands"`
-	PasswordEncrypted types.String `tfsdk:"password_encrypted"`
-	SecretEncrypted types.String `tfsdk:"secret_encrypted"`
-	TimeoutLoginResponse types.Int64 `tfsdk:"timeout_login_response"`
-	UsersGroup []LineTemplateUsersGroup `tfsdk:"users_group"`
-	ExecTimeoutMinutes types.Int64 `tfsdk:"exec_timeout_minutes"`
-	ExecTimeoutSeconds types.Int64 `tfsdk:"exec_timeout_seconds"`
-	AbsoluteTimeout types.Int64 `tfsdk:"absolute_timeout"`
-	Width types.Int64 `tfsdk:"width"`
-	Length types.Int64 `tfsdk:"length"`
-	TimestampDisable types.Bool `tfsdk:"timestamp_disable"`
-	Pager types.String `tfsdk:"pager"`
-	TelnetTransparent types.Bool `tfsdk:"telnet_transparent"`
+	Device                    types.String             `tfsdk:"device"`
+	Id                        types.String             `tfsdk:"id"`
+	TemplateName              types.String             `tfsdk:"template_name"`
+	Autocommand               types.String             `tfsdk:"autocommand"`
+	AccessClassIngress        types.String             `tfsdk:"access_class_ingress"`
+	AccessClassEgress         types.String             `tfsdk:"access_class_egress"`
+	DisconnectCharacter       types.String             `tfsdk:"disconnect_character"`
+	EscapeCharacter           types.String             `tfsdk:"escape_character"`
+	SessionTimeout            types.Int64              `tfsdk:"session_timeout"`
+	SessionTimeoutOutput      types.Bool               `tfsdk:"session_timeout_output"`
+	TransportInputNone        types.Bool               `tfsdk:"transport_input_none"`
+	TransportInputSsh         types.Bool               `tfsdk:"transport_input_ssh"`
+	TransportInputSshTelnet   types.Bool               `tfsdk:"transport_input_ssh_telnet"`
+	TransportInputTelnet      types.Bool               `tfsdk:"transport_input_telnet"`
+	TransportInputAll         types.Bool               `tfsdk:"transport_input_all"`
+	TransportOutputAll        types.Bool               `tfsdk:"transport_output_all"`
+	TransportOutputNone       types.Bool               `tfsdk:"transport_output_none"`
+	TransportOutputSsh        types.Bool               `tfsdk:"transport_output_ssh"`
+	TransportOutputSshTelnet  types.Bool               `tfsdk:"transport_output_ssh_telnet"`
+	TransportOutputTelnet     types.Bool               `tfsdk:"transport_output_telnet"`
+	TransportPreferredNone    types.Bool               `tfsdk:"transport_preferred_none"`
+	TransportPreferredTelnet  types.Bool               `tfsdk:"transport_preferred_telnet"`
+	TransportPreferredSsh     types.Bool               `tfsdk:"transport_preferred_ssh"`
+	SessionLimit              types.Int64              `tfsdk:"session_limit"`
+	CliWhitespaceCompletion   types.Bool               `tfsdk:"cli_whitespace_completion"`
+	LoginAuthentication       types.String             `tfsdk:"login_authentication"`
+	AuthorizationExec         types.String             `tfsdk:"authorization_exec"`
+	AuthorizationEventmanager types.String             `tfsdk:"authorization_eventmanager"`
+	AuthorizationCommands     types.String             `tfsdk:"authorization_commands"`
+	AccountingExec            types.String             `tfsdk:"accounting_exec"`
+	AccountingCommands        types.String             `tfsdk:"accounting_commands"`
+	PasswordEncrypted         types.String             `tfsdk:"password_encrypted"`
+	SecretEncrypted           types.String             `tfsdk:"secret_encrypted"`
+	TimeoutLoginResponse      types.Int64              `tfsdk:"timeout_login_response"`
+	UsersGroup                []LineTemplateUsersGroup `tfsdk:"users_group"`
+	ExecTimeoutMinutes        types.Int64              `tfsdk:"exec_timeout_minutes"`
+	ExecTimeoutSeconds        types.Int64              `tfsdk:"exec_timeout_seconds"`
+	AbsoluteTimeout           types.Int64              `tfsdk:"absolute_timeout"`
+	Width                     types.Int64              `tfsdk:"width"`
+	Length                    types.Int64              `tfsdk:"length"`
+	TimestampDisable          types.Bool               `tfsdk:"timestamp_disable"`
+	Pager                     types.String             `tfsdk:"pager"`
+	TelnetTransparent         types.Bool               `tfsdk:"telnet_transparent"`
 }
 type LineTemplateUsersGroup struct {
 	GroupName types.String `tfsdk:"group_name"`
@@ -367,145 +367,130 @@ func (data *LineTemplate) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.SessionTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "session-timeout.output"); !data.SessionTimeoutOutput.IsNull() {
-		if value.Exists() {
-			data.SessionTimeoutOutput = types.BoolValue(true)
-		} else {
-			data.SessionTimeoutOutput = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "session-timeout.output"); value.Exists() {
+		data.SessionTimeoutOutput = types.BoolValue(true)
 	} else {
-		data.SessionTimeoutOutput = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SessionTimeoutOutput.IsNull() {
+			data.SessionTimeoutOutput = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.none"); !data.TransportInputNone.IsNull() {
-		if value.Exists() {
-			data.TransportInputNone = types.BoolValue(true)
-		} else {
-			data.TransportInputNone = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "transport.input.none"); value.Exists() {
+		data.TransportInputNone = types.BoolValue(true)
 	} else {
-		data.TransportInputNone = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputNone.IsNull() {
+			data.TransportInputNone = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.ssh"); !data.TransportInputSsh.IsNull() {
-		if value.Exists() {
-			data.TransportInputSsh = types.BoolValue(true)
-		} else {
-			data.TransportInputSsh = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "transport.input.ssh"); value.Exists() {
+		data.TransportInputSsh = types.BoolValue(true)
 	} else {
-		data.TransportInputSsh = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputSsh.IsNull() {
+			data.TransportInputSsh = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.ssh.telnet"); !data.TransportInputSshTelnet.IsNull() {
-		if value.Exists() {
-			data.TransportInputSshTelnet = types.BoolValue(true)
-		} else {
-			data.TransportInputSshTelnet = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "transport.input.ssh.telnet"); value.Exists() {
+		data.TransportInputSshTelnet = types.BoolValue(true)
 	} else {
-		data.TransportInputSshTelnet = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputSshTelnet.IsNull() {
+			data.TransportInputSshTelnet = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.telnet"); !data.TransportInputTelnet.IsNull() {
-		if value.Exists() {
-			data.TransportInputTelnet = types.BoolValue(true)
-		} else {
-			data.TransportInputTelnet = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "transport.input.telnet"); value.Exists() {
+		data.TransportInputTelnet = types.BoolValue(true)
 	} else {
-		data.TransportInputTelnet = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputTelnet.IsNull() {
+			data.TransportInputTelnet = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.all"); !data.TransportInputAll.IsNull() {
-		if value.Exists() {
-			data.TransportInputAll = types.BoolValue(true)
-		} else {
-			data.TransportInputAll = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "transport.input.all"); value.Exists() {
+		data.TransportInputAll = types.BoolValue(true)
 	} else {
-		data.TransportInputAll = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputAll.IsNull() {
+			data.TransportInputAll = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.all"); !data.TransportOutputAll.IsNull() {
-		if value.Exists() {
-			data.TransportOutputAll = types.BoolValue(true)
-		} else {
-			data.TransportOutputAll = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "transport.output.all"); value.Exists() {
+		data.TransportOutputAll = types.BoolValue(true)
 	} else {
-		data.TransportOutputAll = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputAll.IsNull() {
+			data.TransportOutputAll = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.none"); !data.TransportOutputNone.IsNull() {
-		if value.Exists() {
-			data.TransportOutputNone = types.BoolValue(true)
-		} else {
-			data.TransportOutputNone = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "transport.output.none"); value.Exists() {
+		data.TransportOutputNone = types.BoolValue(true)
 	} else {
-		data.TransportOutputNone = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputNone.IsNull() {
+			data.TransportOutputNone = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.ssh"); !data.TransportOutputSsh.IsNull() {
-		if value.Exists() {
-			data.TransportOutputSsh = types.BoolValue(true)
-		} else {
-			data.TransportOutputSsh = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "transport.output.ssh"); value.Exists() {
+		data.TransportOutputSsh = types.BoolValue(true)
 	} else {
-		data.TransportOutputSsh = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputSsh.IsNull() {
+			data.TransportOutputSsh = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.ssh.telnet"); !data.TransportOutputSshTelnet.IsNull() {
-		if value.Exists() {
-			data.TransportOutputSshTelnet = types.BoolValue(true)
-		} else {
-			data.TransportOutputSshTelnet = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "transport.output.ssh.telnet"); value.Exists() {
+		data.TransportOutputSshTelnet = types.BoolValue(true)
 	} else {
-		data.TransportOutputSshTelnet = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputSshTelnet.IsNull() {
+			data.TransportOutputSshTelnet = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.telnet"); !data.TransportOutputTelnet.IsNull() {
-		if value.Exists() {
-			data.TransportOutputTelnet = types.BoolValue(true)
-		} else {
-			data.TransportOutputTelnet = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "transport.output.telnet"); value.Exists() {
+		data.TransportOutputTelnet = types.BoolValue(true)
 	} else {
-		data.TransportOutputTelnet = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputTelnet.IsNull() {
+			data.TransportOutputTelnet = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.none"); !data.TransportPreferredNone.IsNull() {
-		if value.Exists() {
-			data.TransportPreferredNone = types.BoolValue(true)
-		} else {
-			data.TransportPreferredNone = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "transport.preferred.none"); value.Exists() {
+		data.TransportPreferredNone = types.BoolValue(true)
 	} else {
-		data.TransportPreferredNone = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportPreferredNone.IsNull() {
+			data.TransportPreferredNone = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.telnet"); !data.TransportPreferredTelnet.IsNull() {
-		if value.Exists() {
-			data.TransportPreferredTelnet = types.BoolValue(true)
-		} else {
-			data.TransportPreferredTelnet = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "transport.preferred.telnet"); value.Exists() {
+		data.TransportPreferredTelnet = types.BoolValue(true)
 	} else {
-		data.TransportPreferredTelnet = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportPreferredTelnet.IsNull() {
+			data.TransportPreferredTelnet = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.ssh"); !data.TransportPreferredSsh.IsNull() {
-		if value.Exists() {
-			data.TransportPreferredSsh = types.BoolValue(true)
-		} else {
-			data.TransportPreferredSsh = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "transport.preferred.ssh"); value.Exists() {
+		data.TransportPreferredSsh = types.BoolValue(true)
 	} else {
-		data.TransportPreferredSsh = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportPreferredSsh.IsNull() {
+			data.TransportPreferredSsh = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "session-limit"); value.Exists() && !data.SessionLimit.IsNull() {
 		data.SessionLimit = types.Int64Value(value.Int())
 	} else {
 		data.SessionLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "cli.whitespace.completion"); !data.CliWhitespaceCompletion.IsNull() {
-		if value.Exists() {
-			data.CliWhitespaceCompletion = types.BoolValue(true)
-		} else {
-			data.CliWhitespaceCompletion = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "cli.whitespace.completion"); value.Exists() {
+		data.CliWhitespaceCompletion = types.BoolValue(true)
 	} else {
-		data.CliWhitespaceCompletion = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.CliWhitespaceCompletion.IsNull() {
+			data.CliWhitespaceCompletion = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() && !data.LoginAuthentication.IsNull() {
 		data.LoginAuthentication = types.StringValue(value.String())
@@ -543,8 +528,8 @@ func (data *LineTemplate) updateFromBody(ctx context.Context, res []byte) {
 		data.TimeoutLoginResponse = types.Int64Null()
 	}
 	for i := range data.UsersGroup {
-		keys := [...]string{ "group-name",  }
-		keyValues := [...]string{ data.UsersGroup[i].GroupName.ValueString(),  }
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.UsersGroup[i].GroupName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:users.group").ForEach(
@@ -596,28 +581,26 @@ func (data *LineTemplate) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Length = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); !data.TimestampDisable.IsNull() {
-		if value.Exists() {
-			data.TimestampDisable = types.BoolValue(true)
-		} else {
-			data.TimestampDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
+		data.TimestampDisable = types.BoolValue(true)
 	} else {
-		data.TimestampDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TimestampDisable.IsNull() {
+			data.TimestampDisable = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() && !data.Pager.IsNull() {
 		data.Pager = types.StringValue(value.String())
 	} else {
 		data.Pager = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); !data.TelnetTransparent.IsNull() {
-		if value.Exists() {
-			data.TelnetTransparent = types.BoolValue(true)
-		} else {
-			data.TelnetTransparent = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
+		data.TelnetTransparent = types.BoolValue(true)
 	} else {
-		data.TelnetTransparent = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TelnetTransparent.IsNull() {
+			data.TelnetTransparent = types.BoolNull()
+		}
 	}
 }
 
@@ -627,130 +610,130 @@ func (data *LineTemplate) updateFromBody(ctx context.Context, res []byte) {
 func (data LineTemplate) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.TemplateName.IsNull() && !data.TemplateName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/template-name", data.TemplateName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/template-name", data.TemplateName.ValueString())
 	}
 	if !data.Autocommand.IsNull() && !data.Autocommand.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/autocommand", data.Autocommand.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/autocommand", data.Autocommand.ValueString())
 	}
 	if !data.AccessClassIngress.IsNull() && !data.AccessClassIngress.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/access-class/ingress", data.AccessClassIngress.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/access-class/ingress", data.AccessClassIngress.ValueString())
 	}
 	if !data.AccessClassEgress.IsNull() && !data.AccessClassEgress.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/access-class/egress", data.AccessClassEgress.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/access-class/egress", data.AccessClassEgress.ValueString())
 	}
 	if !data.DisconnectCharacter.IsNull() && !data.DisconnectCharacter.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/disconnect-character", data.DisconnectCharacter.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/disconnect-character", data.DisconnectCharacter.ValueString())
 	}
 	if !data.EscapeCharacter.IsNull() && !data.EscapeCharacter.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/escape-character", data.EscapeCharacter.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/escape-character", data.EscapeCharacter.ValueString())
 	}
 	if !data.SessionTimeout.IsNull() && !data.SessionTimeout.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/session-timeout/timeout-interval", strconv.FormatInt(data.SessionTimeout.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/session-timeout/timeout-interval", strconv.FormatInt(data.SessionTimeout.ValueInt64(), 10))
 	}
 	if !data.SessionTimeoutOutput.IsNull() && !data.SessionTimeoutOutput.IsUnknown() {
 		if data.SessionTimeoutOutput.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/session-timeout/output", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/session-timeout/output", "")
 		}
 	}
 	if !data.TransportInputNone.IsNull() && !data.TransportInputNone.IsUnknown() {
 		if data.TransportInputNone.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/transport/input/none", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/input/none", "")
 		}
 	}
 	if !data.TransportInputSsh.IsNull() && !data.TransportInputSsh.IsUnknown() {
 		if data.TransportInputSsh.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/transport/input/ssh", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/input/ssh", "")
 		}
 	}
 	if !data.TransportInputSshTelnet.IsNull() && !data.TransportInputSshTelnet.IsUnknown() {
 		if data.TransportInputSshTelnet.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/transport/input/ssh/telnet", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/input/ssh/telnet", "")
 		}
 	}
 	if !data.TransportInputTelnet.IsNull() && !data.TransportInputTelnet.IsUnknown() {
 		if data.TransportInputTelnet.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/transport/input/telnet", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/input/telnet", "")
 		}
 	}
 	if !data.TransportInputAll.IsNull() && !data.TransportInputAll.IsUnknown() {
 		if data.TransportInputAll.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/transport/input/all", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/input/all", "")
 		}
 	}
 	if !data.TransportOutputAll.IsNull() && !data.TransportOutputAll.IsUnknown() {
 		if data.TransportOutputAll.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/transport/output/all", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/output/all", "")
 		}
 	}
 	if !data.TransportOutputNone.IsNull() && !data.TransportOutputNone.IsUnknown() {
 		if data.TransportOutputNone.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/transport/output/none", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/output/none", "")
 		}
 	}
 	if !data.TransportOutputSsh.IsNull() && !data.TransportOutputSsh.IsUnknown() {
 		if data.TransportOutputSsh.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/transport/output/ssh", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/output/ssh", "")
 		}
 	}
 	if !data.TransportOutputSshTelnet.IsNull() && !data.TransportOutputSshTelnet.IsUnknown() {
 		if data.TransportOutputSshTelnet.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/transport/output/ssh/telnet", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/output/ssh/telnet", "")
 		}
 	}
 	if !data.TransportOutputTelnet.IsNull() && !data.TransportOutputTelnet.IsUnknown() {
 		if data.TransportOutputTelnet.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/transport/output/telnet", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/output/telnet", "")
 		}
 	}
 	if !data.TransportPreferredNone.IsNull() && !data.TransportPreferredNone.IsUnknown() {
 		if data.TransportPreferredNone.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/transport/preferred/none", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/preferred/none", "")
 		}
 	}
 	if !data.TransportPreferredTelnet.IsNull() && !data.TransportPreferredTelnet.IsUnknown() {
 		if data.TransportPreferredTelnet.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/transport/preferred/telnet", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/preferred/telnet", "")
 		}
 	}
 	if !data.TransportPreferredSsh.IsNull() && !data.TransportPreferredSsh.IsUnknown() {
 		if data.TransportPreferredSsh.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/transport/preferred/ssh", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/preferred/ssh", "")
 		}
 	}
 	if !data.SessionLimit.IsNull() && !data.SessionLimit.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/session-limit", strconv.FormatInt(data.SessionLimit.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/session-limit", strconv.FormatInt(data.SessionLimit.ValueInt64(), 10))
 	}
 	if !data.CliWhitespaceCompletion.IsNull() && !data.CliWhitespaceCompletion.IsUnknown() {
 		if data.CliWhitespaceCompletion.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/cli/whitespace/completion", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/cli/whitespace/completion", "")
 		}
 	}
 	if !data.LoginAuthentication.IsNull() && !data.LoginAuthentication.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication", data.LoginAuthentication.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication", data.LoginAuthentication.ValueString())
 	}
 	if !data.AuthorizationExec.IsNull() && !data.AuthorizationExec.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec", data.AuthorizationExec.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec", data.AuthorizationExec.ValueString())
 	}
 	if !data.AuthorizationEventmanager.IsNull() && !data.AuthorizationEventmanager.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager", data.AuthorizationEventmanager.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager", data.AuthorizationEventmanager.ValueString())
 	}
 	if !data.AuthorizationCommands.IsNull() && !data.AuthorizationCommands.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands", data.AuthorizationCommands.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands", data.AuthorizationCommands.ValueString())
 	}
 	if !data.AccountingExec.IsNull() && !data.AccountingExec.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec", data.AccountingExec.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec", data.AccountingExec.ValueString())
 	}
 	if !data.AccountingCommands.IsNull() && !data.AccountingCommands.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands", data.AccountingCommands.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands", data.AccountingCommands.ValueString())
 	}
 	if !data.PasswordEncrypted.IsNull() && !data.PasswordEncrypted.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven", data.PasswordEncrypted.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven", data.PasswordEncrypted.ValueString())
 	}
 	if !data.SecretEncrypted.IsNull() && !data.SecretEncrypted.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five", data.SecretEncrypted.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five", data.SecretEncrypted.ValueString())
 	}
 	if !data.TimeoutLoginResponse.IsNull() && !data.TimeoutLoginResponse.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response", strconv.FormatInt(data.TimeoutLoginResponse.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response", strconv.FormatInt(data.TimeoutLoginResponse.ValueInt64(), 10))
 	}
 	if len(data.UsersGroup) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -764,31 +747,31 @@ func (data LineTemplate) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if !data.ExecTimeoutMinutes.IsNull() && !data.ExecTimeoutMinutes.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-minutes", strconv.FormatInt(data.ExecTimeoutMinutes.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-minutes", strconv.FormatInt(data.ExecTimeoutMinutes.ValueInt64(), 10))
 	}
 	if !data.ExecTimeoutSeconds.IsNull() && !data.ExecTimeoutSeconds.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-seconds", strconv.FormatInt(data.ExecTimeoutSeconds.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-seconds", strconv.FormatInt(data.ExecTimeoutSeconds.ValueInt64(), 10))
 	}
 	if !data.AbsoluteTimeout.IsNull() && !data.AbsoluteTimeout.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout", strconv.FormatInt(data.AbsoluteTimeout.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout", strconv.FormatInt(data.AbsoluteTimeout.ValueInt64(), 10))
 	}
 	if !data.Width.IsNull() && !data.Width.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:width", strconv.FormatInt(data.Width.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:width", strconv.FormatInt(data.Width.ValueInt64(), 10))
 	}
 	if !data.Length.IsNull() && !data.Length.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:length", strconv.FormatInt(data.Length.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:length", strconv.FormatInt(data.Length.ValueInt64(), 10))
 	}
 	if !data.TimestampDisable.IsNull() && !data.TimestampDisable.IsUnknown() {
 		if data.TimestampDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp/disable", "")
 		}
 	}
 	if !data.Pager.IsNull() && !data.Pager.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-line-timestamp-cfg:pager", data.Pager.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:pager", data.Pager.ValueString())
 	}
 	if !data.TelnetTransparent.IsNull() && !data.TelnetTransparent.IsUnknown() {
 		if data.TelnetTransparent.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent", "")
 		}
 	}
 	bodyString, err := body.String()
@@ -802,42 +785,42 @@ func (data LineTemplate) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/template-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/template-name"); value.Exists() {
 		data.TemplateName = types.StringValue(value.String())
 	} else if data.TemplateName.IsNull() {
 		data.TemplateName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/autocommand"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autocommand"); value.Exists() {
 		data.Autocommand = types.StringValue(value.String())
 	} else if data.Autocommand.IsNull() {
 		data.Autocommand = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/access-class/ingress"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-class/ingress"); value.Exists() {
 		data.AccessClassIngress = types.StringValue(value.String())
 	} else if data.AccessClassIngress.IsNull() {
 		data.AccessClassIngress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/access-class/egress"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-class/egress"); value.Exists() {
 		data.AccessClassEgress = types.StringValue(value.String())
 	} else if data.AccessClassEgress.IsNull() {
 		data.AccessClassEgress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/disconnect-character"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/disconnect-character"); value.Exists() {
 		data.DisconnectCharacter = types.StringValue(value.String())
 	} else if data.DisconnectCharacter.IsNull() {
 		data.DisconnectCharacter = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/escape-character"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/escape-character"); value.Exists() {
 		data.EscapeCharacter = types.StringValue(value.String())
 	} else if data.EscapeCharacter.IsNull() {
 		data.EscapeCharacter = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/session-timeout/timeout-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/session-timeout/timeout-interval"); value.Exists() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	} else if data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/session-timeout/output"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/session-timeout/output"); value.Exists() {
 		data.SessionTimeoutOutput = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -845,7 +828,7 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.SessionTimeoutOutput = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/none"); value.Exists() {
 		data.TransportInputNone = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -853,7 +836,7 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.TransportInputNone = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/ssh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/ssh"); value.Exists() {
 		data.TransportInputSsh = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -861,7 +844,7 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.TransportInputSsh = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/ssh/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/ssh/telnet"); value.Exists() {
 		data.TransportInputSshTelnet = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -869,7 +852,7 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.TransportInputSshTelnet = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/telnet"); value.Exists() {
 		data.TransportInputTelnet = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -877,7 +860,7 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.TransportInputTelnet = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/all"); value.Exists() {
 		data.TransportInputAll = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -885,7 +868,7 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.TransportInputAll = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/all"); value.Exists() {
 		data.TransportOutputAll = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -893,7 +876,7 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.TransportOutputAll = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/none"); value.Exists() {
 		data.TransportOutputNone = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -901,7 +884,7 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.TransportOutputNone = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/ssh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/ssh"); value.Exists() {
 		data.TransportOutputSsh = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -909,7 +892,7 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.TransportOutputSsh = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/ssh/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/ssh/telnet"); value.Exists() {
 		data.TransportOutputSshTelnet = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -917,7 +900,7 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.TransportOutputSshTelnet = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/telnet"); value.Exists() {
 		data.TransportOutputTelnet = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -925,7 +908,7 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.TransportOutputTelnet = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/preferred/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/preferred/none"); value.Exists() {
 		data.TransportPreferredNone = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -933,7 +916,7 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.TransportPreferredNone = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/preferred/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/preferred/telnet"); value.Exists() {
 		data.TransportPreferredTelnet = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -941,7 +924,7 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.TransportPreferredTelnet = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/preferred/ssh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/preferred/ssh"); value.Exists() {
 		data.TransportPreferredSsh = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -949,12 +932,12 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.TransportPreferredSsh = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/session-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/session-limit"); value.Exists() {
 		data.SessionLimit = types.Int64Value(value.Int())
 	} else if data.SessionLimit.IsNull() {
 		data.SessionLimit = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/cli/whitespace/completion"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/cli/whitespace/completion"); value.Exists() {
 		data.CliWhitespaceCompletion = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -962,47 +945,47 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.CliWhitespaceCompletion = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication"); value.Exists() {
 		data.LoginAuthentication = types.StringValue(value.String())
 	} else if data.LoginAuthentication.IsNull() {
 		data.LoginAuthentication = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec"); value.Exists() {
 		data.AuthorizationExec = types.StringValue(value.String())
 	} else if data.AuthorizationExec.IsNull() {
 		data.AuthorizationExec = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager"); value.Exists() {
 		data.AuthorizationEventmanager = types.StringValue(value.String())
 	} else if data.AuthorizationEventmanager.IsNull() {
 		data.AuthorizationEventmanager = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands"); value.Exists() {
 		data.AuthorizationCommands = types.StringValue(value.String())
 	} else if data.AuthorizationCommands.IsNull() {
 		data.AuthorizationCommands = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec"); value.Exists() {
 		data.AccountingExec = types.StringValue(value.String())
 	} else if data.AccountingExec.IsNull() {
 		data.AccountingExec = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands"); value.Exists() {
 		data.AccountingCommands = types.StringValue(value.String())
 	} else if data.AccountingCommands.IsNull() {
 		data.AccountingCommands = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response"); value.Exists() {
 		data.TimeoutLoginResponse = types.Int64Value(value.Int())
 	} else if data.TimeoutLoginResponse.IsNull() {
 		data.TimeoutLoginResponse = types.Int64Null()
 	}
 	for i := range data.UsersGroup {
-		keys := [...]string{ "group-name",  }
-		keyValues := [...]string{ data.UsersGroup[i].GroupName.ValueString(),  }
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.UsersGroup[i].GroupName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1026,32 +1009,32 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.UsersGroup[i].GroupName = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-minutes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-minutes"); value.Exists() {
 		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
 	} else if data.ExecTimeoutMinutes.IsNull() {
 		data.ExecTimeoutMinutes = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-seconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-seconds"); value.Exists() {
 		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
 	} else if data.ExecTimeoutSeconds.IsNull() {
 		data.ExecTimeoutSeconds = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
 		data.AbsoluteTimeout = types.Int64Value(value.Int())
 	} else if data.AbsoluteTimeout.IsNull() {
 		data.AbsoluteTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
 		data.Width = types.Int64Value(value.Int())
 	} else if data.Width.IsNull() {
 		data.Width = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
 		data.Length = types.Int64Value(value.Int())
 	} else if data.Length.IsNull() {
 		data.Length = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp/disable"); value.Exists() {
 		data.TimestampDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1059,12 +1042,12 @@ func (data *LineTemplate) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.TimestampDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
 		data.Pager = types.StringValue(value.String())
 	} else if data.Pager.IsNull() {
 		data.Pager = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"); value.Exists() {
 		data.TelnetTransparent = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -1082,124 +1065,124 @@ func (data *LineTemplate) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"autocommand"); value.Exists() {
+	if value := res.Get(prefix + "autocommand"); value.Exists() {
 		data.Autocommand = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"access-class.ingress"); value.Exists() {
+	if value := res.Get(prefix + "access-class.ingress"); value.Exists() {
 		data.AccessClassIngress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"access-class.egress"); value.Exists() {
+	if value := res.Get(prefix + "access-class.egress"); value.Exists() {
 		data.AccessClassEgress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"disconnect-character"); value.Exists() {
+	if value := res.Get(prefix + "disconnect-character"); value.Exists() {
 		data.DisconnectCharacter = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"escape-character"); value.Exists() {
+	if value := res.Get(prefix + "escape-character"); value.Exists() {
 		data.EscapeCharacter = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"session-timeout.timeout-interval"); value.Exists() {
+	if value := res.Get(prefix + "session-timeout.timeout-interval"); value.Exists() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"session-timeout.output"); value.Exists() {
+	if value := res.Get(prefix + "session-timeout.output"); value.Exists() {
 		data.SessionTimeoutOutput = types.BoolValue(true)
 	} else {
 		data.SessionTimeoutOutput = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"transport.input.none"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.none"); value.Exists() {
 		data.TransportInputNone = types.BoolValue(true)
 	} else {
 		data.TransportInputNone = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"transport.input.ssh"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.ssh"); value.Exists() {
 		data.TransportInputSsh = types.BoolValue(true)
 	} else {
 		data.TransportInputSsh = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"transport.input.ssh.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.ssh.telnet"); value.Exists() {
 		data.TransportInputSshTelnet = types.BoolValue(true)
 	} else {
 		data.TransportInputSshTelnet = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"transport.input.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.telnet"); value.Exists() {
 		data.TransportInputTelnet = types.BoolValue(true)
 	} else {
 		data.TransportInputTelnet = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"transport.input.all"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.all"); value.Exists() {
 		data.TransportInputAll = types.BoolValue(true)
 	} else {
 		data.TransportInputAll = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"transport.output.all"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.all"); value.Exists() {
 		data.TransportOutputAll = types.BoolValue(true)
 	} else {
 		data.TransportOutputAll = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"transport.output.none"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.none"); value.Exists() {
 		data.TransportOutputNone = types.BoolValue(true)
 	} else {
 		data.TransportOutputNone = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"transport.output.ssh"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.ssh"); value.Exists() {
 		data.TransportOutputSsh = types.BoolValue(true)
 	} else {
 		data.TransportOutputSsh = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"transport.output.ssh.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.ssh.telnet"); value.Exists() {
 		data.TransportOutputSshTelnet = types.BoolValue(true)
 	} else {
 		data.TransportOutputSshTelnet = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"transport.output.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.telnet"); value.Exists() {
 		data.TransportOutputTelnet = types.BoolValue(true)
 	} else {
 		data.TransportOutputTelnet = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"transport.preferred.none"); value.Exists() {
+	if value := res.Get(prefix + "transport.preferred.none"); value.Exists() {
 		data.TransportPreferredNone = types.BoolValue(true)
 	} else {
 		data.TransportPreferredNone = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"transport.preferred.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.preferred.telnet"); value.Exists() {
 		data.TransportPreferredTelnet = types.BoolValue(true)
 	} else {
 		data.TransportPreferredTelnet = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"transport.preferred.ssh"); value.Exists() {
+	if value := res.Get(prefix + "transport.preferred.ssh"); value.Exists() {
 		data.TransportPreferredSsh = types.BoolValue(true)
 	} else {
 		data.TransportPreferredSsh = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"session-limit"); value.Exists() {
+	if value := res.Get(prefix + "session-limit"); value.Exists() {
 		data.SessionLimit = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"cli.whitespace.completion"); value.Exists() {
+	if value := res.Get(prefix + "cli.whitespace.completion"); value.Exists() {
 		data.CliWhitespaceCompletion = types.BoolValue(true)
 	} else {
 		data.CliWhitespaceCompletion = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() {
 		data.LoginAuthentication = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() {
 		data.AuthorizationExec = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() {
 		data.AuthorizationEventmanager = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() {
 		data.AuthorizationCommands = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() {
 		data.AccountingExec = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() {
 		data.AccountingCommands = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() {
 		data.TimeoutLoginResponse = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:users.group"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:users.group"); value.Exists() {
 		data.UsersGroup = make([]LineTemplateUsersGroup, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LineTemplateUsersGroup{}
@@ -1210,30 +1193,30 @@ func (data *LineTemplate) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() {
 		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() {
 		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
 		data.AbsoluteTimeout = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
 		data.Width = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
 		data.Length = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
 		data.TimestampDisable = types.BoolValue(true)
 	} else {
 		data.TimestampDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
 		data.Pager = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
 		data.TelnetTransparent = types.BoolValue(true)
 	} else {
 		data.TelnetTransparent = types.BoolValue(false)
@@ -1248,130 +1231,130 @@ func (data *LineTemplateData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"autocommand"); value.Exists() {
+	if value := res.Get(prefix + "autocommand"); value.Exists() {
 		data.Autocommand = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"access-class.ingress"); value.Exists() {
+	if value := res.Get(prefix + "access-class.ingress"); value.Exists() {
 		data.AccessClassIngress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"access-class.egress"); value.Exists() {
+	if value := res.Get(prefix + "access-class.egress"); value.Exists() {
 		data.AccessClassEgress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"disconnect-character"); value.Exists() {
+	if value := res.Get(prefix + "disconnect-character"); value.Exists() {
 		data.DisconnectCharacter = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"escape-character"); value.Exists() {
+	if value := res.Get(prefix + "escape-character"); value.Exists() {
 		data.EscapeCharacter = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"session-timeout.timeout-interval"); value.Exists() {
+	if value := res.Get(prefix + "session-timeout.timeout-interval"); value.Exists() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"session-timeout.output"); value.Exists() {
+	if value := res.Get(prefix + "session-timeout.output"); value.Exists() {
 		data.SessionTimeoutOutput = types.BoolValue(true)
 	} else {
 		data.SessionTimeoutOutput = types.BoolNull()
 	}
-	if value := res.Get(prefix+"transport.input.none"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.none"); value.Exists() {
 		data.TransportInputNone = types.BoolValue(true)
 	} else {
 		data.TransportInputNone = types.BoolNull()
 	}
-	if value := res.Get(prefix+"transport.input.ssh"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.ssh"); value.Exists() {
 		data.TransportInputSsh = types.BoolValue(true)
 	} else {
 		data.TransportInputSsh = types.BoolNull()
 	}
-	if value := res.Get(prefix+"transport.input.ssh.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.ssh.telnet"); value.Exists() {
 		data.TransportInputSshTelnet = types.BoolValue(true)
 	} else {
 		data.TransportInputSshTelnet = types.BoolNull()
 	}
-	if value := res.Get(prefix+"transport.input.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.telnet"); value.Exists() {
 		data.TransportInputTelnet = types.BoolValue(true)
 	} else {
 		data.TransportInputTelnet = types.BoolNull()
 	}
-	if value := res.Get(prefix+"transport.input.all"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.all"); value.Exists() {
 		data.TransportInputAll = types.BoolValue(true)
 	} else {
 		data.TransportInputAll = types.BoolNull()
 	}
-	if value := res.Get(prefix+"transport.output.all"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.all"); value.Exists() {
 		data.TransportOutputAll = types.BoolValue(true)
 	} else {
 		data.TransportOutputAll = types.BoolNull()
 	}
-	if value := res.Get(prefix+"transport.output.none"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.none"); value.Exists() {
 		data.TransportOutputNone = types.BoolValue(true)
 	} else {
 		data.TransportOutputNone = types.BoolNull()
 	}
-	if value := res.Get(prefix+"transport.output.ssh"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.ssh"); value.Exists() {
 		data.TransportOutputSsh = types.BoolValue(true)
 	} else {
 		data.TransportOutputSsh = types.BoolNull()
 	}
-	if value := res.Get(prefix+"transport.output.ssh.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.ssh.telnet"); value.Exists() {
 		data.TransportOutputSshTelnet = types.BoolValue(true)
 	} else {
 		data.TransportOutputSshTelnet = types.BoolNull()
 	}
-	if value := res.Get(prefix+"transport.output.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.telnet"); value.Exists() {
 		data.TransportOutputTelnet = types.BoolValue(true)
 	} else {
 		data.TransportOutputTelnet = types.BoolNull()
 	}
-	if value := res.Get(prefix+"transport.preferred.none"); value.Exists() {
+	if value := res.Get(prefix + "transport.preferred.none"); value.Exists() {
 		data.TransportPreferredNone = types.BoolValue(true)
 	} else {
 		data.TransportPreferredNone = types.BoolNull()
 	}
-	if value := res.Get(prefix+"transport.preferred.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.preferred.telnet"); value.Exists() {
 		data.TransportPreferredTelnet = types.BoolValue(true)
 	} else {
 		data.TransportPreferredTelnet = types.BoolNull()
 	}
-	if value := res.Get(prefix+"transport.preferred.ssh"); value.Exists() {
+	if value := res.Get(prefix + "transport.preferred.ssh"); value.Exists() {
 		data.TransportPreferredSsh = types.BoolValue(true)
 	} else {
 		data.TransportPreferredSsh = types.BoolNull()
 	}
-	if value := res.Get(prefix+"session-limit"); value.Exists() {
+	if value := res.Get(prefix + "session-limit"); value.Exists() {
 		data.SessionLimit = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"cli.whitespace.completion"); value.Exists() {
+	if value := res.Get(prefix + "cli.whitespace.completion"); value.Exists() {
 		data.CliWhitespaceCompletion = types.BoolValue(true)
 	} else {
 		data.CliWhitespaceCompletion = types.BoolNull()
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() {
 		data.LoginAuthentication = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() {
 		data.AuthorizationExec = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() {
 		data.AuthorizationEventmanager = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() {
 		data.AuthorizationCommands = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() {
 		data.AccountingExec = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() {
 		data.AccountingCommands = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:password.seven"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:password.seven"); value.Exists() {
 		data.PasswordEncrypted = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:secret.five"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:secret.five"); value.Exists() {
 		data.SecretEncrypted = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() {
 		data.TimeoutLoginResponse = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-aaa-task-user-cfg:users.group"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:users.group"); value.Exists() {
 		data.UsersGroup = make([]LineTemplateUsersGroup, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LineTemplateUsersGroup{}
@@ -1382,30 +1365,30 @@ func (data *LineTemplateData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() {
 		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() {
 		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
 		data.AbsoluteTimeout = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
 		data.Width = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
 		data.Length = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
 		data.TimestampDisable = types.BoolValue(true)
 	} else {
 		data.TimestampDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
 		data.Pager = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
 		data.TelnetTransparent = types.BoolValue(true)
 	} else {
 		data.TelnetTransparent = types.BoolNull()
@@ -1416,130 +1399,130 @@ func (data *LineTemplateData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *LineTemplate) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/autocommand"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autocommand"); value.Exists() {
 		data.Autocommand = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/access-class/ingress"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-class/ingress"); value.Exists() {
 		data.AccessClassIngress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/access-class/egress"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-class/egress"); value.Exists() {
 		data.AccessClassEgress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/disconnect-character"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/disconnect-character"); value.Exists() {
 		data.DisconnectCharacter = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/escape-character"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/escape-character"); value.Exists() {
 		data.EscapeCharacter = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/session-timeout/timeout-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/session-timeout/timeout-interval"); value.Exists() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/session-timeout/output"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/session-timeout/output"); value.Exists() {
 		data.SessionTimeoutOutput = types.BoolValue(true)
 	} else {
 		data.SessionTimeoutOutput = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/none"); value.Exists() {
 		data.TransportInputNone = types.BoolValue(true)
 	} else {
 		data.TransportInputNone = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/ssh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/ssh"); value.Exists() {
 		data.TransportInputSsh = types.BoolValue(true)
 	} else {
 		data.TransportInputSsh = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/ssh/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/ssh/telnet"); value.Exists() {
 		data.TransportInputSshTelnet = types.BoolValue(true)
 	} else {
 		data.TransportInputSshTelnet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/telnet"); value.Exists() {
 		data.TransportInputTelnet = types.BoolValue(true)
 	} else {
 		data.TransportInputTelnet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/all"); value.Exists() {
 		data.TransportInputAll = types.BoolValue(true)
 	} else {
 		data.TransportInputAll = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/all"); value.Exists() {
 		data.TransportOutputAll = types.BoolValue(true)
 	} else {
 		data.TransportOutputAll = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/none"); value.Exists() {
 		data.TransportOutputNone = types.BoolValue(true)
 	} else {
 		data.TransportOutputNone = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/ssh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/ssh"); value.Exists() {
 		data.TransportOutputSsh = types.BoolValue(true)
 	} else {
 		data.TransportOutputSsh = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/ssh/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/ssh/telnet"); value.Exists() {
 		data.TransportOutputSshTelnet = types.BoolValue(true)
 	} else {
 		data.TransportOutputSshTelnet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/telnet"); value.Exists() {
 		data.TransportOutputTelnet = types.BoolValue(true)
 	} else {
 		data.TransportOutputTelnet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/preferred/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/preferred/none"); value.Exists() {
 		data.TransportPreferredNone = types.BoolValue(true)
 	} else {
 		data.TransportPreferredNone = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/preferred/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/preferred/telnet"); value.Exists() {
 		data.TransportPreferredTelnet = types.BoolValue(true)
 	} else {
 		data.TransportPreferredTelnet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/preferred/ssh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/preferred/ssh"); value.Exists() {
 		data.TransportPreferredSsh = types.BoolValue(true)
 	} else {
 		data.TransportPreferredSsh = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/session-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/session-limit"); value.Exists() {
 		data.SessionLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/cli/whitespace/completion"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/cli/whitespace/completion"); value.Exists() {
 		data.CliWhitespaceCompletion = types.BoolValue(true)
 	} else {
 		data.CliWhitespaceCompletion = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication"); value.Exists() {
 		data.LoginAuthentication = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec"); value.Exists() {
 		data.AuthorizationExec = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager"); value.Exists() {
 		data.AuthorizationEventmanager = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands"); value.Exists() {
 		data.AuthorizationCommands = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec"); value.Exists() {
 		data.AccountingExec = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands"); value.Exists() {
 		data.AccountingCommands = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven"); value.Exists() {
 		data.PasswordEncrypted = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five"); value.Exists() {
 		data.SecretEncrypted = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response"); value.Exists() {
 		data.TimeoutLoginResponse = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group"); value.Exists() {
 		data.UsersGroup = make([]LineTemplateUsersGroup, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := LineTemplateUsersGroup{}
@@ -1550,30 +1533,30 @@ func (data *LineTemplate) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-minutes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-minutes"); value.Exists() {
 		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-seconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-seconds"); value.Exists() {
 		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
 		data.AbsoluteTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
 		data.Width = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
 		data.Length = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp/disable"); value.Exists() {
 		data.TimestampDisable = types.BoolValue(true)
 	} else {
 		data.TimestampDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
 		data.Pager = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"); value.Exists() {
 		data.TelnetTransparent = types.BoolValue(true)
 	} else {
 		data.TelnetTransparent = types.BoolValue(false)
@@ -1584,130 +1567,130 @@ func (data *LineTemplate) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *LineTemplateData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/autocommand"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autocommand"); value.Exists() {
 		data.Autocommand = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/access-class/ingress"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-class/ingress"); value.Exists() {
 		data.AccessClassIngress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/access-class/egress"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-class/egress"); value.Exists() {
 		data.AccessClassEgress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/disconnect-character"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/disconnect-character"); value.Exists() {
 		data.DisconnectCharacter = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/escape-character"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/escape-character"); value.Exists() {
 		data.EscapeCharacter = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/session-timeout/timeout-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/session-timeout/timeout-interval"); value.Exists() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/session-timeout/output"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/session-timeout/output"); value.Exists() {
 		data.SessionTimeoutOutput = types.BoolValue(true)
 	} else {
 		data.SessionTimeoutOutput = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/none"); value.Exists() {
 		data.TransportInputNone = types.BoolValue(true)
 	} else {
 		data.TransportInputNone = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/ssh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/ssh"); value.Exists() {
 		data.TransportInputSsh = types.BoolValue(true)
 	} else {
 		data.TransportInputSsh = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/ssh/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/ssh/telnet"); value.Exists() {
 		data.TransportInputSshTelnet = types.BoolValue(true)
 	} else {
 		data.TransportInputSshTelnet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/telnet"); value.Exists() {
 		data.TransportInputTelnet = types.BoolValue(true)
 	} else {
 		data.TransportInputTelnet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/input/all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/input/all"); value.Exists() {
 		data.TransportInputAll = types.BoolValue(true)
 	} else {
 		data.TransportInputAll = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/all"); value.Exists() {
 		data.TransportOutputAll = types.BoolValue(true)
 	} else {
 		data.TransportOutputAll = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/none"); value.Exists() {
 		data.TransportOutputNone = types.BoolValue(true)
 	} else {
 		data.TransportOutputNone = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/ssh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/ssh"); value.Exists() {
 		data.TransportOutputSsh = types.BoolValue(true)
 	} else {
 		data.TransportOutputSsh = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/ssh/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/ssh/telnet"); value.Exists() {
 		data.TransportOutputSshTelnet = types.BoolValue(true)
 	} else {
 		data.TransportOutputSshTelnet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/output/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/output/telnet"); value.Exists() {
 		data.TransportOutputTelnet = types.BoolValue(true)
 	} else {
 		data.TransportOutputTelnet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/preferred/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/preferred/none"); value.Exists() {
 		data.TransportPreferredNone = types.BoolValue(true)
 	} else {
 		data.TransportPreferredNone = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/preferred/telnet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/preferred/telnet"); value.Exists() {
 		data.TransportPreferredTelnet = types.BoolValue(true)
 	} else {
 		data.TransportPreferredTelnet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/transport/preferred/ssh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/preferred/ssh"); value.Exists() {
 		data.TransportPreferredSsh = types.BoolValue(true)
 	} else {
 		data.TransportPreferredSsh = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/session-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/session-limit"); value.Exists() {
 		data.SessionLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/cli/whitespace/completion"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/cli/whitespace/completion"); value.Exists() {
 		data.CliWhitespaceCompletion = types.BoolValue(true)
 	} else {
 		data.CliWhitespaceCompletion = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication"); value.Exists() {
 		data.LoginAuthentication = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec"); value.Exists() {
 		data.AuthorizationExec = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager"); value.Exists() {
 		data.AuthorizationEventmanager = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands"); value.Exists() {
 		data.AuthorizationCommands = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec"); value.Exists() {
 		data.AccountingExec = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands"); value.Exists() {
 		data.AccountingCommands = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven"); value.Exists() {
 		data.PasswordEncrypted = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five"); value.Exists() {
 		data.SecretEncrypted = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response"); value.Exists() {
 		data.TimeoutLoginResponse = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group"); value.Exists() {
 		data.UsersGroup = make([]LineTemplateUsersGroup, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := LineTemplateUsersGroup{}
@@ -1718,30 +1701,30 @@ func (data *LineTemplateData) fromBodyXML(ctx context.Context, res xmldot.Result
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-minutes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-minutes"); value.Exists() {
 		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-seconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-seconds"); value.Exists() {
 		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
 		data.AbsoluteTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
 		data.Width = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
 		data.Length = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp/disable"); value.Exists() {
 		data.TimestampDisable = types.BoolValue(true)
 	} else {
 		data.TimestampDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
 		data.Pager = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"); value.Exists() {
 		data.TelnetTransparent = types.BoolValue(true)
 	} else {
 		data.TelnetTransparent = types.BoolValue(false)
@@ -1778,11 +1761,11 @@ func (data *LineTemplate) getDeletedItems(ctx context.Context, state LineTemplat
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout", state.getPath()))
 	}
 	for i := range state.UsersGroup {
-		keys := [...]string{ "group-name",  }
-		stateKeyValues := [...]string{ state.UsersGroup[i].GroupName.ValueString(),  }
+		keys := [...]string{"group-name"}
+		stateKeyValues := [...]string{state.UsersGroup[i].GroupName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -1799,7 +1782,7 @@ func (data *LineTemplate) getDeletedItems(ctx context.Context, state LineTemplat
 			if state.UsersGroup[i].GroupName.ValueString() != data.UsersGroup[j].GroupName.ValueString() {
 				found = false
 			}
-		if found {
+			if found {
 				break
 			}
 		}
@@ -1921,11 +1904,11 @@ func (data *LineTemplate) getEmptyLeafsDelete(ctx context.Context, state *LineTe
 		}
 	}
 	for i := range data.UsersGroup {
-		keys := [...]string{ "group-name",  }
-		keyValues := [...]string{ data.UsersGroup[i].GroupName.ValueString(),  }
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.UsersGroup[i].GroupName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -2051,7 +2034,7 @@ func (data *LineTemplate) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout", data.getPath()))
 	}
 	for i := range data.UsersGroup {
-		keyValues := [...]string{ data.UsersGroup[i].GroupName.ValueString(),  }
+		keyValues := [...]string{data.UsersGroup[i].GroupName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2161,14 +2144,14 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TelnetTransparent.IsNull() && state.TelnetTransparent.ValueBool() && data.TelnetTransparent.IsNull() {
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Pager.IsNull() && data.Pager.IsNull() {
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:pager"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-line-timestamp-cfg:pager"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2177,7 +2160,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TimestampDisable.IsNull() && state.TimestampDisable.ValueBool() && data.TimestampDisable.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp"
 		predicates := make(map[string]string)
 		predicates["disable"] = fmt.Sprintf("%v", state.TimestampDisable.ValueBool())
 		// Sort keys to ensure consistent ordering
@@ -2195,21 +2178,21 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 		}
 	}
 	if !state.Length.IsNull() && data.Length.IsNull() {
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:length"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:length"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Width.IsNull() && data.Width.IsNull() {
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:width"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:width"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AbsoluteTimeout.IsNull() && data.AbsoluteTimeout.IsNull() {
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2217,7 +2200,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	if !state.ExecTimeoutSeconds.IsNull() && data.ExecTimeoutSeconds.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout"
 		predicates := make(map[string]string)
 		if !state.ExecTimeoutMinutes.IsNull() {
 			predicates["timeout-in-minutes"] = fmt.Sprintf("%v", state.ExecTimeoutMinutes.ValueInt64())
@@ -2239,7 +2222,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	if !state.ExecTimeoutMinutes.IsNull() && data.ExecTimeoutMinutes.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout"
 		predicates := make(map[string]string)
 		if !state.ExecTimeoutSeconds.IsNull() {
 			predicates["timeout-in-seconds"] = fmt.Sprintf("%v", state.ExecTimeoutSeconds.ValueInt64())
@@ -2260,8 +2243,8 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 		}
 	}
 	for i := range state.UsersGroup {
-		stateKeys := [...]string{ "group-name",  }
-		stateKeyValues := [...]string{ state.UsersGroup[i].GroupName.ValueString(),  }
+		stateKeys := [...]string{"group-name"}
+		stateKeyValues := [...]string{state.UsersGroup[i].GroupName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2290,63 +2273,63 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 		}
 	}
 	if !state.TimeoutLoginResponse.IsNull() && data.TimeoutLoginResponse.IsNull() {
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SecretEncrypted.IsNull() && data.SecretEncrypted.IsNull() {
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PasswordEncrypted.IsNull() && data.PasswordEncrypted.IsNull() {
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AccountingCommands.IsNull() && data.AccountingCommands.IsNull() {
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AccountingExec.IsNull() && data.AccountingExec.IsNull() {
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AuthorizationCommands.IsNull() && data.AuthorizationCommands.IsNull() {
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AuthorizationEventmanager.IsNull() && data.AuthorizationEventmanager.IsNull() {
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AuthorizationExec.IsNull() && data.AuthorizationExec.IsNull() {
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.LoginAuthentication.IsNull() && data.LoginAuthentication.IsNull() {
-		deletePath := state.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication"
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2354,14 +2337,14 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.CliWhitespaceCompletion.IsNull() && state.CliWhitespaceCompletion.ValueBool() && data.CliWhitespaceCompletion.IsNull() {
-		deletePath := state.getXPath()+"/cli/whitespace/completion"
+		deletePath := state.getXPath() + "/cli/whitespace/completion"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SessionLimit.IsNull() && data.SessionLimit.IsNull() {
-		deletePath := state.getXPath()+"/session-limit"
+		deletePath := state.getXPath() + "/session-limit"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2369,7 +2352,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TransportPreferredSsh.IsNull() && state.TransportPreferredSsh.ValueBool() && data.TransportPreferredSsh.IsNull() {
-		deletePath := state.getXPath()+"/transport/preferred/ssh"
+		deletePath := state.getXPath() + "/transport/preferred/ssh"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2377,7 +2360,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TransportPreferredTelnet.IsNull() && state.TransportPreferredTelnet.ValueBool() && data.TransportPreferredTelnet.IsNull() {
-		deletePath := state.getXPath()+"/transport/preferred/telnet"
+		deletePath := state.getXPath() + "/transport/preferred/telnet"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2385,7 +2368,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TransportPreferredNone.IsNull() && state.TransportPreferredNone.ValueBool() && data.TransportPreferredNone.IsNull() {
-		deletePath := state.getXPath()+"/transport/preferred/none"
+		deletePath := state.getXPath() + "/transport/preferred/none"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2393,7 +2376,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TransportOutputTelnet.IsNull() && state.TransportOutputTelnet.ValueBool() && data.TransportOutputTelnet.IsNull() {
-		deletePath := state.getXPath()+"/transport/output/telnet"
+		deletePath := state.getXPath() + "/transport/output/telnet"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2402,7 +2385,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TransportOutputSshTelnet.IsNull() && state.TransportOutputSshTelnet.ValueBool() && data.TransportOutputSshTelnet.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/transport/output/ssh"
+		deletePath := state.getXPath() + "/transport/output/ssh"
 		predicates := make(map[string]string)
 		predicates["telnet"] = fmt.Sprintf("%v", state.TransportOutputSshTelnet.ValueBool())
 		// Sort keys to ensure consistent ordering
@@ -2421,7 +2404,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TransportOutputSsh.IsNull() && state.TransportOutputSsh.ValueBool() && data.TransportOutputSsh.IsNull() {
-		deletePath := state.getXPath()+"/transport/output/ssh"
+		deletePath := state.getXPath() + "/transport/output/ssh"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2429,7 +2412,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TransportOutputNone.IsNull() && state.TransportOutputNone.ValueBool() && data.TransportOutputNone.IsNull() {
-		deletePath := state.getXPath()+"/transport/output/none"
+		deletePath := state.getXPath() + "/transport/output/none"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2437,7 +2420,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TransportOutputAll.IsNull() && state.TransportOutputAll.ValueBool() && data.TransportOutputAll.IsNull() {
-		deletePath := state.getXPath()+"/transport/output/all"
+		deletePath := state.getXPath() + "/transport/output/all"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2445,7 +2428,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TransportInputAll.IsNull() && state.TransportInputAll.ValueBool() && data.TransportInputAll.IsNull() {
-		deletePath := state.getXPath()+"/transport/input/all"
+		deletePath := state.getXPath() + "/transport/input/all"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2453,7 +2436,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TransportInputTelnet.IsNull() && state.TransportInputTelnet.ValueBool() && data.TransportInputTelnet.IsNull() {
-		deletePath := state.getXPath()+"/transport/input/telnet"
+		deletePath := state.getXPath() + "/transport/input/telnet"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2462,7 +2445,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TransportInputSshTelnet.IsNull() && state.TransportInputSshTelnet.ValueBool() && data.TransportInputSshTelnet.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/transport/input/ssh"
+		deletePath := state.getXPath() + "/transport/input/ssh"
 		predicates := make(map[string]string)
 		predicates["telnet"] = fmt.Sprintf("%v", state.TransportInputSshTelnet.ValueBool())
 		// Sort keys to ensure consistent ordering
@@ -2481,7 +2464,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TransportInputSsh.IsNull() && state.TransportInputSsh.ValueBool() && data.TransportInputSsh.IsNull() {
-		deletePath := state.getXPath()+"/transport/input/ssh"
+		deletePath := state.getXPath() + "/transport/input/ssh"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2489,7 +2472,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TransportInputNone.IsNull() && state.TransportInputNone.ValueBool() && data.TransportInputNone.IsNull() {
-		deletePath := state.getXPath()+"/transport/input/none"
+		deletePath := state.getXPath() + "/transport/input/none"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2498,7 +2481,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SessionTimeoutOutput.IsNull() && state.SessionTimeoutOutput.ValueBool() && data.SessionTimeoutOutput.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/session-timeout"
+		deletePath := state.getXPath() + "/session-timeout"
 		predicates := make(map[string]string)
 		if !state.SessionTimeout.IsNull() {
 			predicates["timeout-interval"] = fmt.Sprintf("%v", state.SessionTimeout.ValueInt64())
@@ -2520,7 +2503,7 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 	}
 	if !state.SessionTimeout.IsNull() && data.SessionTimeout.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/session-timeout"
+		deletePath := state.getXPath() + "/session-timeout"
 		predicates := make(map[string]string)
 		if !state.SessionTimeoutOutput.IsNull() {
 			predicates["output"] = fmt.Sprintf("%v", state.SessionTimeoutOutput.ValueBool())
@@ -2541,35 +2524,35 @@ func (data *LineTemplate) addDeletedItemsXML(ctx context.Context, state LineTemp
 		}
 	}
 	if !state.EscapeCharacter.IsNull() && data.EscapeCharacter.IsNull() {
-		deletePath := state.getXPath()+"/escape-character"
+		deletePath := state.getXPath() + "/escape-character"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DisconnectCharacter.IsNull() && data.DisconnectCharacter.IsNull() {
-		deletePath := state.getXPath()+"/disconnect-character"
+		deletePath := state.getXPath() + "/disconnect-character"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AccessClassEgress.IsNull() && data.AccessClassEgress.IsNull() {
-		deletePath := state.getXPath()+"/access-class/egress"
+		deletePath := state.getXPath() + "/access-class/egress"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AccessClassIngress.IsNull() && data.AccessClassIngress.IsNull() {
-		deletePath := state.getXPath()+"/access-class/ingress"
+		deletePath := state.getXPath() + "/access-class/ingress"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Autocommand.IsNull() && data.Autocommand.IsNull() {
-		deletePath := state.getXPath()+"/autocommand"
+		deletePath := state.getXPath() + "/autocommand"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2611,8 +2594,8 @@ func (data *LineTemplate) addDeletePathsXML(ctx context.Context, body string) st
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout")
 	}
 	for i := range data.UsersGroup {
-		keys := [...]string{ "group-name",  }
-		keyValues := [...]string{ data.UsersGroup[i].GroupName.ValueString(),  }
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.UsersGroup[i].GroupName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

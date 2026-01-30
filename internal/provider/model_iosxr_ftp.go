@@ -24,41 +24,40 @@ import (
 	"context"
 	"fmt"
 	"reflect"
-	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type FTP struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
+	Device     types.String    `tfsdk:"device"`
+	Id         types.String    `tfsdk:"id"`
+	DeleteMode types.String    `tfsdk:"delete_mode"`
 	ClientVrfs []FTPClientVrfs `tfsdk:"client_vrfs"`
 }
 
 type FTPData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
+	Device     types.String    `tfsdk:"device"`
+	Id         types.String    `tfsdk:"id"`
 	ClientVrfs []FTPClientVrfs `tfsdk:"client_vrfs"`
 }
 type FTPClientVrfs struct {
-	VrfName types.String `tfsdk:"vrf_name"`
-	Passive types.Bool `tfsdk:"passive"`
-	SourceInterface types.String `tfsdk:"source_interface"`
+	VrfName           types.String `tfsdk:"vrf_name"`
+	Passive           types.Bool   `tfsdk:"passive"`
+	SourceInterface   types.String `tfsdk:"source_interface"`
 	AnonymousPassword types.String `tfsdk:"anonymous_password"`
-	Username types.String `tfsdk:"username"`
-	Password types.String `tfsdk:"password"`
+	Username          types.String `tfsdk:"username"`
+	Password          types.String `tfsdk:"password"`
 }
 
 // End of section. //template:end types
@@ -165,8 +164,8 @@ func (data FTP) toBodyXML(ctx context.Context) string {
 
 func (data *FTP) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.ClientVrfs {
-		keys := [...]string{ "vrf-name",  }
-		keyValues := [...]string{ data.ClientVrfs[i].VrfName.ValueString(),  }
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "client.vrfs.vrf").ForEach(
@@ -192,14 +191,14 @@ func (data *FTP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.ClientVrfs[i].VrfName = types.StringNull()
 		}
-		if value := r.Get("passive"); !data.ClientVrfs[i].Passive.IsNull() {
-			if value.Exists() {
-				data.ClientVrfs[i].Passive = types.BoolValue(true)
-			} else {
-				data.ClientVrfs[i].Passive = types.BoolValue(false)
-			}
+		if value := r.Get("passive"); value.Exists() {
+			data.ClientVrfs[i].Passive = types.BoolValue(true)
 		} else {
-			data.ClientVrfs[i].Passive = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.ClientVrfs[i].Passive.IsNull() {
+				data.ClientVrfs[i].Passive = types.BoolNull()
+			}
 		}
 		if value := r.Get("source-interface"); value.Exists() && !data.ClientVrfs[i].SourceInterface.IsNull() {
 			data.ClientVrfs[i].SourceInterface = types.StringValue(value.String())
@@ -230,11 +229,11 @@ func (data *FTP) updateFromBody(ctx context.Context, res []byte) {
 
 func (data *FTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	for i := range data.ClientVrfs {
-		keys := [...]string{ "vrf-name",  }
-		keyValues := [...]string{ data.ClientVrfs[i].VrfName.ValueString(),  }
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/client/vrfs/vrf").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/client/vrfs/vrf").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -298,7 +297,7 @@ func (data *FTP) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"client.vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "client.vrfs.vrf"); value.Exists() {
 		data.ClientVrfs = make([]FTPClientVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := FTPClientVrfs{}
@@ -337,7 +336,7 @@ func (data *FTPData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"client.vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "client.vrfs.vrf"); value.Exists() {
 		data.ClientVrfs = make([]FTPClientVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := FTPClientVrfs{}
@@ -372,7 +371,7 @@ func (data *FTPData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *FTP) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/client/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/client/vrfs/vrf"); value.Exists() {
 		data.ClientVrfs = make([]FTPClientVrfs, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := FTPClientVrfs{}
@@ -407,18 +406,18 @@ func (data *FTP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *FTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/client/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/client/vrfs/vrf"); value.Exists() {
 		data.ClientVrfs = make([]FTPClientVrfs, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := FTPClientVrfs{}
 			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
 				item.VrfName = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "passive"); cValue.Exists() {
-			item.Passive = types.BoolValue(true)
-		} else {
-			item.Passive = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "passive"); cValue.Exists() {
+				item.Passive = types.BoolValue(true)
+			} else {
+				item.Passive = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "source-interface"); cValue.Exists() {
 				item.SourceInterface = types.StringValue(cValue.String())
 			}
@@ -444,11 +443,11 @@ func (data *FTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 func (data *FTP) getDeletedItems(ctx context.Context, state FTP) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.ClientVrfs {
-		keys := [...]string{ "vrf-name",  }
-		stateKeyValues := [...]string{ state.ClientVrfs[i].VrfName.ValueString(),  }
+		keys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.ClientVrfs[i].VrfName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -465,22 +464,22 @@ func (data *FTP) getDeletedItems(ctx context.Context, state FTP) []string {
 			if state.ClientVrfs[i].VrfName.ValueString() != data.ClientVrfs[j].VrfName.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.ClientVrfs[i].Password.IsNull() && data.ClientVrfs[j].Password.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/password/encrypted", state.getPath(), keyString))
-			}
-			if !state.ClientVrfs[i].Username.IsNull() && data.ClientVrfs[j].Username.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/username", state.getPath(), keyString))
-			}
-			if !state.ClientVrfs[i].AnonymousPassword.IsNull() && data.ClientVrfs[j].AnonymousPassword.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/anonymous-password", state.getPath(), keyString))
-			}
-			if !state.ClientVrfs[i].SourceInterface.IsNull() && data.ClientVrfs[j].SourceInterface.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/source-interface", state.getPath(), keyString))
-			}
-			if !state.ClientVrfs[i].Passive.IsNull() && data.ClientVrfs[j].Passive.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/passive", state.getPath(), keyString))
-			}
+			if found {
+				if !state.ClientVrfs[i].Password.IsNull() && data.ClientVrfs[j].Password.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/password/encrypted", state.getPath(), keyString))
+				}
+				if !state.ClientVrfs[i].Username.IsNull() && data.ClientVrfs[j].Username.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/username", state.getPath(), keyString))
+				}
+				if !state.ClientVrfs[i].AnonymousPassword.IsNull() && data.ClientVrfs[j].AnonymousPassword.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/anonymous-password", state.getPath(), keyString))
+				}
+				if !state.ClientVrfs[i].SourceInterface.IsNull() && data.ClientVrfs[j].SourceInterface.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/source-interface", state.getPath(), keyString))
+				}
+				if !state.ClientVrfs[i].Passive.IsNull() && data.ClientVrfs[j].Passive.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/passive", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -498,11 +497,11 @@ func (data *FTP) getDeletedItems(ctx context.Context, state FTP) []string {
 func (data *FTP) getEmptyLeafsDelete(ctx context.Context, state *FTP) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.ClientVrfs {
-		keys := [...]string{ "vrf-name",  }
-		keyValues := [...]string{ data.ClientVrfs[i].VrfName.ValueString(),  }
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.ClientVrfs[i].Passive.IsNull() && !data.ClientVrfs[i].Passive.ValueBool() {
@@ -522,7 +521,7 @@ func (data *FTP) getEmptyLeafsDelete(ctx context.Context, state *FTP) []string {
 func (data *FTP) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.ClientVrfs {
-		keyValues := [...]string{ data.ClientVrfs[i].VrfName.ValueString(),  }
+		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/client/vrfs/vrf=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -539,8 +538,8 @@ func (data *FTP) addDeletedItemsXML(ctx context.Context, state FTP, body string)
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.ClientVrfs {
-		stateKeys := [...]string{ "vrf-name",  }
-		stateKeyValues := [...]string{ state.ClientVrfs[i].VrfName.ValueString(),  }
+		stateKeys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.ClientVrfs[i].VrfName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -561,22 +560,22 @@ func (data *FTP) addDeletedItemsXML(ctx context.Context, state FTP, body string)
 				found = false
 			}
 			if found {
-			if !state.ClientVrfs[i].Password.IsNull() && data.ClientVrfs[j].Password.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/password/encrypted", predicates))
-			}
-			if !state.ClientVrfs[i].Username.IsNull() && data.ClientVrfs[j].Username.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/username", predicates))
-			}
-			if !state.ClientVrfs[i].AnonymousPassword.IsNull() && data.ClientVrfs[j].AnonymousPassword.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/anonymous-password", predicates))
-			}
-			if !state.ClientVrfs[i].SourceInterface.IsNull() && data.ClientVrfs[j].SourceInterface.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/source-interface", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.ClientVrfs[i].Passive.IsNull() && state.ClientVrfs[i].Passive.ValueBool() && data.ClientVrfs[j].Passive.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/passive", predicates))
-			}
+				if !state.ClientVrfs[i].Password.IsNull() && data.ClientVrfs[j].Password.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/password/encrypted", predicates))
+				}
+				if !state.ClientVrfs[i].Username.IsNull() && data.ClientVrfs[j].Username.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/username", predicates))
+				}
+				if !state.ClientVrfs[i].AnonymousPassword.IsNull() && data.ClientVrfs[j].AnonymousPassword.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/anonymous-password", predicates))
+				}
+				if !state.ClientVrfs[i].SourceInterface.IsNull() && data.ClientVrfs[j].SourceInterface.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/source-interface", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.ClientVrfs[i].Passive.IsNull() && state.ClientVrfs[i].Passive.ValueBool() && data.ClientVrfs[j].Passive.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/passive", predicates))
+				}
 				break
 			}
 		}
@@ -597,8 +596,8 @@ func (data *FTP) addDeletedItemsXML(ctx context.Context, state FTP, body string)
 func (data *FTP) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.ClientVrfs {
-		keys := [...]string{ "vrf-name",  }
-		keyValues := [...]string{ data.ClientVrfs[i].VrfName.ValueString(),  }
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

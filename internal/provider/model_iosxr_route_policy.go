@@ -23,35 +23,31 @@ package provider
 import (
 	"context"
 	"fmt"
-	"reflect"
-	"sort"
-	"strconv"
-	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type RoutePolicy struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
+	Device          types.String `tfsdk:"device"`
+	Id              types.String `tfsdk:"id"`
 	RoutePolicyName types.String `tfsdk:"route_policy_name"`
-	Rpl types.String `tfsdk:"rpl"`
+	Rpl             types.String `tfsdk:"rpl"`
 }
 
 type RoutePolicyData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
+	Device          types.String `tfsdk:"device"`
+	Id              types.String `tfsdk:"id"`
 	RoutePolicyName types.String `tfsdk:"route_policy_name"`
-	Rpl types.String `tfsdk:"rpl"`
+	Rpl             types.String `tfsdk:"rpl"`
 }
 
 // End of section. //template:end types
@@ -101,10 +97,10 @@ func (data RoutePolicy) toBody(ctx context.Context) string {
 func (data RoutePolicy) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.RoutePolicyName.IsNull() && !data.RoutePolicyName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/route-policy-name", data.RoutePolicyName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/route-policy-name", data.RoutePolicyName.ValueString())
 	}
 	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/rpl-route-policy", data.Rpl.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/rpl-route-policy", data.Rpl.ValueString())
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -130,13 +126,13 @@ func (data *RoutePolicy) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RoutePolicy) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/route-policy-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/route-policy-name"); value.Exists() {
 		data.RoutePolicyName = types.StringValue(value.String())
 	} else if data.RoutePolicyName.IsNull() {
 		data.RoutePolicyName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/rpl-route-policy"); value.Exists() {
-		data.Rpl = types.StringValue(value.Raw)
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpl-route-policy"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
 	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
 	}
@@ -150,7 +146,7 @@ func (data *RoutePolicy) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"rpl-route-policy"); value.Exists() {
+	if value := res.Get(prefix + "rpl-route-policy"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
@@ -163,7 +159,7 @@ func (data *RoutePolicyData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"rpl-route-policy"); value.Exists() {
+	if value := res.Get(prefix + "rpl-route-policy"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
@@ -172,8 +168,8 @@ func (data *RoutePolicyData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RoutePolicy) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/rpl-route-policy"); value.Exists() {
-		data.Rpl = types.StringValue(value.Raw)
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpl-route-policy"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
 	}
 }
 
@@ -181,8 +177,8 @@ func (data *RoutePolicy) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RoutePolicyData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/rpl-route-policy"); value.Exists() {
-		data.Rpl = types.StringValue(value.Raw)
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpl-route-policy"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
 	}
 }
 
@@ -225,7 +221,7 @@ func (data *RoutePolicy) addDeletedItemsXML(ctx context.Context, state RoutePoli
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
-		deletePath := state.getXPath()+"/rpl-route-policy"
+		deletePath := state.getXPath() + "/rpl-route-policy"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true

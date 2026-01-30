@@ -23,19 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/netascode/go-gnmi"
-	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -52,7 +47,7 @@ func NewL2VPNBridgeGroupBridgeDomainDataSource() datasource.DataSource {
 	return &L2VPNBridgeGroupBridgeDomainDataSource{}
 }
 
-type L2VPNBridgeGroupBridgeDomainDataSource struct{
+type L2VPNBridgeGroupBridgeDomainDataSource struct {
 	data *IosxrProviderData
 }
 
@@ -419,7 +414,7 @@ func (d *L2VPNBridgeGroupBridgeDomainDataSource) Schema(ctx context.Context, req
 									"mac_address": schema.StringAttribute{
 										MarkdownDescription: "Static MAC address",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -595,11 +590,11 @@ func (d *L2VPNBridgeGroupBridgeDomainDataSource) Schema(ctx context.Context, req
 									"mac_address": schema.StringAttribute{
 										MarkdownDescription: "Static MAC address",
 										Computed:            true,
-								},
+									},
 									"next_hop": schema.StringAttribute{
 										MarkdownDescription: "Specify the next hop IP address",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -683,7 +678,6 @@ func (d *L2VPNBridgeGroupBridgeDomainDataSource) Read(ctx context.Context, req d
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
-
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

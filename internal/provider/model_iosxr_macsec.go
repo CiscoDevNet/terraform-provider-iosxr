@@ -23,36 +23,32 @@ package provider
 import (
 	"context"
 	"fmt"
-	"reflect"
-	"sort"
-	"strconv"
-	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type MACSec struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
+	Device     types.String `tfsdk:"device"`
+	Id         types.String `tfsdk:"id"`
 	DeleteMode types.String `tfsdk:"delete_mode"`
-	Shutdown types.Bool `tfsdk:"shutdown"`
-	Fips types.Bool `tfsdk:"fips"`
+	Shutdown   types.Bool   `tfsdk:"shutdown"`
+	Fips       types.Bool   `tfsdk:"fips"`
 }
 
 type MACSecData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	Shutdown types.Bool `tfsdk:"shutdown"`
-	Fips types.Bool `tfsdk:"fips"`
+	Device   types.String `tfsdk:"device"`
+	Id       types.String `tfsdk:"id"`
+	Shutdown types.Bool   `tfsdk:"shutdown"`
+	Fips     types.Bool   `tfsdk:"fips"`
 }
 
 // End of section. //template:end types
@@ -102,23 +98,21 @@ func (data MACSec) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *MACSec) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "shutdown"); !data.Shutdown.IsNull() {
-		if value.Exists() {
-			data.Shutdown = types.BoolValue(true)
-		} else {
-			data.Shutdown = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+		data.Shutdown = types.BoolValue(true)
 	} else {
-		data.Shutdown = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Shutdown.IsNull() {
+			data.Shutdown = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "fips"); !data.Fips.IsNull() {
-		if value.Exists() {
-			data.Fips = types.BoolValue(true)
-		} else {
-			data.Fips = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "fips"); value.Exists() {
+		data.Fips = types.BoolValue(true)
 	} else {
-		data.Fips = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Fips.IsNull() {
+			data.Fips = types.BoolNull()
+		}
 	}
 }
 
@@ -129,12 +123,12 @@ func (data MACSec) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.Shutdown.IsNull() && !data.Shutdown.IsUnknown() {
 		if data.Shutdown.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/shutdown", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/shutdown", "")
 		}
 	}
 	if !data.Fips.IsNull() && !data.Fips.IsUnknown() {
 		if data.Fips.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/fips", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/fips", "")
 		}
 	}
 	bodyString, err := body.String()
@@ -148,7 +142,7 @@ func (data MACSec) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *MACSec) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/shutdown"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -156,7 +150,7 @@ func (data *MACSec) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Shutdown = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/fips"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fips"); value.Exists() {
 		data.Fips = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -174,12 +168,12 @@ func (data *MACSec) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"shutdown"); value.Exists() {
+	if value := res.Get(prefix + "shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
 		data.Shutdown = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"fips"); value.Exists() {
+	if value := res.Get(prefix + "fips"); value.Exists() {
 		data.Fips = types.BoolValue(true)
 	} else {
 		data.Fips = types.BoolValue(false)
@@ -194,12 +188,12 @@ func (data *MACSecData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"shutdown"); value.Exists() {
+	if value := res.Get(prefix + "shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
 		data.Shutdown = types.BoolNull()
 	}
-	if value := res.Get(prefix+"fips"); value.Exists() {
+	if value := res.Get(prefix + "fips"); value.Exists() {
 		data.Fips = types.BoolValue(true)
 	} else {
 		data.Fips = types.BoolNull()
@@ -210,12 +204,12 @@ func (data *MACSecData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *MACSec) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/shutdown"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
 		data.Shutdown = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/fips"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fips"); value.Exists() {
 		data.Fips = types.BoolValue(true)
 	} else {
 		data.Fips = types.BoolValue(false)
@@ -226,12 +220,12 @@ func (data *MACSec) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *MACSecData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/shutdown"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
 		data.Shutdown = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/fips"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fips"); value.Exists() {
 		data.Fips = types.BoolValue(true)
 	} else {
 		data.Fips = types.BoolValue(false)
@@ -296,7 +290,7 @@ func (data *MACSec) addDeletedItemsXML(ctx context.Context, state MACSec, body s
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Fips.IsNull() && state.Fips.ValueBool() && data.Fips.IsNull() {
-		deletePath := state.getXPath()+"/fips"
+		deletePath := state.getXPath() + "/fips"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -304,7 +298,7 @@ func (data *MACSec) addDeletedItemsXML(ctx context.Context, state MACSec, body s
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Shutdown.IsNull() && state.Shutdown.ValueBool() && data.Shutdown.IsNull() {
-		deletePath := state.getXPath()+"/shutdown"
+		deletePath := state.getXPath() + "/shutdown"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true

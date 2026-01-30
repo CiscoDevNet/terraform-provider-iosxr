@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -32,16 +33,16 @@ import (
 
 func TestAccDataSourceIosxrMonitorSession(t *testing.T) {
 	if os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
-        t.Skip("skipping test, set environment variable NCS or C8000")
-    }
+		t.Skip("skipping test, set environment variable NCS or C8000")
+	}
 	var checks []resource.TestCheckFunc
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_monitor_session.test", "monitor_sessions.0.session_name", "SPAN1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_monitor_session.test", "monitor_sessions.0.traffic_type", "ethernet"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_monitor_session.test", "monitor_sessions.0.destination_interface", "GigabitEthernet0/0/0/1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_monitor_session.test", "monitor_sessions.0.discard_class", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_monitor_session.test", "monitor_sessions.0.traffic_class", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_monitor_session.test", "monitor_sessions.0.mirror_first", "256"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_monitor_session.test", "monitor_sessions.0.session_name", "SPAN1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_monitor_session.test", "monitor_sessions.0.traffic_type", "ethernet"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_monitor_session.test", "monitor_sessions.0.destination_interface", "GigabitEthernet0/0/0/1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_monitor_session.test", "monitor_sessions.0.discard_class", "1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_monitor_session.test", "monitor_sessions.0.traffic_class", "5"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_monitor_session.test", "monitor_sessions.0.mirror_first", "256"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_monitor_session.test", "router_id", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_monitor_session.test", "default_capture_disable", "true"))
@@ -51,7 +52,7 @@ func TestAccDataSourceIosxrMonitorSession(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrMonitorSessionConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -68,14 +69,14 @@ func TestAccDataSourceIosxrMonitorSession(t *testing.T) {
 func testAccDataSourceIosxrMonitorSessionConfig() string {
 	config := `resource "iosxr_monitor_session" "test" {` + "\n"
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	config += `	monitor_sessions = [{` + "\n"
-	config += `		session_name = "SPAN1"` + "\n"
-	config += `		traffic_type = "ethernet"` + "\n"
-	config += `		destination_interface = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `		discard_class = 1` + "\n"
-	config += `		traffic_class = 5` + "\n"
-	config += `		mirror_first = 256` + "\n"
-	config += `	}]` + "\n"
+		config += `	monitor_sessions = [{` + "\n"
+		config += `		session_name = "SPAN1"` + "\n"
+		config += `		traffic_type = "ethernet"` + "\n"
+		config += `		destination_interface = "GigabitEthernet0/0/0/1"` + "\n"
+		config += `		discard_class = 1` + "\n"
+		config += `		traffic_class = 5` + "\n"
+		config += `		mirror_first = 256` + "\n"
+		config += `	}]` + "\n"
 	}
 	config += `	router_id = 1` + "\n"
 	config += `	default_capture_disable = true` + "\n"

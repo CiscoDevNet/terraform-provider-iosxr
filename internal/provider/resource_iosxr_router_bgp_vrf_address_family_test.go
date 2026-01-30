@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -112,23 +114,23 @@ func TestAccIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig+testAccIosxrRouterBGPVRFAddressFamilyConfig_minimum(),
+			Config: testAccIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPVRFAddressFamilyConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig+testAccIosxrRouterBGPVRFAddressFamilyConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPVRFAddressFamilyConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_router_bgp_vrf_address_family.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_router_bgp_vrf_address_family.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrRouterBGPVRFAddressFamilyImportStateIdFunc("iosxr_router_bgp_vrf_address_family.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -143,7 +145,7 @@ func iosxrRouterBGPVRFAddressFamilyImportStateIdFunc(resourceName string) resour
 		VrfName := primary.Attributes["vrf_name"]
 		AfName := primary.Attributes["af_name"]
 
-		return fmt.Sprintf("%s,%s,%s", AsNumber,VrfName,AfName), nil
+		return fmt.Sprintf("%s,%s,%s", AsNumber, VrfName, AfName), nil
 	}
 }
 

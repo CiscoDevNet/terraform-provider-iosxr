@@ -23,19 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/netascode/go-gnmi"
-	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -52,7 +47,7 @@ func NewPCEDataSource() datasource.DataSource {
 	return &PCEDataSource{}
 }
 
-type PCEDataSource struct{
+type PCEDataSource struct {
 	data *IosxrProviderData
 }
 
@@ -192,47 +187,47 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"sub_id": schema.Int64Attribute{
 										MarkdownDescription: "Sub ID",
 										Computed:            true,
-								},
+									},
 									"strict": schema.BoolAttribute{
 										MarkdownDescription: "Disable Fallback",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_address_type": schema.StringAttribute{
 										MarkdownDescription: "Address type",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_ip_address": schema.StringAttribute{
 										MarkdownDescription: "IP address of PCC",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_lsp_name": schema.StringAttribute{
 										MarkdownDescription: "Name of label switched path",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_shortest_path": schema.BoolAttribute{
 										MarkdownDescription: "Set LSP to follow shortest-path",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
 										MarkdownDescription: "Exclude SRLG",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_address_type": schema.StringAttribute{
 										MarkdownDescription: "Address type",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_ip_address": schema.StringAttribute{
 										MarkdownDescription: "IP address of PCC",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_lsp_name": schema.StringAttribute{
 										MarkdownDescription: "Name of label switched path",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
 										MarkdownDescription: "Exclude SRLG",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -288,47 +283,47 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"sub_id": schema.Int64Attribute{
 										MarkdownDescription: "Sub ID",
 										Computed:            true,
-								},
+									},
 									"strict": schema.BoolAttribute{
 										MarkdownDescription: "Disable Fallback",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_address_type": schema.StringAttribute{
 										MarkdownDescription: "Address type",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_ip_address": schema.StringAttribute{
 										MarkdownDescription: "IP address of PCC",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_lsp_name": schema.StringAttribute{
 										MarkdownDescription: "Name of label switched path",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_shortest_path": schema.BoolAttribute{
 										MarkdownDescription: "Set LSP to follow shortest-path",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
 										MarkdownDescription: "Exclude SRLG",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_address_type": schema.StringAttribute{
 										MarkdownDescription: "Address type",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_ip_address": schema.StringAttribute{
 										MarkdownDescription: "IP address of PCC",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_lsp_name": schema.StringAttribute{
 										MarkdownDescription: "Name of label switched path",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
 										MarkdownDescription: "Exclude SRLG",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -384,47 +379,47 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"sub_id": schema.Int64Attribute{
 										MarkdownDescription: "Sub ID",
 										Computed:            true,
-								},
+									},
 									"strict": schema.BoolAttribute{
 										MarkdownDescription: "Disable Fallback",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_address_type": schema.StringAttribute{
 										MarkdownDescription: "Address type",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_ip_address": schema.StringAttribute{
 										MarkdownDescription: "IP address of PCC",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_lsp_name": schema.StringAttribute{
 										MarkdownDescription: "Name of label switched path",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_shortest_path": schema.BoolAttribute{
 										MarkdownDescription: "Set LSP to follow shortest-path",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
 										MarkdownDescription: "Exclude SRLG",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_address_type": schema.StringAttribute{
 										MarkdownDescription: "Address type",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_ip_address": schema.StringAttribute{
 										MarkdownDescription: "IP address of PCC",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_lsp_name": schema.StringAttribute{
 										MarkdownDescription: "Name of label switched path",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
 										MarkdownDescription: "Exclude SRLG",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -480,47 +475,47 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"sub_id": schema.Int64Attribute{
 										MarkdownDescription: "Sub ID",
 										Computed:            true,
-								},
+									},
 									"strict": schema.BoolAttribute{
 										MarkdownDescription: "Disable Fallback",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_address_type": schema.StringAttribute{
 										MarkdownDescription: "Address type",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_ip_address": schema.StringAttribute{
 										MarkdownDescription: "IP address of PCC",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_lsp_name": schema.StringAttribute{
 										MarkdownDescription: "Name of label switched path",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_shortest_path": schema.BoolAttribute{
 										MarkdownDescription: "Set LSP to follow shortest-path",
 										Computed:            true,
-								},
+									},
 									"lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
 										MarkdownDescription: "Exclude SRLG",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_address_type": schema.StringAttribute{
 										MarkdownDescription: "Address type",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_ip_address": schema.StringAttribute{
 										MarkdownDescription: "IP address of PCC",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_lsp_name": schema.StringAttribute{
 										MarkdownDescription: "Name of label switched path",
 										Computed:            true,
-								},
+									},
 									"lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
 										MarkdownDescription: "Exclude SRLG",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -728,15 +723,15 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"index_number": schema.Int64Attribute{
 										MarkdownDescription: "Next entry index",
 										Computed:            true,
-								},
+									},
 									"mpls_label": schema.Int64Attribute{
 										MarkdownDescription: "MPLS label configuration",
 										Computed:            true,
-								},
+									},
 									"mpls_adjacency": schema.StringAttribute{
 										MarkdownDescription: "Specify hop address",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -760,11 +755,11 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"policy_name": schema.StringAttribute{
 										MarkdownDescription: "Name of SR-TE Policy",
 										Computed:            true,
-								},
+									},
 									"candidate_paths_append_sid_mpls": schema.Int64Attribute{
 										MarkdownDescription: "MPLS label",
 										Computed:            true,
-								},
+									},
 									"candidate_paths_preferences": schema.ListNestedAttribute{
 										MarkdownDescription: "Policy path-option preference entry",
 										Computed:            true,
@@ -773,31 +768,31 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 												"preference_id": schema.Int64Attribute{
 													MarkdownDescription: "Policy path-option preference entry",
 													Computed:            true,
-											},
+												},
 												"dynamic_mpls": schema.BoolAttribute{
 													MarkdownDescription: "MPLS path type",
 													Computed:            true,
-											},
+												},
 												"dynamic_metric_type_te": schema.BoolAttribute{
 													MarkdownDescription: "TE metric type",
 													Computed:            true,
-											},
+												},
 												"dynamic_metric_type_igp": schema.BoolAttribute{
 													MarkdownDescription: "IGP metric type",
 													Computed:            true,
-											},
+												},
 												"dynamic_metric_type_latency": schema.BoolAttribute{
 													MarkdownDescription: "Latency metric type",
 													Computed:            true,
-											},
+												},
 												"dynamic_metric_type_hopcount": schema.BoolAttribute{
 													MarkdownDescription: "Hopcount metric type",
 													Computed:            true,
-											},
+												},
 												"dynamic_metric_sid_limit": schema.Int64Attribute{
 													MarkdownDescription: "SID limit",
 													Computed:            true,
-											},
+												},
 												"explicit_segment_list_names": schema.ListNestedAttribute{
 													MarkdownDescription: "Identifying name for Segment-list",
 													Computed:            true,
@@ -806,33 +801,33 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 															"segment_list_name": schema.StringAttribute{
 																MarkdownDescription: "Identifying name for Segment-list",
 																Computed:            true,
-														},
+															},
 														},
 													},
-											},
+												},
 												"constraints_segments_sid_algorithm": schema.Int64Attribute{
 													MarkdownDescription: "Prefix-SID algorithm",
 													Computed:            true,
-											},
+												},
 												"constraints_segments_protection_protected_preferred": schema.BoolAttribute{
 													MarkdownDescription: "Protected adj-SID preferred (default)",
 													Computed:            true,
-											},
+												},
 												"constraints_segments_protection_protected_only": schema.BoolAttribute{
 													MarkdownDescription: "Protected adj-SID only",
 													Computed:            true,
-											},
+												},
 												"constraints_segments_protection_unprotected_only": schema.BoolAttribute{
 													MarkdownDescription: "Unprotected adj-SID only",
 													Computed:            true,
-											},
+												},
 												"constraints_segments_protection_unprotected_preferred": schema.BoolAttribute{
 													MarkdownDescription: "Unprotected adj-SID preferred",
 													Computed:            true,
-											},
+												},
 											},
 										},
-								},
+									},
 									"candidate_paths_affinity_include_any_colors": schema.ListNestedAttribute{
 										MarkdownDescription: "Affinity color name",
 										Computed:            true,
@@ -841,10 +836,10 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 												"affinity_color_name": schema.StringAttribute{
 													MarkdownDescription: "Affinity color name",
 													Computed:            true,
-											},
+												},
 											},
 										},
-								},
+									},
 									"candidate_paths_affinity_include_all_colors": schema.ListNestedAttribute{
 										MarkdownDescription: "Affinity color name",
 										Computed:            true,
@@ -853,10 +848,10 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 												"affinity_color_name": schema.StringAttribute{
 													MarkdownDescription: "Affinity color name",
 													Computed:            true,
-											},
+												},
 											},
 										},
-								},
+									},
 									"candidate_paths_affinity_exclude_colors": schema.ListNestedAttribute{
 										MarkdownDescription: "Affinity color name",
 										Computed:            true,
@@ -865,38 +860,38 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 												"affinity_color_name": schema.StringAttribute{
 													MarkdownDescription: "Affinity color name",
 													Computed:            true,
-											},
+												},
 											},
 										},
-								},
+									},
 									"color": schema.Int64Attribute{
 										MarkdownDescription: "Specify color for policy",
 										Computed:            true,
-								},
+									},
 									"end_point_ipv4": schema.StringAttribute{
 										MarkdownDescription: "IPv4 address",
 										Computed:            true,
-								},
+									},
 									"binding_sid_mpls": schema.Int64Attribute{
 										MarkdownDescription: "MPLS label",
 										Computed:            true,
-								},
+									},
 									"shutdown": schema.BoolAttribute{
 										MarkdownDescription: "Policy admin-shutdown",
 										Computed:            true,
-								},
+									},
 									"profile_id": schema.Int64Attribute{
 										MarkdownDescription: "Policy configuration profile that the PCC should apply to this policy",
 										Computed:            true,
-								},
+									},
 									"path_selection_protected": schema.BoolAttribute{
 										MarkdownDescription: "Use local protected if possible",
 										Computed:            true,
-								},
+									},
 									"path_selection_unprotected": schema.BoolAttribute{
 										MarkdownDescription: "Force use of unprotected adjacency SIDs",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -932,7 +927,7 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"address": schema.StringAttribute{
 										MarkdownDescription: "Specify the address AFI",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -980,7 +975,7 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"affinity_color_name": schema.StringAttribute{
 										MarkdownDescription: "Affinity color name",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -992,7 +987,7 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"affinity_color_name": schema.StringAttribute{
 										MarkdownDescription: "Affinity color name",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -1004,7 +999,7 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"affinity_color_name": schema.StringAttribute{
 										MarkdownDescription: "Affinity color name",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -1016,27 +1011,27 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"preference_id": schema.Int64Attribute{
 										MarkdownDescription: "Policy path preference entry",
 										Computed:            true,
-								},
+									},
 									"dynamic": schema.BoolAttribute{
 										MarkdownDescription: "Dynamically computed path",
 										Computed:            true,
-								},
+									},
 									"dynamic_metric_type_te": schema.BoolAttribute{
 										MarkdownDescription: "TE metric type",
 										Computed:            true,
-								},
+									},
 									"dynamic_metric_type_igp": schema.BoolAttribute{
 										MarkdownDescription: "IGP metric type",
 										Computed:            true,
-								},
+									},
 									"dynamic_metric_type_latency": schema.BoolAttribute{
 										MarkdownDescription: "Latency metric type",
 										Computed:            true,
-								},
+									},
 									"dynamic_metric_type_hopcount": schema.BoolAttribute{
 										MarkdownDescription: "Use the least number of hops for path computation",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -1176,7 +1171,6 @@ func (d *PCEDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
-
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

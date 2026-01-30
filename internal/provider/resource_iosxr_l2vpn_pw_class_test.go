@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -63,23 +65,23 @@ func TestAccIosxrL2VPNPWClass(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrL2VPNPWClassPrerequisitesConfig+testAccIosxrL2VPNPWClassConfig_minimum(),
+			Config: testAccIosxrL2VPNPWClassPrerequisitesConfig + testAccIosxrL2VPNPWClassConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrL2VPNPWClassPrerequisitesConfig+testAccIosxrL2VPNPWClassConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrL2VPNPWClassPrerequisitesConfig + testAccIosxrL2VPNPWClassConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_l2vpn_pw_class.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_l2vpn_pw_class.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrL2VPNPWClassImportStateIdFunc("iosxr_l2vpn_pw_class.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 

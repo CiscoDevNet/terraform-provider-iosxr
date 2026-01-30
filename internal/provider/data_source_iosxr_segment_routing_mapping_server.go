@@ -23,19 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/netascode/go-gnmi"
-	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -52,7 +47,7 @@ func NewSegmentRoutingMappingServerDataSource() datasource.DataSource {
 	return &SegmentRoutingMappingServerDataSource{}
 }
 
-type SegmentRoutingMappingServerDataSource struct{
+type SegmentRoutingMappingServerDataSource struct {
 	data *IosxrProviderData
 }
 
@@ -91,23 +86,23 @@ func (d *SegmentRoutingMappingServerDataSource) Schema(ctx context.Context, req 
 									"address": schema.StringAttribute{
 										MarkdownDescription: "IP address with prefix",
 										Computed:            true,
-								},
+									},
 									"length": schema.StringAttribute{
 										MarkdownDescription: "Prefix length",
 										Computed:            true,
-								},
+									},
 									"sid_index": schema.Int64Attribute{
 										MarkdownDescription: "Start of SID index range",
 										Computed:            true,
-								},
+									},
 									"range": schema.Int64Attribute{
 										MarkdownDescription: "Number of allocated SIDs",
 										Computed:            true,
-								},
+									},
 									"attached": schema.BoolAttribute{
 										MarkdownDescription: "Attached entry advertised via the A-flag",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -191,7 +186,6 @@ func (d *SegmentRoutingMappingServerDataSource) Read(ctx context.Context, req da
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
-
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

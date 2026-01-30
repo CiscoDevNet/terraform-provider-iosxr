@@ -24,44 +24,43 @@ import (
 	"context"
 	"fmt"
 	"reflect"
-	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type SegmentRoutingMappingServer struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
+	Device                        types.String                                               `tfsdk:"device"`
+	Id                            types.String                                               `tfsdk:"id"`
+	DeleteMode                    types.String                                               `tfsdk:"delete_mode"`
 	MappingPrefixSidAddressFamily []SegmentRoutingMappingServerMappingPrefixSidAddressFamily `tfsdk:"mapping_prefix_sid_address_family"`
 }
 
 type SegmentRoutingMappingServerData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
+	Device                        types.String                                               `tfsdk:"device"`
+	Id                            types.String                                               `tfsdk:"id"`
 	MappingPrefixSidAddressFamily []SegmentRoutingMappingServerMappingPrefixSidAddressFamily `tfsdk:"mapping_prefix_sid_address_family"`
 }
 type SegmentRoutingMappingServerMappingPrefixSidAddressFamily struct {
-	AfName types.String `tfsdk:"af_name"`
+	AfName          types.String                                                              `tfsdk:"af_name"`
 	PrefixAddresses []SegmentRoutingMappingServerMappingPrefixSidAddressFamilyPrefixAddresses `tfsdk:"prefix_addresses"`
 }
 type SegmentRoutingMappingServerMappingPrefixSidAddressFamilyPrefixAddresses struct {
-	Address types.String `tfsdk:"address"`
-	Length types.String `tfsdk:"length"`
-	SidIndex types.Int64 `tfsdk:"sid_index"`
-	Range types.Int64 `tfsdk:"range"`
-	Attached types.Bool `tfsdk:"attached"`
+	Address  types.String `tfsdk:"address"`
+	Length   types.String `tfsdk:"length"`
+	SidIndex types.Int64  `tfsdk:"sid_index"`
+	Range    types.Int64  `tfsdk:"range"`
+	Attached types.Bool   `tfsdk:"attached"`
 }
 
 // End of section. //template:end types
@@ -132,8 +131,8 @@ func (data SegmentRoutingMappingServer) toBody(ctx context.Context) string {
 
 func (data *SegmentRoutingMappingServer) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.MappingPrefixSidAddressFamily {
-		keys := [...]string{ "af-name",  }
-		keyValues := [...]string{ data.MappingPrefixSidAddressFamily[i].AfName.ValueString(),  }
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.MappingPrefixSidAddressFamily[i].AfName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "prefix-sid-map.address-families.address-family").ForEach(
@@ -160,8 +159,8 @@ func (data *SegmentRoutingMappingServer) updateFromBody(ctx context.Context, res
 			data.MappingPrefixSidAddressFamily[i].AfName = types.StringNull()
 		}
 		for ci := range data.MappingPrefixSidAddressFamily[i].PrefixAddresses {
-			keys := [...]string{ "address", "length",  }
-			keyValues := [...]string{ data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.ValueString(), data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.ValueString(),  }
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.ValueString(), data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.ValueString()}
 
 			var cr gjson.Result
 			r.Get("prefix-address").ForEach(
@@ -202,14 +201,15 @@ func (data *SegmentRoutingMappingServer) updateFromBody(ctx context.Context, res
 			} else {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range = types.Int64Null()
 			}
-			if value := cr.Get("attached"); !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("attached"); value.Exists() {
+				if !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() {
 					data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolValue(true)
-				} else {
-					data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolValue(false)
 				}
 			} else {
-				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() {
+					data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolNull()
+				}
 			}
 		}
 	}
@@ -266,11 +266,11 @@ func (data SegmentRoutingMappingServer) toBodyXML(ctx context.Context) string {
 
 func (data *SegmentRoutingMappingServer) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	for i := range data.MappingPrefixSidAddressFamily {
-		keys := [...]string{ "af-name",  }
-		keyValues := [...]string{ data.MappingPrefixSidAddressFamily[i].AfName.ValueString(),  }
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.MappingPrefixSidAddressFamily[i].AfName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/prefix-sid-map/address-families/address-family").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid-map/address-families/address-family").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -294,8 +294,8 @@ func (data *SegmentRoutingMappingServer) updateFromBodyXML(ctx context.Context, 
 			data.MappingPrefixSidAddressFamily[i].AfName = types.StringNull()
 		}
 		for ci := range data.MappingPrefixSidAddressFamily[i].PrefixAddresses {
-			keys := [...]string{ "address", "length",  }
-			keyValues := [...]string{ data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.ValueString(), data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.ValueString(),  }
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.ValueString(), data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.ValueString()}
 
 			var cr xmldot.Result
 			helpers.GetFromXPath(r, "prefix-address").ForEach(
@@ -319,33 +319,35 @@ func (data *SegmentRoutingMappingServer) updateFromBodyXML(ctx context.Context, 
 			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address = types.StringValue(value.String())
 			} else {
-				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address = types.StringNull()
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
 			}
 			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length = types.StringValue(value.String())
 			} else {
-				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length = types.StringNull()
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
 			}
 			if value := helpers.GetFromXPath(cr, "sid-index"); value.Exists() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex = types.Int64Value(value.Int())
-			} else {
+			} else if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex.IsNull() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex = types.Int64Null()
 			}
 			if value := helpers.GetFromXPath(cr, "range"); value.Exists() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range = types.Int64Value(value.Int())
-			} else {
+			} else if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range.IsNull() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range = types.Int64Null()
 			}
-					if value := helpers.GetFromXPath(cr, "attached"); value.Exists() {
-						if !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() {
-							data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolValue(true)
-						}
-					} else {
-						// For presence-based booleans, only set to false if the attribute is null in state
-						if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() {
-							data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolNull()
-						}
-					}
+			if value := helpers.GetFromXPath(cr, "attached"); value.Exists() {
+				if !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() {
+					data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() {
+					data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolNull()
+				}
+			}
 		}
 	}
 }
@@ -358,7 +360,7 @@ func (data *SegmentRoutingMappingServer) fromBody(ctx context.Context, res gjson
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"prefix-sid-map.address-families.address-family"); value.Exists() {
+	if value := res.Get(prefix + "prefix-sid-map.address-families.address-family"); value.Exists() {
 		data.MappingPrefixSidAddressFamily = make([]SegmentRoutingMappingServerMappingPrefixSidAddressFamily, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SegmentRoutingMappingServerMappingPrefixSidAddressFamily{}
@@ -375,21 +377,21 @@ func (data *SegmentRoutingMappingServer) fromBody(ctx context.Context, res gjson
 					if ccValue := cv.Get("length"); ccValue.Exists() {
 						cItem.Length = types.StringValue(ccValue.String())
 					}
-				if ccValue := cv.Get("sid-index"); ccValue.Exists() {
-					cItem.SidIndex = types.Int64Value(ccValue.Int())
-				}
-				if ccValue := cv.Get("range"); ccValue.Exists() {
-					cItem.Range = types.Int64Value(ccValue.Int())
-				}
-				if ccValue := cv.Get("attached"); ccValue.Exists() {
-					cItem.Attached = types.BoolValue(true)
-				} else {
-					cItem.Attached = types.BoolValue(false)
-				}
-				item.PrefixAddresses = append(item.PrefixAddresses, cItem)
-				return true
-			})
-		}
+					if ccValue := cv.Get("sid-index"); ccValue.Exists() {
+						cItem.SidIndex = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("range"); ccValue.Exists() {
+						cItem.Range = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("attached"); ccValue.Exists() {
+						cItem.Attached = types.BoolValue(true)
+					} else {
+						cItem.Attached = types.BoolValue(false)
+					}
+					item.PrefixAddresses = append(item.PrefixAddresses, cItem)
+					return true
+				})
+			}
 			data.MappingPrefixSidAddressFamily = append(data.MappingPrefixSidAddressFamily, item)
 			return true
 		})
@@ -404,7 +406,7 @@ func (data *SegmentRoutingMappingServerData) fromBody(ctx context.Context, res g
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"prefix-sid-map.address-families.address-family"); value.Exists() {
+	if value := res.Get(prefix + "prefix-sid-map.address-families.address-family"); value.Exists() {
 		data.MappingPrefixSidAddressFamily = make([]SegmentRoutingMappingServerMappingPrefixSidAddressFamily, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SegmentRoutingMappingServerMappingPrefixSidAddressFamily{}
@@ -446,7 +448,7 @@ func (data *SegmentRoutingMappingServerData) fromBody(ctx context.Context, res g
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *SegmentRoutingMappingServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/prefix-sid-map/address-families/address-family"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid-map/address-families/address-family"); value.Exists() {
 		data.MappingPrefixSidAddressFamily = make([]SegmentRoutingMappingServerMappingPrefixSidAddressFamily, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := SegmentRoutingMappingServerMappingPrefixSidAddressFamily{}
@@ -488,7 +490,7 @@ func (data *SegmentRoutingMappingServer) fromBodyXML(ctx context.Context, res xm
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *SegmentRoutingMappingServerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/prefix-sid-map/address-families/address-family"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid-map/address-families/address-family"); value.Exists() {
 		data.MappingPrefixSidAddressFamily = make([]SegmentRoutingMappingServerMappingPrefixSidAddressFamily, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := SegmentRoutingMappingServerMappingPrefixSidAddressFamily{}
@@ -531,11 +533,11 @@ func (data *SegmentRoutingMappingServerData) fromBodyXML(ctx context.Context, re
 func (data *SegmentRoutingMappingServer) getDeletedItems(ctx context.Context, state SegmentRoutingMappingServer) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.MappingPrefixSidAddressFamily {
-		keys := [...]string{ "af-name",  }
-		stateKeyValues := [...]string{ state.MappingPrefixSidAddressFamily[i].AfName.ValueString(),  }
+		keys := [...]string{"af-name"}
+		stateKeyValues := [...]string{state.MappingPrefixSidAddressFamily[i].AfName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -552,13 +554,13 @@ func (data *SegmentRoutingMappingServer) getDeletedItems(ctx context.Context, st
 			if state.MappingPrefixSidAddressFamily[i].AfName.ValueString() != data.MappingPrefixSidAddressFamily[j].AfName.ValueString() {
 				found = false
 			}
-		if found {
+			if found {
 				for ci := range state.MappingPrefixSidAddressFamily[i].PrefixAddresses {
-					ckeys := [...]string{ "address", "length",  }
-					cstateKeyValues := [...]string{ state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.ValueString(), state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.ValueString(),  }
+					ckeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.ValueString(), state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.ValueString()}
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 					}
 
 					cemptyKeys := true
@@ -581,23 +583,23 @@ func (data *SegmentRoutingMappingServer) getDeletedItems(ctx context.Context, st
 						if state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.ValueString() != data.MappingPrefixSidAddressFamily[j].PrefixAddresses[cj].Length.ValueString() {
 							found = false
 						}
-					if found {
-						if !state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() && data.MappingPrefixSidAddressFamily[j].PrefixAddresses[cj].Attached.IsNull() {
-							deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-sid-map/address-families/address-family%v/prefix-address%v/attached", state.getPath(), keyString, ckeyString))
+						if found {
+							if !state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() && data.MappingPrefixSidAddressFamily[j].PrefixAddresses[cj].Attached.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-sid-map/address-families/address-family%v/prefix-address%v/attached", state.getPath(), keyString, ckeyString))
+							}
+							if !state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range.IsNull() && data.MappingPrefixSidAddressFamily[j].PrefixAddresses[cj].Range.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-sid-map/address-families/address-family%v/prefix-address%v/range", state.getPath(), keyString, ckeyString))
+							}
+							if !state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex.IsNull() && data.MappingPrefixSidAddressFamily[j].PrefixAddresses[cj].SidIndex.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-sid-map/address-families/address-family%v/prefix-address%v/sid-index", state.getPath(), keyString, ckeyString))
+							}
+							break
 						}
-						if !state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range.IsNull() && data.MappingPrefixSidAddressFamily[j].PrefixAddresses[cj].Range.IsNull() {
-							deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-sid-map/address-families/address-family%v/prefix-address%v/range", state.getPath(), keyString, ckeyString))
-						}
-						if !state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex.IsNull() && data.MappingPrefixSidAddressFamily[j].PrefixAddresses[cj].SidIndex.IsNull() {
-							deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-sid-map/address-families/address-family%v/prefix-address%v/sid-index", state.getPath(), keyString, ckeyString))
-						}
-						break
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-sid-map/address-families/address-family%v/prefix-address%v", state.getPath(), keyString, ckeyString))
 					}
 				}
-				if !found {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-sid-map/address-families/address-family%v/prefix-address%v", state.getPath(), keyString, ckeyString))
-				}
-			}
 				break
 			}
 		}
@@ -614,18 +616,18 @@ func (data *SegmentRoutingMappingServer) getDeletedItems(ctx context.Context, st
 func (data *SegmentRoutingMappingServer) getEmptyLeafsDelete(ctx context.Context, state *SegmentRoutingMappingServer) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.MappingPrefixSidAddressFamily {
-		keys := [...]string{ "af-name",  }
-		keyValues := [...]string{ data.MappingPrefixSidAddressFamily[i].AfName.ValueString(),  }
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.MappingPrefixSidAddressFamily[i].AfName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		for ci := range data.MappingPrefixSidAddressFamily[i].PrefixAddresses {
-			ckeys := [...]string{ "address", "length",  }
-			ckeyValues := [...]string{ data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.ValueString(), data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.ValueString(),  }
+			ckeys := [...]string{"address", "length"}
+			ckeyValues := [...]string{data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.ValueString(), data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.ValueString()}
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			// Only delete if state has true and plan has false
 			if !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() && !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.ValueBool() {
@@ -645,7 +647,7 @@ func (data *SegmentRoutingMappingServer) getEmptyLeafsDelete(ctx context.Context
 func (data *SegmentRoutingMappingServer) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.MappingPrefixSidAddressFamily {
-		keyValues := [...]string{ data.MappingPrefixSidAddressFamily[i].AfName.ValueString(),  }
+		keyValues := [...]string{data.MappingPrefixSidAddressFamily[i].AfName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-sid-map/address-families/address-family=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -661,8 +663,8 @@ func (data *SegmentRoutingMappingServer) addDeletedItemsXML(ctx context.Context,
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.MappingPrefixSidAddressFamily {
-		stateKeys := [...]string{ "af-name",  }
-		stateKeyValues := [...]string{ state.MappingPrefixSidAddressFamily[i].AfName.ValueString(),  }
+		stateKeys := [...]string{"af-name"}
+		stateKeyValues := [...]string{state.MappingPrefixSidAddressFamily[i].AfName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -683,9 +685,9 @@ func (data *SegmentRoutingMappingServer) addDeletedItemsXML(ctx context.Context,
 				found = false
 			}
 			if found {
-			for ci := range state.MappingPrefixSidAddressFamily[i].PrefixAddresses {
-					cstateKeys := [...]string{ "address", "length",  }
-					cstateKeyValues := [...]string{ state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.ValueString(), state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.ValueString(),  }
+				for ci := range state.MappingPrefixSidAddressFamily[i].PrefixAddresses {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.ValueString(), state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.ValueString()}
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -748,8 +750,8 @@ func (data *SegmentRoutingMappingServer) addDeletedItemsXML(ctx context.Context,
 func (data *SegmentRoutingMappingServer) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.MappingPrefixSidAddressFamily {
-		keys := [...]string{ "af-name",  }
-		keyValues := [...]string{ data.MappingPrefixSidAddressFamily[i].AfName.ValueString(),  }
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.MappingPrefixSidAddressFamily[i].AfName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

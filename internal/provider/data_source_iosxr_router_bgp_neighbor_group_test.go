@@ -124,8 +124,8 @@ func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterBGPNeighborGroupPrerequisitesConfig+testAccDataSourceIosxrRouterBGPNeighborGroupConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrRouterBGPNeighborGroupPrerequisitesConfig + testAccDataSourceIosxrRouterBGPNeighborGroupConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

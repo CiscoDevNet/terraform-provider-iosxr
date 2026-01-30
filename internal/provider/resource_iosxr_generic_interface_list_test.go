@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +35,8 @@ import (
 
 func TestAccIosxrGenericInterfaceList(t *testing.T) {
 	if os.Getenv("XRD") == "" && os.Getenv("C8000") == "" {
-        t.Skip("skipping test, set environment variable XRD or C8000")
-    }
+		t.Skip("skipping test, set environment variable XRD or C8000")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_generic_interface_list.test", "list_name", "INTF-LIST1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_generic_interface_list.test", "interfaces.0.interface_name", "Bundle-Ether101"))
@@ -46,18 +48,18 @@ func TestAccIosxrGenericInterfaceList(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrGenericInterfaceListConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_generic_interface_list.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_generic_interface_list.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrGenericInterfaceListImportStateIdFunc("iosxr_generic_interface_list.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 

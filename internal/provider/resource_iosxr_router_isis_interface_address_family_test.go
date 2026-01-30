@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -95,23 +97,23 @@ func TestAccIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig+testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum(),
+			Config: testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig+testAccIosxrRouterISISInterfaceAddressFamilyConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISInterfaceAddressFamilyConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_router_isis_interface_address_family.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_router_isis_interface_address_family.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrRouterISISInterfaceAddressFamilyImportStateIdFunc("iosxr_router_isis_interface_address_family.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -127,7 +129,7 @@ func iosxrRouterISISInterfaceAddressFamilyImportStateIdFunc(resourceName string)
 		AfName := primary.Attributes["af_name"]
 		SafName := primary.Attributes["saf_name"]
 
-		return fmt.Sprintf("%s,%s,%s,%s", ProcessId,InterfaceName,AfName,SafName), nil
+		return fmt.Sprintf("%s,%s,%s,%s", ProcessId, InterfaceName, AfName, SafName), nil
 	}
 }
 

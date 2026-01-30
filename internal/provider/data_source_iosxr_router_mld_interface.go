@@ -23,19 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/netascode/go-gnmi"
-	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -52,7 +47,7 @@ func NewRouterMLDInterfaceDataSource() datasource.DataSource {
 	return &RouterMLDInterfaceDataSource{}
 }
 
-type RouterMLDInterfaceDataSource struct{
+type RouterMLDInterfaceDataSource struct {
 	data *IosxrProviderData
 }
 
@@ -155,15 +150,15 @@ func (d *RouterMLDInterfaceDataSource) Schema(ctx context.Context, req datasourc
 									"group_inc_mask": schema.StringAttribute{
 										MarkdownDescription: "Increment mask for group address",
 										Computed:            true,
-								},
+									},
 									"group_count": schema.Int64Attribute{
 										MarkdownDescription: "No. of group addresses to join",
 										Computed:            true,
-								},
+									},
 									"suppress_reports": schema.BoolAttribute{
 										MarkdownDescription: "Suppress IGMP reports",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -175,11 +170,11 @@ func (d *RouterMLDInterfaceDataSource) Schema(ctx context.Context, req datasourc
 									"source_ip": schema.StringAttribute{
 										MarkdownDescription: "Source address to join",
 										Computed:            true,
-								},
+									},
 									"suppress_reports": schema.BoolAttribute{
 										MarkdownDescription: "Suppress IGMP reports",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -191,19 +186,19 @@ func (d *RouterMLDInterfaceDataSource) Schema(ctx context.Context, req datasourc
 									"group_inc_mask": schema.StringAttribute{
 										MarkdownDescription: "Increment mask for group address",
 										Computed:            true,
-								},
+									},
 									"source_ip": schema.StringAttribute{
 										MarkdownDescription: "Source address to join",
 										Computed:            true,
-								},
+									},
 									"group_count": schema.Int64Attribute{
 										MarkdownDescription: "No. of group addresses to join",
 										Computed:            true,
-								},
+									},
 									"suppress_reports": schema.BoolAttribute{
 										MarkdownDescription: "Suppress IGMP reports",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -231,15 +226,15 @@ func (d *RouterMLDInterfaceDataSource) Schema(ctx context.Context, req datasourc
 									"source_ip": schema.StringAttribute{
 										MarkdownDescription: "Source address to include",
 										Computed:            true,
-								},
+									},
 									"include": schema.BoolAttribute{
 										MarkdownDescription: "Include only the following source address",
 										Computed:            true,
-								},
+									},
 									"exclude": schema.BoolAttribute{
 										MarkdownDescription: "Exclude only the following source address",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -327,7 +322,6 @@ func (d *RouterMLDInterfaceDataSource) Read(ctx context.Context, req datasource.
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
-
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

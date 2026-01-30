@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +35,8 @@ import (
 
 func TestAccIosxrTACACSSourceInterface(t *testing.T) {
 	if os.Getenv("AAA") == "" {
-        t.Skip("skipping test, set environment variable AAA")
-    }
+		t.Skip("skipping test, set environment variable AAA")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_tacacs_source_interface.test", "source_interface", "MgmtEth0/RP0/CPU0/0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_tacacs_source_interface.test", "source_interfaces.0.vrf", "VRF1"))
@@ -42,23 +44,23 @@ func TestAccIosxrTACACSSourceInterface(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrTACACSSourceInterfacePrerequisitesConfig+testAccIosxrTACACSSourceInterfaceConfig_minimum(),
+			Config: testAccIosxrTACACSSourceInterfacePrerequisitesConfig + testAccIosxrTACACSSourceInterfaceConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrTACACSSourceInterfacePrerequisitesConfig+testAccIosxrTACACSSourceInterfaceConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrTACACSSourceInterfacePrerequisitesConfig + testAccIosxrTACACSSourceInterfaceConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_tacacs_source_interface.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_tacacs_source_interface.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrTACACSSourceInterfaceImportStateIdFunc("iosxr_tacacs_source_interface.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -69,7 +71,7 @@ func TestAccIosxrTACACSSourceInterface(t *testing.T) {
 func iosxrTACACSSourceInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf("", ), nil
+		return fmt.Sprintf(""), nil
 	}
 }
 

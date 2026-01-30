@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,16 +35,16 @@ import (
 
 func TestAccIosxrMonitorSession(t *testing.T) {
 	if os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
-        t.Skip("skipping test, set environment variable NCS or C8000")
-    }
+		t.Skip("skipping test, set environment variable NCS or C8000")
+	}
 	var checks []resource.TestCheckFunc
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_monitor_session.test", "monitor_sessions.0.session_name", "SPAN1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_monitor_session.test", "monitor_sessions.0.traffic_type", "ethernet"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_monitor_session.test", "monitor_sessions.0.destination_interface", "GigabitEthernet0/0/0/1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_monitor_session.test", "monitor_sessions.0.discard_class", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_monitor_session.test", "monitor_sessions.0.traffic_class", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_monitor_session.test", "monitor_sessions.0.mirror_first", "256"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_monitor_session.test", "monitor_sessions.0.session_name", "SPAN1"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_monitor_session.test", "monitor_sessions.0.traffic_type", "ethernet"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_monitor_session.test", "monitor_sessions.0.destination_interface", "GigabitEthernet0/0/0/1"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_monitor_session.test", "monitor_sessions.0.discard_class", "1"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_monitor_session.test", "monitor_sessions.0.traffic_class", "5"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_monitor_session.test", "monitor_sessions.0.mirror_first", "256"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_monitor_session.test", "router_id", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_monitor_session.test", "default_capture_disable", "true"))
@@ -54,18 +56,18 @@ func TestAccIosxrMonitorSession(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrMonitorSessionConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_monitor_session.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_monitor_session.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrMonitorSessionImportStateIdFunc("iosxr_monitor_session.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -76,7 +78,7 @@ func TestAccIosxrMonitorSession(t *testing.T) {
 func iosxrMonitorSessionImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
-		return fmt.Sprintf("", ), nil
+		return fmt.Sprintf(""), nil
 	}
 }
 
@@ -103,14 +105,14 @@ func testAccIosxrMonitorSessionConfig_minimum() string {
 func testAccIosxrMonitorSessionConfig_all() string {
 	config := `resource "iosxr_monitor_session" "test" {` + "\n"
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-	config += `	monitor_sessions = [{` + "\n"
-	config += `		session_name = "SPAN1"` + "\n"
-	config += `		traffic_type = "ethernet"` + "\n"
-	config += `		destination_interface = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `		discard_class = 1` + "\n"
-	config += `		traffic_class = 5` + "\n"
-	config += `		mirror_first = 256` + "\n"
-	config += `		}]` + "\n"
+		config += `	monitor_sessions = [{` + "\n"
+		config += `		session_name = "SPAN1"` + "\n"
+		config += `		traffic_type = "ethernet"` + "\n"
+		config += `		destination_interface = "GigabitEthernet0/0/0/1"` + "\n"
+		config += `		discard_class = 1` + "\n"
+		config += `		traffic_class = 5` + "\n"
+		config += `		mirror_first = 256` + "\n"
+		config += `		}]` + "\n"
 	}
 	config += `	router_id = 1` + "\n"
 	config += `	default_capture_disable = true` + "\n"

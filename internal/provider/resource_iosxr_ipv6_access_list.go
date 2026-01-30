@@ -24,28 +24,21 @@ import (
 	"context"
 	"fmt"
 	"regexp"
-	"strconv"
 	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -56,7 +49,7 @@ func NewIPv6AccessListResource() resource.Resource {
 	return &IPv6AccessListResource{}
 }
 
-type IPv6AccessListResource struct{
+type IPv6AccessListResource struct {
 	data *IosxrProviderData
 }
 
@@ -123,10 +116,10 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Optional:            true,
 						},
 						"permit_fragment_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Fragment type for a packet").AddStringEnumDescription("first-fragment", "is-fragment", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Fragment type for a packet").AddStringEnumDescription("first-fragment", "is-fragment").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("first-fragment", "is-fragment", ),
+								stringvalidator.OneOf("first-fragment", "is-fragment"),
 							},
 						},
 						"permit_counter": schema.StringAttribute{
@@ -293,10 +286,10 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Optional:            true,
 						},
 						"permit_icmp_message_type_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("ICMP message type").AddStringEnumDescription("AddressUnreachable", "AdministrativelyProhibited", "BeyondScopeOfSourceAddress", "DestinationUnreachable", "Echo", "EchoReply", "ErroneousHeaderField", "GroupMembershipQuery", "GroupMembershipReduction", "GroupMembershipReport", "NeighborAdvertisement", "NeighborRedirect", "NeighborSolicitation", "NoRouteToDestination", "NodeInformationRequestIsRefused", "NodeInformationSuccessfulReply", "PacketTooBig", "ParameterProblem", "PortUnreachable", "QuerySubjectIsDomainName", "QuerySubjectIsIPv4Address", "QuerySubjectIsIPv6Address", "RRCommand", "RRResult", "RRSeqnumReset", "ReassemblyOption", "RouterAdvertisement", "RouterRenumbering", "RouterSolicitation", "TTLExceeded", "TimeExceeded", "UnknownQueryType", "UnrecognizedNextHeader", "UnrecognizedOption", "WhoAreYouReply", "WhoAreYouRequest", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("ICMP message type").AddStringEnumDescription("AddressUnreachable", "AdministrativelyProhibited", "BeyondScopeOfSourceAddress", "DestinationUnreachable", "Echo", "EchoReply", "ErroneousHeaderField", "GroupMembershipQuery", "GroupMembershipReduction", "GroupMembershipReport", "NeighborAdvertisement", "NeighborRedirect", "NeighborSolicitation", "NoRouteToDestination", "NodeInformationRequestIsRefused", "NodeInformationSuccessfulReply", "PacketTooBig", "ParameterProblem", "PortUnreachable", "QuerySubjectIsDomainName", "QuerySubjectIsIPv4Address", "QuerySubjectIsIPv6Address", "RRCommand", "RRResult", "RRSeqnumReset", "ReassemblyOption", "RouterAdvertisement", "RouterRenumbering", "RouterSolicitation", "TTLExceeded", "TimeExceeded", "UnknownQueryType", "UnrecognizedNextHeader", "UnrecognizedOption", "WhoAreYouReply", "WhoAreYouRequest").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("AddressUnreachable", "AdministrativelyProhibited", "BeyondScopeOfSourceAddress", "DestinationUnreachable", "Echo", "EchoReply", "ErroneousHeaderField", "GroupMembershipQuery", "GroupMembershipReduction", "GroupMembershipReport", "NeighborAdvertisement", "NeighborRedirect", "NeighborSolicitation", "NoRouteToDestination", "NodeInformationRequestIsRefused", "NodeInformationSuccessfulReply", "PacketTooBig", "ParameterProblem", "PortUnreachable", "QuerySubjectIsDomainName", "QuerySubjectIsIPv4Address", "QuerySubjectIsIPv6Address", "RRCommand", "RRResult", "RRSeqnumReset", "ReassemblyOption", "RouterAdvertisement", "RouterRenumbering", "RouterSolicitation", "TTLExceeded", "TimeExceeded", "UnknownQueryType", "UnrecognizedNextHeader", "UnrecognizedOption", "WhoAreYouReply", "WhoAreYouRequest", ),
+								stringvalidator.OneOf("AddressUnreachable", "AdministrativelyProhibited", "BeyondScopeOfSourceAddress", "DestinationUnreachable", "Echo", "EchoReply", "ErroneousHeaderField", "GroupMembershipQuery", "GroupMembershipReduction", "GroupMembershipReport", "NeighborAdvertisement", "NeighborRedirect", "NeighborSolicitation", "NoRouteToDestination", "NodeInformationRequestIsRefused", "NodeInformationSuccessfulReply", "PacketTooBig", "ParameterProblem", "PortUnreachable", "QuerySubjectIsDomainName", "QuerySubjectIsIPv4Address", "QuerySubjectIsIPv6Address", "RRCommand", "RRResult", "RRSeqnumReset", "ReassemblyOption", "RouterAdvertisement", "RouterRenumbering", "RouterSolicitation", "TTLExceeded", "TimeExceeded", "UnknownQueryType", "UnrecognizedNextHeader", "UnrecognizedOption", "WhoAreYouReply", "WhoAreYouRequest"),
 							},
 						},
 						"permit_icmp_message_type": schema.Int64Attribute{
@@ -454,10 +447,10 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"permit_police_priority": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Set Priority option on this entry").AddStringEnumDescription("critical", "high", "low", "medium", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Set Priority option on this entry").AddStringEnumDescription("critical", "high", "low", "medium").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("critical", "high", "low", "medium", ),
+								stringvalidator.OneOf("critical", "high", "low", "medium"),
 							},
 						},
 						"permit_nexthop1_ipv6": schema.StringAttribute{
@@ -565,10 +558,10 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Optional:            true,
 						},
 						"deny_fragment_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Fragment type for a packet").AddStringEnumDescription("first-fragment", "is-fragment", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Fragment type for a packet").AddStringEnumDescription("first-fragment", "is-fragment").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("first-fragment", "is-fragment", ),
+								stringvalidator.OneOf("first-fragment", "is-fragment"),
 							},
 						},
 						"deny_counter": schema.StringAttribute{
@@ -735,10 +728,10 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Optional:            true,
 						},
 						"deny_icmp_message_type_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("ICMP message type").AddStringEnumDescription("AddressUnreachable", "AdministrativelyProhibited", "BeyondScopeOfSourceAddress", "DestinationUnreachable", "Echo", "EchoReply", "ErroneousHeaderField", "GroupMembershipQuery", "GroupMembershipReduction", "GroupMembershipReport", "NeighborAdvertisement", "NeighborRedirect", "NeighborSolicitation", "NoRouteToDestination", "NodeInformationRequestIsRefused", "NodeInformationSuccessfulReply", "PacketTooBig", "ParameterProblem", "PortUnreachable", "QuerySubjectIsDomainName", "QuerySubjectIsIPv4Address", "QuerySubjectIsIPv6Address", "RRCommand", "RRResult", "RRSeqnumReset", "ReassemblyOption", "RouterAdvertisement", "RouterRenumbering", "RouterSolicitation", "TTLExceeded", "TimeExceeded", "UnknownQueryType", "UnrecognizedNextHeader", "UnrecognizedOption", "WhoAreYouReply", "WhoAreYouRequest", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("ICMP message type").AddStringEnumDescription("AddressUnreachable", "AdministrativelyProhibited", "BeyondScopeOfSourceAddress", "DestinationUnreachable", "Echo", "EchoReply", "ErroneousHeaderField", "GroupMembershipQuery", "GroupMembershipReduction", "GroupMembershipReport", "NeighborAdvertisement", "NeighborRedirect", "NeighborSolicitation", "NoRouteToDestination", "NodeInformationRequestIsRefused", "NodeInformationSuccessfulReply", "PacketTooBig", "ParameterProblem", "PortUnreachable", "QuerySubjectIsDomainName", "QuerySubjectIsIPv4Address", "QuerySubjectIsIPv6Address", "RRCommand", "RRResult", "RRSeqnumReset", "ReassemblyOption", "RouterAdvertisement", "RouterRenumbering", "RouterSolicitation", "TTLExceeded", "TimeExceeded", "UnknownQueryType", "UnrecognizedNextHeader", "UnrecognizedOption", "WhoAreYouReply", "WhoAreYouRequest").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("AddressUnreachable", "AdministrativelyProhibited", "BeyondScopeOfSourceAddress", "DestinationUnreachable", "Echo", "EchoReply", "ErroneousHeaderField", "GroupMembershipQuery", "GroupMembershipReduction", "GroupMembershipReport", "NeighborAdvertisement", "NeighborRedirect", "NeighborSolicitation", "NoRouteToDestination", "NodeInformationRequestIsRefused", "NodeInformationSuccessfulReply", "PacketTooBig", "ParameterProblem", "PortUnreachable", "QuerySubjectIsDomainName", "QuerySubjectIsIPv4Address", "QuerySubjectIsIPv6Address", "RRCommand", "RRResult", "RRSeqnumReset", "ReassemblyOption", "RouterAdvertisement", "RouterRenumbering", "RouterSolicitation", "TTLExceeded", "TimeExceeded", "UnknownQueryType", "UnrecognizedNextHeader", "UnrecognizedOption", "WhoAreYouReply", "WhoAreYouRequest", ),
+								stringvalidator.OneOf("AddressUnreachable", "AdministrativelyProhibited", "BeyondScopeOfSourceAddress", "DestinationUnreachable", "Echo", "EchoReply", "ErroneousHeaderField", "GroupMembershipQuery", "GroupMembershipReduction", "GroupMembershipReport", "NeighborAdvertisement", "NeighborRedirect", "NeighborSolicitation", "NoRouteToDestination", "NodeInformationRequestIsRefused", "NodeInformationSuccessfulReply", "PacketTooBig", "ParameterProblem", "PortUnreachable", "QuerySubjectIsDomainName", "QuerySubjectIsIPv4Address", "QuerySubjectIsIPv6Address", "RRCommand", "RRResult", "RRSeqnumReset", "ReassemblyOption", "RouterAdvertisement", "RouterRenumbering", "RouterSolicitation", "TTLExceeded", "TimeExceeded", "UnknownQueryType", "UnrecognizedNextHeader", "UnrecognizedOption", "WhoAreYouReply", "WhoAreYouRequest"),
 							},
 						},
 						"deny_icmp_message_type": schema.Int64Attribute{
@@ -896,10 +889,10 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"deny_police_priority": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Set Priority option on this entry").AddStringEnumDescription("critical", "high", "low", "medium", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Set Priority option on this entry").AddStringEnumDescription("critical", "high", "low", "medium").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("critical", "high", "low", "medium", ),
+								stringvalidator.OneOf("critical", "high", "low", "medium"),
 							},
 						},
 						"deny_capture": schema.BoolAttribute{
@@ -975,14 +968,14 @@ func (r *IPv6AccessListResource) Create(ctx context.Context, req resource.Create
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-		var ops []gnmi.SetOperation
+			var ops []gnmi.SetOperation
 
-		// Create object
-		body := plan.toBody(ctx)
-		ops = append(ops, gnmi.Update(plan.getPath(), body))
+			// Create object
+			body := plan.toBody(ctx)
+			ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -1203,11 +1196,11 @@ func (r *IPv6AccessListResource) Update(ctx context.Context, req resource.Update
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			 // Combine update and delete operations into a single transaction
-		 	combinedBody := body + deleteBody
-		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-		 		resp.Diagnostics.AddError("Client Error", err.Error())
-		 		return
+			// Combine update and delete operations into a single transaction
+			combinedBody := body + deleteBody
+			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+				resp.Diagnostics.AddError("Client Error", err.Error())
+				return
 			}
 		}
 	}

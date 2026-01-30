@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +35,8 @@ import (
 
 func TestAccIosxrControllerOptics(t *testing.T) {
 	if os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
-        t.Skip("skipping test, set environment variable NCS or C8000")
-    }
+		t.Skip("skipping test, set environment variable NCS or C8000")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_controller_optics.test", "type", "Optics"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_controller_optics.test", "name", "0/0/0/1"))
@@ -54,18 +56,18 @@ func TestAccIosxrControllerOptics(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrControllerOpticsConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_controller_optics.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_controller_optics.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrControllerOpticsImportStateIdFunc("iosxr_controller_optics.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -80,7 +82,7 @@ func iosxrControllerOpticsImportStateIdFunc(resourceName string) resource.Import
 		Name := primary.Attributes["name"]
 		Active := primary.Attributes["active"]
 
-		return fmt.Sprintf("%s,%s,%s", Type,Name,Active), nil
+		return fmt.Sprintf("%s,%s,%s", Type, Name, Active), nil
 	}
 }
 

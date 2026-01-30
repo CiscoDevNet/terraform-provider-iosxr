@@ -28,76 +28,76 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type LinuxNetworking struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
-	StatisticsSynchronizationThirtySeconds types.Bool `tfsdk:"statistics_synchronization_thirty_seconds"`
-	StatisticsSynchronizationSixtySeconds types.Bool `tfsdk:"statistics_synchronization_sixty_seconds"`
-	StatisticsSynchronizationTwoMinutes types.Bool `tfsdk:"statistics_synchronization_two_minutes"`
-	StatisticsSynchronizationThreeMinutes types.Bool `tfsdk:"statistics_synchronization_three_minutes"`
-	StatisticsSynchronizationFourMinutes types.Bool `tfsdk:"statistics_synchronization_four_minutes"`
-	StatisticsSynchronizationFiveMinutes types.Bool `tfsdk:"statistics_synchronization_five_minutes"`
-	StatisticsSynchronizationSixMinutes types.Bool `tfsdk:"statistics_synchronization_six_minutes"`
-	StatisticsSynchronizationSevenMinutes types.Bool `tfsdk:"statistics_synchronization_seven_minutes"`
-	StatisticsSynchronizationEightMinutes types.Bool `tfsdk:"statistics_synchronization_eight_minutes"`
-	StatisticsSynchronizationNineMinutes types.Bool `tfsdk:"statistics_synchronization_nine_minutes"`
-	StatisticsSynchronizationTenMinutes types.Bool `tfsdk:"statistics_synchronization_ten_minutes"`
-	LinuxOwnedVrf types.String `tfsdk:"linux_owned_vrf"`
-	ExposedInterfaces []LinuxNetworkingExposedInterfaces `tfsdk:"exposed_interfaces"`
-	Vrfs []LinuxNetworkingVrfs `tfsdk:"vrfs"`
+	Device                                 types.String                       `tfsdk:"device"`
+	Id                                     types.String                       `tfsdk:"id"`
+	DeleteMode                             types.String                       `tfsdk:"delete_mode"`
+	StatisticsSynchronizationThirtySeconds types.Bool                         `tfsdk:"statistics_synchronization_thirty_seconds"`
+	StatisticsSynchronizationSixtySeconds  types.Bool                         `tfsdk:"statistics_synchronization_sixty_seconds"`
+	StatisticsSynchronizationTwoMinutes    types.Bool                         `tfsdk:"statistics_synchronization_two_minutes"`
+	StatisticsSynchronizationThreeMinutes  types.Bool                         `tfsdk:"statistics_synchronization_three_minutes"`
+	StatisticsSynchronizationFourMinutes   types.Bool                         `tfsdk:"statistics_synchronization_four_minutes"`
+	StatisticsSynchronizationFiveMinutes   types.Bool                         `tfsdk:"statistics_synchronization_five_minutes"`
+	StatisticsSynchronizationSixMinutes    types.Bool                         `tfsdk:"statistics_synchronization_six_minutes"`
+	StatisticsSynchronizationSevenMinutes  types.Bool                         `tfsdk:"statistics_synchronization_seven_minutes"`
+	StatisticsSynchronizationEightMinutes  types.Bool                         `tfsdk:"statistics_synchronization_eight_minutes"`
+	StatisticsSynchronizationNineMinutes   types.Bool                         `tfsdk:"statistics_synchronization_nine_minutes"`
+	StatisticsSynchronizationTenMinutes    types.Bool                         `tfsdk:"statistics_synchronization_ten_minutes"`
+	LinuxOwnedVrf                          types.String                       `tfsdk:"linux_owned_vrf"`
+	ExposedInterfaces                      []LinuxNetworkingExposedInterfaces `tfsdk:"exposed_interfaces"`
+	Vrfs                                   []LinuxNetworkingVrfs              `tfsdk:"vrfs"`
 }
 
 type LinuxNetworkingData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	StatisticsSynchronizationThirtySeconds types.Bool `tfsdk:"statistics_synchronization_thirty_seconds"`
-	StatisticsSynchronizationSixtySeconds types.Bool `tfsdk:"statistics_synchronization_sixty_seconds"`
-	StatisticsSynchronizationTwoMinutes types.Bool `tfsdk:"statistics_synchronization_two_minutes"`
-	StatisticsSynchronizationThreeMinutes types.Bool `tfsdk:"statistics_synchronization_three_minutes"`
-	StatisticsSynchronizationFourMinutes types.Bool `tfsdk:"statistics_synchronization_four_minutes"`
-	StatisticsSynchronizationFiveMinutes types.Bool `tfsdk:"statistics_synchronization_five_minutes"`
-	StatisticsSynchronizationSixMinutes types.Bool `tfsdk:"statistics_synchronization_six_minutes"`
-	StatisticsSynchronizationSevenMinutes types.Bool `tfsdk:"statistics_synchronization_seven_minutes"`
-	StatisticsSynchronizationEightMinutes types.Bool `tfsdk:"statistics_synchronization_eight_minutes"`
-	StatisticsSynchronizationNineMinutes types.Bool `tfsdk:"statistics_synchronization_nine_minutes"`
-	StatisticsSynchronizationTenMinutes types.Bool `tfsdk:"statistics_synchronization_ten_minutes"`
-	LinuxOwnedVrf types.String `tfsdk:"linux_owned_vrf"`
-	ExposedInterfaces []LinuxNetworkingExposedInterfaces `tfsdk:"exposed_interfaces"`
-	Vrfs []LinuxNetworkingVrfs `tfsdk:"vrfs"`
+	Device                                 types.String                       `tfsdk:"device"`
+	Id                                     types.String                       `tfsdk:"id"`
+	StatisticsSynchronizationThirtySeconds types.Bool                         `tfsdk:"statistics_synchronization_thirty_seconds"`
+	StatisticsSynchronizationSixtySeconds  types.Bool                         `tfsdk:"statistics_synchronization_sixty_seconds"`
+	StatisticsSynchronizationTwoMinutes    types.Bool                         `tfsdk:"statistics_synchronization_two_minutes"`
+	StatisticsSynchronizationThreeMinutes  types.Bool                         `tfsdk:"statistics_synchronization_three_minutes"`
+	StatisticsSynchronizationFourMinutes   types.Bool                         `tfsdk:"statistics_synchronization_four_minutes"`
+	StatisticsSynchronizationFiveMinutes   types.Bool                         `tfsdk:"statistics_synchronization_five_minutes"`
+	StatisticsSynchronizationSixMinutes    types.Bool                         `tfsdk:"statistics_synchronization_six_minutes"`
+	StatisticsSynchronizationSevenMinutes  types.Bool                         `tfsdk:"statistics_synchronization_seven_minutes"`
+	StatisticsSynchronizationEightMinutes  types.Bool                         `tfsdk:"statistics_synchronization_eight_minutes"`
+	StatisticsSynchronizationNineMinutes   types.Bool                         `tfsdk:"statistics_synchronization_nine_minutes"`
+	StatisticsSynchronizationTenMinutes    types.Bool                         `tfsdk:"statistics_synchronization_ten_minutes"`
+	LinuxOwnedVrf                          types.String                       `tfsdk:"linux_owned_vrf"`
+	ExposedInterfaces                      []LinuxNetworkingExposedInterfaces `tfsdk:"exposed_interfaces"`
+	Vrfs                                   []LinuxNetworkingVrfs              `tfsdk:"vrfs"`
 }
 type LinuxNetworkingExposedInterfaces struct {
-	InterfaceName types.String `tfsdk:"interface_name"`
-	LinuxManaged types.String `tfsdk:"linux_managed"`
-	StatisticsSynchronizationFiveSeconds types.Bool `tfsdk:"statistics_synchronization_five_seconds"`
-	StatisticsSynchronizationTenSeconds types.Bool `tfsdk:"statistics_synchronization_ten_seconds"`
-	StatisticsSynchronizationThirtySeconds types.Bool `tfsdk:"statistics_synchronization_thirty_seconds"`
-	StatisticsSynchronizationSixtySeconds types.Bool `tfsdk:"statistics_synchronization_sixty_seconds"`
+	InterfaceName                          types.String `tfsdk:"interface_name"`
+	LinuxManaged                           types.String `tfsdk:"linux_managed"`
+	StatisticsSynchronizationFiveSeconds   types.Bool   `tfsdk:"statistics_synchronization_five_seconds"`
+	StatisticsSynchronizationTenSeconds    types.Bool   `tfsdk:"statistics_synchronization_ten_seconds"`
+	StatisticsSynchronizationThirtySeconds types.Bool   `tfsdk:"statistics_synchronization_thirty_seconds"`
+	StatisticsSynchronizationSixtySeconds  types.Bool   `tfsdk:"statistics_synchronization_sixty_seconds"`
 }
 type LinuxNetworkingVrfs struct {
-	VrfName types.String `tfsdk:"vrf_name"`
-	Disable types.Bool `tfsdk:"disable"`
-	EastWestInterfaces []LinuxNetworkingVrfsEastWestInterfaces `tfsdk:"east_west_interfaces"`
-	Ipv4SourceInterfaceDefaultRoute types.String `tfsdk:"ipv4_source_interface_default_route"`
-	Ipv4SourceDefaultRouteActiveManagement types.Bool `tfsdk:"ipv4_source_default_route_active_management"`
-	Ipv4SourceInterfaceManagementRoute types.String `tfsdk:"ipv4_source_interface_management_route"`
-	Ipv4DefaultRouteSoftwareForwarding types.Bool `tfsdk:"ipv4_default_route_software_forwarding"`
-	Ipv6SourceInterfaceDefaultRoute types.String `tfsdk:"ipv6_source_interface_default_route"`
-	Ipv6SourceDefaultRouteActiveManagement types.Bool `tfsdk:"ipv6_source_default_route_active_management"`
-	Ipv6SourceInterfaceManagementRoute types.String `tfsdk:"ipv6_source_interface_management_route"`
-	Ipv6DefaultRouteSoftwareForwarding types.Bool `tfsdk:"ipv6_default_route_software_forwarding"`
+	VrfName                                types.String                            `tfsdk:"vrf_name"`
+	Disable                                types.Bool                              `tfsdk:"disable"`
+	EastWestInterfaces                     []LinuxNetworkingVrfsEastWestInterfaces `tfsdk:"east_west_interfaces"`
+	Ipv4SourceInterfaceDefaultRoute        types.String                            `tfsdk:"ipv4_source_interface_default_route"`
+	Ipv4SourceDefaultRouteActiveManagement types.Bool                              `tfsdk:"ipv4_source_default_route_active_management"`
+	Ipv4SourceInterfaceManagementRoute     types.String                            `tfsdk:"ipv4_source_interface_management_route"`
+	Ipv4DefaultRouteSoftwareForwarding     types.Bool                              `tfsdk:"ipv4_default_route_software_forwarding"`
+	Ipv6SourceInterfaceDefaultRoute        types.String                            `tfsdk:"ipv6_source_interface_default_route"`
+	Ipv6SourceDefaultRouteActiveManagement types.Bool                              `tfsdk:"ipv6_source_default_route_active_management"`
+	Ipv6SourceInterfaceManagementRoute     types.String                            `tfsdk:"ipv6_source_interface_management_route"`
+	Ipv6DefaultRouteSoftwareForwarding     types.Bool                              `tfsdk:"ipv6_default_route_software_forwarding"`
 }
 type LinuxNetworkingVrfsEastWestInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
@@ -282,104 +282,93 @@ func (data LinuxNetworking) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.thirty-seconds"); !data.StatisticsSynchronizationThirtySeconds.IsNull() {
-		if value.Exists() {
-			data.StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
-		} else {
-			data.StatisticsSynchronizationThirtySeconds = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.thirty-seconds"); value.Exists() {
+		data.StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
 	} else {
-		data.StatisticsSynchronizationThirtySeconds = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatisticsSynchronizationThirtySeconds.IsNull() {
+			data.StatisticsSynchronizationThirtySeconds = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.sixty-seconds"); !data.StatisticsSynchronizationSixtySeconds.IsNull() {
-		if value.Exists() {
-			data.StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
-		} else {
-			data.StatisticsSynchronizationSixtySeconds = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.sixty-seconds"); value.Exists() {
+		data.StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
 	} else {
-		data.StatisticsSynchronizationSixtySeconds = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatisticsSynchronizationSixtySeconds.IsNull() {
+			data.StatisticsSynchronizationSixtySeconds = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.twom"); !data.StatisticsSynchronizationTwoMinutes.IsNull() {
-		if value.Exists() {
-			data.StatisticsSynchronizationTwoMinutes = types.BoolValue(true)
-		} else {
-			data.StatisticsSynchronizationTwoMinutes = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.twom"); value.Exists() {
+		data.StatisticsSynchronizationTwoMinutes = types.BoolValue(true)
 	} else {
-		data.StatisticsSynchronizationTwoMinutes = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatisticsSynchronizationTwoMinutes.IsNull() {
+			data.StatisticsSynchronizationTwoMinutes = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.threem"); !data.StatisticsSynchronizationThreeMinutes.IsNull() {
-		if value.Exists() {
-			data.StatisticsSynchronizationThreeMinutes = types.BoolValue(true)
-		} else {
-			data.StatisticsSynchronizationThreeMinutes = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.threem"); value.Exists() {
+		data.StatisticsSynchronizationThreeMinutes = types.BoolValue(true)
 	} else {
-		data.StatisticsSynchronizationThreeMinutes = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatisticsSynchronizationThreeMinutes.IsNull() {
+			data.StatisticsSynchronizationThreeMinutes = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.fourm"); !data.StatisticsSynchronizationFourMinutes.IsNull() {
-		if value.Exists() {
-			data.StatisticsSynchronizationFourMinutes = types.BoolValue(true)
-		} else {
-			data.StatisticsSynchronizationFourMinutes = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.fourm"); value.Exists() {
+		data.StatisticsSynchronizationFourMinutes = types.BoolValue(true)
 	} else {
-		data.StatisticsSynchronizationFourMinutes = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatisticsSynchronizationFourMinutes.IsNull() {
+			data.StatisticsSynchronizationFourMinutes = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.fivem"); !data.StatisticsSynchronizationFiveMinutes.IsNull() {
-		if value.Exists() {
-			data.StatisticsSynchronizationFiveMinutes = types.BoolValue(true)
-		} else {
-			data.StatisticsSynchronizationFiveMinutes = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.fivem"); value.Exists() {
+		data.StatisticsSynchronizationFiveMinutes = types.BoolValue(true)
 	} else {
-		data.StatisticsSynchronizationFiveMinutes = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatisticsSynchronizationFiveMinutes.IsNull() {
+			data.StatisticsSynchronizationFiveMinutes = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.sixm"); !data.StatisticsSynchronizationSixMinutes.IsNull() {
-		if value.Exists() {
-			data.StatisticsSynchronizationSixMinutes = types.BoolValue(true)
-		} else {
-			data.StatisticsSynchronizationSixMinutes = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.sixm"); value.Exists() {
+		data.StatisticsSynchronizationSixMinutes = types.BoolValue(true)
 	} else {
-		data.StatisticsSynchronizationSixMinutes = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatisticsSynchronizationSixMinutes.IsNull() {
+			data.StatisticsSynchronizationSixMinutes = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.sevenm"); !data.StatisticsSynchronizationSevenMinutes.IsNull() {
-		if value.Exists() {
-			data.StatisticsSynchronizationSevenMinutes = types.BoolValue(true)
-		} else {
-			data.StatisticsSynchronizationSevenMinutes = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.sevenm"); value.Exists() {
+		data.StatisticsSynchronizationSevenMinutes = types.BoolValue(true)
 	} else {
-		data.StatisticsSynchronizationSevenMinutes = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatisticsSynchronizationSevenMinutes.IsNull() {
+			data.StatisticsSynchronizationSevenMinutes = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.eightm"); !data.StatisticsSynchronizationEightMinutes.IsNull() {
-		if value.Exists() {
-			data.StatisticsSynchronizationEightMinutes = types.BoolValue(true)
-		} else {
-			data.StatisticsSynchronizationEightMinutes = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.eightm"); value.Exists() {
+		data.StatisticsSynchronizationEightMinutes = types.BoolValue(true)
 	} else {
-		data.StatisticsSynchronizationEightMinutes = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatisticsSynchronizationEightMinutes.IsNull() {
+			data.StatisticsSynchronizationEightMinutes = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.ninem"); !data.StatisticsSynchronizationNineMinutes.IsNull() {
-		if value.Exists() {
-			data.StatisticsSynchronizationNineMinutes = types.BoolValue(true)
-		} else {
-			data.StatisticsSynchronizationNineMinutes = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.ninem"); value.Exists() {
+		data.StatisticsSynchronizationNineMinutes = types.BoolValue(true)
 	} else {
-		data.StatisticsSynchronizationNineMinutes = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatisticsSynchronizationNineMinutes.IsNull() {
+			data.StatisticsSynchronizationNineMinutes = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.ten-m"); !data.StatisticsSynchronizationTenMinutes.IsNull() {
-		if value.Exists() {
-			data.StatisticsSynchronizationTenMinutes = types.BoolValue(true)
-		} else {
-			data.StatisticsSynchronizationTenMinutes = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.ten-m"); value.Exists() {
+		data.StatisticsSynchronizationTenMinutes = types.BoolValue(true)
 	} else {
-		data.StatisticsSynchronizationTenMinutes = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatisticsSynchronizationTenMinutes.IsNull() {
+			data.StatisticsSynchronizationTenMinutes = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "linux-owned-vrf"); value.Exists() && !data.LinuxOwnedVrf.IsNull() {
 		data.LinuxOwnedVrf = types.StringValue(value.String())
@@ -387,8 +376,8 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 		data.LinuxOwnedVrf = types.StringNull()
 	}
 	for i := range data.ExposedInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.ExposedInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.ExposedInterfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "exposed-interfaces.interfaces.interface").ForEach(
@@ -419,46 +408,46 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.ExposedInterfaces[i].LinuxManaged = types.StringNull()
 		}
-		if value := r.Get("statistics-synchronization.from-xr.every.five-seconds"); !data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.IsNull() {
-			if value.Exists() {
-				data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds = types.BoolValue(true)
-			} else {
-				data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds = types.BoolValue(false)
-			}
+		if value := r.Get("statistics-synchronization.from-xr.every.five-seconds"); value.Exists() {
+			data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds = types.BoolValue(true)
 		} else {
-			data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.IsNull() {
+				data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds = types.BoolNull()
+			}
 		}
-		if value := r.Get("statistics-synchronization.from-xr.every.ten-seconds"); !data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.IsNull() {
-			if value.Exists() {
-				data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds = types.BoolValue(true)
-			} else {
-				data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds = types.BoolValue(false)
-			}
+		if value := r.Get("statistics-synchronization.from-xr.every.ten-seconds"); value.Exists() {
+			data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds = types.BoolValue(true)
 		} else {
-			data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.IsNull() {
+				data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds = types.BoolNull()
+			}
 		}
-		if value := r.Get("statistics-synchronization.from-xr.every.thirty-seconds"); !data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.IsNull() {
-			if value.Exists() {
-				data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
-			} else {
-				data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds = types.BoolValue(false)
-			}
+		if value := r.Get("statistics-synchronization.from-xr.every.thirty-seconds"); value.Exists() {
+			data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
 		} else {
-			data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.IsNull() {
+				data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds = types.BoolNull()
+			}
 		}
-		if value := r.Get("statistics-synchronization.from-xr.every.sixty-seconds"); !data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.IsNull() {
-			if value.Exists() {
-				data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
-			} else {
-				data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds = types.BoolValue(false)
-			}
+		if value := r.Get("statistics-synchronization.from-xr.every.sixty-seconds"); value.Exists() {
+			data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
 		} else {
-			data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.IsNull() {
+				data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds = types.BoolNull()
+			}
 		}
 	}
 	for i := range data.Vrfs {
-		keys := [...]string{ "vrf-name",  }
-		keyValues := [...]string{ data.Vrfs[i].VrfName.ValueString(),  }
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "vrfs.vrf").ForEach(
@@ -484,18 +473,18 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Vrfs[i].VrfName = types.StringNull()
 		}
-		if value := r.Get("disable"); !data.Vrfs[i].Disable.IsNull() {
-			if value.Exists() {
-				data.Vrfs[i].Disable = types.BoolValue(true)
-			} else {
-				data.Vrfs[i].Disable = types.BoolValue(false)
-			}
+		if value := r.Get("disable"); value.Exists() {
+			data.Vrfs[i].Disable = types.BoolValue(true)
 		} else {
-			data.Vrfs[i].Disable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Vrfs[i].Disable.IsNull() {
+				data.Vrfs[i].Disable = types.BoolNull()
+			}
 		}
 		for ci := range data.Vrfs[i].EastWestInterfaces {
-			keys := [...]string{ "east-west-name",  }
-			keyValues := [...]string{ data.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString(),  }
+			keys := [...]string{"east-west-name"}
+			keyValues := [...]string{data.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString()}
 
 			var cr gjson.Result
 			r.Get("east-wests.east-west").ForEach(
@@ -527,56 +516,56 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Vrfs[i].Ipv4SourceInterfaceDefaultRoute = types.StringNull()
 		}
-		if value := r.Get("address-family.ipv4.source-hint.default-route.active-management"); !data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.IsNull() {
-			if value.Exists() {
-				data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement = types.BoolValue(true)
-			} else {
-				data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement = types.BoolValue(false)
-			}
+		if value := r.Get("address-family.ipv4.source-hint.default-route.active-management"); value.Exists() {
+			data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement = types.BoolValue(true)
 		} else {
-			data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.IsNull() {
+				data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement = types.BoolNull()
+			}
 		}
 		if value := r.Get("address-family.ipv4.source-hint.management-route.interface"); value.Exists() && !data.Vrfs[i].Ipv4SourceInterfaceManagementRoute.IsNull() {
 			data.Vrfs[i].Ipv4SourceInterfaceManagementRoute = types.StringValue(value.String())
 		} else {
 			data.Vrfs[i].Ipv4SourceInterfaceManagementRoute = types.StringNull()
 		}
-		if value := r.Get("address-family.ipv4.default-route.software-forwarding"); !data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.IsNull() {
-			if value.Exists() {
-				data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding = types.BoolValue(true)
-			} else {
-				data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding = types.BoolValue(false)
-			}
+		if value := r.Get("address-family.ipv4.default-route.software-forwarding"); value.Exists() {
+			data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding = types.BoolValue(true)
 		} else {
-			data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.IsNull() {
+				data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding = types.BoolNull()
+			}
 		}
 		if value := r.Get("address-family.ipv6.source-hint.default-route.interface"); value.Exists() && !data.Vrfs[i].Ipv6SourceInterfaceDefaultRoute.IsNull() {
 			data.Vrfs[i].Ipv6SourceInterfaceDefaultRoute = types.StringValue(value.String())
 		} else {
 			data.Vrfs[i].Ipv6SourceInterfaceDefaultRoute = types.StringNull()
 		}
-		if value := r.Get("address-family.ipv6.source-hint.default-route.active-management"); !data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.IsNull() {
-			if value.Exists() {
-				data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement = types.BoolValue(true)
-			} else {
-				data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement = types.BoolValue(false)
-			}
+		if value := r.Get("address-family.ipv6.source-hint.default-route.active-management"); value.Exists() {
+			data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement = types.BoolValue(true)
 		} else {
-			data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.IsNull() {
+				data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement = types.BoolNull()
+			}
 		}
 		if value := r.Get("address-family.ipv6.source-hint.management-route.interface"); value.Exists() && !data.Vrfs[i].Ipv6SourceInterfaceManagementRoute.IsNull() {
 			data.Vrfs[i].Ipv6SourceInterfaceManagementRoute = types.StringValue(value.String())
 		} else {
 			data.Vrfs[i].Ipv6SourceInterfaceManagementRoute = types.StringNull()
 		}
-		if value := r.Get("address-family.ipv6.default-route.software-forwarding"); !data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.IsNull() {
-			if value.Exists() {
-				data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding = types.BoolValue(true)
-			} else {
-				data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding = types.BoolValue(false)
-			}
+		if value := r.Get("address-family.ipv6.default-route.software-forwarding"); value.Exists() {
+			data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding = types.BoolValue(true)
 		} else {
-			data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.IsNull() {
+				data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding = types.BoolNull()
+			}
 		}
 	}
 }
@@ -588,61 +577,61 @@ func (data LinuxNetworking) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.StatisticsSynchronizationThirtySeconds.IsNull() && !data.StatisticsSynchronizationThirtySeconds.IsUnknown() {
 		if data.StatisticsSynchronizationThirtySeconds.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/statistics-synchronization/from-xr/every/thirty-seconds", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/statistics-synchronization/from-xr/every/thirty-seconds", "")
 		}
 	}
 	if !data.StatisticsSynchronizationSixtySeconds.IsNull() && !data.StatisticsSynchronizationSixtySeconds.IsUnknown() {
 		if data.StatisticsSynchronizationSixtySeconds.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/statistics-synchronization/from-xr/every/sixty-seconds", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/statistics-synchronization/from-xr/every/sixty-seconds", "")
 		}
 	}
 	if !data.StatisticsSynchronizationTwoMinutes.IsNull() && !data.StatisticsSynchronizationTwoMinutes.IsUnknown() {
 		if data.StatisticsSynchronizationTwoMinutes.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/statistics-synchronization/from-xr/every/twom", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/statistics-synchronization/from-xr/every/twom", "")
 		}
 	}
 	if !data.StatisticsSynchronizationThreeMinutes.IsNull() && !data.StatisticsSynchronizationThreeMinutes.IsUnknown() {
 		if data.StatisticsSynchronizationThreeMinutes.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/statistics-synchronization/from-xr/every/threem", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/statistics-synchronization/from-xr/every/threem", "")
 		}
 	}
 	if !data.StatisticsSynchronizationFourMinutes.IsNull() && !data.StatisticsSynchronizationFourMinutes.IsUnknown() {
 		if data.StatisticsSynchronizationFourMinutes.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/statistics-synchronization/from-xr/every/fourm", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/statistics-synchronization/from-xr/every/fourm", "")
 		}
 	}
 	if !data.StatisticsSynchronizationFiveMinutes.IsNull() && !data.StatisticsSynchronizationFiveMinutes.IsUnknown() {
 		if data.StatisticsSynchronizationFiveMinutes.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/statistics-synchronization/from-xr/every/fivem", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/statistics-synchronization/from-xr/every/fivem", "")
 		}
 	}
 	if !data.StatisticsSynchronizationSixMinutes.IsNull() && !data.StatisticsSynchronizationSixMinutes.IsUnknown() {
 		if data.StatisticsSynchronizationSixMinutes.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/statistics-synchronization/from-xr/every/sixm", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/statistics-synchronization/from-xr/every/sixm", "")
 		}
 	}
 	if !data.StatisticsSynchronizationSevenMinutes.IsNull() && !data.StatisticsSynchronizationSevenMinutes.IsUnknown() {
 		if data.StatisticsSynchronizationSevenMinutes.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/statistics-synchronization/from-xr/every/sevenm", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/statistics-synchronization/from-xr/every/sevenm", "")
 		}
 	}
 	if !data.StatisticsSynchronizationEightMinutes.IsNull() && !data.StatisticsSynchronizationEightMinutes.IsUnknown() {
 		if data.StatisticsSynchronizationEightMinutes.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/statistics-synchronization/from-xr/every/eightm", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/statistics-synchronization/from-xr/every/eightm", "")
 		}
 	}
 	if !data.StatisticsSynchronizationNineMinutes.IsNull() && !data.StatisticsSynchronizationNineMinutes.IsUnknown() {
 		if data.StatisticsSynchronizationNineMinutes.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/statistics-synchronization/from-xr/every/ninem", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/statistics-synchronization/from-xr/every/ninem", "")
 		}
 	}
 	if !data.StatisticsSynchronizationTenMinutes.IsNull() && !data.StatisticsSynchronizationTenMinutes.IsUnknown() {
 		if data.StatisticsSynchronizationTenMinutes.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/statistics-synchronization/from-xr/every/ten-m", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/statistics-synchronization/from-xr/every/ten-m", "")
 		}
 	}
 	if !data.LinuxOwnedVrf.IsNull() && !data.LinuxOwnedVrf.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/linux-owned-vrf", data.LinuxOwnedVrf.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/linux-owned-vrf", data.LinuxOwnedVrf.ValueString())
 	}
 	if len(data.ExposedInterfaces) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -746,7 +735,7 @@ func (data LinuxNetworking) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/thirty-seconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/thirty-seconds"); value.Exists() {
 		data.StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -754,7 +743,7 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 			data.StatisticsSynchronizationThirtySeconds = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/sixty-seconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/sixty-seconds"); value.Exists() {
 		data.StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -762,7 +751,7 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 			data.StatisticsSynchronizationSixtySeconds = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/twom"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/twom"); value.Exists() {
 		data.StatisticsSynchronizationTwoMinutes = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -770,7 +759,7 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 			data.StatisticsSynchronizationTwoMinutes = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/threem"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/threem"); value.Exists() {
 		data.StatisticsSynchronizationThreeMinutes = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -778,7 +767,7 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 			data.StatisticsSynchronizationThreeMinutes = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/fourm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/fourm"); value.Exists() {
 		data.StatisticsSynchronizationFourMinutes = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -786,7 +775,7 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 			data.StatisticsSynchronizationFourMinutes = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/fivem"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/fivem"); value.Exists() {
 		data.StatisticsSynchronizationFiveMinutes = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -794,7 +783,7 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 			data.StatisticsSynchronizationFiveMinutes = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/sixm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/sixm"); value.Exists() {
 		data.StatisticsSynchronizationSixMinutes = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -802,7 +791,7 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 			data.StatisticsSynchronizationSixMinutes = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/sevenm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/sevenm"); value.Exists() {
 		data.StatisticsSynchronizationSevenMinutes = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -810,7 +799,7 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 			data.StatisticsSynchronizationSevenMinutes = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/eightm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/eightm"); value.Exists() {
 		data.StatisticsSynchronizationEightMinutes = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -818,7 +807,7 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 			data.StatisticsSynchronizationEightMinutes = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/ninem"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/ninem"); value.Exists() {
 		data.StatisticsSynchronizationNineMinutes = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -826,7 +815,7 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 			data.StatisticsSynchronizationNineMinutes = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/ten-m"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/ten-m"); value.Exists() {
 		data.StatisticsSynchronizationTenMinutes = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -834,17 +823,17 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 			data.StatisticsSynchronizationTenMinutes = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/linux-owned-vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/linux-owned-vrf"); value.Exists() {
 		data.LinuxOwnedVrf = types.StringValue(value.String())
 	} else if data.LinuxOwnedVrf.IsNull() {
 		data.LinuxOwnedVrf = types.StringNull()
 	}
 	for i := range data.ExposedInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.ExposedInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.ExposedInterfaces[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/exposed-interfaces/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/exposed-interfaces/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -910,11 +899,11 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 		}
 	}
 	for i := range data.Vrfs {
-		keys := [...]string{ "vrf-name",  }
-		keyValues := [...]string{ data.Vrfs[i].VrfName.ValueString(),  }
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/vrfs/vrf").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -947,8 +936,8 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 			}
 		}
 		for ci := range data.Vrfs[i].EastWestInterfaces {
-			keys := [...]string{ "east-west-name",  }
-			keyValues := [...]string{ data.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString(),  }
+			keys := [...]string{"east-west-name"}
+			keyValues := [...]string{data.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString()}
 
 			var cr xmldot.Result
 			helpers.GetFromXPath(r, "east-wests/east-west").ForEach(
@@ -972,7 +961,8 @@ func (data *LinuxNetworking) updateFromBodyXML(ctx context.Context, res xmldot.R
 			if value := helpers.GetFromXPath(cr, "east-west-name"); value.Exists() {
 				data.Vrfs[i].EastWestInterfaces[ci].InterfaceName = types.StringValue(value.String())
 			} else {
-				data.Vrfs[i].EastWestInterfaces[ci].InterfaceName = types.StringNull()
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
 			}
 		}
 		if value := helpers.GetFromXPath(r, "address-family/ipv4/source-hint/default-route/interface"); value.Exists() {
@@ -1042,65 +1032,65 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.thirty-seconds"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.thirty-seconds"); value.Exists() {
 		data.StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationThirtySeconds = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.sixty-seconds"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.sixty-seconds"); value.Exists() {
 		data.StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationSixtySeconds = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.twom"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.twom"); value.Exists() {
 		data.StatisticsSynchronizationTwoMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationTwoMinutes = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.threem"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.threem"); value.Exists() {
 		data.StatisticsSynchronizationThreeMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationThreeMinutes = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.fourm"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.fourm"); value.Exists() {
 		data.StatisticsSynchronizationFourMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationFourMinutes = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.fivem"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.fivem"); value.Exists() {
 		data.StatisticsSynchronizationFiveMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationFiveMinutes = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.sixm"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.sixm"); value.Exists() {
 		data.StatisticsSynchronizationSixMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationSixMinutes = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.sevenm"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.sevenm"); value.Exists() {
 		data.StatisticsSynchronizationSevenMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationSevenMinutes = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.eightm"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.eightm"); value.Exists() {
 		data.StatisticsSynchronizationEightMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationEightMinutes = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.ninem"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.ninem"); value.Exists() {
 		data.StatisticsSynchronizationNineMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationNineMinutes = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.ten-m"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.ten-m"); value.Exists() {
 		data.StatisticsSynchronizationTenMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationTenMinutes = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"linux-owned-vrf"); value.Exists() {
+	if value := res.Get(prefix + "linux-owned-vrf"); value.Exists() {
 		data.LinuxOwnedVrf = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"exposed-interfaces.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "exposed-interfaces.interfaces.interface"); value.Exists() {
 		data.ExposedInterfaces = make([]LinuxNetworkingExposedInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LinuxNetworkingExposedInterfaces{}
@@ -1134,7 +1124,7 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "vrfs.vrf"); value.Exists() {
 		data.Vrfs = make([]LinuxNetworkingVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LinuxNetworkingVrfs{}
@@ -1153,10 +1143,10 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("east-west-name"); ccValue.Exists() {
 						cItem.InterfaceName = types.StringValue(ccValue.String())
 					}
-				item.EastWestInterfaces = append(item.EastWestInterfaces, cItem)
-				return true
-			})
-		}
+					item.EastWestInterfaces = append(item.EastWestInterfaces, cItem)
+					return true
+				})
+			}
 			if cValue := v.Get("address-family.ipv4.source-hint.default-route.interface"); cValue.Exists() {
 				item.Ipv4SourceInterfaceDefaultRoute = types.StringValue(cValue.String())
 			}
@@ -1203,65 +1193,65 @@ func (data *LinuxNetworkingData) fromBody(ctx context.Context, res gjson.Result)
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.thirty-seconds"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.thirty-seconds"); value.Exists() {
 		data.StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationThirtySeconds = types.BoolNull()
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.sixty-seconds"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.sixty-seconds"); value.Exists() {
 		data.StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationSixtySeconds = types.BoolNull()
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.twom"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.twom"); value.Exists() {
 		data.StatisticsSynchronizationTwoMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationTwoMinutes = types.BoolNull()
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.threem"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.threem"); value.Exists() {
 		data.StatisticsSynchronizationThreeMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationThreeMinutes = types.BoolNull()
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.fourm"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.fourm"); value.Exists() {
 		data.StatisticsSynchronizationFourMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationFourMinutes = types.BoolNull()
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.fivem"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.fivem"); value.Exists() {
 		data.StatisticsSynchronizationFiveMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationFiveMinutes = types.BoolNull()
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.sixm"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.sixm"); value.Exists() {
 		data.StatisticsSynchronizationSixMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationSixMinutes = types.BoolNull()
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.sevenm"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.sevenm"); value.Exists() {
 		data.StatisticsSynchronizationSevenMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationSevenMinutes = types.BoolNull()
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.eightm"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.eightm"); value.Exists() {
 		data.StatisticsSynchronizationEightMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationEightMinutes = types.BoolNull()
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.ninem"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.ninem"); value.Exists() {
 		data.StatisticsSynchronizationNineMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationNineMinutes = types.BoolNull()
 	}
-	if value := res.Get(prefix+"statistics-synchronization.from-xr.every.ten-m"); value.Exists() {
+	if value := res.Get(prefix + "statistics-synchronization.from-xr.every.ten-m"); value.Exists() {
 		data.StatisticsSynchronizationTenMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationTenMinutes = types.BoolNull()
 	}
-	if value := res.Get(prefix+"linux-owned-vrf"); value.Exists() {
+	if value := res.Get(prefix + "linux-owned-vrf"); value.Exists() {
 		data.LinuxOwnedVrf = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"exposed-interfaces.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "exposed-interfaces.interfaces.interface"); value.Exists() {
 		data.ExposedInterfaces = make([]LinuxNetworkingExposedInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LinuxNetworkingExposedInterfaces{}
@@ -1295,7 +1285,7 @@ func (data *LinuxNetworkingData) fromBody(ctx context.Context, res gjson.Result)
 			return true
 		})
 	}
-	if value := res.Get(prefix+"vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "vrfs.vrf"); value.Exists() {
 		data.Vrfs = make([]LinuxNetworkingVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LinuxNetworkingVrfs{}
@@ -1360,65 +1350,65 @@ func (data *LinuxNetworkingData) fromBody(ctx context.Context, res gjson.Result)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *LinuxNetworking) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/thirty-seconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/thirty-seconds"); value.Exists() {
 		data.StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationThirtySeconds = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/sixty-seconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/sixty-seconds"); value.Exists() {
 		data.StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationSixtySeconds = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/twom"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/twom"); value.Exists() {
 		data.StatisticsSynchronizationTwoMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationTwoMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/threem"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/threem"); value.Exists() {
 		data.StatisticsSynchronizationThreeMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationThreeMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/fourm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/fourm"); value.Exists() {
 		data.StatisticsSynchronizationFourMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationFourMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/fivem"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/fivem"); value.Exists() {
 		data.StatisticsSynchronizationFiveMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationFiveMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/sixm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/sixm"); value.Exists() {
 		data.StatisticsSynchronizationSixMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationSixMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/sevenm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/sevenm"); value.Exists() {
 		data.StatisticsSynchronizationSevenMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationSevenMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/eightm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/eightm"); value.Exists() {
 		data.StatisticsSynchronizationEightMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationEightMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/ninem"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/ninem"); value.Exists() {
 		data.StatisticsSynchronizationNineMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationNineMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/ten-m"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/ten-m"); value.Exists() {
 		data.StatisticsSynchronizationTenMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationTenMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/linux-owned-vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/linux-owned-vrf"); value.Exists() {
 		data.LinuxOwnedVrf = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/exposed-interfaces/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/exposed-interfaces/interfaces/interface"); value.Exists() {
 		data.ExposedInterfaces = make([]LinuxNetworkingExposedInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := LinuxNetworkingExposedInterfaces{}
@@ -1452,7 +1442,7 @@ func (data *LinuxNetworking) fromBodyXML(ctx context.Context, res xmldot.Result)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf"); value.Exists() {
 		data.Vrfs = make([]LinuxNetworkingVrfs, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := LinuxNetworkingVrfs{}
@@ -1517,65 +1507,65 @@ func (data *LinuxNetworking) fromBodyXML(ctx context.Context, res xmldot.Result)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *LinuxNetworkingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/thirty-seconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/thirty-seconds"); value.Exists() {
 		data.StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationThirtySeconds = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/sixty-seconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/sixty-seconds"); value.Exists() {
 		data.StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationSixtySeconds = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/twom"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/twom"); value.Exists() {
 		data.StatisticsSynchronizationTwoMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationTwoMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/threem"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/threem"); value.Exists() {
 		data.StatisticsSynchronizationThreeMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationThreeMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/fourm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/fourm"); value.Exists() {
 		data.StatisticsSynchronizationFourMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationFourMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/fivem"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/fivem"); value.Exists() {
 		data.StatisticsSynchronizationFiveMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationFiveMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/sixm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/sixm"); value.Exists() {
 		data.StatisticsSynchronizationSixMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationSixMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/sevenm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/sevenm"); value.Exists() {
 		data.StatisticsSynchronizationSevenMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationSevenMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/eightm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/eightm"); value.Exists() {
 		data.StatisticsSynchronizationEightMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationEightMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/ninem"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/ninem"); value.Exists() {
 		data.StatisticsSynchronizationNineMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationNineMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/statistics-synchronization/from-xr/every/ten-m"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/statistics-synchronization/from-xr/every/ten-m"); value.Exists() {
 		data.StatisticsSynchronizationTenMinutes = types.BoolValue(true)
 	} else {
 		data.StatisticsSynchronizationTenMinutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/linux-owned-vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/linux-owned-vrf"); value.Exists() {
 		data.LinuxOwnedVrf = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/exposed-interfaces/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/exposed-interfaces/interfaces/interface"); value.Exists() {
 		data.ExposedInterfaces = make([]LinuxNetworkingExposedInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := LinuxNetworkingExposedInterfaces{}
@@ -1585,42 +1575,42 @@ func (data *LinuxNetworkingData) fromBodyXML(ctx context.Context, res xmldot.Res
 			if cValue := helpers.GetFromXPath(v, "linux-managed"); cValue.Exists() {
 				item.LinuxManaged = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "statistics-synchronization/from-xr/every/five-seconds"); cValue.Exists() {
-			item.StatisticsSynchronizationFiveSeconds = types.BoolValue(true)
-		} else {
-			item.StatisticsSynchronizationFiveSeconds = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "statistics-synchronization/from-xr/every/ten-seconds"); cValue.Exists() {
-			item.StatisticsSynchronizationTenSeconds = types.BoolValue(true)
-		} else {
-			item.StatisticsSynchronizationTenSeconds = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "statistics-synchronization/from-xr/every/thirty-seconds"); cValue.Exists() {
-			item.StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
-		} else {
-			item.StatisticsSynchronizationThirtySeconds = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "statistics-synchronization/from-xr/every/sixty-seconds"); cValue.Exists() {
-			item.StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
-		} else {
-			item.StatisticsSynchronizationSixtySeconds = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "statistics-synchronization/from-xr/every/five-seconds"); cValue.Exists() {
+				item.StatisticsSynchronizationFiveSeconds = types.BoolValue(true)
+			} else {
+				item.StatisticsSynchronizationFiveSeconds = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "statistics-synchronization/from-xr/every/ten-seconds"); cValue.Exists() {
+				item.StatisticsSynchronizationTenSeconds = types.BoolValue(true)
+			} else {
+				item.StatisticsSynchronizationTenSeconds = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "statistics-synchronization/from-xr/every/thirty-seconds"); cValue.Exists() {
+				item.StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
+			} else {
+				item.StatisticsSynchronizationThirtySeconds = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "statistics-synchronization/from-xr/every/sixty-seconds"); cValue.Exists() {
+				item.StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
+			} else {
+				item.StatisticsSynchronizationSixtySeconds = types.BoolValue(false)
+			}
 			data.ExposedInterfaces = append(data.ExposedInterfaces, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf"); value.Exists() {
 		data.Vrfs = make([]LinuxNetworkingVrfs, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := LinuxNetworkingVrfs{}
 			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
 				item.VrfName = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "disable"); cValue.Exists() {
-			item.Disable = types.BoolValue(true)
-		} else {
-			item.Disable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "disable"); cValue.Exists() {
+				item.Disable = types.BoolValue(true)
+			} else {
+				item.Disable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "east-wests/east-west"); cValue.Exists() {
 				item.EastWestInterfaces = make([]LinuxNetworkingVrfsEastWestInterfaces, 0)
 				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
@@ -1635,35 +1625,35 @@ func (data *LinuxNetworkingData) fromBodyXML(ctx context.Context, res xmldot.Res
 			if cValue := helpers.GetFromXPath(v, "address-family/ipv4/source-hint/default-route/interface"); cValue.Exists() {
 				item.Ipv4SourceInterfaceDefaultRoute = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "address-family/ipv4/source-hint/default-route/active-management"); cValue.Exists() {
-			item.Ipv4SourceDefaultRouteActiveManagement = types.BoolValue(true)
-		} else {
-			item.Ipv4SourceDefaultRouteActiveManagement = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv4/source-hint/default-route/active-management"); cValue.Exists() {
+				item.Ipv4SourceDefaultRouteActiveManagement = types.BoolValue(true)
+			} else {
+				item.Ipv4SourceDefaultRouteActiveManagement = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "address-family/ipv4/source-hint/management-route/interface"); cValue.Exists() {
 				item.Ipv4SourceInterfaceManagementRoute = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "address-family/ipv4/default-route/software-forwarding"); cValue.Exists() {
-			item.Ipv4DefaultRouteSoftwareForwarding = types.BoolValue(true)
-		} else {
-			item.Ipv4DefaultRouteSoftwareForwarding = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv4/default-route/software-forwarding"); cValue.Exists() {
+				item.Ipv4DefaultRouteSoftwareForwarding = types.BoolValue(true)
+			} else {
+				item.Ipv4DefaultRouteSoftwareForwarding = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "address-family/ipv6/source-hint/default-route/interface"); cValue.Exists() {
 				item.Ipv6SourceInterfaceDefaultRoute = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "address-family/ipv6/source-hint/default-route/active-management"); cValue.Exists() {
-			item.Ipv6SourceDefaultRouteActiveManagement = types.BoolValue(true)
-		} else {
-			item.Ipv6SourceDefaultRouteActiveManagement = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv6/source-hint/default-route/active-management"); cValue.Exists() {
+				item.Ipv6SourceDefaultRouteActiveManagement = types.BoolValue(true)
+			} else {
+				item.Ipv6SourceDefaultRouteActiveManagement = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "address-family/ipv6/source-hint/management-route/interface"); cValue.Exists() {
 				item.Ipv6SourceInterfaceManagementRoute = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "address-family/ipv6/default-route/software-forwarding"); cValue.Exists() {
-			item.Ipv6DefaultRouteSoftwareForwarding = types.BoolValue(true)
-		} else {
-			item.Ipv6DefaultRouteSoftwareForwarding = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv6/default-route/software-forwarding"); cValue.Exists() {
+				item.Ipv6DefaultRouteSoftwareForwarding = types.BoolValue(true)
+			} else {
+				item.Ipv6DefaultRouteSoftwareForwarding = types.BoolValue(false)
+			}
 			data.Vrfs = append(data.Vrfs, item)
 			return true
 		})
@@ -1676,11 +1666,11 @@ func (data *LinuxNetworkingData) fromBodyXML(ctx context.Context, res xmldot.Res
 func (data *LinuxNetworking) getDeletedItems(ctx context.Context, state LinuxNetworking) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.Vrfs {
-		keys := [...]string{ "vrf-name",  }
-		stateKeyValues := [...]string{ state.Vrfs[i].VrfName.ValueString(),  }
+		keys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.Vrfs[i].VrfName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -1697,37 +1687,37 @@ func (data *LinuxNetworking) getDeletedItems(ctx context.Context, state LinuxNet
 			if state.Vrfs[i].VrfName.ValueString() != data.Vrfs[j].VrfName.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.IsNull() && data.Vrfs[j].Ipv6DefaultRouteSoftwareForwarding.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv6/default-route/software-forwarding", state.getPath(), keyString))
-			}
-			if !state.Vrfs[i].Ipv6SourceInterfaceManagementRoute.IsNull() && data.Vrfs[j].Ipv6SourceInterfaceManagementRoute.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv6/source-hint/management-route/interface", state.getPath(), keyString))
-			}
-			if !state.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.IsNull() && data.Vrfs[j].Ipv6SourceDefaultRouteActiveManagement.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv6/source-hint/default-route/active-management", state.getPath(), keyString))
-			}
-			if !state.Vrfs[i].Ipv6SourceInterfaceDefaultRoute.IsNull() && data.Vrfs[j].Ipv6SourceInterfaceDefaultRoute.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv6/source-hint/default-route/interface", state.getPath(), keyString))
-			}
-			if !state.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.IsNull() && data.Vrfs[j].Ipv4DefaultRouteSoftwareForwarding.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv4/default-route/software-forwarding", state.getPath(), keyString))
-			}
-			if !state.Vrfs[i].Ipv4SourceInterfaceManagementRoute.IsNull() && data.Vrfs[j].Ipv4SourceInterfaceManagementRoute.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv4/source-hint/management-route/interface", state.getPath(), keyString))
-			}
-			if !state.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.IsNull() && data.Vrfs[j].Ipv4SourceDefaultRouteActiveManagement.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv4/source-hint/default-route/active-management", state.getPath(), keyString))
-			}
-			if !state.Vrfs[i].Ipv4SourceInterfaceDefaultRoute.IsNull() && data.Vrfs[j].Ipv4SourceInterfaceDefaultRoute.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv4/source-hint/default-route/interface", state.getPath(), keyString))
-			}
+			if found {
+				if !state.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.IsNull() && data.Vrfs[j].Ipv6DefaultRouteSoftwareForwarding.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv6/default-route/software-forwarding", state.getPath(), keyString))
+				}
+				if !state.Vrfs[i].Ipv6SourceInterfaceManagementRoute.IsNull() && data.Vrfs[j].Ipv6SourceInterfaceManagementRoute.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv6/source-hint/management-route/interface", state.getPath(), keyString))
+				}
+				if !state.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.IsNull() && data.Vrfs[j].Ipv6SourceDefaultRouteActiveManagement.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv6/source-hint/default-route/active-management", state.getPath(), keyString))
+				}
+				if !state.Vrfs[i].Ipv6SourceInterfaceDefaultRoute.IsNull() && data.Vrfs[j].Ipv6SourceInterfaceDefaultRoute.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv6/source-hint/default-route/interface", state.getPath(), keyString))
+				}
+				if !state.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.IsNull() && data.Vrfs[j].Ipv4DefaultRouteSoftwareForwarding.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv4/default-route/software-forwarding", state.getPath(), keyString))
+				}
+				if !state.Vrfs[i].Ipv4SourceInterfaceManagementRoute.IsNull() && data.Vrfs[j].Ipv4SourceInterfaceManagementRoute.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv4/source-hint/management-route/interface", state.getPath(), keyString))
+				}
+				if !state.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.IsNull() && data.Vrfs[j].Ipv4SourceDefaultRouteActiveManagement.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv4/source-hint/default-route/active-management", state.getPath(), keyString))
+				}
+				if !state.Vrfs[i].Ipv4SourceInterfaceDefaultRoute.IsNull() && data.Vrfs[j].Ipv4SourceInterfaceDefaultRoute.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv4/source-hint/default-route/interface", state.getPath(), keyString))
+				}
 				for ci := range state.Vrfs[i].EastWestInterfaces {
-					ckeys := [...]string{ "east-west-name",  }
-					cstateKeyValues := [...]string{ state.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString(),  }
+					ckeys := [...]string{"east-west-name"}
+					cstateKeyValues := [...]string{state.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString()}
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 					}
 
 					cemptyKeys := true
@@ -1744,17 +1734,17 @@ func (data *LinuxNetworking) getDeletedItems(ctx context.Context, state LinuxNet
 						if state.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString() != data.Vrfs[j].EastWestInterfaces[cj].InterfaceName.ValueString() {
 							found = false
 						}
-					if found {
-						break
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/east-wests/east-west%v", state.getPath(), keyString, ckeyString))
 					}
 				}
-				if !found {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/east-wests/east-west%v", state.getPath(), keyString, ckeyString))
+				if !state.Vrfs[i].Disable.IsNull() && data.Vrfs[j].Disable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/disable", state.getPath(), keyString))
 				}
-			}
-			if !state.Vrfs[i].Disable.IsNull() && data.Vrfs[j].Disable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/disable", state.getPath(), keyString))
-			}
 				break
 			}
 		}
@@ -1763,11 +1753,11 @@ func (data *LinuxNetworking) getDeletedItems(ctx context.Context, state LinuxNet
 		}
 	}
 	for i := range state.ExposedInterfaces {
-		keys := [...]string{ "interface-name",  }
-		stateKeyValues := [...]string{ state.ExposedInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.ExposedInterfaces[i].InterfaceName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -1784,22 +1774,22 @@ func (data *LinuxNetworking) getDeletedItems(ctx context.Context, state LinuxNet
 			if state.ExposedInterfaces[i].InterfaceName.ValueString() != data.ExposedInterfaces[j].InterfaceName.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.IsNull() && data.ExposedInterfaces[j].StatisticsSynchronizationSixtySeconds.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", state.getPath(), keyString))
-			}
-			if !state.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.IsNull() && data.ExposedInterfaces[j].StatisticsSynchronizationThirtySeconds.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", state.getPath(), keyString))
-			}
-			if !state.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.IsNull() && data.ExposedInterfaces[j].StatisticsSynchronizationTenSeconds.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", state.getPath(), keyString))
-			}
-			if !state.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.IsNull() && data.ExposedInterfaces[j].StatisticsSynchronizationFiveSeconds.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", state.getPath(), keyString))
-			}
-			if !state.ExposedInterfaces[i].LinuxManaged.IsNull() && data.ExposedInterfaces[j].LinuxManaged.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/exposed-interfaces/interfaces/interface%v/linux-managed", state.getPath(), keyString))
-			}
+			if found {
+				if !state.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.IsNull() && data.ExposedInterfaces[j].StatisticsSynchronizationSixtySeconds.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", state.getPath(), keyString))
+				}
+				if !state.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.IsNull() && data.ExposedInterfaces[j].StatisticsSynchronizationThirtySeconds.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", state.getPath(), keyString))
+				}
+				if !state.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.IsNull() && data.ExposedInterfaces[j].StatisticsSynchronizationTenSeconds.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", state.getPath(), keyString))
+				}
+				if !state.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.IsNull() && data.ExposedInterfaces[j].StatisticsSynchronizationFiveSeconds.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", state.getPath(), keyString))
+				}
+				if !state.ExposedInterfaces[i].LinuxManaged.IsNull() && data.ExposedInterfaces[j].LinuxManaged.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/exposed-interfaces/interfaces/interface%v/linux-managed", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -1852,11 +1842,11 @@ func (data *LinuxNetworking) getDeletedItems(ctx context.Context, state LinuxNet
 func (data *LinuxNetworking) getEmptyLeafsDelete(ctx context.Context, state *LinuxNetworking) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Vrfs {
-		keys := [...]string{ "vrf-name",  }
-		keyValues := [...]string{ data.Vrfs[i].VrfName.ValueString(),  }
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.IsNull() && !data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.ValueBool() {
@@ -1887,11 +1877,11 @@ func (data *LinuxNetworking) getEmptyLeafsDelete(ctx context.Context, state *Lin
 			}
 		}
 		for ci := range data.Vrfs[i].EastWestInterfaces {
-			ckeys := [...]string{ "east-west-name",  }
-			ckeyValues := [...]string{ data.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString(),  }
+			ckeys := [...]string{"east-west-name"}
+			ckeyValues := [...]string{data.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString()}
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
 		// Only delete if state has true and plan has false
@@ -1903,11 +1893,11 @@ func (data *LinuxNetworking) getEmptyLeafsDelete(ctx context.Context, state *Lin
 		}
 	}
 	for i := range data.ExposedInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.ExposedInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.ExposedInterfaces[i].InterfaceName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.IsNull() && !data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.ValueBool() {
@@ -2013,12 +2003,12 @@ func (data *LinuxNetworking) getEmptyLeafsDelete(ctx context.Context, state *Lin
 func (data *LinuxNetworking) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Vrfs {
-		keyValues := [...]string{ data.Vrfs[i].VrfName.ValueString(),  }
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.ExposedInterfaces {
-		keyValues := [...]string{ data.ExposedInterfaces[i].InterfaceName.ValueString(),  }
+		keyValues := [...]string{data.ExposedInterfaces[i].InterfaceName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/exposed-interfaces/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -2070,8 +2060,8 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.Vrfs {
-		stateKeys := [...]string{ "vrf-name",  }
-		stateKeyValues := [...]string{ state.Vrfs[i].VrfName.ValueString(),  }
+		stateKeys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.Vrfs[i].VrfName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2092,37 +2082,37 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 				found = false
 			}
 			if found {
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.IsNull() && state.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.ValueBool() && data.Vrfs[j].Ipv6DefaultRouteSoftwareForwarding.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv6/default-route/software-forwarding", predicates))
-			}
-			if !state.Vrfs[i].Ipv6SourceInterfaceManagementRoute.IsNull() && data.Vrfs[j].Ipv6SourceInterfaceManagementRoute.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv6/source-hint/management-route/interface", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.IsNull() && state.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.ValueBool() && data.Vrfs[j].Ipv6SourceDefaultRouteActiveManagement.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv6/source-hint/default-route/active-management", predicates))
-			}
-			if !state.Vrfs[i].Ipv6SourceInterfaceDefaultRoute.IsNull() && data.Vrfs[j].Ipv6SourceInterfaceDefaultRoute.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv6/source-hint/default-route/interface", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.IsNull() && state.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.ValueBool() && data.Vrfs[j].Ipv4DefaultRouteSoftwareForwarding.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv4/default-route/software-forwarding", predicates))
-			}
-			if !state.Vrfs[i].Ipv4SourceInterfaceManagementRoute.IsNull() && data.Vrfs[j].Ipv4SourceInterfaceManagementRoute.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv4/source-hint/management-route/interface", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.IsNull() && state.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.ValueBool() && data.Vrfs[j].Ipv4SourceDefaultRouteActiveManagement.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv4/source-hint/default-route/active-management", predicates))
-			}
-			if !state.Vrfs[i].Ipv4SourceInterfaceDefaultRoute.IsNull() && data.Vrfs[j].Ipv4SourceInterfaceDefaultRoute.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv4/source-hint/default-route/interface", predicates))
-			}
-			for ci := range state.Vrfs[i].EastWestInterfaces {
-					cstateKeys := [...]string{ "east-west-name",  }
-					cstateKeyValues := [...]string{ state.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString(),  }
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.IsNull() && state.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.ValueBool() && data.Vrfs[j].Ipv6DefaultRouteSoftwareForwarding.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv6/default-route/software-forwarding", predicates))
+				}
+				if !state.Vrfs[i].Ipv6SourceInterfaceManagementRoute.IsNull() && data.Vrfs[j].Ipv6SourceInterfaceManagementRoute.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv6/source-hint/management-route/interface", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.IsNull() && state.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.ValueBool() && data.Vrfs[j].Ipv6SourceDefaultRouteActiveManagement.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv6/source-hint/default-route/active-management", predicates))
+				}
+				if !state.Vrfs[i].Ipv6SourceInterfaceDefaultRoute.IsNull() && data.Vrfs[j].Ipv6SourceInterfaceDefaultRoute.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv6/source-hint/default-route/interface", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.IsNull() && state.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.ValueBool() && data.Vrfs[j].Ipv4DefaultRouteSoftwareForwarding.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv4/default-route/software-forwarding", predicates))
+				}
+				if !state.Vrfs[i].Ipv4SourceInterfaceManagementRoute.IsNull() && data.Vrfs[j].Ipv4SourceInterfaceManagementRoute.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv4/source-hint/management-route/interface", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.IsNull() && state.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.ValueBool() && data.Vrfs[j].Ipv4SourceDefaultRouteActiveManagement.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv4/source-hint/default-route/active-management", predicates))
+				}
+				if !state.Vrfs[i].Ipv4SourceInterfaceDefaultRoute.IsNull() && data.Vrfs[j].Ipv4SourceInterfaceDefaultRoute.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv4/source-hint/default-route/interface", predicates))
+				}
+				for ci := range state.Vrfs[i].EastWestInterfaces {
+					cstateKeys := [...]string{"east-west-name"}
+					cstateKeyValues := [...]string{state.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString()}
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -2150,10 +2140,10 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/east-wests/east-west%v", predicates, cpredicates))
 					}
 				}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Vrfs[i].Disable.IsNull() && state.Vrfs[i].Disable.ValueBool() && data.Vrfs[j].Disable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/disable", predicates))
-			}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Vrfs[i].Disable.IsNull() && state.Vrfs[i].Disable.ValueBool() && data.Vrfs[j].Disable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/disable", predicates))
+				}
 				break
 			}
 		}
@@ -2162,8 +2152,8 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 		}
 	}
 	for i := range state.ExposedInterfaces {
-		stateKeys := [...]string{ "interface-name",  }
-		stateKeyValues := [...]string{ state.ExposedInterfaces[i].InterfaceName.ValueString(),  }
+		stateKeys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.ExposedInterfaces[i].InterfaceName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -2184,25 +2174,25 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 				found = false
 			}
 			if found {
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.IsNull() && state.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.ValueBool() && data.ExposedInterfaces[j].StatisticsSynchronizationSixtySeconds.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.IsNull() && state.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.ValueBool() && data.ExposedInterfaces[j].StatisticsSynchronizationThirtySeconds.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.IsNull() && state.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.ValueBool() && data.ExposedInterfaces[j].StatisticsSynchronizationTenSeconds.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.IsNull() && state.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.ValueBool() && data.ExposedInterfaces[j].StatisticsSynchronizationFiveSeconds.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", predicates))
-			}
-			if !state.ExposedInterfaces[i].LinuxManaged.IsNull() && data.ExposedInterfaces[j].LinuxManaged.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exposed-interfaces/interfaces/interface%v/linux-managed", predicates))
-			}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.IsNull() && state.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.ValueBool() && data.ExposedInterfaces[j].StatisticsSynchronizationSixtySeconds.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.IsNull() && state.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.ValueBool() && data.ExposedInterfaces[j].StatisticsSynchronizationThirtySeconds.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.IsNull() && state.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.ValueBool() && data.ExposedInterfaces[j].StatisticsSynchronizationTenSeconds.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.IsNull() && state.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.ValueBool() && data.ExposedInterfaces[j].StatisticsSynchronizationFiveSeconds.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exposed-interfaces/interfaces/interface%v/statistics-synchronization/from-xr", predicates))
+				}
+				if !state.ExposedInterfaces[i].LinuxManaged.IsNull() && data.ExposedInterfaces[j].LinuxManaged.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exposed-interfaces/interfaces/interface%v/linux-managed", predicates))
+				}
 				break
 			}
 		}
@@ -2211,7 +2201,7 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 		}
 	}
 	if !state.LinuxOwnedVrf.IsNull() && data.LinuxOwnedVrf.IsNull() {
-		deletePath := state.getXPath()+"/linux-owned-vrf"
+		deletePath := state.getXPath() + "/linux-owned-vrf"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -2220,7 +2210,7 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.StatisticsSynchronizationTenMinutes.IsNull() && state.StatisticsSynchronizationTenMinutes.ValueBool() && data.StatisticsSynchronizationTenMinutes.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/statistics-synchronization/from-xr"
+		deletePath := state.getXPath() + "/statistics-synchronization/from-xr"
 		predicates := make(map[string]string)
 		if !state.StatisticsSynchronizationThirtySeconds.IsNull() {
 			predicates["thirty-seconds"] = fmt.Sprintf("%v", state.StatisticsSynchronizationThirtySeconds.ValueBool())
@@ -2270,7 +2260,7 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.StatisticsSynchronizationNineMinutes.IsNull() && state.StatisticsSynchronizationNineMinutes.ValueBool() && data.StatisticsSynchronizationNineMinutes.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/statistics-synchronization/from-xr"
+		deletePath := state.getXPath() + "/statistics-synchronization/from-xr"
 		predicates := make(map[string]string)
 		if !state.StatisticsSynchronizationThirtySeconds.IsNull() {
 			predicates["thirty-seconds"] = fmt.Sprintf("%v", state.StatisticsSynchronizationThirtySeconds.ValueBool())
@@ -2320,7 +2310,7 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.StatisticsSynchronizationEightMinutes.IsNull() && state.StatisticsSynchronizationEightMinutes.ValueBool() && data.StatisticsSynchronizationEightMinutes.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/statistics-synchronization/from-xr"
+		deletePath := state.getXPath() + "/statistics-synchronization/from-xr"
 		predicates := make(map[string]string)
 		if !state.StatisticsSynchronizationThirtySeconds.IsNull() {
 			predicates["thirty-seconds"] = fmt.Sprintf("%v", state.StatisticsSynchronizationThirtySeconds.ValueBool())
@@ -2370,7 +2360,7 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.StatisticsSynchronizationSevenMinutes.IsNull() && state.StatisticsSynchronizationSevenMinutes.ValueBool() && data.StatisticsSynchronizationSevenMinutes.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/statistics-synchronization/from-xr"
+		deletePath := state.getXPath() + "/statistics-synchronization/from-xr"
 		predicates := make(map[string]string)
 		if !state.StatisticsSynchronizationThirtySeconds.IsNull() {
 			predicates["thirty-seconds"] = fmt.Sprintf("%v", state.StatisticsSynchronizationThirtySeconds.ValueBool())
@@ -2420,7 +2410,7 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.StatisticsSynchronizationSixMinutes.IsNull() && state.StatisticsSynchronizationSixMinutes.ValueBool() && data.StatisticsSynchronizationSixMinutes.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/statistics-synchronization/from-xr"
+		deletePath := state.getXPath() + "/statistics-synchronization/from-xr"
 		predicates := make(map[string]string)
 		if !state.StatisticsSynchronizationThirtySeconds.IsNull() {
 			predicates["thirty-seconds"] = fmt.Sprintf("%v", state.StatisticsSynchronizationThirtySeconds.ValueBool())
@@ -2470,7 +2460,7 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.StatisticsSynchronizationFiveMinutes.IsNull() && state.StatisticsSynchronizationFiveMinutes.ValueBool() && data.StatisticsSynchronizationFiveMinutes.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/statistics-synchronization/from-xr"
+		deletePath := state.getXPath() + "/statistics-synchronization/from-xr"
 		predicates := make(map[string]string)
 		if !state.StatisticsSynchronizationThirtySeconds.IsNull() {
 			predicates["thirty-seconds"] = fmt.Sprintf("%v", state.StatisticsSynchronizationThirtySeconds.ValueBool())
@@ -2520,7 +2510,7 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.StatisticsSynchronizationFourMinutes.IsNull() && state.StatisticsSynchronizationFourMinutes.ValueBool() && data.StatisticsSynchronizationFourMinutes.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/statistics-synchronization/from-xr"
+		deletePath := state.getXPath() + "/statistics-synchronization/from-xr"
 		predicates := make(map[string]string)
 		if !state.StatisticsSynchronizationThirtySeconds.IsNull() {
 			predicates["thirty-seconds"] = fmt.Sprintf("%v", state.StatisticsSynchronizationThirtySeconds.ValueBool())
@@ -2570,7 +2560,7 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.StatisticsSynchronizationThreeMinutes.IsNull() && state.StatisticsSynchronizationThreeMinutes.ValueBool() && data.StatisticsSynchronizationThreeMinutes.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/statistics-synchronization/from-xr"
+		deletePath := state.getXPath() + "/statistics-synchronization/from-xr"
 		predicates := make(map[string]string)
 		if !state.StatisticsSynchronizationThirtySeconds.IsNull() {
 			predicates["thirty-seconds"] = fmt.Sprintf("%v", state.StatisticsSynchronizationThirtySeconds.ValueBool())
@@ -2620,7 +2610,7 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.StatisticsSynchronizationTwoMinutes.IsNull() && state.StatisticsSynchronizationTwoMinutes.ValueBool() && data.StatisticsSynchronizationTwoMinutes.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/statistics-synchronization/from-xr"
+		deletePath := state.getXPath() + "/statistics-synchronization/from-xr"
 		predicates := make(map[string]string)
 		if !state.StatisticsSynchronizationThirtySeconds.IsNull() {
 			predicates["thirty-seconds"] = fmt.Sprintf("%v", state.StatisticsSynchronizationThirtySeconds.ValueBool())
@@ -2670,7 +2660,7 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.StatisticsSynchronizationSixtySeconds.IsNull() && state.StatisticsSynchronizationSixtySeconds.ValueBool() && data.StatisticsSynchronizationSixtySeconds.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/statistics-synchronization/from-xr"
+		deletePath := state.getXPath() + "/statistics-synchronization/from-xr"
 		predicates := make(map[string]string)
 		if !state.StatisticsSynchronizationThirtySeconds.IsNull() {
 			predicates["thirty-seconds"] = fmt.Sprintf("%v", state.StatisticsSynchronizationThirtySeconds.ValueBool())
@@ -2720,7 +2710,7 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.StatisticsSynchronizationThirtySeconds.IsNull() && state.StatisticsSynchronizationThirtySeconds.ValueBool() && data.StatisticsSynchronizationThirtySeconds.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/statistics-synchronization/from-xr"
+		deletePath := state.getXPath() + "/statistics-synchronization/from-xr"
 		predicates := make(map[string]string)
 		if !state.StatisticsSynchronizationSixtySeconds.IsNull() {
 			predicates["sixty-seconds"] = fmt.Sprintf("%v", state.StatisticsSynchronizationSixtySeconds.ValueBool())
@@ -2779,8 +2769,8 @@ func (data *LinuxNetworking) addDeletedItemsXML(ctx context.Context, state Linux
 func (data *LinuxNetworking) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.Vrfs {
-		keys := [...]string{ "vrf-name",  }
-		keyValues := [...]string{ data.Vrfs[i].VrfName.ValueString(),  }
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -2789,8 +2779,8 @@ func (data *LinuxNetworking) addDeletePathsXML(ctx context.Context, body string)
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/vrfs/vrf%v", predicates))
 	}
 	for i := range data.ExposedInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.ExposedInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.ExposedInterfaces[i].InterfaceName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

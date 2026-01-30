@@ -23,19 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/netascode/go-gnmi"
-	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -52,7 +47,7 @@ func NewSNMPServerDataSource() datasource.DataSource {
 	return &SNMPServerDataSource{}
 }
 
-type SNMPServerDataSource struct{
+type SNMPServerDataSource struct {
 	data *IosxrProviderData
 }
 
@@ -525,19 +520,19 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 										MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
 										Computed:            true,
 										Sensitive:           true,
-								},
+									},
 									"udp_port": schema.Int64Attribute{
 										MarkdownDescription: "udp port to which notifications should be sent",
 										Computed:            true,
-								},
+									},
 									"version_v2c": schema.BoolAttribute{
 										MarkdownDescription: "Use 2c for SNMPv2c",
 										Computed:            true,
-								},
+									},
 									"version_v3_security_level": schema.StringAttribute{
 										MarkdownDescription: "Security level",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -550,19 +545,19 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 										MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
 										Computed:            true,
 										Sensitive:           true,
-								},
+									},
 									"udp_port": schema.Int64Attribute{
 										MarkdownDescription: "udp port to which notifications should be sent",
 										Computed:            true,
-								},
+									},
 									"version_v2c": schema.BoolAttribute{
 										MarkdownDescription: "Use 2c for SNMPv2c",
 										Computed:            true,
-								},
+									},
 									"version_v3_security_level": schema.StringAttribute{
 										MarkdownDescription: "Security level",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -586,15 +581,15 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 									"name": schema.StringAttribute{
 										MarkdownDescription: "MIB view family name",
 										Computed:            true,
-								},
+									},
 									"included": schema.BoolAttribute{
 										MarkdownDescription: "MIB family is included in the view",
 										Computed:            true,
-								},
+									},
 									"excluded": schema.BoolAttribute{
 										MarkdownDescription: "MIB family is excluded from the view",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -1026,7 +1021,6 @@ func (d *SNMPServerDataSource) Read(ctx context.Context, req datasource.ReadRequ
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
-
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

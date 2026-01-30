@@ -23,42 +23,40 @@ package provider
 import (
 	"context"
 	"fmt"
-	"reflect"
 	"sort"
 	"strconv"
-	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type CDP struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
-	Enable types.Bool `tfsdk:"enable"`
-	Holdtime types.Int64 `tfsdk:"holdtime"`
-	Timer types.Int64 `tfsdk:"timer"`
-	AdvertiseV1 types.Bool `tfsdk:"advertise_v1"`
-	LogAdjacencyChanges types.Bool `tfsdk:"log_adjacency_changes"`
+	Device              types.String `tfsdk:"device"`
+	Id                  types.String `tfsdk:"id"`
+	DeleteMode          types.String `tfsdk:"delete_mode"`
+	Enable              types.Bool   `tfsdk:"enable"`
+	Holdtime            types.Int64  `tfsdk:"holdtime"`
+	Timer               types.Int64  `tfsdk:"timer"`
+	AdvertiseV1         types.Bool   `tfsdk:"advertise_v1"`
+	LogAdjacencyChanges types.Bool   `tfsdk:"log_adjacency_changes"`
 }
 
 type CDPData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	Enable types.Bool `tfsdk:"enable"`
-	Holdtime types.Int64 `tfsdk:"holdtime"`
-	Timer types.Int64 `tfsdk:"timer"`
-	AdvertiseV1 types.Bool `tfsdk:"advertise_v1"`
-	LogAdjacencyChanges types.Bool `tfsdk:"log_adjacency_changes"`
+	Device              types.String `tfsdk:"device"`
+	Id                  types.String `tfsdk:"id"`
+	Enable              types.Bool   `tfsdk:"enable"`
+	Holdtime            types.Int64  `tfsdk:"holdtime"`
+	Timer               types.Int64  `tfsdk:"timer"`
+	AdvertiseV1         types.Bool   `tfsdk:"advertise_v1"`
+	LogAdjacencyChanges types.Bool   `tfsdk:"log_adjacency_changes"`
 }
 
 // End of section. //template:end types
@@ -122,23 +120,23 @@ func (data CDP) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.Enable.IsNull() && !data.Enable.IsUnknown() {
 		if data.Enable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/enable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/enable", "")
 		}
 	}
 	if !data.Holdtime.IsNull() && !data.Holdtime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/holdtime", strconv.FormatInt(data.Holdtime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/holdtime", strconv.FormatInt(data.Holdtime.ValueInt64(), 10))
 	}
 	if !data.Timer.IsNull() && !data.Timer.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/timer", strconv.FormatInt(data.Timer.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timer", strconv.FormatInt(data.Timer.ValueInt64(), 10))
 	}
 	if !data.AdvertiseV1.IsNull() && !data.AdvertiseV1.IsUnknown() {
 		if data.AdvertiseV1.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/advertise/v1", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/advertise/v1", "")
 		}
 	}
 	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.IsUnknown() {
 		if data.LogAdjacencyChanges.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/log/adjacency/changes", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/log/adjacency/changes", "")
 		}
 	}
 	bodyString, err := body.String()
@@ -153,14 +151,13 @@ func (data CDP) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *CDP) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "enable"); !data.Enable.IsNull() {
-		if value.Exists() {
-			data.Enable = types.BoolValue(true)
-		} else {
-			data.Enable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
 	} else {
-		data.Enable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Enable.IsNull() {
+			data.Enable = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "holdtime"); value.Exists() && !data.Holdtime.IsNull() {
 		data.Holdtime = types.Int64Value(value.Int())
@@ -172,23 +169,21 @@ func (data *CDP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Timer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "advertise.v1"); !data.AdvertiseV1.IsNull() {
-		if value.Exists() {
-			data.AdvertiseV1 = types.BoolValue(true)
-		} else {
-			data.AdvertiseV1 = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "advertise.v1"); value.Exists() {
+		data.AdvertiseV1 = types.BoolValue(true)
 	} else {
-		data.AdvertiseV1 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.AdvertiseV1.IsNull() {
+			data.AdvertiseV1 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "log.adjacency.changes"); !data.LogAdjacencyChanges.IsNull() {
-		if value.Exists() {
-			data.LogAdjacencyChanges = types.BoolValue(true)
-		} else {
-			data.LogAdjacencyChanges = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "log.adjacency.changes"); value.Exists() {
+		data.LogAdjacencyChanges = types.BoolValue(true)
 	} else {
-		data.LogAdjacencyChanges = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LogAdjacencyChanges.IsNull() {
+			data.LogAdjacencyChanges = types.BoolNull()
+		}
 	}
 }
 
@@ -197,7 +192,7 @@ func (data *CDP) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *CDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -205,17 +200,17 @@ func (data *CDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Enable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdtime"); value.Exists() {
 		data.Holdtime = types.Int64Value(value.Int())
 	} else if data.Holdtime.IsNull() {
 		data.Holdtime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer"); value.Exists() {
 		data.Timer = types.Int64Value(value.Int())
 	} else if data.Timer.IsNull() {
 		data.Timer = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/advertise/v1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise/v1"); value.Exists() {
 		data.AdvertiseV1 = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -223,7 +218,7 @@ func (data *CDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.AdvertiseV1 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/log/adjacency/changes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/adjacency/changes"); value.Exists() {
 		data.LogAdjacencyChanges = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -242,23 +237,23 @@ func (data *CDP) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"enable"); value.Exists() {
+	if value := res.Get(prefix + "enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
 	} else {
 		data.Enable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"holdtime"); value.Exists() {
+	if value := res.Get(prefix + "holdtime"); value.Exists() {
 		data.Holdtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timer"); value.Exists() {
+	if value := res.Get(prefix + "timer"); value.Exists() {
 		data.Timer = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"advertise.v1"); value.Exists() {
+	if value := res.Get(prefix + "advertise.v1"); value.Exists() {
 		data.AdvertiseV1 = types.BoolValue(true)
 	} else {
 		data.AdvertiseV1 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"log.adjacency.changes"); value.Exists() {
+	if value := res.Get(prefix + "log.adjacency.changes"); value.Exists() {
 		data.LogAdjacencyChanges = types.BoolValue(true)
 	} else {
 		data.LogAdjacencyChanges = types.BoolValue(false)
@@ -274,23 +269,23 @@ func (data *CDPData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"enable"); value.Exists() {
+	if value := res.Get(prefix + "enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
 	} else {
 		data.Enable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"holdtime"); value.Exists() {
+	if value := res.Get(prefix + "holdtime"); value.Exists() {
 		data.Holdtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timer"); value.Exists() {
+	if value := res.Get(prefix + "timer"); value.Exists() {
 		data.Timer = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"advertise.v1"); value.Exists() {
+	if value := res.Get(prefix + "advertise.v1"); value.Exists() {
 		data.AdvertiseV1 = types.BoolValue(true)
 	} else {
 		data.AdvertiseV1 = types.BoolNull()
 	}
-	if value := res.Get(prefix+"log.adjacency.changes"); value.Exists() {
+	if value := res.Get(prefix + "log.adjacency.changes"); value.Exists() {
 		data.LogAdjacencyChanges = types.BoolValue(true)
 	} else {
 		data.LogAdjacencyChanges = types.BoolNull()
@@ -302,23 +297,23 @@ func (data *CDPData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *CDP) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
 	} else {
 		data.Enable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdtime"); value.Exists() {
 		data.Holdtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer"); value.Exists() {
 		data.Timer = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/advertise/v1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise/v1"); value.Exists() {
 		data.AdvertiseV1 = types.BoolValue(true)
 	} else {
 		data.AdvertiseV1 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/log/adjacency/changes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/adjacency/changes"); value.Exists() {
 		data.LogAdjacencyChanges = types.BoolValue(true)
 	} else {
 		data.LogAdjacencyChanges = types.BoolValue(false)
@@ -330,23 +325,23 @@ func (data *CDP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *CDPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
 	} else {
 		data.Enable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdtime"); value.Exists() {
 		data.Holdtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer"); value.Exists() {
 		data.Timer = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/advertise/v1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise/v1"); value.Exists() {
 		data.AdvertiseV1 = types.BoolValue(true)
 	} else {
 		data.AdvertiseV1 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/log/adjacency/changes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/adjacency/changes"); value.Exists() {
 		data.LogAdjacencyChanges = types.BoolValue(true)
 	} else {
 		data.LogAdjacencyChanges = types.BoolValue(false)
@@ -439,7 +434,7 @@ func (data *CDP) addDeletedItemsXML(ctx context.Context, state CDP, body string)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LogAdjacencyChanges.IsNull() && state.LogAdjacencyChanges.ValueBool() && data.LogAdjacencyChanges.IsNull() {
-		deletePath := state.getXPath()+"/log/adjacency/changes"
+		deletePath := state.getXPath() + "/log/adjacency/changes"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -448,7 +443,7 @@ func (data *CDP) addDeletedItemsXML(ctx context.Context, state CDP, body string)
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AdvertiseV1.IsNull() && state.AdvertiseV1.ValueBool() && data.AdvertiseV1.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/advertise"
+		deletePath := state.getXPath() + "/advertise"
 		predicates := make(map[string]string)
 		predicates["v1"] = fmt.Sprintf("%v", state.AdvertiseV1.ValueBool())
 		// Sort keys to ensure consistent ordering
@@ -466,14 +461,14 @@ func (data *CDP) addDeletedItemsXML(ctx context.Context, state CDP, body string)
 		}
 	}
 	if !state.Timer.IsNull() && data.Timer.IsNull() {
-		deletePath := state.getXPath()+"/timer"
+		deletePath := state.getXPath() + "/timer"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Holdtime.IsNull() && data.Holdtime.IsNull() {
-		deletePath := state.getXPath()+"/holdtime"
+		deletePath := state.getXPath() + "/holdtime"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -481,7 +476,7 @@ func (data *CDP) addDeletedItemsXML(ctx context.Context, state CDP, body string)
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Enable.IsNull() && state.Enable.ValueBool() && data.Enable.IsNull() {
-		deletePath := state.getXPath()+"/enable"
+		deletePath := state.getXPath() + "/enable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true

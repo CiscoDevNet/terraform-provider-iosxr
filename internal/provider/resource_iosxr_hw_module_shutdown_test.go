@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +35,8 @@ import (
 
 func TestAccIosxrHWModuleShutdown(t *testing.T) {
 	if os.Getenv("HW") == "" {
-        t.Skip("skipping test, set environment variable HW")
-    }
+		t.Skip("skipping test, set environment variable HW")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_shutdown.test", "location_name", "0/0/CPU0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_shutdown.test", "unshut", "true"))
@@ -46,18 +48,18 @@ func TestAccIosxrHWModuleShutdown(t *testing.T) {
 	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrHWModuleShutdownConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_hw_module_shutdown.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_hw_module_shutdown.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrHWModuleShutdownImportStateIdFunc("iosxr_hw_module_shutdown.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 

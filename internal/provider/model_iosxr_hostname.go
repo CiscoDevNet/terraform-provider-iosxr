@@ -23,32 +23,28 @@ package provider
 import (
 	"context"
 	"fmt"
-	"reflect"
-	"sort"
-	"strconv"
-	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type Hostname struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
+	Device            types.String `tfsdk:"device"`
+	Id                types.String `tfsdk:"id"`
 	SystemNetworkName types.String `tfsdk:"system_network_name"`
 }
 
 type HostnameData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
+	Device            types.String `tfsdk:"device"`
+	Id                types.String `tfsdk:"id"`
 	SystemNetworkName types.String `tfsdk:"system_network_name"`
 }
 
@@ -94,7 +90,7 @@ func (data Hostname) toBody(ctx context.Context) string {
 func (data Hostname) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.SystemNetworkName.IsNull() && !data.SystemNetworkName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/system-network-name", data.SystemNetworkName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/system-network-name", data.SystemNetworkName.ValueString())
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -120,7 +116,7 @@ func (data *Hostname) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *Hostname) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system-network-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system-network-name"); value.Exists() {
 		data.SystemNetworkName = types.StringValue(value.String())
 	} else if data.SystemNetworkName.IsNull() {
 		data.SystemNetworkName = types.StringNull()
@@ -135,7 +131,7 @@ func (data *Hostname) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"system-network-name"); value.Exists() {
+	if value := res.Get(prefix + "system-network-name"); value.Exists() {
 		data.SystemNetworkName = types.StringValue(value.String())
 	}
 }
@@ -148,7 +144,7 @@ func (data *HostnameData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"system-network-name"); value.Exists() {
+	if value := res.Get(prefix + "system-network-name"); value.Exists() {
 		data.SystemNetworkName = types.StringValue(value.String())
 	}
 }
@@ -157,7 +153,7 @@ func (data *HostnameData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *Hostname) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system-network-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system-network-name"); value.Exists() {
 		data.SystemNetworkName = types.StringValue(value.String())
 	}
 }
@@ -166,7 +162,7 @@ func (data *Hostname) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *HostnameData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/system-network-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system-network-name"); value.Exists() {
 		data.SystemNetworkName = types.StringValue(value.String())
 	}
 }
@@ -210,7 +206,7 @@ func (data *Hostname) addDeletedItemsXML(ctx context.Context, state Hostname, bo
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.SystemNetworkName.IsNull() && data.SystemNetworkName.IsNull() {
-		deletePath := state.getXPath()+"/system-network-name"
+		deletePath := state.getXPath() + "/system-network-name"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true

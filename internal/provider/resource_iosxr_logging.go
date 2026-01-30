@@ -24,28 +24,21 @@ import (
 	"context"
 	"fmt"
 	"regexp"
-	"strconv"
 	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -56,7 +49,7 @@ func NewLoggingResource() resource.Resource {
 	return &LoggingResource{}
 }
 
-type LoggingResource struct{
+type LoggingResource struct {
 	data *IosxrProviderData
 }
 
@@ -89,31 +82,31 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"console": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set console logging").AddStringEnumDescription("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set console logging").AddStringEnumDescription("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning", ),
+					stringvalidator.OneOf("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning"),
 				},
 			},
 			"trap": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set trap logging").AddStringEnumDescription("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set trap logging").AddStringEnumDescription("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning", ),
+					stringvalidator.OneOf("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning"),
 				},
 			},
 			"monitor": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set monitor logging").AddStringEnumDescription("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set monitor logging").AddStringEnumDescription("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning", ),
+					stringvalidator.OneOf("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning"),
 				},
 			},
 			"console_facility": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Console message logging facilities").AddStringEnumDescription("all", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Console message logging facilities").AddStringEnumDescription("all").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("all", ),
+					stringvalidator.OneOf("all"),
 				},
 			},
 			"monitor_discriminator_match1": schema.StringAttribute{
@@ -206,10 +199,10 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"archive_severity": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The minimum severity of log messages to archive").AddStringEnumDescription("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("The minimum severity of log messages to archive").AddStringEnumDescription("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings", ),
+					stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings"),
 				},
 			},
 			"archive_threshold": schema.Int64Attribute{
@@ -236,10 +229,10 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Optional:            true,
 			},
 			"facility_level": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("configure this node").AddStringEnumDescription("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("configure this node").AddStringEnumDescription("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user", ),
+					stringvalidator.OneOf("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user"),
 				},
 			},
 			"buffered_entries_count": schema.Int64Attribute{
@@ -257,10 +250,10 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"buffered_level": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("configure this node").AddStringEnumDescription("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("configure this node").AddStringEnumDescription("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings", ),
+					stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings"),
 				},
 			},
 			"buffered_discriminator_match1": schema.StringAttribute{
@@ -347,17 +340,17 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 							},
 						},
 						"severity": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Set severity level").AddStringEnumDescription("alerts", "critical", "debugging", "emergencies", "error", "info", "notifications", "warning", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Set severity level").AddStringEnumDescription("alerts", "critical", "debugging", "emergencies", "error", "info", "notifications", "warning").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "error", "info", "notifications", "warning", ),
+								stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "error", "info", "notifications", "warning"),
 							},
 						},
 						"local_accounting_send_to_remote_facility_level": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("configure this node").AddStringEnumDescription("auth", "cron", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "lpr", "mail", "news", "sys10", "sys11", "sys12", "sys13", "sys14", "sys9", "syslog", "user", "uucp", ).String,
+							MarkdownDescription: helpers.NewAttributeDescription("configure this node").AddStringEnumDescription("auth", "cron", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "lpr", "mail", "news", "sys10", "sys11", "sys12", "sys13", "sys14", "sys9", "syslog", "user", "uucp").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("auth", "cron", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "lpr", "mail", "news", "sys10", "sys11", "sys12", "sys13", "sys14", "sys9", "syslog", "user", "uucp", ),
+								stringvalidator.OneOf("auth", "cron", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "lpr", "mail", "news", "sys10", "sys11", "sys12", "sys13", "sys14", "sys9", "syslog", "user", "uucp"),
 							},
 						},
 						"discriminator_match1": schema.StringAttribute{
@@ -412,10 +405,10 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"history": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set history logging").AddStringEnumDescription("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warnings", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set history logging").AddStringEnumDescription("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warnings").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warnings", ),
+					stringvalidator.OneOf("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warnings"),
 				},
 			},
 			"history_size": schema.Int64Attribute{
@@ -480,10 +473,10 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Optional:            true,
 			},
 			"yang": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set yang logging parameters").AddStringEnumDescription("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set yang logging parameters").AddStringEnumDescription("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings", ),
+					stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings"),
 				},
 			},
 			"suppress_rules": schema.ListNestedAttribute{
@@ -565,10 +558,10 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Optional:            true,
 			},
 			"events_level": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Log all events with equal or higher (lower level) severity").AddStringEnumDescription("alerts", "critical", "emergencies", "errors", "informational", "notifications", "warnings", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Log all events with equal or higher (lower level) severity").AddStringEnumDescription("alerts", "critical", "emergencies", "errors", "informational", "notifications", "warnings").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("alerts", "critical", "emergencies", "errors", "informational", "notifications", "warnings", ),
+					stringvalidator.OneOf("alerts", "critical", "emergencies", "errors", "informational", "notifications", "warnings"),
 				},
 			},
 			"events_threshold": schema.Int64Attribute{
@@ -579,10 +572,10 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"events_precfg_suppression": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Suppress events from a card/VM till its configuration is complete").AddStringEnumDescription("enable", ).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Suppress events from a card/VM till its configuration is complete").AddStringEnumDescription("enable").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("enable", ),
+					stringvalidator.OneOf("enable"),
 				},
 			},
 			"events_precfg_suppression_timeout": schema.Int64Attribute{
@@ -628,14 +621,14 @@ func (r *LoggingResource) Create(ctx context.Context, req resource.CreateRequest
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-		var ops []gnmi.SetOperation
+			var ops []gnmi.SetOperation
 
-		// Create object
-		body := plan.toBody(ctx)
-		ops = append(ops, gnmi.Update(plan.getPath(), body))
+			// Create object
+			body := plan.toBody(ctx)
+			ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
@@ -856,11 +849,11 @@ func (r *LoggingResource) Update(ctx context.Context, req resource.UpdateRequest
 				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			}
 
-			 // Combine update and delete operations into a single transaction
-		 	combinedBody := body + deleteBody
-		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
-		 		resp.Diagnostics.AddError("Client Error", err.Error())
-		 		return
+			// Combine update and delete operations into a single transaction
+			combinedBody := body + deleteBody
+			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+				resp.Diagnostics.AddError("Client Error", err.Error())
+				return
 			}
 		}
 	}

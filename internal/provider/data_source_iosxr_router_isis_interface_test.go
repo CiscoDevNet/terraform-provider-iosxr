@@ -81,8 +81,8 @@ func TestAccDataSourceIosxrRouterISISInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterISISInterfacePrerequisitesConfig+testAccDataSourceIosxrRouterISISInterfaceConfig(),
-				Check: resource.ComposeTestCheckFunc(checks...),
+				Config: testAccDataSourceIosxrRouterISISInterfacePrerequisitesConfig + testAccDataSourceIosxrRouterISISInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

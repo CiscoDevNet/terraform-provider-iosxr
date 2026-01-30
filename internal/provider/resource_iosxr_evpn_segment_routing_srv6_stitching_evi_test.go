@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -53,23 +55,23 @@ func TestAccIosxrEVPNSegmentRoutingSRv6StitchingEVI(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIPrerequisitesConfig+testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIConfig_minimum(),
+			Config: testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIPrerequisitesConfig + testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIPrerequisitesConfig+testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIPrerequisitesConfig + testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_evpn_segment_routing_srv6_stitching_evi.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_evpn_segment_routing_srv6_stitching_evi.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrEVPNSegmentRoutingSRv6StitchingEVIImportStateIdFunc("iosxr_evpn_segment_routing_srv6_stitching_evi.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 

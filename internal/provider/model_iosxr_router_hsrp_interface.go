@@ -23,48 +23,45 @@ package provider
 import (
 	"context"
 	"fmt"
-	"reflect"
-	"sort"
 	"strconv"
-	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterHSRPInterface struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
-	InterfaceName types.String `tfsdk:"interface_name"`
-	HsrpUseBia types.Bool `tfsdk:"hsrp_use_bia"`
-	HsrpRedirectsDisable types.Bool `tfsdk:"hsrp_redirects_disable"`
-	HsrpDelayMinimum types.Int64 `tfsdk:"hsrp_delay_minimum"`
-	HsrpDelayReload types.Int64 `tfsdk:"hsrp_delay_reload"`
-	HsrpBfdMinimumInterval types.Int64 `tfsdk:"hsrp_bfd_minimum_interval"`
-	HsrpBfdMultiplier types.Int64 `tfsdk:"hsrp_bfd_multiplier"`
-	HsrpMacRefresh types.Int64 `tfsdk:"hsrp_mac_refresh"`
+	Device                 types.String `tfsdk:"device"`
+	Id                     types.String `tfsdk:"id"`
+	DeleteMode             types.String `tfsdk:"delete_mode"`
+	InterfaceName          types.String `tfsdk:"interface_name"`
+	HsrpUseBia             types.Bool   `tfsdk:"hsrp_use_bia"`
+	HsrpRedirectsDisable   types.Bool   `tfsdk:"hsrp_redirects_disable"`
+	HsrpDelayMinimum       types.Int64  `tfsdk:"hsrp_delay_minimum"`
+	HsrpDelayReload        types.Int64  `tfsdk:"hsrp_delay_reload"`
+	HsrpBfdMinimumInterval types.Int64  `tfsdk:"hsrp_bfd_minimum_interval"`
+	HsrpBfdMultiplier      types.Int64  `tfsdk:"hsrp_bfd_multiplier"`
+	HsrpMacRefresh         types.Int64  `tfsdk:"hsrp_mac_refresh"`
 }
 
 type RouterHSRPInterfaceData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	InterfaceName types.String `tfsdk:"interface_name"`
-	HsrpUseBia types.Bool `tfsdk:"hsrp_use_bia"`
-	HsrpRedirectsDisable types.Bool `tfsdk:"hsrp_redirects_disable"`
-	HsrpDelayMinimum types.Int64 `tfsdk:"hsrp_delay_minimum"`
-	HsrpDelayReload types.Int64 `tfsdk:"hsrp_delay_reload"`
-	HsrpBfdMinimumInterval types.Int64 `tfsdk:"hsrp_bfd_minimum_interval"`
-	HsrpBfdMultiplier types.Int64 `tfsdk:"hsrp_bfd_multiplier"`
-	HsrpMacRefresh types.Int64 `tfsdk:"hsrp_mac_refresh"`
+	Device                 types.String `tfsdk:"device"`
+	Id                     types.String `tfsdk:"id"`
+	InterfaceName          types.String `tfsdk:"interface_name"`
+	HsrpUseBia             types.Bool   `tfsdk:"hsrp_use_bia"`
+	HsrpRedirectsDisable   types.Bool   `tfsdk:"hsrp_redirects_disable"`
+	HsrpDelayMinimum       types.Int64  `tfsdk:"hsrp_delay_minimum"`
+	HsrpDelayReload        types.Int64  `tfsdk:"hsrp_delay_reload"`
+	HsrpBfdMinimumInterval types.Int64  `tfsdk:"hsrp_bfd_minimum_interval"`
+	HsrpBfdMultiplier      types.Int64  `tfsdk:"hsrp_bfd_multiplier"`
+	HsrpMacRefresh         types.Int64  `tfsdk:"hsrp_mac_refresh"`
 }
 
 // End of section. //template:end types
@@ -136,32 +133,32 @@ func (data RouterHSRPInterface) toBody(ctx context.Context) string {
 func (data RouterHSRPInterface) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/interface-name", data.InterfaceName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/interface-name", data.InterfaceName.ValueString())
 	}
 	if !data.HsrpUseBia.IsNull() && !data.HsrpUseBia.IsUnknown() {
 		if data.HsrpUseBia.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/hsrp/use-bia", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/hsrp/use-bia", "")
 		}
 	}
 	if !data.HsrpRedirectsDisable.IsNull() && !data.HsrpRedirectsDisable.IsUnknown() {
 		if data.HsrpRedirectsDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/hsrp/redirects/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/hsrp/redirects/disable", "")
 		}
 	}
 	if !data.HsrpDelayMinimum.IsNull() && !data.HsrpDelayMinimum.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/hsrp/delay/minimum", strconv.FormatInt(data.HsrpDelayMinimum.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/hsrp/delay/minimum", strconv.FormatInt(data.HsrpDelayMinimum.ValueInt64(), 10))
 	}
 	if !data.HsrpDelayReload.IsNull() && !data.HsrpDelayReload.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/hsrp/delay/reload", strconv.FormatInt(data.HsrpDelayReload.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/hsrp/delay/reload", strconv.FormatInt(data.HsrpDelayReload.ValueInt64(), 10))
 	}
 	if !data.HsrpBfdMinimumInterval.IsNull() && !data.HsrpBfdMinimumInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/hsrp/bfd/minimum-interval", strconv.FormatInt(data.HsrpBfdMinimumInterval.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/hsrp/bfd/minimum-interval", strconv.FormatInt(data.HsrpBfdMinimumInterval.ValueInt64(), 10))
 	}
 	if !data.HsrpBfdMultiplier.IsNull() && !data.HsrpBfdMultiplier.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/hsrp/bfd/multiplier", strconv.FormatInt(data.HsrpBfdMultiplier.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/hsrp/bfd/multiplier", strconv.FormatInt(data.HsrpBfdMultiplier.ValueInt64(), 10))
 	}
 	if !data.HsrpMacRefresh.IsNull() && !data.HsrpMacRefresh.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/hsrp/mac-refresh", strconv.FormatInt(data.HsrpMacRefresh.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/hsrp/mac-refresh", strconv.FormatInt(data.HsrpMacRefresh.ValueInt64(), 10))
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -175,23 +172,21 @@ func (data RouterHSRPInterface) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterHSRPInterface) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "hsrp.use-bia"); !data.HsrpUseBia.IsNull() {
-		if value.Exists() {
-			data.HsrpUseBia = types.BoolValue(true)
-		} else {
-			data.HsrpUseBia = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "hsrp.use-bia"); value.Exists() {
+		data.HsrpUseBia = types.BoolValue(true)
 	} else {
-		data.HsrpUseBia = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.HsrpUseBia.IsNull() {
+			data.HsrpUseBia = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "hsrp.redirects.disable"); !data.HsrpRedirectsDisable.IsNull() {
-		if value.Exists() {
-			data.HsrpRedirectsDisable = types.BoolValue(true)
-		} else {
-			data.HsrpRedirectsDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "hsrp.redirects.disable"); value.Exists() {
+		data.HsrpRedirectsDisable = types.BoolValue(true)
 	} else {
-		data.HsrpRedirectsDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.HsrpRedirectsDisable.IsNull() {
+			data.HsrpRedirectsDisable = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "hsrp.delay.minimum"); value.Exists() && !data.HsrpDelayMinimum.IsNull() {
 		data.HsrpDelayMinimum = types.Int64Value(value.Int())
@@ -225,12 +220,12 @@ func (data *RouterHSRPInterface) updateFromBody(ctx context.Context, res []byte)
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RouterHSRPInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/interface-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interface-name"); value.Exists() {
 		data.InterfaceName = types.StringValue(value.String())
 	} else if data.InterfaceName.IsNull() {
 		data.InterfaceName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/use-bia"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/use-bia"); value.Exists() {
 		data.HsrpUseBia = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -238,7 +233,7 @@ func (data *RouterHSRPInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.HsrpUseBia = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/redirects/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/redirects/disable"); value.Exists() {
 		data.HsrpRedirectsDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -246,27 +241,27 @@ func (data *RouterHSRPInterface) updateFromBodyXML(ctx context.Context, res xmld
 			data.HsrpRedirectsDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/delay/minimum"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/delay/minimum"); value.Exists() {
 		data.HsrpDelayMinimum = types.Int64Value(value.Int())
 	} else if data.HsrpDelayMinimum.IsNull() {
 		data.HsrpDelayMinimum = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/delay/reload"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/delay/reload"); value.Exists() {
 		data.HsrpDelayReload = types.Int64Value(value.Int())
 	} else if data.HsrpDelayReload.IsNull() {
 		data.HsrpDelayReload = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/bfd/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/bfd/minimum-interval"); value.Exists() {
 		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
 	} else if data.HsrpBfdMinimumInterval.IsNull() {
 		data.HsrpBfdMinimumInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/bfd/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/bfd/multiplier"); value.Exists() {
 		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
 	} else if data.HsrpBfdMultiplier.IsNull() {
 		data.HsrpBfdMultiplier = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/mac-refresh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/mac-refresh"); value.Exists() {
 		data.HsrpMacRefresh = types.Int64Value(value.Int())
 	} else if data.HsrpMacRefresh.IsNull() {
 		data.HsrpMacRefresh = types.Int64Null()
@@ -281,29 +276,29 @@ func (data *RouterHSRPInterface) fromBody(ctx context.Context, res gjson.Result)
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"hsrp.use-bia"); value.Exists() {
+	if value := res.Get(prefix + "hsrp.use-bia"); value.Exists() {
 		data.HsrpUseBia = types.BoolValue(true)
 	} else {
 		data.HsrpUseBia = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"hsrp.redirects.disable"); value.Exists() {
+	if value := res.Get(prefix + "hsrp.redirects.disable"); value.Exists() {
 		data.HsrpRedirectsDisable = types.BoolValue(true)
 	} else {
 		data.HsrpRedirectsDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"hsrp.delay.minimum"); value.Exists() {
+	if value := res.Get(prefix + "hsrp.delay.minimum"); value.Exists() {
 		data.HsrpDelayMinimum = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"hsrp.delay.reload"); value.Exists() {
+	if value := res.Get(prefix + "hsrp.delay.reload"); value.Exists() {
 		data.HsrpDelayReload = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"hsrp.bfd.minimum-interval"); value.Exists() {
+	if value := res.Get(prefix + "hsrp.bfd.minimum-interval"); value.Exists() {
 		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"hsrp.bfd.multiplier"); value.Exists() {
+	if value := res.Get(prefix + "hsrp.bfd.multiplier"); value.Exists() {
 		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"hsrp.mac-refresh"); value.Exists() {
+	if value := res.Get(prefix + "hsrp.mac-refresh"); value.Exists() {
 		data.HsrpMacRefresh = types.Int64Value(value.Int())
 	}
 }
@@ -316,29 +311,29 @@ func (data *RouterHSRPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"hsrp.use-bia"); value.Exists() {
+	if value := res.Get(prefix + "hsrp.use-bia"); value.Exists() {
 		data.HsrpUseBia = types.BoolValue(true)
 	} else {
 		data.HsrpUseBia = types.BoolNull()
 	}
-	if value := res.Get(prefix+"hsrp.redirects.disable"); value.Exists() {
+	if value := res.Get(prefix + "hsrp.redirects.disable"); value.Exists() {
 		data.HsrpRedirectsDisable = types.BoolValue(true)
 	} else {
 		data.HsrpRedirectsDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"hsrp.delay.minimum"); value.Exists() {
+	if value := res.Get(prefix + "hsrp.delay.minimum"); value.Exists() {
 		data.HsrpDelayMinimum = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"hsrp.delay.reload"); value.Exists() {
+	if value := res.Get(prefix + "hsrp.delay.reload"); value.Exists() {
 		data.HsrpDelayReload = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"hsrp.bfd.minimum-interval"); value.Exists() {
+	if value := res.Get(prefix + "hsrp.bfd.minimum-interval"); value.Exists() {
 		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"hsrp.bfd.multiplier"); value.Exists() {
+	if value := res.Get(prefix + "hsrp.bfd.multiplier"); value.Exists() {
 		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"hsrp.mac-refresh"); value.Exists() {
+	if value := res.Get(prefix + "hsrp.mac-refresh"); value.Exists() {
 		data.HsrpMacRefresh = types.Int64Value(value.Int())
 	}
 }
@@ -347,29 +342,29 @@ func (data *RouterHSRPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterHSRPInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/use-bia"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/use-bia"); value.Exists() {
 		data.HsrpUseBia = types.BoolValue(true)
 	} else {
 		data.HsrpUseBia = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/redirects/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/redirects/disable"); value.Exists() {
 		data.HsrpRedirectsDisable = types.BoolValue(true)
 	} else {
 		data.HsrpRedirectsDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/delay/minimum"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/delay/minimum"); value.Exists() {
 		data.HsrpDelayMinimum = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/delay/reload"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/delay/reload"); value.Exists() {
 		data.HsrpDelayReload = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/bfd/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/bfd/minimum-interval"); value.Exists() {
 		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/bfd/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/bfd/multiplier"); value.Exists() {
 		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/mac-refresh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/mac-refresh"); value.Exists() {
 		data.HsrpMacRefresh = types.Int64Value(value.Int())
 	}
 }
@@ -378,29 +373,29 @@ func (data *RouterHSRPInterface) fromBodyXML(ctx context.Context, res xmldot.Res
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RouterHSRPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/use-bia"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/use-bia"); value.Exists() {
 		data.HsrpUseBia = types.BoolValue(true)
 	} else {
 		data.HsrpUseBia = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/redirects/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/redirects/disable"); value.Exists() {
 		data.HsrpRedirectsDisable = types.BoolValue(true)
 	} else {
 		data.HsrpRedirectsDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/delay/minimum"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/delay/minimum"); value.Exists() {
 		data.HsrpDelayMinimum = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/delay/reload"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/delay/reload"); value.Exists() {
 		data.HsrpDelayReload = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/bfd/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/bfd/minimum-interval"); value.Exists() {
 		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/bfd/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/bfd/multiplier"); value.Exists() {
 		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/hsrp/mac-refresh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/mac-refresh"); value.Exists() {
 		data.HsrpMacRefresh = types.Int64Value(value.Int())
 	}
 }
@@ -492,35 +487,35 @@ func (data *RouterHSRPInterface) addDeletedItemsXML(ctx context.Context, state R
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.HsrpMacRefresh.IsNull() && data.HsrpMacRefresh.IsNull() {
-		deletePath := state.getXPath()+"/hsrp/mac-refresh"
+		deletePath := state.getXPath() + "/hsrp/mac-refresh"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.HsrpBfdMultiplier.IsNull() && data.HsrpBfdMultiplier.IsNull() {
-		deletePath := state.getXPath()+"/hsrp/bfd/multiplier"
+		deletePath := state.getXPath() + "/hsrp/bfd/multiplier"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.HsrpBfdMinimumInterval.IsNull() && data.HsrpBfdMinimumInterval.IsNull() {
-		deletePath := state.getXPath()+"/hsrp/bfd/minimum-interval"
+		deletePath := state.getXPath() + "/hsrp/bfd/minimum-interval"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.HsrpDelayReload.IsNull() && data.HsrpDelayReload.IsNull() {
-		deletePath := state.getXPath()+"/hsrp/delay/reload"
+		deletePath := state.getXPath() + "/hsrp/delay/reload"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.HsrpDelayMinimum.IsNull() && data.HsrpDelayMinimum.IsNull() {
-		deletePath := state.getXPath()+"/hsrp/delay/minimum"
+		deletePath := state.getXPath() + "/hsrp/delay/minimum"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -528,7 +523,7 @@ func (data *RouterHSRPInterface) addDeletedItemsXML(ctx context.Context, state R
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.HsrpRedirectsDisable.IsNull() && state.HsrpRedirectsDisable.ValueBool() && data.HsrpRedirectsDisable.IsNull() {
-		deletePath := state.getXPath()+"/hsrp/redirects/disable"
+		deletePath := state.getXPath() + "/hsrp/redirects/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -536,7 +531,7 @@ func (data *RouterHSRPInterface) addDeletedItemsXML(ctx context.Context, state R
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.HsrpUseBia.IsNull() && state.HsrpUseBia.ValueBool() && data.HsrpUseBia.IsNull() {
-		deletePath := state.getXPath()+"/hsrp/use-bia"
+		deletePath := state.getXPath() + "/hsrp/use-bia"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true

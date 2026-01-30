@@ -28,355 +28,355 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterBGP struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
-	AsNumber types.String `tfsdk:"as_number"`
-	DefaultMetric types.Int64 `tfsdk:"default_metric"`
-	Mvpn types.Bool `tfsdk:"mvpn"`
-	SegmentRoutingSrv6Locator types.String `tfsdk:"segment_routing_srv6_locator"`
-	SegmentRoutingSrv6UsidAllocationWideLocalIdBlock types.Bool `tfsdk:"segment_routing_srv6_usid_allocation_wide_local_id_block"`
-	Neighbors []RouterBGPNeighbors `tfsdk:"neighbors"`
-	GracefulMaintenanceActivateAllNeighbors types.Bool `tfsdk:"graceful_maintenance_activate_all_neighbors"`
-	GracefulMaintenanceActivateRetainRoutes types.Bool `tfsdk:"graceful_maintenance_activate_retain_routes"`
-	GracefulMaintenanceActivateInterfaces []RouterBGPGracefulMaintenanceActivateInterfaces `tfsdk:"graceful_maintenance_activate_interfaces"`
-	GracefulMaintenanceActivateLocations []RouterBGPGracefulMaintenanceActivateLocations `tfsdk:"graceful_maintenance_activate_locations"`
-	MplsActivateInterfaces []RouterBGPMplsActivateInterfaces `tfsdk:"mpls_activate_interfaces"`
-	AsLeaguePeers []RouterBGPAsLeaguePeers `tfsdk:"as_league_peers"`
-	AttributeFilterGroups []RouterBGPAttributeFilterGroups `tfsdk:"attribute_filter_groups"`
-	AsLists []RouterBGPAsLists `tfsdk:"as_lists"`
-	DefaultInformationOriginate types.Bool `tfsdk:"default_information_originate"`
-	SocketReceiveBufferSize types.Int64 `tfsdk:"socket_receive_buffer_size"`
-	SocketReceiveBufferSizeRead types.Int64 `tfsdk:"socket_receive_buffer_size_read"`
-	SocketSendBufferSize types.Int64 `tfsdk:"socket_send_buffer_size"`
-	SocketSendBufferSizeWrite types.Int64 `tfsdk:"socket_send_buffer_size_write"`
-	NexthopMplsForwardingIbgp types.Bool `tfsdk:"nexthop_mpls_forwarding_ibgp"`
-	NexthopValidationColorExtcommSrPolicy types.Bool `tfsdk:"nexthop_validation_color_extcomm_sr_policy"`
-	NexthopValidationColorExtcommDisable types.Bool `tfsdk:"nexthop_validation_color_extcomm_disable"`
-	NexthopResolutionAllowDefault types.Bool `tfsdk:"nexthop_resolution_allow_default"`
-	NexthopSrteMetricDisable types.Bool `tfsdk:"nexthop_srte_metric_disable"`
-	SlowPeerDynamic types.Bool `tfsdk:"slow_peer_dynamic"`
-	SlowPeerDynamicThreshold types.Int64 `tfsdk:"slow_peer_dynamic_threshold"`
-	SlowPeerDetectionDisable types.Bool `tfsdk:"slow_peer_detection_disable"`
-	BgpRedistributeInternal types.Bool `tfsdk:"bgp_redistribute_internal"`
-	BgpRouterId types.String `tfsdk:"bgp_router_id"`
-	BgpUnsafeEbgpPolicy types.Bool `tfsdk:"bgp_unsafe_ebgp_policy"`
-	BgpScanTime types.Int64 `tfsdk:"bgp_scan_time"`
-	BgpReadOnly types.Bool `tfsdk:"bgp_read_only"`
-	BgpLptsSecureBinding types.Bool `tfsdk:"bgp_lpts_secure_binding"`
-	BgpAsPathLoopcheck types.Bool `tfsdk:"bgp_as_path_loopcheck"`
-	BgpAutoPolicySoftResetDisable types.Bool `tfsdk:"bgp_auto_policy_soft_reset_disable"`
-	BgpBestpathCostCommunityIgnore types.Bool `tfsdk:"bgp_bestpath_cost_community_ignore"`
-	BgpBestpathCompareRouterid types.Bool `tfsdk:"bgp_bestpath_compare_routerid"`
-	BgpBestpathAigpIgnore types.Bool `tfsdk:"bgp_bestpath_aigp_ignore"`
-	BgpBestpathIgpMetricIgnore types.Bool `tfsdk:"bgp_bestpath_igp_metric_ignore"`
-	BgpBestpathIgpMetricSrPolicy types.Bool `tfsdk:"bgp_bestpath_igp_metric_sr_policy"`
-	BgpBestpathMedMissingAsWorst types.Bool `tfsdk:"bgp_bestpath_med_missing_as_worst"`
-	BgpBestpathMedAlways types.Bool `tfsdk:"bgp_bestpath_med_always"`
-	BgpBestpathAsPathIgnore types.Bool `tfsdk:"bgp_bestpath_as_path_ignore"`
-	BgpBestpathAsPathMultipathRelax types.Bool `tfsdk:"bgp_bestpath_as_path_multipath_relax"`
-	BgpBestpathOriginAsUseValidity types.Bool `tfsdk:"bgp_bestpath_origin_as_use_validity"`
-	BgpBestpathOriginAsAllowInvalid types.Bool `tfsdk:"bgp_bestpath_origin_as_allow_invalid"`
-	BgpBestpathSrPolicyPrefer types.Bool `tfsdk:"bgp_bestpath_sr_policy_prefer"`
-	BgpBestpathSrPolicyForce types.Bool `tfsdk:"bgp_bestpath_sr_policy_force"`
-	BgpClusterId32bitFormat types.Int64 `tfsdk:"bgp_cluster_id_32bit_format"`
-	BgpClusterIdIpFormat types.String `tfsdk:"bgp_cluster_id_ip_format"`
-	BgpDefaultLocalPreference types.Int64 `tfsdk:"bgp_default_local_preference"`
-	BgpEnforceFirstAsDisable types.Bool `tfsdk:"bgp_enforce_first_as_disable"`
-	BgpFastExternalFalloverDisable types.Bool `tfsdk:"bgp_fast_external_fallover_disable"`
-	BgpLogNeighborChangesDetail types.Bool `tfsdk:"bgp_log_neighbor_changes_detail"`
-	BgpLogNeighborChangesDisable types.Bool `tfsdk:"bgp_log_neighbor_changes_disable"`
-	BgpLogMessageDisable types.Bool `tfsdk:"bgp_log_message_disable"`
-	BgpLogMemoryThresholdWarning types.Int64 `tfsdk:"bgp_log_memory_threshold_warning"`
-	BgpLogMemoryThresholdCritical types.Int64 `tfsdk:"bgp_log_memory_threshold_critical"`
-	BgpLogTotalPaths types.Int64 `tfsdk:"bgp_log_total_paths"`
-	BgpLogTotalPathsWarnThreshold types.Int64 `tfsdk:"bgp_log_total_paths_warn_threshold"`
-	BgpMultipathUseClusterListLength types.Bool `tfsdk:"bgp_multipath_use_cluster_list_length"`
-	BgpMultipathAsPathIgnoreOnwards types.Bool `tfsdk:"bgp_multipath_as_path_ignore_onwards"`
-	BgpConfederationIdentifier types.String `tfsdk:"bgp_confederation_identifier"`
-	BgpConfederationPeers []RouterBGPBgpConfederationPeers `tfsdk:"bgp_confederation_peers"`
-	BgpGracefulRestartEnable types.Bool `tfsdk:"bgp_graceful_restart_enable"`
-	BgpGracefulRestartPurgeTime types.Int64 `tfsdk:"bgp_graceful_restart_purge_time"`
-	BgpGracefulRestartRestartTime types.Int64 `tfsdk:"bgp_graceful_restart_restart_time"`
-	BgpGracefulRestartStalepathTime types.Int64 `tfsdk:"bgp_graceful_restart_stalepath_time"`
-	BgpGracefulRestartGracefulReset types.Bool `tfsdk:"bgp_graceful_restart_graceful_reset"`
-	BgpGracefulRestartRetainNbrRoutesDisable types.Bool `tfsdk:"bgp_graceful_restart_retain_nbr_routes_disable"`
-	BgpInstallDiversion types.Bool `tfsdk:"bgp_install_diversion"`
-	BgpUpdateDelay types.Int64 `tfsdk:"bgp_update_delay"`
-	BgpUpdateDelayAlways types.Bool `tfsdk:"bgp_update_delay_always"`
-	BgpMaximumNeighbor types.Int64 `tfsdk:"bgp_maximum_neighbor"`
-	BgpOriginAsValidationSignalIbgp types.Bool `tfsdk:"bgp_origin_as_validation_signal_ibgp"`
-	BgpOriginAsValidationTimeOff types.Bool `tfsdk:"bgp_origin_as_validation_time_off"`
-	BgpOriginAsValidationTime types.Int64 `tfsdk:"bgp_origin_as_validation_time"`
-	TimersBgpKeepaliveInterval types.Int64 `tfsdk:"timers_bgp_keepalive_interval"`
-	TimersBgpHolddownZero types.Bool `tfsdk:"timers_bgp_holddown_zero"`
-	TimersBgpHolddownZeroMinimumAcceptableZero types.Bool `tfsdk:"timers_bgp_holddown_zero_minimum_acceptable_zero"`
-	TimersBgpHolddownZeroMinimumAcceptableHoldtime types.Int64 `tfsdk:"timers_bgp_holddown_zero_minimum_acceptable_holdtime"`
-	TimersBgpHoldtime types.Int64 `tfsdk:"timers_bgp_holdtime"`
-	TimersBgpHoldtimeMinimumAcceptableHoldtime types.Int64 `tfsdk:"timers_bgp_holdtime_minimum_acceptable_holdtime"`
-	Nsr types.Bool `tfsdk:"nsr"`
-	NsrDisable types.Bool `tfsdk:"nsr_disable"`
-	IbgpPolicyOutEnforceModifications types.Bool `tfsdk:"ibgp_policy_out_enforce_modifications"`
-	OpenconfigRibTelemetry types.Bool `tfsdk:"openconfig_rib_telemetry"`
-	UpdateLimit types.Int64 `tfsdk:"update_limit"`
-	UpdateInErrorHandlingBasicEbgpDisable types.Bool `tfsdk:"update_in_error_handling_basic_ebgp_disable"`
-	UpdateInErrorHandlingBasicIbgpDisable types.Bool `tfsdk:"update_in_error_handling_basic_ibgp_disable"`
-	UpdateInErrorHandlingExtendedEbgp types.Bool `tfsdk:"update_in_error_handling_extended_ebgp"`
-	UpdateInErrorHandlingExtendedIbgp types.Bool `tfsdk:"update_in_error_handling_extended_ibgp"`
-	UpdateOutLogging types.Bool `tfsdk:"update_out_logging"`
-	BfdMultiplier types.Int64 `tfsdk:"bfd_multiplier"`
-	BfdMinimumInterval types.Int64 `tfsdk:"bfd_minimum_interval"`
-	RpkiRoutes []RouterBGPRpkiRoutes `tfsdk:"rpki_routes"`
-	RpkiServers []RouterBGPRpkiServers `tfsdk:"rpki_servers"`
+	Device                                           types.String                                     `tfsdk:"device"`
+	Id                                               types.String                                     `tfsdk:"id"`
+	DeleteMode                                       types.String                                     `tfsdk:"delete_mode"`
+	AsNumber                                         types.String                                     `tfsdk:"as_number"`
+	DefaultMetric                                    types.Int64                                      `tfsdk:"default_metric"`
+	Mvpn                                             types.Bool                                       `tfsdk:"mvpn"`
+	SegmentRoutingSrv6Locator                        types.String                                     `tfsdk:"segment_routing_srv6_locator"`
+	SegmentRoutingSrv6UsidAllocationWideLocalIdBlock types.Bool                                       `tfsdk:"segment_routing_srv6_usid_allocation_wide_local_id_block"`
+	Neighbors                                        []RouterBGPNeighbors                             `tfsdk:"neighbors"`
+	GracefulMaintenanceActivateAllNeighbors          types.Bool                                       `tfsdk:"graceful_maintenance_activate_all_neighbors"`
+	GracefulMaintenanceActivateRetainRoutes          types.Bool                                       `tfsdk:"graceful_maintenance_activate_retain_routes"`
+	GracefulMaintenanceActivateInterfaces            []RouterBGPGracefulMaintenanceActivateInterfaces `tfsdk:"graceful_maintenance_activate_interfaces"`
+	GracefulMaintenanceActivateLocations             []RouterBGPGracefulMaintenanceActivateLocations  `tfsdk:"graceful_maintenance_activate_locations"`
+	MplsActivateInterfaces                           []RouterBGPMplsActivateInterfaces                `tfsdk:"mpls_activate_interfaces"`
+	AsLeaguePeers                                    []RouterBGPAsLeaguePeers                         `tfsdk:"as_league_peers"`
+	AttributeFilterGroups                            []RouterBGPAttributeFilterGroups                 `tfsdk:"attribute_filter_groups"`
+	AsLists                                          []RouterBGPAsLists                               `tfsdk:"as_lists"`
+	DefaultInformationOriginate                      types.Bool                                       `tfsdk:"default_information_originate"`
+	SocketReceiveBufferSize                          types.Int64                                      `tfsdk:"socket_receive_buffer_size"`
+	SocketReceiveBufferSizeRead                      types.Int64                                      `tfsdk:"socket_receive_buffer_size_read"`
+	SocketSendBufferSize                             types.Int64                                      `tfsdk:"socket_send_buffer_size"`
+	SocketSendBufferSizeWrite                        types.Int64                                      `tfsdk:"socket_send_buffer_size_write"`
+	NexthopMplsForwardingIbgp                        types.Bool                                       `tfsdk:"nexthop_mpls_forwarding_ibgp"`
+	NexthopValidationColorExtcommSrPolicy            types.Bool                                       `tfsdk:"nexthop_validation_color_extcomm_sr_policy"`
+	NexthopValidationColorExtcommDisable             types.Bool                                       `tfsdk:"nexthop_validation_color_extcomm_disable"`
+	NexthopResolutionAllowDefault                    types.Bool                                       `tfsdk:"nexthop_resolution_allow_default"`
+	NexthopSrteMetricDisable                         types.Bool                                       `tfsdk:"nexthop_srte_metric_disable"`
+	SlowPeerDynamic                                  types.Bool                                       `tfsdk:"slow_peer_dynamic"`
+	SlowPeerDynamicThreshold                         types.Int64                                      `tfsdk:"slow_peer_dynamic_threshold"`
+	SlowPeerDetectionDisable                         types.Bool                                       `tfsdk:"slow_peer_detection_disable"`
+	BgpRedistributeInternal                          types.Bool                                       `tfsdk:"bgp_redistribute_internal"`
+	BgpRouterId                                      types.String                                     `tfsdk:"bgp_router_id"`
+	BgpUnsafeEbgpPolicy                              types.Bool                                       `tfsdk:"bgp_unsafe_ebgp_policy"`
+	BgpScanTime                                      types.Int64                                      `tfsdk:"bgp_scan_time"`
+	BgpReadOnly                                      types.Bool                                       `tfsdk:"bgp_read_only"`
+	BgpLptsSecureBinding                             types.Bool                                       `tfsdk:"bgp_lpts_secure_binding"`
+	BgpAsPathLoopcheck                               types.Bool                                       `tfsdk:"bgp_as_path_loopcheck"`
+	BgpAutoPolicySoftResetDisable                    types.Bool                                       `tfsdk:"bgp_auto_policy_soft_reset_disable"`
+	BgpBestpathCostCommunityIgnore                   types.Bool                                       `tfsdk:"bgp_bestpath_cost_community_ignore"`
+	BgpBestpathCompareRouterid                       types.Bool                                       `tfsdk:"bgp_bestpath_compare_routerid"`
+	BgpBestpathAigpIgnore                            types.Bool                                       `tfsdk:"bgp_bestpath_aigp_ignore"`
+	BgpBestpathIgpMetricIgnore                       types.Bool                                       `tfsdk:"bgp_bestpath_igp_metric_ignore"`
+	BgpBestpathIgpMetricSrPolicy                     types.Bool                                       `tfsdk:"bgp_bestpath_igp_metric_sr_policy"`
+	BgpBestpathMedMissingAsWorst                     types.Bool                                       `tfsdk:"bgp_bestpath_med_missing_as_worst"`
+	BgpBestpathMedAlways                             types.Bool                                       `tfsdk:"bgp_bestpath_med_always"`
+	BgpBestpathAsPathIgnore                          types.Bool                                       `tfsdk:"bgp_bestpath_as_path_ignore"`
+	BgpBestpathAsPathMultipathRelax                  types.Bool                                       `tfsdk:"bgp_bestpath_as_path_multipath_relax"`
+	BgpBestpathOriginAsUseValidity                   types.Bool                                       `tfsdk:"bgp_bestpath_origin_as_use_validity"`
+	BgpBestpathOriginAsAllowInvalid                  types.Bool                                       `tfsdk:"bgp_bestpath_origin_as_allow_invalid"`
+	BgpBestpathSrPolicyPrefer                        types.Bool                                       `tfsdk:"bgp_bestpath_sr_policy_prefer"`
+	BgpBestpathSrPolicyForce                         types.Bool                                       `tfsdk:"bgp_bestpath_sr_policy_force"`
+	BgpClusterId32bitFormat                          types.Int64                                      `tfsdk:"bgp_cluster_id_32bit_format"`
+	BgpClusterIdIpFormat                             types.String                                     `tfsdk:"bgp_cluster_id_ip_format"`
+	BgpDefaultLocalPreference                        types.Int64                                      `tfsdk:"bgp_default_local_preference"`
+	BgpEnforceFirstAsDisable                         types.Bool                                       `tfsdk:"bgp_enforce_first_as_disable"`
+	BgpFastExternalFalloverDisable                   types.Bool                                       `tfsdk:"bgp_fast_external_fallover_disable"`
+	BgpLogNeighborChangesDetail                      types.Bool                                       `tfsdk:"bgp_log_neighbor_changes_detail"`
+	BgpLogNeighborChangesDisable                     types.Bool                                       `tfsdk:"bgp_log_neighbor_changes_disable"`
+	BgpLogMessageDisable                             types.Bool                                       `tfsdk:"bgp_log_message_disable"`
+	BgpLogMemoryThresholdWarning                     types.Int64                                      `tfsdk:"bgp_log_memory_threshold_warning"`
+	BgpLogMemoryThresholdCritical                    types.Int64                                      `tfsdk:"bgp_log_memory_threshold_critical"`
+	BgpLogTotalPaths                                 types.Int64                                      `tfsdk:"bgp_log_total_paths"`
+	BgpLogTotalPathsWarnThreshold                    types.Int64                                      `tfsdk:"bgp_log_total_paths_warn_threshold"`
+	BgpMultipathUseClusterListLength                 types.Bool                                       `tfsdk:"bgp_multipath_use_cluster_list_length"`
+	BgpMultipathAsPathIgnoreOnwards                  types.Bool                                       `tfsdk:"bgp_multipath_as_path_ignore_onwards"`
+	BgpConfederationIdentifier                       types.String                                     `tfsdk:"bgp_confederation_identifier"`
+	BgpConfederationPeers                            []RouterBGPBgpConfederationPeers                 `tfsdk:"bgp_confederation_peers"`
+	BgpGracefulRestartEnable                         types.Bool                                       `tfsdk:"bgp_graceful_restart_enable"`
+	BgpGracefulRestartPurgeTime                      types.Int64                                      `tfsdk:"bgp_graceful_restart_purge_time"`
+	BgpGracefulRestartRestartTime                    types.Int64                                      `tfsdk:"bgp_graceful_restart_restart_time"`
+	BgpGracefulRestartStalepathTime                  types.Int64                                      `tfsdk:"bgp_graceful_restart_stalepath_time"`
+	BgpGracefulRestartGracefulReset                  types.Bool                                       `tfsdk:"bgp_graceful_restart_graceful_reset"`
+	BgpGracefulRestartRetainNbrRoutesDisable         types.Bool                                       `tfsdk:"bgp_graceful_restart_retain_nbr_routes_disable"`
+	BgpInstallDiversion                              types.Bool                                       `tfsdk:"bgp_install_diversion"`
+	BgpUpdateDelay                                   types.Int64                                      `tfsdk:"bgp_update_delay"`
+	BgpUpdateDelayAlways                             types.Bool                                       `tfsdk:"bgp_update_delay_always"`
+	BgpMaximumNeighbor                               types.Int64                                      `tfsdk:"bgp_maximum_neighbor"`
+	BgpOriginAsValidationSignalIbgp                  types.Bool                                       `tfsdk:"bgp_origin_as_validation_signal_ibgp"`
+	BgpOriginAsValidationTimeOff                     types.Bool                                       `tfsdk:"bgp_origin_as_validation_time_off"`
+	BgpOriginAsValidationTime                        types.Int64                                      `tfsdk:"bgp_origin_as_validation_time"`
+	TimersBgpKeepaliveInterval                       types.Int64                                      `tfsdk:"timers_bgp_keepalive_interval"`
+	TimersBgpHolddownZero                            types.Bool                                       `tfsdk:"timers_bgp_holddown_zero"`
+	TimersBgpHolddownZeroMinimumAcceptableZero       types.Bool                                       `tfsdk:"timers_bgp_holddown_zero_minimum_acceptable_zero"`
+	TimersBgpHolddownZeroMinimumAcceptableHoldtime   types.Int64                                      `tfsdk:"timers_bgp_holddown_zero_minimum_acceptable_holdtime"`
+	TimersBgpHoldtime                                types.Int64                                      `tfsdk:"timers_bgp_holdtime"`
+	TimersBgpHoldtimeMinimumAcceptableHoldtime       types.Int64                                      `tfsdk:"timers_bgp_holdtime_minimum_acceptable_holdtime"`
+	Nsr                                              types.Bool                                       `tfsdk:"nsr"`
+	NsrDisable                                       types.Bool                                       `tfsdk:"nsr_disable"`
+	IbgpPolicyOutEnforceModifications                types.Bool                                       `tfsdk:"ibgp_policy_out_enforce_modifications"`
+	OpenconfigRibTelemetry                           types.Bool                                       `tfsdk:"openconfig_rib_telemetry"`
+	UpdateLimit                                      types.Int64                                      `tfsdk:"update_limit"`
+	UpdateInErrorHandlingBasicEbgpDisable            types.Bool                                       `tfsdk:"update_in_error_handling_basic_ebgp_disable"`
+	UpdateInErrorHandlingBasicIbgpDisable            types.Bool                                       `tfsdk:"update_in_error_handling_basic_ibgp_disable"`
+	UpdateInErrorHandlingExtendedEbgp                types.Bool                                       `tfsdk:"update_in_error_handling_extended_ebgp"`
+	UpdateInErrorHandlingExtendedIbgp                types.Bool                                       `tfsdk:"update_in_error_handling_extended_ibgp"`
+	UpdateOutLogging                                 types.Bool                                       `tfsdk:"update_out_logging"`
+	BfdMultiplier                                    types.Int64                                      `tfsdk:"bfd_multiplier"`
+	BfdMinimumInterval                               types.Int64                                      `tfsdk:"bfd_minimum_interval"`
+	RpkiRoutes                                       []RouterBGPRpkiRoutes                            `tfsdk:"rpki_routes"`
+	RpkiServers                                      []RouterBGPRpkiServers                           `tfsdk:"rpki_servers"`
 }
 
 type RouterBGPData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	AsNumber types.String `tfsdk:"as_number"`
-	DefaultMetric types.Int64 `tfsdk:"default_metric"`
-	Mvpn types.Bool `tfsdk:"mvpn"`
-	SegmentRoutingSrv6Locator types.String `tfsdk:"segment_routing_srv6_locator"`
-	SegmentRoutingSrv6UsidAllocationWideLocalIdBlock types.Bool `tfsdk:"segment_routing_srv6_usid_allocation_wide_local_id_block"`
-	Neighbors []RouterBGPNeighbors `tfsdk:"neighbors"`
-	GracefulMaintenanceActivateAllNeighbors types.Bool `tfsdk:"graceful_maintenance_activate_all_neighbors"`
-	GracefulMaintenanceActivateRetainRoutes types.Bool `tfsdk:"graceful_maintenance_activate_retain_routes"`
-	GracefulMaintenanceActivateInterfaces []RouterBGPGracefulMaintenanceActivateInterfaces `tfsdk:"graceful_maintenance_activate_interfaces"`
-	GracefulMaintenanceActivateLocations []RouterBGPGracefulMaintenanceActivateLocations `tfsdk:"graceful_maintenance_activate_locations"`
-	MplsActivateInterfaces []RouterBGPMplsActivateInterfaces `tfsdk:"mpls_activate_interfaces"`
-	AsLeaguePeers []RouterBGPAsLeaguePeers `tfsdk:"as_league_peers"`
-	AttributeFilterGroups []RouterBGPAttributeFilterGroups `tfsdk:"attribute_filter_groups"`
-	AsLists []RouterBGPAsLists `tfsdk:"as_lists"`
-	DefaultInformationOriginate types.Bool `tfsdk:"default_information_originate"`
-	SocketReceiveBufferSize types.Int64 `tfsdk:"socket_receive_buffer_size"`
-	SocketReceiveBufferSizeRead types.Int64 `tfsdk:"socket_receive_buffer_size_read"`
-	SocketSendBufferSize types.Int64 `tfsdk:"socket_send_buffer_size"`
-	SocketSendBufferSizeWrite types.Int64 `tfsdk:"socket_send_buffer_size_write"`
-	NexthopMplsForwardingIbgp types.Bool `tfsdk:"nexthop_mpls_forwarding_ibgp"`
-	NexthopValidationColorExtcommSrPolicy types.Bool `tfsdk:"nexthop_validation_color_extcomm_sr_policy"`
-	NexthopValidationColorExtcommDisable types.Bool `tfsdk:"nexthop_validation_color_extcomm_disable"`
-	NexthopResolutionAllowDefault types.Bool `tfsdk:"nexthop_resolution_allow_default"`
-	NexthopSrteMetricDisable types.Bool `tfsdk:"nexthop_srte_metric_disable"`
-	SlowPeerDynamic types.Bool `tfsdk:"slow_peer_dynamic"`
-	SlowPeerDynamicThreshold types.Int64 `tfsdk:"slow_peer_dynamic_threshold"`
-	SlowPeerDetectionDisable types.Bool `tfsdk:"slow_peer_detection_disable"`
-	BgpRedistributeInternal types.Bool `tfsdk:"bgp_redistribute_internal"`
-	BgpRouterId types.String `tfsdk:"bgp_router_id"`
-	BgpUnsafeEbgpPolicy types.Bool `tfsdk:"bgp_unsafe_ebgp_policy"`
-	BgpScanTime types.Int64 `tfsdk:"bgp_scan_time"`
-	BgpReadOnly types.Bool `tfsdk:"bgp_read_only"`
-	BgpLptsSecureBinding types.Bool `tfsdk:"bgp_lpts_secure_binding"`
-	BgpAsPathLoopcheck types.Bool `tfsdk:"bgp_as_path_loopcheck"`
-	BgpAutoPolicySoftResetDisable types.Bool `tfsdk:"bgp_auto_policy_soft_reset_disable"`
-	BgpBestpathCostCommunityIgnore types.Bool `tfsdk:"bgp_bestpath_cost_community_ignore"`
-	BgpBestpathCompareRouterid types.Bool `tfsdk:"bgp_bestpath_compare_routerid"`
-	BgpBestpathAigpIgnore types.Bool `tfsdk:"bgp_bestpath_aigp_ignore"`
-	BgpBestpathIgpMetricIgnore types.Bool `tfsdk:"bgp_bestpath_igp_metric_ignore"`
-	BgpBestpathIgpMetricSrPolicy types.Bool `tfsdk:"bgp_bestpath_igp_metric_sr_policy"`
-	BgpBestpathMedMissingAsWorst types.Bool `tfsdk:"bgp_bestpath_med_missing_as_worst"`
-	BgpBestpathMedAlways types.Bool `tfsdk:"bgp_bestpath_med_always"`
-	BgpBestpathAsPathIgnore types.Bool `tfsdk:"bgp_bestpath_as_path_ignore"`
-	BgpBestpathAsPathMultipathRelax types.Bool `tfsdk:"bgp_bestpath_as_path_multipath_relax"`
-	BgpBestpathOriginAsUseValidity types.Bool `tfsdk:"bgp_bestpath_origin_as_use_validity"`
-	BgpBestpathOriginAsAllowInvalid types.Bool `tfsdk:"bgp_bestpath_origin_as_allow_invalid"`
-	BgpBestpathSrPolicyPrefer types.Bool `tfsdk:"bgp_bestpath_sr_policy_prefer"`
-	BgpBestpathSrPolicyForce types.Bool `tfsdk:"bgp_bestpath_sr_policy_force"`
-	BgpClusterId32bitFormat types.Int64 `tfsdk:"bgp_cluster_id_32bit_format"`
-	BgpClusterIdIpFormat types.String `tfsdk:"bgp_cluster_id_ip_format"`
-	BgpDefaultLocalPreference types.Int64 `tfsdk:"bgp_default_local_preference"`
-	BgpEnforceFirstAsDisable types.Bool `tfsdk:"bgp_enforce_first_as_disable"`
-	BgpFastExternalFalloverDisable types.Bool `tfsdk:"bgp_fast_external_fallover_disable"`
-	BgpLogNeighborChangesDetail types.Bool `tfsdk:"bgp_log_neighbor_changes_detail"`
-	BgpLogNeighborChangesDisable types.Bool `tfsdk:"bgp_log_neighbor_changes_disable"`
-	BgpLogMessageDisable types.Bool `tfsdk:"bgp_log_message_disable"`
-	BgpLogMemoryThresholdWarning types.Int64 `tfsdk:"bgp_log_memory_threshold_warning"`
-	BgpLogMemoryThresholdCritical types.Int64 `tfsdk:"bgp_log_memory_threshold_critical"`
-	BgpLogTotalPaths types.Int64 `tfsdk:"bgp_log_total_paths"`
-	BgpLogTotalPathsWarnThreshold types.Int64 `tfsdk:"bgp_log_total_paths_warn_threshold"`
-	BgpMultipathUseClusterListLength types.Bool `tfsdk:"bgp_multipath_use_cluster_list_length"`
-	BgpMultipathAsPathIgnoreOnwards types.Bool `tfsdk:"bgp_multipath_as_path_ignore_onwards"`
-	BgpConfederationIdentifier types.String `tfsdk:"bgp_confederation_identifier"`
-	BgpConfederationPeers []RouterBGPBgpConfederationPeers `tfsdk:"bgp_confederation_peers"`
-	BgpGracefulRestartEnable types.Bool `tfsdk:"bgp_graceful_restart_enable"`
-	BgpGracefulRestartPurgeTime types.Int64 `tfsdk:"bgp_graceful_restart_purge_time"`
-	BgpGracefulRestartRestartTime types.Int64 `tfsdk:"bgp_graceful_restart_restart_time"`
-	BgpGracefulRestartStalepathTime types.Int64 `tfsdk:"bgp_graceful_restart_stalepath_time"`
-	BgpGracefulRestartGracefulReset types.Bool `tfsdk:"bgp_graceful_restart_graceful_reset"`
-	BgpGracefulRestartRetainNbrRoutesDisable types.Bool `tfsdk:"bgp_graceful_restart_retain_nbr_routes_disable"`
-	BgpInstallDiversion types.Bool `tfsdk:"bgp_install_diversion"`
-	BgpUpdateDelay types.Int64 `tfsdk:"bgp_update_delay"`
-	BgpUpdateDelayAlways types.Bool `tfsdk:"bgp_update_delay_always"`
-	BgpMaximumNeighbor types.Int64 `tfsdk:"bgp_maximum_neighbor"`
-	BgpOriginAsValidationSignalIbgp types.Bool `tfsdk:"bgp_origin_as_validation_signal_ibgp"`
-	BgpOriginAsValidationTimeOff types.Bool `tfsdk:"bgp_origin_as_validation_time_off"`
-	BgpOriginAsValidationTime types.Int64 `tfsdk:"bgp_origin_as_validation_time"`
-	TimersBgpKeepaliveInterval types.Int64 `tfsdk:"timers_bgp_keepalive_interval"`
-	TimersBgpHolddownZero types.Bool `tfsdk:"timers_bgp_holddown_zero"`
-	TimersBgpHolddownZeroMinimumAcceptableZero types.Bool `tfsdk:"timers_bgp_holddown_zero_minimum_acceptable_zero"`
-	TimersBgpHolddownZeroMinimumAcceptableHoldtime types.Int64 `tfsdk:"timers_bgp_holddown_zero_minimum_acceptable_holdtime"`
-	TimersBgpHoldtime types.Int64 `tfsdk:"timers_bgp_holdtime"`
-	TimersBgpHoldtimeMinimumAcceptableHoldtime types.Int64 `tfsdk:"timers_bgp_holdtime_minimum_acceptable_holdtime"`
-	Nsr types.Bool `tfsdk:"nsr"`
-	NsrDisable types.Bool `tfsdk:"nsr_disable"`
-	IbgpPolicyOutEnforceModifications types.Bool `tfsdk:"ibgp_policy_out_enforce_modifications"`
-	OpenconfigRibTelemetry types.Bool `tfsdk:"openconfig_rib_telemetry"`
-	UpdateLimit types.Int64 `tfsdk:"update_limit"`
-	UpdateInErrorHandlingBasicEbgpDisable types.Bool `tfsdk:"update_in_error_handling_basic_ebgp_disable"`
-	UpdateInErrorHandlingBasicIbgpDisable types.Bool `tfsdk:"update_in_error_handling_basic_ibgp_disable"`
-	UpdateInErrorHandlingExtendedEbgp types.Bool `tfsdk:"update_in_error_handling_extended_ebgp"`
-	UpdateInErrorHandlingExtendedIbgp types.Bool `tfsdk:"update_in_error_handling_extended_ibgp"`
-	UpdateOutLogging types.Bool `tfsdk:"update_out_logging"`
-	BfdMultiplier types.Int64 `tfsdk:"bfd_multiplier"`
-	BfdMinimumInterval types.Int64 `tfsdk:"bfd_minimum_interval"`
-	RpkiRoutes []RouterBGPRpkiRoutes `tfsdk:"rpki_routes"`
-	RpkiServers []RouterBGPRpkiServers `tfsdk:"rpki_servers"`
+	Device                                           types.String                                     `tfsdk:"device"`
+	Id                                               types.String                                     `tfsdk:"id"`
+	AsNumber                                         types.String                                     `tfsdk:"as_number"`
+	DefaultMetric                                    types.Int64                                      `tfsdk:"default_metric"`
+	Mvpn                                             types.Bool                                       `tfsdk:"mvpn"`
+	SegmentRoutingSrv6Locator                        types.String                                     `tfsdk:"segment_routing_srv6_locator"`
+	SegmentRoutingSrv6UsidAllocationWideLocalIdBlock types.Bool                                       `tfsdk:"segment_routing_srv6_usid_allocation_wide_local_id_block"`
+	Neighbors                                        []RouterBGPNeighbors                             `tfsdk:"neighbors"`
+	GracefulMaintenanceActivateAllNeighbors          types.Bool                                       `tfsdk:"graceful_maintenance_activate_all_neighbors"`
+	GracefulMaintenanceActivateRetainRoutes          types.Bool                                       `tfsdk:"graceful_maintenance_activate_retain_routes"`
+	GracefulMaintenanceActivateInterfaces            []RouterBGPGracefulMaintenanceActivateInterfaces `tfsdk:"graceful_maintenance_activate_interfaces"`
+	GracefulMaintenanceActivateLocations             []RouterBGPGracefulMaintenanceActivateLocations  `tfsdk:"graceful_maintenance_activate_locations"`
+	MplsActivateInterfaces                           []RouterBGPMplsActivateInterfaces                `tfsdk:"mpls_activate_interfaces"`
+	AsLeaguePeers                                    []RouterBGPAsLeaguePeers                         `tfsdk:"as_league_peers"`
+	AttributeFilterGroups                            []RouterBGPAttributeFilterGroups                 `tfsdk:"attribute_filter_groups"`
+	AsLists                                          []RouterBGPAsLists                               `tfsdk:"as_lists"`
+	DefaultInformationOriginate                      types.Bool                                       `tfsdk:"default_information_originate"`
+	SocketReceiveBufferSize                          types.Int64                                      `tfsdk:"socket_receive_buffer_size"`
+	SocketReceiveBufferSizeRead                      types.Int64                                      `tfsdk:"socket_receive_buffer_size_read"`
+	SocketSendBufferSize                             types.Int64                                      `tfsdk:"socket_send_buffer_size"`
+	SocketSendBufferSizeWrite                        types.Int64                                      `tfsdk:"socket_send_buffer_size_write"`
+	NexthopMplsForwardingIbgp                        types.Bool                                       `tfsdk:"nexthop_mpls_forwarding_ibgp"`
+	NexthopValidationColorExtcommSrPolicy            types.Bool                                       `tfsdk:"nexthop_validation_color_extcomm_sr_policy"`
+	NexthopValidationColorExtcommDisable             types.Bool                                       `tfsdk:"nexthop_validation_color_extcomm_disable"`
+	NexthopResolutionAllowDefault                    types.Bool                                       `tfsdk:"nexthop_resolution_allow_default"`
+	NexthopSrteMetricDisable                         types.Bool                                       `tfsdk:"nexthop_srte_metric_disable"`
+	SlowPeerDynamic                                  types.Bool                                       `tfsdk:"slow_peer_dynamic"`
+	SlowPeerDynamicThreshold                         types.Int64                                      `tfsdk:"slow_peer_dynamic_threshold"`
+	SlowPeerDetectionDisable                         types.Bool                                       `tfsdk:"slow_peer_detection_disable"`
+	BgpRedistributeInternal                          types.Bool                                       `tfsdk:"bgp_redistribute_internal"`
+	BgpRouterId                                      types.String                                     `tfsdk:"bgp_router_id"`
+	BgpUnsafeEbgpPolicy                              types.Bool                                       `tfsdk:"bgp_unsafe_ebgp_policy"`
+	BgpScanTime                                      types.Int64                                      `tfsdk:"bgp_scan_time"`
+	BgpReadOnly                                      types.Bool                                       `tfsdk:"bgp_read_only"`
+	BgpLptsSecureBinding                             types.Bool                                       `tfsdk:"bgp_lpts_secure_binding"`
+	BgpAsPathLoopcheck                               types.Bool                                       `tfsdk:"bgp_as_path_loopcheck"`
+	BgpAutoPolicySoftResetDisable                    types.Bool                                       `tfsdk:"bgp_auto_policy_soft_reset_disable"`
+	BgpBestpathCostCommunityIgnore                   types.Bool                                       `tfsdk:"bgp_bestpath_cost_community_ignore"`
+	BgpBestpathCompareRouterid                       types.Bool                                       `tfsdk:"bgp_bestpath_compare_routerid"`
+	BgpBestpathAigpIgnore                            types.Bool                                       `tfsdk:"bgp_bestpath_aigp_ignore"`
+	BgpBestpathIgpMetricIgnore                       types.Bool                                       `tfsdk:"bgp_bestpath_igp_metric_ignore"`
+	BgpBestpathIgpMetricSrPolicy                     types.Bool                                       `tfsdk:"bgp_bestpath_igp_metric_sr_policy"`
+	BgpBestpathMedMissingAsWorst                     types.Bool                                       `tfsdk:"bgp_bestpath_med_missing_as_worst"`
+	BgpBestpathMedAlways                             types.Bool                                       `tfsdk:"bgp_bestpath_med_always"`
+	BgpBestpathAsPathIgnore                          types.Bool                                       `tfsdk:"bgp_bestpath_as_path_ignore"`
+	BgpBestpathAsPathMultipathRelax                  types.Bool                                       `tfsdk:"bgp_bestpath_as_path_multipath_relax"`
+	BgpBestpathOriginAsUseValidity                   types.Bool                                       `tfsdk:"bgp_bestpath_origin_as_use_validity"`
+	BgpBestpathOriginAsAllowInvalid                  types.Bool                                       `tfsdk:"bgp_bestpath_origin_as_allow_invalid"`
+	BgpBestpathSrPolicyPrefer                        types.Bool                                       `tfsdk:"bgp_bestpath_sr_policy_prefer"`
+	BgpBestpathSrPolicyForce                         types.Bool                                       `tfsdk:"bgp_bestpath_sr_policy_force"`
+	BgpClusterId32bitFormat                          types.Int64                                      `tfsdk:"bgp_cluster_id_32bit_format"`
+	BgpClusterIdIpFormat                             types.String                                     `tfsdk:"bgp_cluster_id_ip_format"`
+	BgpDefaultLocalPreference                        types.Int64                                      `tfsdk:"bgp_default_local_preference"`
+	BgpEnforceFirstAsDisable                         types.Bool                                       `tfsdk:"bgp_enforce_first_as_disable"`
+	BgpFastExternalFalloverDisable                   types.Bool                                       `tfsdk:"bgp_fast_external_fallover_disable"`
+	BgpLogNeighborChangesDetail                      types.Bool                                       `tfsdk:"bgp_log_neighbor_changes_detail"`
+	BgpLogNeighborChangesDisable                     types.Bool                                       `tfsdk:"bgp_log_neighbor_changes_disable"`
+	BgpLogMessageDisable                             types.Bool                                       `tfsdk:"bgp_log_message_disable"`
+	BgpLogMemoryThresholdWarning                     types.Int64                                      `tfsdk:"bgp_log_memory_threshold_warning"`
+	BgpLogMemoryThresholdCritical                    types.Int64                                      `tfsdk:"bgp_log_memory_threshold_critical"`
+	BgpLogTotalPaths                                 types.Int64                                      `tfsdk:"bgp_log_total_paths"`
+	BgpLogTotalPathsWarnThreshold                    types.Int64                                      `tfsdk:"bgp_log_total_paths_warn_threshold"`
+	BgpMultipathUseClusterListLength                 types.Bool                                       `tfsdk:"bgp_multipath_use_cluster_list_length"`
+	BgpMultipathAsPathIgnoreOnwards                  types.Bool                                       `tfsdk:"bgp_multipath_as_path_ignore_onwards"`
+	BgpConfederationIdentifier                       types.String                                     `tfsdk:"bgp_confederation_identifier"`
+	BgpConfederationPeers                            []RouterBGPBgpConfederationPeers                 `tfsdk:"bgp_confederation_peers"`
+	BgpGracefulRestartEnable                         types.Bool                                       `tfsdk:"bgp_graceful_restart_enable"`
+	BgpGracefulRestartPurgeTime                      types.Int64                                      `tfsdk:"bgp_graceful_restart_purge_time"`
+	BgpGracefulRestartRestartTime                    types.Int64                                      `tfsdk:"bgp_graceful_restart_restart_time"`
+	BgpGracefulRestartStalepathTime                  types.Int64                                      `tfsdk:"bgp_graceful_restart_stalepath_time"`
+	BgpGracefulRestartGracefulReset                  types.Bool                                       `tfsdk:"bgp_graceful_restart_graceful_reset"`
+	BgpGracefulRestartRetainNbrRoutesDisable         types.Bool                                       `tfsdk:"bgp_graceful_restart_retain_nbr_routes_disable"`
+	BgpInstallDiversion                              types.Bool                                       `tfsdk:"bgp_install_diversion"`
+	BgpUpdateDelay                                   types.Int64                                      `tfsdk:"bgp_update_delay"`
+	BgpUpdateDelayAlways                             types.Bool                                       `tfsdk:"bgp_update_delay_always"`
+	BgpMaximumNeighbor                               types.Int64                                      `tfsdk:"bgp_maximum_neighbor"`
+	BgpOriginAsValidationSignalIbgp                  types.Bool                                       `tfsdk:"bgp_origin_as_validation_signal_ibgp"`
+	BgpOriginAsValidationTimeOff                     types.Bool                                       `tfsdk:"bgp_origin_as_validation_time_off"`
+	BgpOriginAsValidationTime                        types.Int64                                      `tfsdk:"bgp_origin_as_validation_time"`
+	TimersBgpKeepaliveInterval                       types.Int64                                      `tfsdk:"timers_bgp_keepalive_interval"`
+	TimersBgpHolddownZero                            types.Bool                                       `tfsdk:"timers_bgp_holddown_zero"`
+	TimersBgpHolddownZeroMinimumAcceptableZero       types.Bool                                       `tfsdk:"timers_bgp_holddown_zero_minimum_acceptable_zero"`
+	TimersBgpHolddownZeroMinimumAcceptableHoldtime   types.Int64                                      `tfsdk:"timers_bgp_holddown_zero_minimum_acceptable_holdtime"`
+	TimersBgpHoldtime                                types.Int64                                      `tfsdk:"timers_bgp_holdtime"`
+	TimersBgpHoldtimeMinimumAcceptableHoldtime       types.Int64                                      `tfsdk:"timers_bgp_holdtime_minimum_acceptable_holdtime"`
+	Nsr                                              types.Bool                                       `tfsdk:"nsr"`
+	NsrDisable                                       types.Bool                                       `tfsdk:"nsr_disable"`
+	IbgpPolicyOutEnforceModifications                types.Bool                                       `tfsdk:"ibgp_policy_out_enforce_modifications"`
+	OpenconfigRibTelemetry                           types.Bool                                       `tfsdk:"openconfig_rib_telemetry"`
+	UpdateLimit                                      types.Int64                                      `tfsdk:"update_limit"`
+	UpdateInErrorHandlingBasicEbgpDisable            types.Bool                                       `tfsdk:"update_in_error_handling_basic_ebgp_disable"`
+	UpdateInErrorHandlingBasicIbgpDisable            types.Bool                                       `tfsdk:"update_in_error_handling_basic_ibgp_disable"`
+	UpdateInErrorHandlingExtendedEbgp                types.Bool                                       `tfsdk:"update_in_error_handling_extended_ebgp"`
+	UpdateInErrorHandlingExtendedIbgp                types.Bool                                       `tfsdk:"update_in_error_handling_extended_ibgp"`
+	UpdateOutLogging                                 types.Bool                                       `tfsdk:"update_out_logging"`
+	BfdMultiplier                                    types.Int64                                      `tfsdk:"bfd_multiplier"`
+	BfdMinimumInterval                               types.Int64                                      `tfsdk:"bfd_minimum_interval"`
+	RpkiRoutes                                       []RouterBGPRpkiRoutes                            `tfsdk:"rpki_routes"`
+	RpkiServers                                      []RouterBGPRpkiServers                           `tfsdk:"rpki_servers"`
 }
 type RouterBGPNeighbors struct {
-	Address types.String `tfsdk:"address"`
-	RemoteAs types.String `tfsdk:"remote_as"`
-	MaximumPeers types.Int64 `tfsdk:"maximum_peers"`
-	RemoteAsList types.String `tfsdk:"remote_as_list"`
-	AsPathLoopcheckOut types.String `tfsdk:"as_path_loopcheck_out"`
-	UseNeighborGroup types.String `tfsdk:"use_neighbor_group"`
-	UseSessionGroup types.String `tfsdk:"use_session_group"`
-	AdvertisementIntervalSeconds types.Int64 `tfsdk:"advertisement_interval_seconds"`
-	AdvertisementIntervalMilliseconds types.Int64 `tfsdk:"advertisement_interval_milliseconds"`
-	Description types.String `tfsdk:"description"`
-	IgnoreConnectedCheck types.Bool `tfsdk:"ignore_connected_check"`
-	IgnoreConnectedCheckInheritanceDisable types.Bool `tfsdk:"ignore_connected_check_inheritance_disable"`
-	EbgpMultihopMaximumHopCount types.Int64 `tfsdk:"ebgp_multihop_maximum_hop_count"`
-	EbgpMultihopMpls types.Bool `tfsdk:"ebgp_multihop_mpls"`
-	TcpMssValue types.Int64 `tfsdk:"tcp_mss_value"`
-	TcpMssInheritanceDisable types.Bool `tfsdk:"tcp_mss_inheritance_disable"`
-	TcpMtuDiscovery types.Bool `tfsdk:"tcp_mtu_discovery"`
-	TcpMtuDiscoveryInheritanceDisable types.Bool `tfsdk:"tcp_mtu_discovery_inheritance_disable"`
-	TcpIpOnlyPreferred types.Bool `tfsdk:"tcp_ip_only_preferred"`
-	TcpIpOnlyPreferredInheritanceDisable types.Bool `tfsdk:"tcp_ip_only_preferred_inheritance_disable"`
-	BmpActivateServers []RouterBGPNeighborsBmpActivateServers `tfsdk:"bmp_activate_servers"`
-	BfdMinimumInterval types.Int64 `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier types.Int64 `tfsdk:"bfd_multiplier"`
-	BfdFastDetect types.Bool `tfsdk:"bfd_fast_detect"`
-	BfdFastDetectStrictMode types.Bool `tfsdk:"bfd_fast_detect_strict_mode"`
-	BfdFastDetectDisable types.Bool `tfsdk:"bfd_fast_detect_disable"`
-	BfdFastDetectStrictModeNegotiate types.Bool `tfsdk:"bfd_fast_detect_strict_mode_negotiate"`
-	BfdFastDetectStrictModeNegotiateOverride types.Bool `tfsdk:"bfd_fast_detect_strict_mode_negotiate_override"`
-	KeychainName types.String `tfsdk:"keychain_name"`
-	KeychainInheritanceDisable types.Bool `tfsdk:"keychain_inheritance_disable"`
-	LocalAsInheritanceDisable types.Bool `tfsdk:"local_as_inheritance_disable"`
-	LocalAs types.String `tfsdk:"local_as"`
-	LocalAsNoPrepend types.Bool `tfsdk:"local_as_no_prepend"`
-	LocalAsNoPrependReplaceAs types.Bool `tfsdk:"local_as_no_prepend_replace_as"`
-	LocalAsNoPrependReplaceAsDualAs types.Bool `tfsdk:"local_as_no_prepend_replace_as_dual_as"`
-	Password types.String `tfsdk:"password"`
-	PasswordInheritanceDisable types.Bool `tfsdk:"password_inheritance_disable"`
-	ReceiveBufferSize types.Int64 `tfsdk:"receive_buffer_size"`
-	ReceiveBufferSizeRead types.Int64 `tfsdk:"receive_buffer_size_read"`
-	SendBufferSize types.Int64 `tfsdk:"send_buffer_size"`
-	SendBufferSizeWrite types.Int64 `tfsdk:"send_buffer_size_write"`
-	FastFallover types.Bool `tfsdk:"fast_fallover"`
-	FastFalloverInheritanceDisable types.Bool `tfsdk:"fast_fallover_inheritance_disable"`
-	Shutdown types.Bool `tfsdk:"shutdown"`
-	TimersKeepaliveInterval types.Int64 `tfsdk:"timers_keepalive_interval"`
-	TimersHolddownZero types.Bool `tfsdk:"timers_holddown_zero"`
-	TimersHolddownZeroMinimumAcceptableZero types.Bool `tfsdk:"timers_holddown_zero_minimum_acceptable_zero"`
-	TimersHolddownZeroMinimumAcceptableHoldtime types.Int64 `tfsdk:"timers_holddown_zero_minimum_acceptable_holdtime"`
-	TimersHoldtime types.Int64 `tfsdk:"timers_holdtime"`
-	TimersHoldtimeMinimumAcceptableHoldtime types.Int64 `tfsdk:"timers_holdtime_minimum_acceptable_holdtime"`
-	LocalAddress types.String `tfsdk:"local_address"`
-	LocalAddressInheritanceDisable types.Bool `tfsdk:"local_address_inheritance_disable"`
-	LogNeighborChangesDetail types.Bool `tfsdk:"log_neighbor_changes_detail"`
-	LogNeighborChangesDisable types.Bool `tfsdk:"log_neighbor_changes_disable"`
-	LogNeighborChangesInheritanceDisable types.Bool `tfsdk:"log_neighbor_changes_inheritance_disable"`
-	LogMessageInSize types.Int64 `tfsdk:"log_message_in_size"`
-	LogMessageInDisable types.Bool `tfsdk:"log_message_in_disable"`
-	LogMessageInInheritanceDisable types.Bool `tfsdk:"log_message_in_inheritance_disable"`
-	LogMessageOutSize types.Int64 `tfsdk:"log_message_out_size"`
-	LogMessageOutDisable types.Bool `tfsdk:"log_message_out_disable"`
-	LogMessageOutInheritanceDisable types.Bool `tfsdk:"log_message_out_inheritance_disable"`
-	UpdateSource types.String `tfsdk:"update_source"`
-	LocalAddressSubnetPrefix types.String `tfsdk:"local_address_subnet_prefix"`
-	LocalAddressSubnetMask types.Int64 `tfsdk:"local_address_subnet_mask"`
-	DmzLinkBandwidth types.Bool `tfsdk:"dmz_link_bandwidth"`
-	DmzLinkBandwidthInheritanceDisable types.Bool `tfsdk:"dmz_link_bandwidth_inheritance_disable"`
-	EbgpRecvExtcommunityDmz types.Bool `tfsdk:"ebgp_recv_extcommunity_dmz"`
-	EbgpRecvExtcommunityDmzInheritanceDisable types.Bool `tfsdk:"ebgp_recv_extcommunity_dmz_inheritance_disable"`
-	EbgpSendExtcommunityDmz types.Bool `tfsdk:"ebgp_send_extcommunity_dmz"`
-	EbgpSendExtcommunityDmzCumulative types.Bool `tfsdk:"ebgp_send_extcommunity_dmz_cumulative"`
-	EbgpSendExtcommunityDmzInheritanceDisable types.Bool `tfsdk:"ebgp_send_extcommunity_dmz_inheritance_disable"`
-	TtlSecurity types.Bool `tfsdk:"ttl_security"`
-	TtlSecurityInheritanceDisable types.Bool `tfsdk:"ttl_security_inheritance_disable"`
-	SessionOpenMode types.String `tfsdk:"session_open_mode"`
-	Dscp types.String `tfsdk:"dscp"`
-	Precedence types.String `tfsdk:"precedence"`
-	CapabilityAdditionalPathsSend types.Bool `tfsdk:"capability_additional_paths_send"`
-	CapabilityAdditionalPathsSendDisable types.Bool `tfsdk:"capability_additional_paths_send_disable"`
-	CapabilityAdditionalPathsReceive types.Bool `tfsdk:"capability_additional_paths_receive"`
-	CapabilityAdditionalPathsReceiveDisable types.Bool `tfsdk:"capability_additional_paths_receive_disable"`
-	CapabilitySuppressAll types.Bool `tfsdk:"capability_suppress_all"`
-	CapabilitySuppressAllInheritanceDisable types.Bool `tfsdk:"capability_suppress_all_inheritance_disable"`
-	CapabilitySuppressExtendedNexthopEncoding types.Bool `tfsdk:"capability_suppress_extended_nexthop_encoding"`
-	CapabilitySuppressExtendedNexthopEncodingInheritanceDisable types.Bool `tfsdk:"capability_suppress_extended_nexthop_encoding_inheritance_disable"`
-	CapabilitySuppressFourByteAs types.Bool `tfsdk:"capability_suppress_four_byte_as"`
-	CapabilitySuppressFourByteAsInheritanceDisable types.Bool `tfsdk:"capability_suppress_four_byte_as_inheritance_disable"`
-	GracefulRestart types.Bool `tfsdk:"graceful_restart"`
-	GracefulRestartDisable types.Bool `tfsdk:"graceful_restart_disable"`
-	GracefulRestartHelperOnly types.Bool `tfsdk:"graceful_restart_helper_only"`
-	GracefulRestartHelperOnlyInheritanceDisable types.Bool `tfsdk:"graceful_restart_helper_only_inheritance_disable"`
-	GracefulRestartRestartTime types.Int64 `tfsdk:"graceful_restart_restart_time"`
-	GracefulRestartStalepathTime types.Int64 `tfsdk:"graceful_restart_stalepath_time"`
-	EnforceFirstAs types.String `tfsdk:"enforce_first_as"`
-	ClusterId32bitFormat types.Int64 `tfsdk:"cluster_id_32bit_format"`
-	ClusterIdIpFormat types.String `tfsdk:"cluster_id_ip_format"`
-	IdleWatchTime types.Int64 `tfsdk:"idle_watch_time"`
-	AllowasIn types.Int64 `tfsdk:"allowas_in"`
-	EgressEngineering types.Bool `tfsdk:"egress_engineering"`
-	EgressEngineeringInheritanceDisable types.Bool `tfsdk:"egress_engineering_inheritance_disable"`
-	PeerSets []RouterBGPNeighborsPeerSets `tfsdk:"peer_sets"`
-	PeerNodeSidIndex types.Int64 `tfsdk:"peer_node_sid_index"`
-	AoKeyChainName types.String `tfsdk:"ao_key_chain_name"`
-	AoKeyChainIncludeTcpOptions types.String `tfsdk:"ao_key_chain_include_tcp_options"`
-	AoKeyChainAcceptMismatch types.Bool `tfsdk:"ao_key_chain_accept_mismatch"`
-	AoInheritanceDisable types.Bool `tfsdk:"ao_inheritance_disable"`
-	Dampening types.String `tfsdk:"dampening"`
-	AsOverride types.String `tfsdk:"as_override"`
-	DefaultPolicyActionIn types.String `tfsdk:"default_policy_action_in"`
-	DefaultPolicyActionOut types.String `tfsdk:"default_policy_action_out"`
-	OriginAsValidationDisable types.Bool `tfsdk:"origin_as_validation_disable"`
-	SendExtendedCommunityEbgp types.Bool `tfsdk:"send_extended_community_ebgp"`
-	SendExtendedCommunityEbgpInheritanceDisable types.Bool `tfsdk:"send_extended_community_ebgp_inheritance_disable"`
-	BestpathOriginAsAllowInvalid types.Bool `tfsdk:"bestpath_origin_as_allow_invalid"`
-	UpdateInFilteringMessageBuffers types.Int64 `tfsdk:"update_in_filtering_message_buffers"`
-	UpdateInFilteringMessageBuffersType types.String `tfsdk:"update_in_filtering_message_buffers_type"`
-	UpdateInFilteringLoggingDisable types.Bool `tfsdk:"update_in_filtering_logging_disable"`
-	UpdateInFilteringAttributeFilterGroup types.String `tfsdk:"update_in_filtering_attribute_filter_group"`
-	UpdateInLabeledUnicastEquivalent types.Bool `tfsdk:"update_in_labeled_unicast_equivalent"`
-	UpdateInLabeledUnicastEquivalentInheritanceDisable types.Bool `tfsdk:"update_in_labeled_unicast_equivalent_inheritance_disable"`
-	UpdateInErrorHandlingAvoidReset types.String `tfsdk:"update_in_error_handling_avoid_reset"`
-	UpdateInErrorHandlingTreatAsWithdraw types.String `tfsdk:"update_in_error_handling_treat_as_withdraw"`
-	GracefulMaintenanceActivate types.Bool `tfsdk:"graceful_maintenance_activate"`
-	GracefulMaintenanceActivateInheritanceDisable types.Bool `tfsdk:"graceful_maintenance_activate_inheritance_disable"`
-	GracefulMaintenanceLocalPreference types.Int64 `tfsdk:"graceful_maintenance_local_preference"`
-	GracefulMaintenanceLocalPreferenceInheritanceDisable types.Bool `tfsdk:"graceful_maintenance_local_preference_inheritance_disable"`
-	GracefulMaintenanceAsPrependsNumber types.Int64 `tfsdk:"graceful_maintenance_as_prepends_number"`
-	GracefulMaintenanceAsPrependsInheritanceDisable types.Bool `tfsdk:"graceful_maintenance_as_prepends_inheritance_disable"`
-	GracefulMaintenanceBandwidthAwarePercentageThreshold types.Int64 `tfsdk:"graceful_maintenance_bandwidth_aware_percentage_threshold"`
-	GracefulMaintenanceBandwidthAwarePercentageThresholdHigh types.Int64 `tfsdk:"graceful_maintenance_bandwidth_aware_percentage_threshold_high"`
-	GracefulMaintenanceBandwidthAwareBandwidthThreshold types.Int64 `tfsdk:"graceful_maintenance_bandwidth_aware_bandwidth_threshold"`
-	GracefulMaintenanceBandwidthAwareBandwidthThresholdHigh types.Int64 `tfsdk:"graceful_maintenance_bandwidth_aware_bandwidth_threshold_high"`
-	GracefulMaintenanceBandwidthAwareInheritanceDisable types.Bool `tfsdk:"graceful_maintenance_bandwidth_aware_inheritance_disable"`
+	Address                                                     types.String                           `tfsdk:"address"`
+	RemoteAs                                                    types.String                           `tfsdk:"remote_as"`
+	MaximumPeers                                                types.Int64                            `tfsdk:"maximum_peers"`
+	RemoteAsList                                                types.String                           `tfsdk:"remote_as_list"`
+	AsPathLoopcheckOut                                          types.String                           `tfsdk:"as_path_loopcheck_out"`
+	UseNeighborGroup                                            types.String                           `tfsdk:"use_neighbor_group"`
+	UseSessionGroup                                             types.String                           `tfsdk:"use_session_group"`
+	AdvertisementIntervalSeconds                                types.Int64                            `tfsdk:"advertisement_interval_seconds"`
+	AdvertisementIntervalMilliseconds                           types.Int64                            `tfsdk:"advertisement_interval_milliseconds"`
+	Description                                                 types.String                           `tfsdk:"description"`
+	IgnoreConnectedCheck                                        types.Bool                             `tfsdk:"ignore_connected_check"`
+	IgnoreConnectedCheckInheritanceDisable                      types.Bool                             `tfsdk:"ignore_connected_check_inheritance_disable"`
+	EbgpMultihopMaximumHopCount                                 types.Int64                            `tfsdk:"ebgp_multihop_maximum_hop_count"`
+	EbgpMultihopMpls                                            types.Bool                             `tfsdk:"ebgp_multihop_mpls"`
+	TcpMssValue                                                 types.Int64                            `tfsdk:"tcp_mss_value"`
+	TcpMssInheritanceDisable                                    types.Bool                             `tfsdk:"tcp_mss_inheritance_disable"`
+	TcpMtuDiscovery                                             types.Bool                             `tfsdk:"tcp_mtu_discovery"`
+	TcpMtuDiscoveryInheritanceDisable                           types.Bool                             `tfsdk:"tcp_mtu_discovery_inheritance_disable"`
+	TcpIpOnlyPreferred                                          types.Bool                             `tfsdk:"tcp_ip_only_preferred"`
+	TcpIpOnlyPreferredInheritanceDisable                        types.Bool                             `tfsdk:"tcp_ip_only_preferred_inheritance_disable"`
+	BmpActivateServers                                          []RouterBGPNeighborsBmpActivateServers `tfsdk:"bmp_activate_servers"`
+	BfdMinimumInterval                                          types.Int64                            `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                                               types.Int64                            `tfsdk:"bfd_multiplier"`
+	BfdFastDetect                                               types.Bool                             `tfsdk:"bfd_fast_detect"`
+	BfdFastDetectStrictMode                                     types.Bool                             `tfsdk:"bfd_fast_detect_strict_mode"`
+	BfdFastDetectDisable                                        types.Bool                             `tfsdk:"bfd_fast_detect_disable"`
+	BfdFastDetectStrictModeNegotiate                            types.Bool                             `tfsdk:"bfd_fast_detect_strict_mode_negotiate"`
+	BfdFastDetectStrictModeNegotiateOverride                    types.Bool                             `tfsdk:"bfd_fast_detect_strict_mode_negotiate_override"`
+	KeychainName                                                types.String                           `tfsdk:"keychain_name"`
+	KeychainInheritanceDisable                                  types.Bool                             `tfsdk:"keychain_inheritance_disable"`
+	LocalAsInheritanceDisable                                   types.Bool                             `tfsdk:"local_as_inheritance_disable"`
+	LocalAs                                                     types.String                           `tfsdk:"local_as"`
+	LocalAsNoPrepend                                            types.Bool                             `tfsdk:"local_as_no_prepend"`
+	LocalAsNoPrependReplaceAs                                   types.Bool                             `tfsdk:"local_as_no_prepend_replace_as"`
+	LocalAsNoPrependReplaceAsDualAs                             types.Bool                             `tfsdk:"local_as_no_prepend_replace_as_dual_as"`
+	Password                                                    types.String                           `tfsdk:"password"`
+	PasswordInheritanceDisable                                  types.Bool                             `tfsdk:"password_inheritance_disable"`
+	ReceiveBufferSize                                           types.Int64                            `tfsdk:"receive_buffer_size"`
+	ReceiveBufferSizeRead                                       types.Int64                            `tfsdk:"receive_buffer_size_read"`
+	SendBufferSize                                              types.Int64                            `tfsdk:"send_buffer_size"`
+	SendBufferSizeWrite                                         types.Int64                            `tfsdk:"send_buffer_size_write"`
+	FastFallover                                                types.Bool                             `tfsdk:"fast_fallover"`
+	FastFalloverInheritanceDisable                              types.Bool                             `tfsdk:"fast_fallover_inheritance_disable"`
+	Shutdown                                                    types.Bool                             `tfsdk:"shutdown"`
+	TimersKeepaliveInterval                                     types.Int64                            `tfsdk:"timers_keepalive_interval"`
+	TimersHolddownZero                                          types.Bool                             `tfsdk:"timers_holddown_zero"`
+	TimersHolddownZeroMinimumAcceptableZero                     types.Bool                             `tfsdk:"timers_holddown_zero_minimum_acceptable_zero"`
+	TimersHolddownZeroMinimumAcceptableHoldtime                 types.Int64                            `tfsdk:"timers_holddown_zero_minimum_acceptable_holdtime"`
+	TimersHoldtime                                              types.Int64                            `tfsdk:"timers_holdtime"`
+	TimersHoldtimeMinimumAcceptableHoldtime                     types.Int64                            `tfsdk:"timers_holdtime_minimum_acceptable_holdtime"`
+	LocalAddress                                                types.String                           `tfsdk:"local_address"`
+	LocalAddressInheritanceDisable                              types.Bool                             `tfsdk:"local_address_inheritance_disable"`
+	LogNeighborChangesDetail                                    types.Bool                             `tfsdk:"log_neighbor_changes_detail"`
+	LogNeighborChangesDisable                                   types.Bool                             `tfsdk:"log_neighbor_changes_disable"`
+	LogNeighborChangesInheritanceDisable                        types.Bool                             `tfsdk:"log_neighbor_changes_inheritance_disable"`
+	LogMessageInSize                                            types.Int64                            `tfsdk:"log_message_in_size"`
+	LogMessageInDisable                                         types.Bool                             `tfsdk:"log_message_in_disable"`
+	LogMessageInInheritanceDisable                              types.Bool                             `tfsdk:"log_message_in_inheritance_disable"`
+	LogMessageOutSize                                           types.Int64                            `tfsdk:"log_message_out_size"`
+	LogMessageOutDisable                                        types.Bool                             `tfsdk:"log_message_out_disable"`
+	LogMessageOutInheritanceDisable                             types.Bool                             `tfsdk:"log_message_out_inheritance_disable"`
+	UpdateSource                                                types.String                           `tfsdk:"update_source"`
+	LocalAddressSubnetPrefix                                    types.String                           `tfsdk:"local_address_subnet_prefix"`
+	LocalAddressSubnetMask                                      types.Int64                            `tfsdk:"local_address_subnet_mask"`
+	DmzLinkBandwidth                                            types.Bool                             `tfsdk:"dmz_link_bandwidth"`
+	DmzLinkBandwidthInheritanceDisable                          types.Bool                             `tfsdk:"dmz_link_bandwidth_inheritance_disable"`
+	EbgpRecvExtcommunityDmz                                     types.Bool                             `tfsdk:"ebgp_recv_extcommunity_dmz"`
+	EbgpRecvExtcommunityDmzInheritanceDisable                   types.Bool                             `tfsdk:"ebgp_recv_extcommunity_dmz_inheritance_disable"`
+	EbgpSendExtcommunityDmz                                     types.Bool                             `tfsdk:"ebgp_send_extcommunity_dmz"`
+	EbgpSendExtcommunityDmzCumulative                           types.Bool                             `tfsdk:"ebgp_send_extcommunity_dmz_cumulative"`
+	EbgpSendExtcommunityDmzInheritanceDisable                   types.Bool                             `tfsdk:"ebgp_send_extcommunity_dmz_inheritance_disable"`
+	TtlSecurity                                                 types.Bool                             `tfsdk:"ttl_security"`
+	TtlSecurityInheritanceDisable                               types.Bool                             `tfsdk:"ttl_security_inheritance_disable"`
+	SessionOpenMode                                             types.String                           `tfsdk:"session_open_mode"`
+	Dscp                                                        types.String                           `tfsdk:"dscp"`
+	Precedence                                                  types.String                           `tfsdk:"precedence"`
+	CapabilityAdditionalPathsSend                               types.Bool                             `tfsdk:"capability_additional_paths_send"`
+	CapabilityAdditionalPathsSendDisable                        types.Bool                             `tfsdk:"capability_additional_paths_send_disable"`
+	CapabilityAdditionalPathsReceive                            types.Bool                             `tfsdk:"capability_additional_paths_receive"`
+	CapabilityAdditionalPathsReceiveDisable                     types.Bool                             `tfsdk:"capability_additional_paths_receive_disable"`
+	CapabilitySuppressAll                                       types.Bool                             `tfsdk:"capability_suppress_all"`
+	CapabilitySuppressAllInheritanceDisable                     types.Bool                             `tfsdk:"capability_suppress_all_inheritance_disable"`
+	CapabilitySuppressExtendedNexthopEncoding                   types.Bool                             `tfsdk:"capability_suppress_extended_nexthop_encoding"`
+	CapabilitySuppressExtendedNexthopEncodingInheritanceDisable types.Bool                             `tfsdk:"capability_suppress_extended_nexthop_encoding_inheritance_disable"`
+	CapabilitySuppressFourByteAs                                types.Bool                             `tfsdk:"capability_suppress_four_byte_as"`
+	CapabilitySuppressFourByteAsInheritanceDisable              types.Bool                             `tfsdk:"capability_suppress_four_byte_as_inheritance_disable"`
+	GracefulRestart                                             types.Bool                             `tfsdk:"graceful_restart"`
+	GracefulRestartDisable                                      types.Bool                             `tfsdk:"graceful_restart_disable"`
+	GracefulRestartHelperOnly                                   types.Bool                             `tfsdk:"graceful_restart_helper_only"`
+	GracefulRestartHelperOnlyInheritanceDisable                 types.Bool                             `tfsdk:"graceful_restart_helper_only_inheritance_disable"`
+	GracefulRestartRestartTime                                  types.Int64                            `tfsdk:"graceful_restart_restart_time"`
+	GracefulRestartStalepathTime                                types.Int64                            `tfsdk:"graceful_restart_stalepath_time"`
+	EnforceFirstAs                                              types.String                           `tfsdk:"enforce_first_as"`
+	ClusterId32bitFormat                                        types.Int64                            `tfsdk:"cluster_id_32bit_format"`
+	ClusterIdIpFormat                                           types.String                           `tfsdk:"cluster_id_ip_format"`
+	IdleWatchTime                                               types.Int64                            `tfsdk:"idle_watch_time"`
+	AllowasIn                                                   types.Int64                            `tfsdk:"allowas_in"`
+	EgressEngineering                                           types.Bool                             `tfsdk:"egress_engineering"`
+	EgressEngineeringInheritanceDisable                         types.Bool                             `tfsdk:"egress_engineering_inheritance_disable"`
+	PeerSets                                                    []RouterBGPNeighborsPeerSets           `tfsdk:"peer_sets"`
+	PeerNodeSidIndex                                            types.Int64                            `tfsdk:"peer_node_sid_index"`
+	AoKeyChainName                                              types.String                           `tfsdk:"ao_key_chain_name"`
+	AoKeyChainIncludeTcpOptions                                 types.String                           `tfsdk:"ao_key_chain_include_tcp_options"`
+	AoKeyChainAcceptMismatch                                    types.Bool                             `tfsdk:"ao_key_chain_accept_mismatch"`
+	AoInheritanceDisable                                        types.Bool                             `tfsdk:"ao_inheritance_disable"`
+	Dampening                                                   types.String                           `tfsdk:"dampening"`
+	AsOverride                                                  types.String                           `tfsdk:"as_override"`
+	DefaultPolicyActionIn                                       types.String                           `tfsdk:"default_policy_action_in"`
+	DefaultPolicyActionOut                                      types.String                           `tfsdk:"default_policy_action_out"`
+	OriginAsValidationDisable                                   types.Bool                             `tfsdk:"origin_as_validation_disable"`
+	SendExtendedCommunityEbgp                                   types.Bool                             `tfsdk:"send_extended_community_ebgp"`
+	SendExtendedCommunityEbgpInheritanceDisable                 types.Bool                             `tfsdk:"send_extended_community_ebgp_inheritance_disable"`
+	BestpathOriginAsAllowInvalid                                types.Bool                             `tfsdk:"bestpath_origin_as_allow_invalid"`
+	UpdateInFilteringMessageBuffers                             types.Int64                            `tfsdk:"update_in_filtering_message_buffers"`
+	UpdateInFilteringMessageBuffersType                         types.String                           `tfsdk:"update_in_filtering_message_buffers_type"`
+	UpdateInFilteringLoggingDisable                             types.Bool                             `tfsdk:"update_in_filtering_logging_disable"`
+	UpdateInFilteringAttributeFilterGroup                       types.String                           `tfsdk:"update_in_filtering_attribute_filter_group"`
+	UpdateInLabeledUnicastEquivalent                            types.Bool                             `tfsdk:"update_in_labeled_unicast_equivalent"`
+	UpdateInLabeledUnicastEquivalentInheritanceDisable          types.Bool                             `tfsdk:"update_in_labeled_unicast_equivalent_inheritance_disable"`
+	UpdateInErrorHandlingAvoidReset                             types.String                           `tfsdk:"update_in_error_handling_avoid_reset"`
+	UpdateInErrorHandlingTreatAsWithdraw                        types.String                           `tfsdk:"update_in_error_handling_treat_as_withdraw"`
+	GracefulMaintenanceActivate                                 types.Bool                             `tfsdk:"graceful_maintenance_activate"`
+	GracefulMaintenanceActivateInheritanceDisable               types.Bool                             `tfsdk:"graceful_maintenance_activate_inheritance_disable"`
+	GracefulMaintenanceLocalPreference                          types.Int64                            `tfsdk:"graceful_maintenance_local_preference"`
+	GracefulMaintenanceLocalPreferenceInheritanceDisable        types.Bool                             `tfsdk:"graceful_maintenance_local_preference_inheritance_disable"`
+	GracefulMaintenanceAsPrependsNumber                         types.Int64                            `tfsdk:"graceful_maintenance_as_prepends_number"`
+	GracefulMaintenanceAsPrependsInheritanceDisable             types.Bool                             `tfsdk:"graceful_maintenance_as_prepends_inheritance_disable"`
+	GracefulMaintenanceBandwidthAwarePercentageThreshold        types.Int64                            `tfsdk:"graceful_maintenance_bandwidth_aware_percentage_threshold"`
+	GracefulMaintenanceBandwidthAwarePercentageThresholdHigh    types.Int64                            `tfsdk:"graceful_maintenance_bandwidth_aware_percentage_threshold_high"`
+	GracefulMaintenanceBandwidthAwareBandwidthThreshold         types.Int64                            `tfsdk:"graceful_maintenance_bandwidth_aware_bandwidth_threshold"`
+	GracefulMaintenanceBandwidthAwareBandwidthThresholdHigh     types.Int64                            `tfsdk:"graceful_maintenance_bandwidth_aware_bandwidth_threshold_high"`
+	GracefulMaintenanceBandwidthAwareInheritanceDisable         types.Bool                             `tfsdk:"graceful_maintenance_bandwidth_aware_inheritance_disable"`
 }
 type RouterBGPGracefulMaintenanceActivateInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
@@ -391,11 +391,11 @@ type RouterBGPAsLeaguePeers struct {
 	PeerAsNumber types.String `tfsdk:"peer_as_number"`
 }
 type RouterBGPAttributeFilterGroups struct {
-	GroupName types.String `tfsdk:"group_name"`
+	GroupName           types.String                                        `tfsdk:"group_name"`
 	AttributeCodeRanges []RouterBGPAttributeFilterGroupsAttributeCodeRanges `tfsdk:"attribute_code_ranges"`
 }
 type RouterBGPAsLists struct {
-	ListName types.String `tfsdk:"list_name"`
+	ListName  types.String                `tfsdk:"list_name"`
 	AsNumbers []RouterBGPAsListsAsNumbers `tfsdk:"as_numbers"`
 }
 type RouterBGPBgpConfederationPeers struct {
@@ -403,23 +403,23 @@ type RouterBGPBgpConfederationPeers struct {
 }
 type RouterBGPRpkiRoutes struct {
 	RouteAddress types.String `tfsdk:"route_address"`
-	RoutePrefix types.Int64 `tfsdk:"route_prefix"`
-	MaxLength types.Int64 `tfsdk:"max_length"`
-	OriginAs types.Int64 `tfsdk:"origin_as"`
+	RoutePrefix  types.Int64  `tfsdk:"route_prefix"`
+	MaxLength    types.Int64  `tfsdk:"max_length"`
+	OriginAs     types.Int64  `tfsdk:"origin_as"`
 }
 type RouterBGPRpkiServers struct {
-	Server types.String `tfsdk:"server"`
-	RefreshTimeSeconds types.Int64 `tfsdk:"refresh_time_seconds"`
-	RefreshTimeOff types.Bool `tfsdk:"refresh_time_off"`
-	ResponseTimeSeconds types.Int64 `tfsdk:"response_time_seconds"`
-	ResponseTimeOff types.Bool `tfsdk:"response_time_off"`
-	PurgeTime types.Int64 `tfsdk:"purge_time"`
-	Username types.String `tfsdk:"username"`
-	Password types.String `tfsdk:"password"`
-	TransportTcpPort types.Int64 `tfsdk:"transport_tcp_port"`
-	TransportSshPort types.Int64 `tfsdk:"transport_ssh_port"`
+	Server              types.String `tfsdk:"server"`
+	RefreshTimeSeconds  types.Int64  `tfsdk:"refresh_time_seconds"`
+	RefreshTimeOff      types.Bool   `tfsdk:"refresh_time_off"`
+	ResponseTimeSeconds types.Int64  `tfsdk:"response_time_seconds"`
+	ResponseTimeOff     types.Bool   `tfsdk:"response_time_off"`
+	PurgeTime           types.Int64  `tfsdk:"purge_time"`
+	Username            types.String `tfsdk:"username"`
+	Password            types.String `tfsdk:"password"`
+	TransportTcpPort    types.Int64  `tfsdk:"transport_tcp_port"`
+	TransportSshPort    types.Int64  `tfsdk:"transport_ssh_port"`
 	BindSourceInterface types.String `tfsdk:"bind_source_interface"`
-	Shutdown types.Bool `tfsdk:"shutdown"`
+	Shutdown            types.Bool   `tfsdk:"shutdown"`
 }
 type RouterBGPNeighborsBmpActivateServers struct {
 	ServerNumber types.Int64 `tfsdk:"server_number"`
@@ -428,10 +428,10 @@ type RouterBGPNeighborsPeerSets struct {
 	Peer types.Int64 `tfsdk:"peer"`
 }
 type RouterBGPAttributeFilterGroupsAttributeCodeRanges struct {
-	Start types.Int64 `tfsdk:"start"`
-	End types.Int64 `tfsdk:"end"`
-	Discard types.Bool `tfsdk:"discard"`
-	TreatAsWithdraw types.Bool `tfsdk:"treat_as_withdraw"`
+	Start           types.Int64 `tfsdk:"start"`
+	End             types.Int64 `tfsdk:"end"`
+	Discard         types.Bool  `tfsdk:"discard"`
+	TreatAsWithdraw types.Bool  `tfsdk:"treat_as_withdraw"`
 }
 type RouterBGPAsListsAsNumbers struct {
 	AsValue types.String `tfsdk:"as_value"`
@@ -1556,32 +1556,30 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.DefaultMetric = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mvpn"); !data.Mvpn.IsNull() {
-		if value.Exists() {
-			data.Mvpn = types.BoolValue(true)
-		} else {
-			data.Mvpn = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "mvpn"); value.Exists() {
+		data.Mvpn = types.BoolValue(true)
 	} else {
-		data.Mvpn = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Mvpn.IsNull() {
+			data.Mvpn = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "segment-routing.srv6.locator"); value.Exists() && !data.SegmentRoutingSrv6Locator.IsNull() {
 		data.SegmentRoutingSrv6Locator = types.StringValue(value.String())
 	} else {
 		data.SegmentRoutingSrv6Locator = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
-		if value.Exists() {
-			data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
-		} else {
-			data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 	} else {
-		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
+			data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolNull()
+		}
 	}
 	for i := range data.Neighbors {
-		keys := [...]string{ "address",  }
-		keyValues := [...]string{ data.Neighbors[i].Address.ValueString(),  }
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "neighbors.neighbor").ForEach(
@@ -1652,91 +1650,91 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].Description = types.StringNull()
 		}
-		if value := r.Get("ignore-connected-check"); !data.Neighbors[i].IgnoreConnectedCheck.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].IgnoreConnectedCheck = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].IgnoreConnectedCheck = types.BoolValue(false)
-			}
+		if value := r.Get("ignore-connected-check"); value.Exists() {
+			data.Neighbors[i].IgnoreConnectedCheck = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].IgnoreConnectedCheck = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].IgnoreConnectedCheck.IsNull() {
+				data.Neighbors[i].IgnoreConnectedCheck = types.BoolNull()
+			}
 		}
-		if value := r.Get("ignore-connected-check.inheritance-disable"); !data.Neighbors[i].IgnoreConnectedCheckInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].IgnoreConnectedCheckInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].IgnoreConnectedCheckInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("ignore-connected-check.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].IgnoreConnectedCheckInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].IgnoreConnectedCheckInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].IgnoreConnectedCheckInheritanceDisable.IsNull() {
+				data.Neighbors[i].IgnoreConnectedCheckInheritanceDisable = types.BoolNull()
+			}
 		}
 		if value := r.Get("ebgp-multihop.maximum-hop-count"); value.Exists() && !data.Neighbors[i].EbgpMultihopMaximumHopCount.IsNull() {
 			data.Neighbors[i].EbgpMultihopMaximumHopCount = types.Int64Value(value.Int())
 		} else {
 			data.Neighbors[i].EbgpMultihopMaximumHopCount = types.Int64Null()
 		}
-		if value := r.Get("ebgp-multihop.mpls"); !data.Neighbors[i].EbgpMultihopMpls.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].EbgpMultihopMpls = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].EbgpMultihopMpls = types.BoolValue(false)
-			}
+		if value := r.Get("ebgp-multihop.mpls"); value.Exists() {
+			data.Neighbors[i].EbgpMultihopMpls = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].EbgpMultihopMpls = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].EbgpMultihopMpls.IsNull() {
+				data.Neighbors[i].EbgpMultihopMpls = types.BoolNull()
+			}
 		}
 		if value := r.Get("tcp.mss.tcp-initial-maximum-segment-size"); value.Exists() && !data.Neighbors[i].TcpMssValue.IsNull() {
 			data.Neighbors[i].TcpMssValue = types.Int64Value(value.Int())
 		} else {
 			data.Neighbors[i].TcpMssValue = types.Int64Null()
 		}
-		if value := r.Get("tcp.mss.inheritance-disable"); !data.Neighbors[i].TcpMssInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].TcpMssInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].TcpMssInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("tcp.mss.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].TcpMssInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].TcpMssInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].TcpMssInheritanceDisable.IsNull() {
+				data.Neighbors[i].TcpMssInheritanceDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("tcp.mtu-discovery"); !data.Neighbors[i].TcpMtuDiscovery.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].TcpMtuDiscovery = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].TcpMtuDiscovery = types.BoolValue(false)
-			}
+		if value := r.Get("tcp.mtu-discovery"); value.Exists() {
+			data.Neighbors[i].TcpMtuDiscovery = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].TcpMtuDiscovery = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].TcpMtuDiscovery.IsNull() {
+				data.Neighbors[i].TcpMtuDiscovery = types.BoolNull()
+			}
 		}
-		if value := r.Get("tcp.mtu-discovery.inheritance-disable"); !data.Neighbors[i].TcpMtuDiscoveryInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].TcpMtuDiscoveryInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].TcpMtuDiscoveryInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("tcp.mtu-discovery.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].TcpMtuDiscoveryInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].TcpMtuDiscoveryInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].TcpMtuDiscoveryInheritanceDisable.IsNull() {
+				data.Neighbors[i].TcpMtuDiscoveryInheritanceDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("tcp.ip-only-preferred"); !data.Neighbors[i].TcpIpOnlyPreferred.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].TcpIpOnlyPreferred = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].TcpIpOnlyPreferred = types.BoolValue(false)
-			}
+		if value := r.Get("tcp.ip-only-preferred"); value.Exists() {
+			data.Neighbors[i].TcpIpOnlyPreferred = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].TcpIpOnlyPreferred = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].TcpIpOnlyPreferred.IsNull() {
+				data.Neighbors[i].TcpIpOnlyPreferred = types.BoolNull()
+			}
 		}
-		if value := r.Get("tcp.ip-only-preferred.inheritance-disable"); !data.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("tcp.ip-only-preferred.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable.IsNull() {
+				data.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable = types.BoolNull()
+			}
 		}
 		for ci := range data.Neighbors[i].BmpActivateServers {
-			keys := [...]string{ "server-number",  }
-			keyValues := [...]string{ strconv.FormatInt(data.Neighbors[i].BmpActivateServers[ci].ServerNumber.ValueInt64(), 10),  }
+			keys := [...]string{"server-number"}
+			keyValues := [...]string{strconv.FormatInt(data.Neighbors[i].BmpActivateServers[ci].ServerNumber.ValueInt64(), 10)}
 
 			var cr gjson.Result
 			r.Get("bmp-activate.servers.server").ForEach(
@@ -1773,114 +1771,114 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].BfdMultiplier = types.Int64Null()
 		}
-		if value := r.Get("bfd.fast-detect"); !data.Neighbors[i].BfdFastDetect.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].BfdFastDetect = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].BfdFastDetect = types.BoolValue(false)
-			}
+		if value := r.Get("bfd.fast-detect"); value.Exists() {
+			data.Neighbors[i].BfdFastDetect = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].BfdFastDetect = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].BfdFastDetect.IsNull() {
+				data.Neighbors[i].BfdFastDetect = types.BoolNull()
+			}
 		}
-		if value := r.Get("bfd.fast-detect.strict-mode"); !data.Neighbors[i].BfdFastDetectStrictMode.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].BfdFastDetectStrictMode = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].BfdFastDetectStrictMode = types.BoolValue(false)
-			}
+		if value := r.Get("bfd.fast-detect.strict-mode"); value.Exists() {
+			data.Neighbors[i].BfdFastDetectStrictMode = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].BfdFastDetectStrictMode = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].BfdFastDetectStrictMode.IsNull() {
+				data.Neighbors[i].BfdFastDetectStrictMode = types.BoolNull()
+			}
 		}
-		if value := r.Get("bfd.fast-detect.disable"); !data.Neighbors[i].BfdFastDetectDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].BfdFastDetectDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].BfdFastDetectDisable = types.BoolValue(false)
-			}
+		if value := r.Get("bfd.fast-detect.disable"); value.Exists() {
+			data.Neighbors[i].BfdFastDetectDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].BfdFastDetectDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].BfdFastDetectDisable.IsNull() {
+				data.Neighbors[i].BfdFastDetectDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("bfd.fast-detect.strict-mode-negotiate"); !data.Neighbors[i].BfdFastDetectStrictModeNegotiate.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].BfdFastDetectStrictModeNegotiate = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].BfdFastDetectStrictModeNegotiate = types.BoolValue(false)
-			}
+		if value := r.Get("bfd.fast-detect.strict-mode-negotiate"); value.Exists() {
+			data.Neighbors[i].BfdFastDetectStrictModeNegotiate = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].BfdFastDetectStrictModeNegotiate = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].BfdFastDetectStrictModeNegotiate.IsNull() {
+				data.Neighbors[i].BfdFastDetectStrictModeNegotiate = types.BoolNull()
+			}
 		}
-		if value := r.Get("bfd.fast-detect.strict-mode-negotiate.override"); !data.Neighbors[i].BfdFastDetectStrictModeNegotiateOverride.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].BfdFastDetectStrictModeNegotiateOverride = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].BfdFastDetectStrictModeNegotiateOverride = types.BoolValue(false)
-			}
+		if value := r.Get("bfd.fast-detect.strict-mode-negotiate.override"); value.Exists() {
+			data.Neighbors[i].BfdFastDetectStrictModeNegotiateOverride = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].BfdFastDetectStrictModeNegotiateOverride = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].BfdFastDetectStrictModeNegotiateOverride.IsNull() {
+				data.Neighbors[i].BfdFastDetectStrictModeNegotiateOverride = types.BoolNull()
+			}
 		}
 		if value := r.Get("keychain.keychain-name"); value.Exists() && !data.Neighbors[i].KeychainName.IsNull() {
 			data.Neighbors[i].KeychainName = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].KeychainName = types.StringNull()
 		}
-		if value := r.Get("keychain.inheritance-disable"); !data.Neighbors[i].KeychainInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].KeychainInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].KeychainInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("keychain.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].KeychainInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].KeychainInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].KeychainInheritanceDisable.IsNull() {
+				data.Neighbors[i].KeychainInheritanceDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("local-as.inheritance-disable"); !data.Neighbors[i].LocalAsInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].LocalAsInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].LocalAsInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("local-as.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].LocalAsInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].LocalAsInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].LocalAsInheritanceDisable.IsNull() {
+				data.Neighbors[i].LocalAsInheritanceDisable = types.BoolNull()
+			}
 		}
 		if value := r.Get("local-as.as.as-number"); value.Exists() && !data.Neighbors[i].LocalAs.IsNull() {
 			data.Neighbors[i].LocalAs = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].LocalAs = types.StringNull()
 		}
-		if value := r.Get("local-as.as.no-prepend"); !data.Neighbors[i].LocalAsNoPrepend.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].LocalAsNoPrepend = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].LocalAsNoPrepend = types.BoolValue(false)
-			}
+		if value := r.Get("local-as.as.no-prepend"); value.Exists() {
+			data.Neighbors[i].LocalAsNoPrepend = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].LocalAsNoPrepend = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].LocalAsNoPrepend.IsNull() {
+				data.Neighbors[i].LocalAsNoPrepend = types.BoolNull()
+			}
 		}
-		if value := r.Get("local-as.as.no-prepend.replace-as"); !data.Neighbors[i].LocalAsNoPrependReplaceAs.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].LocalAsNoPrependReplaceAs = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].LocalAsNoPrependReplaceAs = types.BoolValue(false)
-			}
+		if value := r.Get("local-as.as.no-prepend.replace-as"); value.Exists() {
+			data.Neighbors[i].LocalAsNoPrependReplaceAs = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].LocalAsNoPrependReplaceAs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].LocalAsNoPrependReplaceAs.IsNull() {
+				data.Neighbors[i].LocalAsNoPrependReplaceAs = types.BoolNull()
+			}
 		}
-		if value := r.Get("local-as.as.no-prepend.replace-as.dual-as"); !data.Neighbors[i].LocalAsNoPrependReplaceAsDualAs.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].LocalAsNoPrependReplaceAsDualAs = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].LocalAsNoPrependReplaceAsDualAs = types.BoolValue(false)
-			}
+		if value := r.Get("local-as.as.no-prepend.replace-as.dual-as"); value.Exists() {
+			data.Neighbors[i].LocalAsNoPrependReplaceAsDualAs = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].LocalAsNoPrependReplaceAsDualAs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].LocalAsNoPrependReplaceAsDualAs.IsNull() {
+				data.Neighbors[i].LocalAsNoPrependReplaceAsDualAs = types.BoolNull()
+			}
 		}
-		if value := r.Get("password.inheritance-disable"); !data.Neighbors[i].PasswordInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].PasswordInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].PasswordInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("password.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].PasswordInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].PasswordInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].PasswordInheritanceDisable.IsNull() {
+				data.Neighbors[i].PasswordInheritanceDisable = types.BoolNull()
+			}
 		}
 		if value := r.Get("receive-buffer-size.receive-buffer-size-number"); value.Exists() && !data.Neighbors[i].ReceiveBufferSize.IsNull() {
 			data.Neighbors[i].ReceiveBufferSize = types.Int64Value(value.Int())
@@ -1902,55 +1900,55 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].SendBufferSizeWrite = types.Int64Null()
 		}
-		if value := r.Get("fast-fallover"); !data.Neighbors[i].FastFallover.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].FastFallover = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].FastFallover = types.BoolValue(false)
-			}
+		if value := r.Get("fast-fallover"); value.Exists() {
+			data.Neighbors[i].FastFallover = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].FastFallover = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].FastFallover.IsNull() {
+				data.Neighbors[i].FastFallover = types.BoolNull()
+			}
 		}
-		if value := r.Get("fast-fallover.inheritance-disable"); !data.Neighbors[i].FastFalloverInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].FastFalloverInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].FastFalloverInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("fast-fallover.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].FastFalloverInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].FastFalloverInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].FastFalloverInheritanceDisable.IsNull() {
+				data.Neighbors[i].FastFalloverInheritanceDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("shutdown"); !data.Neighbors[i].Shutdown.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].Shutdown = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].Shutdown = types.BoolValue(false)
-			}
+		if value := r.Get("shutdown"); value.Exists() {
+			data.Neighbors[i].Shutdown = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].Shutdown = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].Shutdown.IsNull() {
+				data.Neighbors[i].Shutdown = types.BoolNull()
+			}
 		}
 		if value := r.Get("timers.keepalive-interval"); value.Exists() && !data.Neighbors[i].TimersKeepaliveInterval.IsNull() {
 			data.Neighbors[i].TimersKeepaliveInterval = types.Int64Value(value.Int())
 		} else {
 			data.Neighbors[i].TimersKeepaliveInterval = types.Int64Null()
 		}
-		if value := r.Get("timers.zero"); !data.Neighbors[i].TimersHolddownZero.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].TimersHolddownZero = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].TimersHolddownZero = types.BoolValue(false)
-			}
+		if value := r.Get("timers.zero"); value.Exists() {
+			data.Neighbors[i].TimersHolddownZero = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].TimersHolddownZero = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].TimersHolddownZero.IsNull() {
+				data.Neighbors[i].TimersHolddownZero = types.BoolNull()
+			}
 		}
-		if value := r.Get("timers.zero.zero"); !data.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(false)
-			}
+		if value := r.Get("timers.zero.zero"); value.Exists() {
+			data.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero.IsNull() {
+				data.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero = types.BoolNull()
+			}
 		}
 		if value := r.Get("timers.zero.minimum-acceptable-holdtime"); value.Exists() && !data.Neighbors[i].TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() {
 			data.Neighbors[i].TimersHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
@@ -1972,87 +1970,87 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].LocalAddress = types.StringNull()
 		}
-		if value := r.Get("local.address.inheritance-disable"); !data.Neighbors[i].LocalAddressInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].LocalAddressInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].LocalAddressInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("local.address.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].LocalAddressInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].LocalAddressInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].LocalAddressInheritanceDisable.IsNull() {
+				data.Neighbors[i].LocalAddressInheritanceDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("log.neighbor.changes.detail"); !data.Neighbors[i].LogNeighborChangesDetail.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].LogNeighborChangesDetail = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].LogNeighborChangesDetail = types.BoolValue(false)
-			}
+		if value := r.Get("log.neighbor.changes.detail"); value.Exists() {
+			data.Neighbors[i].LogNeighborChangesDetail = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].LogNeighborChangesDetail = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].LogNeighborChangesDetail.IsNull() {
+				data.Neighbors[i].LogNeighborChangesDetail = types.BoolNull()
+			}
 		}
-		if value := r.Get("log.neighbor.changes.disable"); !data.Neighbors[i].LogNeighborChangesDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].LogNeighborChangesDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].LogNeighborChangesDisable = types.BoolValue(false)
-			}
+		if value := r.Get("log.neighbor.changes.disable"); value.Exists() {
+			data.Neighbors[i].LogNeighborChangesDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].LogNeighborChangesDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].LogNeighborChangesDisable.IsNull() {
+				data.Neighbors[i].LogNeighborChangesDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("log.neighbor.changes.inheritance-disable"); !data.Neighbors[i].LogNeighborChangesInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].LogNeighborChangesInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].LogNeighborChangesInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("log.neighbor.changes.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].LogNeighborChangesInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].LogNeighborChangesInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].LogNeighborChangesInheritanceDisable.IsNull() {
+				data.Neighbors[i].LogNeighborChangesInheritanceDisable = types.BoolNull()
+			}
 		}
 		if value := r.Get("log.message.in.log-buffer-size"); value.Exists() && !data.Neighbors[i].LogMessageInSize.IsNull() {
 			data.Neighbors[i].LogMessageInSize = types.Int64Value(value.Int())
 		} else {
 			data.Neighbors[i].LogMessageInSize = types.Int64Null()
 		}
-		if value := r.Get("log.message.in.disable"); !data.Neighbors[i].LogMessageInDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].LogMessageInDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].LogMessageInDisable = types.BoolValue(false)
-			}
+		if value := r.Get("log.message.in.disable"); value.Exists() {
+			data.Neighbors[i].LogMessageInDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].LogMessageInDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].LogMessageInDisable.IsNull() {
+				data.Neighbors[i].LogMessageInDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("log.message.in.inheritance-disable"); !data.Neighbors[i].LogMessageInInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].LogMessageInInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].LogMessageInInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("log.message.in.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].LogMessageInInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].LogMessageInInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].LogMessageInInheritanceDisable.IsNull() {
+				data.Neighbors[i].LogMessageInInheritanceDisable = types.BoolNull()
+			}
 		}
 		if value := r.Get("log.message.out.log-buffer-size"); value.Exists() && !data.Neighbors[i].LogMessageOutSize.IsNull() {
 			data.Neighbors[i].LogMessageOutSize = types.Int64Value(value.Int())
 		} else {
 			data.Neighbors[i].LogMessageOutSize = types.Int64Null()
 		}
-		if value := r.Get("log.message.out.disable"); !data.Neighbors[i].LogMessageOutDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].LogMessageOutDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].LogMessageOutDisable = types.BoolValue(false)
-			}
+		if value := r.Get("log.message.out.disable"); value.Exists() {
+			data.Neighbors[i].LogMessageOutDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].LogMessageOutDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].LogMessageOutDisable.IsNull() {
+				data.Neighbors[i].LogMessageOutDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("log.message.out.inheritance-disable"); !data.Neighbors[i].LogMessageOutInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].LogMessageOutInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].LogMessageOutInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("log.message.out.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].LogMessageOutInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].LogMessageOutInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].LogMessageOutInheritanceDisable.IsNull() {
+				data.Neighbors[i].LogMessageOutInheritanceDisable = types.BoolNull()
+			}
 		}
 		if value := r.Get("update-source"); value.Exists() && !data.Neighbors[i].UpdateSource.IsNull() {
 			data.Neighbors[i].UpdateSource = types.StringValue(value.String())
@@ -2069,86 +2067,86 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].LocalAddressSubnetMask = types.Int64Null()
 		}
-		if value := r.Get("dmz-link-bandwidth"); !data.Neighbors[i].DmzLinkBandwidth.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].DmzLinkBandwidth = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].DmzLinkBandwidth = types.BoolValue(false)
-			}
+		if value := r.Get("dmz-link-bandwidth"); value.Exists() {
+			data.Neighbors[i].DmzLinkBandwidth = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].DmzLinkBandwidth = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].DmzLinkBandwidth.IsNull() {
+				data.Neighbors[i].DmzLinkBandwidth = types.BoolNull()
+			}
 		}
-		if value := r.Get("dmz-link-bandwidth.inheritance-disable"); !data.Neighbors[i].DmzLinkBandwidthInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].DmzLinkBandwidthInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].DmzLinkBandwidthInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("dmz-link-bandwidth.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].DmzLinkBandwidthInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].DmzLinkBandwidthInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].DmzLinkBandwidthInheritanceDisable.IsNull() {
+				data.Neighbors[i].DmzLinkBandwidthInheritanceDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("ebgp-recv-extcommunity-dmz"); !data.Neighbors[i].EbgpRecvExtcommunityDmz.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].EbgpRecvExtcommunityDmz = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].EbgpRecvExtcommunityDmz = types.BoolValue(false)
-			}
+		if value := r.Get("ebgp-recv-extcommunity-dmz"); value.Exists() {
+			data.Neighbors[i].EbgpRecvExtcommunityDmz = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].EbgpRecvExtcommunityDmz = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].EbgpRecvExtcommunityDmz.IsNull() {
+				data.Neighbors[i].EbgpRecvExtcommunityDmz = types.BoolNull()
+			}
 		}
-		if value := r.Get("ebgp-recv-extcommunity-dmz.inheritance-disable"); !data.Neighbors[i].EbgpRecvExtcommunityDmzInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].EbgpRecvExtcommunityDmzInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].EbgpRecvExtcommunityDmzInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("ebgp-recv-extcommunity-dmz.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].EbgpRecvExtcommunityDmzInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].EbgpRecvExtcommunityDmzInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].EbgpRecvExtcommunityDmzInheritanceDisable.IsNull() {
+				data.Neighbors[i].EbgpRecvExtcommunityDmzInheritanceDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("ebgp-send-extcommunity-dmz"); !data.Neighbors[i].EbgpSendExtcommunityDmz.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].EbgpSendExtcommunityDmz = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].EbgpSendExtcommunityDmz = types.BoolValue(false)
-			}
+		if value := r.Get("ebgp-send-extcommunity-dmz"); value.Exists() {
+			data.Neighbors[i].EbgpSendExtcommunityDmz = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].EbgpSendExtcommunityDmz = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].EbgpSendExtcommunityDmz.IsNull() {
+				data.Neighbors[i].EbgpSendExtcommunityDmz = types.BoolNull()
+			}
 		}
-		if value := r.Get("ebgp-send-extcommunity-dmz.cumulative"); !data.Neighbors[i].EbgpSendExtcommunityDmzCumulative.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].EbgpSendExtcommunityDmzCumulative = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].EbgpSendExtcommunityDmzCumulative = types.BoolValue(false)
-			}
+		if value := r.Get("ebgp-send-extcommunity-dmz.cumulative"); value.Exists() {
+			data.Neighbors[i].EbgpSendExtcommunityDmzCumulative = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].EbgpSendExtcommunityDmzCumulative = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].EbgpSendExtcommunityDmzCumulative.IsNull() {
+				data.Neighbors[i].EbgpSendExtcommunityDmzCumulative = types.BoolNull()
+			}
 		}
-		if value := r.Get("ebgp-send-extcommunity-dmz.inheritance-disable"); !data.Neighbors[i].EbgpSendExtcommunityDmzInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].EbgpSendExtcommunityDmzInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].EbgpSendExtcommunityDmzInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("ebgp-send-extcommunity-dmz.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].EbgpSendExtcommunityDmzInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].EbgpSendExtcommunityDmzInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].EbgpSendExtcommunityDmzInheritanceDisable.IsNull() {
+				data.Neighbors[i].EbgpSendExtcommunityDmzInheritanceDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("ttl-security"); !data.Neighbors[i].TtlSecurity.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].TtlSecurity = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].TtlSecurity = types.BoolValue(false)
-			}
+		if value := r.Get("ttl-security"); value.Exists() {
+			data.Neighbors[i].TtlSecurity = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].TtlSecurity = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].TtlSecurity.IsNull() {
+				data.Neighbors[i].TtlSecurity = types.BoolNull()
+			}
 		}
-		if value := r.Get("ttl-security.inheritance-disable"); !data.Neighbors[i].TtlSecurityInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].TtlSecurityInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].TtlSecurityInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("ttl-security.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].TtlSecurityInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].TtlSecurityInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].TtlSecurityInheritanceDisable.IsNull() {
+				data.Neighbors[i].TtlSecurityInheritanceDisable = types.BoolNull()
+			}
 		}
 		if value := r.Get("session-open-mode"); value.Exists() && !data.Neighbors[i].SessionOpenMode.IsNull() {
 			data.Neighbors[i].SessionOpenMode = types.StringValue(value.String())
@@ -2165,131 +2163,131 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].Precedence = types.StringNull()
 		}
-		if value := r.Get("capability.additional-paths.send"); !data.Neighbors[i].CapabilityAdditionalPathsSend.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].CapabilityAdditionalPathsSend = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].CapabilityAdditionalPathsSend = types.BoolValue(false)
-			}
+		if value := r.Get("capability.additional-paths.send"); value.Exists() {
+			data.Neighbors[i].CapabilityAdditionalPathsSend = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].CapabilityAdditionalPathsSend = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].CapabilityAdditionalPathsSend.IsNull() {
+				data.Neighbors[i].CapabilityAdditionalPathsSend = types.BoolNull()
+			}
 		}
-		if value := r.Get("capability.additional-paths.send.disable"); !data.Neighbors[i].CapabilityAdditionalPathsSendDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].CapabilityAdditionalPathsSendDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].CapabilityAdditionalPathsSendDisable = types.BoolValue(false)
-			}
+		if value := r.Get("capability.additional-paths.send.disable"); value.Exists() {
+			data.Neighbors[i].CapabilityAdditionalPathsSendDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].CapabilityAdditionalPathsSendDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].CapabilityAdditionalPathsSendDisable.IsNull() {
+				data.Neighbors[i].CapabilityAdditionalPathsSendDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("capability.additional-paths.receive"); !data.Neighbors[i].CapabilityAdditionalPathsReceive.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].CapabilityAdditionalPathsReceive = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].CapabilityAdditionalPathsReceive = types.BoolValue(false)
-			}
+		if value := r.Get("capability.additional-paths.receive"); value.Exists() {
+			data.Neighbors[i].CapabilityAdditionalPathsReceive = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].CapabilityAdditionalPathsReceive = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].CapabilityAdditionalPathsReceive.IsNull() {
+				data.Neighbors[i].CapabilityAdditionalPathsReceive = types.BoolNull()
+			}
 		}
-		if value := r.Get("capability.additional-paths.receive.disable"); !data.Neighbors[i].CapabilityAdditionalPathsReceiveDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].CapabilityAdditionalPathsReceiveDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].CapabilityAdditionalPathsReceiveDisable = types.BoolValue(false)
-			}
+		if value := r.Get("capability.additional-paths.receive.disable"); value.Exists() {
+			data.Neighbors[i].CapabilityAdditionalPathsReceiveDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].CapabilityAdditionalPathsReceiveDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].CapabilityAdditionalPathsReceiveDisable.IsNull() {
+				data.Neighbors[i].CapabilityAdditionalPathsReceiveDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("capability.suppress.all"); !data.Neighbors[i].CapabilitySuppressAll.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].CapabilitySuppressAll = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].CapabilitySuppressAll = types.BoolValue(false)
-			}
+		if value := r.Get("capability.suppress.all"); value.Exists() {
+			data.Neighbors[i].CapabilitySuppressAll = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].CapabilitySuppressAll = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].CapabilitySuppressAll.IsNull() {
+				data.Neighbors[i].CapabilitySuppressAll = types.BoolNull()
+			}
 		}
-		if value := r.Get("capability.suppress.all.inheritance-disable"); !data.Neighbors[i].CapabilitySuppressAllInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].CapabilitySuppressAllInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].CapabilitySuppressAllInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("capability.suppress.all.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].CapabilitySuppressAllInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].CapabilitySuppressAllInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].CapabilitySuppressAllInheritanceDisable.IsNull() {
+				data.Neighbors[i].CapabilitySuppressAllInheritanceDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("capability.suppress.extended-nexthop-encoding"); !data.Neighbors[i].CapabilitySuppressExtendedNexthopEncoding.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].CapabilitySuppressExtendedNexthopEncoding = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].CapabilitySuppressExtendedNexthopEncoding = types.BoolValue(false)
-			}
+		if value := r.Get("capability.suppress.extended-nexthop-encoding"); value.Exists() {
+			data.Neighbors[i].CapabilitySuppressExtendedNexthopEncoding = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].CapabilitySuppressExtendedNexthopEncoding = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].CapabilitySuppressExtendedNexthopEncoding.IsNull() {
+				data.Neighbors[i].CapabilitySuppressExtendedNexthopEncoding = types.BoolNull()
+			}
 		}
-		if value := r.Get("capability.suppress.extended-nexthop-encoding.inheritance-disable"); !data.Neighbors[i].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("capability.suppress.extended-nexthop-encoding.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable.IsNull() {
+				data.Neighbors[i].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("capability.suppress.four-byte-as"); !data.Neighbors[i].CapabilitySuppressFourByteAs.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].CapabilitySuppressFourByteAs = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].CapabilitySuppressFourByteAs = types.BoolValue(false)
-			}
+		if value := r.Get("capability.suppress.four-byte-as"); value.Exists() {
+			data.Neighbors[i].CapabilitySuppressFourByteAs = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].CapabilitySuppressFourByteAs = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].CapabilitySuppressFourByteAs.IsNull() {
+				data.Neighbors[i].CapabilitySuppressFourByteAs = types.BoolNull()
+			}
 		}
-		if value := r.Get("capability.suppress.four-byte-as.inheritance-disable"); !data.Neighbors[i].CapabilitySuppressFourByteAsInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].CapabilitySuppressFourByteAsInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].CapabilitySuppressFourByteAsInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("capability.suppress.four-byte-as.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].CapabilitySuppressFourByteAsInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].CapabilitySuppressFourByteAsInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].CapabilitySuppressFourByteAsInheritanceDisable.IsNull() {
+				data.Neighbors[i].CapabilitySuppressFourByteAsInheritanceDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("graceful-restart.graceful-restart-enable"); !data.Neighbors[i].GracefulRestart.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].GracefulRestart = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].GracefulRestart = types.BoolValue(false)
-			}
+		if value := r.Get("graceful-restart.graceful-restart-enable"); value.Exists() {
+			data.Neighbors[i].GracefulRestart = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].GracefulRestart = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].GracefulRestart.IsNull() {
+				data.Neighbors[i].GracefulRestart = types.BoolNull()
+			}
 		}
-		if value := r.Get("graceful-restart.graceful-restart-enable.disable"); !data.Neighbors[i].GracefulRestartDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].GracefulRestartDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].GracefulRestartDisable = types.BoolValue(false)
-			}
+		if value := r.Get("graceful-restart.graceful-restart-enable.disable"); value.Exists() {
+			data.Neighbors[i].GracefulRestartDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].GracefulRestartDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].GracefulRestartDisable.IsNull() {
+				data.Neighbors[i].GracefulRestartDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("graceful-restart.helper-only"); !data.Neighbors[i].GracefulRestartHelperOnly.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].GracefulRestartHelperOnly = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].GracefulRestartHelperOnly = types.BoolValue(false)
-			}
+		if value := r.Get("graceful-restart.helper-only"); value.Exists() {
+			data.Neighbors[i].GracefulRestartHelperOnly = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].GracefulRestartHelperOnly = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].GracefulRestartHelperOnly.IsNull() {
+				data.Neighbors[i].GracefulRestartHelperOnly = types.BoolNull()
+			}
 		}
-		if value := r.Get("graceful-restart.helper-only.inheritance-disable"); !data.Neighbors[i].GracefulRestartHelperOnlyInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].GracefulRestartHelperOnlyInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].GracefulRestartHelperOnlyInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("graceful-restart.helper-only.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].GracefulRestartHelperOnlyInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].GracefulRestartHelperOnlyInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].GracefulRestartHelperOnlyInheritanceDisable.IsNull() {
+				data.Neighbors[i].GracefulRestartHelperOnlyInheritanceDisable = types.BoolNull()
+			}
 		}
 		if value := r.Get("graceful-restart.restart-time"); value.Exists() && !data.Neighbors[i].GracefulRestartRestartTime.IsNull() {
 			data.Neighbors[i].GracefulRestartRestartTime = types.Int64Value(value.Int())
@@ -2326,27 +2324,27 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].AllowasIn = types.Int64Null()
 		}
-		if value := r.Get("egress-engineering"); !data.Neighbors[i].EgressEngineering.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].EgressEngineering = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].EgressEngineering = types.BoolValue(false)
-			}
+		if value := r.Get("egress-engineering"); value.Exists() {
+			data.Neighbors[i].EgressEngineering = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].EgressEngineering = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].EgressEngineering.IsNull() {
+				data.Neighbors[i].EgressEngineering = types.BoolNull()
+			}
 		}
-		if value := r.Get("egress-engineering.inheritance-disable"); !data.Neighbors[i].EgressEngineeringInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].EgressEngineeringInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].EgressEngineeringInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("egress-engineering.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].EgressEngineeringInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].EgressEngineeringInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].EgressEngineeringInheritanceDisable.IsNull() {
+				data.Neighbors[i].EgressEngineeringInheritanceDisable = types.BoolNull()
+			}
 		}
 		for ci := range data.Neighbors[i].PeerSets {
-			keys := [...]string{ "peer",  }
-			keyValues := [...]string{ strconv.FormatInt(data.Neighbors[i].PeerSets[ci].Peer.ValueInt64(), 10),  }
+			keys := [...]string{"peer"}
+			keyValues := [...]string{strconv.FormatInt(data.Neighbors[i].PeerSets[ci].Peer.ValueInt64(), 10)}
 
 			var cr gjson.Result
 			r.Get("peer-set.peer-sets").ForEach(
@@ -2388,23 +2386,23 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].AoKeyChainIncludeTcpOptions = types.StringNull()
 		}
-		if value := r.Get("ao.key-chain-name.accept-ao-mismatch-connection"); !data.Neighbors[i].AoKeyChainAcceptMismatch.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].AoKeyChainAcceptMismatch = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].AoKeyChainAcceptMismatch = types.BoolValue(false)
-			}
+		if value := r.Get("ao.key-chain-name.accept-ao-mismatch-connection"); value.Exists() {
+			data.Neighbors[i].AoKeyChainAcceptMismatch = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].AoKeyChainAcceptMismatch = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].AoKeyChainAcceptMismatch.IsNull() {
+				data.Neighbors[i].AoKeyChainAcceptMismatch = types.BoolNull()
+			}
 		}
-		if value := r.Get("ao.inheritance-disable"); !data.Neighbors[i].AoInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].AoInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].AoInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("ao.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].AoInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].AoInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].AoInheritanceDisable.IsNull() {
+				data.Neighbors[i].AoInheritanceDisable = types.BoolNull()
+			}
 		}
 		if value := r.Get("dampening"); value.Exists() && !data.Neighbors[i].Dampening.IsNull() {
 			data.Neighbors[i].Dampening = types.StringValue(value.String())
@@ -2426,41 +2424,41 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].DefaultPolicyActionOut = types.StringNull()
 		}
-		if value := r.Get("origin-as.validation.disable"); !data.Neighbors[i].OriginAsValidationDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].OriginAsValidationDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].OriginAsValidationDisable = types.BoolValue(false)
-			}
+		if value := r.Get("origin-as.validation.disable"); value.Exists() {
+			data.Neighbors[i].OriginAsValidationDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].OriginAsValidationDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].OriginAsValidationDisable.IsNull() {
+				data.Neighbors[i].OriginAsValidationDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("send-extended-community-ebgp"); !data.Neighbors[i].SendExtendedCommunityEbgp.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].SendExtendedCommunityEbgp = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].SendExtendedCommunityEbgp = types.BoolValue(false)
-			}
+		if value := r.Get("send-extended-community-ebgp"); value.Exists() {
+			data.Neighbors[i].SendExtendedCommunityEbgp = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].SendExtendedCommunityEbgp = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].SendExtendedCommunityEbgp.IsNull() {
+				data.Neighbors[i].SendExtendedCommunityEbgp = types.BoolNull()
+			}
 		}
-		if value := r.Get("send-extended-community-ebgp.inheritance-disable"); !data.Neighbors[i].SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("send-extended-community-ebgp.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].SendExtendedCommunityEbgpInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
+				data.Neighbors[i].SendExtendedCommunityEbgpInheritanceDisable = types.BoolNull()
+			}
 		}
-		if value := r.Get("bestpath.origin-as.allow.invalid"); !data.Neighbors[i].BestpathOriginAsAllowInvalid.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].BestpathOriginAsAllowInvalid = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].BestpathOriginAsAllowInvalid = types.BoolValue(false)
-			}
+		if value := r.Get("bestpath.origin-as.allow.invalid"); value.Exists() {
+			data.Neighbors[i].BestpathOriginAsAllowInvalid = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].BestpathOriginAsAllowInvalid = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].BestpathOriginAsAllowInvalid.IsNull() {
+				data.Neighbors[i].BestpathOriginAsAllowInvalid = types.BoolNull()
+			}
 		}
 		if value := r.Get("update.in.filtering.message.buffers.buffers-number"); value.Exists() && !data.Neighbors[i].UpdateInFilteringMessageBuffers.IsNull() {
 			data.Neighbors[i].UpdateInFilteringMessageBuffers = types.Int64Value(value.Int())
@@ -2472,37 +2470,37 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].UpdateInFilteringMessageBuffersType = types.StringNull()
 		}
-		if value := r.Get("update.in.filtering.logging.disable"); !data.Neighbors[i].UpdateInFilteringLoggingDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].UpdateInFilteringLoggingDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].UpdateInFilteringLoggingDisable = types.BoolValue(false)
-			}
+		if value := r.Get("update.in.filtering.logging.disable"); value.Exists() {
+			data.Neighbors[i].UpdateInFilteringLoggingDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].UpdateInFilteringLoggingDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].UpdateInFilteringLoggingDisable.IsNull() {
+				data.Neighbors[i].UpdateInFilteringLoggingDisable = types.BoolNull()
+			}
 		}
 		if value := r.Get("update.in.filtering.attribute-filter.group"); value.Exists() && !data.Neighbors[i].UpdateInFilteringAttributeFilterGroup.IsNull() {
 			data.Neighbors[i].UpdateInFilteringAttributeFilterGroup = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].UpdateInFilteringAttributeFilterGroup = types.StringNull()
 		}
-		if value := r.Get("update.in.labeled-unicast.equivalent"); !data.Neighbors[i].UpdateInLabeledUnicastEquivalent.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].UpdateInLabeledUnicastEquivalent = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].UpdateInLabeledUnicastEquivalent = types.BoolValue(false)
-			}
+		if value := r.Get("update.in.labeled-unicast.equivalent"); value.Exists() {
+			data.Neighbors[i].UpdateInLabeledUnicastEquivalent = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].UpdateInLabeledUnicastEquivalent = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].UpdateInLabeledUnicastEquivalent.IsNull() {
+				data.Neighbors[i].UpdateInLabeledUnicastEquivalent = types.BoolNull()
+			}
 		}
-		if value := r.Get("update.in.labeled-unicast.equivalent.inheritance-disable"); !data.Neighbors[i].UpdateInLabeledUnicastEquivalentInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].UpdateInLabeledUnicastEquivalentInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].UpdateInLabeledUnicastEquivalentInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("update.in.labeled-unicast.equivalent.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].UpdateInLabeledUnicastEquivalentInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].UpdateInLabeledUnicastEquivalentInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].UpdateInLabeledUnicastEquivalentInheritanceDisable.IsNull() {
+				data.Neighbors[i].UpdateInLabeledUnicastEquivalentInheritanceDisable = types.BoolNull()
+			}
 		}
 		if value := r.Get("update.in.error-handling.avoid-reset"); value.Exists() && !data.Neighbors[i].UpdateInErrorHandlingAvoidReset.IsNull() {
 			data.Neighbors[i].UpdateInErrorHandlingAvoidReset = types.StringValue(value.String())
@@ -2514,51 +2512,51 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].UpdateInErrorHandlingTreatAsWithdraw = types.StringNull()
 		}
-		if value := r.Get("graceful-maintenance.activate"); !data.Neighbors[i].GracefulMaintenanceActivate.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].GracefulMaintenanceActivate = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].GracefulMaintenanceActivate = types.BoolValue(false)
-			}
+		if value := r.Get("graceful-maintenance.activate"); value.Exists() {
+			data.Neighbors[i].GracefulMaintenanceActivate = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].GracefulMaintenanceActivate = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].GracefulMaintenanceActivate.IsNull() {
+				data.Neighbors[i].GracefulMaintenanceActivate = types.BoolNull()
+			}
 		}
-		if value := r.Get("graceful-maintenance.activate.inheritance-disable"); !data.Neighbors[i].GracefulMaintenanceActivateInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].GracefulMaintenanceActivateInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].GracefulMaintenanceActivateInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("graceful-maintenance.activate.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].GracefulMaintenanceActivateInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].GracefulMaintenanceActivateInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].GracefulMaintenanceActivateInheritanceDisable.IsNull() {
+				data.Neighbors[i].GracefulMaintenanceActivateInheritanceDisable = types.BoolNull()
+			}
 		}
 		if value := r.Get("graceful-maintenance.local-preference.local-preference-number"); value.Exists() && !data.Neighbors[i].GracefulMaintenanceLocalPreference.IsNull() {
 			data.Neighbors[i].GracefulMaintenanceLocalPreference = types.Int64Value(value.Int())
 		} else {
 			data.Neighbors[i].GracefulMaintenanceLocalPreference = types.Int64Null()
 		}
-		if value := r.Get("graceful-maintenance.local-preference.inheritance-disable"); !data.Neighbors[i].GracefulMaintenanceLocalPreferenceInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].GracefulMaintenanceLocalPreferenceInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].GracefulMaintenanceLocalPreferenceInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("graceful-maintenance.local-preference.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].GracefulMaintenanceLocalPreferenceInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].GracefulMaintenanceLocalPreferenceInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].GracefulMaintenanceLocalPreferenceInheritanceDisable.IsNull() {
+				data.Neighbors[i].GracefulMaintenanceLocalPreferenceInheritanceDisable = types.BoolNull()
+			}
 		}
 		if value := r.Get("graceful-maintenance.as-prepends.prepends-number"); value.Exists() && !data.Neighbors[i].GracefulMaintenanceAsPrependsNumber.IsNull() {
 			data.Neighbors[i].GracefulMaintenanceAsPrependsNumber = types.Int64Value(value.Int())
 		} else {
 			data.Neighbors[i].GracefulMaintenanceAsPrependsNumber = types.Int64Null()
 		}
-		if value := r.Get("graceful-maintenance.as-prepends.inheritance-disable"); !data.Neighbors[i].GracefulMaintenanceAsPrependsInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].GracefulMaintenanceAsPrependsInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].GracefulMaintenanceAsPrependsInheritanceDisable = types.BoolValue(false)
-			}
+		if value := r.Get("graceful-maintenance.as-prepends.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].GracefulMaintenanceAsPrependsInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.Neighbors[i].GracefulMaintenanceAsPrependsInheritanceDisable = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].GracefulMaintenanceAsPrependsInheritanceDisable.IsNull() {
+				data.Neighbors[i].GracefulMaintenanceAsPrependsInheritanceDisable = types.BoolNull()
+			}
 		}
 		if value := r.Get("graceful-maintenance.bandwidth-aware.percentage-threshold.percentage-threshold-number"); value.Exists() && !data.Neighbors[i].GracefulMaintenanceBandwidthAwarePercentageThreshold.IsNull() {
 			data.Neighbors[i].GracefulMaintenanceBandwidthAwarePercentageThreshold = types.Int64Value(value.Int())
@@ -2580,37 +2578,35 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].GracefulMaintenanceBandwidthAwareBandwidthThresholdHigh = types.Int64Null()
 		}
-		if value := r.Get("graceful-maintenance.bandwidth-aware.inheritance-disable"); !data.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable = types.BoolValue(false)
+		if value := r.Get("graceful-maintenance.bandwidth-aware.inheritance-disable"); value.Exists() {
+			data.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable.IsNull() {
+				data.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable = types.BoolNull()
 			}
-		} else {
-			data.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "graceful-maintenance.activate.all-neighbors"); !data.GracefulMaintenanceActivateAllNeighbors.IsNull() {
-		if value.Exists() {
-			data.GracefulMaintenanceActivateAllNeighbors = types.BoolValue(true)
-		} else {
-			data.GracefulMaintenanceActivateAllNeighbors = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "graceful-maintenance.activate.all-neighbors"); value.Exists() {
+		data.GracefulMaintenanceActivateAllNeighbors = types.BoolValue(true)
 	} else {
-		data.GracefulMaintenanceActivateAllNeighbors = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.GracefulMaintenanceActivateAllNeighbors.IsNull() {
+			data.GracefulMaintenanceActivateAllNeighbors = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "graceful-maintenance.activate.retain-routes"); !data.GracefulMaintenanceActivateRetainRoutes.IsNull() {
-		if value.Exists() {
-			data.GracefulMaintenanceActivateRetainRoutes = types.BoolValue(true)
-		} else {
-			data.GracefulMaintenanceActivateRetainRoutes = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "graceful-maintenance.activate.retain-routes"); value.Exists() {
+		data.GracefulMaintenanceActivateRetainRoutes = types.BoolValue(true)
 	} else {
-		data.GracefulMaintenanceActivateRetainRoutes = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.GracefulMaintenanceActivateRetainRoutes.IsNull() {
+			data.GracefulMaintenanceActivateRetainRoutes = types.BoolNull()
+		}
 	}
 	for i := range data.GracefulMaintenanceActivateInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "graceful-maintenance.activate.interfaces.interface").ForEach(
@@ -2638,8 +2634,8 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.GracefulMaintenanceActivateLocations {
-		keys := [...]string{ "location-value",  }
-		keyValues := [...]string{ data.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString(),  }
+		keys := [...]string{"location-value"}
+		keyValues := [...]string{data.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "graceful-maintenance.activate.locations.location").ForEach(
@@ -2667,8 +2663,8 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.MplsActivateInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.MplsActivateInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.MplsActivateInterfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "mpls.activate.interfaces.interface").ForEach(
@@ -2696,8 +2692,8 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.AsLeaguePeers {
-		keys := [...]string{ "peer-as-number",  }
-		keyValues := [...]string{ data.AsLeaguePeers[i].PeerAsNumber.ValueString(),  }
+		keys := [...]string{"peer-as-number"}
+		keyValues := [...]string{data.AsLeaguePeers[i].PeerAsNumber.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "as-league.peers.peer").ForEach(
@@ -2725,8 +2721,8 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.AttributeFilterGroups {
-		keys := [...]string{ "group-name",  }
-		keyValues := [...]string{ data.AttributeFilterGroups[i].GroupName.ValueString(),  }
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.AttributeFilterGroups[i].GroupName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "attribute-filter.groups.group").ForEach(
@@ -2753,8 +2749,8 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 			data.AttributeFilterGroups[i].GroupName = types.StringNull()
 		}
 		for ci := range data.AttributeFilterGroups[i].AttributeCodeRanges {
-			keys := [...]string{ "start", "end",  }
-			keyValues := [...]string{ strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start.ValueInt64(), 10), strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.ValueInt64(), 10),  }
+			keys := [...]string{"start", "end"}
+			keyValues := [...]string{strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start.ValueInt64(), 10), strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.ValueInt64(), 10)}
 
 			var cr gjson.Result
 			r.Get("attributes.attribute-code-ranges.attribute-code-range").ForEach(
@@ -2785,29 +2781,31 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 			} else {
 				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End = types.Int64Null()
 			}
-			if value := cr.Get("discard"); !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("discard"); value.Exists() {
+				if !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.IsNull() {
 					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard = types.BoolValue(true)
-				} else {
-					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard = types.BoolValue(false)
 				}
 			} else {
-				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.IsNull() {
+					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard = types.BoolNull()
+				}
 			}
-			if value := cr.Get("treat-as-withdraw"); !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("treat-as-withdraw"); value.Exists() {
+				if !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() {
 					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw = types.BoolValue(true)
-				} else {
-					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw = types.BoolValue(false)
 				}
 			} else {
-				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() {
+					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw = types.BoolNull()
+				}
 			}
 		}
 	}
 	for i := range data.AsLists {
-		keys := [...]string{ "as-list-name",  }
-		keyValues := [...]string{ data.AsLists[i].ListName.ValueString(),  }
+		keys := [...]string{"as-list-name"}
+		keyValues := [...]string{data.AsLists[i].ListName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "as-lists.as-list").ForEach(
@@ -2834,8 +2832,8 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 			data.AsLists[i].ListName = types.StringNull()
 		}
 		for ci := range data.AsLists[i].AsNumbers {
-			keys := [...]string{ "as-list-value",  }
-			keyValues := [...]string{ data.AsLists[i].AsNumbers[ci].AsValue.ValueString(),  }
+			keys := [...]string{"as-list-value"}
+			keyValues := [...]string{data.AsLists[i].AsNumbers[ci].AsValue.ValueString()}
 
 			var cr gjson.Result
 			r.Get("as-list-numbers.as-list-number").ForEach(
@@ -2863,14 +2861,13 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "default-information.originate"); !data.DefaultInformationOriginate.IsNull() {
-		if value.Exists() {
-			data.DefaultInformationOriginate = types.BoolValue(true)
-		} else {
-			data.DefaultInformationOriginate = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
+		data.DefaultInformationOriginate = types.BoolValue(true)
 	} else {
-		data.DefaultInformationOriginate = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.DefaultInformationOriginate.IsNull() {
+			data.DefaultInformationOriginate = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "socket.receive-buffer-size.receive-buffer-size-number"); value.Exists() && !data.SocketReceiveBufferSize.IsNull() {
 		data.SocketReceiveBufferSize = types.Int64Value(value.Int())
@@ -2892,254 +2889,228 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.SocketSendBufferSizeWrite = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "nexthop.mpls.forwarding.ibgp"); !data.NexthopMplsForwardingIbgp.IsNull() {
-		if value.Exists() {
-			data.NexthopMplsForwardingIbgp = types.BoolValue(true)
-		} else {
-			data.NexthopMplsForwardingIbgp = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "nexthop.mpls.forwarding.ibgp"); value.Exists() {
+		data.NexthopMplsForwardingIbgp = types.BoolValue(true)
 	} else {
-		data.NexthopMplsForwardingIbgp = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.NexthopMplsForwardingIbgp.IsNull() {
+			data.NexthopMplsForwardingIbgp = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "nexthop.validation.color-extcomm.sr-policy"); !data.NexthopValidationColorExtcommSrPolicy.IsNull() {
-		if value.Exists() {
-			data.NexthopValidationColorExtcommSrPolicy = types.BoolValue(true)
-		} else {
-			data.NexthopValidationColorExtcommSrPolicy = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "nexthop.validation.color-extcomm.sr-policy"); value.Exists() {
+		data.NexthopValidationColorExtcommSrPolicy = types.BoolValue(true)
 	} else {
-		data.NexthopValidationColorExtcommSrPolicy = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.NexthopValidationColorExtcommSrPolicy.IsNull() {
+			data.NexthopValidationColorExtcommSrPolicy = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "nexthop.validation.color-extcomm.disable"); !data.NexthopValidationColorExtcommDisable.IsNull() {
-		if value.Exists() {
-			data.NexthopValidationColorExtcommDisable = types.BoolValue(true)
-		} else {
-			data.NexthopValidationColorExtcommDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "nexthop.validation.color-extcomm.disable"); value.Exists() {
+		data.NexthopValidationColorExtcommDisable = types.BoolValue(true)
 	} else {
-		data.NexthopValidationColorExtcommDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.NexthopValidationColorExtcommDisable.IsNull() {
+			data.NexthopValidationColorExtcommDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "nexthop.resolution.allow-default"); !data.NexthopResolutionAllowDefault.IsNull() {
-		if value.Exists() {
-			data.NexthopResolutionAllowDefault = types.BoolValue(true)
-		} else {
-			data.NexthopResolutionAllowDefault = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "nexthop.resolution.allow-default"); value.Exists() {
+		data.NexthopResolutionAllowDefault = types.BoolValue(true)
 	} else {
-		data.NexthopResolutionAllowDefault = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.NexthopResolutionAllowDefault.IsNull() {
+			data.NexthopResolutionAllowDefault = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "nexthop.srte-metric.disable"); !data.NexthopSrteMetricDisable.IsNull() {
-		if value.Exists() {
-			data.NexthopSrteMetricDisable = types.BoolValue(true)
-		} else {
-			data.NexthopSrteMetricDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "nexthop.srte-metric.disable"); value.Exists() {
+		data.NexthopSrteMetricDisable = types.BoolValue(true)
 	} else {
-		data.NexthopSrteMetricDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.NexthopSrteMetricDisable.IsNull() {
+			data.NexthopSrteMetricDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "slow-peer.dynamic"); !data.SlowPeerDynamic.IsNull() {
-		if value.Exists() {
-			data.SlowPeerDynamic = types.BoolValue(true)
-		} else {
-			data.SlowPeerDynamic = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "slow-peer.dynamic"); value.Exists() {
+		data.SlowPeerDynamic = types.BoolValue(true)
 	} else {
-		data.SlowPeerDynamic = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SlowPeerDynamic.IsNull() {
+			data.SlowPeerDynamic = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "slow-peer.dynamic.threshold"); value.Exists() && !data.SlowPeerDynamicThreshold.IsNull() {
 		data.SlowPeerDynamicThreshold = types.Int64Value(value.Int())
 	} else {
 		data.SlowPeerDynamicThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "slow-peer.detection-disable"); !data.SlowPeerDetectionDisable.IsNull() {
-		if value.Exists() {
-			data.SlowPeerDetectionDisable = types.BoolValue(true)
-		} else {
-			data.SlowPeerDetectionDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "slow-peer.detection-disable"); value.Exists() {
+		data.SlowPeerDetectionDisable = types.BoolValue(true)
 	} else {
-		data.SlowPeerDetectionDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SlowPeerDetectionDisable.IsNull() {
+			data.SlowPeerDetectionDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.redistribute-internal"); !data.BgpRedistributeInternal.IsNull() {
-		if value.Exists() {
-			data.BgpRedistributeInternal = types.BoolValue(true)
-		} else {
-			data.BgpRedistributeInternal = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.redistribute-internal"); value.Exists() {
+		data.BgpRedistributeInternal = types.BoolValue(true)
 	} else {
-		data.BgpRedistributeInternal = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpRedistributeInternal.IsNull() {
+			data.BgpRedistributeInternal = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "bgp.router-id"); value.Exists() && !data.BgpRouterId.IsNull() {
 		data.BgpRouterId = types.StringValue(value.String())
 	} else {
 		data.BgpRouterId = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "bgp.unsafe-ebgp-policy"); !data.BgpUnsafeEbgpPolicy.IsNull() {
-		if value.Exists() {
-			data.BgpUnsafeEbgpPolicy = types.BoolValue(true)
-		} else {
-			data.BgpUnsafeEbgpPolicy = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.unsafe-ebgp-policy"); value.Exists() {
+		data.BgpUnsafeEbgpPolicy = types.BoolValue(true)
 	} else {
-		data.BgpUnsafeEbgpPolicy = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpUnsafeEbgpPolicy.IsNull() {
+			data.BgpUnsafeEbgpPolicy = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "bgp.scan-time"); value.Exists() && !data.BgpScanTime.IsNull() {
 		data.BgpScanTime = types.Int64Value(value.Int())
 	} else {
 		data.BgpScanTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bgp.read-only"); !data.BgpReadOnly.IsNull() {
-		if value.Exists() {
-			data.BgpReadOnly = types.BoolValue(true)
-		} else {
-			data.BgpReadOnly = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.read-only"); value.Exists() {
+		data.BgpReadOnly = types.BoolValue(true)
 	} else {
-		data.BgpReadOnly = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpReadOnly.IsNull() {
+			data.BgpReadOnly = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.lpts-secure-binding"); !data.BgpLptsSecureBinding.IsNull() {
-		if value.Exists() {
-			data.BgpLptsSecureBinding = types.BoolValue(true)
-		} else {
-			data.BgpLptsSecureBinding = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.lpts-secure-binding"); value.Exists() {
+		data.BgpLptsSecureBinding = types.BoolValue(true)
 	} else {
-		data.BgpLptsSecureBinding = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpLptsSecureBinding.IsNull() {
+			data.BgpLptsSecureBinding = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.as-path-loopcheck"); !data.BgpAsPathLoopcheck.IsNull() {
-		if value.Exists() {
-			data.BgpAsPathLoopcheck = types.BoolValue(true)
-		} else {
-			data.BgpAsPathLoopcheck = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.as-path-loopcheck"); value.Exists() {
+		data.BgpAsPathLoopcheck = types.BoolValue(true)
 	} else {
-		data.BgpAsPathLoopcheck = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpAsPathLoopcheck.IsNull() {
+			data.BgpAsPathLoopcheck = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.auto-policy-soft-reset.disable"); !data.BgpAutoPolicySoftResetDisable.IsNull() {
-		if value.Exists() {
-			data.BgpAutoPolicySoftResetDisable = types.BoolValue(true)
-		} else {
-			data.BgpAutoPolicySoftResetDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.auto-policy-soft-reset.disable"); value.Exists() {
+		data.BgpAutoPolicySoftResetDisable = types.BoolValue(true)
 	} else {
-		data.BgpAutoPolicySoftResetDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpAutoPolicySoftResetDisable.IsNull() {
+			data.BgpAutoPolicySoftResetDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.bestpath.cost-community.ignore"); !data.BgpBestpathCostCommunityIgnore.IsNull() {
-		if value.Exists() {
-			data.BgpBestpathCostCommunityIgnore = types.BoolValue(true)
-		} else {
-			data.BgpBestpathCostCommunityIgnore = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.bestpath.cost-community.ignore"); value.Exists() {
+		data.BgpBestpathCostCommunityIgnore = types.BoolValue(true)
 	} else {
-		data.BgpBestpathCostCommunityIgnore = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpBestpathCostCommunityIgnore.IsNull() {
+			data.BgpBestpathCostCommunityIgnore = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.bestpath.compare-routerid"); !data.BgpBestpathCompareRouterid.IsNull() {
-		if value.Exists() {
-			data.BgpBestpathCompareRouterid = types.BoolValue(true)
-		} else {
-			data.BgpBestpathCompareRouterid = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.bestpath.compare-routerid"); value.Exists() {
+		data.BgpBestpathCompareRouterid = types.BoolValue(true)
 	} else {
-		data.BgpBestpathCompareRouterid = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpBestpathCompareRouterid.IsNull() {
+			data.BgpBestpathCompareRouterid = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.bestpath.aigp.ignore"); !data.BgpBestpathAigpIgnore.IsNull() {
-		if value.Exists() {
-			data.BgpBestpathAigpIgnore = types.BoolValue(true)
-		} else {
-			data.BgpBestpathAigpIgnore = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.bestpath.aigp.ignore"); value.Exists() {
+		data.BgpBestpathAigpIgnore = types.BoolValue(true)
 	} else {
-		data.BgpBestpathAigpIgnore = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpBestpathAigpIgnore.IsNull() {
+			data.BgpBestpathAigpIgnore = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.bestpath.igp-metric.ignore"); !data.BgpBestpathIgpMetricIgnore.IsNull() {
-		if value.Exists() {
-			data.BgpBestpathIgpMetricIgnore = types.BoolValue(true)
-		} else {
-			data.BgpBestpathIgpMetricIgnore = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.bestpath.igp-metric.ignore"); value.Exists() {
+		data.BgpBestpathIgpMetricIgnore = types.BoolValue(true)
 	} else {
-		data.BgpBestpathIgpMetricIgnore = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpBestpathIgpMetricIgnore.IsNull() {
+			data.BgpBestpathIgpMetricIgnore = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.bestpath.igp-metric.sr-policy"); !data.BgpBestpathIgpMetricSrPolicy.IsNull() {
-		if value.Exists() {
-			data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(true)
-		} else {
-			data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.bestpath.igp-metric.sr-policy"); value.Exists() {
+		data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(true)
 	} else {
-		data.BgpBestpathIgpMetricSrPolicy = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpBestpathIgpMetricSrPolicy.IsNull() {
+			data.BgpBestpathIgpMetricSrPolicy = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.bestpath.med.missing-as-worst"); !data.BgpBestpathMedMissingAsWorst.IsNull() {
-		if value.Exists() {
-			data.BgpBestpathMedMissingAsWorst = types.BoolValue(true)
-		} else {
-			data.BgpBestpathMedMissingAsWorst = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.bestpath.med.missing-as-worst"); value.Exists() {
+		data.BgpBestpathMedMissingAsWorst = types.BoolValue(true)
 	} else {
-		data.BgpBestpathMedMissingAsWorst = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpBestpathMedMissingAsWorst.IsNull() {
+			data.BgpBestpathMedMissingAsWorst = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.bestpath.med.always"); !data.BgpBestpathMedAlways.IsNull() {
-		if value.Exists() {
-			data.BgpBestpathMedAlways = types.BoolValue(true)
-		} else {
-			data.BgpBestpathMedAlways = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.bestpath.med.always"); value.Exists() {
+		data.BgpBestpathMedAlways = types.BoolValue(true)
 	} else {
-		data.BgpBestpathMedAlways = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpBestpathMedAlways.IsNull() {
+			data.BgpBestpathMedAlways = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.bestpath.as-path.ignore"); !data.BgpBestpathAsPathIgnore.IsNull() {
-		if value.Exists() {
-			data.BgpBestpathAsPathIgnore = types.BoolValue(true)
-		} else {
-			data.BgpBestpathAsPathIgnore = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.bestpath.as-path.ignore"); value.Exists() {
+		data.BgpBestpathAsPathIgnore = types.BoolValue(true)
 	} else {
-		data.BgpBestpathAsPathIgnore = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpBestpathAsPathIgnore.IsNull() {
+			data.BgpBestpathAsPathIgnore = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.bestpath.as-path.multipath-relax"); !data.BgpBestpathAsPathMultipathRelax.IsNull() {
-		if value.Exists() {
-			data.BgpBestpathAsPathMultipathRelax = types.BoolValue(true)
-		} else {
-			data.BgpBestpathAsPathMultipathRelax = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.bestpath.as-path.multipath-relax"); value.Exists() {
+		data.BgpBestpathAsPathMultipathRelax = types.BoolValue(true)
 	} else {
-		data.BgpBestpathAsPathMultipathRelax = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpBestpathAsPathMultipathRelax.IsNull() {
+			data.BgpBestpathAsPathMultipathRelax = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.bestpath.origin-as.use.validity"); !data.BgpBestpathOriginAsUseValidity.IsNull() {
-		if value.Exists() {
-			data.BgpBestpathOriginAsUseValidity = types.BoolValue(true)
-		} else {
-			data.BgpBestpathOriginAsUseValidity = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.bestpath.origin-as.use.validity"); value.Exists() {
+		data.BgpBestpathOriginAsUseValidity = types.BoolValue(true)
 	} else {
-		data.BgpBestpathOriginAsUseValidity = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpBestpathOriginAsUseValidity.IsNull() {
+			data.BgpBestpathOriginAsUseValidity = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.bestpath.origin-as.allow.invalid"); !data.BgpBestpathOriginAsAllowInvalid.IsNull() {
-		if value.Exists() {
-			data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(true)
-		} else {
-			data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.bestpath.origin-as.allow.invalid"); value.Exists() {
+		data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(true)
 	} else {
-		data.BgpBestpathOriginAsAllowInvalid = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpBestpathOriginAsAllowInvalid.IsNull() {
+			data.BgpBestpathOriginAsAllowInvalid = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.bestpath.sr-policy.prefer"); !data.BgpBestpathSrPolicyPrefer.IsNull() {
-		if value.Exists() {
-			data.BgpBestpathSrPolicyPrefer = types.BoolValue(true)
-		} else {
-			data.BgpBestpathSrPolicyPrefer = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.bestpath.sr-policy.prefer"); value.Exists() {
+		data.BgpBestpathSrPolicyPrefer = types.BoolValue(true)
 	} else {
-		data.BgpBestpathSrPolicyPrefer = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpBestpathSrPolicyPrefer.IsNull() {
+			data.BgpBestpathSrPolicyPrefer = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.bestpath.sr-policy.force"); !data.BgpBestpathSrPolicyForce.IsNull() {
-		if value.Exists() {
-			data.BgpBestpathSrPolicyForce = types.BoolValue(true)
-		} else {
-			data.BgpBestpathSrPolicyForce = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.bestpath.sr-policy.force"); value.Exists() {
+		data.BgpBestpathSrPolicyForce = types.BoolValue(true)
 	} else {
-		data.BgpBestpathSrPolicyForce = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpBestpathSrPolicyForce.IsNull() {
+			data.BgpBestpathSrPolicyForce = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "bgp.cluster-id.route-reflector-number"); value.Exists() && !data.BgpClusterId32bitFormat.IsNull() {
 		data.BgpClusterId32bitFormat = types.Int64Value(value.Int())
@@ -3156,50 +3127,45 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BgpDefaultLocalPreference = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bgp.enforce-first-as.disable"); !data.BgpEnforceFirstAsDisable.IsNull() {
-		if value.Exists() {
-			data.BgpEnforceFirstAsDisable = types.BoolValue(true)
-		} else {
-			data.BgpEnforceFirstAsDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.enforce-first-as.disable"); value.Exists() {
+		data.BgpEnforceFirstAsDisable = types.BoolValue(true)
 	} else {
-		data.BgpEnforceFirstAsDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpEnforceFirstAsDisable.IsNull() {
+			data.BgpEnforceFirstAsDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.fast-external-fallover.disable"); !data.BgpFastExternalFalloverDisable.IsNull() {
-		if value.Exists() {
-			data.BgpFastExternalFalloverDisable = types.BoolValue(true)
-		} else {
-			data.BgpFastExternalFalloverDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.fast-external-fallover.disable"); value.Exists() {
+		data.BgpFastExternalFalloverDisable = types.BoolValue(true)
 	} else {
-		data.BgpFastExternalFalloverDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpFastExternalFalloverDisable.IsNull() {
+			data.BgpFastExternalFalloverDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.log.neighbor.changes.detail"); !data.BgpLogNeighborChangesDetail.IsNull() {
-		if value.Exists() {
-			data.BgpLogNeighborChangesDetail = types.BoolValue(true)
-		} else {
-			data.BgpLogNeighborChangesDetail = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.log.neighbor.changes.detail"); value.Exists() {
+		data.BgpLogNeighborChangesDetail = types.BoolValue(true)
 	} else {
-		data.BgpLogNeighborChangesDetail = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpLogNeighborChangesDetail.IsNull() {
+			data.BgpLogNeighborChangesDetail = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.log.neighbor.changes.disable"); !data.BgpLogNeighborChangesDisable.IsNull() {
-		if value.Exists() {
-			data.BgpLogNeighborChangesDisable = types.BoolValue(true)
-		} else {
-			data.BgpLogNeighborChangesDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.log.neighbor.changes.disable"); value.Exists() {
+		data.BgpLogNeighborChangesDisable = types.BoolValue(true)
 	} else {
-		data.BgpLogNeighborChangesDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpLogNeighborChangesDisable.IsNull() {
+			data.BgpLogNeighborChangesDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.log.message.disable"); !data.BgpLogMessageDisable.IsNull() {
-		if value.Exists() {
-			data.BgpLogMessageDisable = types.BoolValue(true)
-		} else {
-			data.BgpLogMessageDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.log.message.disable"); value.Exists() {
+		data.BgpLogMessageDisable = types.BoolValue(true)
 	} else {
-		data.BgpLogMessageDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpLogMessageDisable.IsNull() {
+			data.BgpLogMessageDisable = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "bgp.log.memory-threshold.memory-warning-number"); value.Exists() && !data.BgpLogMemoryThresholdWarning.IsNull() {
 		data.BgpLogMemoryThresholdWarning = types.Int64Value(value.Int())
@@ -3221,23 +3187,21 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BgpLogTotalPathsWarnThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bgp.multipath.use.cluster-list-length"); !data.BgpMultipathUseClusterListLength.IsNull() {
-		if value.Exists() {
-			data.BgpMultipathUseClusterListLength = types.BoolValue(true)
-		} else {
-			data.BgpMultipathUseClusterListLength = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.multipath.use.cluster-list-length"); value.Exists() {
+		data.BgpMultipathUseClusterListLength = types.BoolValue(true)
 	} else {
-		data.BgpMultipathUseClusterListLength = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpMultipathUseClusterListLength.IsNull() {
+			data.BgpMultipathUseClusterListLength = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.multipath.as-path.ignore.onwards"); !data.BgpMultipathAsPathIgnoreOnwards.IsNull() {
-		if value.Exists() {
-			data.BgpMultipathAsPathIgnoreOnwards = types.BoolValue(true)
-		} else {
-			data.BgpMultipathAsPathIgnoreOnwards = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.multipath.as-path.ignore.onwards"); value.Exists() {
+		data.BgpMultipathAsPathIgnoreOnwards = types.BoolValue(true)
 	} else {
-		data.BgpMultipathAsPathIgnoreOnwards = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpMultipathAsPathIgnoreOnwards.IsNull() {
+			data.BgpMultipathAsPathIgnoreOnwards = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "bgp.confederation.identifier"); value.Exists() && !data.BgpConfederationIdentifier.IsNull() {
 		data.BgpConfederationIdentifier = types.StringValue(value.String())
@@ -3245,8 +3209,8 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		data.BgpConfederationIdentifier = types.StringNull()
 	}
 	for i := range data.BgpConfederationPeers {
-		keys := [...]string{ "peer-as-number",  }
-		keyValues := [...]string{ data.BgpConfederationPeers[i].PeerAsNumber.ValueString(),  }
+		keys := [...]string{"peer-as-number"}
+		keyValues := [...]string{data.BgpConfederationPeers[i].PeerAsNumber.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "bgp.confederation.peers").ForEach(
@@ -3273,14 +3237,13 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 			data.BgpConfederationPeers[i].PeerAsNumber = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "bgp.graceful-restart.enable"); !data.BgpGracefulRestartEnable.IsNull() {
-		if value.Exists() {
-			data.BgpGracefulRestartEnable = types.BoolValue(true)
-		} else {
-			data.BgpGracefulRestartEnable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.graceful-restart.enable"); value.Exists() {
+		data.BgpGracefulRestartEnable = types.BoolValue(true)
 	} else {
-		data.BgpGracefulRestartEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpGracefulRestartEnable.IsNull() {
+			data.BgpGracefulRestartEnable = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "bgp.graceful-restart.purge-time"); value.Exists() && !data.BgpGracefulRestartPurgeTime.IsNull() {
 		data.BgpGracefulRestartPurgeTime = types.Int64Value(value.Int())
@@ -3297,69 +3260,63 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BgpGracefulRestartStalepathTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bgp.graceful-restart.graceful-reset"); !data.BgpGracefulRestartGracefulReset.IsNull() {
-		if value.Exists() {
-			data.BgpGracefulRestartGracefulReset = types.BoolValue(true)
-		} else {
-			data.BgpGracefulRestartGracefulReset = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.graceful-restart.graceful-reset"); value.Exists() {
+		data.BgpGracefulRestartGracefulReset = types.BoolValue(true)
 	} else {
-		data.BgpGracefulRestartGracefulReset = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpGracefulRestartGracefulReset.IsNull() {
+			data.BgpGracefulRestartGracefulReset = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.graceful-restart.retain-nbr-routes.disable"); !data.BgpGracefulRestartRetainNbrRoutesDisable.IsNull() {
-		if value.Exists() {
-			data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolValue(true)
-		} else {
-			data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.graceful-restart.retain-nbr-routes.disable"); value.Exists() {
+		data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolValue(true)
 	} else {
-		data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpGracefulRestartRetainNbrRoutesDisable.IsNull() {
+			data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.install.diversion"); !data.BgpInstallDiversion.IsNull() {
-		if value.Exists() {
-			data.BgpInstallDiversion = types.BoolValue(true)
-		} else {
-			data.BgpInstallDiversion = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.install.diversion"); value.Exists() {
+		data.BgpInstallDiversion = types.BoolValue(true)
 	} else {
-		data.BgpInstallDiversion = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpInstallDiversion.IsNull() {
+			data.BgpInstallDiversion = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "bgp.update-delay.delay"); value.Exists() && !data.BgpUpdateDelay.IsNull() {
 		data.BgpUpdateDelay = types.Int64Value(value.Int())
 	} else {
 		data.BgpUpdateDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bgp.update-delay.always"); !data.BgpUpdateDelayAlways.IsNull() {
-		if value.Exists() {
-			data.BgpUpdateDelayAlways = types.BoolValue(true)
-		} else {
-			data.BgpUpdateDelayAlways = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.update-delay.always"); value.Exists() {
+		data.BgpUpdateDelayAlways = types.BoolValue(true)
 	} else {
-		data.BgpUpdateDelayAlways = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpUpdateDelayAlways.IsNull() {
+			data.BgpUpdateDelayAlways = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "bgp.maximum.neighbor"); value.Exists() && !data.BgpMaximumNeighbor.IsNull() {
 		data.BgpMaximumNeighbor = types.Int64Value(value.Int())
 	} else {
 		data.BgpMaximumNeighbor = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bgp.origin-as.validation.signal.ibgp"); !data.BgpOriginAsValidationSignalIbgp.IsNull() {
-		if value.Exists() {
-			data.BgpOriginAsValidationSignalIbgp = types.BoolValue(true)
-		} else {
-			data.BgpOriginAsValidationSignalIbgp = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.origin-as.validation.signal.ibgp"); value.Exists() {
+		data.BgpOriginAsValidationSignalIbgp = types.BoolValue(true)
 	} else {
-		data.BgpOriginAsValidationSignalIbgp = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpOriginAsValidationSignalIbgp.IsNull() {
+			data.BgpOriginAsValidationSignalIbgp = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.origin-as.validation.time.off"); !data.BgpOriginAsValidationTimeOff.IsNull() {
-		if value.Exists() {
-			data.BgpOriginAsValidationTimeOff = types.BoolValue(true)
-		} else {
-			data.BgpOriginAsValidationTimeOff = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bgp.origin-as.validation.time.off"); value.Exists() {
+		data.BgpOriginAsValidationTimeOff = types.BoolValue(true)
 	} else {
-		data.BgpOriginAsValidationTimeOff = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpOriginAsValidationTimeOff.IsNull() {
+			data.BgpOriginAsValidationTimeOff = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "bgp.origin-as.validation.time.prefix-validation-time"); value.Exists() && !data.BgpOriginAsValidationTime.IsNull() {
 		data.BgpOriginAsValidationTime = types.Int64Value(value.Int())
@@ -3371,23 +3328,21 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TimersBgpKeepaliveInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.bgp.zero"); !data.TimersBgpHolddownZero.IsNull() {
-		if value.Exists() {
-			data.TimersBgpHolddownZero = types.BoolValue(true)
-		} else {
-			data.TimersBgpHolddownZero = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "timers.bgp.zero"); value.Exists() {
+		data.TimersBgpHolddownZero = types.BoolValue(true)
 	} else {
-		data.TimersBgpHolddownZero = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TimersBgpHolddownZero.IsNull() {
+			data.TimersBgpHolddownZero = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "timers.bgp.zero.zero"); !data.TimersBgpHolddownZeroMinimumAcceptableZero.IsNull() {
-		if value.Exists() {
-			data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
-		} else {
-			data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "timers.bgp.zero.zero"); value.Exists() {
+		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
 	} else {
-		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TimersBgpHolddownZeroMinimumAcceptableZero.IsNull() {
+			data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.zero.minimum-acceptable-holdtime"); value.Exists() && !data.TimersBgpHolddownZeroMinimumAcceptableHoldtime.IsNull() {
 		data.TimersBgpHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
@@ -3404,91 +3359,82 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TimersBgpHoldtimeMinimumAcceptableHoldtime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "nsr"); !data.Nsr.IsNull() {
-		if value.Exists() {
-			data.Nsr = types.BoolValue(true)
-		} else {
-			data.Nsr = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "nsr"); value.Exists() {
+		data.Nsr = types.BoolValue(true)
 	} else {
-		data.Nsr = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Nsr.IsNull() {
+			data.Nsr = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "nsr.disable"); !data.NsrDisable.IsNull() {
-		if value.Exists() {
-			data.NsrDisable = types.BoolValue(true)
-		} else {
-			data.NsrDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "nsr.disable"); value.Exists() {
+		data.NsrDisable = types.BoolValue(true)
 	} else {
-		data.NsrDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.NsrDisable.IsNull() {
+			data.NsrDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "ibgp.policy.out.enforce-modifications"); !data.IbgpPolicyOutEnforceModifications.IsNull() {
-		if value.Exists() {
-			data.IbgpPolicyOutEnforceModifications = types.BoolValue(true)
-		} else {
-			data.IbgpPolicyOutEnforceModifications = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "ibgp.policy.out.enforce-modifications"); value.Exists() {
+		data.IbgpPolicyOutEnforceModifications = types.BoolValue(true)
 	} else {
-		data.IbgpPolicyOutEnforceModifications = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.IbgpPolicyOutEnforceModifications.IsNull() {
+			data.IbgpPolicyOutEnforceModifications = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "openconfig.rib-telemetry"); !data.OpenconfigRibTelemetry.IsNull() {
-		if value.Exists() {
-			data.OpenconfigRibTelemetry = types.BoolValue(true)
-		} else {
-			data.OpenconfigRibTelemetry = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "openconfig.rib-telemetry"); value.Exists() {
+		data.OpenconfigRibTelemetry = types.BoolValue(true)
 	} else {
-		data.OpenconfigRibTelemetry = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.OpenconfigRibTelemetry.IsNull() {
+			data.OpenconfigRibTelemetry = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "update.limit"); value.Exists() && !data.UpdateLimit.IsNull() {
 		data.UpdateLimit = types.Int64Value(value.Int())
 	} else {
 		data.UpdateLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "update.in.error-handling.basic.ebgp.disable"); !data.UpdateInErrorHandlingBasicEbgpDisable.IsNull() {
-		if value.Exists() {
-			data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolValue(true)
-		} else {
-			data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "update.in.error-handling.basic.ebgp.disable"); value.Exists() {
+		data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolValue(true)
 	} else {
-		data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.UpdateInErrorHandlingBasicEbgpDisable.IsNull() {
+			data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "update.in.error-handling.basic.ibgp.disable"); !data.UpdateInErrorHandlingBasicIbgpDisable.IsNull() {
-		if value.Exists() {
-			data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolValue(true)
-		} else {
-			data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "update.in.error-handling.basic.ibgp.disable"); value.Exists() {
+		data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolValue(true)
 	} else {
-		data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.UpdateInErrorHandlingBasicIbgpDisable.IsNull() {
+			data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "update.in.error-handling.extended.ebgp"); !data.UpdateInErrorHandlingExtendedEbgp.IsNull() {
-		if value.Exists() {
-			data.UpdateInErrorHandlingExtendedEbgp = types.BoolValue(true)
-		} else {
-			data.UpdateInErrorHandlingExtendedEbgp = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "update.in.error-handling.extended.ebgp"); value.Exists() {
+		data.UpdateInErrorHandlingExtendedEbgp = types.BoolValue(true)
 	} else {
-		data.UpdateInErrorHandlingExtendedEbgp = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.UpdateInErrorHandlingExtendedEbgp.IsNull() {
+			data.UpdateInErrorHandlingExtendedEbgp = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "update.in.error-handling.extended.ibgp"); !data.UpdateInErrorHandlingExtendedIbgp.IsNull() {
-		if value.Exists() {
-			data.UpdateInErrorHandlingExtendedIbgp = types.BoolValue(true)
-		} else {
-			data.UpdateInErrorHandlingExtendedIbgp = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "update.in.error-handling.extended.ibgp"); value.Exists() {
+		data.UpdateInErrorHandlingExtendedIbgp = types.BoolValue(true)
 	} else {
-		data.UpdateInErrorHandlingExtendedIbgp = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.UpdateInErrorHandlingExtendedIbgp.IsNull() {
+			data.UpdateInErrorHandlingExtendedIbgp = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "update.out.logging"); !data.UpdateOutLogging.IsNull() {
-		if value.Exists() {
-			data.UpdateOutLogging = types.BoolValue(true)
-		} else {
-			data.UpdateOutLogging = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "update.out.logging"); value.Exists() {
+		data.UpdateOutLogging = types.BoolValue(true)
 	} else {
-		data.UpdateOutLogging = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.UpdateOutLogging.IsNull() {
+			data.UpdateOutLogging = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
@@ -3501,8 +3447,8 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
 	for i := range data.RpkiRoutes {
-		keys := [...]string{ "route-address", "route-prefix", "max", "origin",  }
-		keyValues := [...]string{ data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10),  }
+		keys := [...]string{"route-address", "route-prefix", "max", "origin"}
+		keyValues := [...]string{data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "rpki.routes.route").ForEach(
@@ -3545,8 +3491,8 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.RpkiServers {
-		keys := [...]string{ "server-name",  }
-		keyValues := [...]string{ data.RpkiServers[i].Server.ValueString(),  }
+		keys := [...]string{"server-name"}
+		keyValues := [...]string{data.RpkiServers[i].Server.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "rpki.servers.server").ForEach(
@@ -3577,28 +3523,28 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.RpkiServers[i].RefreshTimeSeconds = types.Int64Null()
 		}
-		if value := r.Get("refresh-time.off"); !data.RpkiServers[i].RefreshTimeOff.IsNull() {
-			if value.Exists() {
-				data.RpkiServers[i].RefreshTimeOff = types.BoolValue(true)
-			} else {
-				data.RpkiServers[i].RefreshTimeOff = types.BoolValue(false)
-			}
+		if value := r.Get("refresh-time.off"); value.Exists() {
+			data.RpkiServers[i].RefreshTimeOff = types.BoolValue(true)
 		} else {
-			data.RpkiServers[i].RefreshTimeOff = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.RpkiServers[i].RefreshTimeOff.IsNull() {
+				data.RpkiServers[i].RefreshTimeOff = types.BoolNull()
+			}
 		}
 		if value := r.Get("response-time.response-time-seconds"); value.Exists() && !data.RpkiServers[i].ResponseTimeSeconds.IsNull() {
 			data.RpkiServers[i].ResponseTimeSeconds = types.Int64Value(value.Int())
 		} else {
 			data.RpkiServers[i].ResponseTimeSeconds = types.Int64Null()
 		}
-		if value := r.Get("response-time.off"); !data.RpkiServers[i].ResponseTimeOff.IsNull() {
-			if value.Exists() {
-				data.RpkiServers[i].ResponseTimeOff = types.BoolValue(true)
-			} else {
-				data.RpkiServers[i].ResponseTimeOff = types.BoolValue(false)
-			}
+		if value := r.Get("response-time.off"); value.Exists() {
+			data.RpkiServers[i].ResponseTimeOff = types.BoolValue(true)
 		} else {
-			data.RpkiServers[i].ResponseTimeOff = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.RpkiServers[i].ResponseTimeOff.IsNull() {
+				data.RpkiServers[i].ResponseTimeOff = types.BoolNull()
+			}
 		}
 		if value := r.Get("purge-time"); value.Exists() && !data.RpkiServers[i].PurgeTime.IsNull() {
 			data.RpkiServers[i].PurgeTime = types.Int64Value(value.Int())
@@ -3625,14 +3571,14 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.RpkiServers[i].BindSourceInterface = types.StringNull()
 		}
-		if value := r.Get("shutdown"); !data.RpkiServers[i].Shutdown.IsNull() {
-			if value.Exists() {
-				data.RpkiServers[i].Shutdown = types.BoolValue(true)
-			} else {
-				data.RpkiServers[i].Shutdown = types.BoolValue(false)
-			}
+		if value := r.Get("shutdown"); value.Exists() {
+			data.RpkiServers[i].Shutdown = types.BoolValue(true)
 		} else {
-			data.RpkiServers[i].Shutdown = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.RpkiServers[i].Shutdown.IsNull() {
+				data.RpkiServers[i].Shutdown = types.BoolNull()
+			}
 		}
 	}
 }
@@ -3646,23 +3592,23 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"default-metric"); value.Exists() {
+	if value := res.Get(prefix + "default-metric"); value.Exists() {
 		data.DefaultMetric = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"mvpn"); value.Exists() {
+	if value := res.Get(prefix + "mvpn"); value.Exists() {
 		data.Mvpn = types.BoolValue(true)
 	} else {
 		data.Mvpn = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"segment-routing.srv6.locator"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.srv6.locator"); value.Exists() {
 		data.SegmentRoutingSrv6Locator = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
 		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 	} else {
 		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"neighbors.neighbor"); value.Exists() {
+	if value := res.Get(prefix + "neighbors.neighbor"); value.Exists() {
 		data.Neighbors = make([]RouterBGPNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPNeighbors{}
@@ -3746,13 +3692,13 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 				item.BmpActivateServers = make([]RouterBGPNeighborsBmpActivateServers, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := RouterBGPNeighborsBmpActivateServers{}
-				if ccValue := cv.Get("server-number"); ccValue.Exists() {
-					cItem.ServerNumber = types.Int64Value(ccValue.Int())
-				}
-				item.BmpActivateServers = append(item.BmpActivateServers, cItem)
-				return true
-			})
-		}
+					if ccValue := cv.Get("server-number"); ccValue.Exists() {
+						cItem.ServerNumber = types.Int64Value(ccValue.Int())
+					}
+					item.BmpActivateServers = append(item.BmpActivateServers, cItem)
+					return true
+				})
+			}
 			if cValue := v.Get("bfd.minimum-interval"); cValue.Exists() {
 				item.BfdMinimumInterval = types.Int64Value(cValue.Int())
 			}
@@ -4086,13 +4032,13 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 				item.PeerSets = make([]RouterBGPNeighborsPeerSets, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := RouterBGPNeighborsPeerSets{}
-				if ccValue := cv.Get("peer"); ccValue.Exists() {
-					cItem.Peer = types.Int64Value(ccValue.Int())
-				}
-				item.PeerSets = append(item.PeerSets, cItem)
-				return true
-			})
-		}
+					if ccValue := cv.Get("peer"); ccValue.Exists() {
+						cItem.Peer = types.Int64Value(ccValue.Int())
+					}
+					item.PeerSets = append(item.PeerSets, cItem)
+					return true
+				})
+			}
 			if cValue := v.Get("peer-node-sid.index"); cValue.Exists() {
 				item.PeerNodeSidIndex = types.Int64Value(cValue.Int())
 			}
@@ -4221,17 +4167,17 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"graceful-maintenance.activate.all-neighbors"); value.Exists() {
+	if value := res.Get(prefix + "graceful-maintenance.activate.all-neighbors"); value.Exists() {
 		data.GracefulMaintenanceActivateAllNeighbors = types.BoolValue(true)
 	} else {
 		data.GracefulMaintenanceActivateAllNeighbors = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"graceful-maintenance.activate.retain-routes"); value.Exists() {
+	if value := res.Get(prefix + "graceful-maintenance.activate.retain-routes"); value.Exists() {
 		data.GracefulMaintenanceActivateRetainRoutes = types.BoolValue(true)
 	} else {
 		data.GracefulMaintenanceActivateRetainRoutes = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"graceful-maintenance.activate.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "graceful-maintenance.activate.interfaces.interface"); value.Exists() {
 		data.GracefulMaintenanceActivateInterfaces = make([]RouterBGPGracefulMaintenanceActivateInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPGracefulMaintenanceActivateInterfaces{}
@@ -4242,7 +4188,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"graceful-maintenance.activate.locations.location"); value.Exists() {
+	if value := res.Get(prefix + "graceful-maintenance.activate.locations.location"); value.Exists() {
 		data.GracefulMaintenanceActivateLocations = make([]RouterBGPGracefulMaintenanceActivateLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPGracefulMaintenanceActivateLocations{}
@@ -4253,7 +4199,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"mpls.activate.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "mpls.activate.interfaces.interface"); value.Exists() {
 		data.MplsActivateInterfaces = make([]RouterBGPMplsActivateInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPMplsActivateInterfaces{}
@@ -4264,7 +4210,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"as-league.peers.peer"); value.Exists() {
+	if value := res.Get(prefix + "as-league.peers.peer"); value.Exists() {
 		data.AsLeaguePeers = make([]RouterBGPAsLeaguePeers, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPAsLeaguePeers{}
@@ -4275,7 +4221,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"attribute-filter.groups.group"); value.Exists() {
+	if value := res.Get(prefix + "attribute-filter.groups.group"); value.Exists() {
 		data.AttributeFilterGroups = make([]RouterBGPAttributeFilterGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPAttributeFilterGroups{}
@@ -4286,31 +4232,31 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 				item.AttributeCodeRanges = make([]RouterBGPAttributeFilterGroupsAttributeCodeRanges, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := RouterBGPAttributeFilterGroupsAttributeCodeRanges{}
-				if ccValue := cv.Get("start"); ccValue.Exists() {
-					cItem.Start = types.Int64Value(ccValue.Int())
-				}
-				if ccValue := cv.Get("end"); ccValue.Exists() {
-					cItem.End = types.Int64Value(ccValue.Int())
-				}
-				if ccValue := cv.Get("discard"); ccValue.Exists() {
-					cItem.Discard = types.BoolValue(true)
-				} else {
-					cItem.Discard = types.BoolValue(false)
-				}
-				if ccValue := cv.Get("treat-as-withdraw"); ccValue.Exists() {
-					cItem.TreatAsWithdraw = types.BoolValue(true)
-				} else {
-					cItem.TreatAsWithdraw = types.BoolValue(false)
-				}
-				item.AttributeCodeRanges = append(item.AttributeCodeRanges, cItem)
-				return true
-			})
-		}
+					if ccValue := cv.Get("start"); ccValue.Exists() {
+						cItem.Start = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("end"); ccValue.Exists() {
+						cItem.End = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("discard"); ccValue.Exists() {
+						cItem.Discard = types.BoolValue(true)
+					} else {
+						cItem.Discard = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("treat-as-withdraw"); ccValue.Exists() {
+						cItem.TreatAsWithdraw = types.BoolValue(true)
+					} else {
+						cItem.TreatAsWithdraw = types.BoolValue(false)
+					}
+					item.AttributeCodeRanges = append(item.AttributeCodeRanges, cItem)
+					return true
+				})
+			}
 			data.AttributeFilterGroups = append(data.AttributeFilterGroups, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix+"as-lists.as-list"); value.Exists() {
+	if value := res.Get(prefix + "as-lists.as-list"); value.Exists() {
 		data.AsLists = make([]RouterBGPAsLists, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPAsLists{}
@@ -4324,230 +4270,230 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("as-list-value"); ccValue.Exists() {
 						cItem.AsValue = types.StringValue(ccValue.String())
 					}
-				item.AsNumbers = append(item.AsNumbers, cItem)
-				return true
-			})
-		}
+					item.AsNumbers = append(item.AsNumbers, cItem)
+					return true
+				})
+			}
 			data.AsLists = append(data.AsLists, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix+"default-information.originate"); value.Exists() {
+	if value := res.Get(prefix + "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
 	} else {
 		data.DefaultInformationOriginate = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"socket.receive-buffer-size.receive-buffer-size-number"); value.Exists() {
+	if value := res.Get(prefix + "socket.receive-buffer-size.receive-buffer-size-number"); value.Exists() {
 		data.SocketReceiveBufferSize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"socket.receive-buffer-size.bgp-read-buffer-size-byte"); value.Exists() {
+	if value := res.Get(prefix + "socket.receive-buffer-size.bgp-read-buffer-size-byte"); value.Exists() {
 		data.SocketReceiveBufferSizeRead = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"socket.send-buffer-size.send-buffer-size-number"); value.Exists() {
+	if value := res.Get(prefix + "socket.send-buffer-size.send-buffer-size-number"); value.Exists() {
 		data.SocketSendBufferSize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"socket.send-buffer-size.bgp-write-buffer-size-byte"); value.Exists() {
+	if value := res.Get(prefix + "socket.send-buffer-size.bgp-write-buffer-size-byte"); value.Exists() {
 		data.SocketSendBufferSizeWrite = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"nexthop.mpls.forwarding.ibgp"); value.Exists() {
+	if value := res.Get(prefix + "nexthop.mpls.forwarding.ibgp"); value.Exists() {
 		data.NexthopMplsForwardingIbgp = types.BoolValue(true)
 	} else {
 		data.NexthopMplsForwardingIbgp = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"nexthop.validation.color-extcomm.sr-policy"); value.Exists() {
+	if value := res.Get(prefix + "nexthop.validation.color-extcomm.sr-policy"); value.Exists() {
 		data.NexthopValidationColorExtcommSrPolicy = types.BoolValue(true)
 	} else {
 		data.NexthopValidationColorExtcommSrPolicy = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"nexthop.validation.color-extcomm.disable"); value.Exists() {
+	if value := res.Get(prefix + "nexthop.validation.color-extcomm.disable"); value.Exists() {
 		data.NexthopValidationColorExtcommDisable = types.BoolValue(true)
 	} else {
 		data.NexthopValidationColorExtcommDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"nexthop.resolution.allow-default"); value.Exists() {
+	if value := res.Get(prefix + "nexthop.resolution.allow-default"); value.Exists() {
 		data.NexthopResolutionAllowDefault = types.BoolValue(true)
 	} else {
 		data.NexthopResolutionAllowDefault = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"nexthop.srte-metric.disable"); value.Exists() {
+	if value := res.Get(prefix + "nexthop.srte-metric.disable"); value.Exists() {
 		data.NexthopSrteMetricDisable = types.BoolValue(true)
 	} else {
 		data.NexthopSrteMetricDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"slow-peer.dynamic"); value.Exists() {
+	if value := res.Get(prefix + "slow-peer.dynamic"); value.Exists() {
 		data.SlowPeerDynamic = types.BoolValue(true)
 	} else {
 		data.SlowPeerDynamic = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"slow-peer.dynamic.threshold"); value.Exists() {
+	if value := res.Get(prefix + "slow-peer.dynamic.threshold"); value.Exists() {
 		data.SlowPeerDynamicThreshold = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"slow-peer.detection-disable"); value.Exists() {
+	if value := res.Get(prefix + "slow-peer.detection-disable"); value.Exists() {
 		data.SlowPeerDetectionDisable = types.BoolValue(true)
 	} else {
 		data.SlowPeerDetectionDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.redistribute-internal"); value.Exists() {
+	if value := res.Get(prefix + "bgp.redistribute-internal"); value.Exists() {
 		data.BgpRedistributeInternal = types.BoolValue(true)
 	} else {
 		data.BgpRedistributeInternal = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.router-id"); value.Exists() {
+	if value := res.Get(prefix + "bgp.router-id"); value.Exists() {
 		data.BgpRouterId = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"bgp.unsafe-ebgp-policy"); value.Exists() {
+	if value := res.Get(prefix + "bgp.unsafe-ebgp-policy"); value.Exists() {
 		data.BgpUnsafeEbgpPolicy = types.BoolValue(true)
 	} else {
 		data.BgpUnsafeEbgpPolicy = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.scan-time"); value.Exists() {
+	if value := res.Get(prefix + "bgp.scan-time"); value.Exists() {
 		data.BgpScanTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.read-only"); value.Exists() {
+	if value := res.Get(prefix + "bgp.read-only"); value.Exists() {
 		data.BgpReadOnly = types.BoolValue(true)
 	} else {
 		data.BgpReadOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.lpts-secure-binding"); value.Exists() {
+	if value := res.Get(prefix + "bgp.lpts-secure-binding"); value.Exists() {
 		data.BgpLptsSecureBinding = types.BoolValue(true)
 	} else {
 		data.BgpLptsSecureBinding = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.as-path-loopcheck"); value.Exists() {
+	if value := res.Get(prefix + "bgp.as-path-loopcheck"); value.Exists() {
 		data.BgpAsPathLoopcheck = types.BoolValue(true)
 	} else {
 		data.BgpAsPathLoopcheck = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.auto-policy-soft-reset.disable"); value.Exists() {
+	if value := res.Get(prefix + "bgp.auto-policy-soft-reset.disable"); value.Exists() {
 		data.BgpAutoPolicySoftResetDisable = types.BoolValue(true)
 	} else {
 		data.BgpAutoPolicySoftResetDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.bestpath.cost-community.ignore"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.cost-community.ignore"); value.Exists() {
 		data.BgpBestpathCostCommunityIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathCostCommunityIgnore = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.bestpath.compare-routerid"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.compare-routerid"); value.Exists() {
 		data.BgpBestpathCompareRouterid = types.BoolValue(true)
 	} else {
 		data.BgpBestpathCompareRouterid = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.bestpath.aigp.ignore"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.aigp.ignore"); value.Exists() {
 		data.BgpBestpathAigpIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathAigpIgnore = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.bestpath.igp-metric.ignore"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.igp-metric.ignore"); value.Exists() {
 		data.BgpBestpathIgpMetricIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathIgpMetricIgnore = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.bestpath.igp-metric.sr-policy"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.igp-metric.sr-policy"); value.Exists() {
 		data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(true)
 	} else {
 		data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.bestpath.med.missing-as-worst"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.med.missing-as-worst"); value.Exists() {
 		data.BgpBestpathMedMissingAsWorst = types.BoolValue(true)
 	} else {
 		data.BgpBestpathMedMissingAsWorst = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.bestpath.med.always"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.med.always"); value.Exists() {
 		data.BgpBestpathMedAlways = types.BoolValue(true)
 	} else {
 		data.BgpBestpathMedAlways = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.bestpath.as-path.ignore"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.as-path.ignore"); value.Exists() {
 		data.BgpBestpathAsPathIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathAsPathIgnore = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.bestpath.as-path.multipath-relax"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.as-path.multipath-relax"); value.Exists() {
 		data.BgpBestpathAsPathMultipathRelax = types.BoolValue(true)
 	} else {
 		data.BgpBestpathAsPathMultipathRelax = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.bestpath.origin-as.use.validity"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.origin-as.use.validity"); value.Exists() {
 		data.BgpBestpathOriginAsUseValidity = types.BoolValue(true)
 	} else {
 		data.BgpBestpathOriginAsUseValidity = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.bestpath.origin-as.allow.invalid"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.origin-as.allow.invalid"); value.Exists() {
 		data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(true)
 	} else {
 		data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.bestpath.sr-policy.prefer"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.sr-policy.prefer"); value.Exists() {
 		data.BgpBestpathSrPolicyPrefer = types.BoolValue(true)
 	} else {
 		data.BgpBestpathSrPolicyPrefer = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.bestpath.sr-policy.force"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.sr-policy.force"); value.Exists() {
 		data.BgpBestpathSrPolicyForce = types.BoolValue(true)
 	} else {
 		data.BgpBestpathSrPolicyForce = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.cluster-id.route-reflector-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.cluster-id.route-reflector-number"); value.Exists() {
 		data.BgpClusterId32bitFormat = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.cluster-id.route-reflector-ip-address"); value.Exists() {
+	if value := res.Get(prefix + "bgp.cluster-id.route-reflector-ip-address"); value.Exists() {
 		data.BgpClusterIdIpFormat = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"bgp.default.local-preference"); value.Exists() {
+	if value := res.Get(prefix + "bgp.default.local-preference"); value.Exists() {
 		data.BgpDefaultLocalPreference = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.enforce-first-as.disable"); value.Exists() {
+	if value := res.Get(prefix + "bgp.enforce-first-as.disable"); value.Exists() {
 		data.BgpEnforceFirstAsDisable = types.BoolValue(true)
 	} else {
 		data.BgpEnforceFirstAsDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.fast-external-fallover.disable"); value.Exists() {
+	if value := res.Get(prefix + "bgp.fast-external-fallover.disable"); value.Exists() {
 		data.BgpFastExternalFalloverDisable = types.BoolValue(true)
 	} else {
 		data.BgpFastExternalFalloverDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.log.neighbor.changes.detail"); value.Exists() {
+	if value := res.Get(prefix + "bgp.log.neighbor.changes.detail"); value.Exists() {
 		data.BgpLogNeighborChangesDetail = types.BoolValue(true)
 	} else {
 		data.BgpLogNeighborChangesDetail = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.log.neighbor.changes.disable"); value.Exists() {
+	if value := res.Get(prefix + "bgp.log.neighbor.changes.disable"); value.Exists() {
 		data.BgpLogNeighborChangesDisable = types.BoolValue(true)
 	} else {
 		data.BgpLogNeighborChangesDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.log.message.disable"); value.Exists() {
+	if value := res.Get(prefix + "bgp.log.message.disable"); value.Exists() {
 		data.BgpLogMessageDisable = types.BoolValue(true)
 	} else {
 		data.BgpLogMessageDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.log.memory-threshold.memory-warning-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.log.memory-threshold.memory-warning-number"); value.Exists() {
 		data.BgpLogMemoryThresholdWarning = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.log.memory-threshold.memory-critical-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.log.memory-threshold.memory-critical-number"); value.Exists() {
 		data.BgpLogMemoryThresholdCritical = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.log.total-paths.total-paths-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.log.total-paths.total-paths-number"); value.Exists() {
 		data.BgpLogTotalPaths = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.log.total-paths.warn-threshold-value"); value.Exists() {
+	if value := res.Get(prefix + "bgp.log.total-paths.warn-threshold-value"); value.Exists() {
 		data.BgpLogTotalPathsWarnThreshold = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.multipath.use.cluster-list-length"); value.Exists() {
+	if value := res.Get(prefix + "bgp.multipath.use.cluster-list-length"); value.Exists() {
 		data.BgpMultipathUseClusterListLength = types.BoolValue(true)
 	} else {
 		data.BgpMultipathUseClusterListLength = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.multipath.as-path.ignore.onwards"); value.Exists() {
+	if value := res.Get(prefix + "bgp.multipath.as-path.ignore.onwards"); value.Exists() {
 		data.BgpMultipathAsPathIgnoreOnwards = types.BoolValue(true)
 	} else {
 		data.BgpMultipathAsPathIgnoreOnwards = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.confederation.identifier"); value.Exists() {
+	if value := res.Get(prefix + "bgp.confederation.identifier"); value.Exists() {
 		data.BgpConfederationIdentifier = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"bgp.confederation.peers"); value.Exists() {
+	if value := res.Get(prefix + "bgp.confederation.peers"); value.Exists() {
 		data.BgpConfederationPeers = make([]RouterBGPBgpConfederationPeers, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPBgpConfederationPeers{}
@@ -4558,136 +4504,136 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"bgp.graceful-restart.enable"); value.Exists() {
+	if value := res.Get(prefix + "bgp.graceful-restart.enable"); value.Exists() {
 		data.BgpGracefulRestartEnable = types.BoolValue(true)
 	} else {
 		data.BgpGracefulRestartEnable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.graceful-restart.purge-time"); value.Exists() {
+	if value := res.Get(prefix + "bgp.graceful-restart.purge-time"); value.Exists() {
 		data.BgpGracefulRestartPurgeTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.graceful-restart.restart-time"); value.Exists() {
+	if value := res.Get(prefix + "bgp.graceful-restart.restart-time"); value.Exists() {
 		data.BgpGracefulRestartRestartTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.graceful-restart.stalepath-time"); value.Exists() {
+	if value := res.Get(prefix + "bgp.graceful-restart.stalepath-time"); value.Exists() {
 		data.BgpGracefulRestartStalepathTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.graceful-restart.graceful-reset"); value.Exists() {
+	if value := res.Get(prefix + "bgp.graceful-restart.graceful-reset"); value.Exists() {
 		data.BgpGracefulRestartGracefulReset = types.BoolValue(true)
 	} else {
 		data.BgpGracefulRestartGracefulReset = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.graceful-restart.retain-nbr-routes.disable"); value.Exists() {
+	if value := res.Get(prefix + "bgp.graceful-restart.retain-nbr-routes.disable"); value.Exists() {
 		data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolValue(true)
 	} else {
 		data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.install.diversion"); value.Exists() {
+	if value := res.Get(prefix + "bgp.install.diversion"); value.Exists() {
 		data.BgpInstallDiversion = types.BoolValue(true)
 	} else {
 		data.BgpInstallDiversion = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.update-delay.delay"); value.Exists() {
+	if value := res.Get(prefix + "bgp.update-delay.delay"); value.Exists() {
 		data.BgpUpdateDelay = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.update-delay.always"); value.Exists() {
+	if value := res.Get(prefix + "bgp.update-delay.always"); value.Exists() {
 		data.BgpUpdateDelayAlways = types.BoolValue(true)
 	} else {
 		data.BgpUpdateDelayAlways = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.maximum.neighbor"); value.Exists() {
+	if value := res.Get(prefix + "bgp.maximum.neighbor"); value.Exists() {
 		data.BgpMaximumNeighbor = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.origin-as.validation.signal.ibgp"); value.Exists() {
+	if value := res.Get(prefix + "bgp.origin-as.validation.signal.ibgp"); value.Exists() {
 		data.BgpOriginAsValidationSignalIbgp = types.BoolValue(true)
 	} else {
 		data.BgpOriginAsValidationSignalIbgp = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.origin-as.validation.time.off"); value.Exists() {
+	if value := res.Get(prefix + "bgp.origin-as.validation.time.off"); value.Exists() {
 		data.BgpOriginAsValidationTimeOff = types.BoolValue(true)
 	} else {
 		data.BgpOriginAsValidationTimeOff = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bgp.origin-as.validation.time.prefix-validation-time"); value.Exists() {
+	if value := res.Get(prefix + "bgp.origin-as.validation.time.prefix-validation-time"); value.Exists() {
 		data.BgpOriginAsValidationTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timers.bgp.keepalive-interval"); value.Exists() {
+	if value := res.Get(prefix + "timers.bgp.keepalive-interval"); value.Exists() {
 		data.TimersBgpKeepaliveInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timers.bgp.zero"); value.Exists() {
+	if value := res.Get(prefix + "timers.bgp.zero"); value.Exists() {
 		data.TimersBgpHolddownZero = types.BoolValue(true)
 	} else {
 		data.TimersBgpHolddownZero = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"timers.bgp.zero.zero"); value.Exists() {
+	if value := res.Get(prefix + "timers.bgp.zero.zero"); value.Exists() {
 		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
 	} else {
 		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"timers.bgp.zero.minimum-acceptable-holdtime"); value.Exists() {
+	if value := res.Get(prefix + "timers.bgp.zero.minimum-acceptable-holdtime"); value.Exists() {
 		data.TimersBgpHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timers.bgp.holdtime.holdtime-number"); value.Exists() {
+	if value := res.Get(prefix + "timers.bgp.holdtime.holdtime-number"); value.Exists() {
 		data.TimersBgpHoldtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timers.bgp.holdtime.minimum-acceptable-holdtime"); value.Exists() {
+	if value := res.Get(prefix + "timers.bgp.holdtime.minimum-acceptable-holdtime"); value.Exists() {
 		data.TimersBgpHoldtimeMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"nsr"); value.Exists() {
+	if value := res.Get(prefix + "nsr"); value.Exists() {
 		data.Nsr = types.BoolValue(true)
 	} else {
 		data.Nsr = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"nsr.disable"); value.Exists() {
+	if value := res.Get(prefix + "nsr.disable"); value.Exists() {
 		data.NsrDisable = types.BoolValue(true)
 	} else {
 		data.NsrDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"ibgp.policy.out.enforce-modifications"); value.Exists() {
+	if value := res.Get(prefix + "ibgp.policy.out.enforce-modifications"); value.Exists() {
 		data.IbgpPolicyOutEnforceModifications = types.BoolValue(true)
 	} else {
 		data.IbgpPolicyOutEnforceModifications = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"openconfig.rib-telemetry"); value.Exists() {
+	if value := res.Get(prefix + "openconfig.rib-telemetry"); value.Exists() {
 		data.OpenconfigRibTelemetry = types.BoolValue(true)
 	} else {
 		data.OpenconfigRibTelemetry = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"update.limit"); value.Exists() {
+	if value := res.Get(prefix + "update.limit"); value.Exists() {
 		data.UpdateLimit = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"update.in.error-handling.basic.ebgp.disable"); value.Exists() {
+	if value := res.Get(prefix + "update.in.error-handling.basic.ebgp.disable"); value.Exists() {
 		data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"update.in.error-handling.basic.ibgp.disable"); value.Exists() {
+	if value := res.Get(prefix + "update.in.error-handling.basic.ibgp.disable"); value.Exists() {
 		data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"update.in.error-handling.extended.ebgp"); value.Exists() {
+	if value := res.Get(prefix + "update.in.error-handling.extended.ebgp"); value.Exists() {
 		data.UpdateInErrorHandlingExtendedEbgp = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingExtendedEbgp = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"update.in.error-handling.extended.ibgp"); value.Exists() {
+	if value := res.Get(prefix + "update.in.error-handling.extended.ibgp"); value.Exists() {
 		data.UpdateInErrorHandlingExtendedIbgp = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingExtendedIbgp = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"update.out.logging"); value.Exists() {
+	if value := res.Get(prefix + "update.out.logging"); value.Exists() {
 		data.UpdateOutLogging = types.BoolValue(true)
 	} else {
 		data.UpdateOutLogging = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"bfd.multiplier"); value.Exists() {
+	if value := res.Get(prefix + "bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bfd.minimum-interval"); value.Exists() {
+	if value := res.Get(prefix + "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"rpki.routes.route"); value.Exists() {
+	if value := res.Get(prefix + "rpki.routes.route"); value.Exists() {
 		data.RpkiRoutes = make([]RouterBGPRpkiRoutes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPRpkiRoutes{}
@@ -4707,7 +4653,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"rpki.servers.server"); value.Exists() {
+	if value := res.Get(prefix + "rpki.servers.server"); value.Exists() {
 		data.RpkiServers = make([]RouterBGPRpkiServers, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPRpkiServers{}
@@ -4765,23 +4711,23 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"default-metric"); value.Exists() {
+	if value := res.Get(prefix + "default-metric"); value.Exists() {
 		data.DefaultMetric = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"mvpn"); value.Exists() {
+	if value := res.Get(prefix + "mvpn"); value.Exists() {
 		data.Mvpn = types.BoolValue(true)
 	} else {
 		data.Mvpn = types.BoolNull()
 	}
-	if value := res.Get(prefix+"segment-routing.srv6.locator"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.srv6.locator"); value.Exists() {
 		data.SegmentRoutingSrv6Locator = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
 		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 	} else {
 		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolNull()
 	}
-	if value := res.Get(prefix+"neighbors.neighbor"); value.Exists() {
+	if value := res.Get(prefix + "neighbors.neighbor"); value.Exists() {
 		data.Neighbors = make([]RouterBGPNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPNeighbors{}
@@ -5343,17 +5289,17 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"graceful-maintenance.activate.all-neighbors"); value.Exists() {
+	if value := res.Get(prefix + "graceful-maintenance.activate.all-neighbors"); value.Exists() {
 		data.GracefulMaintenanceActivateAllNeighbors = types.BoolValue(true)
 	} else {
 		data.GracefulMaintenanceActivateAllNeighbors = types.BoolNull()
 	}
-	if value := res.Get(prefix+"graceful-maintenance.activate.retain-routes"); value.Exists() {
+	if value := res.Get(prefix + "graceful-maintenance.activate.retain-routes"); value.Exists() {
 		data.GracefulMaintenanceActivateRetainRoutes = types.BoolValue(true)
 	} else {
 		data.GracefulMaintenanceActivateRetainRoutes = types.BoolNull()
 	}
-	if value := res.Get(prefix+"graceful-maintenance.activate.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "graceful-maintenance.activate.interfaces.interface"); value.Exists() {
 		data.GracefulMaintenanceActivateInterfaces = make([]RouterBGPGracefulMaintenanceActivateInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPGracefulMaintenanceActivateInterfaces{}
@@ -5364,7 +5310,7 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"graceful-maintenance.activate.locations.location"); value.Exists() {
+	if value := res.Get(prefix + "graceful-maintenance.activate.locations.location"); value.Exists() {
 		data.GracefulMaintenanceActivateLocations = make([]RouterBGPGracefulMaintenanceActivateLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPGracefulMaintenanceActivateLocations{}
@@ -5375,7 +5321,7 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"mpls.activate.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "mpls.activate.interfaces.interface"); value.Exists() {
 		data.MplsActivateInterfaces = make([]RouterBGPMplsActivateInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPMplsActivateInterfaces{}
@@ -5386,7 +5332,7 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"as-league.peers.peer"); value.Exists() {
+	if value := res.Get(prefix + "as-league.peers.peer"); value.Exists() {
 		data.AsLeaguePeers = make([]RouterBGPAsLeaguePeers, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPAsLeaguePeers{}
@@ -5397,7 +5343,7 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"attribute-filter.groups.group"); value.Exists() {
+	if value := res.Get(prefix + "attribute-filter.groups.group"); value.Exists() {
 		data.AttributeFilterGroups = make([]RouterBGPAttributeFilterGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPAttributeFilterGroups{}
@@ -5432,7 +5378,7 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"as-lists.as-list"); value.Exists() {
+	if value := res.Get(prefix + "as-lists.as-list"); value.Exists() {
 		data.AsLists = make([]RouterBGPAsLists, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPAsLists{}
@@ -5454,222 +5400,222 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"default-information.originate"); value.Exists() {
+	if value := res.Get(prefix + "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
 	} else {
 		data.DefaultInformationOriginate = types.BoolNull()
 	}
-	if value := res.Get(prefix+"socket.receive-buffer-size.receive-buffer-size-number"); value.Exists() {
+	if value := res.Get(prefix + "socket.receive-buffer-size.receive-buffer-size-number"); value.Exists() {
 		data.SocketReceiveBufferSize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"socket.receive-buffer-size.bgp-read-buffer-size-byte"); value.Exists() {
+	if value := res.Get(prefix + "socket.receive-buffer-size.bgp-read-buffer-size-byte"); value.Exists() {
 		data.SocketReceiveBufferSizeRead = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"socket.send-buffer-size.send-buffer-size-number"); value.Exists() {
+	if value := res.Get(prefix + "socket.send-buffer-size.send-buffer-size-number"); value.Exists() {
 		data.SocketSendBufferSize = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"socket.send-buffer-size.bgp-write-buffer-size-byte"); value.Exists() {
+	if value := res.Get(prefix + "socket.send-buffer-size.bgp-write-buffer-size-byte"); value.Exists() {
 		data.SocketSendBufferSizeWrite = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"nexthop.mpls.forwarding.ibgp"); value.Exists() {
+	if value := res.Get(prefix + "nexthop.mpls.forwarding.ibgp"); value.Exists() {
 		data.NexthopMplsForwardingIbgp = types.BoolValue(true)
 	} else {
 		data.NexthopMplsForwardingIbgp = types.BoolNull()
 	}
-	if value := res.Get(prefix+"nexthop.validation.color-extcomm.sr-policy"); value.Exists() {
+	if value := res.Get(prefix + "nexthop.validation.color-extcomm.sr-policy"); value.Exists() {
 		data.NexthopValidationColorExtcommSrPolicy = types.BoolValue(true)
 	} else {
 		data.NexthopValidationColorExtcommSrPolicy = types.BoolNull()
 	}
-	if value := res.Get(prefix+"nexthop.validation.color-extcomm.disable"); value.Exists() {
+	if value := res.Get(prefix + "nexthop.validation.color-extcomm.disable"); value.Exists() {
 		data.NexthopValidationColorExtcommDisable = types.BoolValue(true)
 	} else {
 		data.NexthopValidationColorExtcommDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"nexthop.resolution.allow-default"); value.Exists() {
+	if value := res.Get(prefix + "nexthop.resolution.allow-default"); value.Exists() {
 		data.NexthopResolutionAllowDefault = types.BoolValue(true)
 	} else {
 		data.NexthopResolutionAllowDefault = types.BoolNull()
 	}
-	if value := res.Get(prefix+"nexthop.srte-metric.disable"); value.Exists() {
+	if value := res.Get(prefix + "nexthop.srte-metric.disable"); value.Exists() {
 		data.NexthopSrteMetricDisable = types.BoolValue(true)
 	} else {
 		data.NexthopSrteMetricDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"slow-peer.dynamic"); value.Exists() {
+	if value := res.Get(prefix + "slow-peer.dynamic"); value.Exists() {
 		data.SlowPeerDynamic = types.BoolValue(true)
 	} else {
 		data.SlowPeerDynamic = types.BoolNull()
 	}
-	if value := res.Get(prefix+"slow-peer.dynamic.threshold"); value.Exists() {
+	if value := res.Get(prefix + "slow-peer.dynamic.threshold"); value.Exists() {
 		data.SlowPeerDynamicThreshold = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"slow-peer.detection-disable"); value.Exists() {
+	if value := res.Get(prefix + "slow-peer.detection-disable"); value.Exists() {
 		data.SlowPeerDetectionDisable = types.BoolValue(true)
 	} else {
 		data.SlowPeerDetectionDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.redistribute-internal"); value.Exists() {
+	if value := res.Get(prefix + "bgp.redistribute-internal"); value.Exists() {
 		data.BgpRedistributeInternal = types.BoolValue(true)
 	} else {
 		data.BgpRedistributeInternal = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.router-id"); value.Exists() {
+	if value := res.Get(prefix + "bgp.router-id"); value.Exists() {
 		data.BgpRouterId = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"bgp.unsafe-ebgp-policy"); value.Exists() {
+	if value := res.Get(prefix + "bgp.unsafe-ebgp-policy"); value.Exists() {
 		data.BgpUnsafeEbgpPolicy = types.BoolValue(true)
 	} else {
 		data.BgpUnsafeEbgpPolicy = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.scan-time"); value.Exists() {
+	if value := res.Get(prefix + "bgp.scan-time"); value.Exists() {
 		data.BgpScanTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.read-only"); value.Exists() {
+	if value := res.Get(prefix + "bgp.read-only"); value.Exists() {
 		data.BgpReadOnly = types.BoolValue(true)
 	} else {
 		data.BgpReadOnly = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.lpts-secure-binding"); value.Exists() {
+	if value := res.Get(prefix + "bgp.lpts-secure-binding"); value.Exists() {
 		data.BgpLptsSecureBinding = types.BoolValue(true)
 	} else {
 		data.BgpLptsSecureBinding = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.as-path-loopcheck"); value.Exists() {
+	if value := res.Get(prefix + "bgp.as-path-loopcheck"); value.Exists() {
 		data.BgpAsPathLoopcheck = types.BoolValue(true)
 	} else {
 		data.BgpAsPathLoopcheck = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.auto-policy-soft-reset.disable"); value.Exists() {
+	if value := res.Get(prefix + "bgp.auto-policy-soft-reset.disable"); value.Exists() {
 		data.BgpAutoPolicySoftResetDisable = types.BoolValue(true)
 	} else {
 		data.BgpAutoPolicySoftResetDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.bestpath.cost-community.ignore"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.cost-community.ignore"); value.Exists() {
 		data.BgpBestpathCostCommunityIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathCostCommunityIgnore = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.bestpath.compare-routerid"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.compare-routerid"); value.Exists() {
 		data.BgpBestpathCompareRouterid = types.BoolValue(true)
 	} else {
 		data.BgpBestpathCompareRouterid = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.bestpath.aigp.ignore"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.aigp.ignore"); value.Exists() {
 		data.BgpBestpathAigpIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathAigpIgnore = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.bestpath.igp-metric.ignore"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.igp-metric.ignore"); value.Exists() {
 		data.BgpBestpathIgpMetricIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathIgpMetricIgnore = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.bestpath.igp-metric.sr-policy"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.igp-metric.sr-policy"); value.Exists() {
 		data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(true)
 	} else {
 		data.BgpBestpathIgpMetricSrPolicy = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.bestpath.med.missing-as-worst"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.med.missing-as-worst"); value.Exists() {
 		data.BgpBestpathMedMissingAsWorst = types.BoolValue(true)
 	} else {
 		data.BgpBestpathMedMissingAsWorst = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.bestpath.med.always"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.med.always"); value.Exists() {
 		data.BgpBestpathMedAlways = types.BoolValue(true)
 	} else {
 		data.BgpBestpathMedAlways = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.bestpath.as-path.ignore"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.as-path.ignore"); value.Exists() {
 		data.BgpBestpathAsPathIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathAsPathIgnore = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.bestpath.as-path.multipath-relax"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.as-path.multipath-relax"); value.Exists() {
 		data.BgpBestpathAsPathMultipathRelax = types.BoolValue(true)
 	} else {
 		data.BgpBestpathAsPathMultipathRelax = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.bestpath.origin-as.use.validity"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.origin-as.use.validity"); value.Exists() {
 		data.BgpBestpathOriginAsUseValidity = types.BoolValue(true)
 	} else {
 		data.BgpBestpathOriginAsUseValidity = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.bestpath.origin-as.allow.invalid"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.origin-as.allow.invalid"); value.Exists() {
 		data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(true)
 	} else {
 		data.BgpBestpathOriginAsAllowInvalid = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.bestpath.sr-policy.prefer"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.sr-policy.prefer"); value.Exists() {
 		data.BgpBestpathSrPolicyPrefer = types.BoolValue(true)
 	} else {
 		data.BgpBestpathSrPolicyPrefer = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.bestpath.sr-policy.force"); value.Exists() {
+	if value := res.Get(prefix + "bgp.bestpath.sr-policy.force"); value.Exists() {
 		data.BgpBestpathSrPolicyForce = types.BoolValue(true)
 	} else {
 		data.BgpBestpathSrPolicyForce = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.cluster-id.route-reflector-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.cluster-id.route-reflector-number"); value.Exists() {
 		data.BgpClusterId32bitFormat = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.cluster-id.route-reflector-ip-address"); value.Exists() {
+	if value := res.Get(prefix + "bgp.cluster-id.route-reflector-ip-address"); value.Exists() {
 		data.BgpClusterIdIpFormat = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"bgp.default.local-preference"); value.Exists() {
+	if value := res.Get(prefix + "bgp.default.local-preference"); value.Exists() {
 		data.BgpDefaultLocalPreference = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.enforce-first-as.disable"); value.Exists() {
+	if value := res.Get(prefix + "bgp.enforce-first-as.disable"); value.Exists() {
 		data.BgpEnforceFirstAsDisable = types.BoolValue(true)
 	} else {
 		data.BgpEnforceFirstAsDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.fast-external-fallover.disable"); value.Exists() {
+	if value := res.Get(prefix + "bgp.fast-external-fallover.disable"); value.Exists() {
 		data.BgpFastExternalFalloverDisable = types.BoolValue(true)
 	} else {
 		data.BgpFastExternalFalloverDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.log.neighbor.changes.detail"); value.Exists() {
+	if value := res.Get(prefix + "bgp.log.neighbor.changes.detail"); value.Exists() {
 		data.BgpLogNeighborChangesDetail = types.BoolValue(true)
 	} else {
 		data.BgpLogNeighborChangesDetail = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.log.neighbor.changes.disable"); value.Exists() {
+	if value := res.Get(prefix + "bgp.log.neighbor.changes.disable"); value.Exists() {
 		data.BgpLogNeighborChangesDisable = types.BoolValue(true)
 	} else {
 		data.BgpLogNeighborChangesDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.log.message.disable"); value.Exists() {
+	if value := res.Get(prefix + "bgp.log.message.disable"); value.Exists() {
 		data.BgpLogMessageDisable = types.BoolValue(true)
 	} else {
 		data.BgpLogMessageDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.log.memory-threshold.memory-warning-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.log.memory-threshold.memory-warning-number"); value.Exists() {
 		data.BgpLogMemoryThresholdWarning = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.log.memory-threshold.memory-critical-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.log.memory-threshold.memory-critical-number"); value.Exists() {
 		data.BgpLogMemoryThresholdCritical = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.log.total-paths.total-paths-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.log.total-paths.total-paths-number"); value.Exists() {
 		data.BgpLogTotalPaths = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.log.total-paths.warn-threshold-value"); value.Exists() {
+	if value := res.Get(prefix + "bgp.log.total-paths.warn-threshold-value"); value.Exists() {
 		data.BgpLogTotalPathsWarnThreshold = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.multipath.use.cluster-list-length"); value.Exists() {
+	if value := res.Get(prefix + "bgp.multipath.use.cluster-list-length"); value.Exists() {
 		data.BgpMultipathUseClusterListLength = types.BoolValue(true)
 	} else {
 		data.BgpMultipathUseClusterListLength = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.multipath.as-path.ignore.onwards"); value.Exists() {
+	if value := res.Get(prefix + "bgp.multipath.as-path.ignore.onwards"); value.Exists() {
 		data.BgpMultipathAsPathIgnoreOnwards = types.BoolValue(true)
 	} else {
 		data.BgpMultipathAsPathIgnoreOnwards = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.confederation.identifier"); value.Exists() {
+	if value := res.Get(prefix + "bgp.confederation.identifier"); value.Exists() {
 		data.BgpConfederationIdentifier = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix+"bgp.confederation.peers"); value.Exists() {
+	if value := res.Get(prefix + "bgp.confederation.peers"); value.Exists() {
 		data.BgpConfederationPeers = make([]RouterBGPBgpConfederationPeers, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPBgpConfederationPeers{}
@@ -5680,136 +5626,136 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"bgp.graceful-restart.enable"); value.Exists() {
+	if value := res.Get(prefix + "bgp.graceful-restart.enable"); value.Exists() {
 		data.BgpGracefulRestartEnable = types.BoolValue(true)
 	} else {
 		data.BgpGracefulRestartEnable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.graceful-restart.purge-time"); value.Exists() {
+	if value := res.Get(prefix + "bgp.graceful-restart.purge-time"); value.Exists() {
 		data.BgpGracefulRestartPurgeTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.graceful-restart.restart-time"); value.Exists() {
+	if value := res.Get(prefix + "bgp.graceful-restart.restart-time"); value.Exists() {
 		data.BgpGracefulRestartRestartTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.graceful-restart.stalepath-time"); value.Exists() {
+	if value := res.Get(prefix + "bgp.graceful-restart.stalepath-time"); value.Exists() {
 		data.BgpGracefulRestartStalepathTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.graceful-restart.graceful-reset"); value.Exists() {
+	if value := res.Get(prefix + "bgp.graceful-restart.graceful-reset"); value.Exists() {
 		data.BgpGracefulRestartGracefulReset = types.BoolValue(true)
 	} else {
 		data.BgpGracefulRestartGracefulReset = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.graceful-restart.retain-nbr-routes.disable"); value.Exists() {
+	if value := res.Get(prefix + "bgp.graceful-restart.retain-nbr-routes.disable"); value.Exists() {
 		data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolValue(true)
 	} else {
 		data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.install.diversion"); value.Exists() {
+	if value := res.Get(prefix + "bgp.install.diversion"); value.Exists() {
 		data.BgpInstallDiversion = types.BoolValue(true)
 	} else {
 		data.BgpInstallDiversion = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.update-delay.delay"); value.Exists() {
+	if value := res.Get(prefix + "bgp.update-delay.delay"); value.Exists() {
 		data.BgpUpdateDelay = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.update-delay.always"); value.Exists() {
+	if value := res.Get(prefix + "bgp.update-delay.always"); value.Exists() {
 		data.BgpUpdateDelayAlways = types.BoolValue(true)
 	} else {
 		data.BgpUpdateDelayAlways = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.maximum.neighbor"); value.Exists() {
+	if value := res.Get(prefix + "bgp.maximum.neighbor"); value.Exists() {
 		data.BgpMaximumNeighbor = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bgp.origin-as.validation.signal.ibgp"); value.Exists() {
+	if value := res.Get(prefix + "bgp.origin-as.validation.signal.ibgp"); value.Exists() {
 		data.BgpOriginAsValidationSignalIbgp = types.BoolValue(true)
 	} else {
 		data.BgpOriginAsValidationSignalIbgp = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.origin-as.validation.time.off"); value.Exists() {
+	if value := res.Get(prefix + "bgp.origin-as.validation.time.off"); value.Exists() {
 		data.BgpOriginAsValidationTimeOff = types.BoolValue(true)
 	} else {
 		data.BgpOriginAsValidationTimeOff = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bgp.origin-as.validation.time.prefix-validation-time"); value.Exists() {
+	if value := res.Get(prefix + "bgp.origin-as.validation.time.prefix-validation-time"); value.Exists() {
 		data.BgpOriginAsValidationTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timers.bgp.keepalive-interval"); value.Exists() {
+	if value := res.Get(prefix + "timers.bgp.keepalive-interval"); value.Exists() {
 		data.TimersBgpKeepaliveInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timers.bgp.zero"); value.Exists() {
+	if value := res.Get(prefix + "timers.bgp.zero"); value.Exists() {
 		data.TimersBgpHolddownZero = types.BoolValue(true)
 	} else {
 		data.TimersBgpHolddownZero = types.BoolNull()
 	}
-	if value := res.Get(prefix+"timers.bgp.zero.zero"); value.Exists() {
+	if value := res.Get(prefix + "timers.bgp.zero.zero"); value.Exists() {
 		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
 	} else {
 		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolNull()
 	}
-	if value := res.Get(prefix+"timers.bgp.zero.minimum-acceptable-holdtime"); value.Exists() {
+	if value := res.Get(prefix + "timers.bgp.zero.minimum-acceptable-holdtime"); value.Exists() {
 		data.TimersBgpHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timers.bgp.holdtime.holdtime-number"); value.Exists() {
+	if value := res.Get(prefix + "timers.bgp.holdtime.holdtime-number"); value.Exists() {
 		data.TimersBgpHoldtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"timers.bgp.holdtime.minimum-acceptable-holdtime"); value.Exists() {
+	if value := res.Get(prefix + "timers.bgp.holdtime.minimum-acceptable-holdtime"); value.Exists() {
 		data.TimersBgpHoldtimeMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"nsr"); value.Exists() {
+	if value := res.Get(prefix + "nsr"); value.Exists() {
 		data.Nsr = types.BoolValue(true)
 	} else {
 		data.Nsr = types.BoolNull()
 	}
-	if value := res.Get(prefix+"nsr.disable"); value.Exists() {
+	if value := res.Get(prefix + "nsr.disable"); value.Exists() {
 		data.NsrDisable = types.BoolValue(true)
 	} else {
 		data.NsrDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"ibgp.policy.out.enforce-modifications"); value.Exists() {
+	if value := res.Get(prefix + "ibgp.policy.out.enforce-modifications"); value.Exists() {
 		data.IbgpPolicyOutEnforceModifications = types.BoolValue(true)
 	} else {
 		data.IbgpPolicyOutEnforceModifications = types.BoolNull()
 	}
-	if value := res.Get(prefix+"openconfig.rib-telemetry"); value.Exists() {
+	if value := res.Get(prefix + "openconfig.rib-telemetry"); value.Exists() {
 		data.OpenconfigRibTelemetry = types.BoolValue(true)
 	} else {
 		data.OpenconfigRibTelemetry = types.BoolNull()
 	}
-	if value := res.Get(prefix+"update.limit"); value.Exists() {
+	if value := res.Get(prefix + "update.limit"); value.Exists() {
 		data.UpdateLimit = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"update.in.error-handling.basic.ebgp.disable"); value.Exists() {
+	if value := res.Get(prefix + "update.in.error-handling.basic.ebgp.disable"); value.Exists() {
 		data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"update.in.error-handling.basic.ibgp.disable"); value.Exists() {
+	if value := res.Get(prefix + "update.in.error-handling.basic.ibgp.disable"); value.Exists() {
 		data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix+"update.in.error-handling.extended.ebgp"); value.Exists() {
+	if value := res.Get(prefix + "update.in.error-handling.extended.ebgp"); value.Exists() {
 		data.UpdateInErrorHandlingExtendedEbgp = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingExtendedEbgp = types.BoolNull()
 	}
-	if value := res.Get(prefix+"update.in.error-handling.extended.ibgp"); value.Exists() {
+	if value := res.Get(prefix + "update.in.error-handling.extended.ibgp"); value.Exists() {
 		data.UpdateInErrorHandlingExtendedIbgp = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingExtendedIbgp = types.BoolNull()
 	}
-	if value := res.Get(prefix+"update.out.logging"); value.Exists() {
+	if value := res.Get(prefix + "update.out.logging"); value.Exists() {
 		data.UpdateOutLogging = types.BoolValue(true)
 	} else {
 		data.UpdateOutLogging = types.BoolNull()
 	}
-	if value := res.Get(prefix+"bfd.multiplier"); value.Exists() {
+	if value := res.Get(prefix + "bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"bfd.minimum-interval"); value.Exists() {
+	if value := res.Get(prefix + "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix+"rpki.routes.route"); value.Exists() {
+	if value := res.Get(prefix + "rpki.routes.route"); value.Exists() {
 		data.RpkiRoutes = make([]RouterBGPRpkiRoutes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPRpkiRoutes{}
@@ -5829,7 +5775,7 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix+"rpki.servers.server"); value.Exists() {
+	if value := res.Get(prefix + "rpki.servers.server"); value.Exists() {
 		data.RpkiServers = make([]RouterBGPRpkiServers, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPRpkiServers{}
@@ -5888,11 +5834,11 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res gjson.Result) {
 func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.RpkiServers {
-		keys := [...]string{ "server-name",  }
-		stateKeyValues := [...]string{ state.RpkiServers[i].Server.ValueString(),  }
+		keys := [...]string{"server-name"}
+		stateKeyValues := [...]string{state.RpkiServers[i].Server.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -5909,40 +5855,40 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 			if state.RpkiServers[i].Server.ValueString() != data.RpkiServers[j].Server.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.RpkiServers[i].Shutdown.IsNull() && data.RpkiServers[j].Shutdown.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/shutdown", state.getPath(), keyString))
-			}
-			if !state.RpkiServers[i].BindSourceInterface.IsNull() && data.RpkiServers[j].BindSourceInterface.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/bind-source/interface", state.getPath(), keyString))
-			}
-			if !state.RpkiServers[i].TransportSshPort.IsNull() && data.RpkiServers[j].TransportSshPort.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/transport/ssh", state.getPath(), keyString))
-			}
-			if !state.RpkiServers[i].TransportTcpPort.IsNull() && data.RpkiServers[j].TransportTcpPort.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/transport/tcp", state.getPath(), keyString))
-			}
-			if !state.RpkiServers[i].Password.IsNull() && data.RpkiServers[j].Password.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/password", state.getPath(), keyString))
-			}
-			if !state.RpkiServers[i].Username.IsNull() && data.RpkiServers[j].Username.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/username", state.getPath(), keyString))
-			}
-			if !state.RpkiServers[i].PurgeTime.IsNull() && data.RpkiServers[j].PurgeTime.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/purge-time", state.getPath(), keyString))
-			}
-			if !state.RpkiServers[i].ResponseTimeOff.IsNull() && data.RpkiServers[j].ResponseTimeOff.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/response-time", state.getPath(), keyString))
-			}
-			if !state.RpkiServers[i].ResponseTimeSeconds.IsNull() && data.RpkiServers[j].ResponseTimeSeconds.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/response-time/response-time-seconds", state.getPath(), keyString))
-			}
-			if !state.RpkiServers[i].RefreshTimeOff.IsNull() && data.RpkiServers[j].RefreshTimeOff.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/refresh-time", state.getPath(), keyString))
-			}
-			if !state.RpkiServers[i].RefreshTimeSeconds.IsNull() && data.RpkiServers[j].RefreshTimeSeconds.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/refresh-time/refresh-time-seconds", state.getPath(), keyString))
-			}
+			if found {
+				if !state.RpkiServers[i].Shutdown.IsNull() && data.RpkiServers[j].Shutdown.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/shutdown", state.getPath(), keyString))
+				}
+				if !state.RpkiServers[i].BindSourceInterface.IsNull() && data.RpkiServers[j].BindSourceInterface.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/bind-source/interface", state.getPath(), keyString))
+				}
+				if !state.RpkiServers[i].TransportSshPort.IsNull() && data.RpkiServers[j].TransportSshPort.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/transport/ssh", state.getPath(), keyString))
+				}
+				if !state.RpkiServers[i].TransportTcpPort.IsNull() && data.RpkiServers[j].TransportTcpPort.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/transport/tcp", state.getPath(), keyString))
+				}
+				if !state.RpkiServers[i].Password.IsNull() && data.RpkiServers[j].Password.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/password", state.getPath(), keyString))
+				}
+				if !state.RpkiServers[i].Username.IsNull() && data.RpkiServers[j].Username.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/username", state.getPath(), keyString))
+				}
+				if !state.RpkiServers[i].PurgeTime.IsNull() && data.RpkiServers[j].PurgeTime.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/purge-time", state.getPath(), keyString))
+				}
+				if !state.RpkiServers[i].ResponseTimeOff.IsNull() && data.RpkiServers[j].ResponseTimeOff.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/response-time", state.getPath(), keyString))
+				}
+				if !state.RpkiServers[i].ResponseTimeSeconds.IsNull() && data.RpkiServers[j].ResponseTimeSeconds.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/response-time/response-time-seconds", state.getPath(), keyString))
+				}
+				if !state.RpkiServers[i].RefreshTimeOff.IsNull() && data.RpkiServers[j].RefreshTimeOff.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/refresh-time", state.getPath(), keyString))
+				}
+				if !state.RpkiServers[i].RefreshTimeSeconds.IsNull() && data.RpkiServers[j].RefreshTimeSeconds.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/rpki/servers/server%v/refresh-time/refresh-time-seconds", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -5951,11 +5897,11 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 		}
 	}
 	for i := range state.RpkiRoutes {
-		keys := [...]string{ "route-address", "route-prefix", "max", "origin",  }
-		stateKeyValues := [...]string{ state.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(state.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(state.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(state.RpkiRoutes[i].OriginAs.ValueInt64(), 10),  }
+		keys := [...]string{"route-address", "route-prefix", "max", "origin"}
+		stateKeyValues := [...]string{state.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(state.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(state.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(state.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -5990,7 +5936,7 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 			if state.RpkiRoutes[i].OriginAs.ValueInt64() != data.RpkiRoutes[j].OriginAs.ValueInt64() {
 				found = false
 			}
-		if found {
+			if found {
 				break
 			}
 		}
@@ -6092,11 +6038,11 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/graceful-restart/enable", state.getPath()))
 	}
 	for i := range state.BgpConfederationPeers {
-		keys := [...]string{ "peer-as-number",  }
-		stateKeyValues := [...]string{ state.BgpConfederationPeers[i].PeerAsNumber.ValueString(),  }
+		keys := [...]string{"peer-as-number"}
+		stateKeyValues := [...]string{state.BgpConfederationPeers[i].PeerAsNumber.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -6113,7 +6059,7 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 			if state.BgpConfederationPeers[i].PeerAsNumber.ValueString() != data.BgpConfederationPeers[j].PeerAsNumber.ValueString() {
 				found = false
 			}
-		if found {
+			if found {
 				break
 			}
 		}
@@ -6269,11 +6215,11 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-information/originate", state.getPath()))
 	}
 	for i := range state.AsLists {
-		keys := [...]string{ "as-list-name",  }
-		stateKeyValues := [...]string{ state.AsLists[i].ListName.ValueString(),  }
+		keys := [...]string{"as-list-name"}
+		stateKeyValues := [...]string{state.AsLists[i].ListName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -6290,13 +6236,13 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 			if state.AsLists[i].ListName.ValueString() != data.AsLists[j].ListName.ValueString() {
 				found = false
 			}
-		if found {
+			if found {
 				for ci := range state.AsLists[i].AsNumbers {
-					ckeys := [...]string{ "as-list-value",  }
-					cstateKeyValues := [...]string{ state.AsLists[i].AsNumbers[ci].AsValue.ValueString(),  }
+					ckeys := [...]string{"as-list-value"}
+					cstateKeyValues := [...]string{state.AsLists[i].AsNumbers[ci].AsValue.ValueString()}
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 					}
 
 					cemptyKeys := true
@@ -6313,14 +6259,14 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 						if state.AsLists[i].AsNumbers[ci].AsValue.ValueString() != data.AsLists[j].AsNumbers[cj].AsValue.ValueString() {
 							found = false
 						}
-					if found {
-						break
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/as-lists/as-list%v/as-list-numbers/as-list-number%v", state.getPath(), keyString, ckeyString))
 					}
 				}
-				if !found {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/as-lists/as-list%v/as-list-numbers/as-list-number%v", state.getPath(), keyString, ckeyString))
-				}
-			}
 				break
 			}
 		}
@@ -6329,11 +6275,11 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 		}
 	}
 	for i := range state.AttributeFilterGroups {
-		keys := [...]string{ "group-name",  }
-		stateKeyValues := [...]string{ state.AttributeFilterGroups[i].GroupName.ValueString(),  }
+		keys := [...]string{"group-name"}
+		stateKeyValues := [...]string{state.AttributeFilterGroups[i].GroupName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -6350,13 +6296,13 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 			if state.AttributeFilterGroups[i].GroupName.ValueString() != data.AttributeFilterGroups[j].GroupName.ValueString() {
 				found = false
 			}
-		if found {
+			if found {
 				for ci := range state.AttributeFilterGroups[i].AttributeCodeRanges {
-					ckeys := [...]string{ "start", "end",  }
-					cstateKeyValues := [...]string{ strconv.FormatInt(state.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start.ValueInt64(), 10), strconv.FormatInt(state.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.ValueInt64(), 10),  }
+					ckeys := [...]string{"start", "end"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start.ValueInt64(), 10), strconv.FormatInt(state.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.ValueInt64(), 10)}
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 					}
 
 					cemptyKeys := true
@@ -6379,20 +6325,20 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 						if state.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.ValueInt64() != data.AttributeFilterGroups[j].AttributeCodeRanges[cj].End.ValueInt64() {
 							found = false
 						}
-					if found {
-						if !state.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() && data.AttributeFilterGroups[j].AttributeCodeRanges[cj].TreatAsWithdraw.IsNull() {
-							deletedItems = append(deletedItems, fmt.Sprintf("%v/attribute-filter/groups/group%v/attributes/attribute-code-ranges/attribute-code-range%v/treat-as-withdraw", state.getPath(), keyString, ckeyString))
+						if found {
+							if !state.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() && data.AttributeFilterGroups[j].AttributeCodeRanges[cj].TreatAsWithdraw.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/attribute-filter/groups/group%v/attributes/attribute-code-ranges/attribute-code-range%v/treat-as-withdraw", state.getPath(), keyString, ckeyString))
+							}
+							if !state.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.IsNull() && data.AttributeFilterGroups[j].AttributeCodeRanges[cj].Discard.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/attribute-filter/groups/group%v/attributes/attribute-code-ranges/attribute-code-range%v/discard", state.getPath(), keyString, ckeyString))
+							}
+							break
 						}
-						if !state.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.IsNull() && data.AttributeFilterGroups[j].AttributeCodeRanges[cj].Discard.IsNull() {
-							deletedItems = append(deletedItems, fmt.Sprintf("%v/attribute-filter/groups/group%v/attributes/attribute-code-ranges/attribute-code-range%v/discard", state.getPath(), keyString, ckeyString))
-						}
-						break
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/attribute-filter/groups/group%v/attributes/attribute-code-ranges/attribute-code-range%v", state.getPath(), keyString, ckeyString))
 					}
 				}
-				if !found {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/attribute-filter/groups/group%v/attributes/attribute-code-ranges/attribute-code-range%v", state.getPath(), keyString, ckeyString))
-				}
-			}
 				break
 			}
 		}
@@ -6401,11 +6347,11 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 		}
 	}
 	for i := range state.AsLeaguePeers {
-		keys := [...]string{ "peer-as-number",  }
-		stateKeyValues := [...]string{ state.AsLeaguePeers[i].PeerAsNumber.ValueString(),  }
+		keys := [...]string{"peer-as-number"}
+		stateKeyValues := [...]string{state.AsLeaguePeers[i].PeerAsNumber.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -6422,7 +6368,7 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 			if state.AsLeaguePeers[i].PeerAsNumber.ValueString() != data.AsLeaguePeers[j].PeerAsNumber.ValueString() {
 				found = false
 			}
-		if found {
+			if found {
 				break
 			}
 		}
@@ -6431,11 +6377,11 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 		}
 	}
 	for i := range state.MplsActivateInterfaces {
-		keys := [...]string{ "interface-name",  }
-		stateKeyValues := [...]string{ state.MplsActivateInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.MplsActivateInterfaces[i].InterfaceName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -6452,7 +6398,7 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 			if state.MplsActivateInterfaces[i].InterfaceName.ValueString() != data.MplsActivateInterfaces[j].InterfaceName.ValueString() {
 				found = false
 			}
-		if found {
+			if found {
 				break
 			}
 		}
@@ -6461,11 +6407,11 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 		}
 	}
 	for i := range state.GracefulMaintenanceActivateLocations {
-		keys := [...]string{ "location-value",  }
-		stateKeyValues := [...]string{ state.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString(),  }
+		keys := [...]string{"location-value"}
+		stateKeyValues := [...]string{state.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -6482,7 +6428,7 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 			if state.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString() != data.GracefulMaintenanceActivateLocations[j].LocationValue.ValueString() {
 				found = false
 			}
-		if found {
+			if found {
 				break
 			}
 		}
@@ -6491,11 +6437,11 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 		}
 	}
 	for i := range state.GracefulMaintenanceActivateInterfaces {
-		keys := [...]string{ "interface-name",  }
-		stateKeyValues := [...]string{ state.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -6512,7 +6458,7 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 			if state.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString() != data.GracefulMaintenanceActivateInterfaces[j].InterfaceName.ValueString() {
 				found = false
 			}
-		if found {
+			if found {
 				break
 			}
 		}
@@ -6527,11 +6473,11 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/graceful-maintenance/activate/all-neighbors", state.getPath()))
 	}
 	for i := range state.Neighbors {
-		keys := [...]string{ "address",  }
-		stateKeyValues := [...]string{ state.Neighbors[i].Address.ValueString(),  }
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.Neighbors[i].Address.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
@@ -6548,109 +6494,109 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 			if state.Neighbors[i].Address.ValueString() != data.Neighbors[j].Address.ValueString() {
 				found = false
 			}
-		if found {
-			if !state.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwareInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceBandwidthAwareBandwidthThresholdHigh.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwareBandwidthThresholdHigh.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/bandwidth-threshold", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceBandwidthAwareBandwidthThreshold.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwareBandwidthThreshold.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/bandwidth-threshold", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceBandwidthAwarePercentageThresholdHigh.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwarePercentageThresholdHigh.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/percentage-threshold", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceBandwidthAwarePercentageThreshold.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwarePercentageThreshold.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/percentage-threshold", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceAsPrependsInheritanceDisable.IsNull() && data.Neighbors[j].GracefulMaintenanceAsPrependsInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/as-prepends", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceAsPrependsNumber.IsNull() && data.Neighbors[j].GracefulMaintenanceAsPrependsNumber.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/as-prepends", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceLocalPreferenceInheritanceDisable.IsNull() && data.Neighbors[j].GracefulMaintenanceLocalPreferenceInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/local-preference", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceLocalPreference.IsNull() && data.Neighbors[j].GracefulMaintenanceLocalPreference.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/local-preference", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceActivateInheritanceDisable.IsNull() && data.Neighbors[j].GracefulMaintenanceActivateInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/activate/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceActivate.IsNull() && data.Neighbors[j].GracefulMaintenanceActivate.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/activate", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].UpdateInErrorHandlingTreatAsWithdraw.IsNull() && data.Neighbors[j].UpdateInErrorHandlingTreatAsWithdraw.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/error-handling/treat-as-withdraw", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].UpdateInErrorHandlingAvoidReset.IsNull() && data.Neighbors[j].UpdateInErrorHandlingAvoidReset.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/error-handling/avoid-reset", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].UpdateInLabeledUnicastEquivalentInheritanceDisable.IsNull() && data.Neighbors[j].UpdateInLabeledUnicastEquivalentInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/labeled-unicast/equivalent/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].UpdateInLabeledUnicastEquivalent.IsNull() && data.Neighbors[j].UpdateInLabeledUnicastEquivalent.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/labeled-unicast/equivalent", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].UpdateInFilteringAttributeFilterGroup.IsNull() && data.Neighbors[j].UpdateInFilteringAttributeFilterGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/filtering/attribute-filter/group", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].UpdateInFilteringLoggingDisable.IsNull() && data.Neighbors[j].UpdateInFilteringLoggingDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/filtering/logging/disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].UpdateInFilteringMessageBuffersType.IsNull() && data.Neighbors[j].UpdateInFilteringMessageBuffersType.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/filtering/message/buffers", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].UpdateInFilteringMessageBuffers.IsNull() && data.Neighbors[j].UpdateInFilteringMessageBuffers.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/filtering/message/buffers", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].BestpathOriginAsAllowInvalid.IsNull() && data.Neighbors[j].BestpathOriginAsAllowInvalid.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bestpath/origin-as/allow/invalid", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].SendExtendedCommunityEbgpInheritanceDisable.IsNull() && data.Neighbors[j].SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/send-extended-community-ebgp/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].SendExtendedCommunityEbgp.IsNull() && data.Neighbors[j].SendExtendedCommunityEbgp.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/send-extended-community-ebgp", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].OriginAsValidationDisable.IsNull() && data.Neighbors[j].OriginAsValidationDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/origin-as/validation/disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].DefaultPolicyActionOut.IsNull() && data.Neighbors[j].DefaultPolicyActionOut.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/default-policy-action/out", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].DefaultPolicyActionIn.IsNull() && data.Neighbors[j].DefaultPolicyActionIn.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/default-policy-action/in", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].AsOverride.IsNull() && data.Neighbors[j].AsOverride.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/as-override", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].Dampening.IsNull() && data.Neighbors[j].Dampening.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/dampening", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].AoInheritanceDisable.IsNull() && data.Neighbors[j].AoInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ao", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].AoKeyChainAcceptMismatch.IsNull() && data.Neighbors[j].AoKeyChainAcceptMismatch.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ao/key-chain-name/accept-ao-mismatch-connection", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].AoKeyChainIncludeTcpOptions.IsNull() && data.Neighbors[j].AoKeyChainIncludeTcpOptions.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ao/key-chain-name", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].AoKeyChainName.IsNull() && data.Neighbors[j].AoKeyChainName.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ao/key-chain-name", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].PeerNodeSidIndex.IsNull() && data.Neighbors[j].PeerNodeSidIndex.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/peer-node-sid/index", state.getPath(), keyString))
-			}
+			if found {
+				if !state.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwareInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceBandwidthAwareBandwidthThresholdHigh.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwareBandwidthThresholdHigh.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/bandwidth-threshold", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceBandwidthAwareBandwidthThreshold.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwareBandwidthThreshold.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/bandwidth-threshold", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceBandwidthAwarePercentageThresholdHigh.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwarePercentageThresholdHigh.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/percentage-threshold", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceBandwidthAwarePercentageThreshold.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwarePercentageThreshold.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/percentage-threshold", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceAsPrependsInheritanceDisable.IsNull() && data.Neighbors[j].GracefulMaintenanceAsPrependsInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/as-prepends", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceAsPrependsNumber.IsNull() && data.Neighbors[j].GracefulMaintenanceAsPrependsNumber.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/as-prepends", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceLocalPreferenceInheritanceDisable.IsNull() && data.Neighbors[j].GracefulMaintenanceLocalPreferenceInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/local-preference", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceLocalPreference.IsNull() && data.Neighbors[j].GracefulMaintenanceLocalPreference.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/local-preference", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceActivateInheritanceDisable.IsNull() && data.Neighbors[j].GracefulMaintenanceActivateInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/activate/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceActivate.IsNull() && data.Neighbors[j].GracefulMaintenanceActivate.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-maintenance/activate", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].UpdateInErrorHandlingTreatAsWithdraw.IsNull() && data.Neighbors[j].UpdateInErrorHandlingTreatAsWithdraw.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/error-handling/treat-as-withdraw", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].UpdateInErrorHandlingAvoidReset.IsNull() && data.Neighbors[j].UpdateInErrorHandlingAvoidReset.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/error-handling/avoid-reset", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].UpdateInLabeledUnicastEquivalentInheritanceDisable.IsNull() && data.Neighbors[j].UpdateInLabeledUnicastEquivalentInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/labeled-unicast/equivalent/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].UpdateInLabeledUnicastEquivalent.IsNull() && data.Neighbors[j].UpdateInLabeledUnicastEquivalent.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/labeled-unicast/equivalent", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].UpdateInFilteringAttributeFilterGroup.IsNull() && data.Neighbors[j].UpdateInFilteringAttributeFilterGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/filtering/attribute-filter/group", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].UpdateInFilteringLoggingDisable.IsNull() && data.Neighbors[j].UpdateInFilteringLoggingDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/filtering/logging/disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].UpdateInFilteringMessageBuffersType.IsNull() && data.Neighbors[j].UpdateInFilteringMessageBuffersType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/filtering/message/buffers", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].UpdateInFilteringMessageBuffers.IsNull() && data.Neighbors[j].UpdateInFilteringMessageBuffers.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update/in/filtering/message/buffers", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].BestpathOriginAsAllowInvalid.IsNull() && data.Neighbors[j].BestpathOriginAsAllowInvalid.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bestpath/origin-as/allow/invalid", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].SendExtendedCommunityEbgpInheritanceDisable.IsNull() && data.Neighbors[j].SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/send-extended-community-ebgp/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].SendExtendedCommunityEbgp.IsNull() && data.Neighbors[j].SendExtendedCommunityEbgp.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/send-extended-community-ebgp", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].OriginAsValidationDisable.IsNull() && data.Neighbors[j].OriginAsValidationDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/origin-as/validation/disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].DefaultPolicyActionOut.IsNull() && data.Neighbors[j].DefaultPolicyActionOut.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/default-policy-action/out", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].DefaultPolicyActionIn.IsNull() && data.Neighbors[j].DefaultPolicyActionIn.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/default-policy-action/in", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].AsOverride.IsNull() && data.Neighbors[j].AsOverride.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/as-override", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].Dampening.IsNull() && data.Neighbors[j].Dampening.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/dampening", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].AoInheritanceDisable.IsNull() && data.Neighbors[j].AoInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ao", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].AoKeyChainAcceptMismatch.IsNull() && data.Neighbors[j].AoKeyChainAcceptMismatch.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ao/key-chain-name/accept-ao-mismatch-connection", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].AoKeyChainIncludeTcpOptions.IsNull() && data.Neighbors[j].AoKeyChainIncludeTcpOptions.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ao/key-chain-name", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].AoKeyChainName.IsNull() && data.Neighbors[j].AoKeyChainName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ao/key-chain-name", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].PeerNodeSidIndex.IsNull() && data.Neighbors[j].PeerNodeSidIndex.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/peer-node-sid/index", state.getPath(), keyString))
+				}
 				for ci := range state.Neighbors[i].PeerSets {
-					ckeys := [...]string{ "peer",  }
-					cstateKeyValues := [...]string{ strconv.FormatInt(state.Neighbors[i].PeerSets[ci].Peer.ValueInt64(), 10),  }
+					ckeys := [...]string{"peer"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Neighbors[i].PeerSets[ci].Peer.ValueInt64(), 10)}
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 					}
 
 					cemptyKeys := true
@@ -6667,254 +6613,254 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 						if state.Neighbors[i].PeerSets[ci].Peer.ValueInt64() != data.Neighbors[j].PeerSets[cj].Peer.ValueInt64() {
 							found = false
 						}
-					if found {
-						break
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/peer-set/peer-sets%v", state.getPath(), keyString, ckeyString))
 					}
 				}
-				if !found {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/peer-set/peer-sets%v", state.getPath(), keyString, ckeyString))
+				if !state.Neighbors[i].EgressEngineeringInheritanceDisable.IsNull() && data.Neighbors[j].EgressEngineeringInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/egress-engineering/inheritance-disable", state.getPath(), keyString))
 				}
-			}
-			if !state.Neighbors[i].EgressEngineeringInheritanceDisable.IsNull() && data.Neighbors[j].EgressEngineeringInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/egress-engineering/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].EgressEngineering.IsNull() && data.Neighbors[j].EgressEngineering.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/egress-engineering", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].AllowasIn.IsNull() && data.Neighbors[j].AllowasIn.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/allowas-in/number-of-occurrences-of-as-number", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].IdleWatchTime.IsNull() && data.Neighbors[j].IdleWatchTime.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/idle-watch-time", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].ClusterIdIpFormat.IsNull() && data.Neighbors[j].ClusterIdIpFormat.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/cluster-id", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].ClusterId32bitFormat.IsNull() && data.Neighbors[j].ClusterId32bitFormat.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/cluster-id", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].EnforceFirstAs.IsNull() && data.Neighbors[j].EnforceFirstAs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/enforce-first-as", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulRestartStalepathTime.IsNull() && data.Neighbors[j].GracefulRestartStalepathTime.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-restart/stalepath-time", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulRestartRestartTime.IsNull() && data.Neighbors[j].GracefulRestartRestartTime.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-restart/restart-time", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulRestartHelperOnlyInheritanceDisable.IsNull() && data.Neighbors[j].GracefulRestartHelperOnlyInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-restart/helper-only/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulRestartHelperOnly.IsNull() && data.Neighbors[j].GracefulRestartHelperOnly.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-restart/helper-only", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulRestartDisable.IsNull() && data.Neighbors[j].GracefulRestartDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-restart/graceful-restart-enable/disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].GracefulRestart.IsNull() && data.Neighbors[j].GracefulRestart.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-restart/graceful-restart-enable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].CapabilitySuppressFourByteAsInheritanceDisable.IsNull() && data.Neighbors[j].CapabilitySuppressFourByteAsInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/suppress/four-byte-as/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].CapabilitySuppressFourByteAs.IsNull() && data.Neighbors[j].CapabilitySuppressFourByteAs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/suppress/four-byte-as", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable.IsNull() && data.Neighbors[j].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/suppress/extended-nexthop-encoding/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].CapabilitySuppressExtendedNexthopEncoding.IsNull() && data.Neighbors[j].CapabilitySuppressExtendedNexthopEncoding.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/suppress/extended-nexthop-encoding", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].CapabilitySuppressAllInheritanceDisable.IsNull() && data.Neighbors[j].CapabilitySuppressAllInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/suppress/all/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].CapabilitySuppressAll.IsNull() && data.Neighbors[j].CapabilitySuppressAll.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/suppress/all", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].CapabilityAdditionalPathsReceiveDisable.IsNull() && data.Neighbors[j].CapabilityAdditionalPathsReceiveDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/additional-paths/receive/disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].CapabilityAdditionalPathsReceive.IsNull() && data.Neighbors[j].CapabilityAdditionalPathsReceive.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/additional-paths/receive", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].CapabilityAdditionalPathsSendDisable.IsNull() && data.Neighbors[j].CapabilityAdditionalPathsSendDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/additional-paths/send/disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].CapabilityAdditionalPathsSend.IsNull() && data.Neighbors[j].CapabilityAdditionalPathsSend.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/additional-paths/send", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].Precedence.IsNull() && data.Neighbors[j].Precedence.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/precedence", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].Dscp.IsNull() && data.Neighbors[j].Dscp.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/dscp", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].SessionOpenMode.IsNull() && data.Neighbors[j].SessionOpenMode.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/session-open-mode", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].TtlSecurityInheritanceDisable.IsNull() && data.Neighbors[j].TtlSecurityInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ttl-security/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].TtlSecurity.IsNull() && data.Neighbors[j].TtlSecurity.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ttl-security", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].EbgpSendExtcommunityDmzInheritanceDisable.IsNull() && data.Neighbors[j].EbgpSendExtcommunityDmzInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-send-extcommunity-dmz", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].EbgpSendExtcommunityDmzCumulative.IsNull() && data.Neighbors[j].EbgpSendExtcommunityDmzCumulative.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-send-extcommunity-dmz", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].EbgpSendExtcommunityDmz.IsNull() && data.Neighbors[j].EbgpSendExtcommunityDmz.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-send-extcommunity-dmz", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].EbgpRecvExtcommunityDmzInheritanceDisable.IsNull() && data.Neighbors[j].EbgpRecvExtcommunityDmzInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-recv-extcommunity-dmz/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].EbgpRecvExtcommunityDmz.IsNull() && data.Neighbors[j].EbgpRecvExtcommunityDmz.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-recv-extcommunity-dmz", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].DmzLinkBandwidthInheritanceDisable.IsNull() && data.Neighbors[j].DmzLinkBandwidthInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/dmz-link-bandwidth/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].DmzLinkBandwidth.IsNull() && data.Neighbors[j].DmzLinkBandwidth.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/dmz-link-bandwidth", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LocalAddressSubnetMask.IsNull() && data.Neighbors[j].LocalAddressSubnetMask.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-address-subnet", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LocalAddressSubnetPrefix.IsNull() && data.Neighbors[j].LocalAddressSubnetPrefix.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-address-subnet", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].UpdateSource.IsNull() && data.Neighbors[j].UpdateSource.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update-source", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LogMessageOutInheritanceDisable.IsNull() && data.Neighbors[j].LogMessageOutInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/message/out", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LogMessageOutDisable.IsNull() && data.Neighbors[j].LogMessageOutDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/message/out", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LogMessageOutSize.IsNull() && data.Neighbors[j].LogMessageOutSize.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/message/out", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LogMessageInInheritanceDisable.IsNull() && data.Neighbors[j].LogMessageInInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/message/in", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LogMessageInDisable.IsNull() && data.Neighbors[j].LogMessageInDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/message/in", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LogMessageInSize.IsNull() && data.Neighbors[j].LogMessageInSize.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/message/in", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LogNeighborChangesInheritanceDisable.IsNull() && data.Neighbors[j].LogNeighborChangesInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/neighbor/changes", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LogNeighborChangesDisable.IsNull() && data.Neighbors[j].LogNeighborChangesDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/neighbor/changes", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LogNeighborChangesDetail.IsNull() && data.Neighbors[j].LogNeighborChangesDetail.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/neighbor/changes", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LocalAddressInheritanceDisable.IsNull() && data.Neighbors[j].LocalAddressInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local/address", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LocalAddress.IsNull() && data.Neighbors[j].LocalAddress.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local/address", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].TimersHoldtimeMinimumAcceptableHoldtime.IsNull() && data.Neighbors[j].TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/holdtime", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].TimersHoldtime.IsNull() && data.Neighbors[j].TimersHoldtime.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/holdtime", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() && data.Neighbors[j].TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/zero", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero.IsNull() && data.Neighbors[j].TimersHolddownZeroMinimumAcceptableZero.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/zero", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].TimersHolddownZero.IsNull() && data.Neighbors[j].TimersHolddownZero.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/zero", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].TimersKeepaliveInterval.IsNull() && data.Neighbors[j].TimersKeepaliveInterval.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/keepalive-interval", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].Shutdown.IsNull() && data.Neighbors[j].Shutdown.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/shutdown", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].FastFalloverInheritanceDisable.IsNull() && data.Neighbors[j].FastFalloverInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/fast-fallover/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].FastFallover.IsNull() && data.Neighbors[j].FastFallover.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/fast-fallover", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].SendBufferSizeWrite.IsNull() && data.Neighbors[j].SendBufferSizeWrite.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/send-buffer-size", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].SendBufferSize.IsNull() && data.Neighbors[j].SendBufferSize.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/send-buffer-size", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].ReceiveBufferSizeRead.IsNull() && data.Neighbors[j].ReceiveBufferSizeRead.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/receive-buffer-size", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].ReceiveBufferSize.IsNull() && data.Neighbors[j].ReceiveBufferSize.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/receive-buffer-size", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].PasswordInheritanceDisable.IsNull() && data.Neighbors[j].PasswordInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/password/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].Password.IsNull() && data.Neighbors[j].Password.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/password/encrypted", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LocalAsNoPrependReplaceAsDualAs.IsNull() && data.Neighbors[j].LocalAsNoPrependReplaceAsDualAs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as/as/no-prepend/replace-as", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LocalAsNoPrependReplaceAs.IsNull() && data.Neighbors[j].LocalAsNoPrependReplaceAs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as/as/no-prepend", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LocalAsNoPrepend.IsNull() && data.Neighbors[j].LocalAsNoPrepend.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LocalAs.IsNull() && data.Neighbors[j].LocalAs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].LocalAsInheritanceDisable.IsNull() && data.Neighbors[j].LocalAsInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].KeychainInheritanceDisable.IsNull() && data.Neighbors[j].KeychainInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/keychain", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].KeychainName.IsNull() && data.Neighbors[j].KeychainName.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/keychain", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].BfdFastDetectStrictModeNegotiateOverride.IsNull() && data.Neighbors[j].BfdFastDetectStrictModeNegotiateOverride.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect/strict-mode-negotiate/override", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].BfdFastDetectStrictModeNegotiate.IsNull() && data.Neighbors[j].BfdFastDetectStrictModeNegotiate.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect/strict-mode-negotiate", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].BfdFastDetectDisable.IsNull() && data.Neighbors[j].BfdFastDetectDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect/disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].BfdFastDetectStrictMode.IsNull() && data.Neighbors[j].BfdFastDetectStrictMode.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect/strict-mode", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].BfdFastDetect.IsNull() && data.Neighbors[j].BfdFastDetect.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].BfdMultiplier.IsNull() && data.Neighbors[j].BfdMultiplier.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/multiplier", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].BfdMinimumInterval.IsNull() && data.Neighbors[j].BfdMinimumInterval.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/minimum-interval", state.getPath(), keyString))
-			}
+				if !state.Neighbors[i].EgressEngineering.IsNull() && data.Neighbors[j].EgressEngineering.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/egress-engineering", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].AllowasIn.IsNull() && data.Neighbors[j].AllowasIn.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/allowas-in/number-of-occurrences-of-as-number", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].IdleWatchTime.IsNull() && data.Neighbors[j].IdleWatchTime.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/idle-watch-time", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].ClusterIdIpFormat.IsNull() && data.Neighbors[j].ClusterIdIpFormat.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/cluster-id", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].ClusterId32bitFormat.IsNull() && data.Neighbors[j].ClusterId32bitFormat.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/cluster-id", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].EnforceFirstAs.IsNull() && data.Neighbors[j].EnforceFirstAs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/enforce-first-as", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulRestartStalepathTime.IsNull() && data.Neighbors[j].GracefulRestartStalepathTime.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-restart/stalepath-time", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulRestartRestartTime.IsNull() && data.Neighbors[j].GracefulRestartRestartTime.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-restart/restart-time", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulRestartHelperOnlyInheritanceDisable.IsNull() && data.Neighbors[j].GracefulRestartHelperOnlyInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-restart/helper-only/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulRestartHelperOnly.IsNull() && data.Neighbors[j].GracefulRestartHelperOnly.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-restart/helper-only", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulRestartDisable.IsNull() && data.Neighbors[j].GracefulRestartDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-restart/graceful-restart-enable/disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].GracefulRestart.IsNull() && data.Neighbors[j].GracefulRestart.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/graceful-restart/graceful-restart-enable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].CapabilitySuppressFourByteAsInheritanceDisable.IsNull() && data.Neighbors[j].CapabilitySuppressFourByteAsInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/suppress/four-byte-as/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].CapabilitySuppressFourByteAs.IsNull() && data.Neighbors[j].CapabilitySuppressFourByteAs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/suppress/four-byte-as", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable.IsNull() && data.Neighbors[j].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/suppress/extended-nexthop-encoding/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].CapabilitySuppressExtendedNexthopEncoding.IsNull() && data.Neighbors[j].CapabilitySuppressExtendedNexthopEncoding.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/suppress/extended-nexthop-encoding", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].CapabilitySuppressAllInheritanceDisable.IsNull() && data.Neighbors[j].CapabilitySuppressAllInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/suppress/all/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].CapabilitySuppressAll.IsNull() && data.Neighbors[j].CapabilitySuppressAll.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/suppress/all", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].CapabilityAdditionalPathsReceiveDisable.IsNull() && data.Neighbors[j].CapabilityAdditionalPathsReceiveDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/additional-paths/receive/disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].CapabilityAdditionalPathsReceive.IsNull() && data.Neighbors[j].CapabilityAdditionalPathsReceive.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/additional-paths/receive", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].CapabilityAdditionalPathsSendDisable.IsNull() && data.Neighbors[j].CapabilityAdditionalPathsSendDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/additional-paths/send/disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].CapabilityAdditionalPathsSend.IsNull() && data.Neighbors[j].CapabilityAdditionalPathsSend.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/capability/additional-paths/send", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].Precedence.IsNull() && data.Neighbors[j].Precedence.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/precedence", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].Dscp.IsNull() && data.Neighbors[j].Dscp.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/dscp", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].SessionOpenMode.IsNull() && data.Neighbors[j].SessionOpenMode.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/session-open-mode", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TtlSecurityInheritanceDisable.IsNull() && data.Neighbors[j].TtlSecurityInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ttl-security/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TtlSecurity.IsNull() && data.Neighbors[j].TtlSecurity.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ttl-security", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].EbgpSendExtcommunityDmzInheritanceDisable.IsNull() && data.Neighbors[j].EbgpSendExtcommunityDmzInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-send-extcommunity-dmz", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].EbgpSendExtcommunityDmzCumulative.IsNull() && data.Neighbors[j].EbgpSendExtcommunityDmzCumulative.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-send-extcommunity-dmz", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].EbgpSendExtcommunityDmz.IsNull() && data.Neighbors[j].EbgpSendExtcommunityDmz.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-send-extcommunity-dmz", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].EbgpRecvExtcommunityDmzInheritanceDisable.IsNull() && data.Neighbors[j].EbgpRecvExtcommunityDmzInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-recv-extcommunity-dmz/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].EbgpRecvExtcommunityDmz.IsNull() && data.Neighbors[j].EbgpRecvExtcommunityDmz.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-recv-extcommunity-dmz", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].DmzLinkBandwidthInheritanceDisable.IsNull() && data.Neighbors[j].DmzLinkBandwidthInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/dmz-link-bandwidth/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].DmzLinkBandwidth.IsNull() && data.Neighbors[j].DmzLinkBandwidth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/dmz-link-bandwidth", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LocalAddressSubnetMask.IsNull() && data.Neighbors[j].LocalAddressSubnetMask.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-address-subnet", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LocalAddressSubnetPrefix.IsNull() && data.Neighbors[j].LocalAddressSubnetPrefix.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-address-subnet", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].UpdateSource.IsNull() && data.Neighbors[j].UpdateSource.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update-source", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LogMessageOutInheritanceDisable.IsNull() && data.Neighbors[j].LogMessageOutInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/message/out", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LogMessageOutDisable.IsNull() && data.Neighbors[j].LogMessageOutDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/message/out", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LogMessageOutSize.IsNull() && data.Neighbors[j].LogMessageOutSize.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/message/out", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LogMessageInInheritanceDisable.IsNull() && data.Neighbors[j].LogMessageInInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/message/in", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LogMessageInDisable.IsNull() && data.Neighbors[j].LogMessageInDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/message/in", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LogMessageInSize.IsNull() && data.Neighbors[j].LogMessageInSize.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/message/in", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LogNeighborChangesInheritanceDisable.IsNull() && data.Neighbors[j].LogNeighborChangesInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/neighbor/changes", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LogNeighborChangesDisable.IsNull() && data.Neighbors[j].LogNeighborChangesDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/neighbor/changes", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LogNeighborChangesDetail.IsNull() && data.Neighbors[j].LogNeighborChangesDetail.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/log/neighbor/changes", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LocalAddressInheritanceDisable.IsNull() && data.Neighbors[j].LocalAddressInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local/address", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LocalAddress.IsNull() && data.Neighbors[j].LocalAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local/address", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TimersHoldtimeMinimumAcceptableHoldtime.IsNull() && data.Neighbors[j].TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/holdtime", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TimersHoldtime.IsNull() && data.Neighbors[j].TimersHoldtime.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/holdtime", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() && data.Neighbors[j].TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/zero", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero.IsNull() && data.Neighbors[j].TimersHolddownZeroMinimumAcceptableZero.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/zero", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TimersHolddownZero.IsNull() && data.Neighbors[j].TimersHolddownZero.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/zero", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TimersKeepaliveInterval.IsNull() && data.Neighbors[j].TimersKeepaliveInterval.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/keepalive-interval", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].Shutdown.IsNull() && data.Neighbors[j].Shutdown.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/shutdown", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].FastFalloverInheritanceDisable.IsNull() && data.Neighbors[j].FastFalloverInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/fast-fallover/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].FastFallover.IsNull() && data.Neighbors[j].FastFallover.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/fast-fallover", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].SendBufferSizeWrite.IsNull() && data.Neighbors[j].SendBufferSizeWrite.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/send-buffer-size", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].SendBufferSize.IsNull() && data.Neighbors[j].SendBufferSize.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/send-buffer-size", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].ReceiveBufferSizeRead.IsNull() && data.Neighbors[j].ReceiveBufferSizeRead.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/receive-buffer-size", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].ReceiveBufferSize.IsNull() && data.Neighbors[j].ReceiveBufferSize.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/receive-buffer-size", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].PasswordInheritanceDisable.IsNull() && data.Neighbors[j].PasswordInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/password/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].Password.IsNull() && data.Neighbors[j].Password.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/password/encrypted", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LocalAsNoPrependReplaceAsDualAs.IsNull() && data.Neighbors[j].LocalAsNoPrependReplaceAsDualAs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as/as/no-prepend/replace-as", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LocalAsNoPrependReplaceAs.IsNull() && data.Neighbors[j].LocalAsNoPrependReplaceAs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as/as/no-prepend", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LocalAsNoPrepend.IsNull() && data.Neighbors[j].LocalAsNoPrepend.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LocalAs.IsNull() && data.Neighbors[j].LocalAs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LocalAsInheritanceDisable.IsNull() && data.Neighbors[j].LocalAsInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].KeychainInheritanceDisable.IsNull() && data.Neighbors[j].KeychainInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/keychain", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].KeychainName.IsNull() && data.Neighbors[j].KeychainName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/keychain", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].BfdFastDetectStrictModeNegotiateOverride.IsNull() && data.Neighbors[j].BfdFastDetectStrictModeNegotiateOverride.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect/strict-mode-negotiate/override", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].BfdFastDetectStrictModeNegotiate.IsNull() && data.Neighbors[j].BfdFastDetectStrictModeNegotiate.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect/strict-mode-negotiate", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].BfdFastDetectDisable.IsNull() && data.Neighbors[j].BfdFastDetectDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect/disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].BfdFastDetectStrictMode.IsNull() && data.Neighbors[j].BfdFastDetectStrictMode.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect/strict-mode", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].BfdFastDetect.IsNull() && data.Neighbors[j].BfdFastDetect.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].BfdMultiplier.IsNull() && data.Neighbors[j].BfdMultiplier.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/multiplier", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].BfdMinimumInterval.IsNull() && data.Neighbors[j].BfdMinimumInterval.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/minimum-interval", state.getPath(), keyString))
+				}
 				for ci := range state.Neighbors[i].BmpActivateServers {
-					ckeys := [...]string{ "server-number",  }
-					cstateKeyValues := [...]string{ strconv.FormatInt(state.Neighbors[i].BmpActivateServers[ci].ServerNumber.ValueInt64(), 10),  }
+					ckeys := [...]string{"server-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Neighbors[i].BmpActivateServers[ci].ServerNumber.ValueInt64(), 10)}
 					ckeyString := ""
 					for cki := range ckeys {
-						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 					}
 
 					cemptyKeys := true
@@ -6931,71 +6877,71 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 						if state.Neighbors[i].BmpActivateServers[ci].ServerNumber.ValueInt64() != data.Neighbors[j].BmpActivateServers[cj].ServerNumber.ValueInt64() {
 							found = false
 						}
-					if found {
-						break
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bmp-activate/servers/server%v", state.getPath(), keyString, ckeyString))
 					}
 				}
-				if !found {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bmp-activate/servers/server%v", state.getPath(), keyString, ckeyString))
+				if !state.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable.IsNull() && data.Neighbors[j].TcpIpOnlyPreferredInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/tcp/ip-only-preferred/inheritance-disable", state.getPath(), keyString))
 				}
-			}
-			if !state.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable.IsNull() && data.Neighbors[j].TcpIpOnlyPreferredInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/tcp/ip-only-preferred/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].TcpIpOnlyPreferred.IsNull() && data.Neighbors[j].TcpIpOnlyPreferred.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/tcp/ip-only-preferred", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].TcpMtuDiscoveryInheritanceDisable.IsNull() && data.Neighbors[j].TcpMtuDiscoveryInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/tcp/mtu-discovery/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].TcpMtuDiscovery.IsNull() && data.Neighbors[j].TcpMtuDiscovery.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/tcp/mtu-discovery", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].TcpMssInheritanceDisable.IsNull() && data.Neighbors[j].TcpMssInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/tcp/mss/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].TcpMssValue.IsNull() && data.Neighbors[j].TcpMssValue.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/tcp/mss/tcp-initial-maximum-segment-size", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].EbgpMultihopMpls.IsNull() && data.Neighbors[j].EbgpMultihopMpls.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-multihop/mpls", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].EbgpMultihopMaximumHopCount.IsNull() && data.Neighbors[j].EbgpMultihopMaximumHopCount.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-multihop/maximum-hop-count", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].IgnoreConnectedCheckInheritanceDisable.IsNull() && data.Neighbors[j].IgnoreConnectedCheckInheritanceDisable.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ignore-connected-check/inheritance-disable", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].IgnoreConnectedCheck.IsNull() && data.Neighbors[j].IgnoreConnectedCheck.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ignore-connected-check", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].Description.IsNull() && data.Neighbors[j].Description.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/description", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].AdvertisementIntervalMilliseconds.IsNull() && data.Neighbors[j].AdvertisementIntervalMilliseconds.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/advertisement-interval/advertisement-interval-time-in-milliseconds", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].AdvertisementIntervalSeconds.IsNull() && data.Neighbors[j].AdvertisementIntervalSeconds.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/advertisement-interval/advertisement-interval-time-in-seconds", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].UseSessionGroup.IsNull() && data.Neighbors[j].UseSessionGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/use/session-group", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].UseNeighborGroup.IsNull() && data.Neighbors[j].UseNeighborGroup.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/use/neighbor-group", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].AsPathLoopcheckOut.IsNull() && data.Neighbors[j].AsPathLoopcheckOut.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/as-path-loopcheck/out", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].RemoteAsList.IsNull() && data.Neighbors[j].RemoteAsList.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/remote-as-list", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].MaximumPeers.IsNull() && data.Neighbors[j].MaximumPeers.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/maximum-peers", state.getPath(), keyString))
-			}
-			if !state.Neighbors[i].RemoteAs.IsNull() && data.Neighbors[j].RemoteAs.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/remote-as", state.getPath(), keyString))
-			}
+				if !state.Neighbors[i].TcpIpOnlyPreferred.IsNull() && data.Neighbors[j].TcpIpOnlyPreferred.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/tcp/ip-only-preferred", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TcpMtuDiscoveryInheritanceDisable.IsNull() && data.Neighbors[j].TcpMtuDiscoveryInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/tcp/mtu-discovery/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TcpMtuDiscovery.IsNull() && data.Neighbors[j].TcpMtuDiscovery.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/tcp/mtu-discovery", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TcpMssInheritanceDisable.IsNull() && data.Neighbors[j].TcpMssInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/tcp/mss/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TcpMssValue.IsNull() && data.Neighbors[j].TcpMssValue.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/tcp/mss/tcp-initial-maximum-segment-size", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].EbgpMultihopMpls.IsNull() && data.Neighbors[j].EbgpMultihopMpls.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-multihop/mpls", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].EbgpMultihopMaximumHopCount.IsNull() && data.Neighbors[j].EbgpMultihopMaximumHopCount.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-multihop/maximum-hop-count", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].IgnoreConnectedCheckInheritanceDisable.IsNull() && data.Neighbors[j].IgnoreConnectedCheckInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ignore-connected-check/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].IgnoreConnectedCheck.IsNull() && data.Neighbors[j].IgnoreConnectedCheck.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ignore-connected-check", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].Description.IsNull() && data.Neighbors[j].Description.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/description", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].AdvertisementIntervalMilliseconds.IsNull() && data.Neighbors[j].AdvertisementIntervalMilliseconds.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/advertisement-interval/advertisement-interval-time-in-milliseconds", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].AdvertisementIntervalSeconds.IsNull() && data.Neighbors[j].AdvertisementIntervalSeconds.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/advertisement-interval/advertisement-interval-time-in-seconds", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].UseSessionGroup.IsNull() && data.Neighbors[j].UseSessionGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/use/session-group", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].UseNeighborGroup.IsNull() && data.Neighbors[j].UseNeighborGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/use/neighbor-group", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].AsPathLoopcheckOut.IsNull() && data.Neighbors[j].AsPathLoopcheckOut.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/as-path-loopcheck/out", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].RemoteAsList.IsNull() && data.Neighbors[j].RemoteAsList.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/remote-as-list", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].MaximumPeers.IsNull() && data.Neighbors[j].MaximumPeers.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/maximum-peers", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].RemoteAs.IsNull() && data.Neighbors[j].RemoteAs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/remote-as", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -7025,11 +6971,11 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context, state *RouterBGP) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.RpkiServers {
-		keys := [...]string{ "server-name",  }
-		keyValues := [...]string{ data.RpkiServers[i].Server.ValueString(),  }
+		keys := [...]string{"server-name"}
+		keyValues := [...]string{data.RpkiServers[i].Server.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.RpkiServers[i].Shutdown.IsNull() && !data.RpkiServers[i].Shutdown.ValueBool() {
@@ -7054,11 +7000,11 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context, state *RouterBGP
 		}
 	}
 	for i := range data.RpkiRoutes {
-		keys := [...]string{ "route-address", "route-prefix", "max", "origin",  }
-		keyValues := [...]string{ data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10),  }
+		keys := [...]string{"route-address", "route-prefix", "max", "origin"}
+		keyValues := [...]string{data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -7170,11 +7116,11 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context, state *RouterBGP
 		}
 	}
 	for i := range data.BgpConfederationPeers {
-		keys := [...]string{ "peer-as-number",  }
-		keyValues := [...]string{ data.BgpConfederationPeers[i].PeerAsNumber.ValueString(),  }
+		keys := [...]string{"peer-as-number"}
+		keyValues := [...]string{data.BgpConfederationPeers[i].PeerAsNumber.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -7382,34 +7328,34 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context, state *RouterBGP
 		}
 	}
 	for i := range data.AsLists {
-		keys := [...]string{ "as-list-name",  }
-		keyValues := [...]string{ data.AsLists[i].ListName.ValueString(),  }
+		keys := [...]string{"as-list-name"}
+		keyValues := [...]string{data.AsLists[i].ListName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		for ci := range data.AsLists[i].AsNumbers {
-			ckeys := [...]string{ "as-list-value",  }
-			ckeyValues := [...]string{ data.AsLists[i].AsNumbers[ci].AsValue.ValueString(),  }
+			ckeys := [...]string{"as-list-value"}
+			ckeyValues := [...]string{data.AsLists[i].AsNumbers[ci].AsValue.ValueString()}
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
 	}
 	for i := range data.AttributeFilterGroups {
-		keys := [...]string{ "group-name",  }
-		keyValues := [...]string{ data.AttributeFilterGroups[i].GroupName.ValueString(),  }
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.AttributeFilterGroups[i].GroupName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		for ci := range data.AttributeFilterGroups[i].AttributeCodeRanges {
-			ckeys := [...]string{ "start", "end",  }
-			ckeyValues := [...]string{ strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start.ValueInt64(), 10), strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.ValueInt64(), 10),  }
+			ckeys := [...]string{"start", "end"}
+			ckeyValues := [...]string{strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start.ValueInt64(), 10), strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.ValueInt64(), 10)}
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			// Only delete if state has true and plan has false
 			if !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() && !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.ValueBool() {
@@ -7428,35 +7374,35 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context, state *RouterBGP
 		}
 	}
 	for i := range data.AsLeaguePeers {
-		keys := [...]string{ "peer-as-number",  }
-		keyValues := [...]string{ data.AsLeaguePeers[i].PeerAsNumber.ValueString(),  }
+		keys := [...]string{"peer-as-number"}
+		keyValues := [...]string{data.AsLeaguePeers[i].PeerAsNumber.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	for i := range data.MplsActivateInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.MplsActivateInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.MplsActivateInterfaces[i].InterfaceName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	for i := range data.GracefulMaintenanceActivateLocations {
-		keys := [...]string{ "location-value",  }
-		keyValues := [...]string{ data.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString(),  }
+		keys := [...]string{"location-value"}
+		keyValues := [...]string{data.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	for i := range data.GracefulMaintenanceActivateInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -7472,11 +7418,11 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context, state *RouterBGP
 		}
 	}
 	for i := range data.Neighbors {
-		keys := [...]string{ "address",  }
-		keyValues := [...]string{ data.Neighbors[i].Address.ValueString(),  }
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
 		keyString := ""
 		for ki := range keys {
-			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		// Only delete if state has true and plan has false
 		if !data.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable.IsNull() && !data.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable.ValueBool() {
@@ -7577,11 +7523,11 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context, state *RouterBGP
 			}
 		}
 		for ci := range data.Neighbors[i].PeerSets {
-			ckeys := [...]string{ "peer",  }
-			ckeyValues := [...]string{ strconv.FormatInt(data.Neighbors[i].PeerSets[ci].Peer.ValueInt64(), 10),  }
+			ckeys := [...]string{"peer"}
+			ckeyValues := [...]string{strconv.FormatInt(data.Neighbors[i].PeerSets[ci].Peer.ValueInt64(), 10)}
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
 		// Only delete if state has true and plan has false
@@ -7928,11 +7874,11 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context, state *RouterBGP
 			}
 		}
 		for ci := range data.Neighbors[i].BmpActivateServers {
-			ckeys := [...]string{ "server-number",  }
-			ckeyValues := [...]string{ strconv.FormatInt(data.Neighbors[i].BmpActivateServers[ci].ServerNumber.ValueInt64(), 10),  }
+			ckeys := [...]string{"server-number"}
+			ckeyValues := [...]string{strconv.FormatInt(data.Neighbors[i].BmpActivateServers[ci].ServerNumber.ValueInt64(), 10)}
 			ckeyString := ""
 			for cki := range ckeys {
-				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
 		// Only delete if state has true and plan has false
@@ -8014,12 +7960,12 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context, state *RouterBGP
 func (data *RouterBGP) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.RpkiServers {
-		keyValues := [...]string{ data.RpkiServers[i].Server.ValueString(),  }
+		keyValues := [...]string{data.RpkiServers[i].Server.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/rpki/servers/server=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.RpkiRoutes {
-		keyValues := [...]string{ data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10),  }
+		keyValues := [...]string{data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/rpki/routes/route=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -8117,7 +8063,7 @@ func (data *RouterBGP) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/graceful-restart/enable", data.getPath()))
 	}
 	for i := range data.BgpConfederationPeers {
-		keyValues := [...]string{ data.BgpConfederationPeers[i].PeerAsNumber.ValueString(),  }
+		keyValues := [...]string{data.BgpConfederationPeers[i].PeerAsNumber.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/confederation/peers=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -8269,32 +8215,32 @@ func (data *RouterBGP) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate", data.getPath()))
 	}
 	for i := range data.AsLists {
-		keyValues := [...]string{ data.AsLists[i].ListName.ValueString(),  }
+		keyValues := [...]string{data.AsLists[i].ListName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/as-lists/as-list=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.AttributeFilterGroups {
-		keyValues := [...]string{ data.AttributeFilterGroups[i].GroupName.ValueString(),  }
+		keyValues := [...]string{data.AttributeFilterGroups[i].GroupName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/attribute-filter/groups/group=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.AsLeaguePeers {
-		keyValues := [...]string{ data.AsLeaguePeers[i].PeerAsNumber.ValueString(),  }
+		keyValues := [...]string{data.AsLeaguePeers[i].PeerAsNumber.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/as-league/peers/peer=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.MplsActivateInterfaces {
-		keyValues := [...]string{ data.MplsActivateInterfaces[i].InterfaceName.ValueString(),  }
+		keyValues := [...]string{data.MplsActivateInterfaces[i].InterfaceName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/activate/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.GracefulMaintenanceActivateLocations {
-		keyValues := [...]string{ data.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString(),  }
+		keyValues := [...]string{data.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/graceful-maintenance/activate/locations/location=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.GracefulMaintenanceActivateInterfaces {
-		keyValues := [...]string{ data.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString(),  }
+		keyValues := [...]string{data.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/graceful-maintenance/activate/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -8305,7 +8251,7 @@ func (data *RouterBGP) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/graceful-maintenance/activate/all-neighbors", data.getPath()))
 	}
 	for i := range data.Neighbors {
-		keyValues := [...]string{ data.Neighbors[i].Address.ValueString(),  }
+		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbors/neighbor=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
@@ -8332,22 +8278,22 @@ func (data *RouterBGP) getDeletePaths(ctx context.Context) []string {
 func (data RouterBGP) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.AsNumber.IsNull() && !data.AsNumber.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/as-number", data.AsNumber.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/as-number", data.AsNumber.ValueString())
 	}
 	if !data.DefaultMetric.IsNull() && !data.DefaultMetric.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/default-metric", strconv.FormatInt(data.DefaultMetric.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/default-metric", strconv.FormatInt(data.DefaultMetric.ValueInt64(), 10))
 	}
 	if !data.Mvpn.IsNull() && !data.Mvpn.IsUnknown() {
 		if data.Mvpn.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/mvpn", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/mvpn", "")
 		}
 	}
 	if !data.SegmentRoutingSrv6Locator.IsNull() && !data.SegmentRoutingSrv6Locator.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/segment-routing/srv6/locator", data.SegmentRoutingSrv6Locator.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing/srv6/locator", data.SegmentRoutingSrv6Locator.ValueString())
 	}
 	if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsUnknown() {
 		if data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/segment-routing/srv6/usid/allocation/wide-local-id-block", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block", "")
 		}
 	}
 	if len(data.Neighbors) > 0 {
@@ -8910,12 +8856,12 @@ func (data RouterBGP) toBodyXML(ctx context.Context) string {
 	}
 	if !data.GracefulMaintenanceActivateAllNeighbors.IsNull() && !data.GracefulMaintenanceActivateAllNeighbors.IsUnknown() {
 		if data.GracefulMaintenanceActivateAllNeighbors.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/graceful-maintenance/activate/all-neighbors", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/graceful-maintenance/activate/all-neighbors", "")
 		}
 	}
 	if !data.GracefulMaintenanceActivateRetainRoutes.IsNull() && !data.GracefulMaintenanceActivateRetainRoutes.IsUnknown() {
 		if data.GracefulMaintenanceActivateRetainRoutes.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/graceful-maintenance/activate/retain-routes", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/graceful-maintenance/activate/retain-routes", "")
 		}
 	}
 	if len(data.GracefulMaintenanceActivateInterfaces) > 0 {
@@ -9017,218 +8963,218 @@ func (data RouterBGP) toBodyXML(ctx context.Context) string {
 	}
 	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.IsUnknown() {
 		if data.DefaultInformationOriginate.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/default-information/originate", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/default-information/originate", "")
 		}
 	}
 	if !data.SocketReceiveBufferSize.IsNull() && !data.SocketReceiveBufferSize.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/socket/receive-buffer-size/receive-buffer-size-number", strconv.FormatInt(data.SocketReceiveBufferSize.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/socket/receive-buffer-size/receive-buffer-size-number", strconv.FormatInt(data.SocketReceiveBufferSize.ValueInt64(), 10))
 	}
 	if !data.SocketReceiveBufferSizeRead.IsNull() && !data.SocketReceiveBufferSizeRead.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/socket/receive-buffer-size/bgp-read-buffer-size-byte", strconv.FormatInt(data.SocketReceiveBufferSizeRead.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/socket/receive-buffer-size/bgp-read-buffer-size-byte", strconv.FormatInt(data.SocketReceiveBufferSizeRead.ValueInt64(), 10))
 	}
 	if !data.SocketSendBufferSize.IsNull() && !data.SocketSendBufferSize.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/socket/send-buffer-size/send-buffer-size-number", strconv.FormatInt(data.SocketSendBufferSize.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/socket/send-buffer-size/send-buffer-size-number", strconv.FormatInt(data.SocketSendBufferSize.ValueInt64(), 10))
 	}
 	if !data.SocketSendBufferSizeWrite.IsNull() && !data.SocketSendBufferSizeWrite.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/socket/send-buffer-size/bgp-write-buffer-size-byte", strconv.FormatInt(data.SocketSendBufferSizeWrite.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/socket/send-buffer-size/bgp-write-buffer-size-byte", strconv.FormatInt(data.SocketSendBufferSizeWrite.ValueInt64(), 10))
 	}
 	if !data.NexthopMplsForwardingIbgp.IsNull() && !data.NexthopMplsForwardingIbgp.IsUnknown() {
 		if data.NexthopMplsForwardingIbgp.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/nexthop/mpls/forwarding/ibgp", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/nexthop/mpls/forwarding/ibgp", "")
 		}
 	}
 	if !data.NexthopValidationColorExtcommSrPolicy.IsNull() && !data.NexthopValidationColorExtcommSrPolicy.IsUnknown() {
 		if data.NexthopValidationColorExtcommSrPolicy.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/nexthop/validation/color-extcomm/sr-policy", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/nexthop/validation/color-extcomm/sr-policy", "")
 		}
 	}
 	if !data.NexthopValidationColorExtcommDisable.IsNull() && !data.NexthopValidationColorExtcommDisable.IsUnknown() {
 		if data.NexthopValidationColorExtcommDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/nexthop/validation/color-extcomm/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/nexthop/validation/color-extcomm/disable", "")
 		}
 	}
 	if !data.NexthopResolutionAllowDefault.IsNull() && !data.NexthopResolutionAllowDefault.IsUnknown() {
 		if data.NexthopResolutionAllowDefault.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/nexthop/resolution/allow-default", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/nexthop/resolution/allow-default", "")
 		}
 	}
 	if !data.NexthopSrteMetricDisable.IsNull() && !data.NexthopSrteMetricDisable.IsUnknown() {
 		if data.NexthopSrteMetricDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/nexthop/srte-metric/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/nexthop/srte-metric/disable", "")
 		}
 	}
 	if !data.SlowPeerDynamic.IsNull() && !data.SlowPeerDynamic.IsUnknown() {
 		if data.SlowPeerDynamic.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/slow-peer/dynamic", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/slow-peer/dynamic", "")
 		}
 	}
 	if !data.SlowPeerDynamicThreshold.IsNull() && !data.SlowPeerDynamicThreshold.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/slow-peer/dynamic/threshold", strconv.FormatInt(data.SlowPeerDynamicThreshold.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/slow-peer/dynamic/threshold", strconv.FormatInt(data.SlowPeerDynamicThreshold.ValueInt64(), 10))
 	}
 	if !data.SlowPeerDetectionDisable.IsNull() && !data.SlowPeerDetectionDisable.IsUnknown() {
 		if data.SlowPeerDetectionDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/slow-peer/detection-disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/slow-peer/detection-disable", "")
 		}
 	}
 	if !data.BgpRedistributeInternal.IsNull() && !data.BgpRedistributeInternal.IsUnknown() {
 		if data.BgpRedistributeInternal.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/redistribute-internal", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/redistribute-internal", "")
 		}
 	}
 	if !data.BgpRouterId.IsNull() && !data.BgpRouterId.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/router-id", data.BgpRouterId.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/router-id", data.BgpRouterId.ValueString())
 	}
 	if !data.BgpUnsafeEbgpPolicy.IsNull() && !data.BgpUnsafeEbgpPolicy.IsUnknown() {
 		if data.BgpUnsafeEbgpPolicy.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/unsafe-ebgp-policy", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/unsafe-ebgp-policy", "")
 		}
 	}
 	if !data.BgpScanTime.IsNull() && !data.BgpScanTime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/scan-time", strconv.FormatInt(data.BgpScanTime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/scan-time", strconv.FormatInt(data.BgpScanTime.ValueInt64(), 10))
 	}
 	if !data.BgpReadOnly.IsNull() && !data.BgpReadOnly.IsUnknown() {
 		if data.BgpReadOnly.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/read-only", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/read-only", "")
 		}
 	}
 	if !data.BgpLptsSecureBinding.IsNull() && !data.BgpLptsSecureBinding.IsUnknown() {
 		if data.BgpLptsSecureBinding.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/lpts-secure-binding", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/lpts-secure-binding", "")
 		}
 	}
 	if !data.BgpAsPathLoopcheck.IsNull() && !data.BgpAsPathLoopcheck.IsUnknown() {
 		if data.BgpAsPathLoopcheck.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/as-path-loopcheck", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/as-path-loopcheck", "")
 		}
 	}
 	if !data.BgpAutoPolicySoftResetDisable.IsNull() && !data.BgpAutoPolicySoftResetDisable.IsUnknown() {
 		if data.BgpAutoPolicySoftResetDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/auto-policy-soft-reset/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/auto-policy-soft-reset/disable", "")
 		}
 	}
 	if !data.BgpBestpathCostCommunityIgnore.IsNull() && !data.BgpBestpathCostCommunityIgnore.IsUnknown() {
 		if data.BgpBestpathCostCommunityIgnore.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/bestpath/cost-community/ignore", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/bestpath/cost-community/ignore", "")
 		}
 	}
 	if !data.BgpBestpathCompareRouterid.IsNull() && !data.BgpBestpathCompareRouterid.IsUnknown() {
 		if data.BgpBestpathCompareRouterid.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/bestpath/compare-routerid", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/bestpath/compare-routerid", "")
 		}
 	}
 	if !data.BgpBestpathAigpIgnore.IsNull() && !data.BgpBestpathAigpIgnore.IsUnknown() {
 		if data.BgpBestpathAigpIgnore.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/bestpath/aigp/ignore", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/bestpath/aigp/ignore", "")
 		}
 	}
 	if !data.BgpBestpathIgpMetricIgnore.IsNull() && !data.BgpBestpathIgpMetricIgnore.IsUnknown() {
 		if data.BgpBestpathIgpMetricIgnore.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/bestpath/igp-metric/ignore", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/bestpath/igp-metric/ignore", "")
 		}
 	}
 	if !data.BgpBestpathIgpMetricSrPolicy.IsNull() && !data.BgpBestpathIgpMetricSrPolicy.IsUnknown() {
 		if data.BgpBestpathIgpMetricSrPolicy.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/bestpath/igp-metric/sr-policy", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/bestpath/igp-metric/sr-policy", "")
 		}
 	}
 	if !data.BgpBestpathMedMissingAsWorst.IsNull() && !data.BgpBestpathMedMissingAsWorst.IsUnknown() {
 		if data.BgpBestpathMedMissingAsWorst.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/bestpath/med/missing-as-worst", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/bestpath/med/missing-as-worst", "")
 		}
 	}
 	if !data.BgpBestpathMedAlways.IsNull() && !data.BgpBestpathMedAlways.IsUnknown() {
 		if data.BgpBestpathMedAlways.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/bestpath/med/always", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/bestpath/med/always", "")
 		}
 	}
 	if !data.BgpBestpathAsPathIgnore.IsNull() && !data.BgpBestpathAsPathIgnore.IsUnknown() {
 		if data.BgpBestpathAsPathIgnore.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/bestpath/as-path/ignore", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/bestpath/as-path/ignore", "")
 		}
 	}
 	if !data.BgpBestpathAsPathMultipathRelax.IsNull() && !data.BgpBestpathAsPathMultipathRelax.IsUnknown() {
 		if data.BgpBestpathAsPathMultipathRelax.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/bestpath/as-path/multipath-relax", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/bestpath/as-path/multipath-relax", "")
 		}
 	}
 	if !data.BgpBestpathOriginAsUseValidity.IsNull() && !data.BgpBestpathOriginAsUseValidity.IsUnknown() {
 		if data.BgpBestpathOriginAsUseValidity.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/bestpath/origin-as/use/validity", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/bestpath/origin-as/use/validity", "")
 		}
 	}
 	if !data.BgpBestpathOriginAsAllowInvalid.IsNull() && !data.BgpBestpathOriginAsAllowInvalid.IsUnknown() {
 		if data.BgpBestpathOriginAsAllowInvalid.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/bestpath/origin-as/allow/invalid", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/bestpath/origin-as/allow/invalid", "")
 		}
 	}
 	if !data.BgpBestpathSrPolicyPrefer.IsNull() && !data.BgpBestpathSrPolicyPrefer.IsUnknown() {
 		if data.BgpBestpathSrPolicyPrefer.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/bestpath/sr-policy/prefer", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/bestpath/sr-policy/prefer", "")
 		}
 	}
 	if !data.BgpBestpathSrPolicyForce.IsNull() && !data.BgpBestpathSrPolicyForce.IsUnknown() {
 		if data.BgpBestpathSrPolicyForce.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/bestpath/sr-policy/force", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/bestpath/sr-policy/force", "")
 		}
 	}
 	if !data.BgpClusterId32bitFormat.IsNull() && !data.BgpClusterId32bitFormat.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/cluster-id/route-reflector-number", strconv.FormatInt(data.BgpClusterId32bitFormat.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/cluster-id/route-reflector-number", strconv.FormatInt(data.BgpClusterId32bitFormat.ValueInt64(), 10))
 	}
 	if !data.BgpClusterIdIpFormat.IsNull() && !data.BgpClusterIdIpFormat.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/cluster-id/route-reflector-ip-address", data.BgpClusterIdIpFormat.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/cluster-id/route-reflector-ip-address", data.BgpClusterIdIpFormat.ValueString())
 	}
 	if !data.BgpDefaultLocalPreference.IsNull() && !data.BgpDefaultLocalPreference.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/default/local-preference", strconv.FormatInt(data.BgpDefaultLocalPreference.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/default/local-preference", strconv.FormatInt(data.BgpDefaultLocalPreference.ValueInt64(), 10))
 	}
 	if !data.BgpEnforceFirstAsDisable.IsNull() && !data.BgpEnforceFirstAsDisable.IsUnknown() {
 		if data.BgpEnforceFirstAsDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/enforce-first-as/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/enforce-first-as/disable", "")
 		}
 	}
 	if !data.BgpFastExternalFalloverDisable.IsNull() && !data.BgpFastExternalFalloverDisable.IsUnknown() {
 		if data.BgpFastExternalFalloverDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/fast-external-fallover/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/fast-external-fallover/disable", "")
 		}
 	}
 	if !data.BgpLogNeighborChangesDetail.IsNull() && !data.BgpLogNeighborChangesDetail.IsUnknown() {
 		if data.BgpLogNeighborChangesDetail.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/log/neighbor/changes/detail", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/log/neighbor/changes/detail", "")
 		}
 	}
 	if !data.BgpLogNeighborChangesDisable.IsNull() && !data.BgpLogNeighborChangesDisable.IsUnknown() {
 		if data.BgpLogNeighborChangesDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/log/neighbor/changes/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/log/neighbor/changes/disable", "")
 		}
 	}
 	if !data.BgpLogMessageDisable.IsNull() && !data.BgpLogMessageDisable.IsUnknown() {
 		if data.BgpLogMessageDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/log/message/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/log/message/disable", "")
 		}
 	}
 	if !data.BgpLogMemoryThresholdWarning.IsNull() && !data.BgpLogMemoryThresholdWarning.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/log/memory-threshold/memory-warning-number", strconv.FormatInt(data.BgpLogMemoryThresholdWarning.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/log/memory-threshold/memory-warning-number", strconv.FormatInt(data.BgpLogMemoryThresholdWarning.ValueInt64(), 10))
 	}
 	if !data.BgpLogMemoryThresholdCritical.IsNull() && !data.BgpLogMemoryThresholdCritical.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/log/memory-threshold/memory-critical-number", strconv.FormatInt(data.BgpLogMemoryThresholdCritical.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/log/memory-threshold/memory-critical-number", strconv.FormatInt(data.BgpLogMemoryThresholdCritical.ValueInt64(), 10))
 	}
 	if !data.BgpLogTotalPaths.IsNull() && !data.BgpLogTotalPaths.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/log/total-paths/total-paths-number", strconv.FormatInt(data.BgpLogTotalPaths.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/log/total-paths/total-paths-number", strconv.FormatInt(data.BgpLogTotalPaths.ValueInt64(), 10))
 	}
 	if !data.BgpLogTotalPathsWarnThreshold.IsNull() && !data.BgpLogTotalPathsWarnThreshold.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/log/total-paths/warn-threshold-value", strconv.FormatInt(data.BgpLogTotalPathsWarnThreshold.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/log/total-paths/warn-threshold-value", strconv.FormatInt(data.BgpLogTotalPathsWarnThreshold.ValueInt64(), 10))
 	}
 	if !data.BgpMultipathUseClusterListLength.IsNull() && !data.BgpMultipathUseClusterListLength.IsUnknown() {
 		if data.BgpMultipathUseClusterListLength.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/multipath/use/cluster-list-length", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/multipath/use/cluster-list-length", "")
 		}
 	}
 	if !data.BgpMultipathAsPathIgnoreOnwards.IsNull() && !data.BgpMultipathAsPathIgnoreOnwards.IsUnknown() {
 		if data.BgpMultipathAsPathIgnoreOnwards.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/multipath/as-path/ignore/onwards", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/multipath/as-path/ignore/onwards", "")
 		}
 	}
 	if !data.BgpConfederationIdentifier.IsNull() && !data.BgpConfederationIdentifier.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/confederation/identifier", data.BgpConfederationIdentifier.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/confederation/identifier", data.BgpConfederationIdentifier.ValueString())
 	}
 	if len(data.BgpConfederationPeers) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -9243,132 +9189,132 @@ func (data RouterBGP) toBodyXML(ctx context.Context) string {
 	}
 	if !data.BgpGracefulRestartEnable.IsNull() && !data.BgpGracefulRestartEnable.IsUnknown() {
 		if data.BgpGracefulRestartEnable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/graceful-restart/enable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/graceful-restart/enable", "")
 		}
 	}
 	if !data.BgpGracefulRestartPurgeTime.IsNull() && !data.BgpGracefulRestartPurgeTime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/graceful-restart/purge-time", strconv.FormatInt(data.BgpGracefulRestartPurgeTime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/graceful-restart/purge-time", strconv.FormatInt(data.BgpGracefulRestartPurgeTime.ValueInt64(), 10))
 	}
 	if !data.BgpGracefulRestartRestartTime.IsNull() && !data.BgpGracefulRestartRestartTime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/graceful-restart/restart-time", strconv.FormatInt(data.BgpGracefulRestartRestartTime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/graceful-restart/restart-time", strconv.FormatInt(data.BgpGracefulRestartRestartTime.ValueInt64(), 10))
 	}
 	if !data.BgpGracefulRestartStalepathTime.IsNull() && !data.BgpGracefulRestartStalepathTime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/graceful-restart/stalepath-time", strconv.FormatInt(data.BgpGracefulRestartStalepathTime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/graceful-restart/stalepath-time", strconv.FormatInt(data.BgpGracefulRestartStalepathTime.ValueInt64(), 10))
 	}
 	if !data.BgpGracefulRestartGracefulReset.IsNull() && !data.BgpGracefulRestartGracefulReset.IsUnknown() {
 		if data.BgpGracefulRestartGracefulReset.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/graceful-restart/graceful-reset", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/graceful-restart/graceful-reset", "")
 		}
 	}
 	if !data.BgpGracefulRestartRetainNbrRoutesDisable.IsNull() && !data.BgpGracefulRestartRetainNbrRoutesDisable.IsUnknown() {
 		if data.BgpGracefulRestartRetainNbrRoutesDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/graceful-restart/retain-nbr-routes/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/graceful-restart/retain-nbr-routes/disable", "")
 		}
 	}
 	if !data.BgpInstallDiversion.IsNull() && !data.BgpInstallDiversion.IsUnknown() {
 		if data.BgpInstallDiversion.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/install/diversion", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/install/diversion", "")
 		}
 	}
 	if !data.BgpUpdateDelay.IsNull() && !data.BgpUpdateDelay.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/update-delay/delay", strconv.FormatInt(data.BgpUpdateDelay.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/update-delay/delay", strconv.FormatInt(data.BgpUpdateDelay.ValueInt64(), 10))
 	}
 	if !data.BgpUpdateDelayAlways.IsNull() && !data.BgpUpdateDelayAlways.IsUnknown() {
 		if data.BgpUpdateDelayAlways.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/update-delay/always", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/update-delay/always", "")
 		}
 	}
 	if !data.BgpMaximumNeighbor.IsNull() && !data.BgpMaximumNeighbor.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/maximum/neighbor", strconv.FormatInt(data.BgpMaximumNeighbor.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/maximum/neighbor", strconv.FormatInt(data.BgpMaximumNeighbor.ValueInt64(), 10))
 	}
 	if !data.BgpOriginAsValidationSignalIbgp.IsNull() && !data.BgpOriginAsValidationSignalIbgp.IsUnknown() {
 		if data.BgpOriginAsValidationSignalIbgp.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/origin-as/validation/signal/ibgp", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/origin-as/validation/signal/ibgp", "")
 		}
 	}
 	if !data.BgpOriginAsValidationTimeOff.IsNull() && !data.BgpOriginAsValidationTimeOff.IsUnknown() {
 		if data.BgpOriginAsValidationTimeOff.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/origin-as/validation/time/off", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/origin-as/validation/time/off", "")
 		}
 	}
 	if !data.BgpOriginAsValidationTime.IsNull() && !data.BgpOriginAsValidationTime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bgp/origin-as/validation/time/prefix-validation-time", strconv.FormatInt(data.BgpOriginAsValidationTime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/origin-as/validation/time/prefix-validation-time", strconv.FormatInt(data.BgpOriginAsValidationTime.ValueInt64(), 10))
 	}
 	if !data.TimersBgpKeepaliveInterval.IsNull() && !data.TimersBgpKeepaliveInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/timers/bgp/keepalive-interval", strconv.FormatInt(data.TimersBgpKeepaliveInterval.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/bgp/keepalive-interval", strconv.FormatInt(data.TimersBgpKeepaliveInterval.ValueInt64(), 10))
 	}
 	if !data.TimersBgpHolddownZero.IsNull() && !data.TimersBgpHolddownZero.IsUnknown() {
 		if data.TimersBgpHolddownZero.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/timers/bgp/zero", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/timers/bgp/zero", "")
 		}
 	}
 	if !data.TimersBgpHolddownZeroMinimumAcceptableZero.IsNull() && !data.TimersBgpHolddownZeroMinimumAcceptableZero.IsUnknown() {
 		if data.TimersBgpHolddownZeroMinimumAcceptableZero.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/timers/bgp/zero/zero", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/timers/bgp/zero/zero", "")
 		}
 	}
 	if !data.TimersBgpHolddownZeroMinimumAcceptableHoldtime.IsNull() && !data.TimersBgpHolddownZeroMinimumAcceptableHoldtime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/timers/bgp/zero/minimum-acceptable-holdtime", strconv.FormatInt(data.TimersBgpHolddownZeroMinimumAcceptableHoldtime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/bgp/zero/minimum-acceptable-holdtime", strconv.FormatInt(data.TimersBgpHolddownZeroMinimumAcceptableHoldtime.ValueInt64(), 10))
 	}
 	if !data.TimersBgpHoldtime.IsNull() && !data.TimersBgpHoldtime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/timers/bgp/holdtime/holdtime-number", strconv.FormatInt(data.TimersBgpHoldtime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/bgp/holdtime/holdtime-number", strconv.FormatInt(data.TimersBgpHoldtime.ValueInt64(), 10))
 	}
 	if !data.TimersBgpHoldtimeMinimumAcceptableHoldtime.IsNull() && !data.TimersBgpHoldtimeMinimumAcceptableHoldtime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/timers/bgp/holdtime/minimum-acceptable-holdtime", strconv.FormatInt(data.TimersBgpHoldtimeMinimumAcceptableHoldtime.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/bgp/holdtime/minimum-acceptable-holdtime", strconv.FormatInt(data.TimersBgpHoldtimeMinimumAcceptableHoldtime.ValueInt64(), 10))
 	}
 	if !data.Nsr.IsNull() && !data.Nsr.IsUnknown() {
 		if data.Nsr.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/nsr", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/nsr", "")
 		}
 	}
 	if !data.NsrDisable.IsNull() && !data.NsrDisable.IsUnknown() {
 		if data.NsrDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/nsr/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/nsr/disable", "")
 		}
 	}
 	if !data.IbgpPolicyOutEnforceModifications.IsNull() && !data.IbgpPolicyOutEnforceModifications.IsUnknown() {
 		if data.IbgpPolicyOutEnforceModifications.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/ibgp/policy/out/enforce-modifications", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ibgp/policy/out/enforce-modifications", "")
 		}
 	}
 	if !data.OpenconfigRibTelemetry.IsNull() && !data.OpenconfigRibTelemetry.IsUnknown() {
 		if data.OpenconfigRibTelemetry.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/openconfig/rib-telemetry", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/openconfig/rib-telemetry", "")
 		}
 	}
 	if !data.UpdateLimit.IsNull() && !data.UpdateLimit.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/update/limit", strconv.FormatInt(data.UpdateLimit.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/update/limit", strconv.FormatInt(data.UpdateLimit.ValueInt64(), 10))
 	}
 	if !data.UpdateInErrorHandlingBasicEbgpDisable.IsNull() && !data.UpdateInErrorHandlingBasicEbgpDisable.IsUnknown() {
 		if data.UpdateInErrorHandlingBasicEbgpDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/update/in/error-handling/basic/ebgp/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/update/in/error-handling/basic/ebgp/disable", "")
 		}
 	}
 	if !data.UpdateInErrorHandlingBasicIbgpDisable.IsNull() && !data.UpdateInErrorHandlingBasicIbgpDisable.IsUnknown() {
 		if data.UpdateInErrorHandlingBasicIbgpDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/update/in/error-handling/basic/ibgp/disable", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/update/in/error-handling/basic/ibgp/disable", "")
 		}
 	}
 	if !data.UpdateInErrorHandlingExtendedEbgp.IsNull() && !data.UpdateInErrorHandlingExtendedEbgp.IsUnknown() {
 		if data.UpdateInErrorHandlingExtendedEbgp.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/update/in/error-handling/extended/ebgp", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/update/in/error-handling/extended/ebgp", "")
 		}
 	}
 	if !data.UpdateInErrorHandlingExtendedIbgp.IsNull() && !data.UpdateInErrorHandlingExtendedIbgp.IsUnknown() {
 		if data.UpdateInErrorHandlingExtendedIbgp.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/update/in/error-handling/extended/ibgp", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/update/in/error-handling/extended/ibgp", "")
 		}
 	}
 	if !data.UpdateOutLogging.IsNull() && !data.UpdateOutLogging.IsUnknown() {
 		if data.UpdateOutLogging.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/update/out/logging", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/update/out/logging", "")
 		}
 	}
 	if !data.BfdMultiplier.IsNull() && !data.BfdMultiplier.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bfd/multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
 	}
 	if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/bfd/minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
 	}
 	if len(data.RpkiRoutes) > 0 {
 		// Build all list items and append them using AppendFromXPath
@@ -9452,17 +9398,17 @@ func (data RouterBGP) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/as-number"); value.Exists() {
 		data.AsNumber = types.StringValue(value.String())
 	} else if data.AsNumber.IsNull() {
 		data.AsNumber = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default-metric"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-metric"); value.Exists() {
 		data.DefaultMetric = types.Int64Value(value.Int())
 	} else if data.DefaultMetric.IsNull() {
 		data.DefaultMetric = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mvpn"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mvpn"); value.Exists() {
 		data.Mvpn = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -9470,12 +9416,12 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.Mvpn = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/segment-routing/srv6/locator"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6/locator"); value.Exists() {
 		data.SegmentRoutingSrv6Locator = types.StringValue(value.String())
 	} else if data.SegmentRoutingSrv6Locator.IsNull() {
 		data.SegmentRoutingSrv6Locator = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
 		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -9484,11 +9430,11 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 		}
 	}
 	for i := range data.Neighbors {
-		keys := [...]string{ "address",  }
-		keyValues := [...]string{ data.Neighbors[i].Address.ValueString(),  }
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbors/neighbor").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/neighbor").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -9639,8 +9585,8 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			}
 		}
 		for ci := range data.Neighbors[i].BmpActivateServers {
-			keys := [...]string{ "server-number",  }
-			keyValues := [...]string{ strconv.FormatInt(data.Neighbors[i].BmpActivateServers[ci].ServerNumber.ValueInt64(), 10),  }
+			keys := [...]string{"server-number"}
+			keyValues := [...]string{strconv.FormatInt(data.Neighbors[i].BmpActivateServers[ci].ServerNumber.ValueInt64(), 10)}
 
 			var cr xmldot.Result
 			helpers.GetFromXPath(r, "bmp-activate/servers/server").ForEach(
@@ -9663,7 +9609,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			)
 			if value := helpers.GetFromXPath(cr, "server-number"); value.Exists() {
 				data.Neighbors[i].BmpActivateServers[ci].ServerNumber = types.Int64Value(value.Int())
-			} else {
+			} else if data.Neighbors[i].BmpActivateServers[ci].ServerNumber.IsNull() {
 				data.Neighbors[i].BmpActivateServers[ci].ServerNumber = types.Int64Null()
 			}
 		}
@@ -10249,8 +10195,8 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			}
 		}
 		for ci := range data.Neighbors[i].PeerSets {
-			keys := [...]string{ "peer",  }
-			keyValues := [...]string{ strconv.FormatInt(data.Neighbors[i].PeerSets[ci].Peer.ValueInt64(), 10),  }
+			keys := [...]string{"peer"}
+			keyValues := [...]string{strconv.FormatInt(data.Neighbors[i].PeerSets[ci].Peer.ValueInt64(), 10)}
 
 			var cr xmldot.Result
 			helpers.GetFromXPath(r, "peer-set/peer-sets").ForEach(
@@ -10273,7 +10219,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			)
 			if value := helpers.GetFromXPath(cr, "peer"); value.Exists() {
 				data.Neighbors[i].PeerSets[ci].Peer = types.Int64Value(value.Int())
-			} else {
+			} else if data.Neighbors[i].PeerSets[ci].Peer.IsNull() {
 				data.Neighbors[i].PeerSets[ci].Peer = types.Int64Null()
 			}
 		}
@@ -10494,7 +10440,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/graceful-maintenance/activate/all-neighbors"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/graceful-maintenance/activate/all-neighbors"); value.Exists() {
 		data.GracefulMaintenanceActivateAllNeighbors = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10502,7 +10448,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.GracefulMaintenanceActivateAllNeighbors = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/graceful-maintenance/activate/retain-routes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/graceful-maintenance/activate/retain-routes"); value.Exists() {
 		data.GracefulMaintenanceActivateRetainRoutes = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10511,11 +10457,11 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 		}
 	}
 	for i := range data.GracefulMaintenanceActivateInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/graceful-maintenance/activate/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/graceful-maintenance/activate/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -10540,11 +10486,11 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 		}
 	}
 	for i := range data.GracefulMaintenanceActivateLocations {
-		keys := [...]string{ "location-value",  }
-		keyValues := [...]string{ data.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString(),  }
+		keys := [...]string{"location-value"}
+		keyValues := [...]string{data.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/graceful-maintenance/activate/locations/location").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/graceful-maintenance/activate/locations/location").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -10569,11 +10515,11 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 		}
 	}
 	for i := range data.MplsActivateInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.MplsActivateInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.MplsActivateInterfaces[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/mpls/activate/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/activate/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -10598,11 +10544,11 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 		}
 	}
 	for i := range data.AsLeaguePeers {
-		keys := [...]string{ "peer-as-number",  }
-		keyValues := [...]string{ data.AsLeaguePeers[i].PeerAsNumber.ValueString(),  }
+		keys := [...]string{"peer-as-number"}
+		keyValues := [...]string{data.AsLeaguePeers[i].PeerAsNumber.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/as-league/peers/peer").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/as-league/peers/peer").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -10627,11 +10573,11 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 		}
 	}
 	for i := range data.AttributeFilterGroups {
-		keys := [...]string{ "group-name",  }
-		keyValues := [...]string{ data.AttributeFilterGroups[i].GroupName.ValueString(),  }
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.AttributeFilterGroups[i].GroupName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/attribute-filter/groups/group").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/attribute-filter/groups/group").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -10655,8 +10601,8 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.AttributeFilterGroups[i].GroupName = types.StringNull()
 		}
 		for ci := range data.AttributeFilterGroups[i].AttributeCodeRanges {
-			keys := [...]string{ "start", "end",  }
-			keyValues := [...]string{ strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start.ValueInt64(), 10), strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.ValueInt64(), 10),  }
+			keys := [...]string{"start", "end"}
+			keyValues := [...]string{strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start.ValueInt64(), 10), strconv.FormatInt(data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.ValueInt64(), 10)}
 
 			var cr xmldot.Result
 			helpers.GetFromXPath(r, "attributes/attribute-code-ranges/attribute-code-range").ForEach(
@@ -10679,42 +10625,42 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			)
 			if value := helpers.GetFromXPath(cr, "start"); value.Exists() {
 				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start = types.Int64Value(value.Int())
-			} else {
+			} else if data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start.IsNull() {
 				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start = types.Int64Null()
 			}
 			if value := helpers.GetFromXPath(cr, "end"); value.Exists() {
 				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End = types.Int64Value(value.Int())
-			} else {
+			} else if data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.IsNull() {
 				data.AttributeFilterGroups[i].AttributeCodeRanges[ci].End = types.Int64Null()
 			}
-					if value := helpers.GetFromXPath(cr, "discard"); value.Exists() {
-						if !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.IsNull() {
-							data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard = types.BoolValue(true)
-						}
-					} else {
-						// For presence-based booleans, only set to false if the attribute is null in state
-						if data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.IsNull() {
-							data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard = types.BoolNull()
-						}
-					}
-					if value := helpers.GetFromXPath(cr, "treat-as-withdraw"); value.Exists() {
-						if !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() {
-							data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw = types.BoolValue(true)
-						}
-					} else {
-						// For presence-based booleans, only set to false if the attribute is null in state
-						if data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() {
-							data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw = types.BoolNull()
-						}
-					}
+			if value := helpers.GetFromXPath(cr, "discard"); value.Exists() {
+				if !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.IsNull() {
+					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard.IsNull() {
+					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].Discard = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "treat-as-withdraw"); value.Exists() {
+				if !data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() {
+					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw.IsNull() {
+					data.AttributeFilterGroups[i].AttributeCodeRanges[ci].TreatAsWithdraw = types.BoolNull()
+				}
+			}
 		}
 	}
 	for i := range data.AsLists {
-		keys := [...]string{ "as-list-name",  }
-		keyValues := [...]string{ data.AsLists[i].ListName.ValueString(),  }
+		keys := [...]string{"as-list-name"}
+		keyValues := [...]string{data.AsLists[i].ListName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/as-lists/as-list").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/as-lists/as-list").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -10738,8 +10684,8 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.AsLists[i].ListName = types.StringNull()
 		}
 		for ci := range data.AsLists[i].AsNumbers {
-			keys := [...]string{ "as-list-value",  }
-			keyValues := [...]string{ data.AsLists[i].AsNumbers[ci].AsValue.ValueString(),  }
+			keys := [...]string{"as-list-value"}
+			keyValues := [...]string{data.AsLists[i].AsNumbers[ci].AsValue.ValueString()}
 
 			var cr xmldot.Result
 			helpers.GetFromXPath(r, "as-list-numbers/as-list-number").ForEach(
@@ -10763,11 +10709,12 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			if value := helpers.GetFromXPath(cr, "as-list-value"); value.Exists() {
 				data.AsLists[i].AsNumbers[ci].AsValue = types.StringValue(value.String())
 			} else {
-				data.AsLists[i].AsNumbers[ci].AsValue = types.StringNull()
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
 			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default-information/originate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-information/originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10775,27 +10722,27 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.DefaultInformationOriginate = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/socket/receive-buffer-size/receive-buffer-size-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/socket/receive-buffer-size/receive-buffer-size-number"); value.Exists() {
 		data.SocketReceiveBufferSize = types.Int64Value(value.Int())
 	} else if data.SocketReceiveBufferSize.IsNull() {
 		data.SocketReceiveBufferSize = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/socket/receive-buffer-size/bgp-read-buffer-size-byte"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/socket/receive-buffer-size/bgp-read-buffer-size-byte"); value.Exists() {
 		data.SocketReceiveBufferSizeRead = types.Int64Value(value.Int())
 	} else if data.SocketReceiveBufferSizeRead.IsNull() {
 		data.SocketReceiveBufferSizeRead = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/socket/send-buffer-size/send-buffer-size-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/socket/send-buffer-size/send-buffer-size-number"); value.Exists() {
 		data.SocketSendBufferSize = types.Int64Value(value.Int())
 	} else if data.SocketSendBufferSize.IsNull() {
 		data.SocketSendBufferSize = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/socket/send-buffer-size/bgp-write-buffer-size-byte"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/socket/send-buffer-size/bgp-write-buffer-size-byte"); value.Exists() {
 		data.SocketSendBufferSizeWrite = types.Int64Value(value.Int())
 	} else if data.SocketSendBufferSizeWrite.IsNull() {
 		data.SocketSendBufferSizeWrite = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/mpls/forwarding/ibgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/mpls/forwarding/ibgp"); value.Exists() {
 		data.NexthopMplsForwardingIbgp = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10803,7 +10750,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.NexthopMplsForwardingIbgp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/validation/color-extcomm/sr-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/validation/color-extcomm/sr-policy"); value.Exists() {
 		data.NexthopValidationColorExtcommSrPolicy = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10811,7 +10758,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.NexthopValidationColorExtcommSrPolicy = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/validation/color-extcomm/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/validation/color-extcomm/disable"); value.Exists() {
 		data.NexthopValidationColorExtcommDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10819,7 +10766,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.NexthopValidationColorExtcommDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/resolution/allow-default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/resolution/allow-default"); value.Exists() {
 		data.NexthopResolutionAllowDefault = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10827,7 +10774,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.NexthopResolutionAllowDefault = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/srte-metric/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/srte-metric/disable"); value.Exists() {
 		data.NexthopSrteMetricDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10835,7 +10782,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.NexthopSrteMetricDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/slow-peer/dynamic"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/slow-peer/dynamic"); value.Exists() {
 		data.SlowPeerDynamic = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10843,12 +10790,12 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.SlowPeerDynamic = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/slow-peer/dynamic/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/slow-peer/dynamic/threshold"); value.Exists() {
 		data.SlowPeerDynamicThreshold = types.Int64Value(value.Int())
 	} else if data.SlowPeerDynamicThreshold.IsNull() {
 		data.SlowPeerDynamicThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/slow-peer/detection-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/slow-peer/detection-disable"); value.Exists() {
 		data.SlowPeerDetectionDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10856,7 +10803,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.SlowPeerDetectionDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/redistribute-internal"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/redistribute-internal"); value.Exists() {
 		data.BgpRedistributeInternal = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10864,12 +10811,12 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpRedistributeInternal = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/router-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/router-id"); value.Exists() {
 		data.BgpRouterId = types.StringValue(value.String())
 	} else if data.BgpRouterId.IsNull() {
 		data.BgpRouterId = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/unsafe-ebgp-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/unsafe-ebgp-policy"); value.Exists() {
 		data.BgpUnsafeEbgpPolicy = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10877,12 +10824,12 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpUnsafeEbgpPolicy = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/scan-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/scan-time"); value.Exists() {
 		data.BgpScanTime = types.Int64Value(value.Int())
 	} else if data.BgpScanTime.IsNull() {
 		data.BgpScanTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/read-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/read-only"); value.Exists() {
 		data.BgpReadOnly = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10890,7 +10837,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpReadOnly = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/lpts-secure-binding"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/lpts-secure-binding"); value.Exists() {
 		data.BgpLptsSecureBinding = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10898,7 +10845,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpLptsSecureBinding = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/as-path-loopcheck"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/as-path-loopcheck"); value.Exists() {
 		data.BgpAsPathLoopcheck = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10906,7 +10853,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpAsPathLoopcheck = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/auto-policy-soft-reset/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/auto-policy-soft-reset/disable"); value.Exists() {
 		data.BgpAutoPolicySoftResetDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10914,7 +10861,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpAutoPolicySoftResetDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/cost-community/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/cost-community/ignore"); value.Exists() {
 		data.BgpBestpathCostCommunityIgnore = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10922,7 +10869,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpBestpathCostCommunityIgnore = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/compare-routerid"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/compare-routerid"); value.Exists() {
 		data.BgpBestpathCompareRouterid = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10930,7 +10877,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpBestpathCompareRouterid = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/aigp/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/aigp/ignore"); value.Exists() {
 		data.BgpBestpathAigpIgnore = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10938,7 +10885,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpBestpathAigpIgnore = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/igp-metric/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/igp-metric/ignore"); value.Exists() {
 		data.BgpBestpathIgpMetricIgnore = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10946,7 +10893,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpBestpathIgpMetricIgnore = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/igp-metric/sr-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/igp-metric/sr-policy"); value.Exists() {
 		data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10954,7 +10901,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpBestpathIgpMetricSrPolicy = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/med/missing-as-worst"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/med/missing-as-worst"); value.Exists() {
 		data.BgpBestpathMedMissingAsWorst = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10962,7 +10909,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpBestpathMedMissingAsWorst = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/med/always"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/med/always"); value.Exists() {
 		data.BgpBestpathMedAlways = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10970,7 +10917,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpBestpathMedAlways = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/as-path/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/as-path/ignore"); value.Exists() {
 		data.BgpBestpathAsPathIgnore = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10978,7 +10925,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpBestpathAsPathIgnore = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/as-path/multipath-relax"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/as-path/multipath-relax"); value.Exists() {
 		data.BgpBestpathAsPathMultipathRelax = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10986,7 +10933,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpBestpathAsPathMultipathRelax = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/origin-as/use/validity"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/origin-as/use/validity"); value.Exists() {
 		data.BgpBestpathOriginAsUseValidity = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -10994,7 +10941,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpBestpathOriginAsUseValidity = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/origin-as/allow/invalid"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/origin-as/allow/invalid"); value.Exists() {
 		data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11002,7 +10949,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpBestpathOriginAsAllowInvalid = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/sr-policy/prefer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/sr-policy/prefer"); value.Exists() {
 		data.BgpBestpathSrPolicyPrefer = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11010,7 +10957,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpBestpathSrPolicyPrefer = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/sr-policy/force"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/sr-policy/force"); value.Exists() {
 		data.BgpBestpathSrPolicyForce = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11018,22 +10965,22 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpBestpathSrPolicyForce = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/cluster-id/route-reflector-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/cluster-id/route-reflector-number"); value.Exists() {
 		data.BgpClusterId32bitFormat = types.Int64Value(value.Int())
 	} else if data.BgpClusterId32bitFormat.IsNull() {
 		data.BgpClusterId32bitFormat = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/cluster-id/route-reflector-ip-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/cluster-id/route-reflector-ip-address"); value.Exists() {
 		data.BgpClusterIdIpFormat = types.StringValue(value.String())
 	} else if data.BgpClusterIdIpFormat.IsNull() {
 		data.BgpClusterIdIpFormat = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/default/local-preference"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/default/local-preference"); value.Exists() {
 		data.BgpDefaultLocalPreference = types.Int64Value(value.Int())
 	} else if data.BgpDefaultLocalPreference.IsNull() {
 		data.BgpDefaultLocalPreference = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/enforce-first-as/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/enforce-first-as/disable"); value.Exists() {
 		data.BgpEnforceFirstAsDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11041,7 +10988,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpEnforceFirstAsDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/fast-external-fallover/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/fast-external-fallover/disable"); value.Exists() {
 		data.BgpFastExternalFalloverDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11049,7 +10996,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpFastExternalFalloverDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/neighbor/changes/detail"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/neighbor/changes/detail"); value.Exists() {
 		data.BgpLogNeighborChangesDetail = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11057,7 +11004,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpLogNeighborChangesDetail = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/neighbor/changes/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/neighbor/changes/disable"); value.Exists() {
 		data.BgpLogNeighborChangesDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11065,7 +11012,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpLogNeighborChangesDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/message/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/message/disable"); value.Exists() {
 		data.BgpLogMessageDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11073,27 +11020,27 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpLogMessageDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/memory-threshold/memory-warning-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/memory-threshold/memory-warning-number"); value.Exists() {
 		data.BgpLogMemoryThresholdWarning = types.Int64Value(value.Int())
 	} else if data.BgpLogMemoryThresholdWarning.IsNull() {
 		data.BgpLogMemoryThresholdWarning = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/memory-threshold/memory-critical-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/memory-threshold/memory-critical-number"); value.Exists() {
 		data.BgpLogMemoryThresholdCritical = types.Int64Value(value.Int())
 	} else if data.BgpLogMemoryThresholdCritical.IsNull() {
 		data.BgpLogMemoryThresholdCritical = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/total-paths/total-paths-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/total-paths/total-paths-number"); value.Exists() {
 		data.BgpLogTotalPaths = types.Int64Value(value.Int())
 	} else if data.BgpLogTotalPaths.IsNull() {
 		data.BgpLogTotalPaths = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/total-paths/warn-threshold-value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/total-paths/warn-threshold-value"); value.Exists() {
 		data.BgpLogTotalPathsWarnThreshold = types.Int64Value(value.Int())
 	} else if data.BgpLogTotalPathsWarnThreshold.IsNull() {
 		data.BgpLogTotalPathsWarnThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/multipath/use/cluster-list-length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/multipath/use/cluster-list-length"); value.Exists() {
 		data.BgpMultipathUseClusterListLength = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11101,7 +11048,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpMultipathUseClusterListLength = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/multipath/as-path/ignore/onwards"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/multipath/as-path/ignore/onwards"); value.Exists() {
 		data.BgpMultipathAsPathIgnoreOnwards = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11109,17 +11056,17 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpMultipathAsPathIgnoreOnwards = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/confederation/identifier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/confederation/identifier"); value.Exists() {
 		data.BgpConfederationIdentifier = types.StringValue(value.String())
 	} else if data.BgpConfederationIdentifier.IsNull() {
 		data.BgpConfederationIdentifier = types.StringNull()
 	}
 	for i := range data.BgpConfederationPeers {
-		keys := [...]string{ "peer-as-number",  }
-		keyValues := [...]string{ data.BgpConfederationPeers[i].PeerAsNumber.ValueString(),  }
+		keys := [...]string{"peer-as-number"}
+		keyValues := [...]string{data.BgpConfederationPeers[i].PeerAsNumber.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/confederation/peers").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/confederation/peers").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -11143,7 +11090,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpConfederationPeers[i].PeerAsNumber = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/enable"); value.Exists() {
 		data.BgpGracefulRestartEnable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11151,22 +11098,22 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpGracefulRestartEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/purge-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/purge-time"); value.Exists() {
 		data.BgpGracefulRestartPurgeTime = types.Int64Value(value.Int())
 	} else if data.BgpGracefulRestartPurgeTime.IsNull() {
 		data.BgpGracefulRestartPurgeTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/restart-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/restart-time"); value.Exists() {
 		data.BgpGracefulRestartRestartTime = types.Int64Value(value.Int())
 	} else if data.BgpGracefulRestartRestartTime.IsNull() {
 		data.BgpGracefulRestartRestartTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/stalepath-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/stalepath-time"); value.Exists() {
 		data.BgpGracefulRestartStalepathTime = types.Int64Value(value.Int())
 	} else if data.BgpGracefulRestartStalepathTime.IsNull() {
 		data.BgpGracefulRestartStalepathTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/graceful-reset"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/graceful-reset"); value.Exists() {
 		data.BgpGracefulRestartGracefulReset = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11174,7 +11121,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpGracefulRestartGracefulReset = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/retain-nbr-routes/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/retain-nbr-routes/disable"); value.Exists() {
 		data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11182,7 +11129,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/install/diversion"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/install/diversion"); value.Exists() {
 		data.BgpInstallDiversion = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11190,12 +11137,12 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpInstallDiversion = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/update-delay/delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/update-delay/delay"); value.Exists() {
 		data.BgpUpdateDelay = types.Int64Value(value.Int())
 	} else if data.BgpUpdateDelay.IsNull() {
 		data.BgpUpdateDelay = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/update-delay/always"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/update-delay/always"); value.Exists() {
 		data.BgpUpdateDelayAlways = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11203,12 +11150,12 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpUpdateDelayAlways = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/maximum/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/maximum/neighbor"); value.Exists() {
 		data.BgpMaximumNeighbor = types.Int64Value(value.Int())
 	} else if data.BgpMaximumNeighbor.IsNull() {
 		data.BgpMaximumNeighbor = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/origin-as/validation/signal/ibgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/origin-as/validation/signal/ibgp"); value.Exists() {
 		data.BgpOriginAsValidationSignalIbgp = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11216,7 +11163,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpOriginAsValidationSignalIbgp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/origin-as/validation/time/off"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/origin-as/validation/time/off"); value.Exists() {
 		data.BgpOriginAsValidationTimeOff = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11224,17 +11171,17 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.BgpOriginAsValidationTimeOff = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/origin-as/validation/time/prefix-validation-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/origin-as/validation/time/prefix-validation-time"); value.Exists() {
 		data.BgpOriginAsValidationTime = types.Int64Value(value.Int())
 	} else if data.BgpOriginAsValidationTime.IsNull() {
 		data.BgpOriginAsValidationTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/keepalive-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/keepalive-interval"); value.Exists() {
 		data.TimersBgpKeepaliveInterval = types.Int64Value(value.Int())
 	} else if data.TimersBgpKeepaliveInterval.IsNull() {
 		data.TimersBgpKeepaliveInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/zero"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/zero"); value.Exists() {
 		data.TimersBgpHolddownZero = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11242,7 +11189,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.TimersBgpHolddownZero = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/zero/zero"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/zero/zero"); value.Exists() {
 		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11250,22 +11197,22 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/zero/minimum-acceptable-holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/zero/minimum-acceptable-holdtime"); value.Exists() {
 		data.TimersBgpHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	} else if data.TimersBgpHolddownZeroMinimumAcceptableHoldtime.IsNull() {
 		data.TimersBgpHolddownZeroMinimumAcceptableHoldtime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/holdtime/holdtime-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/holdtime/holdtime-number"); value.Exists() {
 		data.TimersBgpHoldtime = types.Int64Value(value.Int())
 	} else if data.TimersBgpHoldtime.IsNull() {
 		data.TimersBgpHoldtime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/holdtime/minimum-acceptable-holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/holdtime/minimum-acceptable-holdtime"); value.Exists() {
 		data.TimersBgpHoldtimeMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	} else if data.TimersBgpHoldtimeMinimumAcceptableHoldtime.IsNull() {
 		data.TimersBgpHoldtimeMinimumAcceptableHoldtime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nsr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nsr"); value.Exists() {
 		data.Nsr = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11273,7 +11220,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.Nsr = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nsr/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nsr/disable"); value.Exists() {
 		data.NsrDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11281,7 +11228,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.NsrDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ibgp/policy/out/enforce-modifications"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ibgp/policy/out/enforce-modifications"); value.Exists() {
 		data.IbgpPolicyOutEnforceModifications = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11289,7 +11236,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.IbgpPolicyOutEnforceModifications = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/openconfig/rib-telemetry"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/openconfig/rib-telemetry"); value.Exists() {
 		data.OpenconfigRibTelemetry = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11297,12 +11244,12 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.OpenconfigRibTelemetry = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/limit"); value.Exists() {
 		data.UpdateLimit = types.Int64Value(value.Int())
 	} else if data.UpdateLimit.IsNull() {
 		data.UpdateLimit = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/in/error-handling/basic/ebgp/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/in/error-handling/basic/ebgp/disable"); value.Exists() {
 		data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11310,7 +11257,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/in/error-handling/basic/ibgp/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/in/error-handling/basic/ibgp/disable"); value.Exists() {
 		data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11318,7 +11265,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/in/error-handling/extended/ebgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/in/error-handling/extended/ebgp"); value.Exists() {
 		data.UpdateInErrorHandlingExtendedEbgp = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11326,7 +11273,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.UpdateInErrorHandlingExtendedEbgp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/in/error-handling/extended/ibgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/in/error-handling/extended/ibgp"); value.Exists() {
 		data.UpdateInErrorHandlingExtendedIbgp = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11334,7 +11281,7 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.UpdateInErrorHandlingExtendedIbgp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/out/logging"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/out/logging"); value.Exists() {
 		data.UpdateOutLogging = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -11342,22 +11289,22 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			data.UpdateOutLogging = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	} else if data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	} else if data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
 	for i := range data.RpkiRoutes {
-		keys := [...]string{ "route-address", "route-prefix", "max", "origin",  }
-		keyValues := [...]string{ data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10),  }
+		keys := [...]string{"route-address", "route-prefix", "max", "origin"}
+		keyValues := [...]string{data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/rpki/routes/route").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpki/routes/route").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -11397,11 +11344,11 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 		}
 	}
 	for i := range data.RpkiServers {
-		keys := [...]string{ "server-name",  }
-		keyValues := [...]string{ data.RpkiServers[i].Server.ValueString(),  }
+		keys := [...]string{"server-name"}
+		keyValues := [...]string{data.RpkiServers[i].Server.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/rpki/servers/server").ForEach(
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpki/servers/server").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -11494,23 +11441,23 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterBGP) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default-metric"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-metric"); value.Exists() {
 		data.DefaultMetric = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mvpn"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mvpn"); value.Exists() {
 		data.Mvpn = types.BoolValue(true)
 	} else {
 		data.Mvpn = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/segment-routing/srv6/locator"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6/locator"); value.Exists() {
 		data.SegmentRoutingSrv6Locator = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
 		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 	} else {
 		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbors/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/neighbor"); value.Exists() {
 		data.Neighbors = make([]RouterBGPNeighbors, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPNeighbors{}
@@ -12072,17 +12019,17 @@ func (data *RouterBGP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/graceful-maintenance/activate/all-neighbors"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/graceful-maintenance/activate/all-neighbors"); value.Exists() {
 		data.GracefulMaintenanceActivateAllNeighbors = types.BoolValue(true)
 	} else {
 		data.GracefulMaintenanceActivateAllNeighbors = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/graceful-maintenance/activate/retain-routes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/graceful-maintenance/activate/retain-routes"); value.Exists() {
 		data.GracefulMaintenanceActivateRetainRoutes = types.BoolValue(true)
 	} else {
 		data.GracefulMaintenanceActivateRetainRoutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/graceful-maintenance/activate/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/graceful-maintenance/activate/interfaces/interface"); value.Exists() {
 		data.GracefulMaintenanceActivateInterfaces = make([]RouterBGPGracefulMaintenanceActivateInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPGracefulMaintenanceActivateInterfaces{}
@@ -12093,7 +12040,7 @@ func (data *RouterBGP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/graceful-maintenance/activate/locations/location"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/graceful-maintenance/activate/locations/location"); value.Exists() {
 		data.GracefulMaintenanceActivateLocations = make([]RouterBGPGracefulMaintenanceActivateLocations, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPGracefulMaintenanceActivateLocations{}
@@ -12104,7 +12051,7 @@ func (data *RouterBGP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mpls/activate/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/activate/interfaces/interface"); value.Exists() {
 		data.MplsActivateInterfaces = make([]RouterBGPMplsActivateInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPMplsActivateInterfaces{}
@@ -12115,7 +12062,7 @@ func (data *RouterBGP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/as-league/peers/peer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/as-league/peers/peer"); value.Exists() {
 		data.AsLeaguePeers = make([]RouterBGPAsLeaguePeers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPAsLeaguePeers{}
@@ -12126,7 +12073,7 @@ func (data *RouterBGP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/attribute-filter/groups/group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/attribute-filter/groups/group"); value.Exists() {
 		data.AttributeFilterGroups = make([]RouterBGPAttributeFilterGroups, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPAttributeFilterGroups{}
@@ -12161,7 +12108,7 @@ func (data *RouterBGP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/as-lists/as-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/as-lists/as-list"); value.Exists() {
 		data.AsLists = make([]RouterBGPAsLists, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPAsLists{}
@@ -12183,222 +12130,222 @@ func (data *RouterBGP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default-information/originate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-information/originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
 	} else {
 		data.DefaultInformationOriginate = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/socket/receive-buffer-size/receive-buffer-size-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/socket/receive-buffer-size/receive-buffer-size-number"); value.Exists() {
 		data.SocketReceiveBufferSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/socket/receive-buffer-size/bgp-read-buffer-size-byte"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/socket/receive-buffer-size/bgp-read-buffer-size-byte"); value.Exists() {
 		data.SocketReceiveBufferSizeRead = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/socket/send-buffer-size/send-buffer-size-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/socket/send-buffer-size/send-buffer-size-number"); value.Exists() {
 		data.SocketSendBufferSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/socket/send-buffer-size/bgp-write-buffer-size-byte"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/socket/send-buffer-size/bgp-write-buffer-size-byte"); value.Exists() {
 		data.SocketSendBufferSizeWrite = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/mpls/forwarding/ibgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/mpls/forwarding/ibgp"); value.Exists() {
 		data.NexthopMplsForwardingIbgp = types.BoolValue(true)
 	} else {
 		data.NexthopMplsForwardingIbgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/validation/color-extcomm/sr-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/validation/color-extcomm/sr-policy"); value.Exists() {
 		data.NexthopValidationColorExtcommSrPolicy = types.BoolValue(true)
 	} else {
 		data.NexthopValidationColorExtcommSrPolicy = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/validation/color-extcomm/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/validation/color-extcomm/disable"); value.Exists() {
 		data.NexthopValidationColorExtcommDisable = types.BoolValue(true)
 	} else {
 		data.NexthopValidationColorExtcommDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/resolution/allow-default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/resolution/allow-default"); value.Exists() {
 		data.NexthopResolutionAllowDefault = types.BoolValue(true)
 	} else {
 		data.NexthopResolutionAllowDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/srte-metric/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/srte-metric/disable"); value.Exists() {
 		data.NexthopSrteMetricDisable = types.BoolValue(true)
 	} else {
 		data.NexthopSrteMetricDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/slow-peer/dynamic"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/slow-peer/dynamic"); value.Exists() {
 		data.SlowPeerDynamic = types.BoolValue(true)
 	} else {
 		data.SlowPeerDynamic = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/slow-peer/dynamic/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/slow-peer/dynamic/threshold"); value.Exists() {
 		data.SlowPeerDynamicThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/slow-peer/detection-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/slow-peer/detection-disable"); value.Exists() {
 		data.SlowPeerDetectionDisable = types.BoolValue(true)
 	} else {
 		data.SlowPeerDetectionDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/redistribute-internal"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/redistribute-internal"); value.Exists() {
 		data.BgpRedistributeInternal = types.BoolValue(true)
 	} else {
 		data.BgpRedistributeInternal = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/router-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/router-id"); value.Exists() {
 		data.BgpRouterId = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/unsafe-ebgp-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/unsafe-ebgp-policy"); value.Exists() {
 		data.BgpUnsafeEbgpPolicy = types.BoolValue(true)
 	} else {
 		data.BgpUnsafeEbgpPolicy = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/scan-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/scan-time"); value.Exists() {
 		data.BgpScanTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/read-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/read-only"); value.Exists() {
 		data.BgpReadOnly = types.BoolValue(true)
 	} else {
 		data.BgpReadOnly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/lpts-secure-binding"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/lpts-secure-binding"); value.Exists() {
 		data.BgpLptsSecureBinding = types.BoolValue(true)
 	} else {
 		data.BgpLptsSecureBinding = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/as-path-loopcheck"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/as-path-loopcheck"); value.Exists() {
 		data.BgpAsPathLoopcheck = types.BoolValue(true)
 	} else {
 		data.BgpAsPathLoopcheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/auto-policy-soft-reset/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/auto-policy-soft-reset/disable"); value.Exists() {
 		data.BgpAutoPolicySoftResetDisable = types.BoolValue(true)
 	} else {
 		data.BgpAutoPolicySoftResetDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/cost-community/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/cost-community/ignore"); value.Exists() {
 		data.BgpBestpathCostCommunityIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathCostCommunityIgnore = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/compare-routerid"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/compare-routerid"); value.Exists() {
 		data.BgpBestpathCompareRouterid = types.BoolValue(true)
 	} else {
 		data.BgpBestpathCompareRouterid = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/aigp/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/aigp/ignore"); value.Exists() {
 		data.BgpBestpathAigpIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathAigpIgnore = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/igp-metric/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/igp-metric/ignore"); value.Exists() {
 		data.BgpBestpathIgpMetricIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathIgpMetricIgnore = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/igp-metric/sr-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/igp-metric/sr-policy"); value.Exists() {
 		data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(true)
 	} else {
 		data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/med/missing-as-worst"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/med/missing-as-worst"); value.Exists() {
 		data.BgpBestpathMedMissingAsWorst = types.BoolValue(true)
 	} else {
 		data.BgpBestpathMedMissingAsWorst = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/med/always"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/med/always"); value.Exists() {
 		data.BgpBestpathMedAlways = types.BoolValue(true)
 	} else {
 		data.BgpBestpathMedAlways = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/as-path/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/as-path/ignore"); value.Exists() {
 		data.BgpBestpathAsPathIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathAsPathIgnore = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/as-path/multipath-relax"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/as-path/multipath-relax"); value.Exists() {
 		data.BgpBestpathAsPathMultipathRelax = types.BoolValue(true)
 	} else {
 		data.BgpBestpathAsPathMultipathRelax = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/origin-as/use/validity"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/origin-as/use/validity"); value.Exists() {
 		data.BgpBestpathOriginAsUseValidity = types.BoolValue(true)
 	} else {
 		data.BgpBestpathOriginAsUseValidity = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/origin-as/allow/invalid"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/origin-as/allow/invalid"); value.Exists() {
 		data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(true)
 	} else {
 		data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/sr-policy/prefer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/sr-policy/prefer"); value.Exists() {
 		data.BgpBestpathSrPolicyPrefer = types.BoolValue(true)
 	} else {
 		data.BgpBestpathSrPolicyPrefer = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/sr-policy/force"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/sr-policy/force"); value.Exists() {
 		data.BgpBestpathSrPolicyForce = types.BoolValue(true)
 	} else {
 		data.BgpBestpathSrPolicyForce = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/cluster-id/route-reflector-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/cluster-id/route-reflector-number"); value.Exists() {
 		data.BgpClusterId32bitFormat = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/cluster-id/route-reflector-ip-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/cluster-id/route-reflector-ip-address"); value.Exists() {
 		data.BgpClusterIdIpFormat = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/default/local-preference"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/default/local-preference"); value.Exists() {
 		data.BgpDefaultLocalPreference = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/enforce-first-as/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/enforce-first-as/disable"); value.Exists() {
 		data.BgpEnforceFirstAsDisable = types.BoolValue(true)
 	} else {
 		data.BgpEnforceFirstAsDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/fast-external-fallover/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/fast-external-fallover/disable"); value.Exists() {
 		data.BgpFastExternalFalloverDisable = types.BoolValue(true)
 	} else {
 		data.BgpFastExternalFalloverDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/neighbor/changes/detail"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/neighbor/changes/detail"); value.Exists() {
 		data.BgpLogNeighborChangesDetail = types.BoolValue(true)
 	} else {
 		data.BgpLogNeighborChangesDetail = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/neighbor/changes/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/neighbor/changes/disable"); value.Exists() {
 		data.BgpLogNeighborChangesDisable = types.BoolValue(true)
 	} else {
 		data.BgpLogNeighborChangesDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/message/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/message/disable"); value.Exists() {
 		data.BgpLogMessageDisable = types.BoolValue(true)
 	} else {
 		data.BgpLogMessageDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/memory-threshold/memory-warning-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/memory-threshold/memory-warning-number"); value.Exists() {
 		data.BgpLogMemoryThresholdWarning = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/memory-threshold/memory-critical-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/memory-threshold/memory-critical-number"); value.Exists() {
 		data.BgpLogMemoryThresholdCritical = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/total-paths/total-paths-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/total-paths/total-paths-number"); value.Exists() {
 		data.BgpLogTotalPaths = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/total-paths/warn-threshold-value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/total-paths/warn-threshold-value"); value.Exists() {
 		data.BgpLogTotalPathsWarnThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/multipath/use/cluster-list-length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/multipath/use/cluster-list-length"); value.Exists() {
 		data.BgpMultipathUseClusterListLength = types.BoolValue(true)
 	} else {
 		data.BgpMultipathUseClusterListLength = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/multipath/as-path/ignore/onwards"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/multipath/as-path/ignore/onwards"); value.Exists() {
 		data.BgpMultipathAsPathIgnoreOnwards = types.BoolValue(true)
 	} else {
 		data.BgpMultipathAsPathIgnoreOnwards = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/confederation/identifier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/confederation/identifier"); value.Exists() {
 		data.BgpConfederationIdentifier = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/confederation/peers"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/confederation/peers"); value.Exists() {
 		data.BgpConfederationPeers = make([]RouterBGPBgpConfederationPeers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPBgpConfederationPeers{}
@@ -12409,136 +12356,136 @@ func (data *RouterBGP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/enable"); value.Exists() {
 		data.BgpGracefulRestartEnable = types.BoolValue(true)
 	} else {
 		data.BgpGracefulRestartEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/purge-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/purge-time"); value.Exists() {
 		data.BgpGracefulRestartPurgeTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/restart-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/restart-time"); value.Exists() {
 		data.BgpGracefulRestartRestartTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/stalepath-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/stalepath-time"); value.Exists() {
 		data.BgpGracefulRestartStalepathTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/graceful-reset"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/graceful-reset"); value.Exists() {
 		data.BgpGracefulRestartGracefulReset = types.BoolValue(true)
 	} else {
 		data.BgpGracefulRestartGracefulReset = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/retain-nbr-routes/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/retain-nbr-routes/disable"); value.Exists() {
 		data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolValue(true)
 	} else {
 		data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/install/diversion"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/install/diversion"); value.Exists() {
 		data.BgpInstallDiversion = types.BoolValue(true)
 	} else {
 		data.BgpInstallDiversion = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/update-delay/delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/update-delay/delay"); value.Exists() {
 		data.BgpUpdateDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/update-delay/always"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/update-delay/always"); value.Exists() {
 		data.BgpUpdateDelayAlways = types.BoolValue(true)
 	} else {
 		data.BgpUpdateDelayAlways = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/maximum/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/maximum/neighbor"); value.Exists() {
 		data.BgpMaximumNeighbor = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/origin-as/validation/signal/ibgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/origin-as/validation/signal/ibgp"); value.Exists() {
 		data.BgpOriginAsValidationSignalIbgp = types.BoolValue(true)
 	} else {
 		data.BgpOriginAsValidationSignalIbgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/origin-as/validation/time/off"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/origin-as/validation/time/off"); value.Exists() {
 		data.BgpOriginAsValidationTimeOff = types.BoolValue(true)
 	} else {
 		data.BgpOriginAsValidationTimeOff = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/origin-as/validation/time/prefix-validation-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/origin-as/validation/time/prefix-validation-time"); value.Exists() {
 		data.BgpOriginAsValidationTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/keepalive-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/keepalive-interval"); value.Exists() {
 		data.TimersBgpKeepaliveInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/zero"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/zero"); value.Exists() {
 		data.TimersBgpHolddownZero = types.BoolValue(true)
 	} else {
 		data.TimersBgpHolddownZero = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/zero/zero"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/zero/zero"); value.Exists() {
 		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
 	} else {
 		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/zero/minimum-acceptable-holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/zero/minimum-acceptable-holdtime"); value.Exists() {
 		data.TimersBgpHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/holdtime/holdtime-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/holdtime/holdtime-number"); value.Exists() {
 		data.TimersBgpHoldtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/holdtime/minimum-acceptable-holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/holdtime/minimum-acceptable-holdtime"); value.Exists() {
 		data.TimersBgpHoldtimeMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nsr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nsr"); value.Exists() {
 		data.Nsr = types.BoolValue(true)
 	} else {
 		data.Nsr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nsr/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nsr/disable"); value.Exists() {
 		data.NsrDisable = types.BoolValue(true)
 	} else {
 		data.NsrDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ibgp/policy/out/enforce-modifications"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ibgp/policy/out/enforce-modifications"); value.Exists() {
 		data.IbgpPolicyOutEnforceModifications = types.BoolValue(true)
 	} else {
 		data.IbgpPolicyOutEnforceModifications = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/openconfig/rib-telemetry"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/openconfig/rib-telemetry"); value.Exists() {
 		data.OpenconfigRibTelemetry = types.BoolValue(true)
 	} else {
 		data.OpenconfigRibTelemetry = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/limit"); value.Exists() {
 		data.UpdateLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/in/error-handling/basic/ebgp/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/in/error-handling/basic/ebgp/disable"); value.Exists() {
 		data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/in/error-handling/basic/ibgp/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/in/error-handling/basic/ibgp/disable"); value.Exists() {
 		data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/in/error-handling/extended/ebgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/in/error-handling/extended/ebgp"); value.Exists() {
 		data.UpdateInErrorHandlingExtendedEbgp = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingExtendedEbgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/in/error-handling/extended/ibgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/in/error-handling/extended/ibgp"); value.Exists() {
 		data.UpdateInErrorHandlingExtendedIbgp = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingExtendedIbgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/out/logging"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/out/logging"); value.Exists() {
 		data.UpdateOutLogging = types.BoolValue(true)
 	} else {
 		data.UpdateOutLogging = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/rpki/routes/route"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpki/routes/route"); value.Exists() {
 		data.RpkiRoutes = make([]RouterBGPRpkiRoutes, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPRpkiRoutes{}
@@ -12558,7 +12505,7 @@ func (data *RouterBGP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/rpki/servers/server"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpki/servers/server"); value.Exists() {
 		data.RpkiServers = make([]RouterBGPRpkiServers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPRpkiServers{}
@@ -12615,23 +12562,23 @@ func (data *RouterBGP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default-metric"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-metric"); value.Exists() {
 		data.DefaultMetric = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mvpn"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mvpn"); value.Exists() {
 		data.Mvpn = types.BoolValue(true)
 	} else {
 		data.Mvpn = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/segment-routing/srv6/locator"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6/locator"); value.Exists() {
 		data.SegmentRoutingSrv6Locator = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
 		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 	} else {
 		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/neighbors/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/neighbor"); value.Exists() {
 		data.Neighbors = make([]RouterBGPNeighbors, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPNeighbors{}
@@ -12665,52 +12612,52 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "description"); cValue.Exists() {
 				item.Description = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "ignore-connected-check"); cValue.Exists() {
-			item.IgnoreConnectedCheck = types.BoolValue(true)
-		} else {
-			item.IgnoreConnectedCheck = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "ignore-connected-check/inheritance-disable"); cValue.Exists() {
-			item.IgnoreConnectedCheckInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.IgnoreConnectedCheckInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "ignore-connected-check"); cValue.Exists() {
+				item.IgnoreConnectedCheck = types.BoolValue(true)
+			} else {
+				item.IgnoreConnectedCheck = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ignore-connected-check/inheritance-disable"); cValue.Exists() {
+				item.IgnoreConnectedCheckInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.IgnoreConnectedCheckInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "ebgp-multihop/maximum-hop-count"); cValue.Exists() {
 				item.EbgpMultihopMaximumHopCount = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "ebgp-multihop/mpls"); cValue.Exists() {
-			item.EbgpMultihopMpls = types.BoolValue(true)
-		} else {
-			item.EbgpMultihopMpls = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "ebgp-multihop/mpls"); cValue.Exists() {
+				item.EbgpMultihopMpls = types.BoolValue(true)
+			} else {
+				item.EbgpMultihopMpls = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "tcp/mss/tcp-initial-maximum-segment-size"); cValue.Exists() {
 				item.TcpMssValue = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "tcp/mss/inheritance-disable"); cValue.Exists() {
-			item.TcpMssInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.TcpMssInheritanceDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "tcp/mtu-discovery"); cValue.Exists() {
-			item.TcpMtuDiscovery = types.BoolValue(true)
-		} else {
-			item.TcpMtuDiscovery = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "tcp/mtu-discovery/inheritance-disable"); cValue.Exists() {
-			item.TcpMtuDiscoveryInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.TcpMtuDiscoveryInheritanceDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "tcp/ip-only-preferred"); cValue.Exists() {
-			item.TcpIpOnlyPreferred = types.BoolValue(true)
-		} else {
-			item.TcpIpOnlyPreferred = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "tcp/ip-only-preferred/inheritance-disable"); cValue.Exists() {
-			item.TcpIpOnlyPreferredInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.TcpIpOnlyPreferredInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "tcp/mss/inheritance-disable"); cValue.Exists() {
+				item.TcpMssInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.TcpMssInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "tcp/mtu-discovery"); cValue.Exists() {
+				item.TcpMtuDiscovery = types.BoolValue(true)
+			} else {
+				item.TcpMtuDiscovery = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "tcp/mtu-discovery/inheritance-disable"); cValue.Exists() {
+				item.TcpMtuDiscoveryInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.TcpMtuDiscoveryInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "tcp/ip-only-preferred"); cValue.Exists() {
+				item.TcpIpOnlyPreferred = types.BoolValue(true)
+			} else {
+				item.TcpIpOnlyPreferred = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "tcp/ip-only-preferred/inheritance-disable"); cValue.Exists() {
+				item.TcpIpOnlyPreferredInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.TcpIpOnlyPreferredInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "bmp-activate/servers/server"); cValue.Exists() {
 				item.BmpActivateServers = make([]RouterBGPNeighborsBmpActivateServers, 0)
 				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
@@ -12728,70 +12675,70 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "bfd/multiplier"); cValue.Exists() {
 				item.BfdMultiplier = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "bfd/fast-detect"); cValue.Exists() {
-			item.BfdFastDetect = types.BoolValue(true)
-		} else {
-			item.BfdFastDetect = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "bfd/fast-detect/strict-mode"); cValue.Exists() {
-			item.BfdFastDetectStrictMode = types.BoolValue(true)
-		} else {
-			item.BfdFastDetectStrictMode = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "bfd/fast-detect/disable"); cValue.Exists() {
-			item.BfdFastDetectDisable = types.BoolValue(true)
-		} else {
-			item.BfdFastDetectDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "bfd/fast-detect/strict-mode-negotiate"); cValue.Exists() {
-			item.BfdFastDetectStrictModeNegotiate = types.BoolValue(true)
-		} else {
-			item.BfdFastDetectStrictModeNegotiate = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "bfd/fast-detect/strict-mode-negotiate/override"); cValue.Exists() {
-			item.BfdFastDetectStrictModeNegotiateOverride = types.BoolValue(true)
-		} else {
-			item.BfdFastDetectStrictModeNegotiateOverride = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "bfd/fast-detect"); cValue.Exists() {
+				item.BfdFastDetect = types.BoolValue(true)
+			} else {
+				item.BfdFastDetect = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "bfd/fast-detect/strict-mode"); cValue.Exists() {
+				item.BfdFastDetectStrictMode = types.BoolValue(true)
+			} else {
+				item.BfdFastDetectStrictMode = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "bfd/fast-detect/disable"); cValue.Exists() {
+				item.BfdFastDetectDisable = types.BoolValue(true)
+			} else {
+				item.BfdFastDetectDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "bfd/fast-detect/strict-mode-negotiate"); cValue.Exists() {
+				item.BfdFastDetectStrictModeNegotiate = types.BoolValue(true)
+			} else {
+				item.BfdFastDetectStrictModeNegotiate = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "bfd/fast-detect/strict-mode-negotiate/override"); cValue.Exists() {
+				item.BfdFastDetectStrictModeNegotiateOverride = types.BoolValue(true)
+			} else {
+				item.BfdFastDetectStrictModeNegotiateOverride = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "keychain/keychain-name"); cValue.Exists() {
 				item.KeychainName = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "keychain/inheritance-disable"); cValue.Exists() {
-			item.KeychainInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.KeychainInheritanceDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "local-as/inheritance-disable"); cValue.Exists() {
-			item.LocalAsInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.LocalAsInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "keychain/inheritance-disable"); cValue.Exists() {
+				item.KeychainInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.KeychainInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "local-as/inheritance-disable"); cValue.Exists() {
+				item.LocalAsInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.LocalAsInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "local-as/as/as-number"); cValue.Exists() {
 				item.LocalAs = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "local-as/as/no-prepend"); cValue.Exists() {
-			item.LocalAsNoPrepend = types.BoolValue(true)
-		} else {
-			item.LocalAsNoPrepend = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "local-as/as/no-prepend/replace-as"); cValue.Exists() {
-			item.LocalAsNoPrependReplaceAs = types.BoolValue(true)
-		} else {
-			item.LocalAsNoPrependReplaceAs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "local-as/as/no-prepend/replace-as/dual-as"); cValue.Exists() {
-			item.LocalAsNoPrependReplaceAsDualAs = types.BoolValue(true)
-		} else {
-			item.LocalAsNoPrependReplaceAsDualAs = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "local-as/as/no-prepend"); cValue.Exists() {
+				item.LocalAsNoPrepend = types.BoolValue(true)
+			} else {
+				item.LocalAsNoPrepend = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "local-as/as/no-prepend/replace-as"); cValue.Exists() {
+				item.LocalAsNoPrependReplaceAs = types.BoolValue(true)
+			} else {
+				item.LocalAsNoPrependReplaceAs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "local-as/as/no-prepend/replace-as/dual-as"); cValue.Exists() {
+				item.LocalAsNoPrependReplaceAsDualAs = types.BoolValue(true)
+			} else {
+				item.LocalAsNoPrependReplaceAsDualAs = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "password/encrypted"); cValue.Exists() {
 				item.Password = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "password/inheritance-disable"); cValue.Exists() {
-			item.PasswordInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.PasswordInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "password/inheritance-disable"); cValue.Exists() {
+				item.PasswordInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.PasswordInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "receive-buffer-size/receive-buffer-size-number"); cValue.Exists() {
 				item.ReceiveBufferSize = types.Int64Value(cValue.Int())
 			}
@@ -12804,34 +12751,34 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "send-buffer-size/bgp-write-buffer-size-byte"); cValue.Exists() {
 				item.SendBufferSizeWrite = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "fast-fallover"); cValue.Exists() {
-			item.FastFallover = types.BoolValue(true)
-		} else {
-			item.FastFallover = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "fast-fallover/inheritance-disable"); cValue.Exists() {
-			item.FastFalloverInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.FastFalloverInheritanceDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "shutdown"); cValue.Exists() {
-			item.Shutdown = types.BoolValue(true)
-		} else {
-			item.Shutdown = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "fast-fallover"); cValue.Exists() {
+				item.FastFallover = types.BoolValue(true)
+			} else {
+				item.FastFallover = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "fast-fallover/inheritance-disable"); cValue.Exists() {
+				item.FastFalloverInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.FastFalloverInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else {
+				item.Shutdown = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "timers/keepalive-interval"); cValue.Exists() {
 				item.TimersKeepaliveInterval = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "timers/zero"); cValue.Exists() {
-			item.TimersHolddownZero = types.BoolValue(true)
-		} else {
-			item.TimersHolddownZero = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "timers/zero/zero"); cValue.Exists() {
-			item.TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
-		} else {
-			item.TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "timers/zero"); cValue.Exists() {
+				item.TimersHolddownZero = types.BoolValue(true)
+			} else {
+				item.TimersHolddownZero = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "timers/zero/zero"); cValue.Exists() {
+				item.TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
+			} else {
+				item.TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "timers/zero/minimum-acceptable-holdtime"); cValue.Exists() {
 				item.TimersHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(cValue.Int())
 			}
@@ -12844,52 +12791,52 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "local/address/ip-address"); cValue.Exists() {
 				item.LocalAddress = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "local/address/inheritance-disable"); cValue.Exists() {
-			item.LocalAddressInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.LocalAddressInheritanceDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "log/neighbor/changes/detail"); cValue.Exists() {
-			item.LogNeighborChangesDetail = types.BoolValue(true)
-		} else {
-			item.LogNeighborChangesDetail = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "log/neighbor/changes/disable"); cValue.Exists() {
-			item.LogNeighborChangesDisable = types.BoolValue(true)
-		} else {
-			item.LogNeighborChangesDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "log/neighbor/changes/inheritance-disable"); cValue.Exists() {
-			item.LogNeighborChangesInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.LogNeighborChangesInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "local/address/inheritance-disable"); cValue.Exists() {
+				item.LocalAddressInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.LocalAddressInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "log/neighbor/changes/detail"); cValue.Exists() {
+				item.LogNeighborChangesDetail = types.BoolValue(true)
+			} else {
+				item.LogNeighborChangesDetail = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "log/neighbor/changes/disable"); cValue.Exists() {
+				item.LogNeighborChangesDisable = types.BoolValue(true)
+			} else {
+				item.LogNeighborChangesDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "log/neighbor/changes/inheritance-disable"); cValue.Exists() {
+				item.LogNeighborChangesInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.LogNeighborChangesInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "log/message/in/log-buffer-size"); cValue.Exists() {
 				item.LogMessageInSize = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "log/message/in/disable"); cValue.Exists() {
-			item.LogMessageInDisable = types.BoolValue(true)
-		} else {
-			item.LogMessageInDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "log/message/in/inheritance-disable"); cValue.Exists() {
-			item.LogMessageInInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.LogMessageInInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "log/message/in/disable"); cValue.Exists() {
+				item.LogMessageInDisable = types.BoolValue(true)
+			} else {
+				item.LogMessageInDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "log/message/in/inheritance-disable"); cValue.Exists() {
+				item.LogMessageInInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.LogMessageInInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "log/message/out/log-buffer-size"); cValue.Exists() {
 				item.LogMessageOutSize = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "log/message/out/disable"); cValue.Exists() {
-			item.LogMessageOutDisable = types.BoolValue(true)
-		} else {
-			item.LogMessageOutDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "log/message/out/inheritance-disable"); cValue.Exists() {
-			item.LogMessageOutInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.LogMessageOutInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "log/message/out/disable"); cValue.Exists() {
+				item.LogMessageOutDisable = types.BoolValue(true)
+			} else {
+				item.LogMessageOutDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "log/message/out/inheritance-disable"); cValue.Exists() {
+				item.LogMessageOutInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.LogMessageOutInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "update-source"); cValue.Exists() {
 				item.UpdateSource = types.StringValue(cValue.String())
 			}
@@ -12899,51 +12846,51 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "local-address-subnet/address-prefix"); cValue.Exists() {
 				item.LocalAddressSubnetMask = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "dmz-link-bandwidth"); cValue.Exists() {
-			item.DmzLinkBandwidth = types.BoolValue(true)
-		} else {
-			item.DmzLinkBandwidth = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "dmz-link-bandwidth/inheritance-disable"); cValue.Exists() {
-			item.DmzLinkBandwidthInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.DmzLinkBandwidthInheritanceDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "ebgp-recv-extcommunity-dmz"); cValue.Exists() {
-			item.EbgpRecvExtcommunityDmz = types.BoolValue(true)
-		} else {
-			item.EbgpRecvExtcommunityDmz = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "ebgp-recv-extcommunity-dmz/inheritance-disable"); cValue.Exists() {
-			item.EbgpRecvExtcommunityDmzInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.EbgpRecvExtcommunityDmzInheritanceDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "ebgp-send-extcommunity-dmz"); cValue.Exists() {
-			item.EbgpSendExtcommunityDmz = types.BoolValue(true)
-		} else {
-			item.EbgpSendExtcommunityDmz = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "ebgp-send-extcommunity-dmz/cumulative"); cValue.Exists() {
-			item.EbgpSendExtcommunityDmzCumulative = types.BoolValue(true)
-		} else {
-			item.EbgpSendExtcommunityDmzCumulative = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "ebgp-send-extcommunity-dmz/inheritance-disable"); cValue.Exists() {
-			item.EbgpSendExtcommunityDmzInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.EbgpSendExtcommunityDmzInheritanceDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "ttl-security"); cValue.Exists() {
-			item.TtlSecurity = types.BoolValue(true)
-		} else {
-			item.TtlSecurity = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "ttl-security/inheritance-disable"); cValue.Exists() {
-			item.TtlSecurityInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.TtlSecurityInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "dmz-link-bandwidth"); cValue.Exists() {
+				item.DmzLinkBandwidth = types.BoolValue(true)
+			} else {
+				item.DmzLinkBandwidth = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "dmz-link-bandwidth/inheritance-disable"); cValue.Exists() {
+				item.DmzLinkBandwidthInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.DmzLinkBandwidthInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ebgp-recv-extcommunity-dmz"); cValue.Exists() {
+				item.EbgpRecvExtcommunityDmz = types.BoolValue(true)
+			} else {
+				item.EbgpRecvExtcommunityDmz = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ebgp-recv-extcommunity-dmz/inheritance-disable"); cValue.Exists() {
+				item.EbgpRecvExtcommunityDmzInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.EbgpRecvExtcommunityDmzInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ebgp-send-extcommunity-dmz"); cValue.Exists() {
+				item.EbgpSendExtcommunityDmz = types.BoolValue(true)
+			} else {
+				item.EbgpSendExtcommunityDmz = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ebgp-send-extcommunity-dmz/cumulative"); cValue.Exists() {
+				item.EbgpSendExtcommunityDmzCumulative = types.BoolValue(true)
+			} else {
+				item.EbgpSendExtcommunityDmzCumulative = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ebgp-send-extcommunity-dmz/inheritance-disable"); cValue.Exists() {
+				item.EbgpSendExtcommunityDmzInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.EbgpSendExtcommunityDmzInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ttl-security"); cValue.Exists() {
+				item.TtlSecurity = types.BoolValue(true)
+			} else {
+				item.TtlSecurity = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ttl-security/inheritance-disable"); cValue.Exists() {
+				item.TtlSecurityInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.TtlSecurityInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "session-open-mode"); cValue.Exists() {
 				item.SessionOpenMode = types.StringValue(cValue.String())
 			}
@@ -12953,76 +12900,76 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "precedence"); cValue.Exists() {
 				item.Precedence = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "capability/additional-paths/send"); cValue.Exists() {
-			item.CapabilityAdditionalPathsSend = types.BoolValue(true)
-		} else {
-			item.CapabilityAdditionalPathsSend = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "capability/additional-paths/send/disable"); cValue.Exists() {
-			item.CapabilityAdditionalPathsSendDisable = types.BoolValue(true)
-		} else {
-			item.CapabilityAdditionalPathsSendDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "capability/additional-paths/receive"); cValue.Exists() {
-			item.CapabilityAdditionalPathsReceive = types.BoolValue(true)
-		} else {
-			item.CapabilityAdditionalPathsReceive = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "capability/additional-paths/receive/disable"); cValue.Exists() {
-			item.CapabilityAdditionalPathsReceiveDisable = types.BoolValue(true)
-		} else {
-			item.CapabilityAdditionalPathsReceiveDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "capability/suppress/all"); cValue.Exists() {
-			item.CapabilitySuppressAll = types.BoolValue(true)
-		} else {
-			item.CapabilitySuppressAll = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "capability/suppress/all/inheritance-disable"); cValue.Exists() {
-			item.CapabilitySuppressAllInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.CapabilitySuppressAllInheritanceDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "capability/suppress/extended-nexthop-encoding"); cValue.Exists() {
-			item.CapabilitySuppressExtendedNexthopEncoding = types.BoolValue(true)
-		} else {
-			item.CapabilitySuppressExtendedNexthopEncoding = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "capability/suppress/extended-nexthop-encoding/inheritance-disable"); cValue.Exists() {
-			item.CapabilitySuppressExtendedNexthopEncodingInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.CapabilitySuppressExtendedNexthopEncodingInheritanceDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "capability/suppress/four-byte-as"); cValue.Exists() {
-			item.CapabilitySuppressFourByteAs = types.BoolValue(true)
-		} else {
-			item.CapabilitySuppressFourByteAs = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "capability/suppress/four-byte-as/inheritance-disable"); cValue.Exists() {
-			item.CapabilitySuppressFourByteAsInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.CapabilitySuppressFourByteAsInheritanceDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "graceful-restart/graceful-restart-enable"); cValue.Exists() {
-			item.GracefulRestart = types.BoolValue(true)
-		} else {
-			item.GracefulRestart = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "graceful-restart/graceful-restart-enable/disable"); cValue.Exists() {
-			item.GracefulRestartDisable = types.BoolValue(true)
-		} else {
-			item.GracefulRestartDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "graceful-restart/helper-only"); cValue.Exists() {
-			item.GracefulRestartHelperOnly = types.BoolValue(true)
-		} else {
-			item.GracefulRestartHelperOnly = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "graceful-restart/helper-only/inheritance-disable"); cValue.Exists() {
-			item.GracefulRestartHelperOnlyInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.GracefulRestartHelperOnlyInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "capability/additional-paths/send"); cValue.Exists() {
+				item.CapabilityAdditionalPathsSend = types.BoolValue(true)
+			} else {
+				item.CapabilityAdditionalPathsSend = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "capability/additional-paths/send/disable"); cValue.Exists() {
+				item.CapabilityAdditionalPathsSendDisable = types.BoolValue(true)
+			} else {
+				item.CapabilityAdditionalPathsSendDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "capability/additional-paths/receive"); cValue.Exists() {
+				item.CapabilityAdditionalPathsReceive = types.BoolValue(true)
+			} else {
+				item.CapabilityAdditionalPathsReceive = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "capability/additional-paths/receive/disable"); cValue.Exists() {
+				item.CapabilityAdditionalPathsReceiveDisable = types.BoolValue(true)
+			} else {
+				item.CapabilityAdditionalPathsReceiveDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "capability/suppress/all"); cValue.Exists() {
+				item.CapabilitySuppressAll = types.BoolValue(true)
+			} else {
+				item.CapabilitySuppressAll = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "capability/suppress/all/inheritance-disable"); cValue.Exists() {
+				item.CapabilitySuppressAllInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.CapabilitySuppressAllInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "capability/suppress/extended-nexthop-encoding"); cValue.Exists() {
+				item.CapabilitySuppressExtendedNexthopEncoding = types.BoolValue(true)
+			} else {
+				item.CapabilitySuppressExtendedNexthopEncoding = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "capability/suppress/extended-nexthop-encoding/inheritance-disable"); cValue.Exists() {
+				item.CapabilitySuppressExtendedNexthopEncodingInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.CapabilitySuppressExtendedNexthopEncodingInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "capability/suppress/four-byte-as"); cValue.Exists() {
+				item.CapabilitySuppressFourByteAs = types.BoolValue(true)
+			} else {
+				item.CapabilitySuppressFourByteAs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "capability/suppress/four-byte-as/inheritance-disable"); cValue.Exists() {
+				item.CapabilitySuppressFourByteAsInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.CapabilitySuppressFourByteAsInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "graceful-restart/graceful-restart-enable"); cValue.Exists() {
+				item.GracefulRestart = types.BoolValue(true)
+			} else {
+				item.GracefulRestart = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "graceful-restart/graceful-restart-enable/disable"); cValue.Exists() {
+				item.GracefulRestartDisable = types.BoolValue(true)
+			} else {
+				item.GracefulRestartDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "graceful-restart/helper-only"); cValue.Exists() {
+				item.GracefulRestartHelperOnly = types.BoolValue(true)
+			} else {
+				item.GracefulRestartHelperOnly = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "graceful-restart/helper-only/inheritance-disable"); cValue.Exists() {
+				item.GracefulRestartHelperOnlyInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.GracefulRestartHelperOnlyInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "graceful-restart/restart-time"); cValue.Exists() {
 				item.GracefulRestartRestartTime = types.Int64Value(cValue.Int())
 			}
@@ -13044,16 +12991,16 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "allowas-in/number-of-occurrences-of-as-number"); cValue.Exists() {
 				item.AllowasIn = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "egress-engineering"); cValue.Exists() {
-			item.EgressEngineering = types.BoolValue(true)
-		} else {
-			item.EgressEngineering = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "egress-engineering/inheritance-disable"); cValue.Exists() {
-			item.EgressEngineeringInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.EgressEngineeringInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "egress-engineering"); cValue.Exists() {
+				item.EgressEngineering = types.BoolValue(true)
+			} else {
+				item.EgressEngineering = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "egress-engineering/inheritance-disable"); cValue.Exists() {
+				item.EgressEngineeringInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.EgressEngineeringInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "peer-set/peer-sets"); cValue.Exists() {
 				item.PeerSets = make([]RouterBGPNeighborsPeerSets, 0)
 				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
@@ -13074,16 +13021,16 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "ao/key-chain-name/include-tcp-options"); cValue.Exists() {
 				item.AoKeyChainIncludeTcpOptions = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "ao/key-chain-name/accept-ao-mismatch-connection"); cValue.Exists() {
-			item.AoKeyChainAcceptMismatch = types.BoolValue(true)
-		} else {
-			item.AoKeyChainAcceptMismatch = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "ao/inheritance-disable"); cValue.Exists() {
-			item.AoInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.AoInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "ao/key-chain-name/accept-ao-mismatch-connection"); cValue.Exists() {
+				item.AoKeyChainAcceptMismatch = types.BoolValue(true)
+			} else {
+				item.AoKeyChainAcceptMismatch = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ao/inheritance-disable"); cValue.Exists() {
+				item.AoInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.AoInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "dampening"); cValue.Exists() {
 				item.Dampening = types.StringValue(cValue.String())
 			}
@@ -13096,82 +13043,82 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "default-policy-action/out"); cValue.Exists() {
 				item.DefaultPolicyActionOut = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "origin-as/validation/disable"); cValue.Exists() {
-			item.OriginAsValidationDisable = types.BoolValue(true)
-		} else {
-			item.OriginAsValidationDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "send-extended-community-ebgp"); cValue.Exists() {
-			item.SendExtendedCommunityEbgp = types.BoolValue(true)
-		} else {
-			item.SendExtendedCommunityEbgp = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "send-extended-community-ebgp/inheritance-disable"); cValue.Exists() {
-			item.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "bestpath/origin-as/allow/invalid"); cValue.Exists() {
-			item.BestpathOriginAsAllowInvalid = types.BoolValue(true)
-		} else {
-			item.BestpathOriginAsAllowInvalid = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "origin-as/validation/disable"); cValue.Exists() {
+				item.OriginAsValidationDisable = types.BoolValue(true)
+			} else {
+				item.OriginAsValidationDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "send-extended-community-ebgp"); cValue.Exists() {
+				item.SendExtendedCommunityEbgp = types.BoolValue(true)
+			} else {
+				item.SendExtendedCommunityEbgp = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "send-extended-community-ebgp/inheritance-disable"); cValue.Exists() {
+				item.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "bestpath/origin-as/allow/invalid"); cValue.Exists() {
+				item.BestpathOriginAsAllowInvalid = types.BoolValue(true)
+			} else {
+				item.BestpathOriginAsAllowInvalid = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "update/in/filtering/message/buffers/buffers-number"); cValue.Exists() {
 				item.UpdateInFilteringMessageBuffers = types.Int64Value(cValue.Int())
 			}
 			if cValue := helpers.GetFromXPath(v, "update/in/filtering/message/buffers/buffer-list"); cValue.Exists() {
 				item.UpdateInFilteringMessageBuffersType = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "update/in/filtering/logging/disable"); cValue.Exists() {
-			item.UpdateInFilteringLoggingDisable = types.BoolValue(true)
-		} else {
-			item.UpdateInFilteringLoggingDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "update/in/filtering/logging/disable"); cValue.Exists() {
+				item.UpdateInFilteringLoggingDisable = types.BoolValue(true)
+			} else {
+				item.UpdateInFilteringLoggingDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "update/in/filtering/attribute-filter/group"); cValue.Exists() {
 				item.UpdateInFilteringAttributeFilterGroup = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "update/in/labeled-unicast/equivalent"); cValue.Exists() {
-			item.UpdateInLabeledUnicastEquivalent = types.BoolValue(true)
-		} else {
-			item.UpdateInLabeledUnicastEquivalent = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "update/in/labeled-unicast/equivalent/inheritance-disable"); cValue.Exists() {
-			item.UpdateInLabeledUnicastEquivalentInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.UpdateInLabeledUnicastEquivalentInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "update/in/labeled-unicast/equivalent"); cValue.Exists() {
+				item.UpdateInLabeledUnicastEquivalent = types.BoolValue(true)
+			} else {
+				item.UpdateInLabeledUnicastEquivalent = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "update/in/labeled-unicast/equivalent/inheritance-disable"); cValue.Exists() {
+				item.UpdateInLabeledUnicastEquivalentInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.UpdateInLabeledUnicastEquivalentInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "update/in/error-handling/avoid-reset"); cValue.Exists() {
 				item.UpdateInErrorHandlingAvoidReset = types.StringValue(cValue.String())
 			}
 			if cValue := helpers.GetFromXPath(v, "update/in/error-handling/treat-as-withdraw"); cValue.Exists() {
 				item.UpdateInErrorHandlingTreatAsWithdraw = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "graceful-maintenance/activate"); cValue.Exists() {
-			item.GracefulMaintenanceActivate = types.BoolValue(true)
-		} else {
-			item.GracefulMaintenanceActivate = types.BoolValue(false)
-		}
-		if cValue := helpers.GetFromXPath(v, "graceful-maintenance/activate/inheritance-disable"); cValue.Exists() {
-			item.GracefulMaintenanceActivateInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.GracefulMaintenanceActivateInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "graceful-maintenance/activate"); cValue.Exists() {
+				item.GracefulMaintenanceActivate = types.BoolValue(true)
+			} else {
+				item.GracefulMaintenanceActivate = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "graceful-maintenance/activate/inheritance-disable"); cValue.Exists() {
+				item.GracefulMaintenanceActivateInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.GracefulMaintenanceActivateInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "graceful-maintenance/local-preference/local-preference-number"); cValue.Exists() {
 				item.GracefulMaintenanceLocalPreference = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "graceful-maintenance/local-preference/inheritance-disable"); cValue.Exists() {
-			item.GracefulMaintenanceLocalPreferenceInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.GracefulMaintenanceLocalPreferenceInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "graceful-maintenance/local-preference/inheritance-disable"); cValue.Exists() {
+				item.GracefulMaintenanceLocalPreferenceInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.GracefulMaintenanceLocalPreferenceInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "graceful-maintenance/as-prepends/prepends-number"); cValue.Exists() {
 				item.GracefulMaintenanceAsPrependsNumber = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "graceful-maintenance/as-prepends/inheritance-disable"); cValue.Exists() {
-			item.GracefulMaintenanceAsPrependsInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.GracefulMaintenanceAsPrependsInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "graceful-maintenance/as-prepends/inheritance-disable"); cValue.Exists() {
+				item.GracefulMaintenanceAsPrependsInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.GracefulMaintenanceAsPrependsInheritanceDisable = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "graceful-maintenance/bandwidth-aware/percentage-threshold/percentage-threshold-number"); cValue.Exists() {
 				item.GracefulMaintenanceBandwidthAwarePercentageThreshold = types.Int64Value(cValue.Int())
 			}
@@ -13184,26 +13131,26 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "graceful-maintenance/bandwidth-aware/bandwidth-threshold/optional-high-threshold-number"); cValue.Exists() {
 				item.GracefulMaintenanceBandwidthAwareBandwidthThresholdHigh = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "graceful-maintenance/bandwidth-aware/inheritance-disable"); cValue.Exists() {
-			item.GracefulMaintenanceBandwidthAwareInheritanceDisable = types.BoolValue(true)
-		} else {
-			item.GracefulMaintenanceBandwidthAwareInheritanceDisable = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "graceful-maintenance/bandwidth-aware/inheritance-disable"); cValue.Exists() {
+				item.GracefulMaintenanceBandwidthAwareInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.GracefulMaintenanceBandwidthAwareInheritanceDisable = types.BoolValue(false)
+			}
 			data.Neighbors = append(data.Neighbors, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/graceful-maintenance/activate/all-neighbors"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/graceful-maintenance/activate/all-neighbors"); value.Exists() {
 		data.GracefulMaintenanceActivateAllNeighbors = types.BoolValue(true)
 	} else {
 		data.GracefulMaintenanceActivateAllNeighbors = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/graceful-maintenance/activate/retain-routes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/graceful-maintenance/activate/retain-routes"); value.Exists() {
 		data.GracefulMaintenanceActivateRetainRoutes = types.BoolValue(true)
 	} else {
 		data.GracefulMaintenanceActivateRetainRoutes = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/graceful-maintenance/activate/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/graceful-maintenance/activate/interfaces/interface"); value.Exists() {
 		data.GracefulMaintenanceActivateInterfaces = make([]RouterBGPGracefulMaintenanceActivateInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPGracefulMaintenanceActivateInterfaces{}
@@ -13214,7 +13161,7 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/graceful-maintenance/activate/locations/location"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/graceful-maintenance/activate/locations/location"); value.Exists() {
 		data.GracefulMaintenanceActivateLocations = make([]RouterBGPGracefulMaintenanceActivateLocations, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPGracefulMaintenanceActivateLocations{}
@@ -13225,7 +13172,7 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/mpls/activate/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/activate/interfaces/interface"); value.Exists() {
 		data.MplsActivateInterfaces = make([]RouterBGPMplsActivateInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPMplsActivateInterfaces{}
@@ -13236,7 +13183,7 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/as-league/peers/peer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/as-league/peers/peer"); value.Exists() {
 		data.AsLeaguePeers = make([]RouterBGPAsLeaguePeers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPAsLeaguePeers{}
@@ -13247,7 +13194,7 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/attribute-filter/groups/group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/attribute-filter/groups/group"); value.Exists() {
 		data.AttributeFilterGroups = make([]RouterBGPAttributeFilterGroups, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPAttributeFilterGroups{}
@@ -13280,7 +13227,7 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/as-lists/as-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/as-lists/as-list"); value.Exists() {
 		data.AsLists = make([]RouterBGPAsLists, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPAsLists{}
@@ -13302,222 +13249,222 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/default-information/originate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-information/originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
 	} else {
 		data.DefaultInformationOriginate = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/socket/receive-buffer-size/receive-buffer-size-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/socket/receive-buffer-size/receive-buffer-size-number"); value.Exists() {
 		data.SocketReceiveBufferSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/socket/receive-buffer-size/bgp-read-buffer-size-byte"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/socket/receive-buffer-size/bgp-read-buffer-size-byte"); value.Exists() {
 		data.SocketReceiveBufferSizeRead = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/socket/send-buffer-size/send-buffer-size-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/socket/send-buffer-size/send-buffer-size-number"); value.Exists() {
 		data.SocketSendBufferSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/socket/send-buffer-size/bgp-write-buffer-size-byte"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/socket/send-buffer-size/bgp-write-buffer-size-byte"); value.Exists() {
 		data.SocketSendBufferSizeWrite = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/mpls/forwarding/ibgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/mpls/forwarding/ibgp"); value.Exists() {
 		data.NexthopMplsForwardingIbgp = types.BoolValue(true)
 	} else {
 		data.NexthopMplsForwardingIbgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/validation/color-extcomm/sr-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/validation/color-extcomm/sr-policy"); value.Exists() {
 		data.NexthopValidationColorExtcommSrPolicy = types.BoolValue(true)
 	} else {
 		data.NexthopValidationColorExtcommSrPolicy = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/validation/color-extcomm/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/validation/color-extcomm/disable"); value.Exists() {
 		data.NexthopValidationColorExtcommDisable = types.BoolValue(true)
 	} else {
 		data.NexthopValidationColorExtcommDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/resolution/allow-default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/resolution/allow-default"); value.Exists() {
 		data.NexthopResolutionAllowDefault = types.BoolValue(true)
 	} else {
 		data.NexthopResolutionAllowDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nexthop/srte-metric/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nexthop/srte-metric/disable"); value.Exists() {
 		data.NexthopSrteMetricDisable = types.BoolValue(true)
 	} else {
 		data.NexthopSrteMetricDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/slow-peer/dynamic"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/slow-peer/dynamic"); value.Exists() {
 		data.SlowPeerDynamic = types.BoolValue(true)
 	} else {
 		data.SlowPeerDynamic = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/slow-peer/dynamic/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/slow-peer/dynamic/threshold"); value.Exists() {
 		data.SlowPeerDynamicThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/slow-peer/detection-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/slow-peer/detection-disable"); value.Exists() {
 		data.SlowPeerDetectionDisable = types.BoolValue(true)
 	} else {
 		data.SlowPeerDetectionDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/redistribute-internal"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/redistribute-internal"); value.Exists() {
 		data.BgpRedistributeInternal = types.BoolValue(true)
 	} else {
 		data.BgpRedistributeInternal = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/router-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/router-id"); value.Exists() {
 		data.BgpRouterId = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/unsafe-ebgp-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/unsafe-ebgp-policy"); value.Exists() {
 		data.BgpUnsafeEbgpPolicy = types.BoolValue(true)
 	} else {
 		data.BgpUnsafeEbgpPolicy = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/scan-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/scan-time"); value.Exists() {
 		data.BgpScanTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/read-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/read-only"); value.Exists() {
 		data.BgpReadOnly = types.BoolValue(true)
 	} else {
 		data.BgpReadOnly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/lpts-secure-binding"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/lpts-secure-binding"); value.Exists() {
 		data.BgpLptsSecureBinding = types.BoolValue(true)
 	} else {
 		data.BgpLptsSecureBinding = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/as-path-loopcheck"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/as-path-loopcheck"); value.Exists() {
 		data.BgpAsPathLoopcheck = types.BoolValue(true)
 	} else {
 		data.BgpAsPathLoopcheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/auto-policy-soft-reset/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/auto-policy-soft-reset/disable"); value.Exists() {
 		data.BgpAutoPolicySoftResetDisable = types.BoolValue(true)
 	} else {
 		data.BgpAutoPolicySoftResetDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/cost-community/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/cost-community/ignore"); value.Exists() {
 		data.BgpBestpathCostCommunityIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathCostCommunityIgnore = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/compare-routerid"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/compare-routerid"); value.Exists() {
 		data.BgpBestpathCompareRouterid = types.BoolValue(true)
 	} else {
 		data.BgpBestpathCompareRouterid = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/aigp/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/aigp/ignore"); value.Exists() {
 		data.BgpBestpathAigpIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathAigpIgnore = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/igp-metric/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/igp-metric/ignore"); value.Exists() {
 		data.BgpBestpathIgpMetricIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathIgpMetricIgnore = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/igp-metric/sr-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/igp-metric/sr-policy"); value.Exists() {
 		data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(true)
 	} else {
 		data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/med/missing-as-worst"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/med/missing-as-worst"); value.Exists() {
 		data.BgpBestpathMedMissingAsWorst = types.BoolValue(true)
 	} else {
 		data.BgpBestpathMedMissingAsWorst = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/med/always"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/med/always"); value.Exists() {
 		data.BgpBestpathMedAlways = types.BoolValue(true)
 	} else {
 		data.BgpBestpathMedAlways = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/as-path/ignore"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/as-path/ignore"); value.Exists() {
 		data.BgpBestpathAsPathIgnore = types.BoolValue(true)
 	} else {
 		data.BgpBestpathAsPathIgnore = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/as-path/multipath-relax"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/as-path/multipath-relax"); value.Exists() {
 		data.BgpBestpathAsPathMultipathRelax = types.BoolValue(true)
 	} else {
 		data.BgpBestpathAsPathMultipathRelax = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/origin-as/use/validity"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/origin-as/use/validity"); value.Exists() {
 		data.BgpBestpathOriginAsUseValidity = types.BoolValue(true)
 	} else {
 		data.BgpBestpathOriginAsUseValidity = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/origin-as/allow/invalid"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/origin-as/allow/invalid"); value.Exists() {
 		data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(true)
 	} else {
 		data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/sr-policy/prefer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/sr-policy/prefer"); value.Exists() {
 		data.BgpBestpathSrPolicyPrefer = types.BoolValue(true)
 	} else {
 		data.BgpBestpathSrPolicyPrefer = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/bestpath/sr-policy/force"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/bestpath/sr-policy/force"); value.Exists() {
 		data.BgpBestpathSrPolicyForce = types.BoolValue(true)
 	} else {
 		data.BgpBestpathSrPolicyForce = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/cluster-id/route-reflector-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/cluster-id/route-reflector-number"); value.Exists() {
 		data.BgpClusterId32bitFormat = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/cluster-id/route-reflector-ip-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/cluster-id/route-reflector-ip-address"); value.Exists() {
 		data.BgpClusterIdIpFormat = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/default/local-preference"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/default/local-preference"); value.Exists() {
 		data.BgpDefaultLocalPreference = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/enforce-first-as/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/enforce-first-as/disable"); value.Exists() {
 		data.BgpEnforceFirstAsDisable = types.BoolValue(true)
 	} else {
 		data.BgpEnforceFirstAsDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/fast-external-fallover/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/fast-external-fallover/disable"); value.Exists() {
 		data.BgpFastExternalFalloverDisable = types.BoolValue(true)
 	} else {
 		data.BgpFastExternalFalloverDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/neighbor/changes/detail"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/neighbor/changes/detail"); value.Exists() {
 		data.BgpLogNeighborChangesDetail = types.BoolValue(true)
 	} else {
 		data.BgpLogNeighborChangesDetail = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/neighbor/changes/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/neighbor/changes/disable"); value.Exists() {
 		data.BgpLogNeighborChangesDisable = types.BoolValue(true)
 	} else {
 		data.BgpLogNeighborChangesDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/message/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/message/disable"); value.Exists() {
 		data.BgpLogMessageDisable = types.BoolValue(true)
 	} else {
 		data.BgpLogMessageDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/memory-threshold/memory-warning-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/memory-threshold/memory-warning-number"); value.Exists() {
 		data.BgpLogMemoryThresholdWarning = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/memory-threshold/memory-critical-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/memory-threshold/memory-critical-number"); value.Exists() {
 		data.BgpLogMemoryThresholdCritical = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/total-paths/total-paths-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/total-paths/total-paths-number"); value.Exists() {
 		data.BgpLogTotalPaths = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/log/total-paths/warn-threshold-value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/log/total-paths/warn-threshold-value"); value.Exists() {
 		data.BgpLogTotalPathsWarnThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/multipath/use/cluster-list-length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/multipath/use/cluster-list-length"); value.Exists() {
 		data.BgpMultipathUseClusterListLength = types.BoolValue(true)
 	} else {
 		data.BgpMultipathUseClusterListLength = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/multipath/as-path/ignore/onwards"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/multipath/as-path/ignore/onwards"); value.Exists() {
 		data.BgpMultipathAsPathIgnoreOnwards = types.BoolValue(true)
 	} else {
 		data.BgpMultipathAsPathIgnoreOnwards = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/confederation/identifier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/confederation/identifier"); value.Exists() {
 		data.BgpConfederationIdentifier = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/confederation/peers"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/confederation/peers"); value.Exists() {
 		data.BgpConfederationPeers = make([]RouterBGPBgpConfederationPeers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPBgpConfederationPeers{}
@@ -13528,136 +13475,136 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/enable"); value.Exists() {
 		data.BgpGracefulRestartEnable = types.BoolValue(true)
 	} else {
 		data.BgpGracefulRestartEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/purge-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/purge-time"); value.Exists() {
 		data.BgpGracefulRestartPurgeTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/restart-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/restart-time"); value.Exists() {
 		data.BgpGracefulRestartRestartTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/stalepath-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/stalepath-time"); value.Exists() {
 		data.BgpGracefulRestartStalepathTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/graceful-reset"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/graceful-reset"); value.Exists() {
 		data.BgpGracefulRestartGracefulReset = types.BoolValue(true)
 	} else {
 		data.BgpGracefulRestartGracefulReset = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/graceful-restart/retain-nbr-routes/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/graceful-restart/retain-nbr-routes/disable"); value.Exists() {
 		data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolValue(true)
 	} else {
 		data.BgpGracefulRestartRetainNbrRoutesDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/install/diversion"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/install/diversion"); value.Exists() {
 		data.BgpInstallDiversion = types.BoolValue(true)
 	} else {
 		data.BgpInstallDiversion = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/update-delay/delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/update-delay/delay"); value.Exists() {
 		data.BgpUpdateDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/update-delay/always"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/update-delay/always"); value.Exists() {
 		data.BgpUpdateDelayAlways = types.BoolValue(true)
 	} else {
 		data.BgpUpdateDelayAlways = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/maximum/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/maximum/neighbor"); value.Exists() {
 		data.BgpMaximumNeighbor = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/origin-as/validation/signal/ibgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/origin-as/validation/signal/ibgp"); value.Exists() {
 		data.BgpOriginAsValidationSignalIbgp = types.BoolValue(true)
 	} else {
 		data.BgpOriginAsValidationSignalIbgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/origin-as/validation/time/off"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/origin-as/validation/time/off"); value.Exists() {
 		data.BgpOriginAsValidationTimeOff = types.BoolValue(true)
 	} else {
 		data.BgpOriginAsValidationTimeOff = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bgp/origin-as/validation/time/prefix-validation-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/origin-as/validation/time/prefix-validation-time"); value.Exists() {
 		data.BgpOriginAsValidationTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/keepalive-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/keepalive-interval"); value.Exists() {
 		data.TimersBgpKeepaliveInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/zero"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/zero"); value.Exists() {
 		data.TimersBgpHolddownZero = types.BoolValue(true)
 	} else {
 		data.TimersBgpHolddownZero = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/zero/zero"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/zero/zero"); value.Exists() {
 		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
 	} else {
 		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/zero/minimum-acceptable-holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/zero/minimum-acceptable-holdtime"); value.Exists() {
 		data.TimersBgpHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/holdtime/holdtime-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/holdtime/holdtime-number"); value.Exists() {
 		data.TimersBgpHoldtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/timers/bgp/holdtime/minimum-acceptable-holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/bgp/holdtime/minimum-acceptable-holdtime"); value.Exists() {
 		data.TimersBgpHoldtimeMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nsr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nsr"); value.Exists() {
 		data.Nsr = types.BoolValue(true)
 	} else {
 		data.Nsr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/nsr/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nsr/disable"); value.Exists() {
 		data.NsrDisable = types.BoolValue(true)
 	} else {
 		data.NsrDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/ibgp/policy/out/enforce-modifications"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ibgp/policy/out/enforce-modifications"); value.Exists() {
 		data.IbgpPolicyOutEnforceModifications = types.BoolValue(true)
 	} else {
 		data.IbgpPolicyOutEnforceModifications = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/openconfig/rib-telemetry"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/openconfig/rib-telemetry"); value.Exists() {
 		data.OpenconfigRibTelemetry = types.BoolValue(true)
 	} else {
 		data.OpenconfigRibTelemetry = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/limit"); value.Exists() {
 		data.UpdateLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/in/error-handling/basic/ebgp/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/in/error-handling/basic/ebgp/disable"); value.Exists() {
 		data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingBasicEbgpDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/in/error-handling/basic/ibgp/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/in/error-handling/basic/ibgp/disable"); value.Exists() {
 		data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingBasicIbgpDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/in/error-handling/extended/ebgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/in/error-handling/extended/ebgp"); value.Exists() {
 		data.UpdateInErrorHandlingExtendedEbgp = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingExtendedEbgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/in/error-handling/extended/ibgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/in/error-handling/extended/ibgp"); value.Exists() {
 		data.UpdateInErrorHandlingExtendedIbgp = types.BoolValue(true)
 	} else {
 		data.UpdateInErrorHandlingExtendedIbgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/update/out/logging"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/out/logging"); value.Exists() {
 		data.UpdateOutLogging = types.BoolValue(true)
 	} else {
 		data.UpdateOutLogging = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/bfd/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/rpki/routes/route"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpki/routes/route"); value.Exists() {
 		data.RpkiRoutes = make([]RouterBGPRpkiRoutes, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPRpkiRoutes{}
@@ -13677,7 +13624,7 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/rpki/servers/server"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpki/servers/server"); value.Exists() {
 		data.RpkiServers = make([]RouterBGPRpkiServers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterBGPRpkiServers{}
@@ -13687,19 +13634,19 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "refresh-time/refresh-time-seconds"); cValue.Exists() {
 				item.RefreshTimeSeconds = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "refresh-time/off"); cValue.Exists() {
-			item.RefreshTimeOff = types.BoolValue(true)
-		} else {
-			item.RefreshTimeOff = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "refresh-time/off"); cValue.Exists() {
+				item.RefreshTimeOff = types.BoolValue(true)
+			} else {
+				item.RefreshTimeOff = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "response-time/response-time-seconds"); cValue.Exists() {
 				item.ResponseTimeSeconds = types.Int64Value(cValue.Int())
 			}
-		if cValue := helpers.GetFromXPath(v, "response-time/off"); cValue.Exists() {
-			item.ResponseTimeOff = types.BoolValue(true)
-		} else {
-			item.ResponseTimeOff = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "response-time/off"); cValue.Exists() {
+				item.ResponseTimeOff = types.BoolValue(true)
+			} else {
+				item.ResponseTimeOff = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "purge-time"); cValue.Exists() {
 				item.PurgeTime = types.Int64Value(cValue.Int())
 			}
@@ -13718,11 +13665,11 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "bind-source/interface"); cValue.Exists() {
 				item.BindSourceInterface = types.StringValue(cValue.String())
 			}
-		if cValue := helpers.GetFromXPath(v, "shutdown"); cValue.Exists() {
-			item.Shutdown = types.BoolValue(true)
-		} else {
-			item.Shutdown = types.BoolValue(false)
-		}
+			if cValue := helpers.GetFromXPath(v, "shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else {
+				item.Shutdown = types.BoolValue(false)
+			}
 			data.RpkiServers = append(data.RpkiServers, item)
 			return true
 		})
@@ -13738,8 +13685,8 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.RpkiServers {
-		stateKeys := [...]string{ "server-name",  }
-		stateKeyValues := [...]string{ state.RpkiServers[i].Server.ValueString(),  }
+		stateKeys := [...]string{"server-name"}
+		stateKeyValues := [...]string{state.RpkiServers[i].Server.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -13760,42 +13707,42 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 				found = false
 			}
 			if found {
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.RpkiServers[i].Shutdown.IsNull() && state.RpkiServers[i].Shutdown.ValueBool() && data.RpkiServers[j].Shutdown.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/shutdown", predicates))
-			}
-			if !state.RpkiServers[i].BindSourceInterface.IsNull() && data.RpkiServers[j].BindSourceInterface.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/bind-source/interface", predicates))
-			}
-			if !state.RpkiServers[i].TransportSshPort.IsNull() && data.RpkiServers[j].TransportSshPort.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/transport/ssh", predicates))
-			}
-			if !state.RpkiServers[i].TransportTcpPort.IsNull() && data.RpkiServers[j].TransportTcpPort.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/transport/tcp", predicates))
-			}
-			if !state.RpkiServers[i].Password.IsNull() && data.RpkiServers[j].Password.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/password", predicates))
-			}
-			if !state.RpkiServers[i].Username.IsNull() && data.RpkiServers[j].Username.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/username", predicates))
-			}
-			if !state.RpkiServers[i].PurgeTime.IsNull() && data.RpkiServers[j].PurgeTime.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/purge-time", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.RpkiServers[i].ResponseTimeOff.IsNull() && state.RpkiServers[i].ResponseTimeOff.ValueBool() && data.RpkiServers[j].ResponseTimeOff.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/response-time", predicates))
-			}
-			if !state.RpkiServers[i].ResponseTimeSeconds.IsNull() && data.RpkiServers[j].ResponseTimeSeconds.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/response-time/response-time-seconds", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.RpkiServers[i].RefreshTimeOff.IsNull() && state.RpkiServers[i].RefreshTimeOff.ValueBool() && data.RpkiServers[j].RefreshTimeOff.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/refresh-time", predicates))
-			}
-			if !state.RpkiServers[i].RefreshTimeSeconds.IsNull() && data.RpkiServers[j].RefreshTimeSeconds.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/refresh-time/refresh-time-seconds", predicates))
-			}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.RpkiServers[i].Shutdown.IsNull() && state.RpkiServers[i].Shutdown.ValueBool() && data.RpkiServers[j].Shutdown.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/shutdown", predicates))
+				}
+				if !state.RpkiServers[i].BindSourceInterface.IsNull() && data.RpkiServers[j].BindSourceInterface.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/bind-source/interface", predicates))
+				}
+				if !state.RpkiServers[i].TransportSshPort.IsNull() && data.RpkiServers[j].TransportSshPort.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/transport/ssh", predicates))
+				}
+				if !state.RpkiServers[i].TransportTcpPort.IsNull() && data.RpkiServers[j].TransportTcpPort.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/transport/tcp", predicates))
+				}
+				if !state.RpkiServers[i].Password.IsNull() && data.RpkiServers[j].Password.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/password", predicates))
+				}
+				if !state.RpkiServers[i].Username.IsNull() && data.RpkiServers[j].Username.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/username", predicates))
+				}
+				if !state.RpkiServers[i].PurgeTime.IsNull() && data.RpkiServers[j].PurgeTime.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/purge-time", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.RpkiServers[i].ResponseTimeOff.IsNull() && state.RpkiServers[i].ResponseTimeOff.ValueBool() && data.RpkiServers[j].ResponseTimeOff.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/response-time", predicates))
+				}
+				if !state.RpkiServers[i].ResponseTimeSeconds.IsNull() && data.RpkiServers[j].ResponseTimeSeconds.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/response-time/response-time-seconds", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.RpkiServers[i].RefreshTimeOff.IsNull() && state.RpkiServers[i].RefreshTimeOff.ValueBool() && data.RpkiServers[j].RefreshTimeOff.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/refresh-time", predicates))
+				}
+				if !state.RpkiServers[i].RefreshTimeSeconds.IsNull() && data.RpkiServers[j].RefreshTimeSeconds.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/rpki/servers/server%v/refresh-time/refresh-time-seconds", predicates))
+				}
 				break
 			}
 		}
@@ -13804,8 +13751,8 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 		}
 	}
 	for i := range state.RpkiRoutes {
-		stateKeys := [...]string{ "route-address", "route-prefix", "max", "origin",  }
-		stateKeyValues := [...]string{ state.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(state.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(state.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(state.RpkiRoutes[i].OriginAs.ValueInt64(), 10),  }
+		stateKeys := [...]string{"route-address", "route-prefix", "max", "origin"}
+		stateKeyValues := [...]string{state.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(state.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(state.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(state.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -13852,14 +13799,14 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 		}
 	}
 	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
-		deletePath := state.getXPath()+"/bfd/minimum-interval"
+		deletePath := state.getXPath() + "/bfd/minimum-interval"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
-		deletePath := state.getXPath()+"/bfd/multiplier"
+		deletePath := state.getXPath() + "/bfd/multiplier"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -13867,7 +13814,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.UpdateOutLogging.IsNull() && state.UpdateOutLogging.ValueBool() && data.UpdateOutLogging.IsNull() {
-		deletePath := state.getXPath()+"/update/out/logging"
+		deletePath := state.getXPath() + "/update/out/logging"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -13875,7 +13822,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.UpdateInErrorHandlingExtendedIbgp.IsNull() && state.UpdateInErrorHandlingExtendedIbgp.ValueBool() && data.UpdateInErrorHandlingExtendedIbgp.IsNull() {
-		deletePath := state.getXPath()+"/update/in/error-handling/extended/ibgp"
+		deletePath := state.getXPath() + "/update/in/error-handling/extended/ibgp"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -13883,7 +13830,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.UpdateInErrorHandlingExtendedEbgp.IsNull() && state.UpdateInErrorHandlingExtendedEbgp.ValueBool() && data.UpdateInErrorHandlingExtendedEbgp.IsNull() {
-		deletePath := state.getXPath()+"/update/in/error-handling/extended/ebgp"
+		deletePath := state.getXPath() + "/update/in/error-handling/extended/ebgp"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -13891,7 +13838,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.UpdateInErrorHandlingBasicIbgpDisable.IsNull() && state.UpdateInErrorHandlingBasicIbgpDisable.ValueBool() && data.UpdateInErrorHandlingBasicIbgpDisable.IsNull() {
-		deletePath := state.getXPath()+"/update/in/error-handling/basic/ibgp/disable"
+		deletePath := state.getXPath() + "/update/in/error-handling/basic/ibgp/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -13899,14 +13846,14 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.UpdateInErrorHandlingBasicEbgpDisable.IsNull() && state.UpdateInErrorHandlingBasicEbgpDisable.ValueBool() && data.UpdateInErrorHandlingBasicEbgpDisable.IsNull() {
-		deletePath := state.getXPath()+"/update/in/error-handling/basic/ebgp/disable"
+		deletePath := state.getXPath() + "/update/in/error-handling/basic/ebgp/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.UpdateLimit.IsNull() && data.UpdateLimit.IsNull() {
-		deletePath := state.getXPath()+"/update/limit"
+		deletePath := state.getXPath() + "/update/limit"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -13914,7 +13861,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.OpenconfigRibTelemetry.IsNull() && state.OpenconfigRibTelemetry.ValueBool() && data.OpenconfigRibTelemetry.IsNull() {
-		deletePath := state.getXPath()+"/openconfig/rib-telemetry"
+		deletePath := state.getXPath() + "/openconfig/rib-telemetry"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -13922,7 +13869,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.IbgpPolicyOutEnforceModifications.IsNull() && state.IbgpPolicyOutEnforceModifications.ValueBool() && data.IbgpPolicyOutEnforceModifications.IsNull() {
-		deletePath := state.getXPath()+"/ibgp/policy/out/enforce-modifications"
+		deletePath := state.getXPath() + "/ibgp/policy/out/enforce-modifications"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -13931,7 +13878,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.NsrDisable.IsNull() && state.NsrDisable.ValueBool() && data.NsrDisable.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/nsr"
+		deletePath := state.getXPath() + "/nsr"
 		predicates := make(map[string]string)
 		predicates["disable"] = fmt.Sprintf("%v", state.NsrDisable.ValueBool())
 		// Sort keys to ensure consistent ordering
@@ -13950,7 +13897,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Nsr.IsNull() && state.Nsr.ValueBool() && data.Nsr.IsNull() {
-		deletePath := state.getXPath()+"/nsr"
+		deletePath := state.getXPath() + "/nsr"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -13958,7 +13905,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.TimersBgpHoldtimeMinimumAcceptableHoldtime.IsNull() && data.TimersBgpHoldtimeMinimumAcceptableHoldtime.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/timers/bgp/holdtime"
+		deletePath := state.getXPath() + "/timers/bgp/holdtime"
 		predicates := make(map[string]string)
 		if !state.TimersBgpHoldtime.IsNull() {
 			predicates["holdtime-number"] = fmt.Sprintf("%v", state.TimersBgpHoldtime.ValueInt64())
@@ -13980,7 +13927,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.TimersBgpHoldtime.IsNull() && data.TimersBgpHoldtime.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/timers/bgp/holdtime"
+		deletePath := state.getXPath() + "/timers/bgp/holdtime"
 		predicates := make(map[string]string)
 		if !state.TimersBgpHoldtimeMinimumAcceptableHoldtime.IsNull() {
 			predicates["minimum-acceptable-holdtime"] = fmt.Sprintf("%v", state.TimersBgpHoldtimeMinimumAcceptableHoldtime.ValueInt64())
@@ -14002,7 +13949,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.TimersBgpHolddownZeroMinimumAcceptableHoldtime.IsNull() && data.TimersBgpHolddownZeroMinimumAcceptableHoldtime.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/timers/bgp/zero"
+		deletePath := state.getXPath() + "/timers/bgp/zero"
 		predicates := make(map[string]string)
 		if !state.TimersBgpHolddownZeroMinimumAcceptableZero.IsNull() {
 			predicates["zero"] = fmt.Sprintf("%v", state.TimersBgpHolddownZeroMinimumAcceptableZero.ValueBool())
@@ -14025,7 +13972,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TimersBgpHolddownZeroMinimumAcceptableZero.IsNull() && state.TimersBgpHolddownZeroMinimumAcceptableZero.ValueBool() && data.TimersBgpHolddownZeroMinimumAcceptableZero.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/timers/bgp/zero"
+		deletePath := state.getXPath() + "/timers/bgp/zero"
 		predicates := make(map[string]string)
 		if !state.TimersBgpHolddownZeroMinimumAcceptableHoldtime.IsNull() {
 			predicates["minimum-acceptable-holdtime"] = fmt.Sprintf("%v", state.TimersBgpHolddownZeroMinimumAcceptableHoldtime.ValueInt64())
@@ -14047,14 +13994,14 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TimersBgpHolddownZero.IsNull() && state.TimersBgpHolddownZero.ValueBool() && data.TimersBgpHolddownZero.IsNull() {
-		deletePath := state.getXPath()+"/timers/bgp/zero"
+		deletePath := state.getXPath() + "/timers/bgp/zero"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.TimersBgpKeepaliveInterval.IsNull() && data.TimersBgpKeepaliveInterval.IsNull() {
-		deletePath := state.getXPath()+"/timers/bgp/keepalive-interval"
+		deletePath := state.getXPath() + "/timers/bgp/keepalive-interval"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14062,7 +14009,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.BgpOriginAsValidationTime.IsNull() && data.BgpOriginAsValidationTime.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/bgp/origin-as/validation/time"
+		deletePath := state.getXPath() + "/bgp/origin-as/validation/time"
 		predicates := make(map[string]string)
 		if !state.BgpOriginAsValidationTimeOff.IsNull() {
 			predicates["off"] = fmt.Sprintf("%v", state.BgpOriginAsValidationTimeOff.ValueBool())
@@ -14085,7 +14032,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpOriginAsValidationTimeOff.IsNull() && state.BgpOriginAsValidationTimeOff.ValueBool() && data.BgpOriginAsValidationTimeOff.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/bgp/origin-as/validation/time"
+		deletePath := state.getXPath() + "/bgp/origin-as/validation/time"
 		predicates := make(map[string]string)
 		if !state.BgpOriginAsValidationTime.IsNull() {
 			predicates["prefix-validation-time"] = fmt.Sprintf("%v", state.BgpOriginAsValidationTime.ValueInt64())
@@ -14107,14 +14054,14 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpOriginAsValidationSignalIbgp.IsNull() && state.BgpOriginAsValidationSignalIbgp.ValueBool() && data.BgpOriginAsValidationSignalIbgp.IsNull() {
-		deletePath := state.getXPath()+"/bgp/origin-as/validation/signal/ibgp"
+		deletePath := state.getXPath() + "/bgp/origin-as/validation/signal/ibgp"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpMaximumNeighbor.IsNull() && data.BgpMaximumNeighbor.IsNull() {
-		deletePath := state.getXPath()+"/bgp/maximum/neighbor"
+		deletePath := state.getXPath() + "/bgp/maximum/neighbor"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14123,7 +14070,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpUpdateDelayAlways.IsNull() && state.BgpUpdateDelayAlways.ValueBool() && data.BgpUpdateDelayAlways.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/bgp/update-delay"
+		deletePath := state.getXPath() + "/bgp/update-delay"
 		predicates := make(map[string]string)
 		if !state.BgpUpdateDelay.IsNull() {
 			predicates["delay"] = fmt.Sprintf("%v", state.BgpUpdateDelay.ValueInt64())
@@ -14145,7 +14092,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.BgpUpdateDelay.IsNull() && data.BgpUpdateDelay.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/bgp/update-delay"
+		deletePath := state.getXPath() + "/bgp/update-delay"
 		predicates := make(map[string]string)
 		if !state.BgpUpdateDelayAlways.IsNull() {
 			predicates["always"] = fmt.Sprintf("%v", state.BgpUpdateDelayAlways.ValueBool())
@@ -14167,7 +14114,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpInstallDiversion.IsNull() && state.BgpInstallDiversion.ValueBool() && data.BgpInstallDiversion.IsNull() {
-		deletePath := state.getXPath()+"/bgp/install/diversion"
+		deletePath := state.getXPath() + "/bgp/install/diversion"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14175,7 +14122,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpGracefulRestartRetainNbrRoutesDisable.IsNull() && state.BgpGracefulRestartRetainNbrRoutesDisable.ValueBool() && data.BgpGracefulRestartRetainNbrRoutesDisable.IsNull() {
-		deletePath := state.getXPath()+"/bgp/graceful-restart/retain-nbr-routes/disable"
+		deletePath := state.getXPath() + "/bgp/graceful-restart/retain-nbr-routes/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14183,28 +14130,28 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpGracefulRestartGracefulReset.IsNull() && state.BgpGracefulRestartGracefulReset.ValueBool() && data.BgpGracefulRestartGracefulReset.IsNull() {
-		deletePath := state.getXPath()+"/bgp/graceful-restart/graceful-reset"
+		deletePath := state.getXPath() + "/bgp/graceful-restart/graceful-reset"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpGracefulRestartStalepathTime.IsNull() && data.BgpGracefulRestartStalepathTime.IsNull() {
-		deletePath := state.getXPath()+"/bgp/graceful-restart/stalepath-time"
+		deletePath := state.getXPath() + "/bgp/graceful-restart/stalepath-time"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpGracefulRestartRestartTime.IsNull() && data.BgpGracefulRestartRestartTime.IsNull() {
-		deletePath := state.getXPath()+"/bgp/graceful-restart/restart-time"
+		deletePath := state.getXPath() + "/bgp/graceful-restart/restart-time"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpGracefulRestartPurgeTime.IsNull() && data.BgpGracefulRestartPurgeTime.IsNull() {
-		deletePath := state.getXPath()+"/bgp/graceful-restart/purge-time"
+		deletePath := state.getXPath() + "/bgp/graceful-restart/purge-time"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14212,15 +14159,15 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpGracefulRestartEnable.IsNull() && state.BgpGracefulRestartEnable.ValueBool() && data.BgpGracefulRestartEnable.IsNull() {
-		deletePath := state.getXPath()+"/bgp/graceful-restart/enable"
+		deletePath := state.getXPath() + "/bgp/graceful-restart/enable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.BgpConfederationPeers {
-		stateKeys := [...]string{ "peer-as-number",  }
-		stateKeyValues := [...]string{ state.BgpConfederationPeers[i].PeerAsNumber.ValueString(),  }
+		stateKeys := [...]string{"peer-as-number"}
+		stateKeyValues := [...]string{state.BgpConfederationPeers[i].PeerAsNumber.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -14249,7 +14196,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 		}
 	}
 	if !state.BgpConfederationIdentifier.IsNull() && data.BgpConfederationIdentifier.IsNull() {
-		deletePath := state.getXPath()+"/bgp/confederation/identifier"
+		deletePath := state.getXPath() + "/bgp/confederation/identifier"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14257,7 +14204,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpMultipathAsPathIgnoreOnwards.IsNull() && state.BgpMultipathAsPathIgnoreOnwards.ValueBool() && data.BgpMultipathAsPathIgnoreOnwards.IsNull() {
-		deletePath := state.getXPath()+"/bgp/multipath/as-path/ignore/onwards"
+		deletePath := state.getXPath() + "/bgp/multipath/as-path/ignore/onwards"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14265,7 +14212,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpMultipathUseClusterListLength.IsNull() && state.BgpMultipathUseClusterListLength.ValueBool() && data.BgpMultipathUseClusterListLength.IsNull() {
-		deletePath := state.getXPath()+"/bgp/multipath/use/cluster-list-length"
+		deletePath := state.getXPath() + "/bgp/multipath/use/cluster-list-length"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14273,7 +14220,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.BgpLogTotalPathsWarnThreshold.IsNull() && data.BgpLogTotalPathsWarnThreshold.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/bgp/log/total-paths"
+		deletePath := state.getXPath() + "/bgp/log/total-paths"
 		predicates := make(map[string]string)
 		if !state.BgpLogTotalPaths.IsNull() {
 			predicates["total-paths-number"] = fmt.Sprintf("%v", state.BgpLogTotalPaths.ValueInt64())
@@ -14295,7 +14242,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.BgpLogTotalPaths.IsNull() && data.BgpLogTotalPaths.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/bgp/log/total-paths"
+		deletePath := state.getXPath() + "/bgp/log/total-paths"
 		predicates := make(map[string]string)
 		if !state.BgpLogTotalPathsWarnThreshold.IsNull() {
 			predicates["warn-threshold-value"] = fmt.Sprintf("%v", state.BgpLogTotalPathsWarnThreshold.ValueInt64())
@@ -14317,7 +14264,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.BgpLogMemoryThresholdCritical.IsNull() && data.BgpLogMemoryThresholdCritical.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/bgp/log/memory-threshold"
+		deletePath := state.getXPath() + "/bgp/log/memory-threshold"
 		predicates := make(map[string]string)
 		if !state.BgpLogMemoryThresholdWarning.IsNull() {
 			predicates["memory-warning-number"] = fmt.Sprintf("%v", state.BgpLogMemoryThresholdWarning.ValueInt64())
@@ -14339,7 +14286,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.BgpLogMemoryThresholdWarning.IsNull() && data.BgpLogMemoryThresholdWarning.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/bgp/log/memory-threshold"
+		deletePath := state.getXPath() + "/bgp/log/memory-threshold"
 		predicates := make(map[string]string)
 		if !state.BgpLogMemoryThresholdCritical.IsNull() {
 			predicates["memory-critical-number"] = fmt.Sprintf("%v", state.BgpLogMemoryThresholdCritical.ValueInt64())
@@ -14361,7 +14308,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpLogMessageDisable.IsNull() && state.BgpLogMessageDisable.ValueBool() && data.BgpLogMessageDisable.IsNull() {
-		deletePath := state.getXPath()+"/bgp/log/message/disable"
+		deletePath := state.getXPath() + "/bgp/log/message/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14369,7 +14316,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpLogNeighborChangesDisable.IsNull() && state.BgpLogNeighborChangesDisable.ValueBool() && data.BgpLogNeighborChangesDisable.IsNull() {
-		deletePath := state.getXPath()+"/bgp/log/neighbor/changes/disable"
+		deletePath := state.getXPath() + "/bgp/log/neighbor/changes/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14377,7 +14324,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpLogNeighborChangesDetail.IsNull() && state.BgpLogNeighborChangesDetail.ValueBool() && data.BgpLogNeighborChangesDetail.IsNull() {
-		deletePath := state.getXPath()+"/bgp/log/neighbor/changes/detail"
+		deletePath := state.getXPath() + "/bgp/log/neighbor/changes/detail"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14385,7 +14332,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpFastExternalFalloverDisable.IsNull() && state.BgpFastExternalFalloverDisable.ValueBool() && data.BgpFastExternalFalloverDisable.IsNull() {
-		deletePath := state.getXPath()+"/bgp/fast-external-fallover/disable"
+		deletePath := state.getXPath() + "/bgp/fast-external-fallover/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14393,14 +14340,14 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpEnforceFirstAsDisable.IsNull() && state.BgpEnforceFirstAsDisable.ValueBool() && data.BgpEnforceFirstAsDisable.IsNull() {
-		deletePath := state.getXPath()+"/bgp/enforce-first-as/disable"
+		deletePath := state.getXPath() + "/bgp/enforce-first-as/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpDefaultLocalPreference.IsNull() && data.BgpDefaultLocalPreference.IsNull() {
-		deletePath := state.getXPath()+"/bgp/default/local-preference"
+		deletePath := state.getXPath() + "/bgp/default/local-preference"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14408,7 +14355,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.BgpClusterIdIpFormat.IsNull() && data.BgpClusterIdIpFormat.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/bgp/cluster-id"
+		deletePath := state.getXPath() + "/bgp/cluster-id"
 		predicates := make(map[string]string)
 		if !state.BgpClusterId32bitFormat.IsNull() {
 			predicates["route-reflector-number"] = fmt.Sprintf("%v", state.BgpClusterId32bitFormat.ValueInt64())
@@ -14430,7 +14377,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.BgpClusterId32bitFormat.IsNull() && data.BgpClusterId32bitFormat.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/bgp/cluster-id"
+		deletePath := state.getXPath() + "/bgp/cluster-id"
 		predicates := make(map[string]string)
 		if !state.BgpClusterIdIpFormat.IsNull() {
 			predicates["route-reflector-ip-address"] = fmt.Sprintf("%v", state.BgpClusterIdIpFormat.ValueString())
@@ -14452,7 +14399,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpBestpathSrPolicyForce.IsNull() && state.BgpBestpathSrPolicyForce.ValueBool() && data.BgpBestpathSrPolicyForce.IsNull() {
-		deletePath := state.getXPath()+"/bgp/bestpath/sr-policy/force"
+		deletePath := state.getXPath() + "/bgp/bestpath/sr-policy/force"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14460,7 +14407,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpBestpathSrPolicyPrefer.IsNull() && state.BgpBestpathSrPolicyPrefer.ValueBool() && data.BgpBestpathSrPolicyPrefer.IsNull() {
-		deletePath := state.getXPath()+"/bgp/bestpath/sr-policy/prefer"
+		deletePath := state.getXPath() + "/bgp/bestpath/sr-policy/prefer"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14468,7 +14415,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpBestpathOriginAsAllowInvalid.IsNull() && state.BgpBestpathOriginAsAllowInvalid.ValueBool() && data.BgpBestpathOriginAsAllowInvalid.IsNull() {
-		deletePath := state.getXPath()+"/bgp/bestpath/origin-as/allow/invalid"
+		deletePath := state.getXPath() + "/bgp/bestpath/origin-as/allow/invalid"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14476,7 +14423,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpBestpathOriginAsUseValidity.IsNull() && state.BgpBestpathOriginAsUseValidity.ValueBool() && data.BgpBestpathOriginAsUseValidity.IsNull() {
-		deletePath := state.getXPath()+"/bgp/bestpath/origin-as/use/validity"
+		deletePath := state.getXPath() + "/bgp/bestpath/origin-as/use/validity"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14484,7 +14431,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpBestpathAsPathMultipathRelax.IsNull() && state.BgpBestpathAsPathMultipathRelax.ValueBool() && data.BgpBestpathAsPathMultipathRelax.IsNull() {
-		deletePath := state.getXPath()+"/bgp/bestpath/as-path/multipath-relax"
+		deletePath := state.getXPath() + "/bgp/bestpath/as-path/multipath-relax"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14492,7 +14439,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpBestpathAsPathIgnore.IsNull() && state.BgpBestpathAsPathIgnore.ValueBool() && data.BgpBestpathAsPathIgnore.IsNull() {
-		deletePath := state.getXPath()+"/bgp/bestpath/as-path/ignore"
+		deletePath := state.getXPath() + "/bgp/bestpath/as-path/ignore"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14500,7 +14447,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpBestpathMedAlways.IsNull() && state.BgpBestpathMedAlways.ValueBool() && data.BgpBestpathMedAlways.IsNull() {
-		deletePath := state.getXPath()+"/bgp/bestpath/med/always"
+		deletePath := state.getXPath() + "/bgp/bestpath/med/always"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14508,7 +14455,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpBestpathMedMissingAsWorst.IsNull() && state.BgpBestpathMedMissingAsWorst.ValueBool() && data.BgpBestpathMedMissingAsWorst.IsNull() {
-		deletePath := state.getXPath()+"/bgp/bestpath/med/missing-as-worst"
+		deletePath := state.getXPath() + "/bgp/bestpath/med/missing-as-worst"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14516,7 +14463,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpBestpathIgpMetricSrPolicy.IsNull() && state.BgpBestpathIgpMetricSrPolicy.ValueBool() && data.BgpBestpathIgpMetricSrPolicy.IsNull() {
-		deletePath := state.getXPath()+"/bgp/bestpath/igp-metric/sr-policy"
+		deletePath := state.getXPath() + "/bgp/bestpath/igp-metric/sr-policy"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14524,7 +14471,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpBestpathIgpMetricIgnore.IsNull() && state.BgpBestpathIgpMetricIgnore.ValueBool() && data.BgpBestpathIgpMetricIgnore.IsNull() {
-		deletePath := state.getXPath()+"/bgp/bestpath/igp-metric/ignore"
+		deletePath := state.getXPath() + "/bgp/bestpath/igp-metric/ignore"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14532,7 +14479,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpBestpathAigpIgnore.IsNull() && state.BgpBestpathAigpIgnore.ValueBool() && data.BgpBestpathAigpIgnore.IsNull() {
-		deletePath := state.getXPath()+"/bgp/bestpath/aigp/ignore"
+		deletePath := state.getXPath() + "/bgp/bestpath/aigp/ignore"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14540,7 +14487,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpBestpathCompareRouterid.IsNull() && state.BgpBestpathCompareRouterid.ValueBool() && data.BgpBestpathCompareRouterid.IsNull() {
-		deletePath := state.getXPath()+"/bgp/bestpath/compare-routerid"
+		deletePath := state.getXPath() + "/bgp/bestpath/compare-routerid"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14548,7 +14495,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpBestpathCostCommunityIgnore.IsNull() && state.BgpBestpathCostCommunityIgnore.ValueBool() && data.BgpBestpathCostCommunityIgnore.IsNull() {
-		deletePath := state.getXPath()+"/bgp/bestpath/cost-community/ignore"
+		deletePath := state.getXPath() + "/bgp/bestpath/cost-community/ignore"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14556,7 +14503,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpAutoPolicySoftResetDisable.IsNull() && state.BgpAutoPolicySoftResetDisable.ValueBool() && data.BgpAutoPolicySoftResetDisable.IsNull() {
-		deletePath := state.getXPath()+"/bgp/auto-policy-soft-reset/disable"
+		deletePath := state.getXPath() + "/bgp/auto-policy-soft-reset/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14564,7 +14511,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpAsPathLoopcheck.IsNull() && state.BgpAsPathLoopcheck.ValueBool() && data.BgpAsPathLoopcheck.IsNull() {
-		deletePath := state.getXPath()+"/bgp/as-path-loopcheck"
+		deletePath := state.getXPath() + "/bgp/as-path-loopcheck"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14572,7 +14519,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpLptsSecureBinding.IsNull() && state.BgpLptsSecureBinding.ValueBool() && data.BgpLptsSecureBinding.IsNull() {
-		deletePath := state.getXPath()+"/bgp/lpts-secure-binding"
+		deletePath := state.getXPath() + "/bgp/lpts-secure-binding"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14580,14 +14527,14 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpReadOnly.IsNull() && state.BgpReadOnly.ValueBool() && data.BgpReadOnly.IsNull() {
-		deletePath := state.getXPath()+"/bgp/read-only"
+		deletePath := state.getXPath() + "/bgp/read-only"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpScanTime.IsNull() && data.BgpScanTime.IsNull() {
-		deletePath := state.getXPath()+"/bgp/scan-time"
+		deletePath := state.getXPath() + "/bgp/scan-time"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14595,14 +14542,14 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpUnsafeEbgpPolicy.IsNull() && state.BgpUnsafeEbgpPolicy.ValueBool() && data.BgpUnsafeEbgpPolicy.IsNull() {
-		deletePath := state.getXPath()+"/bgp/unsafe-ebgp-policy"
+		deletePath := state.getXPath() + "/bgp/unsafe-ebgp-policy"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpRouterId.IsNull() && data.BgpRouterId.IsNull() {
-		deletePath := state.getXPath()+"/bgp/router-id"
+		deletePath := state.getXPath() + "/bgp/router-id"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14610,7 +14557,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpRedistributeInternal.IsNull() && state.BgpRedistributeInternal.ValueBool() && data.BgpRedistributeInternal.IsNull() {
-		deletePath := state.getXPath()+"/bgp/redistribute-internal"
+		deletePath := state.getXPath() + "/bgp/redistribute-internal"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14618,14 +14565,14 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SlowPeerDetectionDisable.IsNull() && state.SlowPeerDetectionDisable.ValueBool() && data.SlowPeerDetectionDisable.IsNull() {
-		deletePath := state.getXPath()+"/slow-peer/detection-disable"
+		deletePath := state.getXPath() + "/slow-peer/detection-disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SlowPeerDynamicThreshold.IsNull() && data.SlowPeerDynamicThreshold.IsNull() {
-		deletePath := state.getXPath()+"/slow-peer/dynamic/threshold"
+		deletePath := state.getXPath() + "/slow-peer/dynamic/threshold"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14633,7 +14580,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SlowPeerDynamic.IsNull() && state.SlowPeerDynamic.ValueBool() && data.SlowPeerDynamic.IsNull() {
-		deletePath := state.getXPath()+"/slow-peer/dynamic"
+		deletePath := state.getXPath() + "/slow-peer/dynamic"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14641,7 +14588,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.NexthopSrteMetricDisable.IsNull() && state.NexthopSrteMetricDisable.ValueBool() && data.NexthopSrteMetricDisable.IsNull() {
-		deletePath := state.getXPath()+"/nexthop/srte-metric/disable"
+		deletePath := state.getXPath() + "/nexthop/srte-metric/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14649,7 +14596,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.NexthopResolutionAllowDefault.IsNull() && state.NexthopResolutionAllowDefault.ValueBool() && data.NexthopResolutionAllowDefault.IsNull() {
-		deletePath := state.getXPath()+"/nexthop/resolution/allow-default"
+		deletePath := state.getXPath() + "/nexthop/resolution/allow-default"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14657,7 +14604,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.NexthopValidationColorExtcommDisable.IsNull() && state.NexthopValidationColorExtcommDisable.ValueBool() && data.NexthopValidationColorExtcommDisable.IsNull() {
-		deletePath := state.getXPath()+"/nexthop/validation/color-extcomm/disable"
+		deletePath := state.getXPath() + "/nexthop/validation/color-extcomm/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14665,7 +14612,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.NexthopValidationColorExtcommSrPolicy.IsNull() && state.NexthopValidationColorExtcommSrPolicy.ValueBool() && data.NexthopValidationColorExtcommSrPolicy.IsNull() {
-		deletePath := state.getXPath()+"/nexthop/validation/color-extcomm/sr-policy"
+		deletePath := state.getXPath() + "/nexthop/validation/color-extcomm/sr-policy"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14673,7 +14620,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.NexthopMplsForwardingIbgp.IsNull() && state.NexthopMplsForwardingIbgp.ValueBool() && data.NexthopMplsForwardingIbgp.IsNull() {
-		deletePath := state.getXPath()+"/nexthop/mpls/forwarding/ibgp"
+		deletePath := state.getXPath() + "/nexthop/mpls/forwarding/ibgp"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -14681,7 +14628,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.SocketSendBufferSizeWrite.IsNull() && data.SocketSendBufferSizeWrite.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/socket/send-buffer-size"
+		deletePath := state.getXPath() + "/socket/send-buffer-size"
 		predicates := make(map[string]string)
 		if !state.SocketSendBufferSize.IsNull() {
 			predicates["send-buffer-size-number"] = fmt.Sprintf("%v", state.SocketSendBufferSize.ValueInt64())
@@ -14703,7 +14650,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.SocketSendBufferSize.IsNull() && data.SocketSendBufferSize.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/socket/send-buffer-size"
+		deletePath := state.getXPath() + "/socket/send-buffer-size"
 		predicates := make(map[string]string)
 		if !state.SocketSendBufferSizeWrite.IsNull() {
 			predicates["bgp-write-buffer-size-byte"] = fmt.Sprintf("%v", state.SocketSendBufferSizeWrite.ValueInt64())
@@ -14725,7 +14672,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.SocketReceiveBufferSizeRead.IsNull() && data.SocketReceiveBufferSizeRead.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/socket/receive-buffer-size"
+		deletePath := state.getXPath() + "/socket/receive-buffer-size"
 		predicates := make(map[string]string)
 		if !state.SocketReceiveBufferSize.IsNull() {
 			predicates["receive-buffer-size-number"] = fmt.Sprintf("%v", state.SocketReceiveBufferSize.ValueInt64())
@@ -14747,7 +14694,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	if !state.SocketReceiveBufferSize.IsNull() && data.SocketReceiveBufferSize.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath()+"/socket/receive-buffer-size"
+		deletePath := state.getXPath() + "/socket/receive-buffer-size"
 		predicates := make(map[string]string)
 		if !state.SocketReceiveBufferSizeRead.IsNull() {
 			predicates["bgp-read-buffer-size-byte"] = fmt.Sprintf("%v", state.SocketReceiveBufferSizeRead.ValueInt64())
@@ -14769,15 +14716,15 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DefaultInformationOriginate.IsNull() && state.DefaultInformationOriginate.ValueBool() && data.DefaultInformationOriginate.IsNull() {
-		deletePath := state.getXPath()+"/default-information/originate"
+		deletePath := state.getXPath() + "/default-information/originate"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.AsLists {
-		stateKeys := [...]string{ "as-list-name",  }
-		stateKeyValues := [...]string{ state.AsLists[i].ListName.ValueString(),  }
+		stateKeys := [...]string{"as-list-name"}
+		stateKeyValues := [...]string{state.AsLists[i].ListName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -14798,9 +14745,9 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 				found = false
 			}
 			if found {
-			for ci := range state.AsLists[i].AsNumbers {
-					cstateKeys := [...]string{ "as-list-value",  }
-					cstateKeyValues := [...]string{ state.AsLists[i].AsNumbers[ci].AsValue.ValueString(),  }
+				for ci := range state.AsLists[i].AsNumbers {
+					cstateKeys := [...]string{"as-list-value"}
+					cstateKeyValues := [...]string{state.AsLists[i].AsNumbers[ci].AsValue.ValueString()}
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -14836,8 +14783,8 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 		}
 	}
 	for i := range state.AttributeFilterGroups {
-		stateKeys := [...]string{ "group-name",  }
-		stateKeyValues := [...]string{ state.AttributeFilterGroups[i].GroupName.ValueString(),  }
+		stateKeys := [...]string{"group-name"}
+		stateKeyValues := [...]string{state.AttributeFilterGroups[i].GroupName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -14858,9 +14805,9 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 				found = false
 			}
 			if found {
-			for ci := range state.AttributeFilterGroups[i].AttributeCodeRanges {
-					cstateKeys := [...]string{ "start", "end",  }
-					cstateKeyValues := [...]string{ strconv.FormatInt(state.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start.ValueInt64(), 10), strconv.FormatInt(state.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.ValueInt64(), 10),  }
+				for ci := range state.AttributeFilterGroups[i].AttributeCodeRanges {
+					cstateKeys := [...]string{"start", "end"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.AttributeFilterGroups[i].AttributeCodeRanges[ci].Start.ValueInt64(), 10), strconv.FormatInt(state.AttributeFilterGroups[i].AttributeCodeRanges[ci].End.ValueInt64(), 10)}
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -14910,8 +14857,8 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 		}
 	}
 	for i := range state.AsLeaguePeers {
-		stateKeys := [...]string{ "peer-as-number",  }
-		stateKeyValues := [...]string{ state.AsLeaguePeers[i].PeerAsNumber.ValueString(),  }
+		stateKeys := [...]string{"peer-as-number"}
+		stateKeyValues := [...]string{state.AsLeaguePeers[i].PeerAsNumber.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -14940,8 +14887,8 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 		}
 	}
 	for i := range state.MplsActivateInterfaces {
-		stateKeys := [...]string{ "interface-name",  }
-		stateKeyValues := [...]string{ state.MplsActivateInterfaces[i].InterfaceName.ValueString(),  }
+		stateKeys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.MplsActivateInterfaces[i].InterfaceName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -14970,8 +14917,8 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 		}
 	}
 	for i := range state.GracefulMaintenanceActivateLocations {
-		stateKeys := [...]string{ "location-value",  }
-		stateKeyValues := [...]string{ state.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString(),  }
+		stateKeys := [...]string{"location-value"}
+		stateKeyValues := [...]string{state.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -15000,8 +14947,8 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 		}
 	}
 	for i := range state.GracefulMaintenanceActivateInterfaces {
-		stateKeys := [...]string{ "interface-name",  }
-		stateKeyValues := [...]string{ state.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString(),  }
+		stateKeys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -15031,7 +14978,7 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.GracefulMaintenanceActivateRetainRoutes.IsNull() && state.GracefulMaintenanceActivateRetainRoutes.ValueBool() && data.GracefulMaintenanceActivateRetainRoutes.IsNull() {
-		deletePath := state.getXPath()+"/graceful-maintenance/activate/retain-routes"
+		deletePath := state.getXPath() + "/graceful-maintenance/activate/retain-routes"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -15039,15 +14986,15 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.GracefulMaintenanceActivateAllNeighbors.IsNull() && state.GracefulMaintenanceActivateAllNeighbors.ValueBool() && data.GracefulMaintenanceActivateAllNeighbors.IsNull() {
-		deletePath := state.getXPath()+"/graceful-maintenance/activate/all-neighbors"
+		deletePath := state.getXPath() + "/graceful-maintenance/activate/all-neighbors"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	for i := range state.Neighbors {
-		stateKeys := [...]string{ "address",  }
-		stateKeyValues := [...]string{ state.Neighbors[i].Address.ValueString(),  }
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.Neighbors[i].Address.ValueString()}
 		predicates := ""
 		for i := range stateKeys {
 			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
@@ -15068,119 +15015,119 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 				found = false
 			}
 			if found {
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable.IsNull() && state.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable.ValueBool() && data.Neighbors[j].GracefulMaintenanceBandwidthAwareInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware", predicates))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceBandwidthAwareBandwidthThresholdHigh.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwareBandwidthThresholdHigh.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/bandwidth-threshold", predicates))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceBandwidthAwareBandwidthThreshold.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwareBandwidthThreshold.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/bandwidth-threshold", predicates))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceBandwidthAwarePercentageThresholdHigh.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwarePercentageThresholdHigh.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/percentage-threshold", predicates))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceBandwidthAwarePercentageThreshold.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwarePercentageThreshold.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/percentage-threshold", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].GracefulMaintenanceAsPrependsInheritanceDisable.IsNull() && state.Neighbors[i].GracefulMaintenanceAsPrependsInheritanceDisable.ValueBool() && data.Neighbors[j].GracefulMaintenanceAsPrependsInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/as-prepends", predicates))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceAsPrependsNumber.IsNull() && data.Neighbors[j].GracefulMaintenanceAsPrependsNumber.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/as-prepends", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].GracefulMaintenanceLocalPreferenceInheritanceDisable.IsNull() && state.Neighbors[i].GracefulMaintenanceLocalPreferenceInheritanceDisable.ValueBool() && data.Neighbors[j].GracefulMaintenanceLocalPreferenceInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/local-preference", predicates))
-			}
-			if !state.Neighbors[i].GracefulMaintenanceLocalPreference.IsNull() && data.Neighbors[j].GracefulMaintenanceLocalPreference.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/local-preference", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].GracefulMaintenanceActivateInheritanceDisable.IsNull() && state.Neighbors[i].GracefulMaintenanceActivateInheritanceDisable.ValueBool() && data.Neighbors[j].GracefulMaintenanceActivateInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/activate/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].GracefulMaintenanceActivate.IsNull() && state.Neighbors[i].GracefulMaintenanceActivate.ValueBool() && data.Neighbors[j].GracefulMaintenanceActivate.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/activate", predicates))
-			}
-			if !state.Neighbors[i].UpdateInErrorHandlingTreatAsWithdraw.IsNull() && data.Neighbors[j].UpdateInErrorHandlingTreatAsWithdraw.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/error-handling/treat-as-withdraw", predicates))
-			}
-			if !state.Neighbors[i].UpdateInErrorHandlingAvoidReset.IsNull() && data.Neighbors[j].UpdateInErrorHandlingAvoidReset.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/error-handling/avoid-reset", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].UpdateInLabeledUnicastEquivalentInheritanceDisable.IsNull() && state.Neighbors[i].UpdateInLabeledUnicastEquivalentInheritanceDisable.ValueBool() && data.Neighbors[j].UpdateInLabeledUnicastEquivalentInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/labeled-unicast/equivalent/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].UpdateInLabeledUnicastEquivalent.IsNull() && state.Neighbors[i].UpdateInLabeledUnicastEquivalent.ValueBool() && data.Neighbors[j].UpdateInLabeledUnicastEquivalent.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/labeled-unicast/equivalent", predicates))
-			}
-			if !state.Neighbors[i].UpdateInFilteringAttributeFilterGroup.IsNull() && data.Neighbors[j].UpdateInFilteringAttributeFilterGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/filtering/attribute-filter/group", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].UpdateInFilteringLoggingDisable.IsNull() && state.Neighbors[i].UpdateInFilteringLoggingDisable.ValueBool() && data.Neighbors[j].UpdateInFilteringLoggingDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/filtering/logging/disable", predicates))
-			}
-			if !state.Neighbors[i].UpdateInFilteringMessageBuffersType.IsNull() && data.Neighbors[j].UpdateInFilteringMessageBuffersType.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/filtering/message/buffers", predicates))
-			}
-			if !state.Neighbors[i].UpdateInFilteringMessageBuffers.IsNull() && data.Neighbors[j].UpdateInFilteringMessageBuffers.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/filtering/message/buffers", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].BestpathOriginAsAllowInvalid.IsNull() && state.Neighbors[i].BestpathOriginAsAllowInvalid.ValueBool() && data.Neighbors[j].BestpathOriginAsAllowInvalid.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bestpath/origin-as/allow/invalid", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].SendExtendedCommunityEbgpInheritanceDisable.IsNull() && state.Neighbors[i].SendExtendedCommunityEbgpInheritanceDisable.ValueBool() && data.Neighbors[j].SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/send-extended-community-ebgp/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].SendExtendedCommunityEbgp.IsNull() && state.Neighbors[i].SendExtendedCommunityEbgp.ValueBool() && data.Neighbors[j].SendExtendedCommunityEbgp.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/send-extended-community-ebgp", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].OriginAsValidationDisable.IsNull() && state.Neighbors[i].OriginAsValidationDisable.ValueBool() && data.Neighbors[j].OriginAsValidationDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/origin-as/validation/disable", predicates))
-			}
-			if !state.Neighbors[i].DefaultPolicyActionOut.IsNull() && data.Neighbors[j].DefaultPolicyActionOut.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/default-policy-action/out", predicates))
-			}
-			if !state.Neighbors[i].DefaultPolicyActionIn.IsNull() && data.Neighbors[j].DefaultPolicyActionIn.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/default-policy-action/in", predicates))
-			}
-			if !state.Neighbors[i].AsOverride.IsNull() && data.Neighbors[j].AsOverride.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/as-override", predicates))
-			}
-			if !state.Neighbors[i].Dampening.IsNull() && data.Neighbors[j].Dampening.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/dampening", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].AoInheritanceDisable.IsNull() && state.Neighbors[i].AoInheritanceDisable.ValueBool() && data.Neighbors[j].AoInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ao", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].AoKeyChainAcceptMismatch.IsNull() && state.Neighbors[i].AoKeyChainAcceptMismatch.ValueBool() && data.Neighbors[j].AoKeyChainAcceptMismatch.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ao/key-chain-name/accept-ao-mismatch-connection", predicates))
-			}
-			if !state.Neighbors[i].AoKeyChainIncludeTcpOptions.IsNull() && data.Neighbors[j].AoKeyChainIncludeTcpOptions.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ao/key-chain-name", predicates))
-			}
-			if !state.Neighbors[i].AoKeyChainName.IsNull() && data.Neighbors[j].AoKeyChainName.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ao/key-chain-name", predicates))
-			}
-			if !state.Neighbors[i].PeerNodeSidIndex.IsNull() && data.Neighbors[j].PeerNodeSidIndex.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/peer-node-sid/index", predicates))
-			}
-			for ci := range state.Neighbors[i].PeerSets {
-					cstateKeys := [...]string{ "peer",  }
-					cstateKeyValues := [...]string{ strconv.FormatInt(state.Neighbors[i].PeerSets[ci].Peer.ValueInt64(), 10),  }
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable.IsNull() && state.Neighbors[i].GracefulMaintenanceBandwidthAwareInheritanceDisable.ValueBool() && data.Neighbors[j].GracefulMaintenanceBandwidthAwareInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware", predicates))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceBandwidthAwareBandwidthThresholdHigh.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwareBandwidthThresholdHigh.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/bandwidth-threshold", predicates))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceBandwidthAwareBandwidthThreshold.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwareBandwidthThreshold.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/bandwidth-threshold", predicates))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceBandwidthAwarePercentageThresholdHigh.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwarePercentageThresholdHigh.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/percentage-threshold", predicates))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceBandwidthAwarePercentageThreshold.IsNull() && data.Neighbors[j].GracefulMaintenanceBandwidthAwarePercentageThreshold.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/bandwidth-aware/percentage-threshold", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].GracefulMaintenanceAsPrependsInheritanceDisable.IsNull() && state.Neighbors[i].GracefulMaintenanceAsPrependsInheritanceDisable.ValueBool() && data.Neighbors[j].GracefulMaintenanceAsPrependsInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/as-prepends", predicates))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceAsPrependsNumber.IsNull() && data.Neighbors[j].GracefulMaintenanceAsPrependsNumber.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/as-prepends", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].GracefulMaintenanceLocalPreferenceInheritanceDisable.IsNull() && state.Neighbors[i].GracefulMaintenanceLocalPreferenceInheritanceDisable.ValueBool() && data.Neighbors[j].GracefulMaintenanceLocalPreferenceInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/local-preference", predicates))
+				}
+				if !state.Neighbors[i].GracefulMaintenanceLocalPreference.IsNull() && data.Neighbors[j].GracefulMaintenanceLocalPreference.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/local-preference", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].GracefulMaintenanceActivateInheritanceDisable.IsNull() && state.Neighbors[i].GracefulMaintenanceActivateInheritanceDisable.ValueBool() && data.Neighbors[j].GracefulMaintenanceActivateInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/activate/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].GracefulMaintenanceActivate.IsNull() && state.Neighbors[i].GracefulMaintenanceActivate.ValueBool() && data.Neighbors[j].GracefulMaintenanceActivate.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-maintenance/activate", predicates))
+				}
+				if !state.Neighbors[i].UpdateInErrorHandlingTreatAsWithdraw.IsNull() && data.Neighbors[j].UpdateInErrorHandlingTreatAsWithdraw.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/error-handling/treat-as-withdraw", predicates))
+				}
+				if !state.Neighbors[i].UpdateInErrorHandlingAvoidReset.IsNull() && data.Neighbors[j].UpdateInErrorHandlingAvoidReset.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/error-handling/avoid-reset", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].UpdateInLabeledUnicastEquivalentInheritanceDisable.IsNull() && state.Neighbors[i].UpdateInLabeledUnicastEquivalentInheritanceDisable.ValueBool() && data.Neighbors[j].UpdateInLabeledUnicastEquivalentInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/labeled-unicast/equivalent/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].UpdateInLabeledUnicastEquivalent.IsNull() && state.Neighbors[i].UpdateInLabeledUnicastEquivalent.ValueBool() && data.Neighbors[j].UpdateInLabeledUnicastEquivalent.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/labeled-unicast/equivalent", predicates))
+				}
+				if !state.Neighbors[i].UpdateInFilteringAttributeFilterGroup.IsNull() && data.Neighbors[j].UpdateInFilteringAttributeFilterGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/filtering/attribute-filter/group", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].UpdateInFilteringLoggingDisable.IsNull() && state.Neighbors[i].UpdateInFilteringLoggingDisable.ValueBool() && data.Neighbors[j].UpdateInFilteringLoggingDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/filtering/logging/disable", predicates))
+				}
+				if !state.Neighbors[i].UpdateInFilteringMessageBuffersType.IsNull() && data.Neighbors[j].UpdateInFilteringMessageBuffersType.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/filtering/message/buffers", predicates))
+				}
+				if !state.Neighbors[i].UpdateInFilteringMessageBuffers.IsNull() && data.Neighbors[j].UpdateInFilteringMessageBuffers.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update/in/filtering/message/buffers", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].BestpathOriginAsAllowInvalid.IsNull() && state.Neighbors[i].BestpathOriginAsAllowInvalid.ValueBool() && data.Neighbors[j].BestpathOriginAsAllowInvalid.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bestpath/origin-as/allow/invalid", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].SendExtendedCommunityEbgpInheritanceDisable.IsNull() && state.Neighbors[i].SendExtendedCommunityEbgpInheritanceDisable.ValueBool() && data.Neighbors[j].SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/send-extended-community-ebgp/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].SendExtendedCommunityEbgp.IsNull() && state.Neighbors[i].SendExtendedCommunityEbgp.ValueBool() && data.Neighbors[j].SendExtendedCommunityEbgp.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/send-extended-community-ebgp", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].OriginAsValidationDisable.IsNull() && state.Neighbors[i].OriginAsValidationDisable.ValueBool() && data.Neighbors[j].OriginAsValidationDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/origin-as/validation/disable", predicates))
+				}
+				if !state.Neighbors[i].DefaultPolicyActionOut.IsNull() && data.Neighbors[j].DefaultPolicyActionOut.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/default-policy-action/out", predicates))
+				}
+				if !state.Neighbors[i].DefaultPolicyActionIn.IsNull() && data.Neighbors[j].DefaultPolicyActionIn.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/default-policy-action/in", predicates))
+				}
+				if !state.Neighbors[i].AsOverride.IsNull() && data.Neighbors[j].AsOverride.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/as-override", predicates))
+				}
+				if !state.Neighbors[i].Dampening.IsNull() && data.Neighbors[j].Dampening.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/dampening", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].AoInheritanceDisable.IsNull() && state.Neighbors[i].AoInheritanceDisable.ValueBool() && data.Neighbors[j].AoInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ao", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].AoKeyChainAcceptMismatch.IsNull() && state.Neighbors[i].AoKeyChainAcceptMismatch.ValueBool() && data.Neighbors[j].AoKeyChainAcceptMismatch.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ao/key-chain-name/accept-ao-mismatch-connection", predicates))
+				}
+				if !state.Neighbors[i].AoKeyChainIncludeTcpOptions.IsNull() && data.Neighbors[j].AoKeyChainIncludeTcpOptions.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ao/key-chain-name", predicates))
+				}
+				if !state.Neighbors[i].AoKeyChainName.IsNull() && data.Neighbors[j].AoKeyChainName.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ao/key-chain-name", predicates))
+				}
+				if !state.Neighbors[i].PeerNodeSidIndex.IsNull() && data.Neighbors[j].PeerNodeSidIndex.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/peer-node-sid/index", predicates))
+				}
+				for ci := range state.Neighbors[i].PeerSets {
+					cstateKeys := [...]string{"peer"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Neighbors[i].PeerSets[ci].Peer.ValueInt64(), 10)}
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -15208,292 +15155,292 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/peer-set/peer-sets%v", predicates, cpredicates))
 					}
 				}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].EgressEngineeringInheritanceDisable.IsNull() && state.Neighbors[i].EgressEngineeringInheritanceDisable.ValueBool() && data.Neighbors[j].EgressEngineeringInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/egress-engineering/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].EgressEngineering.IsNull() && state.Neighbors[i].EgressEngineering.ValueBool() && data.Neighbors[j].EgressEngineering.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/egress-engineering", predicates))
-			}
-			if !state.Neighbors[i].AllowasIn.IsNull() && data.Neighbors[j].AllowasIn.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/allowas-in/number-of-occurrences-of-as-number", predicates))
-			}
-			if !state.Neighbors[i].IdleWatchTime.IsNull() && data.Neighbors[j].IdleWatchTime.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/idle-watch-time", predicates))
-			}
-			if !state.Neighbors[i].ClusterIdIpFormat.IsNull() && data.Neighbors[j].ClusterIdIpFormat.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/cluster-id", predicates))
-			}
-			if !state.Neighbors[i].ClusterId32bitFormat.IsNull() && data.Neighbors[j].ClusterId32bitFormat.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/cluster-id", predicates))
-			}
-			if !state.Neighbors[i].EnforceFirstAs.IsNull() && data.Neighbors[j].EnforceFirstAs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/enforce-first-as", predicates))
-			}
-			if !state.Neighbors[i].GracefulRestartStalepathTime.IsNull() && data.Neighbors[j].GracefulRestartStalepathTime.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-restart/stalepath-time", predicates))
-			}
-			if !state.Neighbors[i].GracefulRestartRestartTime.IsNull() && data.Neighbors[j].GracefulRestartRestartTime.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-restart/restart-time", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].GracefulRestartHelperOnlyInheritanceDisable.IsNull() && state.Neighbors[i].GracefulRestartHelperOnlyInheritanceDisable.ValueBool() && data.Neighbors[j].GracefulRestartHelperOnlyInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-restart/helper-only/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].GracefulRestartHelperOnly.IsNull() && state.Neighbors[i].GracefulRestartHelperOnly.ValueBool() && data.Neighbors[j].GracefulRestartHelperOnly.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-restart/helper-only", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].GracefulRestartDisable.IsNull() && state.Neighbors[i].GracefulRestartDisable.ValueBool() && data.Neighbors[j].GracefulRestartDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-restart/graceful-restart-enable/disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].GracefulRestart.IsNull() && state.Neighbors[i].GracefulRestart.ValueBool() && data.Neighbors[j].GracefulRestart.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-restart/graceful-restart-enable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].CapabilitySuppressFourByteAsInheritanceDisable.IsNull() && state.Neighbors[i].CapabilitySuppressFourByteAsInheritanceDisable.ValueBool() && data.Neighbors[j].CapabilitySuppressFourByteAsInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/suppress/four-byte-as/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].CapabilitySuppressFourByteAs.IsNull() && state.Neighbors[i].CapabilitySuppressFourByteAs.ValueBool() && data.Neighbors[j].CapabilitySuppressFourByteAs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/suppress/four-byte-as", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable.IsNull() && state.Neighbors[i].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable.ValueBool() && data.Neighbors[j].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/suppress/extended-nexthop-encoding/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].CapabilitySuppressExtendedNexthopEncoding.IsNull() && state.Neighbors[i].CapabilitySuppressExtendedNexthopEncoding.ValueBool() && data.Neighbors[j].CapabilitySuppressExtendedNexthopEncoding.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/suppress/extended-nexthop-encoding", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].CapabilitySuppressAllInheritanceDisable.IsNull() && state.Neighbors[i].CapabilitySuppressAllInheritanceDisable.ValueBool() && data.Neighbors[j].CapabilitySuppressAllInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/suppress/all/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].CapabilitySuppressAll.IsNull() && state.Neighbors[i].CapabilitySuppressAll.ValueBool() && data.Neighbors[j].CapabilitySuppressAll.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/suppress/all", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].CapabilityAdditionalPathsReceiveDisable.IsNull() && state.Neighbors[i].CapabilityAdditionalPathsReceiveDisable.ValueBool() && data.Neighbors[j].CapabilityAdditionalPathsReceiveDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/additional-paths/receive/disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].CapabilityAdditionalPathsReceive.IsNull() && state.Neighbors[i].CapabilityAdditionalPathsReceive.ValueBool() && data.Neighbors[j].CapabilityAdditionalPathsReceive.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/additional-paths/receive", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].CapabilityAdditionalPathsSendDisable.IsNull() && state.Neighbors[i].CapabilityAdditionalPathsSendDisable.ValueBool() && data.Neighbors[j].CapabilityAdditionalPathsSendDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/additional-paths/send/disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].CapabilityAdditionalPathsSend.IsNull() && state.Neighbors[i].CapabilityAdditionalPathsSend.ValueBool() && data.Neighbors[j].CapabilityAdditionalPathsSend.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/additional-paths/send", predicates))
-			}
-			if !state.Neighbors[i].Precedence.IsNull() && data.Neighbors[j].Precedence.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/precedence", predicates))
-			}
-			if !state.Neighbors[i].Dscp.IsNull() && data.Neighbors[j].Dscp.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/dscp", predicates))
-			}
-			if !state.Neighbors[i].SessionOpenMode.IsNull() && data.Neighbors[j].SessionOpenMode.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/session-open-mode", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].TtlSecurityInheritanceDisable.IsNull() && state.Neighbors[i].TtlSecurityInheritanceDisable.ValueBool() && data.Neighbors[j].TtlSecurityInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ttl-security/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].TtlSecurity.IsNull() && state.Neighbors[i].TtlSecurity.ValueBool() && data.Neighbors[j].TtlSecurity.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ttl-security", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].EbgpSendExtcommunityDmzInheritanceDisable.IsNull() && state.Neighbors[i].EbgpSendExtcommunityDmzInheritanceDisable.ValueBool() && data.Neighbors[j].EbgpSendExtcommunityDmzInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ebgp-send-extcommunity-dmz", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].EbgpSendExtcommunityDmzCumulative.IsNull() && state.Neighbors[i].EbgpSendExtcommunityDmzCumulative.ValueBool() && data.Neighbors[j].EbgpSendExtcommunityDmzCumulative.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ebgp-send-extcommunity-dmz", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].EbgpSendExtcommunityDmz.IsNull() && state.Neighbors[i].EbgpSendExtcommunityDmz.ValueBool() && data.Neighbors[j].EbgpSendExtcommunityDmz.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ebgp-send-extcommunity-dmz", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].EbgpRecvExtcommunityDmzInheritanceDisable.IsNull() && state.Neighbors[i].EbgpRecvExtcommunityDmzInheritanceDisable.ValueBool() && data.Neighbors[j].EbgpRecvExtcommunityDmzInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ebgp-recv-extcommunity-dmz/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].EbgpRecvExtcommunityDmz.IsNull() && state.Neighbors[i].EbgpRecvExtcommunityDmz.ValueBool() && data.Neighbors[j].EbgpRecvExtcommunityDmz.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ebgp-recv-extcommunity-dmz", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].DmzLinkBandwidthInheritanceDisable.IsNull() && state.Neighbors[i].DmzLinkBandwidthInheritanceDisable.ValueBool() && data.Neighbors[j].DmzLinkBandwidthInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/dmz-link-bandwidth/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].DmzLinkBandwidth.IsNull() && state.Neighbors[i].DmzLinkBandwidth.ValueBool() && data.Neighbors[j].DmzLinkBandwidth.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/dmz-link-bandwidth", predicates))
-			}
-			if !state.Neighbors[i].LocalAddressSubnetMask.IsNull() && data.Neighbors[j].LocalAddressSubnetMask.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local-address-subnet", predicates))
-			}
-			if !state.Neighbors[i].LocalAddressSubnetPrefix.IsNull() && data.Neighbors[j].LocalAddressSubnetPrefix.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local-address-subnet", predicates))
-			}
-			if !state.Neighbors[i].UpdateSource.IsNull() && data.Neighbors[j].UpdateSource.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update-source", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].LogMessageOutInheritanceDisable.IsNull() && state.Neighbors[i].LogMessageOutInheritanceDisable.ValueBool() && data.Neighbors[j].LogMessageOutInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/message/out", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].LogMessageOutDisable.IsNull() && state.Neighbors[i].LogMessageOutDisable.ValueBool() && data.Neighbors[j].LogMessageOutDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/message/out", predicates))
-			}
-			if !state.Neighbors[i].LogMessageOutSize.IsNull() && data.Neighbors[j].LogMessageOutSize.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/message/out", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].LogMessageInInheritanceDisable.IsNull() && state.Neighbors[i].LogMessageInInheritanceDisable.ValueBool() && data.Neighbors[j].LogMessageInInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/message/in", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].LogMessageInDisable.IsNull() && state.Neighbors[i].LogMessageInDisable.ValueBool() && data.Neighbors[j].LogMessageInDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/message/in", predicates))
-			}
-			if !state.Neighbors[i].LogMessageInSize.IsNull() && data.Neighbors[j].LogMessageInSize.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/message/in", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].LogNeighborChangesInheritanceDisable.IsNull() && state.Neighbors[i].LogNeighborChangesInheritanceDisable.ValueBool() && data.Neighbors[j].LogNeighborChangesInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/neighbor/changes", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].LogNeighborChangesDisable.IsNull() && state.Neighbors[i].LogNeighborChangesDisable.ValueBool() && data.Neighbors[j].LogNeighborChangesDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/neighbor/changes", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].LogNeighborChangesDetail.IsNull() && state.Neighbors[i].LogNeighborChangesDetail.ValueBool() && data.Neighbors[j].LogNeighborChangesDetail.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/neighbor/changes", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].LocalAddressInheritanceDisable.IsNull() && state.Neighbors[i].LocalAddressInheritanceDisable.ValueBool() && data.Neighbors[j].LocalAddressInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local/address", predicates))
-			}
-			if !state.Neighbors[i].LocalAddress.IsNull() && data.Neighbors[j].LocalAddress.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local/address", predicates))
-			}
-			if !state.Neighbors[i].TimersHoldtimeMinimumAcceptableHoldtime.IsNull() && data.Neighbors[j].TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/timers/holdtime", predicates))
-			}
-			if !state.Neighbors[i].TimersHoldtime.IsNull() && data.Neighbors[j].TimersHoldtime.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/timers/holdtime", predicates))
-			}
-			if !state.Neighbors[i].TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() && data.Neighbors[j].TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/timers/zero", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero.IsNull() && state.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero.ValueBool() && data.Neighbors[j].TimersHolddownZeroMinimumAcceptableZero.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/timers/zero", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].TimersHolddownZero.IsNull() && state.Neighbors[i].TimersHolddownZero.ValueBool() && data.Neighbors[j].TimersHolddownZero.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/timers/zero", predicates))
-			}
-			if !state.Neighbors[i].TimersKeepaliveInterval.IsNull() && data.Neighbors[j].TimersKeepaliveInterval.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/timers/keepalive-interval", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].Shutdown.IsNull() && state.Neighbors[i].Shutdown.ValueBool() && data.Neighbors[j].Shutdown.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/shutdown", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].FastFalloverInheritanceDisable.IsNull() && state.Neighbors[i].FastFalloverInheritanceDisable.ValueBool() && data.Neighbors[j].FastFalloverInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/fast-fallover/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].FastFallover.IsNull() && state.Neighbors[i].FastFallover.ValueBool() && data.Neighbors[j].FastFallover.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/fast-fallover", predicates))
-			}
-			if !state.Neighbors[i].SendBufferSizeWrite.IsNull() && data.Neighbors[j].SendBufferSizeWrite.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/send-buffer-size", predicates))
-			}
-			if !state.Neighbors[i].SendBufferSize.IsNull() && data.Neighbors[j].SendBufferSize.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/send-buffer-size", predicates))
-			}
-			if !state.Neighbors[i].ReceiveBufferSizeRead.IsNull() && data.Neighbors[j].ReceiveBufferSizeRead.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/receive-buffer-size", predicates))
-			}
-			if !state.Neighbors[i].ReceiveBufferSize.IsNull() && data.Neighbors[j].ReceiveBufferSize.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/receive-buffer-size", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].PasswordInheritanceDisable.IsNull() && state.Neighbors[i].PasswordInheritanceDisable.ValueBool() && data.Neighbors[j].PasswordInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/password/inheritance-disable", predicates))
-			}
-			if !state.Neighbors[i].Password.IsNull() && data.Neighbors[j].Password.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/password/encrypted", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].LocalAsNoPrependReplaceAsDualAs.IsNull() && state.Neighbors[i].LocalAsNoPrependReplaceAsDualAs.ValueBool() && data.Neighbors[j].LocalAsNoPrependReplaceAsDualAs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local-as/as/no-prepend/replace-as", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].LocalAsNoPrependReplaceAs.IsNull() && state.Neighbors[i].LocalAsNoPrependReplaceAs.ValueBool() && data.Neighbors[j].LocalAsNoPrependReplaceAs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local-as/as/no-prepend", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].LocalAsNoPrepend.IsNull() && state.Neighbors[i].LocalAsNoPrepend.ValueBool() && data.Neighbors[j].LocalAsNoPrepend.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local-as", predicates))
-			}
-			if !state.Neighbors[i].LocalAs.IsNull() && data.Neighbors[j].LocalAs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local-as", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].LocalAsInheritanceDisable.IsNull() && state.Neighbors[i].LocalAsInheritanceDisable.ValueBool() && data.Neighbors[j].LocalAsInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local-as", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].KeychainInheritanceDisable.IsNull() && state.Neighbors[i].KeychainInheritanceDisable.ValueBool() && data.Neighbors[j].KeychainInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/keychain", predicates))
-			}
-			if !state.Neighbors[i].KeychainName.IsNull() && data.Neighbors[j].KeychainName.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/keychain", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].BfdFastDetectStrictModeNegotiateOverride.IsNull() && state.Neighbors[i].BfdFastDetectStrictModeNegotiateOverride.ValueBool() && data.Neighbors[j].BfdFastDetectStrictModeNegotiateOverride.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bfd/fast-detect/strict-mode-negotiate/override", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].BfdFastDetectStrictModeNegotiate.IsNull() && state.Neighbors[i].BfdFastDetectStrictModeNegotiate.ValueBool() && data.Neighbors[j].BfdFastDetectStrictModeNegotiate.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bfd/fast-detect/strict-mode-negotiate", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].BfdFastDetectDisable.IsNull() && state.Neighbors[i].BfdFastDetectDisable.ValueBool() && data.Neighbors[j].BfdFastDetectDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bfd/fast-detect/disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].BfdFastDetectStrictMode.IsNull() && state.Neighbors[i].BfdFastDetectStrictMode.ValueBool() && data.Neighbors[j].BfdFastDetectStrictMode.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bfd/fast-detect/strict-mode", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].BfdFastDetect.IsNull() && state.Neighbors[i].BfdFastDetect.ValueBool() && data.Neighbors[j].BfdFastDetect.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bfd/fast-detect", predicates))
-			}
-			if !state.Neighbors[i].BfdMultiplier.IsNull() && data.Neighbors[j].BfdMultiplier.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bfd/multiplier", predicates))
-			}
-			if !state.Neighbors[i].BfdMinimumInterval.IsNull() && data.Neighbors[j].BfdMinimumInterval.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bfd/minimum-interval", predicates))
-			}
-			for ci := range state.Neighbors[i].BmpActivateServers {
-					cstateKeys := [...]string{ "server-number",  }
-					cstateKeyValues := [...]string{ strconv.FormatInt(state.Neighbors[i].BmpActivateServers[ci].ServerNumber.ValueInt64(), 10),  }
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].EgressEngineeringInheritanceDisable.IsNull() && state.Neighbors[i].EgressEngineeringInheritanceDisable.ValueBool() && data.Neighbors[j].EgressEngineeringInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/egress-engineering/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].EgressEngineering.IsNull() && state.Neighbors[i].EgressEngineering.ValueBool() && data.Neighbors[j].EgressEngineering.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/egress-engineering", predicates))
+				}
+				if !state.Neighbors[i].AllowasIn.IsNull() && data.Neighbors[j].AllowasIn.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/allowas-in/number-of-occurrences-of-as-number", predicates))
+				}
+				if !state.Neighbors[i].IdleWatchTime.IsNull() && data.Neighbors[j].IdleWatchTime.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/idle-watch-time", predicates))
+				}
+				if !state.Neighbors[i].ClusterIdIpFormat.IsNull() && data.Neighbors[j].ClusterIdIpFormat.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/cluster-id", predicates))
+				}
+				if !state.Neighbors[i].ClusterId32bitFormat.IsNull() && data.Neighbors[j].ClusterId32bitFormat.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/cluster-id", predicates))
+				}
+				if !state.Neighbors[i].EnforceFirstAs.IsNull() && data.Neighbors[j].EnforceFirstAs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/enforce-first-as", predicates))
+				}
+				if !state.Neighbors[i].GracefulRestartStalepathTime.IsNull() && data.Neighbors[j].GracefulRestartStalepathTime.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-restart/stalepath-time", predicates))
+				}
+				if !state.Neighbors[i].GracefulRestartRestartTime.IsNull() && data.Neighbors[j].GracefulRestartRestartTime.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-restart/restart-time", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].GracefulRestartHelperOnlyInheritanceDisable.IsNull() && state.Neighbors[i].GracefulRestartHelperOnlyInheritanceDisable.ValueBool() && data.Neighbors[j].GracefulRestartHelperOnlyInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-restart/helper-only/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].GracefulRestartHelperOnly.IsNull() && state.Neighbors[i].GracefulRestartHelperOnly.ValueBool() && data.Neighbors[j].GracefulRestartHelperOnly.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-restart/helper-only", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].GracefulRestartDisable.IsNull() && state.Neighbors[i].GracefulRestartDisable.ValueBool() && data.Neighbors[j].GracefulRestartDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-restart/graceful-restart-enable/disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].GracefulRestart.IsNull() && state.Neighbors[i].GracefulRestart.ValueBool() && data.Neighbors[j].GracefulRestart.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/graceful-restart/graceful-restart-enable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].CapabilitySuppressFourByteAsInheritanceDisable.IsNull() && state.Neighbors[i].CapabilitySuppressFourByteAsInheritanceDisable.ValueBool() && data.Neighbors[j].CapabilitySuppressFourByteAsInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/suppress/four-byte-as/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].CapabilitySuppressFourByteAs.IsNull() && state.Neighbors[i].CapabilitySuppressFourByteAs.ValueBool() && data.Neighbors[j].CapabilitySuppressFourByteAs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/suppress/four-byte-as", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable.IsNull() && state.Neighbors[i].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable.ValueBool() && data.Neighbors[j].CapabilitySuppressExtendedNexthopEncodingInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/suppress/extended-nexthop-encoding/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].CapabilitySuppressExtendedNexthopEncoding.IsNull() && state.Neighbors[i].CapabilitySuppressExtendedNexthopEncoding.ValueBool() && data.Neighbors[j].CapabilitySuppressExtendedNexthopEncoding.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/suppress/extended-nexthop-encoding", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].CapabilitySuppressAllInheritanceDisable.IsNull() && state.Neighbors[i].CapabilitySuppressAllInheritanceDisable.ValueBool() && data.Neighbors[j].CapabilitySuppressAllInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/suppress/all/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].CapabilitySuppressAll.IsNull() && state.Neighbors[i].CapabilitySuppressAll.ValueBool() && data.Neighbors[j].CapabilitySuppressAll.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/suppress/all", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].CapabilityAdditionalPathsReceiveDisable.IsNull() && state.Neighbors[i].CapabilityAdditionalPathsReceiveDisable.ValueBool() && data.Neighbors[j].CapabilityAdditionalPathsReceiveDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/additional-paths/receive/disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].CapabilityAdditionalPathsReceive.IsNull() && state.Neighbors[i].CapabilityAdditionalPathsReceive.ValueBool() && data.Neighbors[j].CapabilityAdditionalPathsReceive.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/additional-paths/receive", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].CapabilityAdditionalPathsSendDisable.IsNull() && state.Neighbors[i].CapabilityAdditionalPathsSendDisable.ValueBool() && data.Neighbors[j].CapabilityAdditionalPathsSendDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/additional-paths/send/disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].CapabilityAdditionalPathsSend.IsNull() && state.Neighbors[i].CapabilityAdditionalPathsSend.ValueBool() && data.Neighbors[j].CapabilityAdditionalPathsSend.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/capability/additional-paths/send", predicates))
+				}
+				if !state.Neighbors[i].Precedence.IsNull() && data.Neighbors[j].Precedence.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/precedence", predicates))
+				}
+				if !state.Neighbors[i].Dscp.IsNull() && data.Neighbors[j].Dscp.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/dscp", predicates))
+				}
+				if !state.Neighbors[i].SessionOpenMode.IsNull() && data.Neighbors[j].SessionOpenMode.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/session-open-mode", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].TtlSecurityInheritanceDisable.IsNull() && state.Neighbors[i].TtlSecurityInheritanceDisable.ValueBool() && data.Neighbors[j].TtlSecurityInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ttl-security/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].TtlSecurity.IsNull() && state.Neighbors[i].TtlSecurity.ValueBool() && data.Neighbors[j].TtlSecurity.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ttl-security", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].EbgpSendExtcommunityDmzInheritanceDisable.IsNull() && state.Neighbors[i].EbgpSendExtcommunityDmzInheritanceDisable.ValueBool() && data.Neighbors[j].EbgpSendExtcommunityDmzInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ebgp-send-extcommunity-dmz", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].EbgpSendExtcommunityDmzCumulative.IsNull() && state.Neighbors[i].EbgpSendExtcommunityDmzCumulative.ValueBool() && data.Neighbors[j].EbgpSendExtcommunityDmzCumulative.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ebgp-send-extcommunity-dmz", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].EbgpSendExtcommunityDmz.IsNull() && state.Neighbors[i].EbgpSendExtcommunityDmz.ValueBool() && data.Neighbors[j].EbgpSendExtcommunityDmz.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ebgp-send-extcommunity-dmz", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].EbgpRecvExtcommunityDmzInheritanceDisable.IsNull() && state.Neighbors[i].EbgpRecvExtcommunityDmzInheritanceDisable.ValueBool() && data.Neighbors[j].EbgpRecvExtcommunityDmzInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ebgp-recv-extcommunity-dmz/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].EbgpRecvExtcommunityDmz.IsNull() && state.Neighbors[i].EbgpRecvExtcommunityDmz.ValueBool() && data.Neighbors[j].EbgpRecvExtcommunityDmz.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ebgp-recv-extcommunity-dmz", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].DmzLinkBandwidthInheritanceDisable.IsNull() && state.Neighbors[i].DmzLinkBandwidthInheritanceDisable.ValueBool() && data.Neighbors[j].DmzLinkBandwidthInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/dmz-link-bandwidth/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].DmzLinkBandwidth.IsNull() && state.Neighbors[i].DmzLinkBandwidth.ValueBool() && data.Neighbors[j].DmzLinkBandwidth.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/dmz-link-bandwidth", predicates))
+				}
+				if !state.Neighbors[i].LocalAddressSubnetMask.IsNull() && data.Neighbors[j].LocalAddressSubnetMask.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local-address-subnet", predicates))
+				}
+				if !state.Neighbors[i].LocalAddressSubnetPrefix.IsNull() && data.Neighbors[j].LocalAddressSubnetPrefix.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local-address-subnet", predicates))
+				}
+				if !state.Neighbors[i].UpdateSource.IsNull() && data.Neighbors[j].UpdateSource.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/update-source", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].LogMessageOutInheritanceDisable.IsNull() && state.Neighbors[i].LogMessageOutInheritanceDisable.ValueBool() && data.Neighbors[j].LogMessageOutInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/message/out", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].LogMessageOutDisable.IsNull() && state.Neighbors[i].LogMessageOutDisable.ValueBool() && data.Neighbors[j].LogMessageOutDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/message/out", predicates))
+				}
+				if !state.Neighbors[i].LogMessageOutSize.IsNull() && data.Neighbors[j].LogMessageOutSize.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/message/out", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].LogMessageInInheritanceDisable.IsNull() && state.Neighbors[i].LogMessageInInheritanceDisable.ValueBool() && data.Neighbors[j].LogMessageInInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/message/in", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].LogMessageInDisable.IsNull() && state.Neighbors[i].LogMessageInDisable.ValueBool() && data.Neighbors[j].LogMessageInDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/message/in", predicates))
+				}
+				if !state.Neighbors[i].LogMessageInSize.IsNull() && data.Neighbors[j].LogMessageInSize.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/message/in", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].LogNeighborChangesInheritanceDisable.IsNull() && state.Neighbors[i].LogNeighborChangesInheritanceDisable.ValueBool() && data.Neighbors[j].LogNeighborChangesInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/neighbor/changes", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].LogNeighborChangesDisable.IsNull() && state.Neighbors[i].LogNeighborChangesDisable.ValueBool() && data.Neighbors[j].LogNeighborChangesDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/neighbor/changes", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].LogNeighborChangesDetail.IsNull() && state.Neighbors[i].LogNeighborChangesDetail.ValueBool() && data.Neighbors[j].LogNeighborChangesDetail.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/log/neighbor/changes", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].LocalAddressInheritanceDisable.IsNull() && state.Neighbors[i].LocalAddressInheritanceDisable.ValueBool() && data.Neighbors[j].LocalAddressInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local/address", predicates))
+				}
+				if !state.Neighbors[i].LocalAddress.IsNull() && data.Neighbors[j].LocalAddress.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local/address", predicates))
+				}
+				if !state.Neighbors[i].TimersHoldtimeMinimumAcceptableHoldtime.IsNull() && data.Neighbors[j].TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/timers/holdtime", predicates))
+				}
+				if !state.Neighbors[i].TimersHoldtime.IsNull() && data.Neighbors[j].TimersHoldtime.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/timers/holdtime", predicates))
+				}
+				if !state.Neighbors[i].TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() && data.Neighbors[j].TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/timers/zero", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero.IsNull() && state.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero.ValueBool() && data.Neighbors[j].TimersHolddownZeroMinimumAcceptableZero.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/timers/zero", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].TimersHolddownZero.IsNull() && state.Neighbors[i].TimersHolddownZero.ValueBool() && data.Neighbors[j].TimersHolddownZero.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/timers/zero", predicates))
+				}
+				if !state.Neighbors[i].TimersKeepaliveInterval.IsNull() && data.Neighbors[j].TimersKeepaliveInterval.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/timers/keepalive-interval", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].Shutdown.IsNull() && state.Neighbors[i].Shutdown.ValueBool() && data.Neighbors[j].Shutdown.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/shutdown", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].FastFalloverInheritanceDisable.IsNull() && state.Neighbors[i].FastFalloverInheritanceDisable.ValueBool() && data.Neighbors[j].FastFalloverInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/fast-fallover/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].FastFallover.IsNull() && state.Neighbors[i].FastFallover.ValueBool() && data.Neighbors[j].FastFallover.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/fast-fallover", predicates))
+				}
+				if !state.Neighbors[i].SendBufferSizeWrite.IsNull() && data.Neighbors[j].SendBufferSizeWrite.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/send-buffer-size", predicates))
+				}
+				if !state.Neighbors[i].SendBufferSize.IsNull() && data.Neighbors[j].SendBufferSize.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/send-buffer-size", predicates))
+				}
+				if !state.Neighbors[i].ReceiveBufferSizeRead.IsNull() && data.Neighbors[j].ReceiveBufferSizeRead.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/receive-buffer-size", predicates))
+				}
+				if !state.Neighbors[i].ReceiveBufferSize.IsNull() && data.Neighbors[j].ReceiveBufferSize.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/receive-buffer-size", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].PasswordInheritanceDisable.IsNull() && state.Neighbors[i].PasswordInheritanceDisable.ValueBool() && data.Neighbors[j].PasswordInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/password/inheritance-disable", predicates))
+				}
+				if !state.Neighbors[i].Password.IsNull() && data.Neighbors[j].Password.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/password/encrypted", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].LocalAsNoPrependReplaceAsDualAs.IsNull() && state.Neighbors[i].LocalAsNoPrependReplaceAsDualAs.ValueBool() && data.Neighbors[j].LocalAsNoPrependReplaceAsDualAs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local-as/as/no-prepend/replace-as", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].LocalAsNoPrependReplaceAs.IsNull() && state.Neighbors[i].LocalAsNoPrependReplaceAs.ValueBool() && data.Neighbors[j].LocalAsNoPrependReplaceAs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local-as/as/no-prepend", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].LocalAsNoPrepend.IsNull() && state.Neighbors[i].LocalAsNoPrepend.ValueBool() && data.Neighbors[j].LocalAsNoPrepend.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local-as", predicates))
+				}
+				if !state.Neighbors[i].LocalAs.IsNull() && data.Neighbors[j].LocalAs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local-as", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].LocalAsInheritanceDisable.IsNull() && state.Neighbors[i].LocalAsInheritanceDisable.ValueBool() && data.Neighbors[j].LocalAsInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/local-as", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].KeychainInheritanceDisable.IsNull() && state.Neighbors[i].KeychainInheritanceDisable.ValueBool() && data.Neighbors[j].KeychainInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/keychain", predicates))
+				}
+				if !state.Neighbors[i].KeychainName.IsNull() && data.Neighbors[j].KeychainName.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/keychain", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].BfdFastDetectStrictModeNegotiateOverride.IsNull() && state.Neighbors[i].BfdFastDetectStrictModeNegotiateOverride.ValueBool() && data.Neighbors[j].BfdFastDetectStrictModeNegotiateOverride.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bfd/fast-detect/strict-mode-negotiate/override", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].BfdFastDetectStrictModeNegotiate.IsNull() && state.Neighbors[i].BfdFastDetectStrictModeNegotiate.ValueBool() && data.Neighbors[j].BfdFastDetectStrictModeNegotiate.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bfd/fast-detect/strict-mode-negotiate", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].BfdFastDetectDisable.IsNull() && state.Neighbors[i].BfdFastDetectDisable.ValueBool() && data.Neighbors[j].BfdFastDetectDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bfd/fast-detect/disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].BfdFastDetectStrictMode.IsNull() && state.Neighbors[i].BfdFastDetectStrictMode.ValueBool() && data.Neighbors[j].BfdFastDetectStrictMode.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bfd/fast-detect/strict-mode", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].BfdFastDetect.IsNull() && state.Neighbors[i].BfdFastDetect.ValueBool() && data.Neighbors[j].BfdFastDetect.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bfd/fast-detect", predicates))
+				}
+				if !state.Neighbors[i].BfdMultiplier.IsNull() && data.Neighbors[j].BfdMultiplier.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bfd/multiplier", predicates))
+				}
+				if !state.Neighbors[i].BfdMinimumInterval.IsNull() && data.Neighbors[j].BfdMinimumInterval.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bfd/minimum-interval", predicates))
+				}
+				for ci := range state.Neighbors[i].BmpActivateServers {
+					cstateKeys := [...]string{"server-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Neighbors[i].BmpActivateServers[ci].ServerNumber.ValueInt64(), 10)}
 					cpredicates := ""
 					for i := range cstateKeys {
 						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
@@ -15521,71 +15468,71 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/bmp-activate/servers/server%v", predicates, cpredicates))
 					}
 				}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable.IsNull() && state.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable.ValueBool() && data.Neighbors[j].TcpIpOnlyPreferredInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/tcp/ip-only-preferred/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].TcpIpOnlyPreferred.IsNull() && state.Neighbors[i].TcpIpOnlyPreferred.ValueBool() && data.Neighbors[j].TcpIpOnlyPreferred.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/tcp/ip-only-preferred", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].TcpMtuDiscoveryInheritanceDisable.IsNull() && state.Neighbors[i].TcpMtuDiscoveryInheritanceDisable.ValueBool() && data.Neighbors[j].TcpMtuDiscoveryInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/tcp/mtu-discovery/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].TcpMtuDiscovery.IsNull() && state.Neighbors[i].TcpMtuDiscovery.ValueBool() && data.Neighbors[j].TcpMtuDiscovery.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/tcp/mtu-discovery", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].TcpMssInheritanceDisable.IsNull() && state.Neighbors[i].TcpMssInheritanceDisable.ValueBool() && data.Neighbors[j].TcpMssInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/tcp/mss/inheritance-disable", predicates))
-			}
-			if !state.Neighbors[i].TcpMssValue.IsNull() && data.Neighbors[j].TcpMssValue.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/tcp/mss/tcp-initial-maximum-segment-size", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].EbgpMultihopMpls.IsNull() && state.Neighbors[i].EbgpMultihopMpls.ValueBool() && data.Neighbors[j].EbgpMultihopMpls.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ebgp-multihop/mpls", predicates))
-			}
-			if !state.Neighbors[i].EbgpMultihopMaximumHopCount.IsNull() && data.Neighbors[j].EbgpMultihopMaximumHopCount.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ebgp-multihop/maximum-hop-count", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].IgnoreConnectedCheckInheritanceDisable.IsNull() && state.Neighbors[i].IgnoreConnectedCheckInheritanceDisable.ValueBool() && data.Neighbors[j].IgnoreConnectedCheckInheritanceDisable.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ignore-connected-check/inheritance-disable", predicates))
-			}
-			// For boolean fields, only delete if state was true (presence container was set)
-			if !state.Neighbors[i].IgnoreConnectedCheck.IsNull() && state.Neighbors[i].IgnoreConnectedCheck.ValueBool() && data.Neighbors[j].IgnoreConnectedCheck.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ignore-connected-check", predicates))
-			}
-			if !state.Neighbors[i].Description.IsNull() && data.Neighbors[j].Description.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/description", predicates))
-			}
-			if !state.Neighbors[i].AdvertisementIntervalMilliseconds.IsNull() && data.Neighbors[j].AdvertisementIntervalMilliseconds.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/advertisement-interval/advertisement-interval-time-in-milliseconds", predicates))
-			}
-			if !state.Neighbors[i].AdvertisementIntervalSeconds.IsNull() && data.Neighbors[j].AdvertisementIntervalSeconds.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/advertisement-interval/advertisement-interval-time-in-seconds", predicates))
-			}
-			if !state.Neighbors[i].UseSessionGroup.IsNull() && data.Neighbors[j].UseSessionGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/use/session-group", predicates))
-			}
-			if !state.Neighbors[i].UseNeighborGroup.IsNull() && data.Neighbors[j].UseNeighborGroup.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/use/neighbor-group", predicates))
-			}
-			if !state.Neighbors[i].AsPathLoopcheckOut.IsNull() && data.Neighbors[j].AsPathLoopcheckOut.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/as-path-loopcheck/out", predicates))
-			}
-			if !state.Neighbors[i].RemoteAsList.IsNull() && data.Neighbors[j].RemoteAsList.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/remote-as-list", predicates))
-			}
-			if !state.Neighbors[i].MaximumPeers.IsNull() && data.Neighbors[j].MaximumPeers.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/maximum-peers", predicates))
-			}
-			if !state.Neighbors[i].RemoteAs.IsNull() && data.Neighbors[j].RemoteAs.IsNull() {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/remote-as", predicates))
-			}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable.IsNull() && state.Neighbors[i].TcpIpOnlyPreferredInheritanceDisable.ValueBool() && data.Neighbors[j].TcpIpOnlyPreferredInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/tcp/ip-only-preferred/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].TcpIpOnlyPreferred.IsNull() && state.Neighbors[i].TcpIpOnlyPreferred.ValueBool() && data.Neighbors[j].TcpIpOnlyPreferred.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/tcp/ip-only-preferred", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].TcpMtuDiscoveryInheritanceDisable.IsNull() && state.Neighbors[i].TcpMtuDiscoveryInheritanceDisable.ValueBool() && data.Neighbors[j].TcpMtuDiscoveryInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/tcp/mtu-discovery/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].TcpMtuDiscovery.IsNull() && state.Neighbors[i].TcpMtuDiscovery.ValueBool() && data.Neighbors[j].TcpMtuDiscovery.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/tcp/mtu-discovery", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].TcpMssInheritanceDisable.IsNull() && state.Neighbors[i].TcpMssInheritanceDisable.ValueBool() && data.Neighbors[j].TcpMssInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/tcp/mss/inheritance-disable", predicates))
+				}
+				if !state.Neighbors[i].TcpMssValue.IsNull() && data.Neighbors[j].TcpMssValue.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/tcp/mss/tcp-initial-maximum-segment-size", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].EbgpMultihopMpls.IsNull() && state.Neighbors[i].EbgpMultihopMpls.ValueBool() && data.Neighbors[j].EbgpMultihopMpls.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ebgp-multihop/mpls", predicates))
+				}
+				if !state.Neighbors[i].EbgpMultihopMaximumHopCount.IsNull() && data.Neighbors[j].EbgpMultihopMaximumHopCount.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ebgp-multihop/maximum-hop-count", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].IgnoreConnectedCheckInheritanceDisable.IsNull() && state.Neighbors[i].IgnoreConnectedCheckInheritanceDisable.ValueBool() && data.Neighbors[j].IgnoreConnectedCheckInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ignore-connected-check/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Neighbors[i].IgnoreConnectedCheck.IsNull() && state.Neighbors[i].IgnoreConnectedCheck.ValueBool() && data.Neighbors[j].IgnoreConnectedCheck.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/ignore-connected-check", predicates))
+				}
+				if !state.Neighbors[i].Description.IsNull() && data.Neighbors[j].Description.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/description", predicates))
+				}
+				if !state.Neighbors[i].AdvertisementIntervalMilliseconds.IsNull() && data.Neighbors[j].AdvertisementIntervalMilliseconds.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/advertisement-interval/advertisement-interval-time-in-milliseconds", predicates))
+				}
+				if !state.Neighbors[i].AdvertisementIntervalSeconds.IsNull() && data.Neighbors[j].AdvertisementIntervalSeconds.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/advertisement-interval/advertisement-interval-time-in-seconds", predicates))
+				}
+				if !state.Neighbors[i].UseSessionGroup.IsNull() && data.Neighbors[j].UseSessionGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/use/session-group", predicates))
+				}
+				if !state.Neighbors[i].UseNeighborGroup.IsNull() && data.Neighbors[j].UseNeighborGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/use/neighbor-group", predicates))
+				}
+				if !state.Neighbors[i].AsPathLoopcheckOut.IsNull() && data.Neighbors[j].AsPathLoopcheckOut.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/as-path-loopcheck/out", predicates))
+				}
+				if !state.Neighbors[i].RemoteAsList.IsNull() && data.Neighbors[j].RemoteAsList.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/remote-as-list", predicates))
+				}
+				if !state.Neighbors[i].MaximumPeers.IsNull() && data.Neighbors[j].MaximumPeers.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/maximum-peers", predicates))
+				}
+				if !state.Neighbors[i].RemoteAs.IsNull() && data.Neighbors[j].RemoteAs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/remote-as", predicates))
+				}
 				break
 			}
 		}
@@ -15595,14 +15542,14 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && state.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.ValueBool() && data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
-		deletePath := state.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block"
+		deletePath := state.getXPath() + "/segment-routing/srv6/usid/allocation/wide-local-id-block"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SegmentRoutingSrv6Locator.IsNull() && data.SegmentRoutingSrv6Locator.IsNull() {
-		deletePath := state.getXPath()+"/segment-routing/srv6/locator"
+		deletePath := state.getXPath() + "/segment-routing/srv6/locator"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -15610,14 +15557,14 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Mvpn.IsNull() && state.Mvpn.ValueBool() && data.Mvpn.IsNull() {
-		deletePath := state.getXPath()+"/mvpn"
+		deletePath := state.getXPath() + "/mvpn"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DefaultMetric.IsNull() && data.DefaultMetric.IsNull() {
-		deletePath := state.getXPath()+"/default-metric"
+		deletePath := state.getXPath() + "/default-metric"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -15636,8 +15583,8 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 func (data *RouterBGP) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	for i := range data.RpkiServers {
-		keys := [...]string{ "server-name",  }
-		keyValues := [...]string{ data.RpkiServers[i].Server.ValueString(),  }
+		keys := [...]string{"server-name"}
+		keyValues := [...]string{data.RpkiServers[i].Server.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -15646,8 +15593,8 @@ func (data *RouterBGP) addDeletePathsXML(ctx context.Context, body string) strin
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/rpki/servers/server%v", predicates))
 	}
 	for i := range data.RpkiRoutes {
-		keys := [...]string{ "route-address", "route-prefix", "max", "origin",  }
-		keyValues := [...]string{ data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10),  }
+		keys := [...]string{"route-address", "route-prefix", "max", "origin"}
+		keyValues := [...]string{data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -15749,8 +15696,8 @@ func (data *RouterBGP) addDeletePathsXML(ctx context.Context, body string) strin
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/graceful-restart/enable")
 	}
 	for i := range data.BgpConfederationPeers {
-		keys := [...]string{ "peer-as-number",  }
-		keyValues := [...]string{ data.BgpConfederationPeers[i].PeerAsNumber.ValueString(),  }
+		keys := [...]string{"peer-as-number"}
+		keyValues := [...]string{data.BgpConfederationPeers[i].PeerAsNumber.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -15906,8 +15853,8 @@ func (data *RouterBGP) addDeletePathsXML(ctx context.Context, body string) strin
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/default-information/originate")
 	}
 	for i := range data.AsLists {
-		keys := [...]string{ "as-list-name",  }
-		keyValues := [...]string{ data.AsLists[i].ListName.ValueString(),  }
+		keys := [...]string{"as-list-name"}
+		keyValues := [...]string{data.AsLists[i].ListName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -15916,8 +15863,8 @@ func (data *RouterBGP) addDeletePathsXML(ctx context.Context, body string) strin
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/as-lists/as-list%v", predicates))
 	}
 	for i := range data.AttributeFilterGroups {
-		keys := [...]string{ "group-name",  }
-		keyValues := [...]string{ data.AttributeFilterGroups[i].GroupName.ValueString(),  }
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.AttributeFilterGroups[i].GroupName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -15926,8 +15873,8 @@ func (data *RouterBGP) addDeletePathsXML(ctx context.Context, body string) strin
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/attribute-filter/groups/group%v", predicates))
 	}
 	for i := range data.AsLeaguePeers {
-		keys := [...]string{ "peer-as-number",  }
-		keyValues := [...]string{ data.AsLeaguePeers[i].PeerAsNumber.ValueString(),  }
+		keys := [...]string{"peer-as-number"}
+		keyValues := [...]string{data.AsLeaguePeers[i].PeerAsNumber.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -15936,8 +15883,8 @@ func (data *RouterBGP) addDeletePathsXML(ctx context.Context, body string) strin
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/as-league/peers/peer%v", predicates))
 	}
 	for i := range data.MplsActivateInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.MplsActivateInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.MplsActivateInterfaces[i].InterfaceName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -15946,8 +15893,8 @@ func (data *RouterBGP) addDeletePathsXML(ctx context.Context, body string) strin
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/mpls/activate/interfaces/interface%v", predicates))
 	}
 	for i := range data.GracefulMaintenanceActivateLocations {
-		keys := [...]string{ "location-value",  }
-		keyValues := [...]string{ data.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString(),  }
+		keys := [...]string{"location-value"}
+		keyValues := [...]string{data.GracefulMaintenanceActivateLocations[i].LocationValue.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -15956,8 +15903,8 @@ func (data *RouterBGP) addDeletePathsXML(ctx context.Context, body string) strin
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/graceful-maintenance/activate/locations/location%v", predicates))
 	}
 	for i := range data.GracefulMaintenanceActivateInterfaces {
-		keys := [...]string{ "interface-name",  }
-		keyValues := [...]string{ data.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString(),  }
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.GracefulMaintenanceActivateInterfaces[i].InterfaceName.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
@@ -15972,8 +15919,8 @@ func (data *RouterBGP) addDeletePathsXML(ctx context.Context, body string) strin
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/graceful-maintenance/activate/all-neighbors")
 	}
 	for i := range data.Neighbors {
-		keys := [...]string{ "address",  }
-		keyValues := [...]string{ data.Neighbors[i].Address.ValueString(),  }
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
 		predicates := ""
 		for i := range keys {
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])

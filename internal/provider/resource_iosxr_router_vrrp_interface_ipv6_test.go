@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -52,23 +54,23 @@ func TestAccIosxrRouterVRRPInterfaceIPv6(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterVRRPInterfaceIPv6PrerequisitesConfig+testAccIosxrRouterVRRPInterfaceIPv6Config_minimum(),
+			Config: testAccIosxrRouterVRRPInterfaceIPv6PrerequisitesConfig + testAccIosxrRouterVRRPInterfaceIPv6Config_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterVRRPInterfaceIPv6PrerequisitesConfig+testAccIosxrRouterVRRPInterfaceIPv6Config_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrRouterVRRPInterfaceIPv6PrerequisitesConfig + testAccIosxrRouterVRRPInterfaceIPv6Config_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_router_vrrp_interface_ipv6.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_router_vrrp_interface_ipv6.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrRouterVRRPInterfaceIPv6ImportStateIdFunc("iosxr_router_vrrp_interface_ipv6.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -132,7 +134,7 @@ func iosxrRouterVRRPInterfaceIPv6ImportStateIdFunc(resourceName string) resource
 		InterfaceName := primary.Attributes["interface_name"]
 		VrrpId := primary.Attributes["vrrp_id"]
 
-		return fmt.Sprintf("%s,%s", InterfaceName,VrrpId), nil
+		return fmt.Sprintf("%s,%s", InterfaceName, VrrpId), nil
 	}
 }
 

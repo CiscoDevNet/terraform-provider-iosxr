@@ -23,35 +23,31 @@ package provider
 import (
 	"context"
 	"fmt"
-	"reflect"
-	"sort"
-	"strconv"
-	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type EtagSet struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
 	SetName types.String `tfsdk:"set_name"`
-	Rpl types.String `tfsdk:"rpl"`
+	Rpl     types.String `tfsdk:"rpl"`
 }
 
 type EtagSetData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
 	SetName types.String `tfsdk:"set_name"`
-	Rpl types.String `tfsdk:"rpl"`
+	Rpl     types.String `tfsdk:"rpl"`
 }
 
 // End of section. //template:end types
@@ -101,10 +97,10 @@ func (data EtagSet) toBody(ctx context.Context) string {
 func (data EtagSet) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.SetName.IsNull() && !data.SetName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/set-name", data.SetName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/set-name", data.SetName.ValueString())
 	}
 	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/etag-set-as-text", data.Rpl.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/etag-set-as-text", data.Rpl.ValueString())
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -130,12 +126,12 @@ func (data *EtagSet) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *EtagSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/set-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/set-name"); value.Exists() {
 		data.SetName = types.StringValue(value.String())
 	} else if data.SetName.IsNull() {
 		data.SetName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/etag-set-as-text"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etag-set-as-text"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
@@ -151,7 +147,7 @@ func (data *EtagSet) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"etag-set-as-text"); value.Exists() {
+	if value := res.Get(prefix + "etag-set-as-text"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
@@ -165,7 +161,7 @@ func (data *EtagSetData) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"etag-set-as-text"); value.Exists() {
+	if value := res.Get(prefix + "etag-set-as-text"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
@@ -175,7 +171,7 @@ func (data *EtagSetData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *EtagSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/etag-set-as-text"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etag-set-as-text"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
@@ -185,7 +181,7 @@ func (data *EtagSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *EtagSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/etag-set-as-text"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etag-set-as-text"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
@@ -233,7 +229,7 @@ func (data *EtagSet) addDeletedItemsXML(ctx context.Context, state EtagSet, body
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
-		deletePath := state.getXPath()+"/etag-set-as-text"
+		deletePath := state.getXPath() + "/etag-set-as-text"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true

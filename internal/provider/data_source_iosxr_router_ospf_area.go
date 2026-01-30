@@ -23,19 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/netascode/go-gnmi"
-	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -52,7 +47,7 @@ func NewRouterOSPFAreaDataSource() datasource.DataSource {
 	return &RouterOSPFAreaDataSource{}
 }
 
-type RouterOSPFAreaDataSource struct{
+type RouterOSPFAreaDataSource struct {
 	data *IosxrProviderData
 }
 
@@ -163,19 +158,19 @@ func (d *RouterOSPFAreaDataSource) Schema(ctx context.Context, req datasource.Sc
 									"address": schema.StringAttribute{
 										MarkdownDescription: "Specify a  neighbor router",
 										Computed:            true,
-								},
+									},
 									"database_filter_all_out": schema.BoolAttribute{
 										MarkdownDescription: "Outgoing LSA",
 										Computed:            true,
-								},
+									},
 									"poll_interval": schema.Int64Attribute{
 										MarkdownDescription: "OSPF dead-router polling interval",
 										Computed:            true,
-								},
+									},
 									"cost": schema.Int64Attribute{
 										MarkdownDescription: "OSPF cost for point-to-multipoint neighbor",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -192,12 +187,12 @@ func (d *RouterOSPFAreaDataSource) Schema(ctx context.Context, req datasource.Sc
 									"key_id": schema.Int64Attribute{
 										MarkdownDescription: "Message digest authentication password (key)",
 										Computed:            true,
-								},
+									},
 									"md5_encrypted": schema.StringAttribute{
 										MarkdownDescription: "Specifies an ENCRYPTED password (key) will follow",
 										Computed:            true,
 										Sensitive:           true,
-								},
+									},
 								},
 							},
 						},
@@ -289,7 +284,7 @@ func (d *RouterOSPFAreaDataSource) Schema(ctx context.Context, req datasource.Sc
 									"interface_name": schema.StringAttribute{
 										MarkdownDescription: "Exclude an interface from Per-link LFA",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -301,7 +296,7 @@ func (d *RouterOSPFAreaDataSource) Schema(ctx context.Context, req datasource.Sc
 									"interface_name": schema.StringAttribute{
 										MarkdownDescription: "Include an interface to LFA candidate in computation",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -329,7 +324,7 @@ func (d *RouterOSPFAreaDataSource) Schema(ctx context.Context, req datasource.Sc
 									"interface_name": schema.StringAttribute{
 										MarkdownDescription: "Exclude an interface from Per-prefix LFA",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -341,7 +336,7 @@ func (d *RouterOSPFAreaDataSource) Schema(ctx context.Context, req datasource.Sc
 									"interface_name": schema.StringAttribute{
 										MarkdownDescription: "Include an interface to LFA candidate in computation",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -964,12 +959,12 @@ func (d *RouterOSPFAreaDataSource) Schema(ctx context.Context, req datasource.Sc
 									"key_id": schema.Int64Attribute{
 										MarkdownDescription: "Message digest authentication password (key)",
 										Computed:            true,
-								},
+									},
 									"md5_encrypted": schema.StringAttribute{
 										MarkdownDescription: "Specifies an ENCRYPTED password (key) will follow",
 										Computed:            true,
 										Sensitive:           true,
-								},
+									},
 								},
 							},
 						},
@@ -1069,7 +1064,6 @@ func (d *RouterOSPFAreaDataSource) Read(ctx context.Context, req datasource.Read
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
-
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

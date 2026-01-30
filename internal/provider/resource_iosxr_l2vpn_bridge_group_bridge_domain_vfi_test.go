@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,8 +35,8 @@ import (
 
 func TestAccIosxrL2VPNBridgeGroupBridgeDomainVFI(t *testing.T) {
 	if os.Getenv("XRD") == "" && os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
-        t.Skip("skipping test, set environment variable XRD or NCS or C8000")
-    }
+		t.Skip("skipping test, set environment variable XRD or NCS or C8000")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_bridge_group_bridge_domain_vfi.test", "vfi_name", "VFI1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_bridge_group_bridge_domain_vfi.test", "vpn_id", "100"))
@@ -99,23 +101,23 @@ func TestAccIosxrL2VPNBridgeGroupBridgeDomainVFI(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrL2VPNBridgeGroupBridgeDomainVFIPrerequisitesConfig+testAccIosxrL2VPNBridgeGroupBridgeDomainVFIConfig_minimum(),
+			Config: testAccIosxrL2VPNBridgeGroupBridgeDomainVFIPrerequisitesConfig + testAccIosxrL2VPNBridgeGroupBridgeDomainVFIConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrL2VPNBridgeGroupBridgeDomainVFIPrerequisitesConfig+testAccIosxrL2VPNBridgeGroupBridgeDomainVFIConfig_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrL2VPNBridgeGroupBridgeDomainVFIPrerequisitesConfig + testAccIosxrL2VPNBridgeGroupBridgeDomainVFIConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_l2vpn_bridge_group_bridge_domain_vfi.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_l2vpn_bridge_group_bridge_domain_vfi.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrL2VPNBridgeGroupBridgeDomainVFIImportStateIdFunc("iosxr_l2vpn_bridge_group_bridge_domain_vfi.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -130,7 +132,7 @@ func iosxrL2VPNBridgeGroupBridgeDomainVFIImportStateIdFunc(resourceName string) 
 		BridgeDomainName := primary.Attributes["bridge_domain_name"]
 		VfiName := primary.Attributes["vfi_name"]
 
-		return fmt.Sprintf("%s,%s,%s", BridgeGroupName,BridgeDomainName,VfiName), nil
+		return fmt.Sprintf("%s,%s,%s", BridgeGroupName, BridgeDomainName, VfiName), nil
 	}
 }
 

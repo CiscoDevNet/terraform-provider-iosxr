@@ -23,39 +23,35 @@ package provider
 import (
 	"context"
 	"fmt"
-	"reflect"
-	"sort"
-	"strconv"
-	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/tidwall/sjson"
-	"github.com/tidwall/gjson"
-	"github.com/netascode/xmldot"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type CEFPBTSForwardClass struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	ForwardClass types.String `tfsdk:"forward_class"`
-	FallbackToClass types.List `tfsdk:"fallback_to_class"`
-	FallbackToAny types.Bool `tfsdk:"fallback_to_any"`
-	FallbackToDrop types.Bool `tfsdk:"fallback_to_drop"`
+	Device          types.String `tfsdk:"device"`
+	Id              types.String `tfsdk:"id"`
+	ForwardClass    types.String `tfsdk:"forward_class"`
+	FallbackToClass types.List   `tfsdk:"fallback_to_class"`
+	FallbackToAny   types.Bool   `tfsdk:"fallback_to_any"`
+	FallbackToDrop  types.Bool   `tfsdk:"fallback_to_drop"`
 }
 
 type CEFPBTSForwardClassData struct {
-	Device types.String `tfsdk:"device"`
-	Id     types.String `tfsdk:"id"`
-	ForwardClass types.String `tfsdk:"forward_class"`
-	FallbackToClass types.List `tfsdk:"fallback_to_class"`
-	FallbackToAny types.Bool `tfsdk:"fallback_to_any"`
-	FallbackToDrop types.Bool `tfsdk:"fallback_to_drop"`
+	Device          types.String `tfsdk:"device"`
+	Id              types.String `tfsdk:"id"`
+	ForwardClass    types.String `tfsdk:"forward_class"`
+	FallbackToClass types.List   `tfsdk:"fallback_to_class"`
+	FallbackToAny   types.Bool   `tfsdk:"fallback_to_any"`
+	FallbackToDrop  types.Bool   `tfsdk:"fallback_to_drop"`
 }
 
 // End of section. //template:end types
@@ -117,23 +113,23 @@ func (data CEFPBTSForwardClass) toBody(ctx context.Context) string {
 func (data CEFPBTSForwardClass) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if !data.ForwardClass.IsNull() && !data.ForwardClass.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath() + "/forward-class-number", data.ForwardClass.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/forward-class-number", data.ForwardClass.ValueString())
 	}
 	if !data.FallbackToClass.IsNull() && !data.FallbackToClass.IsUnknown() {
 		var values []int
 		data.FallbackToClass.ElementsAs(ctx, &values, false)
 		for _, v := range values {
-			body = helpers.AppendFromXPath(body, data.getXPath() + "/fallback-to/fallback-class-number", v)
+			body = helpers.AppendFromXPath(body, data.getXPath()+"/fallback-to/fallback-class-number", v)
 		}
 	}
 	if !data.FallbackToAny.IsNull() && !data.FallbackToAny.IsUnknown() {
 		if data.FallbackToAny.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/fallback-to/any", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/fallback-to/any", "")
 		}
 	}
 	if !data.FallbackToDrop.IsNull() && !data.FallbackToDrop.IsUnknown() {
 		if data.FallbackToDrop.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath() + "/fallback-to/drop", "")
+			body = helpers.SetFromXPath(body, data.getXPath()+"/fallback-to/drop", "")
 		}
 	}
 	bodyString, err := body.String()
@@ -153,23 +149,21 @@ func (data *CEFPBTSForwardClass) updateFromBody(ctx context.Context, res []byte)
 	} else {
 		data.FallbackToClass = types.ListNull(types.Int64Type)
 	}
-	if value := gjson.GetBytes(res, "fallback-to.any"); !data.FallbackToAny.IsNull() {
-		if value.Exists() {
-			data.FallbackToAny = types.BoolValue(true)
-		} else {
-			data.FallbackToAny = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "fallback-to.any"); value.Exists() {
+		data.FallbackToAny = types.BoolValue(true)
 	} else {
-		data.FallbackToAny = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.FallbackToAny.IsNull() {
+			data.FallbackToAny = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "fallback-to.drop"); !data.FallbackToDrop.IsNull() {
-		if value.Exists() {
-			data.FallbackToDrop = types.BoolValue(true)
-		} else {
-			data.FallbackToDrop = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "fallback-to.drop"); value.Exists() {
+		data.FallbackToDrop = types.BoolValue(true)
 	} else {
-		data.FallbackToDrop = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.FallbackToDrop.IsNull() {
+			data.FallbackToDrop = types.BoolNull()
+		}
 	}
 }
 
@@ -178,17 +172,17 @@ func (data *CEFPBTSForwardClass) updateFromBody(ctx context.Context, res []byte)
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *CEFPBTSForwardClass) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/forward-class-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/forward-class-number"); value.Exists() {
 		data.ForwardClass = types.StringValue(value.String())
 	} else if data.ForwardClass.IsNull() {
 		data.ForwardClass = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/fallback-to/fallback-class-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fallback-to/fallback-class-number"); value.Exists() {
 		data.FallbackToClass = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.FallbackToClass = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/fallback-to/any"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fallback-to/any"); value.Exists() {
 		data.FallbackToAny = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -196,7 +190,7 @@ func (data *CEFPBTSForwardClass) updateFromBodyXML(ctx context.Context, res xmld
 			data.FallbackToAny = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/fallback-to/drop"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fallback-to/drop"); value.Exists() {
 		data.FallbackToDrop = types.BoolValue(true)
 	} else {
 		// For presence-based booleans, only set to null if it's already null
@@ -215,17 +209,17 @@ func (data *CEFPBTSForwardClass) fromBody(ctx context.Context, res gjson.Result)
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"fallback-to.fallback-class-number"); value.Exists() {
+	if value := res.Get(prefix + "fallback-to.fallback-class-number"); value.Exists() {
 		data.FallbackToClass = helpers.GetInt64List(value.Array())
 	} else {
 		data.FallbackToClass = types.ListNull(types.Int64Type)
 	}
-	if value := res.Get(prefix+"fallback-to.any"); value.Exists() {
+	if value := res.Get(prefix + "fallback-to.any"); value.Exists() {
 		data.FallbackToAny = types.BoolValue(true)
 	} else {
 		data.FallbackToAny = types.BoolValue(false)
 	}
-	if value := res.Get(prefix+"fallback-to.drop"); value.Exists() {
+	if value := res.Get(prefix + "fallback-to.drop"); value.Exists() {
 		data.FallbackToDrop = types.BoolValue(true)
 	} else {
 		data.FallbackToDrop = types.BoolValue(false)
@@ -241,17 +235,17 @@ func (data *CEFPBTSForwardClassData) fromBody(ctx context.Context, res gjson.Res
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix+"fallback-to.fallback-class-number"); value.Exists() {
+	if value := res.Get(prefix + "fallback-to.fallback-class-number"); value.Exists() {
 		data.FallbackToClass = helpers.GetInt64List(value.Array())
 	} else {
 		data.FallbackToClass = types.ListNull(types.Int64Type)
 	}
-	if value := res.Get(prefix+"fallback-to.any"); value.Exists() {
+	if value := res.Get(prefix + "fallback-to.any"); value.Exists() {
 		data.FallbackToAny = types.BoolValue(true)
 	} else {
 		data.FallbackToAny = types.BoolNull()
 	}
-	if value := res.Get(prefix+"fallback-to.drop"); value.Exists() {
+	if value := res.Get(prefix + "fallback-to.drop"); value.Exists() {
 		data.FallbackToDrop = types.BoolValue(true)
 	} else {
 		data.FallbackToDrop = types.BoolNull()
@@ -263,17 +257,17 @@ func (data *CEFPBTSForwardClassData) fromBody(ctx context.Context, res gjson.Res
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *CEFPBTSForwardClass) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/fallback-to/fallback-class-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fallback-to/fallback-class-number"); value.Exists() {
 		data.FallbackToClass = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.FallbackToClass = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/fallback-to/any"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fallback-to/any"); value.Exists() {
 		data.FallbackToAny = types.BoolValue(true)
 	} else {
 		data.FallbackToAny = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/fallback-to/drop"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fallback-to/drop"); value.Exists() {
 		data.FallbackToDrop = types.BoolValue(true)
 	} else {
 		data.FallbackToDrop = types.BoolValue(false)
@@ -285,17 +279,17 @@ func (data *CEFPBTSForwardClass) fromBodyXML(ctx context.Context, res xmldot.Res
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *CEFPBTSForwardClassData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/fallback-to/fallback-class-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fallback-to/fallback-class-number"); value.Exists() {
 		data.FallbackToClass = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.FallbackToClass = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/fallback-to/any"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fallback-to/any"); value.Exists() {
 		data.FallbackToAny = types.BoolValue(true)
 	} else {
 		data.FallbackToAny = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/fallback-to/drop"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fallback-to/drop"); value.Exists() {
 		data.FallbackToDrop = types.BoolValue(true)
 	} else {
 		data.FallbackToDrop = types.BoolValue(false)
@@ -370,7 +364,7 @@ func (data *CEFPBTSForwardClass) addDeletedItemsXML(ctx context.Context, state C
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.FallbackToDrop.IsNull() && state.FallbackToDrop.ValueBool() && data.FallbackToDrop.IsNull() {
-		deletePath := state.getXPath()+"/fallback-to/drop"
+		deletePath := state.getXPath() + "/fallback-to/drop"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -378,7 +372,7 @@ func (data *CEFPBTSForwardClass) addDeletedItemsXML(ctx context.Context, state C
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.FallbackToAny.IsNull() && state.FallbackToAny.ValueBool() && data.FallbackToAny.IsNull() {
-		deletePath := state.getXPath()+"/fallback-to/any"
+		deletePath := state.getXPath() + "/fallback-to/any"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true

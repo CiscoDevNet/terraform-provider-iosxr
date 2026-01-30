@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -52,23 +54,23 @@ func TestAccIosxrRouterHSRPInterfaceIPv4GroupV1(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterHSRPInterfaceIPv4GroupV1PrerequisitesConfig+testAccIosxrRouterHSRPInterfaceIPv4GroupV1Config_minimum(),
+			Config: testAccIosxrRouterHSRPInterfaceIPv4GroupV1PrerequisitesConfig + testAccIosxrRouterHSRPInterfaceIPv4GroupV1Config_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterHSRPInterfaceIPv4GroupV1PrerequisitesConfig+testAccIosxrRouterHSRPInterfaceIPv4GroupV1Config_all(),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Config: testAccIosxrRouterHSRPInterfaceIPv4GroupV1PrerequisitesConfig + testAccIosxrRouterHSRPInterfaceIPv4GroupV1Config_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_router_hsrp_interface_ipv4_group_v1.test",
-		ImportState:   true,
+		ResourceName:      "iosxr_router_hsrp_interface_ipv4_group_v1.test",
+		ImportState:       true,
 		ImportStateIdFunc: iosxrRouterHSRPInterfaceIPv4GroupV1ImportStateIdFunc("iosxr_router_hsrp_interface_ipv4_group_v1.test"),
-		Check: resource.ComposeTestCheckFunc(checks...),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: steps,
+		Steps:                    steps,
 	})
 }
 
@@ -128,7 +130,7 @@ func iosxrRouterHSRPInterfaceIPv4GroupV1ImportStateIdFunc(resourceName string) r
 		InterfaceName := primary.Attributes["interface_name"]
 		GroupId := primary.Attributes["group_id"]
 
-		return fmt.Sprintf("%s,%s", InterfaceName,GroupId), nil
+		return fmt.Sprintf("%s,%s", InterfaceName, GroupId), nil
 	}
 }
 

@@ -23,19 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/netascode/go-gnmi"
-	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -52,7 +47,7 @@ func NewTPADataSource() datasource.DataSource {
 	return &TPADataSource{}
 }
 
-type TPADataSource struct{
+type TPADataSource struct {
 	data *IosxrProviderData
 }
 
@@ -139,11 +134,11 @@ func (d *TPADataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"destination_interface": schema.StringAttribute{
 										MarkdownDescription: "Set the update source for a destination interfaces",
 										Computed:            true,
-								},
+									},
 									"source_interface": schema.StringAttribute{
 										MarkdownDescription: "Set the update source for this interface",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -155,11 +150,11 @@ func (d *TPADataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"destination_interface": schema.StringAttribute{
 										MarkdownDescription: "Set the update source for a destination interfaces",
 										Computed:            true,
-								},
+									},
 									"source_interface": schema.StringAttribute{
 										MarkdownDescription: "Set the update source for this interface",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -171,15 +166,15 @@ func (d *TPADataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									"interface_name": schema.StringAttribute{
 										MarkdownDescription: "Global interface East-West communication options",
 										Computed:            true,
-								},
+									},
 									"referenced_vrf": schema.StringAttribute{
 										MarkdownDescription: "VRF name (must be the same as tpa vrf_name)",
 										Computed:            true,
-								},
+									},
 									"referenced_interface": schema.StringAttribute{
 										MarkdownDescription: "Interface name (must be the same as east_west_interface)",
 										Computed:            true,
-								},
+									},
 								},
 							},
 						},
@@ -263,7 +258,6 @@ func (d *TPADataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 			config.fromBodyXML(ctx, res.Res)
 		}
 	}
-
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

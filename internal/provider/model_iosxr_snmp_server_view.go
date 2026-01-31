@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -66,6 +71,19 @@ func (data SNMPServerViewData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/views/view[view-name=%s]", data.ViewName.ValueString())
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data SNMPServerView) getXPath() string {
+	path := "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/views/view[view-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.ViewName.ValueString()))
+	return path
+}
+
+func (data SNMPServerViewData) getXPath() string {
+	path := "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/views/view[view-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.ViewName.ValueString()))
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -98,6 +116,43 @@ func (data SNMPServerView) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data SNMPServerView) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.ViewName.IsNull() && !data.ViewName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/view-name", data.ViewName.ValueString())
+	}
+	if len(data.MibViewFamilies) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.MibViewFamilies {
+			cBody := netconf.Body{}
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "mib-view-family-name", item.Name.ValueString())
+			}
+			if !item.Included.IsNull() && !item.Included.IsUnknown() {
+				if item.Included.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "included", "")
+				}
+			}
+			if !item.Excluded.IsNull() && !item.Excluded.IsUnknown() {
+				if item.Excluded.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "excluded", "")
+				}
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"mib-view-families/mib-view-family", cBody.Res())
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *SNMPServerView) updateFromBody(ctx context.Context, res []byte) {
@@ -129,33 +184,92 @@ func (data *SNMPServerView) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.MibViewFamilies[i].Name = types.StringNull()
 		}
-		if value := r.Get("included"); !data.MibViewFamilies[i].Included.IsNull() {
-			if value.Exists() {
-				data.MibViewFamilies[i].Included = types.BoolValue(true)
-			} else {
-				data.MibViewFamilies[i].Included = types.BoolValue(false)
-			}
-		} else {
+		if value := r.Get("included"); value.Exists() {
+			data.MibViewFamilies[i].Included = types.BoolValue(true)
+		} else if data.MibViewFamilies[i].Included.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.MibViewFamilies[i].Included = types.BoolNull()
 		}
-		if value := r.Get("excluded"); !data.MibViewFamilies[i].Excluded.IsNull() {
-			if value.Exists() {
-				data.MibViewFamilies[i].Excluded = types.BoolValue(true)
-			} else {
-				data.MibViewFamilies[i].Excluded = types.BoolValue(false)
-			}
-		} else {
+		// else: preserve existing value (e.g., false from config)
+		if value := r.Get("excluded"); value.Exists() {
+			data.MibViewFamilies[i].Excluded = types.BoolValue(true)
+		} else if data.MibViewFamilies[i].Excluded.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.MibViewFamilies[i].Excluded = types.BoolNull()
 		}
+		// else: preserve existing value (e.g., false from config)
 	}
 }
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *SNMPServerView) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/view-name"); value.Exists() {
+		data.ViewName = types.StringValue(value.String())
+	} else if data.ViewName.IsNull() {
+		data.ViewName = types.StringNull()
+	}
+	for i := range data.MibViewFamilies {
+		keys := [...]string{"mib-view-family-name"}
+		keyValues := [...]string{data.MibViewFamilies[i].Name.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/mib-view-families/mib-view-family").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "mib-view-family-name"); value.Exists() {
+			data.MibViewFamilies[i].Name = types.StringValue(value.String())
+		} else if data.MibViewFamilies[i].Name.IsNull() {
+			data.MibViewFamilies[i].Name = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "included"); value.Exists() {
+			data.MibViewFamilies[i].Included = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MibViewFamilies[i].Included.IsNull() {
+				data.MibViewFamilies[i].Included = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "excluded"); value.Exists() {
+			data.MibViewFamilies[i].Excluded = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MibViewFamilies[i].Excluded.IsNull() {
+				data.MibViewFamilies[i].Excluded = types.BoolNull()
+			}
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *SNMPServerView) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "mib-view-families.mib-view-family"); value.Exists() {
+func (data *SNMPServerView) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "mib-view-families.mib-view-family"); value.Exists() {
 		data.MibViewFamilies = make([]SNMPServerViewMibViewFamilies, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SNMPServerViewMibViewFamilies{}
@@ -182,8 +296,12 @@ func (data *SNMPServerView) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *SNMPServerViewData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "mib-view-families.mib-view-family"); value.Exists() {
+func (data *SNMPServerViewData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "mib-view-families.mib-view-family"); value.Exists() {
 		data.MibViewFamilies = make([]SNMPServerViewMibViewFamilies, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SNMPServerViewMibViewFamilies{}
@@ -207,6 +325,60 @@ func (data *SNMPServerViewData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *SNMPServerView) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mib-view-families/mib-view-family"); value.Exists() {
+		data.MibViewFamilies = make([]SNMPServerViewMibViewFamilies, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SNMPServerViewMibViewFamilies{}
+			if cValue := helpers.GetFromXPath(v, "mib-view-family-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "included"); cValue.Exists() {
+				item.Included = types.BoolValue(true)
+			} else {
+			}
+			if cValue := helpers.GetFromXPath(v, "excluded"); cValue.Exists() {
+				item.Excluded = types.BoolValue(true)
+			} else {
+			}
+			data.MibViewFamilies = append(data.MibViewFamilies, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *SNMPServerViewData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mib-view-families/mib-view-family"); value.Exists() {
+		data.MibViewFamilies = make([]SNMPServerViewMibViewFamilies, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SNMPServerViewMibViewFamilies{}
+			if cValue := helpers.GetFromXPath(v, "mib-view-family-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "included"); cValue.Exists() {
+				item.Included = types.BoolValue(true)
+			} else {
+				item.Included = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "excluded"); cValue.Exists() {
+				item.Excluded = types.BoolValue(true)
+			} else {
+				item.Excluded = types.BoolValue(false)
+			}
+			data.MibViewFamilies = append(data.MibViewFamilies, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -235,11 +407,17 @@ func (data *SNMPServerView) getDeletedItems(ctx context.Context, state SNMPServe
 				found = false
 			}
 			if found {
-				if !state.MibViewFamilies[i].Excluded.IsNull() && data.MibViewFamilies[j].Excluded.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/mib-view-families/mib-view-family%v/excluded", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.MibViewFamilies[i].Excluded.IsNull() && state.MibViewFamilies[i].Excluded.ValueBool() {
+					if data.MibViewFamilies[j].Excluded.IsNull() || !data.MibViewFamilies[j].Excluded.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/mib-view-families/mib-view-family%v/excluded", state.getPath(), keyString))
+					}
 				}
-				if !state.MibViewFamilies[i].Included.IsNull() && data.MibViewFamilies[j].Included.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/mib-view-families/mib-view-family%v/included", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.MibViewFamilies[i].Included.IsNull() && state.MibViewFamilies[i].Included.ValueBool() {
+					if data.MibViewFamilies[j].Included.IsNull() || !data.MibViewFamilies[j].Included.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/mib-view-families/mib-view-family%v/included", state.getPath(), keyString))
+					}
 				}
 				break
 			}
@@ -255,7 +433,7 @@ func (data *SNMPServerView) getDeletedItems(ctx context.Context, state SNMPServe
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *SNMPServerView) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *SNMPServerView) getEmptyLeafsDelete(ctx context.Context, state *SNMPServerView) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.MibViewFamilies {
 		keys := [...]string{"mib-view-family-name"}
@@ -264,11 +442,19 @@ func (data *SNMPServerView) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		// Only delete if state has true and plan has false
 		if !data.MibViewFamilies[i].Excluded.IsNull() && !data.MibViewFamilies[i].Excluded.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mib-view-families/mib-view-family%v/excluded", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MibViewFamilies) && !state.MibViewFamilies[i].Excluded.IsNull() && state.MibViewFamilies[i].Excluded.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mib-view-families/mib-view-family%v/excluded", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MibViewFamilies[i].Included.IsNull() && !data.MibViewFamilies[i].Included.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mib-view-families/mib-view-family%v/included", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MibViewFamilies) && !state.MibViewFamilies[i].Included.IsNull() && state.MibViewFamilies[i].Included.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mib-view-families/mib-view-family%v/included", data.getXPath(), keyString))
+			}
 		}
 	}
 	return emptyLeafsDelete
@@ -281,16 +467,85 @@ func (data *SNMPServerView) getEmptyLeafsDelete(ctx context.Context) []string {
 func (data *SNMPServerView) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.MibViewFamilies {
-		keys := [...]string{"mib-view-family-name"}
 		keyValues := [...]string{data.MibViewFamilies[i].Name.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mib-view-families/mib-view-family%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mib-view-families/mib-view-family=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *SNMPServerView) addDeletedItemsXML(ctx context.Context, state SNMPServerView, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.MibViewFamilies {
+		stateKeys := [...]string{"mib-view-family-name"}
+		stateKeyValues := [...]string{state.MibViewFamilies[i].Name.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MibViewFamilies[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MibViewFamilies {
+			found = true
+			if state.MibViewFamilies[i].Name.ValueString() != data.MibViewFamilies[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MibViewFamilies[i].Excluded.IsNull() && state.MibViewFamilies[i].Excluded.ValueBool() && data.MibViewFamilies[j].Excluded.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/mib-view-families/mib-view-family%v/excluded", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MibViewFamilies[i].Included.IsNull() && state.MibViewFamilies[i].Included.ValueBool() && data.MibViewFamilies[j].Included.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/mib-view-families/mib-view-family%v/included", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/mib-view-families/mib-view-family%v", predicates))
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *SNMPServerView) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.MibViewFamilies {
+		keys := [...]string{"mib-view-family-name"}
+		keyValues := [...]string{data.MibViewFamilies[i].Name.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/mib-view-families/mib-view-family%v", predicates))
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

@@ -101,9 +101,9 @@ func (r *CliResource) Create(ctx context.Context, req resource.CreateRequest, re
 		ops = append(ops, gnmi.Update("Cisco-IOS-XR-cli-cfg:/cli", body))
 
 		if !r.data.ReuseConnection {
-			defer d.Client.Disconnect()
+			defer d.GnmiClient.Disconnect()
 		}
-		_, err := d.Client.Set(ctx, ops)
+		_, err := d.GnmiClient.Set(ctx, ops)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
 			return
@@ -152,9 +152,9 @@ func (r *CliResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		ops = append(ops, gnmi.Update("Cisco-IOS-XR-cli-cfg:/cli", body))
 
 		if !r.data.ReuseConnection {
-			defer d.Client.Disconnect()
+			defer d.GnmiClient.Disconnect()
 		}
-		_, err := d.Client.Set(ctx, ops)
+		_, err := d.GnmiClient.Set(ctx, ops)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
 			return

@@ -28,6 +28,9 @@ import (
 
 // End of section. //template:end imports
 
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrBGPASFormat(t *testing.T) {
@@ -46,16 +49,10 @@ func TestAccDataSourceIosxrBGPASFormat(t *testing.T) {
 }
 
 // End of section. //template:end testAccDataSource
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-
-// End of section. //template:end testPrerequisites
-
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 
 func testAccDataSourceIosxrBGPASFormatConfig() string {
 	config := `resource "iosxr_bgp_as_format" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
 	config += `	as_format = "asplain"` + "\n"
 	config += `}` + "\n"
 

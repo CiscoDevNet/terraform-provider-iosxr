@@ -28,6 +28,17 @@ import (
 
 // End of section. //template:end imports
 
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceIosxrRouterVRRPInterfacePrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
+	attributes = {
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrRouterVRRPInterface(t *testing.T) {
@@ -50,19 +61,6 @@ func TestAccDataSourceIosxrRouterVRRPInterface(t *testing.T) {
 }
 
 // End of section. //template:end testAccDataSource
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrRouterVRRPInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
-	attributes = {
-	}
-}
-
-`
-
-// End of section. //template:end testPrerequisites
-
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 
 func testAccDataSourceIosxrRouterVRRPInterfaceConfig() string {

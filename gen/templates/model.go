@@ -229,6 +229,23 @@ func (data {{camelCase .Name}}Data) getXPath() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
+	{{- $hasRootAttr := false}}
+	{{- range .Attributes}}
+	{{- if .Root}}
+	{{- $hasRootAttr = true}}
+	{{- end}}
+	{{- end}}
+	{{- if $hasRootAttr}}
+	// Special case: value goes directly into root element, not nested in JSON
+	{{- range .Attributes}}
+	{{- if and .Root (eq .Type "String")}}
+	if !data.{{toGoName .TfName}}.IsNull() && !data.{{toGoName .TfName}}.IsUnknown() {
+		return fmt.Sprintf(`"%s"`, data.{{toGoName .TfName}}.ValueString())
+	}
+	{{- end}}
+	{{- end}}
+	return "{}"
+	{{- else}}
 	body := "{}"
 	{{- range .Attributes}}
 	{{- if and (not .Reference) (ne .Type "List") (ne .Type "Set")}}
@@ -426,6 +443,7 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 	{{- end}}
 	{{- end}}
 	return body
+	{{- end}}
 }
 
 // End of section. //template:end toBody
@@ -433,6 +451,23 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte) {
+	{{- $hasRootAttr := false}}
+	{{- range .Attributes}}{{if .Root}}{{- $hasRootAttr = true}}{{end}}{{end}}
+	{{- if $hasRootAttr}}
+	// For root element, value is at the element name in the response
+	lastElement := helpers.LastElement(data.getPath())
+	{{- range .Attributes}}
+	{{- if and .Root (eq .Type "String")}}
+	if value := gjson.GetBytes(res, lastElement); value.Exists() {
+		data.{{toGoName .TfName}} = types.StringValue(value.String())
+	} else if !data.{{toGoName .TfName}}.IsNull() {
+		data.{{toGoName .TfName}} = types.StringValue(data.{{toGoName .TfName}}.ValueString())
+	} else {
+		data.{{toGoName .TfName}} = types.StringNull()
+	}
+	{{- end}}
+	{{- end}}
+	{{- else}}
 	{{- range .Attributes}}
 	{{- if and (not .Reference) (not .Id) (not .WriteOnly)}}
 	{{- if eq .Type "Int64"}}
@@ -864,6 +899,7 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 	{{- end}}
 	{{- end}}
 	{{- end}}
+	{{- end}}
 }
 
 // End of section. //template:end updateFromBody
@@ -871,6 +907,21 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result) {
+	{{- $hasRootAttr := false}}
+	{{- range .Attributes}}{{if .Root}}{{- $hasRootAttr = true}}{{end}}{{end}}
+	{{- if $hasRootAttr}}
+	// For root element, value is directly in the response
+	lastElement := helpers.LastElement(data.getPath())
+	{{- range .Attributes}}
+	{{- if and .Root (eq .Type "String")}}
+	if value := res.Get(lastElement); value.Exists() {
+		data.{{toGoName .TfName}} = types.StringValue(value.String())
+	} else {
+		data.{{toGoName .TfName}} = types.StringNull()
+	}
+	{{- end}}
+	{{- end}}
+	{{- else}}
 	{{- $name := camelCase .Name}}
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
@@ -1119,6 +1170,7 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 			return true
 		})
 	}
+	{{- end}}
 	{{- end}}
 	{{- end}}
 	{{- end}}
@@ -1698,6 +1750,28 @@ func (data *{{camelCase .Name}}) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data {{camelCase .Name}}) toBodyXML(ctx context.Context) string {
+	{{- $hasRootAttr := false}}
+	{{- range .Attributes}}
+	{{- if .Root}}
+	{{- $hasRootAttr = true}}
+	{{- end}}
+	{{- end}}
+	{{- if $hasRootAttr}}
+	// Special case: value goes directly into root element text content
+	body := netconf.Body{}
+	{{- range .Attributes}}
+	{{- if and .Root (eq .Type "String")}}
+	if !data.{{toGoName .TfName}}.IsNull() && !data.{{toGoName .TfName}}.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath(), data.{{toGoName .TfName}}.ValueString())
+	}
+	{{- end}}
+	{{- end}}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+	{{- else}}
 	body := netconf.Body{}
 	{{- range .Attributes}}
 	{{- if and (not .Reference) (ne .Type "List") (ne .Type "Set")}}
@@ -1867,6 +1941,7 @@ func (data {{camelCase .Name}}) toBodyXML(ctx context.Context) string {
 		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
 	}
 	return bodyString
+	{{- end}}
 }
 
 // End of section. //template:end toBodyXML

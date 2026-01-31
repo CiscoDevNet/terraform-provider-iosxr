@@ -127,6 +127,7 @@ type YamlConfigAttribute struct {
 	Optional          bool                  `yaml:"optional"`
 	WriteOnly         bool                  `yaml:"write_only"`
 	Sensitive         bool                  `yaml:"sensitive"`
+	Root              bool                  `yaml:"root"` // Value goes into root element directly
 	ExcludeTest       bool                  `yaml:"exclude_test"`
 	ExcludeExample    bool                  `yaml:"exclude_example"`
 	IncludeExample    bool                  `yaml:"include_example"`

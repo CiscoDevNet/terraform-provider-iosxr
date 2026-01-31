@@ -53,7 +53,6 @@ func TestAccDataSourceIosxrBGPASFormat(t *testing.T) {
 
 func testAccDataSourceIosxrBGPASFormatConfig() string {
 	config := `resource "iosxr_bgp_as_format" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
 	config += `	as_format = "asplain"` + "\n"
 	config += `}` + "\n"
 

@@ -58,7 +58,7 @@ func (r *BGPASFormatResource) Metadata(_ context.Context, req resource.MetadataR
 func (r *BGPASFormatResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the BGP AS Format configuration.",
+		MarkdownDescription: "",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -70,13 +70,6 @@ func (r *BGPASFormatResource) Schema(ctx context.Context, req resource.SchemaReq
 				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
-				},
-			},
-			"delete_mode": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.").AddStringEnumDescription("all", "attributes").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
 			"as_format": schema.StringAttribute{
@@ -388,12 +381,7 @@ func (r *BGPASFormatResource) Delete(ctx context.Context, req resource.DeleteReq
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
 	if device.Managed {
-		deleteMode := "all"
-		if state.DeleteMode.ValueString() == "all" {
-			deleteMode = "all"
-		} else if state.DeleteMode.ValueString() == "attributes" {
-			deleteMode = "attributes"
-		}
+		deleteMode := "attributes"
 
 		if deleteMode == "all" {
 			if device.Protocol == "gnmi" {

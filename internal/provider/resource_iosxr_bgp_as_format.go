@@ -58,7 +58,7 @@ func (r *BGPASFormatResource) Metadata(_ context.Context, req resource.MetadataR
 func (r *BGPASFormatResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "",
+		MarkdownDescription: "This resource can manage the BGP AS Format configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

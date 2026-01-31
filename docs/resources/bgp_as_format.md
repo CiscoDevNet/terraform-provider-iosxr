@@ -3,12 +3,12 @@
 page_title: "iosxr_bgp_as_format Resource - terraform-provider-iosxr"
 subcategory: "BGP"
 description: |-
-  
+  This resource can manage the BGP AS Format configuration.
 ---
 
 # iosxr_bgp_as_format (Resource)
 
-
+This resource can manage the BGP AS Format configuration.
 
 ## Example Usage
 

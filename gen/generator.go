@@ -764,6 +764,15 @@ func main() {
 		if resourceName != "" && configs[i].Name != resourceName {
 			continue
 		}
+
+		// Set default descriptions if not provided
+		if configs[i].DsDescription == "" {
+			configs[i].DsDescription = fmt.Sprintf("This data source can read the %s configuration.", configs[i].Name)
+		}
+		if configs[i].ResDescription == "" {
+			configs[i].ResDescription = fmt.Sprintf("This resource can manage the %s configuration.", configs[i].Name)
+		}
+
 		// Augment config by yang models
 		if !configs[i].NoAugmentConfig {
 			augmentConfig(&configs[i], modelPaths)

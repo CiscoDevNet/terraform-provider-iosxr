@@ -3,12 +3,12 @@
 page_title: "iosxr_bgp_as_format Data Source - terraform-provider-iosxr"
 subcategory: "BGP"
 description: |-
-  
+  This data source can read the BGP AS Format configuration.
 ---
 
 # iosxr_bgp_as_format (Data Source)
 
-
+This data source can read the BGP AS Format configuration.
 
 ## Example Usage
 

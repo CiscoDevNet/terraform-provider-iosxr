@@ -57,10 +57,8 @@ func TestAccDataSourceIosxrMPLSLDPInterface(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrMPLSLDPInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp"
-	attributes = {
-	}
 }
 
 `
@@ -84,7 +82,7 @@ func testAccDataSourceIosxrMPLSLDPInterfaceConfig() string {
 	config += `		igp_auto_config_disable = true` + "\n"
 	config += `		mldp_disable = true` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -346,7 +346,7 @@ description: |-
 ## 0.4.0
 
 - BREAKING CHANGE: Refactor resource import functionality to use a comma separated list of key attribute values instead of a gNMI path
-- Add support for empty YANG containers to the `iosxr_gnmi` resource using the `<EMPTY>` keyword
+- Add support for empty YANG containers to the `iosxr_yang` resource using the `<EMPTY>` keyword
 
 ## 0.3.2
 
@@ -380,7 +380,7 @@ description: |-
 ## 0.2.6
 
 - Add `auto_cost` attributes to `iosxr_router_ospf` and `iosxr_router_ospf_vrf` resources and data sources
-- Add support for leaf-lists to `iosxr_gnmi` resource
+- Add support for leaf-lists to `iosxr_yang` resource
 - Add `port` and `operator` attributes to `iosxr_logging_vrf` resource and data source
 - Add `iosxr_router_hsrp_interface_address_family_ipv6_group_v2` resource and data source
 - Add `route_reflector_client` attribute to `iosxr_router_bgp_neighbor_address_family` and `iosxr_router_bgp_neighbor_group` resource and data source
@@ -586,10 +586,10 @@ description: |-
 
 ## 0.1.1
 
-- Add delete attribute to `iosxr_gnmi` resource
+- Add delete attribute to `iosxr_yang` resource
 - Allow provider config without host attribute in case `devices` attribute is being used
-- Enhance `iosxr_gnmi` resource to support nested attributes (within YANG containers) using "/" as separator
-- Enhance `iosxr_gnmi` resource to support nested YANG lists
+- Enhance `iosxr_yang` resource to support nested attributes (within YANG containers) using "/" as separator
+- Enhance `iosxr_yang` resource to support nested YANG lists
 - BREAKING CHANGE: remove `iosxr_vrf_route_target_two_byte_as_format` resource and data source
 - BREAKING CHANGE: remove `iosxr_vrf_route_target_four_byte_as_format` resource and data source
 - BREAKING CHANGE: remove `iosxr_vrf_route_target_ip_address_format` resource and data source

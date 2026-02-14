@@ -124,7 +124,7 @@ func iosxrCryptoImportStateIdFunc(resourceName string) resource.ImportStateIdFun
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrCryptoPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=proxy.example.com]"
 	attributes = {
 		"host-name" = "proxy.example.com"
@@ -154,7 +154,7 @@ func testAccIosxrCryptoConfig_minimum() string {
 	config += `	ca_openssh_trustpoints = [{` + "\n"
 	config += `		trustpoint_name = "OPENSSH-TP1"` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -220,7 +220,7 @@ func testAccIosxrCryptoConfig_all() string {
 	config += `	ca_fqdn_check_ip_address_allow = true` + "\n"
 	config += `	ca_crl_curl_timeout = 10` + "\n"
 	config += `	fips_mode = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

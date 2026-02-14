@@ -23,9 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
+	"sort"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -84,6 +89,17 @@ func (data CEF) getPath() string {
 
 func (data CEFData) getPath() string {
 	return "Cisco-IOS-XR-um-cef-accounting-cfg:/cef"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data CEF) getXPath() string {
+	path := "Cisco-IOS-XR-um-cef-accounting-cfg:/cef"
+	return path
+}
+
+func (data CEFData) getXPath() string {
+	path := "Cisco-IOS-XR-um-cef-accounting-cfg:/cef"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -152,164 +168,367 @@ func (data CEF) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data CEF) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.AdjacencyRouteOverrideRib.IsNull() && !data.AdjacencyRouteOverrideRib.IsUnknown() {
+		if data.AdjacencyRouteOverrideRib.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/adjacency/route/override/rib", "")
+		}
+	}
+	if !data.PlatformLsmFrrHoldtime.IsNull() && !data.PlatformLsmFrrHoldtime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/platform/lsm/frr-holdtime", strconv.FormatInt(data.PlatformLsmFrrHoldtime.ValueInt64(), 10))
+	}
+	if !data.RetryServiceTime.IsNull() && !data.RetryServiceTime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/retry/service-time", strconv.FormatInt(data.RetryServiceTime.ValueInt64(), 10))
+	}
+	if !data.RetryTimeout.IsNull() && !data.RetryTimeout.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/retry/timeout", strconv.FormatInt(data.RetryTimeout.ValueInt64(), 10))
+	}
+	if !data.RetrySyslogTimer.IsNull() && !data.RetrySyslogTimer.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/retry/syslog-timer", strconv.FormatInt(data.RetrySyslogTimer.ValueInt64(), 10))
+	}
+	if !data.EncapSharingDisable.IsNull() && !data.EncapSharingDisable.IsUnknown() {
+		if data.EncapSharingDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/encap-sharing/disable", "")
+		}
+	}
+	if !data.ConsistentHashingAutoRecovery.IsNull() && !data.ConsistentHashingAutoRecovery.IsUnknown() {
+		if data.ConsistentHashingAutoRecovery.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/consistent-hashing/auto-recovery", "")
+		}
+	}
+	if !data.ProactiveArpNdEnable.IsNull() && !data.ProactiveArpNdEnable.IsUnknown() {
+		if data.ProactiveArpNdEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/proactive-arp-nd/enable", "")
+		}
+	}
+	if !data.LtraceMultiplier.IsNull() && !data.LtraceMultiplier.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ltrace-multiplier", strconv.FormatInt(data.LtraceMultiplier.ValueInt64(), 10))
+	}
+	if !data.LoadBalancingModeHierarchicalEcmpMinPaths.IsNull() && !data.LoadBalancingModeHierarchicalEcmpMinPaths.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/load-balancing/mode/hierarchical/ecmp/min-paths", strconv.FormatInt(data.LoadBalancingModeHierarchicalEcmpMinPaths.ValueInt64(), 10))
+	}
+	if !data.LoadBalancingModeHierarchicalUcmpGroupSize.IsNull() && !data.LoadBalancingModeHierarchicalUcmpGroupSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/load-balancing/mode/hierarchical/ucmp/group-size", strconv.FormatInt(data.LoadBalancingModeHierarchicalUcmpGroupSize.ValueInt64(), 10))
+	}
+	if !data.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() && !data.LoadBalancingRecursiveOorModeDampeningAndDlb.IsUnknown() {
+		if data.LoadBalancingRecursiveOorModeDampeningAndDlb.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb", "")
+		}
+	}
+	if !data.LoadBalancingRecursiveOorModeDampeningResourceThreshold.IsNull() && !data.LoadBalancingRecursiveOorModeDampeningResourceThreshold.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/dampening/resource-threshold", strconv.FormatInt(data.LoadBalancingRecursiveOorModeDampeningResourceThreshold.ValueInt64(), 10))
+	}
+	if !data.LoadBalancingRecursiveOorModeDlbResourceThreshold.IsNull() && !data.LoadBalancingRecursiveOorModeDlbResourceThreshold.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/dlb/resource-threshold", strconv.FormatInt(data.LoadBalancingRecursiveOorModeDlbResourceThreshold.ValueInt64(), 10))
+	}
+	if !data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration.IsNull() && !data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/max-duration", strconv.FormatInt(data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration.ValueInt64(), 10))
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *CEF) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "adjacency.route.override.rib"); !data.AdjacencyRouteOverrideRib.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "adjacency.route.override.rib"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AdjacencyRouteOverrideRib.IsNull() {
 			data.AdjacencyRouteOverrideRib = types.BoolValue(true)
-		} else {
-			data.AdjacencyRouteOverrideRib = types.BoolValue(false)
 		}
 	} else {
-		data.AdjacencyRouteOverrideRib = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.AdjacencyRouteOverrideRib.IsNull() {
+			data.AdjacencyRouteOverrideRib = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "platform.lsm.frr-holdtime"); value.Exists() && !data.PlatformLsmFrrHoldtime.IsNull() {
 		data.PlatformLsmFrrHoldtime = types.Int64Value(value.Int())
-	} else {
+	} else if data.PlatformLsmFrrHoldtime.IsNull() {
 		data.PlatformLsmFrrHoldtime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "retry.service-time"); value.Exists() && !data.RetryServiceTime.IsNull() {
 		data.RetryServiceTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.RetryServiceTime.IsNull() {
 		data.RetryServiceTime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "retry.timeout"); value.Exists() && !data.RetryTimeout.IsNull() {
 		data.RetryTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.RetryTimeout.IsNull() {
 		data.RetryTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "retry.syslog-timer"); value.Exists() && !data.RetrySyslogTimer.IsNull() {
 		data.RetrySyslogTimer = types.Int64Value(value.Int())
-	} else {
+	} else if data.RetrySyslogTimer.IsNull() {
 		data.RetrySyslogTimer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "encap-sharing.disable"); !data.EncapSharingDisable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "encap-sharing.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapSharingDisable.IsNull() {
 			data.EncapSharingDisable = types.BoolValue(true)
-		} else {
-			data.EncapSharingDisable = types.BoolValue(false)
 		}
 	} else {
-		data.EncapSharingDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.EncapSharingDisable.IsNull() {
+			data.EncapSharingDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "consistent-hashing.auto-recovery"); !data.ConsistentHashingAutoRecovery.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "consistent-hashing.auto-recovery"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ConsistentHashingAutoRecovery.IsNull() {
 			data.ConsistentHashingAutoRecovery = types.BoolValue(true)
-		} else {
-			data.ConsistentHashingAutoRecovery = types.BoolValue(false)
 		}
 	} else {
-		data.ConsistentHashingAutoRecovery = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ConsistentHashingAutoRecovery.IsNull() {
+			data.ConsistentHashingAutoRecovery = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "proactive-arp-nd.enable"); !data.ProactiveArpNdEnable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "proactive-arp-nd.enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProactiveArpNdEnable.IsNull() {
 			data.ProactiveArpNdEnable = types.BoolValue(true)
-		} else {
-			data.ProactiveArpNdEnable = types.BoolValue(false)
 		}
 	} else {
-		data.ProactiveArpNdEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProactiveArpNdEnable.IsNull() {
+			data.ProactiveArpNdEnable = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "ltrace-multiplier"); value.Exists() && !data.LtraceMultiplier.IsNull() {
 		data.LtraceMultiplier = types.Int64Value(value.Int())
-	} else {
+	} else if data.LtraceMultiplier.IsNull() {
 		data.LtraceMultiplier = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "load-balancing.mode.hierarchical.ecmp.min-paths"); value.Exists() && !data.LoadBalancingModeHierarchicalEcmpMinPaths.IsNull() {
 		data.LoadBalancingModeHierarchicalEcmpMinPaths = types.Int64Value(value.Int())
-	} else {
+	} else if data.LoadBalancingModeHierarchicalEcmpMinPaths.IsNull() {
 		data.LoadBalancingModeHierarchicalEcmpMinPaths = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "load-balancing.mode.hierarchical.ucmp.group-size"); value.Exists() && !data.LoadBalancingModeHierarchicalUcmpGroupSize.IsNull() {
 		data.LoadBalancingModeHierarchicalUcmpGroupSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.LoadBalancingModeHierarchicalUcmpGroupSize.IsNull() {
 		data.LoadBalancingModeHierarchicalUcmpGroupSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb"); !data.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() {
 			data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolValue(true)
-		} else {
-			data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolValue(false)
 		}
 	} else {
-		data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() {
+			data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb.dampening.resource-threshold"); value.Exists() && !data.LoadBalancingRecursiveOorModeDampeningResourceThreshold.IsNull() {
 		data.LoadBalancingRecursiveOorModeDampeningResourceThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.LoadBalancingRecursiveOorModeDampeningResourceThreshold.IsNull() {
 		data.LoadBalancingRecursiveOorModeDampeningResourceThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb.dlb.resource-threshold"); value.Exists() && !data.LoadBalancingRecursiveOorModeDlbResourceThreshold.IsNull() {
 		data.LoadBalancingRecursiveOorModeDlbResourceThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.LoadBalancingRecursiveOorModeDlbResourceThreshold.IsNull() {
 		data.LoadBalancingRecursiveOorModeDlbResourceThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb.max-duration"); value.Exists() && !data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration.IsNull() {
 		data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration = types.Int64Value(value.Int())
-	} else {
+	} else if data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration.IsNull() {
 		data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration = types.Int64Null()
 	}
 }
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *CEF) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/adjacency/route/override/rib"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AdjacencyRouteOverrideRib.IsNull() {
+			data.AdjacencyRouteOverrideRib = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.AdjacencyRouteOverrideRib.IsNull() {
+			data.AdjacencyRouteOverrideRib = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/platform/lsm/frr-holdtime"); value.Exists() {
+		data.PlatformLsmFrrHoldtime = types.Int64Value(value.Int())
+	} else if data.PlatformLsmFrrHoldtime.IsNull() {
+		data.PlatformLsmFrrHoldtime = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/retry/service-time"); value.Exists() {
+		data.RetryServiceTime = types.Int64Value(value.Int())
+	} else if data.RetryServiceTime.IsNull() {
+		data.RetryServiceTime = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/retry/timeout"); value.Exists() {
+		data.RetryTimeout = types.Int64Value(value.Int())
+	} else if data.RetryTimeout.IsNull() {
+		data.RetryTimeout = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/retry/syslog-timer"); value.Exists() {
+		data.RetrySyslogTimer = types.Int64Value(value.Int())
+	} else if data.RetrySyslogTimer.IsNull() {
+		data.RetrySyslogTimer = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encap-sharing/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapSharingDisable.IsNull() {
+			data.EncapSharingDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EncapSharingDisable.IsNull() {
+			data.EncapSharingDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/consistent-hashing/auto-recovery"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ConsistentHashingAutoRecovery.IsNull() {
+			data.ConsistentHashingAutoRecovery = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ConsistentHashingAutoRecovery.IsNull() {
+			data.ConsistentHashingAutoRecovery = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/proactive-arp-nd/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProactiveArpNdEnable.IsNull() {
+			data.ProactiveArpNdEnable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProactiveArpNdEnable.IsNull() {
+			data.ProactiveArpNdEnable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-multiplier"); value.Exists() {
+		data.LtraceMultiplier = types.Int64Value(value.Int())
+	} else if data.LtraceMultiplier.IsNull() {
+		data.LtraceMultiplier = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/mode/hierarchical/ecmp/min-paths"); value.Exists() {
+		data.LoadBalancingModeHierarchicalEcmpMinPaths = types.Int64Value(value.Int())
+	} else if data.LoadBalancingModeHierarchicalEcmpMinPaths.IsNull() {
+		data.LoadBalancingModeHierarchicalEcmpMinPaths = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/mode/hierarchical/ucmp/group-size"); value.Exists() {
+		data.LoadBalancingModeHierarchicalUcmpGroupSize = types.Int64Value(value.Int())
+	} else if data.LoadBalancingModeHierarchicalUcmpGroupSize.IsNull() {
+		data.LoadBalancingModeHierarchicalUcmpGroupSize = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() {
+			data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() {
+			data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/dampening/resource-threshold"); value.Exists() {
+		data.LoadBalancingRecursiveOorModeDampeningResourceThreshold = types.Int64Value(value.Int())
+	} else if data.LoadBalancingRecursiveOorModeDampeningResourceThreshold.IsNull() {
+		data.LoadBalancingRecursiveOorModeDampeningResourceThreshold = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/dlb/resource-threshold"); value.Exists() {
+		data.LoadBalancingRecursiveOorModeDlbResourceThreshold = types.Int64Value(value.Int())
+	} else if data.LoadBalancingRecursiveOorModeDlbResourceThreshold.IsNull() {
+		data.LoadBalancingRecursiveOorModeDlbResourceThreshold = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/max-duration"); value.Exists() {
+		data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration = types.Int64Value(value.Int())
+	} else if data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration.IsNull() {
+		data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration = types.Int64Null()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *CEF) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "adjacency.route.override.rib"); value.Exists() {
+func (data *CEF) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "adjacency.route.override.rib"); value.Exists() {
 		data.AdjacencyRouteOverrideRib = types.BoolValue(true)
-	} else {
+	} else if !data.AdjacencyRouteOverrideRib.IsNull() {
+		// Only set to false if it was previously set in state
 		data.AdjacencyRouteOverrideRib = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "platform.lsm.frr-holdtime"); value.Exists() {
+	if value := res.Get(prefix + "platform.lsm.frr-holdtime"); value.Exists() {
 		data.PlatformLsmFrrHoldtime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "retry.service-time"); value.Exists() {
+	if value := res.Get(prefix + "retry.service-time"); value.Exists() {
 		data.RetryServiceTime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "retry.timeout"); value.Exists() {
+	if value := res.Get(prefix + "retry.timeout"); value.Exists() {
 		data.RetryTimeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "retry.syslog-timer"); value.Exists() {
+	if value := res.Get(prefix + "retry.syslog-timer"); value.Exists() {
 		data.RetrySyslogTimer = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "encap-sharing.disable"); value.Exists() {
+	if value := res.Get(prefix + "encap-sharing.disable"); value.Exists() {
 		data.EncapSharingDisable = types.BoolValue(true)
-	} else {
+	} else if !data.EncapSharingDisable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.EncapSharingDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "consistent-hashing.auto-recovery"); value.Exists() {
+	if value := res.Get(prefix + "consistent-hashing.auto-recovery"); value.Exists() {
 		data.ConsistentHashingAutoRecovery = types.BoolValue(true)
-	} else {
+	} else if !data.ConsistentHashingAutoRecovery.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ConsistentHashingAutoRecovery = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "proactive-arp-nd.enable"); value.Exists() {
+	if value := res.Get(prefix + "proactive-arp-nd.enable"); value.Exists() {
 		data.ProactiveArpNdEnable = types.BoolValue(true)
-	} else {
+	} else if !data.ProactiveArpNdEnable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProactiveArpNdEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ltrace-multiplier"); value.Exists() {
+	if value := res.Get(prefix + "ltrace-multiplier"); value.Exists() {
 		data.LtraceMultiplier = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "load-balancing.mode.hierarchical.ecmp.min-paths"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.mode.hierarchical.ecmp.min-paths"); value.Exists() {
 		data.LoadBalancingModeHierarchicalEcmpMinPaths = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "load-balancing.mode.hierarchical.ucmp.group-size"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.mode.hierarchical.ucmp.group-size"); value.Exists() {
 		data.LoadBalancingModeHierarchicalUcmpGroupSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.recursive.oor.mode.dampening-and-dlb"); value.Exists() {
 		data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolValue(true)
-	} else {
+	} else if !data.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() {
+		// Only set to false if it was previously set in state
 		data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb.dampening.resource-threshold"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.recursive.oor.mode.dampening-and-dlb.dampening.resource-threshold"); value.Exists() {
 		data.LoadBalancingRecursiveOorModeDampeningResourceThreshold = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb.dlb.resource-threshold"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.recursive.oor.mode.dampening-and-dlb.dlb.resource-threshold"); value.Exists() {
 		data.LoadBalancingRecursiveOorModeDlbResourceThreshold = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb.max-duration"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.recursive.oor.mode.dampening-and-dlb.max-duration"); value.Exists() {
 		data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration = types.Int64Value(value.Int())
 	}
 }
@@ -318,65 +537,198 @@ func (data *CEF) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *CEFData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "adjacency.route.override.rib"); value.Exists() {
+func (data *CEFData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "adjacency.route.override.rib"); value.Exists() {
 		data.AdjacencyRouteOverrideRib = types.BoolValue(true)
 	} else {
 		data.AdjacencyRouteOverrideRib = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "platform.lsm.frr-holdtime"); value.Exists() {
+	if value := res.Get(prefix + "platform.lsm.frr-holdtime"); value.Exists() {
 		data.PlatformLsmFrrHoldtime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "retry.service-time"); value.Exists() {
+	if value := res.Get(prefix + "retry.service-time"); value.Exists() {
 		data.RetryServiceTime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "retry.timeout"); value.Exists() {
+	if value := res.Get(prefix + "retry.timeout"); value.Exists() {
 		data.RetryTimeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "retry.syslog-timer"); value.Exists() {
+	if value := res.Get(prefix + "retry.syslog-timer"); value.Exists() {
 		data.RetrySyslogTimer = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "encap-sharing.disable"); value.Exists() {
+	if value := res.Get(prefix + "encap-sharing.disable"); value.Exists() {
 		data.EncapSharingDisable = types.BoolValue(true)
 	} else {
 		data.EncapSharingDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "consistent-hashing.auto-recovery"); value.Exists() {
+	if value := res.Get(prefix + "consistent-hashing.auto-recovery"); value.Exists() {
 		data.ConsistentHashingAutoRecovery = types.BoolValue(true)
 	} else {
 		data.ConsistentHashingAutoRecovery = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "proactive-arp-nd.enable"); value.Exists() {
+	if value := res.Get(prefix + "proactive-arp-nd.enable"); value.Exists() {
 		data.ProactiveArpNdEnable = types.BoolValue(true)
 	} else {
 		data.ProactiveArpNdEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ltrace-multiplier"); value.Exists() {
+	if value := res.Get(prefix + "ltrace-multiplier"); value.Exists() {
 		data.LtraceMultiplier = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "load-balancing.mode.hierarchical.ecmp.min-paths"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.mode.hierarchical.ecmp.min-paths"); value.Exists() {
 		data.LoadBalancingModeHierarchicalEcmpMinPaths = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "load-balancing.mode.hierarchical.ucmp.group-size"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.mode.hierarchical.ucmp.group-size"); value.Exists() {
 		data.LoadBalancingModeHierarchicalUcmpGroupSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.recursive.oor.mode.dampening-and-dlb"); value.Exists() {
 		data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolValue(true)
 	} else {
 		data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb.dampening.resource-threshold"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.recursive.oor.mode.dampening-and-dlb.dampening.resource-threshold"); value.Exists() {
 		data.LoadBalancingRecursiveOorModeDampeningResourceThreshold = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb.dlb.resource-threshold"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.recursive.oor.mode.dampening-and-dlb.dlb.resource-threshold"); value.Exists() {
 		data.LoadBalancingRecursiveOorModeDlbResourceThreshold = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb.max-duration"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.recursive.oor.mode.dampening-and-dlb.max-duration"); value.Exists() {
 		data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration = types.Int64Value(value.Int())
 	}
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *CEF) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/adjacency/route/override/rib"); value.Exists() {
+		data.AdjacencyRouteOverrideRib = types.BoolValue(true)
+	} else {
+		data.AdjacencyRouteOverrideRib = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/platform/lsm/frr-holdtime"); value.Exists() {
+		data.PlatformLsmFrrHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/retry/service-time"); value.Exists() {
+		data.RetryServiceTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/retry/timeout"); value.Exists() {
+		data.RetryTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/retry/syslog-timer"); value.Exists() {
+		data.RetrySyslogTimer = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encap-sharing/disable"); value.Exists() {
+		data.EncapSharingDisable = types.BoolValue(true)
+	} else {
+		data.EncapSharingDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/consistent-hashing/auto-recovery"); value.Exists() {
+		data.ConsistentHashingAutoRecovery = types.BoolValue(true)
+	} else {
+		data.ConsistentHashingAutoRecovery = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/proactive-arp-nd/enable"); value.Exists() {
+		data.ProactiveArpNdEnable = types.BoolValue(true)
+	} else {
+		data.ProactiveArpNdEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-multiplier"); value.Exists() {
+		data.LtraceMultiplier = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/mode/hierarchical/ecmp/min-paths"); value.Exists() {
+		data.LoadBalancingModeHierarchicalEcmpMinPaths = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/mode/hierarchical/ucmp/group-size"); value.Exists() {
+		data.LoadBalancingModeHierarchicalUcmpGroupSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb"); value.Exists() {
+		data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolValue(true)
+	} else {
+		data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/dampening/resource-threshold"); value.Exists() {
+		data.LoadBalancingRecursiveOorModeDampeningResourceThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/dlb/resource-threshold"); value.Exists() {
+		data.LoadBalancingRecursiveOorModeDlbResourceThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/max-duration"); value.Exists() {
+		data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *CEFData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/adjacency/route/override/rib"); value.Exists() {
+		data.AdjacencyRouteOverrideRib = types.BoolValue(true)
+	} else {
+		data.AdjacencyRouteOverrideRib = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/platform/lsm/frr-holdtime"); value.Exists() {
+		data.PlatformLsmFrrHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/retry/service-time"); value.Exists() {
+		data.RetryServiceTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/retry/timeout"); value.Exists() {
+		data.RetryTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/retry/syslog-timer"); value.Exists() {
+		data.RetrySyslogTimer = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encap-sharing/disable"); value.Exists() {
+		data.EncapSharingDisable = types.BoolValue(true)
+	} else {
+		data.EncapSharingDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/consistent-hashing/auto-recovery"); value.Exists() {
+		data.ConsistentHashingAutoRecovery = types.BoolValue(true)
+	} else {
+		data.ConsistentHashingAutoRecovery = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/proactive-arp-nd/enable"); value.Exists() {
+		data.ProactiveArpNdEnable = types.BoolValue(true)
+	} else {
+		data.ProactiveArpNdEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-multiplier"); value.Exists() {
+		data.LtraceMultiplier = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/mode/hierarchical/ecmp/min-paths"); value.Exists() {
+		data.LoadBalancingModeHierarchicalEcmpMinPaths = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/mode/hierarchical/ucmp/group-size"); value.Exists() {
+		data.LoadBalancingModeHierarchicalUcmpGroupSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb"); value.Exists() {
+		data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolValue(true)
+	} else {
+		data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/dampening/resource-threshold"); value.Exists() {
+		data.LoadBalancingRecursiveOorModeDampeningResourceThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/dlb/resource-threshold"); value.Exists() {
+		data.LoadBalancingRecursiveOorModeDlbResourceThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/max-duration"); value.Exists() {
+		data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -434,22 +786,37 @@ func (data *CEF) getDeletedItems(ctx context.Context, state CEF) []string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *CEF) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *CEF) getEmptyLeafsDelete(ctx context.Context, state *CEF) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() && !data.LoadBalancingRecursiveOorModeDampeningAndDlb.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/recursive/oor/mode/dampening-and-dlb", data.getPath()))
+		if state != nil && !state.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() && state.LoadBalancingRecursiveOorModeDampeningAndDlb.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/recursive/oor/mode/dampening-and-dlb", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProactiveArpNdEnable.IsNull() && !data.ProactiveArpNdEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/proactive-arp-nd/enable", data.getPath()))
+		if state != nil && !state.ProactiveArpNdEnable.IsNull() && state.ProactiveArpNdEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/proactive-arp-nd/enable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ConsistentHashingAutoRecovery.IsNull() && !data.ConsistentHashingAutoRecovery.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/consistent-hashing/auto-recovery", data.getPath()))
+		if state != nil && !state.ConsistentHashingAutoRecovery.IsNull() && state.ConsistentHashingAutoRecovery.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/consistent-hashing/auto-recovery", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.EncapSharingDisable.IsNull() && !data.EncapSharingDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encap-sharing/disable", data.getPath()))
+		if state != nil && !state.EncapSharingDisable.IsNull() && state.EncapSharingDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encap-sharing/disable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.AdjacencyRouteOverrideRib.IsNull() && !data.AdjacencyRouteOverrideRib.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/adjacency/route/override/rib", data.getPath()))
+		if state != nil && !state.AdjacencyRouteOverrideRib.IsNull() && state.AdjacencyRouteOverrideRib.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/adjacency/route/override/rib", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -505,7 +872,212 @@ func (data *CEF) getDeletePaths(ctx context.Context) []string {
 	if !data.AdjacencyRouteOverrideRib.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/adjacency/route/override/rib", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *CEF) addDeletedItemsXML(ctx context.Context, state CEF, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration.IsNull() && data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration.IsNull() {
+		deletePath := state.getXPath() + "/load-balancing/recursive/oor/mode/dampening-and-dlb/max-duration"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.LoadBalancingRecursiveOorModeDlbResourceThreshold.IsNull() && data.LoadBalancingRecursiveOorModeDlbResourceThreshold.IsNull() {
+		deletePath := state.getXPath() + "/load-balancing/recursive/oor/mode/dampening-and-dlb/dlb/resource-threshold"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.LoadBalancingRecursiveOorModeDampeningResourceThreshold.IsNull() && data.LoadBalancingRecursiveOorModeDampeningResourceThreshold.IsNull() {
+		deletePath := state.getXPath() + "/load-balancing/recursive/oor/mode/dampening-and-dlb/dampening/resource-threshold"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() && state.LoadBalancingRecursiveOorModeDampeningAndDlb.ValueBool() && data.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() {
+		deletePath := state.getXPath() + "/load-balancing/recursive/oor/mode/dampening-and-dlb"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.LoadBalancingModeHierarchicalUcmpGroupSize.IsNull() && data.LoadBalancingModeHierarchicalUcmpGroupSize.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/load-balancing/mode/hierarchical/ucmp"
+		predicates := make(map[string]string)
+		predicates["group-size"] = fmt.Sprintf("%v", state.LoadBalancingModeHierarchicalUcmpGroupSize.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.LoadBalancingModeHierarchicalEcmpMinPaths.IsNull() && data.LoadBalancingModeHierarchicalEcmpMinPaths.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/load-balancing/mode/hierarchical/ecmp"
+		predicates := make(map[string]string)
+		predicates["min-paths"] = fmt.Sprintf("%v", state.LoadBalancingModeHierarchicalEcmpMinPaths.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.LtraceMultiplier.IsNull() && data.LtraceMultiplier.IsNull() {
+		deletePath := state.getXPath() + "/ltrace-multiplier"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProactiveArpNdEnable.IsNull() && state.ProactiveArpNdEnable.ValueBool() && data.ProactiveArpNdEnable.IsNull() {
+		deletePath := state.getXPath() + "/proactive-arp-nd/enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ConsistentHashingAutoRecovery.IsNull() && state.ConsistentHashingAutoRecovery.ValueBool() && data.ConsistentHashingAutoRecovery.IsNull() {
+		deletePath := state.getXPath() + "/consistent-hashing/auto-recovery"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EncapSharingDisable.IsNull() && state.EncapSharingDisable.ValueBool() && data.EncapSharingDisable.IsNull() {
+		deletePath := state.getXPath() + "/encap-sharing/disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RetrySyslogTimer.IsNull() && data.RetrySyslogTimer.IsNull() {
+		deletePath := state.getXPath() + "/retry/syslog-timer"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RetryTimeout.IsNull() && data.RetryTimeout.IsNull() {
+		deletePath := state.getXPath() + "/retry/timeout"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RetryServiceTime.IsNull() && data.RetryServiceTime.IsNull() {
+		deletePath := state.getXPath() + "/retry/service-time"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.PlatformLsmFrrHoldtime.IsNull() && data.PlatformLsmFrrHoldtime.IsNull() {
+		deletePath := state.getXPath() + "/platform/lsm/frr-holdtime"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AdjacencyRouteOverrideRib.IsNull() && state.AdjacencyRouteOverrideRib.ValueBool() && data.AdjacencyRouteOverrideRib.IsNull() {
+		deletePath := state.getXPath() + "/adjacency/route/override/rib"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *CEF) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/max-duration")
+	}
+	if !data.LoadBalancingRecursiveOorModeDlbResourceThreshold.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/dlb/resource-threshold")
+	}
+	if !data.LoadBalancingRecursiveOorModeDampeningResourceThreshold.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb/dampening/resource-threshold")
+	}
+	if !data.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/load-balancing/recursive/oor/mode/dampening-and-dlb")
+	}
+	if !data.LoadBalancingModeHierarchicalUcmpGroupSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/load-balancing/mode/hierarchical/ucmp")
+	}
+	if !data.LoadBalancingModeHierarchicalEcmpMinPaths.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/load-balancing/mode/hierarchical/ecmp")
+	}
+	if !data.LtraceMultiplier.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ltrace-multiplier")
+	}
+	if !data.ProactiveArpNdEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/proactive-arp-nd/enable")
+	}
+	if !data.ConsistentHashingAutoRecovery.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/consistent-hashing/auto-recovery")
+	}
+	if !data.EncapSharingDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/encap-sharing/disable")
+	}
+	if !data.RetrySyslogTimer.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/retry/syslog-timer")
+	}
+	if !data.RetryTimeout.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/retry/timeout")
+	}
+	if !data.RetryServiceTime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/retry/service-time")
+	}
+	if !data.PlatformLsmFrrHoldtime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/platform/lsm/frr-holdtime")
+	}
+	if !data.AdjacencyRouteOverrideRib.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/adjacency/route/override/rib")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

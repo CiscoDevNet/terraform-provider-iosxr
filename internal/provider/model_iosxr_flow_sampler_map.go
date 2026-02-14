@@ -25,7 +25,11 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -61,6 +65,19 @@ func (data FlowSamplerMapData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]", data.Name.ValueString())
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data FlowSamplerMap) getXPath() string {
+	path := "Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.Name.ValueString()))
+	return path
+}
+
+func (data FlowSamplerMapData) getXPath() string {
+	path := "Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.Name.ValueString()))
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -81,30 +98,82 @@ func (data FlowSamplerMap) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data FlowSamplerMap) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.Name.IsNull() && !data.Name.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/sampler-map-name", data.Name.ValueString())
+	}
+	if !data.Random.IsNull() && !data.Random.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/random", strconv.FormatInt(data.Random.ValueInt64(), 10))
+	}
+	if !data.OutOf.IsNull() && !data.OutOf.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/out-of", strconv.FormatInt(data.OutOf.ValueInt64(), 10))
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *FlowSamplerMap) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "random"); value.Exists() && !data.Random.IsNull() {
 		data.Random = types.Int64Value(value.Int())
-	} else {
+	} else if data.Random.IsNull() {
 		data.Random = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "out-of"); value.Exists() && !data.OutOf.IsNull() {
 		data.OutOf = types.Int64Value(value.Int())
-	} else {
+	} else if data.OutOf.IsNull() {
 		data.OutOf = types.Int64Null()
 	}
 }
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *FlowSamplerMap) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sampler-map-name"); value.Exists() {
+		data.Name = types.StringValue(value.String())
+	} else if data.Name.IsNull() {
+		data.Name = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/random"); value.Exists() {
+		data.Random = types.Int64Value(value.Int())
+	} else if data.Random.IsNull() {
+		data.Random = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/out-of"); value.Exists() {
+		data.OutOf = types.Int64Value(value.Int())
+	} else if data.OutOf.IsNull() {
+		data.OutOf = types.Int64Null()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *FlowSamplerMap) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "random"); value.Exists() {
+func (data *FlowSamplerMap) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "random"); value.Exists() {
 		data.Random = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "out-of"); value.Exists() {
+	if value := res.Get(prefix + "out-of"); value.Exists() {
 		data.OutOf = types.Int64Value(value.Int())
 	}
 }
@@ -113,16 +182,51 @@ func (data *FlowSamplerMap) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *FlowSamplerMapData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "random"); value.Exists() {
+func (data *FlowSamplerMapData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "random"); value.Exists() {
 		data.Random = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "out-of"); value.Exists() {
+	if value := res.Get(prefix + "out-of"); value.Exists() {
 		data.OutOf = types.Int64Value(value.Int())
 	}
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *FlowSamplerMap) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/random"); value.Exists() {
+		data.Random = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/out-of"); value.Exists() {
+		data.OutOf = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *FlowSamplerMapData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/random"); value.Exists() {
+		data.Random = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/out-of"); value.Exists() {
+		data.OutOf = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -141,7 +245,7 @@ func (data *FlowSamplerMap) getDeletedItems(ctx context.Context, state FlowSampl
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *FlowSamplerMap) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *FlowSamplerMap) getEmptyLeafsDelete(ctx context.Context, state *FlowSamplerMap) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
@@ -158,7 +262,53 @@ func (data *FlowSamplerMap) getDeletePaths(ctx context.Context) []string {
 	if !data.Random.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/random", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *FlowSamplerMap) addDeletedItemsXML(ctx context.Context, state FlowSamplerMap, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.OutOf.IsNull() && data.OutOf.IsNull() {
+		deletePath := state.getXPath() + "/out-of"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Random.IsNull() && data.Random.IsNull() {
+		deletePath := state.getXPath() + "/random"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *FlowSamplerMap) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.OutOf.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/out-of")
+	}
+	if !data.Random.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/random")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

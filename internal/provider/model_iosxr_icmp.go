@@ -23,9 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
+	"sort"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -70,6 +75,17 @@ func (data ICMP) getPath() string {
 
 func (data ICMPData) getPath() string {
 	return "Cisco-IOS-XR-um-icmp-cfg:/icmp"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data ICMP) getXPath() string {
+	path := "Cisco-IOS-XR-um-icmp-cfg:/icmp"
+	return path
+}
+
+func (data ICMPData) getXPath() string {
+	path := "Cisco-IOS-XR-um-icmp-cfg:/icmp"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -122,152 +138,315 @@ func (data ICMP) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *ICMP) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "ipv4.source.vrf"); !data.Ipv4SourceVrf.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "ipv4.source.vrf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4SourceVrf.IsNull() {
 			data.Ipv4SourceVrf = types.BoolValue(true)
-		} else {
-			data.Ipv4SourceVrf = types.BoolValue(false)
 		}
 	} else {
-		data.Ipv4SourceVrf = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv4SourceVrf.IsNull() {
+			data.Ipv4SourceVrf = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "ipv4.source.rfc"); !data.Ipv4SourceRfc.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "ipv4.source.rfc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4SourceRfc.IsNull() {
 			data.Ipv4SourceRfc = types.BoolValue(true)
-		} else {
-			data.Ipv4SourceRfc = types.BoolValue(false)
 		}
 	} else {
-		data.Ipv4SourceRfc = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv4SourceRfc.IsNull() {
+			data.Ipv4SourceRfc = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.rate"); value.Exists() && !data.Ipv4RateLimitUnreachableRate.IsNull() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.Ipv4RateLimitUnreachableRate.IsNull() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.disable"); !data.Ipv4RateLimitUnreachableDisable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4RateLimitUnreachableDisable.IsNull() {
 			data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
-		} else {
-			data.Ipv4RateLimitUnreachableDisable = types.BoolValue(false)
 		}
 	} else {
-		data.Ipv4RateLimitUnreachableDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv4RateLimitUnreachableDisable.IsNull() {
+			data.Ipv4RateLimitUnreachableDisable = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.rate"); value.Exists() && !data.Ipv4RateLimitUnreachableDfRate.IsNull() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.Ipv4RateLimitUnreachableDfRate.IsNull() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.disable"); !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
 			data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
-		} else {
-			data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(false)
 		}
 	} else {
-		data.Ipv4RateLimitUnreachableDfDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+			data.Ipv4RateLimitUnreachableDfDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "ipv6.source.vrf"); !data.Ipv6SourceVrf.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "ipv6.source.vrf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv6SourceVrf.IsNull() {
 			data.Ipv6SourceVrf = types.BoolValue(true)
-		} else {
-			data.Ipv6SourceVrf = types.BoolValue(false)
 		}
 	} else {
-		data.Ipv6SourceVrf = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv6SourceVrf.IsNull() {
+			data.Ipv6SourceVrf = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "ipv6.source.rfc"); !data.Ipv6SourceRfc.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "ipv6.source.rfc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv6SourceRfc.IsNull() {
 			data.Ipv6SourceRfc = types.BoolValue(true)
-		} else {
-			data.Ipv6SourceRfc = types.BoolValue(false)
 		}
 	} else {
-		data.Ipv6SourceRfc = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv6SourceRfc.IsNull() {
+			data.Ipv6SourceRfc = types.BoolNull()
+		}
 	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data ICMP) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.Ipv4SourceVrf.IsNull() && !data.Ipv4SourceVrf.IsUnknown() {
+		if data.Ipv4SourceVrf.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/source/vrf", "")
+		}
+	}
+	if !data.Ipv4SourceRfc.IsNull() && !data.Ipv4SourceRfc.IsUnknown() {
+		if data.Ipv4SourceRfc.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/source/rfc", "")
+		}
+	}
+	if !data.Ipv4RateLimitUnreachableRate.IsNull() && !data.Ipv4RateLimitUnreachableRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/rate-limit/unreachable/rate", strconv.FormatInt(data.Ipv4RateLimitUnreachableRate.ValueInt64(), 10))
+	}
+	if !data.Ipv4RateLimitUnreachableDisable.IsNull() && !data.Ipv4RateLimitUnreachableDisable.IsUnknown() {
+		if data.Ipv4RateLimitUnreachableDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/rate-limit/unreachable/disable", "")
+		}
+	}
+	if !data.Ipv4RateLimitUnreachableDfRate.IsNull() && !data.Ipv4RateLimitUnreachableDfRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/rate-limit/unreachable/df/rate", strconv.FormatInt(data.Ipv4RateLimitUnreachableDfRate.ValueInt64(), 10))
+	}
+	if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() && !data.Ipv4RateLimitUnreachableDfDisable.IsUnknown() {
+		if data.Ipv4RateLimitUnreachableDfDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/rate-limit/unreachable/df/disable", "")
+		}
+	}
+	if !data.Ipv6SourceVrf.IsNull() && !data.Ipv6SourceVrf.IsUnknown() {
+		if data.Ipv6SourceVrf.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ipv6/source/vrf", "")
+		}
+	}
+	if !data.Ipv6SourceRfc.IsNull() && !data.Ipv6SourceRfc.IsUnknown() {
+		if data.Ipv6SourceRfc.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ipv6/source/rfc", "")
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *ICMP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/source/vrf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4SourceVrf.IsNull() {
+			data.Ipv4SourceVrf = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv4SourceVrf.IsNull() {
+			data.Ipv4SourceVrf = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/source/rfc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4SourceRfc.IsNull() {
+			data.Ipv4SourceRfc = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv4SourceRfc.IsNull() {
+			data.Ipv4SourceRfc = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/rate"); value.Exists() {
+		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
+	} else if data.Ipv4RateLimitUnreachableRate.IsNull() {
+		data.Ipv4RateLimitUnreachableRate = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4RateLimitUnreachableDisable.IsNull() {
+			data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv4RateLimitUnreachableDisable.IsNull() {
+			data.Ipv4RateLimitUnreachableDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/rate"); value.Exists() {
+		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
+	} else if data.Ipv4RateLimitUnreachableDfRate.IsNull() {
+		data.Ipv4RateLimitUnreachableDfRate = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+			data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+			data.Ipv4RateLimitUnreachableDfDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/source/vrf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv6SourceVrf.IsNull() {
+			data.Ipv6SourceVrf = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv6SourceVrf.IsNull() {
+			data.Ipv6SourceVrf = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/source/rfc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv6SourceRfc.IsNull() {
+			data.Ipv6SourceRfc = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv6SourceRfc.IsNull() {
+			data.Ipv6SourceRfc = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *ICMP) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "ipv4.source.vrf"); value.Exists() {
+func (data *ICMP) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "ipv4.source.vrf"); value.Exists() {
 		data.Ipv4SourceVrf = types.BoolValue(true)
-	} else {
+	} else if !data.Ipv4SourceVrf.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Ipv4SourceVrf = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ipv4.source.rfc"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.source.rfc"); value.Exists() {
 		data.Ipv4SourceRfc = types.BoolValue(true)
-	} else {
+	} else if !data.Ipv4SourceRfc.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Ipv4SourceRfc = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.rate"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.rate"); value.Exists() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.disable"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.disable"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
-	} else {
+	} else if !data.Ipv4RateLimitUnreachableDisable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.rate"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.df.rate"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
-	} else {
+	} else if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ipv6.source.vrf"); value.Exists() {
+	if value := res.Get(prefix + "ipv6.source.vrf"); value.Exists() {
 		data.Ipv6SourceVrf = types.BoolValue(true)
-	} else {
+	} else if !data.Ipv6SourceVrf.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Ipv6SourceVrf = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ipv6.source.rfc"); value.Exists() {
+	if value := res.Get(prefix + "ipv6.source.rfc"); value.Exists() {
 		data.Ipv6SourceRfc = types.BoolValue(true)
-	} else {
+	} else if !data.Ipv6SourceRfc.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Ipv6SourceRfc = types.BoolValue(false)
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *ICMPData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "ipv4.source.vrf"); value.Exists() {
+func (data *ICMPData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "ipv4.source.vrf"); value.Exists() {
 		data.Ipv4SourceVrf = types.BoolValue(true)
 	} else {
 		data.Ipv4SourceVrf = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ipv4.source.rfc"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.source.rfc"); value.Exists() {
 		data.Ipv4SourceRfc = types.BoolValue(true)
 	} else {
 		data.Ipv4SourceRfc = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.rate"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.rate"); value.Exists() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.disable"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.disable"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
 	} else {
 		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.rate"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.df.rate"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
 	} else {
 		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ipv6.source.vrf"); value.Exists() {
+	if value := res.Get(prefix + "ipv6.source.vrf"); value.Exists() {
 		data.Ipv6SourceVrf = types.BoolValue(true)
 	} else {
 		data.Ipv6SourceVrf = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ipv6.source.rfc"); value.Exists() {
+	if value := res.Get(prefix + "ipv6.source.rfc"); value.Exists() {
 		data.Ipv6SourceRfc = types.BoolValue(true)
 	} else {
 		data.Ipv6SourceRfc = types.BoolValue(false)
@@ -275,7 +454,90 @@ func (data *ICMPData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *ICMP) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/source/vrf"); value.Exists() {
+		data.Ipv4SourceVrf = types.BoolValue(true)
+	} else {
+		data.Ipv4SourceVrf = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/source/rfc"); value.Exists() {
+		data.Ipv4SourceRfc = types.BoolValue(true)
+	} else {
+		data.Ipv4SourceRfc = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/rate"); value.Exists() {
+		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/disable"); value.Exists() {
+		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
+	} else {
+		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/rate"); value.Exists() {
+		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/disable"); value.Exists() {
+		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
+	} else {
+		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/source/vrf"); value.Exists() {
+		data.Ipv6SourceVrf = types.BoolValue(true)
+	} else {
+		data.Ipv6SourceVrf = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/source/rfc"); value.Exists() {
+		data.Ipv6SourceRfc = types.BoolValue(true)
+	} else {
+		data.Ipv6SourceRfc = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *ICMPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/source/vrf"); value.Exists() {
+		data.Ipv4SourceVrf = types.BoolValue(true)
+	} else {
+		data.Ipv4SourceVrf = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/source/rfc"); value.Exists() {
+		data.Ipv4SourceRfc = types.BoolValue(true)
+	} else {
+		data.Ipv4SourceRfc = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/rate"); value.Exists() {
+		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/disable"); value.Exists() {
+		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
+	} else {
+		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/rate"); value.Exists() {
+		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/disable"); value.Exists() {
+		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
+	} else {
+		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/source/vrf"); value.Exists() {
+		data.Ipv6SourceVrf = types.BoolValue(true)
+	} else {
+		data.Ipv6SourceVrf = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/source/rfc"); value.Exists() {
+		data.Ipv6SourceRfc = types.BoolValue(true)
+	} else {
+		data.Ipv6SourceRfc = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *ICMP) getDeletedItems(ctx context.Context, state ICMP) []string {
@@ -308,34 +570,50 @@ func (data *ICMP) getDeletedItems(ctx context.Context, state ICMP) []string {
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *ICMP) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *ICMP) getEmptyLeafsDelete(ctx context.Context, state *ICMP) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.Ipv6SourceRfc.IsNull() && !data.Ipv6SourceRfc.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/source", data.getPath()))
+		if state != nil && !state.Ipv6SourceRfc.IsNull() && state.Ipv6SourceRfc.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/source", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Ipv6SourceVrf.IsNull() && !data.Ipv6SourceVrf.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/source", data.getPath()))
+		if state != nil && !state.Ipv6SourceVrf.IsNull() && state.Ipv6SourceVrf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/source", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() && !data.Ipv4RateLimitUnreachableDfDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/rate-limit/unreachable/df", data.getPath()))
+		if state != nil && !state.Ipv4RateLimitUnreachableDfDisable.IsNull() && state.Ipv4RateLimitUnreachableDfDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/rate-limit/unreachable/df", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Ipv4RateLimitUnreachableDisable.IsNull() && !data.Ipv4RateLimitUnreachableDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/rate-limit/unreachable/disable", data.getPath()))
+		if state != nil && !state.Ipv4RateLimitUnreachableDisable.IsNull() && state.Ipv4RateLimitUnreachableDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/rate-limit/unreachable/disable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Ipv4SourceRfc.IsNull() && !data.Ipv4SourceRfc.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/source", data.getPath()))
+		if state != nil && !state.Ipv4SourceRfc.IsNull() && state.Ipv4SourceRfc.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/source", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Ipv4SourceVrf.IsNull() && !data.Ipv4SourceVrf.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/source", data.getPath()))
+		if state != nil && !state.Ipv4SourceVrf.IsNull() && state.Ipv4SourceVrf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/source", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *ICMP) getDeletePaths(ctx context.Context) []string {
@@ -364,7 +642,207 @@ func (data *ICMP) getDeletePaths(ctx context.Context) []string {
 	if !data.Ipv4SourceVrf.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/source", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *ICMP) addDeletedItemsXML(ctx context.Context, state ICMP, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Ipv6SourceRfc.IsNull() && state.Ipv6SourceRfc.ValueBool() && data.Ipv6SourceRfc.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ipv6/source"
+		predicates := make(map[string]string)
+		if !state.Ipv6SourceVrf.IsNull() {
+			predicates["vrf"] = fmt.Sprintf("%v", state.Ipv6SourceVrf.ValueBool())
+		}
+		predicates["rfc"] = fmt.Sprintf("%v", state.Ipv6SourceRfc.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Ipv6SourceVrf.IsNull() && state.Ipv6SourceVrf.ValueBool() && data.Ipv6SourceVrf.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ipv6/source"
+		predicates := make(map[string]string)
+		if !state.Ipv6SourceRfc.IsNull() {
+			predicates["rfc"] = fmt.Sprintf("%v", state.Ipv6SourceRfc.ValueBool())
+		}
+		predicates["vrf"] = fmt.Sprintf("%v", state.Ipv6SourceVrf.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Ipv4RateLimitUnreachableDfDisable.IsNull() && state.Ipv4RateLimitUnreachableDfDisable.ValueBool() && data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ipv4/rate-limit/unreachable/df"
+		predicates := make(map[string]string)
+		if !state.Ipv4RateLimitUnreachableDfRate.IsNull() {
+			predicates["rate"] = fmt.Sprintf("%v", state.Ipv4RateLimitUnreachableDfRate.ValueInt64())
+		}
+		predicates["disable"] = fmt.Sprintf("%v", state.Ipv4RateLimitUnreachableDfDisable.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Ipv4RateLimitUnreachableDfRate.IsNull() && data.Ipv4RateLimitUnreachableDfRate.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ipv4/rate-limit/unreachable/df"
+		predicates := make(map[string]string)
+		if !state.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+			predicates["disable"] = fmt.Sprintf("%v", state.Ipv4RateLimitUnreachableDfDisable.ValueBool())
+		}
+		predicates["rate"] = fmt.Sprintf("%v", state.Ipv4RateLimitUnreachableDfRate.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Ipv4RateLimitUnreachableDisable.IsNull() && state.Ipv4RateLimitUnreachableDisable.ValueBool() && data.Ipv4RateLimitUnreachableDisable.IsNull() {
+		deletePath := state.getXPath() + "/ipv4/rate-limit/unreachable/disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Ipv4RateLimitUnreachableRate.IsNull() && data.Ipv4RateLimitUnreachableRate.IsNull() {
+		deletePath := state.getXPath() + "/ipv4/rate-limit/unreachable/rate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Ipv4SourceRfc.IsNull() && state.Ipv4SourceRfc.ValueBool() && data.Ipv4SourceRfc.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ipv4/source"
+		predicates := make(map[string]string)
+		if !state.Ipv4SourceVrf.IsNull() {
+			predicates["vrf"] = fmt.Sprintf("%v", state.Ipv4SourceVrf.ValueBool())
+		}
+		predicates["rfc"] = fmt.Sprintf("%v", state.Ipv4SourceRfc.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Ipv4SourceVrf.IsNull() && state.Ipv4SourceVrf.ValueBool() && data.Ipv4SourceVrf.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ipv4/source"
+		predicates := make(map[string]string)
+		if !state.Ipv4SourceRfc.IsNull() {
+			predicates["rfc"] = fmt.Sprintf("%v", state.Ipv4SourceRfc.ValueBool())
+		}
+		predicates["vrf"] = fmt.Sprintf("%v", state.Ipv4SourceVrf.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *ICMP) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.Ipv6SourceRfc.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv6/source")
+	}
+	if !data.Ipv6SourceVrf.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv6/source")
+	}
+	if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv4/rate-limit/unreachable/df")
+	}
+	if !data.Ipv4RateLimitUnreachableDfRate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv4/rate-limit/unreachable/df")
+	}
+	if !data.Ipv4RateLimitUnreachableDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv4/rate-limit/unreachable/disable")
+	}
+	if !data.Ipv4RateLimitUnreachableRate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv4/rate-limit/unreachable/rate")
+	}
+	if !data.Ipv4SourceRfc.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv4/source")
+	}
+	if !data.Ipv4SourceVrf.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv4/source")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

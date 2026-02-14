@@ -79,7 +79,7 @@ func iosxrSegmentRoutingMappingServerImportStateIdFunc(resourceName string) reso
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrSegmentRoutingMappingServerPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-segment-routing-cfg:/segment-routing"
 	attributes = {
 		"enable" = "<NULL>"
@@ -103,7 +103,7 @@ func testAccIosxrSegmentRoutingMappingServerConfig_minimum() string {
 	config += `			range = 10` + "\n"
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -124,7 +124,7 @@ func testAccIosxrSegmentRoutingMappingServerConfig_all() string {
 	config += `			attached = true` + "\n"
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

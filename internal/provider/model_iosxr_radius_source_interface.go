@@ -24,7 +24,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -58,6 +62,19 @@ func (data RadiusSourceInterfaceData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-radius-server-cfg:radius/vrfs/vrf[vrf-name=%s]", data.Vrf.ValueString())
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data RadiusSourceInterface) getXPath() string {
+	path := "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-radius-server-cfg:radius/vrfs/vrf[vrf-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.Vrf.ValueString()))
+	return path
+}
+
+func (data RadiusSourceInterfaceData) getXPath() string {
+	path := "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-radius-server-cfg:radius/vrfs/vrf[vrf-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.Vrf.ValueString()))
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -80,33 +97,99 @@ func (data RadiusSourceInterface) toBody(ctx context.Context) string {
 func (data *RadiusSourceInterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "source-interface"); value.Exists() && !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(value.String())
-	} else {
+	} else if data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data RadiusSourceInterface) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.Vrf.IsNull() && !data.Vrf.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/vrf-name", data.Vrf.ValueString())
+	}
+	if !data.SourceInterface.IsNull() && !data.SourceInterface.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/source-interface", data.SourceInterface.ValueString())
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *RadiusSourceInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrf-name"); value.Exists() {
+		data.Vrf = types.StringValue(value.String())
+	} else if data.Vrf.IsNull() {
+		data.Vrf = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() {
+		data.SourceInterface = types.StringValue(value.String())
+	} else if data.SourceInterface.IsNull() {
+		data.SourceInterface = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *RadiusSourceInterface) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "source-interface"); value.Exists() {
+func (data *RadiusSourceInterface) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *RadiusSourceInterfaceData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "source-interface"); value.Exists() {
+func (data *RadiusSourceInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *RadiusSourceInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() {
+		data.SourceInterface = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *RadiusSourceInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() {
+		data.SourceInterface = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RadiusSourceInterface) getDeletedItems(ctx context.Context, state RadiusSourceInterface) []string {
@@ -118,16 +201,14 @@ func (data *RadiusSourceInterface) getDeletedItems(ctx context.Context, state Ra
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *RadiusSourceInterface) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *RadiusSourceInterface) getEmptyLeafsDelete(ctx context.Context, state *RadiusSourceInterface) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RadiusSourceInterface) getDeletePaths(ctx context.Context) []string {
@@ -135,7 +216,41 @@ func (data *RadiusSourceInterface) getDeletePaths(ctx context.Context) []string 
 	if !data.SourceInterface.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-interface", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *RadiusSourceInterface) addDeletedItemsXML(ctx context.Context, state RadiusSourceInterface, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.SourceInterface.IsNull() && data.SourceInterface.IsNull() {
+		deletePath := state.getXPath() + "/source-interface"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *RadiusSourceInterface) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.SourceInterface.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/source-interface")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

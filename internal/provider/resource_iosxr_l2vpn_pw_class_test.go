@@ -102,7 +102,7 @@ func iosxrL2VPNPWClassImportStateIdFunc(resourceName string) resource.ImportStat
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrL2VPNPWClassPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
 	attributes = {
 	}
@@ -117,7 +117,7 @@ resource "iosxr_gnmi" "PreReq0" {
 func testAccIosxrL2VPNPWClassConfig_minimum() string {
 	config := `resource "iosxr_l2vpn_pw_class" "test" {` + "\n"
 	config += `	name = "PW-CLASS1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -155,7 +155,7 @@ func testAccIosxrL2VPNPWClassConfig_all() string {
 	config += `	encapsulation_mpls_ipv4_source = "1.2.3.4"` + "\n"
 	config += `	backup_disable_delay = 10` + "\n"
 	config += `	mac_withdraw = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

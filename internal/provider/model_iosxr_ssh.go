@@ -28,6 +28,9 @@ import (
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -172,6 +175,17 @@ func (data SSH) getPath() string {
 
 func (data SSHData) getPath() string {
 	return "Cisco-IOS-XR-um-ssh-cfg:/ssh"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data SSH) getXPath() string {
+	path := "Cisco-IOS-XR-um-ssh-cfg:/ssh"
+	return path
+}
+
+func (data SSHData) getXPath() string {
+	path := "Cisco-IOS-XR-um-ssh-cfg:/ssh"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -435,7 +449,7 @@ func (data SSH) toBody(ctx context.Context) string {
 func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "timeout"); value.Exists() && !data.Timeout.IsNull() {
 		data.Timeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.Timeout.IsNull() {
 		data.Timeout = types.Int64Null()
 	}
 	for i := range data.ServerVrfs {
@@ -477,96 +491,112 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerVrfs[i].Ipv6AccessList = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.v1"); !data.ServerV1.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.v1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerV1.IsNull() {
 			data.ServerV1 = types.BoolValue(true)
-		} else {
-			data.ServerV1 = types.BoolValue(false)
 		}
 	} else {
-		data.ServerV1 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerV1.IsNull() {
+			data.ServerV1 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.v2"); !data.ServerV2.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.v2"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerV2.IsNull() {
 			data.ServerV2 = types.BoolValue(true)
-		} else {
-			data.ServerV2 = types.BoolValue(false)
 		}
 	} else {
-		data.ServerV2 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerV2.IsNull() {
+			data.ServerV2 = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "server.rate-limit"); value.Exists() && !data.ServerRateLimit.IsNull() {
 		data.ServerRateLimit = types.Int64Value(value.Int())
-	} else {
+	} else if data.ServerRateLimit.IsNull() {
 		data.ServerRateLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha2-512"); !data.ServerDisableHmacSha2512.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha2-512"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerDisableHmacSha2512.IsNull() {
 			data.ServerDisableHmacSha2512 = types.BoolValue(true)
-		} else {
-			data.ServerDisableHmacSha2512 = types.BoolValue(false)
 		}
 	} else {
-		data.ServerDisableHmacSha2512 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerDisableHmacSha2512.IsNull() {
+			data.ServerDisableHmacSha2512 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha1"); !data.ServerDisableHmacSha1.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerDisableHmacSha1.IsNull() {
 			data.ServerDisableHmacSha1 = types.BoolValue(true)
-		} else {
-			data.ServerDisableHmacSha1 = types.BoolValue(false)
 		}
 	} else {
-		data.ServerDisableHmacSha1 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerDisableHmacSha1.IsNull() {
+			data.ServerDisableHmacSha1 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha2-256"); !data.ServerDisableHmacSha2256.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha2-256"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerDisableHmacSha2256.IsNull() {
 			data.ServerDisableHmacSha2256 = types.BoolValue(true)
-		} else {
-			data.ServerDisableHmacSha2256 = types.BoolValue(false)
 		}
 	} else {
-		data.ServerDisableHmacSha2256 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerDisableHmacSha2256.IsNull() {
+			data.ServerDisableHmacSha2256 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.enable.cipher.aes-cbc"); !data.ServerEnableCipherAesCbc.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.enable.cipher.aes-cbc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerEnableCipherAesCbc.IsNull() {
 			data.ServerEnableCipherAesCbc = types.BoolValue(true)
-		} else {
-			data.ServerEnableCipherAesCbc = types.BoolValue(false)
 		}
 	} else {
-		data.ServerEnableCipherAesCbc = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerEnableCipherAesCbc.IsNull() {
+			data.ServerEnableCipherAesCbc = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.enable.cipher.threedes-cbc"); !data.ServerEnableCipher3desCbc.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.enable.cipher.threedes-cbc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerEnableCipher3desCbc.IsNull() {
 			data.ServerEnableCipher3desCbc = types.BoolValue(true)
-		} else {
-			data.ServerEnableCipher3desCbc = types.BoolValue(false)
 		}
 	} else {
-		data.ServerEnableCipher3desCbc = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerEnableCipher3desCbc.IsNull() {
+			data.ServerEnableCipher3desCbc = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "server.session-limit"); value.Exists() && !data.ServerSessionLimit.IsNull() {
 		data.ServerSessionLimit = types.Int64Value(value.Int())
-	} else {
+	} else if data.ServerSessionLimit.IsNull() {
 		data.ServerSessionLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.logging"); !data.ServerLogging.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.logging"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerLogging.IsNull() {
 			data.ServerLogging = types.BoolValue(true)
-		} else {
-			data.ServerLogging = types.BoolValue(false)
 		}
 	} else {
-		data.ServerLogging = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerLogging.IsNull() {
+			data.ServerLogging = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "server.dscp"); value.Exists() && !data.ServerDscp.IsNull() {
 		data.ServerDscp = types.Int64Value(value.Int())
-	} else {
+	} else if data.ServerDscp.IsNull() {
 		data.ServerDscp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "server.netconf.port"); value.Exists() && !data.ServerNetconfPort.IsNull() {
 		data.ServerNetconfPort = types.Int64Value(value.Int())
-	} else {
+	} else if data.ServerNetconfPort.IsNull() {
 		data.ServerNetconfPort = types.Int64Null()
 	}
 	for i := range data.ServerNetconfVrfs {
@@ -608,147 +638,171 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerNetconfVrfs[i].Ipv6AccessList = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.capability.netconf-xml"); !data.ServerNetconfXml.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.capability.netconf-xml"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerNetconfXml.IsNull() {
 			data.ServerNetconfXml = types.BoolValue(true)
-		} else {
-			data.ServerNetconfXml = types.BoolValue(false)
 		}
 	} else {
-		data.ServerNetconfXml = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerNetconfXml.IsNull() {
+			data.ServerNetconfXml = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "server.rekey-time"); value.Exists() && !data.ServerRekeyTime.IsNull() {
 		data.ServerRekeyTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.ServerRekeyTime.IsNull() {
 		data.ServerRekeyTime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "server.rekey-volume"); value.Exists() && !data.ServerRekeyVolume.IsNull() {
 		data.ServerRekeyVolume = types.Int64Value(value.Int())
-	} else {
+	} else if data.ServerRekeyVolume.IsNull() {
 		data.ServerRekeyVolume = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "server.algorithms.key-exchanges.key-exchange"); value.Exists() && !data.ServerAlgorithmsKeyExchanges.IsNull() {
 		data.ServerAlgorithmsKeyExchanges = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.ServerAlgorithmsKeyExchanges.IsNull() {
 		data.ServerAlgorithmsKeyExchanges = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp256"); !data.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp256"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() {
 			data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolValue(true)
-		} else {
-			data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolValue(false)
 		}
 	} else {
-		data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() {
+			data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp384"); !data.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp384"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() {
 			data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolValue(true)
-		} else {
-			data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolValue(false)
 		}
 	} else {
-		data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() {
+			data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp521"); !data.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp521"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() {
 			data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolValue(true)
-		} else {
-			data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolValue(false)
 		}
 	} else {
-		data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() {
+			data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa"); !data.ServerAlgorithmsHostKeyRsa.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyRsa.IsNull() {
 			data.ServerAlgorithmsHostKeyRsa = types.BoolValue(true)
-		} else {
-			data.ServerAlgorithmsHostKeyRsa = types.BoolValue(false)
 		}
 	} else {
-		data.ServerAlgorithmsHostKeyRsa = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyRsa.IsNull() {
+			data.ServerAlgorithmsHostKeyRsa = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.dsa"); !data.ServerAlgorithmsHostKeyDsa.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.algorithms.host-key.dsa"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyDsa.IsNull() {
 			data.ServerAlgorithmsHostKeyDsa = types.BoolValue(true)
-		} else {
-			data.ServerAlgorithmsHostKeyDsa = types.BoolValue(false)
 		}
 	} else {
-		data.ServerAlgorithmsHostKeyDsa = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyDsa.IsNull() {
+			data.ServerAlgorithmsHostKeyDsa = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.x509v3-ssh-rsa"); !data.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.algorithms.host-key.x509v3-ssh-rsa"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() {
 			data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolValue(true)
-		} else {
-			data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolValue(false)
 		}
 	} else {
-		data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() {
+			data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ed25519"); !data.ServerAlgorithmsHostKeyEd25519.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.algorithms.host-key.ed25519"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyEd25519.IsNull() {
 			data.ServerAlgorithmsHostKeyEd25519 = types.BoolValue(true)
-		} else {
-			data.ServerAlgorithmsHostKeyEd25519 = types.BoolValue(false)
 		}
 	} else {
-		data.ServerAlgorithmsHostKeyEd25519 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyEd25519.IsNull() {
+			data.ServerAlgorithmsHostKeyEd25519 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa-sha512"); !data.ServerAlgorithmsHostKeyRsaSha512.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa-sha512"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyRsaSha512.IsNull() {
 			data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolValue(true)
-		} else {
-			data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolValue(false)
 		}
 	} else {
-		data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyRsaSha512.IsNull() {
+			data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa-sha256"); !data.ServerAlgorithmsHostKeyRsaSha256.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa-sha256"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyRsaSha256.IsNull() {
 			data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolValue(true)
-		} else {
-			data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolValue(false)
 		}
 	} else {
-		data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyRsaSha256.IsNull() {
+			data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ssh-rsa"); !data.ServerAlgorithmsHostKeySshRsa.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.algorithms.host-key.ssh-rsa"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeySshRsa.IsNull() {
 			data.ServerAlgorithmsHostKeySshRsa = types.BoolValue(true)
-		} else {
-			data.ServerAlgorithmsHostKeySshRsa = types.BoolValue(false)
 		}
 	} else {
-		data.ServerAlgorithmsHostKeySshRsa = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeySshRsa.IsNull() {
+			data.ServerAlgorithmsHostKeySshRsa = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "server.algorithms.ciphers.cipher"); value.Exists() && !data.ServerAlgorithmsCiphers.IsNull() {
 		data.ServerAlgorithmsCiphers = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.ServerAlgorithmsCiphers.IsNull() {
 		data.ServerAlgorithmsCiphers = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "server.max-auth-limit"); value.Exists() && !data.ServerMaxAuthLimit.IsNull() {
 		data.ServerMaxAuthLimit = types.Int64Value(value.Int())
-	} else {
+	} else if data.ServerMaxAuthLimit.IsNull() {
 		data.ServerMaxAuthLimit = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "server.tcp-window-scale"); value.Exists() && !data.ServerTcpWindowScale.IsNull() {
 		data.ServerTcpWindowScale = types.Int64Value(value.Int())
-	} else {
+	} else if data.ServerTcpWindowScale.IsNull() {
 		data.ServerTcpWindowScale = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.port-forwarding.local"); !data.ServerPortForwardingLocal.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "server.port-forwarding.local"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerPortForwardingLocal.IsNull() {
 			data.ServerPortForwardingLocal = types.BoolValue(true)
-		} else {
-			data.ServerPortForwardingLocal = types.BoolValue(false)
 		}
 	} else {
-		data.ServerPortForwardingLocal = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerPortForwardingLocal.IsNull() {
+			data.ServerPortForwardingLocal = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "server.port"); value.Exists() && !data.ServerPort.IsNull() {
 		data.ServerPort = types.Int64Value(value.Int())
-	} else {
+	} else if data.ServerPort.IsNull() {
 		data.ServerPort = types.Int64Null()
 	}
 	for i := range data.ServerUsernames {
@@ -782,123 +836,924 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "client.knownhost"); value.Exists() && !data.ClientKnownhost.IsNull() {
 		data.ClientKnownhost = types.StringValue(value.String())
-	} else {
+	} else if data.ClientKnownhost.IsNull() {
 		data.ClientKnownhost = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "client.source-interface"); value.Exists() && !data.ClientSourceInterface.IsNull() {
 		data.ClientSourceInterface = types.StringValue(value.String())
-	} else {
+	} else if data.ClientSourceInterface.IsNull() {
 		data.ClientSourceInterface = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "client.vrf"); value.Exists() && !data.ClientVrf.IsNull() {
 		data.ClientVrf = types.StringValue(value.String())
-	} else {
+	} else if data.ClientVrf.IsNull() {
 		data.ClientVrf = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "client.dscp"); value.Exists() && !data.ClientDscp.IsNull() {
 		data.ClientDscp = types.Int64Value(value.Int())
-	} else {
+	} else if data.ClientDscp.IsNull() {
 		data.ClientDscp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "client.rekey-time"); value.Exists() && !data.ClientRekeyTime.IsNull() {
 		data.ClientRekeyTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.ClientRekeyTime.IsNull() {
 		data.ClientRekeyTime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "client.rekey-volume"); value.Exists() && !data.ClientRekeyVolume.IsNull() {
 		data.ClientRekeyVolume = types.Int64Value(value.Int())
-	} else {
+	} else if data.ClientRekeyVolume.IsNull() {
 		data.ClientRekeyVolume = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha1"); !data.ClientDisableHmacSha1.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClientDisableHmacSha1.IsNull() {
 			data.ClientDisableHmacSha1 = types.BoolValue(true)
-		} else {
-			data.ClientDisableHmacSha1 = types.BoolValue(false)
 		}
 	} else {
-		data.ClientDisableHmacSha1 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ClientDisableHmacSha1.IsNull() {
+			data.ClientDisableHmacSha1 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha2-512"); !data.ClientDisableHmacSha2512.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha2-512"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClientDisableHmacSha2512.IsNull() {
 			data.ClientDisableHmacSha2512 = types.BoolValue(true)
-		} else {
-			data.ClientDisableHmacSha2512 = types.BoolValue(false)
 		}
 	} else {
-		data.ClientDisableHmacSha2512 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ClientDisableHmacSha2512.IsNull() {
+			data.ClientDisableHmacSha2512 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha2-256"); !data.ClientDisableHmacSha2256.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha2-256"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClientDisableHmacSha2256.IsNull() {
 			data.ClientDisableHmacSha2256 = types.BoolValue(true)
-		} else {
-			data.ClientDisableHmacSha2256 = types.BoolValue(false)
 		}
 	} else {
-		data.ClientDisableHmacSha2256 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ClientDisableHmacSha2256.IsNull() {
+			data.ClientDisableHmacSha2256 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "client.enable.cipher.aes-cbc"); !data.ClientEnableCipherAesCbc.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "client.enable.cipher.aes-cbc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClientEnableCipherAesCbc.IsNull() {
 			data.ClientEnableCipherAesCbc = types.BoolValue(true)
-		} else {
-			data.ClientEnableCipherAesCbc = types.BoolValue(false)
 		}
 	} else {
-		data.ClientEnableCipherAesCbc = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ClientEnableCipherAesCbc.IsNull() {
+			data.ClientEnableCipherAesCbc = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "client.enable.cipher.threedes-cbc"); !data.ClientEnableCipher3desCbc.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "client.enable.cipher.threedes-cbc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClientEnableCipher3desCbc.IsNull() {
 			data.ClientEnableCipher3desCbc = types.BoolValue(true)
-		} else {
-			data.ClientEnableCipher3desCbc = types.BoolValue(false)
 		}
 	} else {
-		data.ClientEnableCipher3desCbc = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ClientEnableCipher3desCbc.IsNull() {
+			data.ClientEnableCipher3desCbc = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "client.algorithms.key-exchanges.key-exchange"); value.Exists() && !data.ClientAlgorithmsKeyExchanges.IsNull() {
 		data.ClientAlgorithmsKeyExchanges = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.ClientAlgorithmsKeyExchanges.IsNull() {
 		data.ClientAlgorithmsKeyExchanges = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "client.algorithms.ciphers.cipher"); value.Exists() && !data.ClientAlgorithmsCiphers.IsNull() {
 		data.ClientAlgorithmsCiphers = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.ClientAlgorithmsCiphers.IsNull() {
 		data.ClientAlgorithmsCiphers = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "client.tcp-window-scale"); value.Exists() && !data.ClientTcpWindowScale.IsNull() {
 		data.ClientTcpWindowScale = types.Int64Value(value.Int())
-	} else {
+	} else if data.ClientTcpWindowScale.IsNull() {
 		data.ClientTcpWindowScale = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "client.v2"); !data.ClientV2.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "client.v2"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClientV2.IsNull() {
 			data.ClientV2 = types.BoolValue(true)
-		} else {
-			data.ClientV2 = types.BoolValue(false)
 		}
 	} else {
-		data.ClientV2 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ClientV2.IsNull() {
+			data.ClientV2 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "client.v1"); !data.ClientV1.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "client.v1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClientV1.IsNull() {
 			data.ClientV1 = types.BoolValue(true)
-		} else {
-			data.ClientV1 = types.BoolValue(false)
 		}
 	} else {
-		data.ClientV1 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ClientV1.IsNull() {
+			data.ClientV1 = types.BoolNull()
+		}
 	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data SSH) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.Timeout.IsNull() && !data.Timeout.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timeout", strconv.FormatInt(data.Timeout.ValueInt64(), 10))
+	}
+	if len(data.ServerVrfs) > 0 {
+		for _, item := range data.ServerVrfs {
+			basePath := data.getXPath() + "/server/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
+			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
+			}
+			if !item.Ipv4AccessList.IsNull() && !item.Ipv4AccessList.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/ipv4/access-list", item.Ipv4AccessList.ValueString())
+			}
+			if !item.Ipv6AccessList.IsNull() && !item.Ipv6AccessList.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/ipv6/access-list", item.Ipv6AccessList.ValueString())
+			}
+		}
+	}
+	if !data.ServerV1.IsNull() && !data.ServerV1.IsUnknown() {
+		if data.ServerV1.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/v1", "")
+		}
+	}
+	if !data.ServerV2.IsNull() && !data.ServerV2.IsUnknown() {
+		if data.ServerV2.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/v2", "")
+		}
+	}
+	if !data.ServerRateLimit.IsNull() && !data.ServerRateLimit.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/server/rate-limit", strconv.FormatInt(data.ServerRateLimit.ValueInt64(), 10))
+	}
+	if !data.ServerDisableHmacSha2512.IsNull() && !data.ServerDisableHmacSha2512.IsUnknown() {
+		if data.ServerDisableHmacSha2512.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/disable/hmac/hmac-sha2-512", "")
+		}
+	}
+	if !data.ServerDisableHmacSha1.IsNull() && !data.ServerDisableHmacSha1.IsUnknown() {
+		if data.ServerDisableHmacSha1.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/disable/hmac/hmac-sha1", "")
+		}
+	}
+	if !data.ServerDisableHmacSha2256.IsNull() && !data.ServerDisableHmacSha2256.IsUnknown() {
+		if data.ServerDisableHmacSha2256.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/disable/hmac/hmac-sha2-256", "")
+		}
+	}
+	if !data.ServerEnableCipherAesCbc.IsNull() && !data.ServerEnableCipherAesCbc.IsUnknown() {
+		if data.ServerEnableCipherAesCbc.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/enable/cipher/aes-cbc", "")
+		}
+	}
+	if !data.ServerEnableCipher3desCbc.IsNull() && !data.ServerEnableCipher3desCbc.IsUnknown() {
+		if data.ServerEnableCipher3desCbc.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/enable/cipher/threedes-cbc", "")
+		}
+	}
+	if !data.ServerSessionLimit.IsNull() && !data.ServerSessionLimit.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/server/session-limit", strconv.FormatInt(data.ServerSessionLimit.ValueInt64(), 10))
+	}
+	if !data.ServerLogging.IsNull() && !data.ServerLogging.IsUnknown() {
+		if data.ServerLogging.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/logging", "")
+		}
+	}
+	if !data.ServerDscp.IsNull() && !data.ServerDscp.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/server/dscp", strconv.FormatInt(data.ServerDscp.ValueInt64(), 10))
+	}
+	if !data.ServerNetconfPort.IsNull() && !data.ServerNetconfPort.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/server/netconf/port", strconv.FormatInt(data.ServerNetconfPort.ValueInt64(), 10))
+	}
+	if len(data.ServerNetconfVrfs) > 0 {
+		for _, item := range data.ServerNetconfVrfs {
+			basePath := data.getXPath() + "/server/netconf/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
+			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
+			}
+			if !item.Ipv4AccessList.IsNull() && !item.Ipv4AccessList.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/ipv4/access-list", item.Ipv4AccessList.ValueString())
+			}
+			if !item.Ipv6AccessList.IsNull() && !item.Ipv6AccessList.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/ipv6/access-list", item.Ipv6AccessList.ValueString())
+			}
+		}
+	}
+	if !data.ServerNetconfXml.IsNull() && !data.ServerNetconfXml.IsUnknown() {
+		if data.ServerNetconfXml.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/capability/netconf-xml", "")
+		}
+	}
+	if !data.ServerRekeyTime.IsNull() && !data.ServerRekeyTime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/server/rekey-time", strconv.FormatInt(data.ServerRekeyTime.ValueInt64(), 10))
+	}
+	if !data.ServerRekeyVolume.IsNull() && !data.ServerRekeyVolume.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/server/rekey-volume", strconv.FormatInt(data.ServerRekeyVolume.ValueInt64(), 10))
+	}
+	if !data.ServerAlgorithmsKeyExchanges.IsNull() && !data.ServerAlgorithmsKeyExchanges.IsUnknown() {
+		var values []string
+		data.ServerAlgorithmsKeyExchanges.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			body = helpers.AppendFromXPath(body, data.getXPath()+"/server/algorithms/key-exchanges/key-exchange", v)
+		}
+	}
+	if !data.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() && !data.ServerAlgorithmsHostKeyEcdsaNistp256.IsUnknown() {
+		if data.ServerAlgorithmsHostKeyEcdsaNistp256.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp256", "")
+		}
+	}
+	if !data.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() && !data.ServerAlgorithmsHostKeyEcdsaNistp384.IsUnknown() {
+		if data.ServerAlgorithmsHostKeyEcdsaNistp384.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp384", "")
+		}
+	}
+	if !data.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() && !data.ServerAlgorithmsHostKeyEcdsaNistp521.IsUnknown() {
+		if data.ServerAlgorithmsHostKeyEcdsaNistp521.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp521", "")
+		}
+	}
+	if !data.ServerAlgorithmsHostKeyRsa.IsNull() && !data.ServerAlgorithmsHostKeyRsa.IsUnknown() {
+		if data.ServerAlgorithmsHostKeyRsa.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/algorithms/host-key/rsa", "")
+		}
+	}
+	if !data.ServerAlgorithmsHostKeyDsa.IsNull() && !data.ServerAlgorithmsHostKeyDsa.IsUnknown() {
+		if data.ServerAlgorithmsHostKeyDsa.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/algorithms/host-key/dsa", "")
+		}
+	}
+	if !data.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() && !data.ServerAlgorithmsHostKeyX509v3SshRsa.IsUnknown() {
+		if data.ServerAlgorithmsHostKeyX509v3SshRsa.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/algorithms/host-key/x509v3-ssh-rsa", "")
+		}
+	}
+	if !data.ServerAlgorithmsHostKeyEd25519.IsNull() && !data.ServerAlgorithmsHostKeyEd25519.IsUnknown() {
+		if data.ServerAlgorithmsHostKeyEd25519.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/algorithms/host-key/ed25519", "")
+		}
+	}
+	if !data.ServerAlgorithmsHostKeyRsaSha512.IsNull() && !data.ServerAlgorithmsHostKeyRsaSha512.IsUnknown() {
+		if data.ServerAlgorithmsHostKeyRsaSha512.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/algorithms/host-key/rsa-sha512", "")
+		}
+	}
+	if !data.ServerAlgorithmsHostKeyRsaSha256.IsNull() && !data.ServerAlgorithmsHostKeyRsaSha256.IsUnknown() {
+		if data.ServerAlgorithmsHostKeyRsaSha256.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/algorithms/host-key/rsa-sha256", "")
+		}
+	}
+	if !data.ServerAlgorithmsHostKeySshRsa.IsNull() && !data.ServerAlgorithmsHostKeySshRsa.IsUnknown() {
+		if data.ServerAlgorithmsHostKeySshRsa.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/algorithms/host-key/ssh-rsa", "")
+		}
+	}
+	if !data.ServerAlgorithmsCiphers.IsNull() && !data.ServerAlgorithmsCiphers.IsUnknown() {
+		var values []string
+		data.ServerAlgorithmsCiphers.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			body = helpers.AppendFromXPath(body, data.getXPath()+"/server/algorithms/ciphers/cipher", v)
+		}
+	}
+	if !data.ServerMaxAuthLimit.IsNull() && !data.ServerMaxAuthLimit.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/server/max-auth-limit", strconv.FormatInt(data.ServerMaxAuthLimit.ValueInt64(), 10))
+	}
+	if !data.ServerTcpWindowScale.IsNull() && !data.ServerTcpWindowScale.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/server/tcp-window-scale", strconv.FormatInt(data.ServerTcpWindowScale.ValueInt64(), 10))
+	}
+	if !data.ServerPortForwardingLocal.IsNull() && !data.ServerPortForwardingLocal.IsUnknown() {
+		if data.ServerPortForwardingLocal.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/port-forwarding/local", "")
+		}
+	}
+	if !data.ServerPort.IsNull() && !data.ServerPort.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/server/port", strconv.FormatInt(data.ServerPort.ValueInt64(), 10))
+	}
+	if len(data.ServerUsernames) > 0 {
+		for _, item := range data.ServerUsernames {
+			basePath := data.getXPath() + "/server/usernames/username[username-name='" + item.Username.ValueString() + "']"
+			if !item.Username.IsNull() && !item.Username.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/username-name", item.Username.ValueString())
+			}
+			if !item.Keystring.IsNull() && !item.Keystring.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/keystring", item.Keystring.ValueString())
+			}
+		}
+	}
+	if !data.ClientKnownhost.IsNull() && !data.ClientKnownhost.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/client/knownhost", data.ClientKnownhost.ValueString())
+	}
+	if !data.ClientSourceInterface.IsNull() && !data.ClientSourceInterface.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/client/source-interface", data.ClientSourceInterface.ValueString())
+	}
+	if !data.ClientVrf.IsNull() && !data.ClientVrf.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/client/vrf", data.ClientVrf.ValueString())
+	}
+	if !data.ClientDscp.IsNull() && !data.ClientDscp.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/client/dscp", strconv.FormatInt(data.ClientDscp.ValueInt64(), 10))
+	}
+	if !data.ClientRekeyTime.IsNull() && !data.ClientRekeyTime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/client/rekey-time", strconv.FormatInt(data.ClientRekeyTime.ValueInt64(), 10))
+	}
+	if !data.ClientRekeyVolume.IsNull() && !data.ClientRekeyVolume.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/client/rekey-volume", strconv.FormatInt(data.ClientRekeyVolume.ValueInt64(), 10))
+	}
+	if !data.ClientDisableHmacSha1.IsNull() && !data.ClientDisableHmacSha1.IsUnknown() {
+		if data.ClientDisableHmacSha1.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/client/disable/hmac/hmac-sha1", "")
+		}
+	}
+	if !data.ClientDisableHmacSha2512.IsNull() && !data.ClientDisableHmacSha2512.IsUnknown() {
+		if data.ClientDisableHmacSha2512.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/client/disable/hmac/hmac-sha2-512", "")
+		}
+	}
+	if !data.ClientDisableHmacSha2256.IsNull() && !data.ClientDisableHmacSha2256.IsUnknown() {
+		if data.ClientDisableHmacSha2256.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/client/disable/hmac/hmac-sha2-256", "")
+		}
+	}
+	if !data.ClientEnableCipherAesCbc.IsNull() && !data.ClientEnableCipherAesCbc.IsUnknown() {
+		if data.ClientEnableCipherAesCbc.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/client/enable/cipher/aes-cbc", "")
+		}
+	}
+	if !data.ClientEnableCipher3desCbc.IsNull() && !data.ClientEnableCipher3desCbc.IsUnknown() {
+		if data.ClientEnableCipher3desCbc.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/client/enable/cipher/threedes-cbc", "")
+		}
+	}
+	if !data.ClientAlgorithmsKeyExchanges.IsNull() && !data.ClientAlgorithmsKeyExchanges.IsUnknown() {
+		var values []string
+		data.ClientAlgorithmsKeyExchanges.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			body = helpers.AppendFromXPath(body, data.getXPath()+"/client/algorithms/key-exchanges/key-exchange", v)
+		}
+	}
+	if !data.ClientAlgorithmsCiphers.IsNull() && !data.ClientAlgorithmsCiphers.IsUnknown() {
+		var values []string
+		data.ClientAlgorithmsCiphers.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			body = helpers.AppendFromXPath(body, data.getXPath()+"/client/algorithms/ciphers/cipher", v)
+		}
+	}
+	if !data.ClientTcpWindowScale.IsNull() && !data.ClientTcpWindowScale.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/client/tcp-window-scale", strconv.FormatInt(data.ClientTcpWindowScale.ValueInt64(), 10))
+	}
+	if !data.ClientV2.IsNull() && !data.ClientV2.IsUnknown() {
+		if data.ClientV2.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/client/v2", "")
+		}
+	}
+	if !data.ClientV1.IsNull() && !data.ClientV1.IsUnknown() {
+		if data.ClientV1.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/client/v1", "")
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *SSH) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timeout"); value.Exists() {
+		data.Timeout = types.Int64Value(value.Int())
+	} else if data.Timeout.IsNull() {
+		data.Timeout = types.Int64Null()
+	}
+	for i := range data.ServerVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ServerVrfs[i].VrfName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/vrfs/vrf").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vrf-name"); value.Exists() {
+			data.ServerVrfs[i].VrfName = types.StringValue(value.String())
+		} else if data.ServerVrfs[i].VrfName.IsNull() {
+			data.ServerVrfs[i].VrfName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ipv4/access-list"); value.Exists() {
+			data.ServerVrfs[i].Ipv4AccessList = types.StringValue(value.String())
+		} else if data.ServerVrfs[i].Ipv4AccessList.IsNull() {
+			data.ServerVrfs[i].Ipv4AccessList = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ipv6/access-list"); value.Exists() {
+			data.ServerVrfs[i].Ipv6AccessList = types.StringValue(value.String())
+		} else if data.ServerVrfs[i].Ipv6AccessList.IsNull() {
+			data.ServerVrfs[i].Ipv6AccessList = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/v1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerV1.IsNull() {
+			data.ServerV1 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerV1.IsNull() {
+			data.ServerV1 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/v2"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerV2.IsNull() {
+			data.ServerV2 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerV2.IsNull() {
+			data.ServerV2 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/rate-limit"); value.Exists() {
+		data.ServerRateLimit = types.Int64Value(value.Int())
+	} else if data.ServerRateLimit.IsNull() {
+		data.ServerRateLimit = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/disable/hmac/hmac-sha2-512"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerDisableHmacSha2512.IsNull() {
+			data.ServerDisableHmacSha2512 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerDisableHmacSha2512.IsNull() {
+			data.ServerDisableHmacSha2512 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/disable/hmac/hmac-sha1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerDisableHmacSha1.IsNull() {
+			data.ServerDisableHmacSha1 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerDisableHmacSha1.IsNull() {
+			data.ServerDisableHmacSha1 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/disable/hmac/hmac-sha2-256"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerDisableHmacSha2256.IsNull() {
+			data.ServerDisableHmacSha2256 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerDisableHmacSha2256.IsNull() {
+			data.ServerDisableHmacSha2256 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/enable/cipher/aes-cbc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerEnableCipherAesCbc.IsNull() {
+			data.ServerEnableCipherAesCbc = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerEnableCipherAesCbc.IsNull() {
+			data.ServerEnableCipherAesCbc = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/enable/cipher/threedes-cbc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerEnableCipher3desCbc.IsNull() {
+			data.ServerEnableCipher3desCbc = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerEnableCipher3desCbc.IsNull() {
+			data.ServerEnableCipher3desCbc = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/session-limit"); value.Exists() {
+		data.ServerSessionLimit = types.Int64Value(value.Int())
+	} else if data.ServerSessionLimit.IsNull() {
+		data.ServerSessionLimit = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/logging"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerLogging.IsNull() {
+			data.ServerLogging = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerLogging.IsNull() {
+			data.ServerLogging = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/dscp"); value.Exists() {
+		data.ServerDscp = types.Int64Value(value.Int())
+	} else if data.ServerDscp.IsNull() {
+		data.ServerDscp = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/netconf/port"); value.Exists() {
+		data.ServerNetconfPort = types.Int64Value(value.Int())
+	} else if data.ServerNetconfPort.IsNull() {
+		data.ServerNetconfPort = types.Int64Null()
+	}
+	for i := range data.ServerNetconfVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ServerNetconfVrfs[i].VrfName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/netconf/vrfs/vrf").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vrf-name"); value.Exists() {
+			data.ServerNetconfVrfs[i].VrfName = types.StringValue(value.String())
+		} else if data.ServerNetconfVrfs[i].VrfName.IsNull() {
+			data.ServerNetconfVrfs[i].VrfName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ipv4/access-list"); value.Exists() {
+			data.ServerNetconfVrfs[i].Ipv4AccessList = types.StringValue(value.String())
+		} else if data.ServerNetconfVrfs[i].Ipv4AccessList.IsNull() {
+			data.ServerNetconfVrfs[i].Ipv4AccessList = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ipv6/access-list"); value.Exists() {
+			data.ServerNetconfVrfs[i].Ipv6AccessList = types.StringValue(value.String())
+		} else if data.ServerNetconfVrfs[i].Ipv6AccessList.IsNull() {
+			data.ServerNetconfVrfs[i].Ipv6AccessList = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/capability/netconf-xml"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerNetconfXml.IsNull() {
+			data.ServerNetconfXml = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerNetconfXml.IsNull() {
+			data.ServerNetconfXml = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/rekey-time"); value.Exists() {
+		data.ServerRekeyTime = types.Int64Value(value.Int())
+	} else if data.ServerRekeyTime.IsNull() {
+		data.ServerRekeyTime = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/rekey-volume"); value.Exists() {
+		data.ServerRekeyVolume = types.Int64Value(value.Int())
+	} else if data.ServerRekeyVolume.IsNull() {
+		data.ServerRekeyVolume = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/key-exchanges/key-exchange"); value.Exists() {
+		data.ServerAlgorithmsKeyExchanges = helpers.GetStringListXML(value.Array())
+	} else {
+		data.ServerAlgorithmsKeyExchanges = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp256"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() {
+			data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() {
+			data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp384"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() {
+			data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() {
+			data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp521"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() {
+			data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() {
+			data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/rsa"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyRsa.IsNull() {
+			data.ServerAlgorithmsHostKeyRsa = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyRsa.IsNull() {
+			data.ServerAlgorithmsHostKeyRsa = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/dsa"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyDsa.IsNull() {
+			data.ServerAlgorithmsHostKeyDsa = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyDsa.IsNull() {
+			data.ServerAlgorithmsHostKeyDsa = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/x509v3-ssh-rsa"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() {
+			data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() {
+			data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ed25519"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyEd25519.IsNull() {
+			data.ServerAlgorithmsHostKeyEd25519 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyEd25519.IsNull() {
+			data.ServerAlgorithmsHostKeyEd25519 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/rsa-sha512"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyRsaSha512.IsNull() {
+			data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyRsaSha512.IsNull() {
+			data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/rsa-sha256"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeyRsaSha256.IsNull() {
+			data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeyRsaSha256.IsNull() {
+			data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ssh-rsa"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerAlgorithmsHostKeySshRsa.IsNull() {
+			data.ServerAlgorithmsHostKeySshRsa = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerAlgorithmsHostKeySshRsa.IsNull() {
+			data.ServerAlgorithmsHostKeySshRsa = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/ciphers/cipher"); value.Exists() {
+		data.ServerAlgorithmsCiphers = helpers.GetStringListXML(value.Array())
+	} else {
+		data.ServerAlgorithmsCiphers = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/max-auth-limit"); value.Exists() {
+		data.ServerMaxAuthLimit = types.Int64Value(value.Int())
+	} else if data.ServerMaxAuthLimit.IsNull() {
+		data.ServerMaxAuthLimit = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/tcp-window-scale"); value.Exists() {
+		data.ServerTcpWindowScale = types.Int64Value(value.Int())
+	} else if data.ServerTcpWindowScale.IsNull() {
+		data.ServerTcpWindowScale = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/port-forwarding/local"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerPortForwardingLocal.IsNull() {
+			data.ServerPortForwardingLocal = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerPortForwardingLocal.IsNull() {
+			data.ServerPortForwardingLocal = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/port"); value.Exists() {
+		data.ServerPort = types.Int64Value(value.Int())
+	} else if data.ServerPort.IsNull() {
+		data.ServerPort = types.Int64Null()
+	}
+	for i := range data.ServerUsernames {
+		keys := [...]string{"username-name"}
+		keyValues := [...]string{data.ServerUsernames[i].Username.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/usernames/username").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "username-name"); value.Exists() {
+			data.ServerUsernames[i].Username = types.StringValue(value.String())
+		} else if data.ServerUsernames[i].Username.IsNull() {
+			data.ServerUsernames[i].Username = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/knownhost"); value.Exists() {
+		data.ClientKnownhost = types.StringValue(value.String())
+	} else if data.ClientKnownhost.IsNull() {
+		data.ClientKnownhost = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/source-interface"); value.Exists() {
+		data.ClientSourceInterface = types.StringValue(value.String())
+	} else if data.ClientSourceInterface.IsNull() {
+		data.ClientSourceInterface = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/vrf"); value.Exists() {
+		data.ClientVrf = types.StringValue(value.String())
+	} else if data.ClientVrf.IsNull() {
+		data.ClientVrf = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/dscp"); value.Exists() {
+		data.ClientDscp = types.Int64Value(value.Int())
+	} else if data.ClientDscp.IsNull() {
+		data.ClientDscp = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/rekey-time"); value.Exists() {
+		data.ClientRekeyTime = types.Int64Value(value.Int())
+	} else if data.ClientRekeyTime.IsNull() {
+		data.ClientRekeyTime = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/rekey-volume"); value.Exists() {
+		data.ClientRekeyVolume = types.Int64Value(value.Int())
+	} else if data.ClientRekeyVolume.IsNull() {
+		data.ClientRekeyVolume = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/disable/hmac/hmac-sha1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClientDisableHmacSha1.IsNull() {
+			data.ClientDisableHmacSha1 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ClientDisableHmacSha1.IsNull() {
+			data.ClientDisableHmacSha1 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/disable/hmac/hmac-sha2-512"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClientDisableHmacSha2512.IsNull() {
+			data.ClientDisableHmacSha2512 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ClientDisableHmacSha2512.IsNull() {
+			data.ClientDisableHmacSha2512 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/disable/hmac/hmac-sha2-256"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClientDisableHmacSha2256.IsNull() {
+			data.ClientDisableHmacSha2256 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ClientDisableHmacSha2256.IsNull() {
+			data.ClientDisableHmacSha2256 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/enable/cipher/aes-cbc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClientEnableCipherAesCbc.IsNull() {
+			data.ClientEnableCipherAesCbc = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ClientEnableCipherAesCbc.IsNull() {
+			data.ClientEnableCipherAesCbc = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/enable/cipher/threedes-cbc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClientEnableCipher3desCbc.IsNull() {
+			data.ClientEnableCipher3desCbc = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ClientEnableCipher3desCbc.IsNull() {
+			data.ClientEnableCipher3desCbc = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/algorithms/key-exchanges/key-exchange"); value.Exists() {
+		data.ClientAlgorithmsKeyExchanges = helpers.GetStringListXML(value.Array())
+	} else {
+		data.ClientAlgorithmsKeyExchanges = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/algorithms/ciphers/cipher"); value.Exists() {
+		data.ClientAlgorithmsCiphers = helpers.GetStringListXML(value.Array())
+	} else {
+		data.ClientAlgorithmsCiphers = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/tcp-window-scale"); value.Exists() {
+		data.ClientTcpWindowScale = types.Int64Value(value.Int())
+	} else if data.ClientTcpWindowScale.IsNull() {
+		data.ClientTcpWindowScale = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/v2"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClientV2.IsNull() {
+			data.ClientV2 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ClientV2.IsNull() {
+			data.ClientV2 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/v1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClientV1.IsNull() {
+			data.ClientV1 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ClientV1.IsNull() {
+			data.ClientV1 = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *SSH) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "timeout"); value.Exists() {
+func (data *SSH) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "timeout"); value.Exists() {
 		data.Timeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "server.vrfs.vrf"); value.Exists() {
 		data.ServerVrfs = make([]SSHServerVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SSHServerVrfs{}
@@ -915,59 +1770,67 @@ func (data *SSH) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "server.v1"); value.Exists() {
+	if value := res.Get(prefix + "server.v1"); value.Exists() {
 		data.ServerV1 = types.BoolValue(true)
-	} else {
+	} else if !data.ServerV1.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerV1 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.v2"); value.Exists() {
+	if value := res.Get(prefix + "server.v2"); value.Exists() {
 		data.ServerV2 = types.BoolValue(true)
-	} else {
+	} else if !data.ServerV2.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerV2 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.rate-limit"); value.Exists() {
+	if value := res.Get(prefix + "server.rate-limit"); value.Exists() {
 		data.ServerRateLimit = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha2-512"); value.Exists() {
+	if value := res.Get(prefix + "server.disable.hmac.hmac-sha2-512"); value.Exists() {
 		data.ServerDisableHmacSha2512 = types.BoolValue(true)
-	} else {
+	} else if !data.ServerDisableHmacSha2512.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerDisableHmacSha2512 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha1"); value.Exists() {
+	if value := res.Get(prefix + "server.disable.hmac.hmac-sha1"); value.Exists() {
 		data.ServerDisableHmacSha1 = types.BoolValue(true)
-	} else {
+	} else if !data.ServerDisableHmacSha1.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerDisableHmacSha1 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha2-256"); value.Exists() {
+	if value := res.Get(prefix + "server.disable.hmac.hmac-sha2-256"); value.Exists() {
 		data.ServerDisableHmacSha2256 = types.BoolValue(true)
-	} else {
+	} else if !data.ServerDisableHmacSha2256.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerDisableHmacSha2256 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.enable.cipher.aes-cbc"); value.Exists() {
+	if value := res.Get(prefix + "server.enable.cipher.aes-cbc"); value.Exists() {
 		data.ServerEnableCipherAesCbc = types.BoolValue(true)
-	} else {
+	} else if !data.ServerEnableCipherAesCbc.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerEnableCipherAesCbc = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.enable.cipher.threedes-cbc"); value.Exists() {
+	if value := res.Get(prefix + "server.enable.cipher.threedes-cbc"); value.Exists() {
 		data.ServerEnableCipher3desCbc = types.BoolValue(true)
-	} else {
+	} else if !data.ServerEnableCipher3desCbc.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerEnableCipher3desCbc = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.session-limit"); value.Exists() {
+	if value := res.Get(prefix + "server.session-limit"); value.Exists() {
 		data.ServerSessionLimit = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.logging"); value.Exists() {
+	if value := res.Get(prefix + "server.logging"); value.Exists() {
 		data.ServerLogging = types.BoolValue(true)
-	} else {
+	} else if !data.ServerLogging.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerLogging = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.dscp"); value.Exists() {
+	if value := res.Get(prefix + "server.dscp"); value.Exists() {
 		data.ServerDscp = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.netconf.port"); value.Exists() {
+	if value := res.Get(prefix + "server.netconf.port"); value.Exists() {
 		data.ServerNetconfPort = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.netconf.vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "server.netconf.vrfs.vrf"); value.Exists() {
 		data.ServerNetconfVrfs = make([]SSHServerNetconfVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SSHServerNetconfVrfs{}
@@ -984,92 +1847,104 @@ func (data *SSH) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "server.capability.netconf-xml"); value.Exists() {
+	if value := res.Get(prefix + "server.capability.netconf-xml"); value.Exists() {
 		data.ServerNetconfXml = types.BoolValue(true)
-	} else {
+	} else if !data.ServerNetconfXml.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerNetconfXml = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.rekey-time"); value.Exists() {
+	if value := res.Get(prefix + "server.rekey-time"); value.Exists() {
 		data.ServerRekeyTime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.rekey-volume"); value.Exists() {
+	if value := res.Get(prefix + "server.rekey-volume"); value.Exists() {
 		data.ServerRekeyVolume = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.key-exchanges.key-exchange"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.key-exchanges.key-exchange"); value.Exists() {
 		data.ServerAlgorithmsKeyExchanges = helpers.GetStringList(value.Array())
 	} else {
 		data.ServerAlgorithmsKeyExchanges = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp256"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.ecdsa-nistp256"); value.Exists() {
 		data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolValue(true)
-	} else {
+	} else if !data.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp384"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.ecdsa-nistp384"); value.Exists() {
 		data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolValue(true)
-	} else {
+	} else if !data.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp521"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.ecdsa-nistp521"); value.Exists() {
 		data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolValue(true)
-	} else {
+	} else if !data.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.rsa"); value.Exists() {
 		data.ServerAlgorithmsHostKeyRsa = types.BoolValue(true)
-	} else {
+	} else if !data.ServerAlgorithmsHostKeyRsa.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerAlgorithmsHostKeyRsa = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.dsa"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.dsa"); value.Exists() {
 		data.ServerAlgorithmsHostKeyDsa = types.BoolValue(true)
-	} else {
+	} else if !data.ServerAlgorithmsHostKeyDsa.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerAlgorithmsHostKeyDsa = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.x509v3-ssh-rsa"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.x509v3-ssh-rsa"); value.Exists() {
 		data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolValue(true)
-	} else {
+	} else if !data.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ed25519"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.ed25519"); value.Exists() {
 		data.ServerAlgorithmsHostKeyEd25519 = types.BoolValue(true)
-	} else {
+	} else if !data.ServerAlgorithmsHostKeyEd25519.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerAlgorithmsHostKeyEd25519 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa-sha512"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.rsa-sha512"); value.Exists() {
 		data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolValue(true)
-	} else {
+	} else if !data.ServerAlgorithmsHostKeyRsaSha512.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa-sha256"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.rsa-sha256"); value.Exists() {
 		data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolValue(true)
-	} else {
+	} else if !data.ServerAlgorithmsHostKeyRsaSha256.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ssh-rsa"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.ssh-rsa"); value.Exists() {
 		data.ServerAlgorithmsHostKeySshRsa = types.BoolValue(true)
-	} else {
+	} else if !data.ServerAlgorithmsHostKeySshRsa.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerAlgorithmsHostKeySshRsa = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.ciphers.cipher"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.ciphers.cipher"); value.Exists() {
 		data.ServerAlgorithmsCiphers = helpers.GetStringList(value.Array())
 	} else {
 		data.ServerAlgorithmsCiphers = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "server.max-auth-limit"); value.Exists() {
+	if value := res.Get(prefix + "server.max-auth-limit"); value.Exists() {
 		data.ServerMaxAuthLimit = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.tcp-window-scale"); value.Exists() {
+	if value := res.Get(prefix + "server.tcp-window-scale"); value.Exists() {
 		data.ServerTcpWindowScale = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.port-forwarding.local"); value.Exists() {
+	if value := res.Get(prefix + "server.port-forwarding.local"); value.Exists() {
 		data.ServerPortForwardingLocal = types.BoolValue(true)
-	} else {
+	} else if !data.ServerPortForwardingLocal.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ServerPortForwardingLocal = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.port"); value.Exists() {
+	if value := res.Get(prefix + "server.port"); value.Exists() {
 		data.ServerPort = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.usernames.username"); value.Exists() {
+	if value := res.Get(prefix + "server.usernames.username"); value.Exists() {
 		data.ServerUsernames = make([]SSHServerUsernames, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SSHServerUsernames{}
@@ -1080,83 +1955,98 @@ func (data *SSH) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "client.knownhost"); value.Exists() {
+	if value := res.Get(prefix + "client.knownhost"); value.Exists() {
 		data.ClientKnownhost = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "client.source-interface"); value.Exists() {
+	if value := res.Get(prefix + "client.source-interface"); value.Exists() {
 		data.ClientSourceInterface = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "client.vrf"); value.Exists() {
+	if value := res.Get(prefix + "client.vrf"); value.Exists() {
 		data.ClientVrf = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "client.dscp"); value.Exists() {
+	if value := res.Get(prefix + "client.dscp"); value.Exists() {
 		data.ClientDscp = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "client.rekey-time"); value.Exists() {
+	if value := res.Get(prefix + "client.rekey-time"); value.Exists() {
 		data.ClientRekeyTime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "client.rekey-volume"); value.Exists() {
+	if value := res.Get(prefix + "client.rekey-volume"); value.Exists() {
 		data.ClientRekeyVolume = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha1"); value.Exists() {
+	if value := res.Get(prefix + "client.disable.hmac.hmac-sha1"); value.Exists() {
 		data.ClientDisableHmacSha1 = types.BoolValue(true)
-	} else {
+	} else if !data.ClientDisableHmacSha1.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ClientDisableHmacSha1 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha2-512"); value.Exists() {
+	if value := res.Get(prefix + "client.disable.hmac.hmac-sha2-512"); value.Exists() {
 		data.ClientDisableHmacSha2512 = types.BoolValue(true)
-	} else {
+	} else if !data.ClientDisableHmacSha2512.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ClientDisableHmacSha2512 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha2-256"); value.Exists() {
+	if value := res.Get(prefix + "client.disable.hmac.hmac-sha2-256"); value.Exists() {
 		data.ClientDisableHmacSha2256 = types.BoolValue(true)
-	} else {
+	} else if !data.ClientDisableHmacSha2256.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ClientDisableHmacSha2256 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "client.enable.cipher.aes-cbc"); value.Exists() {
+	if value := res.Get(prefix + "client.enable.cipher.aes-cbc"); value.Exists() {
 		data.ClientEnableCipherAesCbc = types.BoolValue(true)
-	} else {
+	} else if !data.ClientEnableCipherAesCbc.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ClientEnableCipherAesCbc = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "client.enable.cipher.threedes-cbc"); value.Exists() {
+	if value := res.Get(prefix + "client.enable.cipher.threedes-cbc"); value.Exists() {
 		data.ClientEnableCipher3desCbc = types.BoolValue(true)
-	} else {
+	} else if !data.ClientEnableCipher3desCbc.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ClientEnableCipher3desCbc = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "client.algorithms.key-exchanges.key-exchange"); value.Exists() {
+	if value := res.Get(prefix + "client.algorithms.key-exchanges.key-exchange"); value.Exists() {
 		data.ClientAlgorithmsKeyExchanges = helpers.GetStringList(value.Array())
 	} else {
 		data.ClientAlgorithmsKeyExchanges = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "client.algorithms.ciphers.cipher"); value.Exists() {
+	if value := res.Get(prefix + "client.algorithms.ciphers.cipher"); value.Exists() {
 		data.ClientAlgorithmsCiphers = helpers.GetStringList(value.Array())
 	} else {
 		data.ClientAlgorithmsCiphers = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "client.tcp-window-scale"); value.Exists() {
+	if value := res.Get(prefix + "client.tcp-window-scale"); value.Exists() {
 		data.ClientTcpWindowScale = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "client.v2"); value.Exists() {
+	if value := res.Get(prefix + "client.v2"); value.Exists() {
 		data.ClientV2 = types.BoolValue(true)
-	} else {
+	} else if !data.ClientV2.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ClientV2 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "client.v1"); value.Exists() {
+	if value := res.Get(prefix + "client.v1"); value.Exists() {
 		data.ClientV1 = types.BoolValue(true)
-	} else {
+	} else if !data.ClientV1.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ClientV1 = types.BoolValue(false)
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *SSHData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "timeout"); value.Exists() {
+func (data *SSHData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "timeout"); value.Exists() {
 		data.Timeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "server.vrfs.vrf"); value.Exists() {
 		data.ServerVrfs = make([]SSHServerVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SSHServerVrfs{}
@@ -1173,59 +2063,59 @@ func (data *SSHData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "server.v1"); value.Exists() {
+	if value := res.Get(prefix + "server.v1"); value.Exists() {
 		data.ServerV1 = types.BoolValue(true)
 	} else {
 		data.ServerV1 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.v2"); value.Exists() {
+	if value := res.Get(prefix + "server.v2"); value.Exists() {
 		data.ServerV2 = types.BoolValue(true)
 	} else {
 		data.ServerV2 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.rate-limit"); value.Exists() {
+	if value := res.Get(prefix + "server.rate-limit"); value.Exists() {
 		data.ServerRateLimit = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha2-512"); value.Exists() {
+	if value := res.Get(prefix + "server.disable.hmac.hmac-sha2-512"); value.Exists() {
 		data.ServerDisableHmacSha2512 = types.BoolValue(true)
 	} else {
 		data.ServerDisableHmacSha2512 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha1"); value.Exists() {
+	if value := res.Get(prefix + "server.disable.hmac.hmac-sha1"); value.Exists() {
 		data.ServerDisableHmacSha1 = types.BoolValue(true)
 	} else {
 		data.ServerDisableHmacSha1 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha2-256"); value.Exists() {
+	if value := res.Get(prefix + "server.disable.hmac.hmac-sha2-256"); value.Exists() {
 		data.ServerDisableHmacSha2256 = types.BoolValue(true)
 	} else {
 		data.ServerDisableHmacSha2256 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.enable.cipher.aes-cbc"); value.Exists() {
+	if value := res.Get(prefix + "server.enable.cipher.aes-cbc"); value.Exists() {
 		data.ServerEnableCipherAesCbc = types.BoolValue(true)
 	} else {
 		data.ServerEnableCipherAesCbc = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.enable.cipher.threedes-cbc"); value.Exists() {
+	if value := res.Get(prefix + "server.enable.cipher.threedes-cbc"); value.Exists() {
 		data.ServerEnableCipher3desCbc = types.BoolValue(true)
 	} else {
 		data.ServerEnableCipher3desCbc = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.session-limit"); value.Exists() {
+	if value := res.Get(prefix + "server.session-limit"); value.Exists() {
 		data.ServerSessionLimit = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.logging"); value.Exists() {
+	if value := res.Get(prefix + "server.logging"); value.Exists() {
 		data.ServerLogging = types.BoolValue(true)
 	} else {
 		data.ServerLogging = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.dscp"); value.Exists() {
+	if value := res.Get(prefix + "server.dscp"); value.Exists() {
 		data.ServerDscp = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.netconf.port"); value.Exists() {
+	if value := res.Get(prefix + "server.netconf.port"); value.Exists() {
 		data.ServerNetconfPort = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.netconf.vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "server.netconf.vrfs.vrf"); value.Exists() {
 		data.ServerNetconfVrfs = make([]SSHServerNetconfVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SSHServerNetconfVrfs{}
@@ -1242,164 +2132,167 @@ func (data *SSHData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "server.capability.netconf-xml"); value.Exists() {
+	if value := res.Get(prefix + "server.capability.netconf-xml"); value.Exists() {
 		data.ServerNetconfXml = types.BoolValue(true)
 	} else {
 		data.ServerNetconfXml = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.rekey-time"); value.Exists() {
+	if value := res.Get(prefix + "server.rekey-time"); value.Exists() {
 		data.ServerRekeyTime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.rekey-volume"); value.Exists() {
+	if value := res.Get(prefix + "server.rekey-volume"); value.Exists() {
 		data.ServerRekeyVolume = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.key-exchanges.key-exchange"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.key-exchanges.key-exchange"); value.Exists() {
 		data.ServerAlgorithmsKeyExchanges = helpers.GetStringList(value.Array())
 	} else {
 		data.ServerAlgorithmsKeyExchanges = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp256"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.ecdsa-nistp256"); value.Exists() {
 		data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolValue(true)
 	} else {
 		data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp384"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.ecdsa-nistp384"); value.Exists() {
 		data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolValue(true)
 	} else {
 		data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp521"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.ecdsa-nistp521"); value.Exists() {
 		data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolValue(true)
 	} else {
 		data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.rsa"); value.Exists() {
 		data.ServerAlgorithmsHostKeyRsa = types.BoolValue(true)
 	} else {
 		data.ServerAlgorithmsHostKeyRsa = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.dsa"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.dsa"); value.Exists() {
 		data.ServerAlgorithmsHostKeyDsa = types.BoolValue(true)
 	} else {
 		data.ServerAlgorithmsHostKeyDsa = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.x509v3-ssh-rsa"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.x509v3-ssh-rsa"); value.Exists() {
 		data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolValue(true)
 	} else {
 		data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ed25519"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.ed25519"); value.Exists() {
 		data.ServerAlgorithmsHostKeyEd25519 = types.BoolValue(true)
 	} else {
 		data.ServerAlgorithmsHostKeyEd25519 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa-sha512"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.rsa-sha512"); value.Exists() {
 		data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolValue(true)
 	} else {
 		data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa-sha256"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.rsa-sha256"); value.Exists() {
 		data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolValue(true)
 	} else {
 		data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ssh-rsa"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.host-key.ssh-rsa"); value.Exists() {
 		data.ServerAlgorithmsHostKeySshRsa = types.BoolValue(true)
 	} else {
 		data.ServerAlgorithmsHostKeySshRsa = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.ciphers.cipher"); value.Exists() {
+	if value := res.Get(prefix + "server.algorithms.ciphers.cipher"); value.Exists() {
 		data.ServerAlgorithmsCiphers = helpers.GetStringList(value.Array())
 	} else {
 		data.ServerAlgorithmsCiphers = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "server.max-auth-limit"); value.Exists() {
+	if value := res.Get(prefix + "server.max-auth-limit"); value.Exists() {
 		data.ServerMaxAuthLimit = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.tcp-window-scale"); value.Exists() {
+	if value := res.Get(prefix + "server.tcp-window-scale"); value.Exists() {
 		data.ServerTcpWindowScale = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.port-forwarding.local"); value.Exists() {
+	if value := res.Get(prefix + "server.port-forwarding.local"); value.Exists() {
 		data.ServerPortForwardingLocal = types.BoolValue(true)
 	} else {
 		data.ServerPortForwardingLocal = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.port"); value.Exists() {
+	if value := res.Get(prefix + "server.port"); value.Exists() {
 		data.ServerPort = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.usernames.username"); value.Exists() {
+	if value := res.Get(prefix + "server.usernames.username"); value.Exists() {
 		data.ServerUsernames = make([]SSHServerUsernames, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SSHServerUsernames{}
 			if cValue := v.Get("username-name"); cValue.Exists() {
 				item.Username = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("keystring"); cValue.Exists() {
+				item.Keystring = types.StringValue(cValue.String())
+			}
 			data.ServerUsernames = append(data.ServerUsernames, item)
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "client.knownhost"); value.Exists() {
+	if value := res.Get(prefix + "client.knownhost"); value.Exists() {
 		data.ClientKnownhost = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "client.source-interface"); value.Exists() {
+	if value := res.Get(prefix + "client.source-interface"); value.Exists() {
 		data.ClientSourceInterface = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "client.vrf"); value.Exists() {
+	if value := res.Get(prefix + "client.vrf"); value.Exists() {
 		data.ClientVrf = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "client.dscp"); value.Exists() {
+	if value := res.Get(prefix + "client.dscp"); value.Exists() {
 		data.ClientDscp = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "client.rekey-time"); value.Exists() {
+	if value := res.Get(prefix + "client.rekey-time"); value.Exists() {
 		data.ClientRekeyTime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "client.rekey-volume"); value.Exists() {
+	if value := res.Get(prefix + "client.rekey-volume"); value.Exists() {
 		data.ClientRekeyVolume = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha1"); value.Exists() {
+	if value := res.Get(prefix + "client.disable.hmac.hmac-sha1"); value.Exists() {
 		data.ClientDisableHmacSha1 = types.BoolValue(true)
 	} else {
 		data.ClientDisableHmacSha1 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha2-512"); value.Exists() {
+	if value := res.Get(prefix + "client.disable.hmac.hmac-sha2-512"); value.Exists() {
 		data.ClientDisableHmacSha2512 = types.BoolValue(true)
 	} else {
 		data.ClientDisableHmacSha2512 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha2-256"); value.Exists() {
+	if value := res.Get(prefix + "client.disable.hmac.hmac-sha2-256"); value.Exists() {
 		data.ClientDisableHmacSha2256 = types.BoolValue(true)
 	} else {
 		data.ClientDisableHmacSha2256 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "client.enable.cipher.aes-cbc"); value.Exists() {
+	if value := res.Get(prefix + "client.enable.cipher.aes-cbc"); value.Exists() {
 		data.ClientEnableCipherAesCbc = types.BoolValue(true)
 	} else {
 		data.ClientEnableCipherAesCbc = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "client.enable.cipher.threedes-cbc"); value.Exists() {
+	if value := res.Get(prefix + "client.enable.cipher.threedes-cbc"); value.Exists() {
 		data.ClientEnableCipher3desCbc = types.BoolValue(true)
 	} else {
 		data.ClientEnableCipher3desCbc = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "client.algorithms.key-exchanges.key-exchange"); value.Exists() {
+	if value := res.Get(prefix + "client.algorithms.key-exchanges.key-exchange"); value.Exists() {
 		data.ClientAlgorithmsKeyExchanges = helpers.GetStringList(value.Array())
 	} else {
 		data.ClientAlgorithmsKeyExchanges = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "client.algorithms.ciphers.cipher"); value.Exists() {
+	if value := res.Get(prefix + "client.algorithms.ciphers.cipher"); value.Exists() {
 		data.ClientAlgorithmsCiphers = helpers.GetStringList(value.Array())
 	} else {
 		data.ClientAlgorithmsCiphers = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "client.tcp-window-scale"); value.Exists() {
+	if value := res.Get(prefix + "client.tcp-window-scale"); value.Exists() {
 		data.ClientTcpWindowScale = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "client.v2"); value.Exists() {
+	if value := res.Get(prefix + "client.v2"); value.Exists() {
 		data.ClientV2 = types.BoolValue(true)
 	} else {
 		data.ClientV2 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "client.v1"); value.Exists() {
+	if value := res.Get(prefix + "client.v1"); value.Exists() {
 		data.ClientV1 = types.BoolValue(true)
 	} else {
 		data.ClientV1 = types.BoolValue(false)
@@ -1407,7 +2300,526 @@ func (data *SSHData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *SSH) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timeout"); value.Exists() {
+		data.Timeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/vrfs/vrf"); value.Exists() {
+		data.ServerVrfs = make([]SSHServerVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SSHServerVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/access-list"); cValue.Exists() {
+				item.Ipv4AccessList = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/access-list"); cValue.Exists() {
+				item.Ipv6AccessList = types.StringValue(cValue.String())
+			}
+			data.ServerVrfs = append(data.ServerVrfs, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/v1"); value.Exists() {
+		data.ServerV1 = types.BoolValue(true)
+	} else {
+		data.ServerV1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/v2"); value.Exists() {
+		data.ServerV2 = types.BoolValue(true)
+	} else {
+		data.ServerV2 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/rate-limit"); value.Exists() {
+		data.ServerRateLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/disable/hmac/hmac-sha2-512"); value.Exists() {
+		data.ServerDisableHmacSha2512 = types.BoolValue(true)
+	} else {
+		data.ServerDisableHmacSha2512 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/disable/hmac/hmac-sha1"); value.Exists() {
+		data.ServerDisableHmacSha1 = types.BoolValue(true)
+	} else {
+		data.ServerDisableHmacSha1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/disable/hmac/hmac-sha2-256"); value.Exists() {
+		data.ServerDisableHmacSha2256 = types.BoolValue(true)
+	} else {
+		data.ServerDisableHmacSha2256 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/enable/cipher/aes-cbc"); value.Exists() {
+		data.ServerEnableCipherAesCbc = types.BoolValue(true)
+	} else {
+		data.ServerEnableCipherAesCbc = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/enable/cipher/threedes-cbc"); value.Exists() {
+		data.ServerEnableCipher3desCbc = types.BoolValue(true)
+	} else {
+		data.ServerEnableCipher3desCbc = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/session-limit"); value.Exists() {
+		data.ServerSessionLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/logging"); value.Exists() {
+		data.ServerLogging = types.BoolValue(true)
+	} else {
+		data.ServerLogging = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/dscp"); value.Exists() {
+		data.ServerDscp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/netconf/port"); value.Exists() {
+		data.ServerNetconfPort = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/netconf/vrfs/vrf"); value.Exists() {
+		data.ServerNetconfVrfs = make([]SSHServerNetconfVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SSHServerNetconfVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/access-list"); cValue.Exists() {
+				item.Ipv4AccessList = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/access-list"); cValue.Exists() {
+				item.Ipv6AccessList = types.StringValue(cValue.String())
+			}
+			data.ServerNetconfVrfs = append(data.ServerNetconfVrfs, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/capability/netconf-xml"); value.Exists() {
+		data.ServerNetconfXml = types.BoolValue(true)
+	} else {
+		data.ServerNetconfXml = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/rekey-time"); value.Exists() {
+		data.ServerRekeyTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/rekey-volume"); value.Exists() {
+		data.ServerRekeyVolume = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/key-exchanges/key-exchange"); value.Exists() {
+		data.ServerAlgorithmsKeyExchanges = helpers.GetStringListXML(value.Array())
+	} else {
+		data.ServerAlgorithmsKeyExchanges = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp256"); value.Exists() {
+		data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp384"); value.Exists() {
+		data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp521"); value.Exists() {
+		data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/rsa"); value.Exists() {
+		data.ServerAlgorithmsHostKeyRsa = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyRsa = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/dsa"); value.Exists() {
+		data.ServerAlgorithmsHostKeyDsa = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyDsa = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/x509v3-ssh-rsa"); value.Exists() {
+		data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ed25519"); value.Exists() {
+		data.ServerAlgorithmsHostKeyEd25519 = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyEd25519 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/rsa-sha512"); value.Exists() {
+		data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/rsa-sha256"); value.Exists() {
+		data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ssh-rsa"); value.Exists() {
+		data.ServerAlgorithmsHostKeySshRsa = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeySshRsa = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/ciphers/cipher"); value.Exists() {
+		data.ServerAlgorithmsCiphers = helpers.GetStringListXML(value.Array())
+	} else {
+		data.ServerAlgorithmsCiphers = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/max-auth-limit"); value.Exists() {
+		data.ServerMaxAuthLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/tcp-window-scale"); value.Exists() {
+		data.ServerTcpWindowScale = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/port-forwarding/local"); value.Exists() {
+		data.ServerPortForwardingLocal = types.BoolValue(true)
+	} else {
+		data.ServerPortForwardingLocal = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/port"); value.Exists() {
+		data.ServerPort = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/usernames/username"); value.Exists() {
+		data.ServerUsernames = make([]SSHServerUsernames, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SSHServerUsernames{}
+			if cValue := helpers.GetFromXPath(v, "username-name"); cValue.Exists() {
+				item.Username = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "keystring"); cValue.Exists() {
+				item.Keystring = types.StringValue(cValue.String())
+			}
+			data.ServerUsernames = append(data.ServerUsernames, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/knownhost"); value.Exists() {
+		data.ClientKnownhost = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/source-interface"); value.Exists() {
+		data.ClientSourceInterface = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/vrf"); value.Exists() {
+		data.ClientVrf = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/dscp"); value.Exists() {
+		data.ClientDscp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/rekey-time"); value.Exists() {
+		data.ClientRekeyTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/rekey-volume"); value.Exists() {
+		data.ClientRekeyVolume = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/disable/hmac/hmac-sha1"); value.Exists() {
+		data.ClientDisableHmacSha1 = types.BoolValue(true)
+	} else {
+		data.ClientDisableHmacSha1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/disable/hmac/hmac-sha2-512"); value.Exists() {
+		data.ClientDisableHmacSha2512 = types.BoolValue(true)
+	} else {
+		data.ClientDisableHmacSha2512 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/disable/hmac/hmac-sha2-256"); value.Exists() {
+		data.ClientDisableHmacSha2256 = types.BoolValue(true)
+	} else {
+		data.ClientDisableHmacSha2256 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/enable/cipher/aes-cbc"); value.Exists() {
+		data.ClientEnableCipherAesCbc = types.BoolValue(true)
+	} else {
+		data.ClientEnableCipherAesCbc = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/enable/cipher/threedes-cbc"); value.Exists() {
+		data.ClientEnableCipher3desCbc = types.BoolValue(true)
+	} else {
+		data.ClientEnableCipher3desCbc = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/algorithms/key-exchanges/key-exchange"); value.Exists() {
+		data.ClientAlgorithmsKeyExchanges = helpers.GetStringListXML(value.Array())
+	} else {
+		data.ClientAlgorithmsKeyExchanges = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/algorithms/ciphers/cipher"); value.Exists() {
+		data.ClientAlgorithmsCiphers = helpers.GetStringListXML(value.Array())
+	} else {
+		data.ClientAlgorithmsCiphers = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/tcp-window-scale"); value.Exists() {
+		data.ClientTcpWindowScale = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/v2"); value.Exists() {
+		data.ClientV2 = types.BoolValue(true)
+	} else {
+		data.ClientV2 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/v1"); value.Exists() {
+		data.ClientV1 = types.BoolValue(true)
+	} else {
+		data.ClientV1 = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *SSHData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timeout"); value.Exists() {
+		data.Timeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/vrfs/vrf"); value.Exists() {
+		data.ServerVrfs = make([]SSHServerVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SSHServerVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/access-list"); cValue.Exists() {
+				item.Ipv4AccessList = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/access-list"); cValue.Exists() {
+				item.Ipv6AccessList = types.StringValue(cValue.String())
+			}
+			data.ServerVrfs = append(data.ServerVrfs, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/v1"); value.Exists() {
+		data.ServerV1 = types.BoolValue(true)
+	} else {
+		data.ServerV1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/v2"); value.Exists() {
+		data.ServerV2 = types.BoolValue(true)
+	} else {
+		data.ServerV2 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/rate-limit"); value.Exists() {
+		data.ServerRateLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/disable/hmac/hmac-sha2-512"); value.Exists() {
+		data.ServerDisableHmacSha2512 = types.BoolValue(true)
+	} else {
+		data.ServerDisableHmacSha2512 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/disable/hmac/hmac-sha1"); value.Exists() {
+		data.ServerDisableHmacSha1 = types.BoolValue(true)
+	} else {
+		data.ServerDisableHmacSha1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/disable/hmac/hmac-sha2-256"); value.Exists() {
+		data.ServerDisableHmacSha2256 = types.BoolValue(true)
+	} else {
+		data.ServerDisableHmacSha2256 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/enable/cipher/aes-cbc"); value.Exists() {
+		data.ServerEnableCipherAesCbc = types.BoolValue(true)
+	} else {
+		data.ServerEnableCipherAesCbc = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/enable/cipher/threedes-cbc"); value.Exists() {
+		data.ServerEnableCipher3desCbc = types.BoolValue(true)
+	} else {
+		data.ServerEnableCipher3desCbc = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/session-limit"); value.Exists() {
+		data.ServerSessionLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/logging"); value.Exists() {
+		data.ServerLogging = types.BoolValue(true)
+	} else {
+		data.ServerLogging = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/dscp"); value.Exists() {
+		data.ServerDscp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/netconf/port"); value.Exists() {
+		data.ServerNetconfPort = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/netconf/vrfs/vrf"); value.Exists() {
+		data.ServerNetconfVrfs = make([]SSHServerNetconfVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SSHServerNetconfVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/access-list"); cValue.Exists() {
+				item.Ipv4AccessList = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/access-list"); cValue.Exists() {
+				item.Ipv6AccessList = types.StringValue(cValue.String())
+			}
+			data.ServerNetconfVrfs = append(data.ServerNetconfVrfs, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/capability/netconf-xml"); value.Exists() {
+		data.ServerNetconfXml = types.BoolValue(true)
+	} else {
+		data.ServerNetconfXml = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/rekey-time"); value.Exists() {
+		data.ServerRekeyTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/rekey-volume"); value.Exists() {
+		data.ServerRekeyVolume = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/key-exchanges/key-exchange"); value.Exists() {
+		data.ServerAlgorithmsKeyExchanges = helpers.GetStringListXML(value.Array())
+	} else {
+		data.ServerAlgorithmsKeyExchanges = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp256"); value.Exists() {
+		data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp384"); value.Exists() {
+		data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp521"); value.Exists() {
+		data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/rsa"); value.Exists() {
+		data.ServerAlgorithmsHostKeyRsa = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyRsa = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/dsa"); value.Exists() {
+		data.ServerAlgorithmsHostKeyDsa = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyDsa = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/x509v3-ssh-rsa"); value.Exists() {
+		data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ed25519"); value.Exists() {
+		data.ServerAlgorithmsHostKeyEd25519 = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyEd25519 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/rsa-sha512"); value.Exists() {
+		data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/rsa-sha256"); value.Exists() {
+		data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/host-key/ssh-rsa"); value.Exists() {
+		data.ServerAlgorithmsHostKeySshRsa = types.BoolValue(true)
+	} else {
+		data.ServerAlgorithmsHostKeySshRsa = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/algorithms/ciphers/cipher"); value.Exists() {
+		data.ServerAlgorithmsCiphers = helpers.GetStringListXML(value.Array())
+	} else {
+		data.ServerAlgorithmsCiphers = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/max-auth-limit"); value.Exists() {
+		data.ServerMaxAuthLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/tcp-window-scale"); value.Exists() {
+		data.ServerTcpWindowScale = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/port-forwarding/local"); value.Exists() {
+		data.ServerPortForwardingLocal = types.BoolValue(true)
+	} else {
+		data.ServerPortForwardingLocal = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/port"); value.Exists() {
+		data.ServerPort = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/usernames/username"); value.Exists() {
+		data.ServerUsernames = make([]SSHServerUsernames, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SSHServerUsernames{}
+			if cValue := helpers.GetFromXPath(v, "username-name"); cValue.Exists() {
+				item.Username = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "keystring"); cValue.Exists() {
+				item.Keystring = types.StringValue(cValue.String())
+			}
+			data.ServerUsernames = append(data.ServerUsernames, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/knownhost"); value.Exists() {
+		data.ClientKnownhost = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/source-interface"); value.Exists() {
+		data.ClientSourceInterface = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/vrf"); value.Exists() {
+		data.ClientVrf = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/dscp"); value.Exists() {
+		data.ClientDscp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/rekey-time"); value.Exists() {
+		data.ClientRekeyTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/rekey-volume"); value.Exists() {
+		data.ClientRekeyVolume = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/disable/hmac/hmac-sha1"); value.Exists() {
+		data.ClientDisableHmacSha1 = types.BoolValue(true)
+	} else {
+		data.ClientDisableHmacSha1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/disable/hmac/hmac-sha2-512"); value.Exists() {
+		data.ClientDisableHmacSha2512 = types.BoolValue(true)
+	} else {
+		data.ClientDisableHmacSha2512 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/disable/hmac/hmac-sha2-256"); value.Exists() {
+		data.ClientDisableHmacSha2256 = types.BoolValue(true)
+	} else {
+		data.ClientDisableHmacSha2256 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/enable/cipher/aes-cbc"); value.Exists() {
+		data.ClientEnableCipherAesCbc = types.BoolValue(true)
+	} else {
+		data.ClientEnableCipherAesCbc = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/enable/cipher/threedes-cbc"); value.Exists() {
+		data.ClientEnableCipher3desCbc = types.BoolValue(true)
+	} else {
+		data.ClientEnableCipher3desCbc = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/algorithms/key-exchanges/key-exchange"); value.Exists() {
+		data.ClientAlgorithmsKeyExchanges = helpers.GetStringListXML(value.Array())
+	} else {
+		data.ClientAlgorithmsKeyExchanges = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/algorithms/ciphers/cipher"); value.Exists() {
+		data.ClientAlgorithmsCiphers = helpers.GetStringListXML(value.Array())
+	} else {
+		data.ClientAlgorithmsCiphers = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/tcp-window-scale"); value.Exists() {
+		data.ClientTcpWindowScale = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/v2"); value.Exists() {
+		data.ClientV2 = types.BoolValue(true)
+	} else {
+		data.ClientV2 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/v1"); value.Exists() {
+		data.ClientV1 = types.BoolValue(true)
+	} else {
+		data.ClientV1 = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *SSH) getDeletedItems(ctx context.Context, state SSH) []string {
@@ -1665,31 +3077,51 @@ func (data *SSH) getDeletedItems(ctx context.Context, state SSH) []string {
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *SSH) getEmptyLeafsDelete(ctx context.Context, state *SSH) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.ClientV1.IsNull() && !data.ClientV1.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/client/v1", data.getPath()))
+		if state != nil && !state.ClientV1.IsNull() && state.ClientV1.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/client/v1", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ClientV2.IsNull() && !data.ClientV2.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/client/v2", data.getPath()))
+		if state != nil && !state.ClientV2.IsNull() && state.ClientV2.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/client/v2", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ClientEnableCipher3desCbc.IsNull() && !data.ClientEnableCipher3desCbc.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/client/enable/cipher/threedes-cbc", data.getPath()))
+		if state != nil && !state.ClientEnableCipher3desCbc.IsNull() && state.ClientEnableCipher3desCbc.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/client/enable/cipher/threedes-cbc", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ClientEnableCipherAesCbc.IsNull() && !data.ClientEnableCipherAesCbc.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/client/enable/cipher/aes-cbc", data.getPath()))
+		if state != nil && !state.ClientEnableCipherAesCbc.IsNull() && state.ClientEnableCipherAesCbc.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/client/enable/cipher/aes-cbc", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ClientDisableHmacSha2256.IsNull() && !data.ClientDisableHmacSha2256.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/client/disable/hmac/hmac-sha2-256", data.getPath()))
+		if state != nil && !state.ClientDisableHmacSha2256.IsNull() && state.ClientDisableHmacSha2256.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/client/disable/hmac/hmac-sha2-256", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ClientDisableHmacSha2512.IsNull() && !data.ClientDisableHmacSha2512.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/client/disable/hmac/hmac-sha2-512", data.getPath()))
+		if state != nil && !state.ClientDisableHmacSha2512.IsNull() && state.ClientDisableHmacSha2512.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/client/disable/hmac/hmac-sha2-512", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ClientDisableHmacSha1.IsNull() && !data.ClientDisableHmacSha1.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/client/disable/hmac/hmac-sha1", data.getPath()))
+		if state != nil && !state.ClientDisableHmacSha1.IsNull() && state.ClientDisableHmacSha1.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/client/disable/hmac/hmac-sha1", data.getXPath()))
+		}
 	}
 	for i := range data.ServerUsernames {
 		keys := [...]string{"username-name"}
@@ -1699,41 +3131,77 @@ func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerPortForwardingLocal.IsNull() && !data.ServerPortForwardingLocal.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/port-forwarding/local", data.getPath()))
+		if state != nil && !state.ServerPortForwardingLocal.IsNull() && state.ServerPortForwardingLocal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/port-forwarding/local", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerAlgorithmsHostKeySshRsa.IsNull() && !data.ServerAlgorithmsHostKeySshRsa.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/ssh-rsa", data.getPath()))
+		if state != nil && !state.ServerAlgorithmsHostKeySshRsa.IsNull() && state.ServerAlgorithmsHostKeySshRsa.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/ssh-rsa", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerAlgorithmsHostKeyRsaSha256.IsNull() && !data.ServerAlgorithmsHostKeyRsaSha256.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/rsa-sha256", data.getPath()))
+		if state != nil && !state.ServerAlgorithmsHostKeyRsaSha256.IsNull() && state.ServerAlgorithmsHostKeyRsaSha256.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/rsa-sha256", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerAlgorithmsHostKeyRsaSha512.IsNull() && !data.ServerAlgorithmsHostKeyRsaSha512.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/rsa-sha512", data.getPath()))
+		if state != nil && !state.ServerAlgorithmsHostKeyRsaSha512.IsNull() && state.ServerAlgorithmsHostKeyRsaSha512.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/rsa-sha512", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerAlgorithmsHostKeyEd25519.IsNull() && !data.ServerAlgorithmsHostKeyEd25519.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/ed25519", data.getPath()))
+		if state != nil && !state.ServerAlgorithmsHostKeyEd25519.IsNull() && state.ServerAlgorithmsHostKeyEd25519.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/ed25519", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() && !data.ServerAlgorithmsHostKeyX509v3SshRsa.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/x509v3-ssh-rsa", data.getPath()))
+		if state != nil && !state.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() && state.ServerAlgorithmsHostKeyX509v3SshRsa.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/x509v3-ssh-rsa", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerAlgorithmsHostKeyDsa.IsNull() && !data.ServerAlgorithmsHostKeyDsa.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/dsa", data.getPath()))
+		if state != nil && !state.ServerAlgorithmsHostKeyDsa.IsNull() && state.ServerAlgorithmsHostKeyDsa.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/dsa", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerAlgorithmsHostKeyRsa.IsNull() && !data.ServerAlgorithmsHostKeyRsa.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/rsa", data.getPath()))
+		if state != nil && !state.ServerAlgorithmsHostKeyRsa.IsNull() && state.ServerAlgorithmsHostKeyRsa.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/rsa", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() && !data.ServerAlgorithmsHostKeyEcdsaNistp521.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/ecdsa-nistp521", data.getPath()))
+		if state != nil && !state.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() && state.ServerAlgorithmsHostKeyEcdsaNistp521.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/ecdsa-nistp521", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() && !data.ServerAlgorithmsHostKeyEcdsaNistp384.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/ecdsa-nistp384", data.getPath()))
+		if state != nil && !state.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() && state.ServerAlgorithmsHostKeyEcdsaNistp384.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/ecdsa-nistp384", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() && !data.ServerAlgorithmsHostKeyEcdsaNistp256.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/ecdsa-nistp256", data.getPath()))
+		if state != nil && !state.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() && state.ServerAlgorithmsHostKeyEcdsaNistp256.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/algorithms/host-key/ecdsa-nistp256", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerNetconfXml.IsNull() && !data.ServerNetconfXml.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/capability/netconf-xml", data.getPath()))
+		if state != nil && !state.ServerNetconfXml.IsNull() && state.ServerNetconfXml.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/capability/netconf-xml", data.getXPath()))
+		}
 	}
 	for i := range data.ServerNetconfVrfs {
 		keys := [...]string{"vrf-name"}
@@ -1743,29 +3211,53 @@ func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerLogging.IsNull() && !data.ServerLogging.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/logging", data.getPath()))
+		if state != nil && !state.ServerLogging.IsNull() && state.ServerLogging.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/logging", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerEnableCipher3desCbc.IsNull() && !data.ServerEnableCipher3desCbc.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/enable/cipher/threedes-cbc", data.getPath()))
+		if state != nil && !state.ServerEnableCipher3desCbc.IsNull() && state.ServerEnableCipher3desCbc.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/enable/cipher/threedes-cbc", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerEnableCipherAesCbc.IsNull() && !data.ServerEnableCipherAesCbc.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/enable/cipher/aes-cbc", data.getPath()))
+		if state != nil && !state.ServerEnableCipherAesCbc.IsNull() && state.ServerEnableCipherAesCbc.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/enable/cipher/aes-cbc", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerDisableHmacSha2256.IsNull() && !data.ServerDisableHmacSha2256.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/disable/hmac/hmac-sha2-256", data.getPath()))
+		if state != nil && !state.ServerDisableHmacSha2256.IsNull() && state.ServerDisableHmacSha2256.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/disable/hmac/hmac-sha2-256", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerDisableHmacSha1.IsNull() && !data.ServerDisableHmacSha1.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/disable/hmac/hmac-sha1", data.getPath()))
+		if state != nil && !state.ServerDisableHmacSha1.IsNull() && state.ServerDisableHmacSha1.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/disable/hmac/hmac-sha1", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerDisableHmacSha2512.IsNull() && !data.ServerDisableHmacSha2512.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/disable/hmac/hmac-sha2-512", data.getPath()))
+		if state != nil && !state.ServerDisableHmacSha2512.IsNull() && state.ServerDisableHmacSha2512.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/disable/hmac/hmac-sha2-512", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerV2.IsNull() && !data.ServerV2.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/v2", data.getPath()))
+		if state != nil && !state.ServerV2.IsNull() && state.ServerV2.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/v2", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerV1.IsNull() && !data.ServerV1.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/v1", data.getPath()))
+		if state != nil && !state.ServerV1.IsNull() && state.ServerV1.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/v1", data.getXPath()))
+		}
 	}
 	for i := range data.ServerVrfs {
 		keys := [...]string{"vrf-name"}
@@ -1779,7 +3271,6 @@ func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *SSH) getDeletePaths(ctx context.Context) []string {
@@ -1833,14 +3324,10 @@ func (data *SSH) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/client/knownhost", data.getPath()))
 	}
 	for i := range data.ServerUsernames {
-		keys := [...]string{"username-name"}
-		keyValues := [...]string{data.ServerUsernames[i].Username.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/usernames/username%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[username-name=" + data.ServerUsernames[i].Username.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/usernames/username%v", data.getPath(), keyPath))
 	}
 	if !data.ServerPort.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/port", data.getPath()))
@@ -1900,14 +3387,10 @@ func (data *SSH) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/capability/netconf-xml", data.getPath()))
 	}
 	for i := range data.ServerNetconfVrfs {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.ServerNetconfVrfs[i].VrfName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/netconf/vrfs/vrf%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[vrf-name=" + data.ServerNetconfVrfs[i].VrfName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/netconf/vrfs/vrf%v", data.getPath(), keyPath))
 	}
 	if !data.ServerNetconfPort.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/netconf/port", data.getPath()))
@@ -1946,19 +3429,769 @@ func (data *SSH) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/v1", data.getPath()))
 	}
 	for i := range data.ServerVrfs {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.ServerVrfs[i].VrfName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/vrfs/vrf%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[vrf-name=" + data.ServerVrfs[i].VrfName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/vrfs/vrf%v", data.getPath(), keyPath))
 	}
 	if !data.Timeout.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timeout", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *SSH) addDeletedItemsXML(ctx context.Context, state SSH, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ClientV1.IsNull() && state.ClientV1.ValueBool() && data.ClientV1.IsNull() {
+		deletePath := state.getXPath() + "/client/v1"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ClientV2.IsNull() && state.ClientV2.ValueBool() && data.ClientV2.IsNull() {
+		deletePath := state.getXPath() + "/client/v2"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ClientTcpWindowScale.IsNull() && data.ClientTcpWindowScale.IsNull() {
+		deletePath := state.getXPath() + "/client/tcp-window-scale"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ClientAlgorithmsCiphers.IsNull() {
+		if data.ClientAlgorithmsCiphers.IsNull() {
+			var values []string
+			state.ClientAlgorithmsCiphers.ElementsAs(ctx, &values, false)
+			for _, v := range values {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/algorithms/ciphers/cipher[.=%v]", v))
+			}
+		} else {
+			var dataValues, stateValues []string
+			data.ClientAlgorithmsCiphers.ElementsAs(ctx, &dataValues, false)
+			state.ClientAlgorithmsCiphers.ElementsAs(ctx, &stateValues, false)
+			for _, v := range stateValues {
+				found := false
+				for _, vv := range dataValues {
+					if v == vv {
+						found = true
+						break
+					}
+				}
+				if !found {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/algorithms/ciphers/cipher[.=%v]", v))
+				}
+			}
+		}
+	}
+	if !state.ClientAlgorithmsKeyExchanges.IsNull() {
+		if data.ClientAlgorithmsKeyExchanges.IsNull() {
+			var values []string
+			state.ClientAlgorithmsKeyExchanges.ElementsAs(ctx, &values, false)
+			for _, v := range values {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/algorithms/key-exchanges/key-exchange[.=%v]", v))
+			}
+		} else {
+			var dataValues, stateValues []string
+			data.ClientAlgorithmsKeyExchanges.ElementsAs(ctx, &dataValues, false)
+			state.ClientAlgorithmsKeyExchanges.ElementsAs(ctx, &stateValues, false)
+			for _, v := range stateValues {
+				found := false
+				for _, vv := range dataValues {
+					if v == vv {
+						found = true
+						break
+					}
+				}
+				if !found {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/algorithms/key-exchanges/key-exchange[.=%v]", v))
+				}
+			}
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ClientEnableCipher3desCbc.IsNull() && state.ClientEnableCipher3desCbc.ValueBool() && data.ClientEnableCipher3desCbc.IsNull() {
+		deletePath := state.getXPath() + "/client/enable/cipher/threedes-cbc"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ClientEnableCipherAesCbc.IsNull() && state.ClientEnableCipherAesCbc.ValueBool() && data.ClientEnableCipherAesCbc.IsNull() {
+		deletePath := state.getXPath() + "/client/enable/cipher/aes-cbc"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ClientDisableHmacSha2256.IsNull() && state.ClientDisableHmacSha2256.ValueBool() && data.ClientDisableHmacSha2256.IsNull() {
+		deletePath := state.getXPath() + "/client/disable/hmac/hmac-sha2-256"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ClientDisableHmacSha2512.IsNull() && state.ClientDisableHmacSha2512.ValueBool() && data.ClientDisableHmacSha2512.IsNull() {
+		deletePath := state.getXPath() + "/client/disable/hmac/hmac-sha2-512"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ClientDisableHmacSha1.IsNull() && state.ClientDisableHmacSha1.ValueBool() && data.ClientDisableHmacSha1.IsNull() {
+		deletePath := state.getXPath() + "/client/disable/hmac/hmac-sha1"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ClientRekeyVolume.IsNull() && data.ClientRekeyVolume.IsNull() {
+		deletePath := state.getXPath() + "/client/rekey-volume"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ClientRekeyTime.IsNull() && data.ClientRekeyTime.IsNull() {
+		deletePath := state.getXPath() + "/client/rekey-time"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ClientDscp.IsNull() && data.ClientDscp.IsNull() {
+		deletePath := state.getXPath() + "/client/dscp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ClientVrf.IsNull() && data.ClientVrf.IsNull() {
+		deletePath := state.getXPath() + "/client/vrf"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ClientSourceInterface.IsNull() && data.ClientSourceInterface.IsNull() {
+		deletePath := state.getXPath() + "/client/source-interface"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ClientKnownhost.IsNull() && data.ClientKnownhost.IsNull() {
+		deletePath := state.getXPath() + "/client/knownhost"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.ServerUsernames {
+		stateKeys := [...]string{"username-name"}
+		stateKeyValues := [...]string{state.ServerUsernames[i].Username.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ServerUsernames[i].Username.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ServerUsernames {
+			found = true
+			if state.ServerUsernames[i].Username.ValueString() != data.ServerUsernames[j].Username.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ServerUsernames[i].Keystring.IsNull() && data.ServerUsernames[j].Keystring.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/usernames/username%v/keystring", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/usernames/username%v", predicates))
+		}
+	}
+	if !state.ServerPort.IsNull() && data.ServerPort.IsNull() {
+		deletePath := state.getXPath() + "/server/port"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerPortForwardingLocal.IsNull() && state.ServerPortForwardingLocal.ValueBool() && data.ServerPortForwardingLocal.IsNull() {
+		deletePath := state.getXPath() + "/server/port-forwarding/local"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ServerTcpWindowScale.IsNull() && data.ServerTcpWindowScale.IsNull() {
+		deletePath := state.getXPath() + "/server/tcp-window-scale"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ServerMaxAuthLimit.IsNull() && data.ServerMaxAuthLimit.IsNull() {
+		deletePath := state.getXPath() + "/server/max-auth-limit"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ServerAlgorithmsCiphers.IsNull() {
+		if data.ServerAlgorithmsCiphers.IsNull() {
+			var values []string
+			state.ServerAlgorithmsCiphers.ElementsAs(ctx, &values, false)
+			for _, v := range values {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/algorithms/ciphers/cipher[.=%v]", v))
+			}
+		} else {
+			var dataValues, stateValues []string
+			data.ServerAlgorithmsCiphers.ElementsAs(ctx, &dataValues, false)
+			state.ServerAlgorithmsCiphers.ElementsAs(ctx, &stateValues, false)
+			for _, v := range stateValues {
+				found := false
+				for _, vv := range dataValues {
+					if v == vv {
+						found = true
+						break
+					}
+				}
+				if !found {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/algorithms/ciphers/cipher[.=%v]", v))
+				}
+			}
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerAlgorithmsHostKeySshRsa.IsNull() && state.ServerAlgorithmsHostKeySshRsa.ValueBool() && data.ServerAlgorithmsHostKeySshRsa.IsNull() {
+		deletePath := state.getXPath() + "/server/algorithms/host-key/ssh-rsa"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerAlgorithmsHostKeyRsaSha256.IsNull() && state.ServerAlgorithmsHostKeyRsaSha256.ValueBool() && data.ServerAlgorithmsHostKeyRsaSha256.IsNull() {
+		deletePath := state.getXPath() + "/server/algorithms/host-key/rsa-sha256"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerAlgorithmsHostKeyRsaSha512.IsNull() && state.ServerAlgorithmsHostKeyRsaSha512.ValueBool() && data.ServerAlgorithmsHostKeyRsaSha512.IsNull() {
+		deletePath := state.getXPath() + "/server/algorithms/host-key/rsa-sha512"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerAlgorithmsHostKeyEd25519.IsNull() && state.ServerAlgorithmsHostKeyEd25519.ValueBool() && data.ServerAlgorithmsHostKeyEd25519.IsNull() {
+		deletePath := state.getXPath() + "/server/algorithms/host-key/ed25519"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() && state.ServerAlgorithmsHostKeyX509v3SshRsa.ValueBool() && data.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() {
+		deletePath := state.getXPath() + "/server/algorithms/host-key/x509v3-ssh-rsa"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerAlgorithmsHostKeyDsa.IsNull() && state.ServerAlgorithmsHostKeyDsa.ValueBool() && data.ServerAlgorithmsHostKeyDsa.IsNull() {
+		deletePath := state.getXPath() + "/server/algorithms/host-key/dsa"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerAlgorithmsHostKeyRsa.IsNull() && state.ServerAlgorithmsHostKeyRsa.ValueBool() && data.ServerAlgorithmsHostKeyRsa.IsNull() {
+		deletePath := state.getXPath() + "/server/algorithms/host-key/rsa"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() && state.ServerAlgorithmsHostKeyEcdsaNistp521.ValueBool() && data.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() {
+		deletePath := state.getXPath() + "/server/algorithms/host-key/ecdsa-nistp521"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() && state.ServerAlgorithmsHostKeyEcdsaNistp384.ValueBool() && data.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() {
+		deletePath := state.getXPath() + "/server/algorithms/host-key/ecdsa-nistp384"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() && state.ServerAlgorithmsHostKeyEcdsaNistp256.ValueBool() && data.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() {
+		deletePath := state.getXPath() + "/server/algorithms/host-key/ecdsa-nistp256"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ServerAlgorithmsKeyExchanges.IsNull() {
+		if data.ServerAlgorithmsKeyExchanges.IsNull() {
+			var values []string
+			state.ServerAlgorithmsKeyExchanges.ElementsAs(ctx, &values, false)
+			for _, v := range values {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/algorithms/key-exchanges/key-exchange[.=%v]", v))
+			}
+		} else {
+			var dataValues, stateValues []string
+			data.ServerAlgorithmsKeyExchanges.ElementsAs(ctx, &dataValues, false)
+			state.ServerAlgorithmsKeyExchanges.ElementsAs(ctx, &stateValues, false)
+			for _, v := range stateValues {
+				found := false
+				for _, vv := range dataValues {
+					if v == vv {
+						found = true
+						break
+					}
+				}
+				if !found {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/algorithms/key-exchanges/key-exchange[.=%v]", v))
+				}
+			}
+		}
+	}
+	if !state.ServerRekeyVolume.IsNull() && data.ServerRekeyVolume.IsNull() {
+		deletePath := state.getXPath() + "/server/rekey-volume"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ServerRekeyTime.IsNull() && data.ServerRekeyTime.IsNull() {
+		deletePath := state.getXPath() + "/server/rekey-time"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerNetconfXml.IsNull() && state.ServerNetconfXml.ValueBool() && data.ServerNetconfXml.IsNull() {
+		deletePath := state.getXPath() + "/server/capability/netconf-xml"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.ServerNetconfVrfs {
+		stateKeys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.ServerNetconfVrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ServerNetconfVrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ServerNetconfVrfs {
+			found = true
+			if state.ServerNetconfVrfs[i].VrfName.ValueString() != data.ServerNetconfVrfs[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ServerNetconfVrfs[i].Ipv6AccessList.IsNull() && data.ServerNetconfVrfs[j].Ipv6AccessList.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/netconf/vrfs/vrf%v/ipv6/access-list", predicates))
+				}
+				if !state.ServerNetconfVrfs[i].Ipv4AccessList.IsNull() && data.ServerNetconfVrfs[j].Ipv4AccessList.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/netconf/vrfs/vrf%v/ipv4/access-list", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/netconf/vrfs/vrf%v", predicates))
+		}
+	}
+	if !state.ServerNetconfPort.IsNull() && data.ServerNetconfPort.IsNull() {
+		deletePath := state.getXPath() + "/server/netconf/port"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ServerDscp.IsNull() && data.ServerDscp.IsNull() {
+		deletePath := state.getXPath() + "/server/dscp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerLogging.IsNull() && state.ServerLogging.ValueBool() && data.ServerLogging.IsNull() {
+		deletePath := state.getXPath() + "/server/logging"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ServerSessionLimit.IsNull() && data.ServerSessionLimit.IsNull() {
+		deletePath := state.getXPath() + "/server/session-limit"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerEnableCipher3desCbc.IsNull() && state.ServerEnableCipher3desCbc.ValueBool() && data.ServerEnableCipher3desCbc.IsNull() {
+		deletePath := state.getXPath() + "/server/enable/cipher/threedes-cbc"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerEnableCipherAesCbc.IsNull() && state.ServerEnableCipherAesCbc.ValueBool() && data.ServerEnableCipherAesCbc.IsNull() {
+		deletePath := state.getXPath() + "/server/enable/cipher/aes-cbc"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerDisableHmacSha2256.IsNull() && state.ServerDisableHmacSha2256.ValueBool() && data.ServerDisableHmacSha2256.IsNull() {
+		deletePath := state.getXPath() + "/server/disable/hmac/hmac-sha2-256"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerDisableHmacSha1.IsNull() && state.ServerDisableHmacSha1.ValueBool() && data.ServerDisableHmacSha1.IsNull() {
+		deletePath := state.getXPath() + "/server/disable/hmac/hmac-sha1"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerDisableHmacSha2512.IsNull() && state.ServerDisableHmacSha2512.ValueBool() && data.ServerDisableHmacSha2512.IsNull() {
+		deletePath := state.getXPath() + "/server/disable/hmac/hmac-sha2-512"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ServerRateLimit.IsNull() && data.ServerRateLimit.IsNull() {
+		deletePath := state.getXPath() + "/server/rate-limit"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerV2.IsNull() && state.ServerV2.ValueBool() && data.ServerV2.IsNull() {
+		deletePath := state.getXPath() + "/server/v2"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerV1.IsNull() && state.ServerV1.ValueBool() && data.ServerV1.IsNull() {
+		deletePath := state.getXPath() + "/server/v1"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.ServerVrfs {
+		stateKeys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.ServerVrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ServerVrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ServerVrfs {
+			found = true
+			if state.ServerVrfs[i].VrfName.ValueString() != data.ServerVrfs[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ServerVrfs[i].Ipv6AccessList.IsNull() && data.ServerVrfs[j].Ipv6AccessList.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/vrfs/vrf%v/ipv6/access-list", predicates))
+				}
+				if !state.ServerVrfs[i].Ipv4AccessList.IsNull() && data.ServerVrfs[j].Ipv4AccessList.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/vrfs/vrf%v/ipv4/access-list", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/vrfs/vrf%v", predicates))
+		}
+	}
+	if !state.Timeout.IsNull() && data.Timeout.IsNull() {
+		deletePath := state.getXPath() + "/timeout"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *SSH) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.ClientV1.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/v1")
+	}
+	if !data.ClientV2.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/v2")
+	}
+	if !data.ClientTcpWindowScale.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/tcp-window-scale")
+	}
+	if !data.ClientAlgorithmsCiphers.IsNull() {
+		var values []string
+		data.ClientAlgorithmsCiphers.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/client/algorithms/ciphers/cipher[.=%v]", v))
+		}
+	}
+	if !data.ClientAlgorithmsKeyExchanges.IsNull() {
+		var values []string
+		data.ClientAlgorithmsKeyExchanges.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/client/algorithms/key-exchanges/key-exchange[.=%v]", v))
+		}
+	}
+	if !data.ClientEnableCipher3desCbc.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/enable/cipher/threedes-cbc")
+	}
+	if !data.ClientEnableCipherAesCbc.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/enable/cipher/aes-cbc")
+	}
+	if !data.ClientDisableHmacSha2256.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/disable/hmac/hmac-sha2-256")
+	}
+	if !data.ClientDisableHmacSha2512.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/disable/hmac/hmac-sha2-512")
+	}
+	if !data.ClientDisableHmacSha1.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/disable/hmac/hmac-sha1")
+	}
+	if !data.ClientRekeyVolume.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/rekey-volume")
+	}
+	if !data.ClientRekeyTime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/rekey-time")
+	}
+	if !data.ClientDscp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/dscp")
+	}
+	if !data.ClientVrf.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/vrf")
+	}
+	if !data.ClientSourceInterface.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/source-interface")
+	}
+	if !data.ClientKnownhost.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/knownhost")
+	}
+	for i := range data.ServerUsernames {
+		keys := [...]string{"username-name"}
+		keyValues := [...]string{data.ServerUsernames[i].Username.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/server/usernames/username%v", predicates))
+	}
+	if !data.ServerPort.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/port")
+	}
+	if !data.ServerPortForwardingLocal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/port-forwarding/local")
+	}
+	if !data.ServerTcpWindowScale.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/tcp-window-scale")
+	}
+	if !data.ServerMaxAuthLimit.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/max-auth-limit")
+	}
+	if !data.ServerAlgorithmsCiphers.IsNull() {
+		var values []string
+		data.ServerAlgorithmsCiphers.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/server/algorithms/ciphers/cipher[.=%v]", v))
+		}
+	}
+	if !data.ServerAlgorithmsHostKeySshRsa.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/algorithms/host-key/ssh-rsa")
+	}
+	if !data.ServerAlgorithmsHostKeyRsaSha256.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/algorithms/host-key/rsa-sha256")
+	}
+	if !data.ServerAlgorithmsHostKeyRsaSha512.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/algorithms/host-key/rsa-sha512")
+	}
+	if !data.ServerAlgorithmsHostKeyEd25519.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/algorithms/host-key/ed25519")
+	}
+	if !data.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/algorithms/host-key/x509v3-ssh-rsa")
+	}
+	if !data.ServerAlgorithmsHostKeyDsa.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/algorithms/host-key/dsa")
+	}
+	if !data.ServerAlgorithmsHostKeyRsa.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/algorithms/host-key/rsa")
+	}
+	if !data.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp521")
+	}
+	if !data.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp384")
+	}
+	if !data.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/algorithms/host-key/ecdsa-nistp256")
+	}
+	if !data.ServerAlgorithmsKeyExchanges.IsNull() {
+		var values []string
+		data.ServerAlgorithmsKeyExchanges.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/server/algorithms/key-exchanges/key-exchange[.=%v]", v))
+		}
+	}
+	if !data.ServerRekeyVolume.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/rekey-volume")
+	}
+	if !data.ServerRekeyTime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/rekey-time")
+	}
+	if !data.ServerNetconfXml.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/capability/netconf-xml")
+	}
+	for i := range data.ServerNetconfVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ServerNetconfVrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/server/netconf/vrfs/vrf%v", predicates))
+	}
+	if !data.ServerNetconfPort.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/netconf/port")
+	}
+	if !data.ServerDscp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/dscp")
+	}
+	if !data.ServerLogging.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/logging")
+	}
+	if !data.ServerSessionLimit.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/session-limit")
+	}
+	if !data.ServerEnableCipher3desCbc.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/enable/cipher/threedes-cbc")
+	}
+	if !data.ServerEnableCipherAesCbc.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/enable/cipher/aes-cbc")
+	}
+	if !data.ServerDisableHmacSha2256.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/disable/hmac/hmac-sha2-256")
+	}
+	if !data.ServerDisableHmacSha1.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/disable/hmac/hmac-sha1")
+	}
+	if !data.ServerDisableHmacSha2512.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/disable/hmac/hmac-sha2-512")
+	}
+	if !data.ServerRateLimit.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/rate-limit")
+	}
+	if !data.ServerV2.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/v2")
+	}
+	if !data.ServerV1.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/v1")
+	}
+	for i := range data.ServerVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ServerVrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/server/vrfs/vrf%v", predicates))
+	}
+	if !data.Timeout.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timeout")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

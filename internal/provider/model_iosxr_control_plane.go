@@ -26,7 +26,11 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -719,6 +723,17 @@ func (data ControlPlaneData) getPath() string {
 	return "Cisco-IOS-XR-um-control-plane-cfg:/control-plane"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data ControlPlane) getXPath() string {
+	path := "Cisco-IOS-XR-um-control-plane-cfg:/control-plane"
+	return path
+}
+
+func (data ControlPlaneData) getXPath() string {
+	path := "Cisco-IOS-XR-um-control-plane-cfg:/control-plane"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -860,7 +875,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.SshIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -871,7 +885,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.SshIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -879,7 +892,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.SshIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -890,7 +902,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.SshIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -898,7 +909,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.TelnetIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -909,7 +919,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.TelnetIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -917,7 +926,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.TelnetIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -928,7 +936,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.TelnetIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -936,7 +943,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.SnmpIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -947,7 +953,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.SnmpIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -955,7 +960,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.SnmpIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -966,7 +970,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.SnmpIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -974,7 +977,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.TftpIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -985,7 +987,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.TftpIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -993,7 +994,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.TftpIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1004,7 +1004,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.TftpIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1012,7 +1011,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.HttpIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.HttpIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1023,7 +1021,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.HttpIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.HttpIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1031,7 +1028,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.XmlIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1042,7 +1038,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.XmlIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1050,7 +1045,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.XmlIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1061,7 +1055,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.XmlIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1069,7 +1062,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.NetconfIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1080,7 +1072,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.NetconfIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1088,7 +1079,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.NetconfIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1099,7 +1089,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.NetconfIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1107,7 +1096,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1118,7 +1106,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1126,7 +1113,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1137,7 +1123,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1478,7 +1463,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.SshIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1489,7 +1473,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.SshIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1497,7 +1480,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.SshIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1508,7 +1490,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.SshIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1516,7 +1497,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.TelnetIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1527,7 +1507,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.TelnetIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1535,7 +1514,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.TelnetIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1546,7 +1524,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.TelnetIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1554,7 +1531,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.SnmpIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1565,7 +1541,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.SnmpIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1573,7 +1548,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.SnmpIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1584,7 +1558,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.SnmpIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1592,7 +1565,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.TftpIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1603,7 +1575,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.TftpIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1611,7 +1582,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.TftpIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1622,7 +1592,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.TftpIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1630,7 +1599,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.HttpIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.HttpIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1641,7 +1609,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.HttpIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.HttpIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1649,7 +1616,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.XmlIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1660,7 +1626,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.XmlIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1668,7 +1633,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.XmlIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1679,7 +1643,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.XmlIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1687,7 +1650,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.NetconfIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1698,7 +1660,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.NetconfIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1706,7 +1667,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.NetconfIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1717,7 +1677,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.NetconfIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1725,7 +1684,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1736,7 +1694,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1744,7 +1701,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1755,7 +1711,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -2054,6 +2009,1343 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data ControlPlane) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if len(data.MgmtInbandInterfaces) > 0 {
+		for _, item := range data.MgmtInbandInterfaces {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
+			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
+			}
+			if !item.Ssh.IsNull() && !item.Ssh.IsUnknown() {
+				if item.Ssh.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/ssh", "")
+				}
+			}
+			if len(item.SshIpv4Prefixes) > 0 {
+				for _, citem := range item.SshIpv4Prefixes {
+					cbasePath := basePath + "/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.SshIpv4Hosts) > 0 {
+				for _, citem := range item.SshIpv4Hosts {
+					cbasePath := basePath + "/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if len(item.SshIpv6Prefixes) > 0 {
+				for _, citem := range item.SshIpv6Prefixes {
+					cbasePath := basePath + "/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.SshIpv6Hosts) > 0 {
+				for _, citem := range item.SshIpv6Hosts {
+					cbasePath := basePath + "/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if !item.Telnet.IsNull() && !item.Telnet.IsUnknown() {
+				if item.Telnet.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/telnet", "")
+				}
+			}
+			if len(item.TelnetIpv4Prefixes) > 0 {
+				for _, citem := range item.TelnetIpv4Prefixes {
+					cbasePath := basePath + "/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.TelnetIpv4Hosts) > 0 {
+				for _, citem := range item.TelnetIpv4Hosts {
+					cbasePath := basePath + "/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if len(item.TelnetIpv6Prefixes) > 0 {
+				for _, citem := range item.TelnetIpv6Prefixes {
+					cbasePath := basePath + "/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.TelnetIpv6Hosts) > 0 {
+				for _, citem := range item.TelnetIpv6Hosts {
+					cbasePath := basePath + "/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if !item.Snmp.IsNull() && !item.Snmp.IsUnknown() {
+				if item.Snmp.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/snmp", "")
+				}
+			}
+			if len(item.SnmpIpv4Prefixes) > 0 {
+				for _, citem := range item.SnmpIpv4Prefixes {
+					cbasePath := basePath + "/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.SnmpIpv4Hosts) > 0 {
+				for _, citem := range item.SnmpIpv4Hosts {
+					cbasePath := basePath + "/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if len(item.SnmpIpv6Prefixes) > 0 {
+				for _, citem := range item.SnmpIpv6Prefixes {
+					cbasePath := basePath + "/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.SnmpIpv6Hosts) > 0 {
+				for _, citem := range item.SnmpIpv6Hosts {
+					cbasePath := basePath + "/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if !item.Tftp.IsNull() && !item.Tftp.IsUnknown() {
+				if item.Tftp.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/tftp", "")
+				}
+			}
+			if len(item.TftpIpv4Prefixes) > 0 {
+				for _, citem := range item.TftpIpv4Prefixes {
+					cbasePath := basePath + "/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.TftpIpv4Hosts) > 0 {
+				for _, citem := range item.TftpIpv4Hosts {
+					cbasePath := basePath + "/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if len(item.TftpIpv6Prefixes) > 0 {
+				for _, citem := range item.TftpIpv6Prefixes {
+					cbasePath := basePath + "/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.TftpIpv6Hosts) > 0 {
+				for _, citem := range item.TftpIpv6Hosts {
+					cbasePath := basePath + "/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if !item.Http.IsNull() && !item.Http.IsUnknown() {
+				if item.Http.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/http", "")
+				}
+			}
+			if len(item.HttpIpv4Prefixes) > 0 {
+				for _, citem := range item.HttpIpv4Prefixes {
+					cbasePath := basePath + "/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.HttpIpv4Hosts) > 0 {
+				for _, citem := range item.HttpIpv4Hosts {
+					cbasePath := basePath + "/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if !item.Xml.IsNull() && !item.Xml.IsUnknown() {
+				if item.Xml.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/xr-xml", "")
+				}
+			}
+			if len(item.XmlIpv4Prefixes) > 0 {
+				for _, citem := range item.XmlIpv4Prefixes {
+					cbasePath := basePath + "/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.XmlIpv4Hosts) > 0 {
+				for _, citem := range item.XmlIpv4Hosts {
+					cbasePath := basePath + "/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if len(item.XmlIpv6Prefixes) > 0 {
+				for _, citem := range item.XmlIpv6Prefixes {
+					cbasePath := basePath + "/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.XmlIpv6Hosts) > 0 {
+				for _, citem := range item.XmlIpv6Hosts {
+					cbasePath := basePath + "/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if !item.Netconf.IsNull() && !item.Netconf.IsUnknown() {
+				if item.Netconf.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/netconf", "")
+				}
+			}
+			if len(item.NetconfIpv4Prefixes) > 0 {
+				for _, citem := range item.NetconfIpv4Prefixes {
+					cbasePath := basePath + "/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.NetconfIpv4Hosts) > 0 {
+				for _, citem := range item.NetconfIpv4Hosts {
+					cbasePath := basePath + "/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if len(item.NetconfIpv6Prefixes) > 0 {
+				for _, citem := range item.NetconfIpv6Prefixes {
+					cbasePath := basePath + "/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.NetconfIpv6Hosts) > 0 {
+				for _, citem := range item.NetconfIpv6Hosts {
+					cbasePath := basePath + "/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if !item.AllowAll.IsNull() && !item.AllowAll.IsUnknown() {
+				if item.AllowAll.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/all", "")
+				}
+			}
+			if len(item.AllowAllIpv4Prefixes) > 0 {
+				for _, citem := range item.AllowAllIpv4Prefixes {
+					cbasePath := basePath + "/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.AllowAllIpv4Hosts) > 0 {
+				for _, citem := range item.AllowAllIpv4Hosts {
+					cbasePath := basePath + "/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if len(item.AllowAllIpv6Prefixes) > 0 {
+				for _, citem := range item.AllowAllIpv6Prefixes {
+					cbasePath := basePath + "/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.AllowAllIpv6Hosts) > 0 {
+				for _, citem := range item.AllowAllIpv6Hosts {
+					cbasePath := basePath + "/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+		}
+	}
+	if !data.MgmtInbandAllSsh.IsNull() && !data.MgmtInbandAllSsh.IsUnknown() {
+		if data.MgmtInbandAllSsh.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh", "")
+		}
+	}
+	if len(data.MgmtInbandAllSshIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllSshIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllSshIpv4Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllSshIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtInbandAllSshIpv6Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllSshIpv6Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllSshIpv6Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllSshIpv6Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.MgmtInbandAllTelnet.IsNull() && !data.MgmtInbandAllTelnet.IsUnknown() {
+		if data.MgmtInbandAllTelnet.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet", "")
+		}
+	}
+	if len(data.MgmtInbandAllTelnetIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllTelnetIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllTelnetIpv4Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllTelnetIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtInbandAllTelnetIpv6Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllTelnetIpv6Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllTelnetIpv6Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllTelnetIpv6Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.MgmtInbandAllSnmp.IsNull() && !data.MgmtInbandAllSnmp.IsUnknown() {
+		if data.MgmtInbandAllSnmp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp", "")
+		}
+	}
+	if len(data.MgmtInbandAllSnmpIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllSnmpIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllSnmpIpv4Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllSnmpIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtInbandAllSnmpIpv6Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllSnmpIpv6Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllSnmpIpv6Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllSnmpIpv6Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.MgmtInbandAllTftp.IsNull() && !data.MgmtInbandAllTftp.IsUnknown() {
+		if data.MgmtInbandAllTftp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp", "")
+		}
+	}
+	if len(data.MgmtInbandAllTftpIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllTftpIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllTftpIpv4Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllTftpIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtInbandAllTftpIpv6Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllTftpIpv6Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllTftpIpv6Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllTftpIpv6Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.MgmtInbandAllHttp.IsNull() && !data.MgmtInbandAllHttp.IsUnknown() {
+		if data.MgmtInbandAllHttp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/inband/interfaces/all/allow/http", "")
+		}
+	}
+	if len(data.MgmtInbandAllHttpIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllHttpIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllHttpIpv4Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllHttpIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.MgmtInbandAllXml.IsNull() && !data.MgmtInbandAllXml.IsUnknown() {
+		if data.MgmtInbandAllXml.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml", "")
+		}
+	}
+	if len(data.MgmtInbandAllXmlIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllXmlIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllXmlIpv4Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllXmlIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtInbandAllXmlIpv6Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllXmlIpv6Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllXmlIpv6Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllXmlIpv6Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.MgmtInbandAllNetconf.IsNull() && !data.MgmtInbandAllNetconf.IsUnknown() {
+		if data.MgmtInbandAllNetconf.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf", "")
+		}
+	}
+	if len(data.MgmtInbandAllNetconfIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllNetconfIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllNetconfIpv4Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllNetconfIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtInbandAllNetconfIpv6Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllNetconfIpv6Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllNetconfIpv6Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllNetconfIpv6Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.MgmtInbandAllAllowAll.IsNull() && !data.MgmtInbandAllAllowAll.IsUnknown() {
+		if data.MgmtInbandAllAllowAll.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/inband/interfaces/all/allow/all", "")
+		}
+	}
+	if len(data.MgmtInbandAllAllowAllIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllAllowAllIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllAllowAllIpv4Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllAllowAllIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtInbandAllAllowAllIpv6Prefixes) > 0 {
+		for _, item := range data.MgmtInbandAllAllowAllIpv6Prefixes {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtInbandAllAllowAllIpv6Hosts) > 0 {
+		for _, item := range data.MgmtInbandAllAllowAllIpv6Hosts {
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtOobInterfaces) > 0 {
+		for _, item := range data.MgmtOobInterfaces {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
+			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
+			}
+			if !item.Ssh.IsNull() && !item.Ssh.IsUnknown() {
+				if item.Ssh.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/ssh", "")
+				}
+			}
+			if len(item.SshIpv4Prefixes) > 0 {
+				for _, citem := range item.SshIpv4Prefixes {
+					cbasePath := basePath + "/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.SshIpv4Hosts) > 0 {
+				for _, citem := range item.SshIpv4Hosts {
+					cbasePath := basePath + "/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if len(item.SshIpv6Prefixes) > 0 {
+				for _, citem := range item.SshIpv6Prefixes {
+					cbasePath := basePath + "/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.SshIpv6Hosts) > 0 {
+				for _, citem := range item.SshIpv6Hosts {
+					cbasePath := basePath + "/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if !item.Telnet.IsNull() && !item.Telnet.IsUnknown() {
+				if item.Telnet.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/telnet", "")
+				}
+			}
+			if len(item.TelnetIpv4Prefixes) > 0 {
+				for _, citem := range item.TelnetIpv4Prefixes {
+					cbasePath := basePath + "/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.TelnetIpv4Hosts) > 0 {
+				for _, citem := range item.TelnetIpv4Hosts {
+					cbasePath := basePath + "/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if len(item.TelnetIpv6Prefixes) > 0 {
+				for _, citem := range item.TelnetIpv6Prefixes {
+					cbasePath := basePath + "/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.TelnetIpv6Hosts) > 0 {
+				for _, citem := range item.TelnetIpv6Hosts {
+					cbasePath := basePath + "/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if !item.Snmp.IsNull() && !item.Snmp.IsUnknown() {
+				if item.Snmp.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/snmp", "")
+				}
+			}
+			if len(item.SnmpIpv4Prefixes) > 0 {
+				for _, citem := range item.SnmpIpv4Prefixes {
+					cbasePath := basePath + "/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.SnmpIpv4Hosts) > 0 {
+				for _, citem := range item.SnmpIpv4Hosts {
+					cbasePath := basePath + "/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if len(item.SnmpIpv6Prefixes) > 0 {
+				for _, citem := range item.SnmpIpv6Prefixes {
+					cbasePath := basePath + "/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.SnmpIpv6Hosts) > 0 {
+				for _, citem := range item.SnmpIpv6Hosts {
+					cbasePath := basePath + "/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if !item.Tftp.IsNull() && !item.Tftp.IsUnknown() {
+				if item.Tftp.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/tftp", "")
+				}
+			}
+			if len(item.TftpIpv4Prefixes) > 0 {
+				for _, citem := range item.TftpIpv4Prefixes {
+					cbasePath := basePath + "/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.TftpIpv4Hosts) > 0 {
+				for _, citem := range item.TftpIpv4Hosts {
+					cbasePath := basePath + "/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if len(item.TftpIpv6Prefixes) > 0 {
+				for _, citem := range item.TftpIpv6Prefixes {
+					cbasePath := basePath + "/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.TftpIpv6Hosts) > 0 {
+				for _, citem := range item.TftpIpv6Hosts {
+					cbasePath := basePath + "/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if !item.Http.IsNull() && !item.Http.IsUnknown() {
+				if item.Http.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/http", "")
+				}
+			}
+			if len(item.HttpIpv4Prefixes) > 0 {
+				for _, citem := range item.HttpIpv4Prefixes {
+					cbasePath := basePath + "/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.HttpIpv4Hosts) > 0 {
+				for _, citem := range item.HttpIpv4Hosts {
+					cbasePath := basePath + "/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if !item.Xml.IsNull() && !item.Xml.IsUnknown() {
+				if item.Xml.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/xr-xml", "")
+				}
+			}
+			if len(item.XmlIpv4Prefixes) > 0 {
+				for _, citem := range item.XmlIpv4Prefixes {
+					cbasePath := basePath + "/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.XmlIpv4Hosts) > 0 {
+				for _, citem := range item.XmlIpv4Hosts {
+					cbasePath := basePath + "/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if len(item.XmlIpv6Prefixes) > 0 {
+				for _, citem := range item.XmlIpv6Prefixes {
+					cbasePath := basePath + "/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.XmlIpv6Hosts) > 0 {
+				for _, citem := range item.XmlIpv6Hosts {
+					cbasePath := basePath + "/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if !item.Netconf.IsNull() && !item.Netconf.IsUnknown() {
+				if item.Netconf.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/netconf", "")
+				}
+			}
+			if len(item.NetconfIpv4Prefixes) > 0 {
+				for _, citem := range item.NetconfIpv4Prefixes {
+					cbasePath := basePath + "/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.NetconfIpv4Hosts) > 0 {
+				for _, citem := range item.NetconfIpv4Hosts {
+					cbasePath := basePath + "/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if len(item.NetconfIpv6Prefixes) > 0 {
+				for _, citem := range item.NetconfIpv6Prefixes {
+					cbasePath := basePath + "/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.NetconfIpv6Hosts) > 0 {
+				for _, citem := range item.NetconfIpv6Hosts {
+					cbasePath := basePath + "/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if !item.AllowAll.IsNull() && !item.AllowAll.IsUnknown() {
+				if item.AllowAll.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/allow/all", "")
+				}
+			}
+			if len(item.AllowAllIpv4Prefixes) > 0 {
+				for _, citem := range item.AllowAllIpv4Prefixes {
+					cbasePath := basePath + "/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.AllowAllIpv4Hosts) > 0 {
+				for _, citem := range item.AllowAllIpv4Hosts {
+					cbasePath := basePath + "/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+			if len(item.AllowAllIpv6Prefixes) > 0 {
+				for _, citem := range item.AllowAllIpv6Prefixes {
+					cbasePath := basePath + "/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.AllowAllIpv6Hosts) > 0 {
+				for _, citem := range item.AllowAllIpv6Hosts {
+					cbasePath := basePath + "/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + citem.Address.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+				}
+			}
+		}
+	}
+	if !data.MgmtOobVrf.IsNull() && !data.MgmtOobVrf.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/out-of-band/vrf", data.MgmtOobVrf.ValueString())
+	}
+	if !data.MgmtOobInbandBehavior.IsNull() && !data.MgmtOobInbandBehavior.IsUnknown() {
+		if data.MgmtOobInbandBehavior.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/out-of-band/enable-inband-behavior", "")
+		}
+	}
+	if !data.MgmtOobAllSsh.IsNull() && !data.MgmtOobAllSsh.IsUnknown() {
+		if data.MgmtOobAllSsh.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh", "")
+		}
+	}
+	if len(data.MgmtOobAllSshIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllSshIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllSshIpv4Hosts) > 0 {
+		for _, item := range data.MgmtOobAllSshIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtOobAllSshIpv6Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllSshIpv6Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllSshIpv6Hosts) > 0 {
+		for _, item := range data.MgmtOobAllSshIpv6Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.MgmtOobAllTelnet.IsNull() && !data.MgmtOobAllTelnet.IsUnknown() {
+		if data.MgmtOobAllTelnet.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet", "")
+		}
+	}
+	if len(data.MgmtOobAllTelnetIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllTelnetIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllTelnetIpv4Hosts) > 0 {
+		for _, item := range data.MgmtOobAllTelnetIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtOobAllTelnetIpv6Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllTelnetIpv6Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllTelnetIpv6Hosts) > 0 {
+		for _, item := range data.MgmtOobAllTelnetIpv6Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.MgmtOobAllSnmp.IsNull() && !data.MgmtOobAllSnmp.IsUnknown() {
+		if data.MgmtOobAllSnmp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp", "")
+		}
+	}
+	if len(data.MgmtOobAllSnmpIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllSnmpIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllSnmpIpv4Hosts) > 0 {
+		for _, item := range data.MgmtOobAllSnmpIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtOobAllSnmpIpv6Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllSnmpIpv6Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllSnmpIpv6Hosts) > 0 {
+		for _, item := range data.MgmtOobAllSnmpIpv6Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.MgmtOobAllTftp.IsNull() && !data.MgmtOobAllTftp.IsUnknown() {
+		if data.MgmtOobAllTftp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp", "")
+		}
+	}
+	if len(data.MgmtOobAllTftpIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllTftpIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllTftpIpv4Hosts) > 0 {
+		for _, item := range data.MgmtOobAllTftpIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtOobAllTftpIpv6Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllTftpIpv6Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllTftpIpv6Hosts) > 0 {
+		for _, item := range data.MgmtOobAllTftpIpv6Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.MgmtOobAllHttp.IsNull() && !data.MgmtOobAllHttp.IsUnknown() {
+		if data.MgmtOobAllHttp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http", "")
+		}
+	}
+	if len(data.MgmtOobAllHttpIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllHttpIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllHttpIpv4Hosts) > 0 {
+		for _, item := range data.MgmtOobAllHttpIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.MgmtOobAllXml.IsNull() && !data.MgmtOobAllXml.IsUnknown() {
+		if data.MgmtOobAllXml.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml", "")
+		}
+	}
+	if len(data.MgmtOobAllXmlIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllXmlIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllXmlIpv4Hosts) > 0 {
+		for _, item := range data.MgmtOobAllXmlIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtOobAllXmlIpv6Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllXmlIpv6Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllXmlIpv6Hosts) > 0 {
+		for _, item := range data.MgmtOobAllXmlIpv6Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.MgmtOobAllNetconf.IsNull() && !data.MgmtOobAllNetconf.IsUnknown() {
+		if data.MgmtOobAllNetconf.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf", "")
+		}
+	}
+	if len(data.MgmtOobAllNetconfIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllNetconfIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllNetconfIpv4Hosts) > 0 {
+		for _, item := range data.MgmtOobAllNetconfIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtOobAllNetconfIpv6Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllNetconfIpv6Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllNetconfIpv6Hosts) > 0 {
+		for _, item := range data.MgmtOobAllNetconfIpv6Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.MgmtOobAllAllowAll.IsNull() && !data.MgmtOobAllAllowAll.IsUnknown() {
+		if data.MgmtOobAllAllowAll.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all", "")
+		}
+	}
+	if len(data.MgmtOobAllAllowAllIpv4Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllAllowAllIpv4Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllAllowAllIpv4Hosts) > 0 {
+		for _, item := range data.MgmtOobAllAllowAllIpv4Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if len(data.MgmtOobAllAllowAllIpv6Prefixes) > 0 {
+		for _, item := range data.MgmtOobAllAllowAllIpv6Prefixes {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Length.IsNull() && !item.Length.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/length", strconv.FormatInt(item.Length.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.MgmtOobAllAllowAllIpv6Hosts) > 0 {
+		for _, item := range data.MgmtOobAllAllowAllIpv6Hosts {
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
@@ -2085,14 +3377,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.MgmtInbandInterfaces[i].InterfaceName = types.StringNull()
 		}
-		if value := r.Get("allow.ssh"); !data.MgmtInbandInterfaces[i].Ssh.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.ssh"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].Ssh.IsNull() {
 				data.MgmtInbandInterfaces[i].Ssh = types.BoolValue(true)
-			} else {
-				data.MgmtInbandInterfaces[i].Ssh = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtInbandInterfaces[i].Ssh = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].Ssh.IsNull() {
+				data.MgmtInbandInterfaces[i].Ssh = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].SshIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -2220,14 +3515,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].SshIpv6Hosts[ci].Address = types.StringNull()
 			}
 		}
-		if value := r.Get("allow.telnet"); !data.MgmtInbandInterfaces[i].Telnet.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.telnet"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].Telnet.IsNull() {
 				data.MgmtInbandInterfaces[i].Telnet = types.BoolValue(true)
-			} else {
-				data.MgmtInbandInterfaces[i].Telnet = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtInbandInterfaces[i].Telnet = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].Telnet.IsNull() {
+				data.MgmtInbandInterfaces[i].Telnet = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -2355,14 +3653,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].TelnetIpv6Hosts[ci].Address = types.StringNull()
 			}
 		}
-		if value := r.Get("allow.snmp"); !data.MgmtInbandInterfaces[i].Snmp.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.snmp"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].Snmp.IsNull() {
 				data.MgmtInbandInterfaces[i].Snmp = types.BoolValue(true)
-			} else {
-				data.MgmtInbandInterfaces[i].Snmp = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtInbandInterfaces[i].Snmp = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].Snmp.IsNull() {
+				data.MgmtInbandInterfaces[i].Snmp = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -2490,14 +3791,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].SnmpIpv6Hosts[ci].Address = types.StringNull()
 			}
 		}
-		if value := r.Get("allow.tftp"); !data.MgmtInbandInterfaces[i].Tftp.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.tftp"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].Tftp.IsNull() {
 				data.MgmtInbandInterfaces[i].Tftp = types.BoolValue(true)
-			} else {
-				data.MgmtInbandInterfaces[i].Tftp = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtInbandInterfaces[i].Tftp = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].Tftp.IsNull() {
+				data.MgmtInbandInterfaces[i].Tftp = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].TftpIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -2625,14 +3929,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].TftpIpv6Hosts[ci].Address = types.StringNull()
 			}
 		}
-		if value := r.Get("allow.http"); !data.MgmtInbandInterfaces[i].Http.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.http"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].Http.IsNull() {
 				data.MgmtInbandInterfaces[i].Http = types.BoolValue(true)
-			} else {
-				data.MgmtInbandInterfaces[i].Http = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtInbandInterfaces[i].Http = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].Http.IsNull() {
+				data.MgmtInbandInterfaces[i].Http = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].HttpIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -2697,14 +4004,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].HttpIpv4Hosts[ci].Address = types.StringNull()
 			}
 		}
-		if value := r.Get("allow.xr-xml"); !data.MgmtInbandInterfaces[i].Xml.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.xr-xml"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].Xml.IsNull() {
 				data.MgmtInbandInterfaces[i].Xml = types.BoolValue(true)
-			} else {
-				data.MgmtInbandInterfaces[i].Xml = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtInbandInterfaces[i].Xml = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].Xml.IsNull() {
+				data.MgmtInbandInterfaces[i].Xml = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].XmlIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -2832,14 +4142,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].XmlIpv6Hosts[ci].Address = types.StringNull()
 			}
 		}
-		if value := r.Get("allow.netconf"); !data.MgmtInbandInterfaces[i].Netconf.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.netconf"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].Netconf.IsNull() {
 				data.MgmtInbandInterfaces[i].Netconf = types.BoolValue(true)
-			} else {
-				data.MgmtInbandInterfaces[i].Netconf = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtInbandInterfaces[i].Netconf = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].Netconf.IsNull() {
+				data.MgmtInbandInterfaces[i].Netconf = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -2967,14 +4280,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtInbandInterfaces[i].NetconfIpv6Hosts[ci].Address = types.StringNull()
 			}
 		}
-		if value := r.Get("allow.all"); !data.MgmtInbandInterfaces[i].AllowAll.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.all"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].AllowAll.IsNull() {
 				data.MgmtInbandInterfaces[i].AllowAll = types.BoolValue(true)
-			} else {
-				data.MgmtInbandInterfaces[i].AllowAll = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtInbandInterfaces[i].AllowAll = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].AllowAll.IsNull() {
+				data.MgmtInbandInterfaces[i].AllowAll = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -3103,14 +4419,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh"); !data.MgmtInbandAllSsh.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllSsh.IsNull() {
 			data.MgmtInbandAllSsh = types.BoolValue(true)
-		} else {
-			data.MgmtInbandAllSsh = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtInbandAllSsh = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllSsh.IsNull() {
+			data.MgmtInbandAllSsh = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtInbandAllSshIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -3238,14 +4556,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandAllSshIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet"); !data.MgmtInbandAllTelnet.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllTelnet.IsNull() {
 			data.MgmtInbandAllTelnet = types.BoolValue(true)
-		} else {
-			data.MgmtInbandAllTelnet = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtInbandAllTelnet = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllTelnet.IsNull() {
+			data.MgmtInbandAllTelnet = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtInbandAllTelnetIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -3373,14 +4693,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandAllTelnetIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp"); !data.MgmtInbandAllSnmp.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllSnmp.IsNull() {
 			data.MgmtInbandAllSnmp = types.BoolValue(true)
-		} else {
-			data.MgmtInbandAllSnmp = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtInbandAllSnmp = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllSnmp.IsNull() {
+			data.MgmtInbandAllSnmp = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtInbandAllSnmpIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -3508,14 +4830,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandAllSnmpIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp"); !data.MgmtInbandAllTftp.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllTftp.IsNull() {
 			data.MgmtInbandAllTftp = types.BoolValue(true)
-		} else {
-			data.MgmtInbandAllTftp = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtInbandAllTftp = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllTftp.IsNull() {
+			data.MgmtInbandAllTftp = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtInbandAllTftpIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -3643,14 +4967,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandAllTftpIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.http"); !data.MgmtInbandAllHttp.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.http"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllHttp.IsNull() {
 			data.MgmtInbandAllHttp = types.BoolValue(true)
-		} else {
-			data.MgmtInbandAllHttp = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtInbandAllHttp = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllHttp.IsNull() {
+			data.MgmtInbandAllHttp = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtInbandAllHttpIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -3715,14 +5041,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandAllHttpIpv4Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml"); !data.MgmtInbandAllXml.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllXml.IsNull() {
 			data.MgmtInbandAllXml = types.BoolValue(true)
-		} else {
-			data.MgmtInbandAllXml = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtInbandAllXml = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllXml.IsNull() {
+			data.MgmtInbandAllXml = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtInbandAllXmlIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -3850,14 +5178,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandAllXmlIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf"); !data.MgmtInbandAllNetconf.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllNetconf.IsNull() {
 			data.MgmtInbandAllNetconf = types.BoolValue(true)
-		} else {
-			data.MgmtInbandAllNetconf = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtInbandAllNetconf = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllNetconf.IsNull() {
+			data.MgmtInbandAllNetconf = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtInbandAllNetconfIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -3985,14 +5315,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandAllNetconfIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all"); !data.MgmtInbandAllAllowAll.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllAllowAll.IsNull() {
 			data.MgmtInbandAllAllowAll = types.BoolValue(true)
-		} else {
-			data.MgmtInbandAllAllowAll = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtInbandAllAllowAll = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllAllowAll.IsNull() {
+			data.MgmtInbandAllAllowAll = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtInbandAllAllowAllIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -4148,14 +5480,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.MgmtOobInterfaces[i].InterfaceName = types.StringNull()
 		}
-		if value := r.Get("allow.ssh"); !data.MgmtOobInterfaces[i].Ssh.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.ssh"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].Ssh.IsNull() {
 				data.MgmtOobInterfaces[i].Ssh = types.BoolValue(true)
-			} else {
-				data.MgmtOobInterfaces[i].Ssh = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtOobInterfaces[i].Ssh = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].Ssh.IsNull() {
+				data.MgmtOobInterfaces[i].Ssh = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].SshIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -4283,14 +5618,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].SshIpv6Hosts[ci].Address = types.StringNull()
 			}
 		}
-		if value := r.Get("allow.telnet"); !data.MgmtOobInterfaces[i].Telnet.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.telnet"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].Telnet.IsNull() {
 				data.MgmtOobInterfaces[i].Telnet = types.BoolValue(true)
-			} else {
-				data.MgmtOobInterfaces[i].Telnet = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtOobInterfaces[i].Telnet = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].Telnet.IsNull() {
+				data.MgmtOobInterfaces[i].Telnet = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].TelnetIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -4418,14 +5756,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].TelnetIpv6Hosts[ci].Address = types.StringNull()
 			}
 		}
-		if value := r.Get("allow.snmp"); !data.MgmtOobInterfaces[i].Snmp.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.snmp"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].Snmp.IsNull() {
 				data.MgmtOobInterfaces[i].Snmp = types.BoolValue(true)
-			} else {
-				data.MgmtOobInterfaces[i].Snmp = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtOobInterfaces[i].Snmp = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].Snmp.IsNull() {
+				data.MgmtOobInterfaces[i].Snmp = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].SnmpIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -4553,14 +5894,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].SnmpIpv6Hosts[ci].Address = types.StringNull()
 			}
 		}
-		if value := r.Get("allow.tftp"); !data.MgmtOobInterfaces[i].Tftp.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.tftp"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].Tftp.IsNull() {
 				data.MgmtOobInterfaces[i].Tftp = types.BoolValue(true)
-			} else {
-				data.MgmtOobInterfaces[i].Tftp = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtOobInterfaces[i].Tftp = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].Tftp.IsNull() {
+				data.MgmtOobInterfaces[i].Tftp = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].TftpIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -4688,14 +6032,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].TftpIpv6Hosts[ci].Address = types.StringNull()
 			}
 		}
-		if value := r.Get("allow.http"); !data.MgmtOobInterfaces[i].Http.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.http"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].Http.IsNull() {
 				data.MgmtOobInterfaces[i].Http = types.BoolValue(true)
-			} else {
-				data.MgmtOobInterfaces[i].Http = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtOobInterfaces[i].Http = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].Http.IsNull() {
+				data.MgmtOobInterfaces[i].Http = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].HttpIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -4760,14 +6107,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].HttpIpv4Hosts[ci].Address = types.StringNull()
 			}
 		}
-		if value := r.Get("allow.xr-xml"); !data.MgmtOobInterfaces[i].Xml.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.xr-xml"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].Xml.IsNull() {
 				data.MgmtOobInterfaces[i].Xml = types.BoolValue(true)
-			} else {
-				data.MgmtOobInterfaces[i].Xml = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtOobInterfaces[i].Xml = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].Xml.IsNull() {
+				data.MgmtOobInterfaces[i].Xml = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].XmlIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -4895,14 +6245,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].XmlIpv6Hosts[ci].Address = types.StringNull()
 			}
 		}
-		if value := r.Get("allow.netconf"); !data.MgmtOobInterfaces[i].Netconf.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.netconf"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].Netconf.IsNull() {
 				data.MgmtOobInterfaces[i].Netconf = types.BoolValue(true)
-			} else {
-				data.MgmtOobInterfaces[i].Netconf = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtOobInterfaces[i].Netconf = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].Netconf.IsNull() {
+				data.MgmtOobInterfaces[i].Netconf = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].NetconfIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -5030,14 +6383,17 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 				data.MgmtOobInterfaces[i].NetconfIpv6Hosts[ci].Address = types.StringNull()
 			}
 		}
-		if value := r.Get("allow.all"); !data.MgmtOobInterfaces[i].AllowAll.IsNull() {
-			if value.Exists() {
+		if value := r.Get("allow.all"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].AllowAll.IsNull() {
 				data.MgmtOobInterfaces[i].AllowAll = types.BoolValue(true)
-			} else {
-				data.MgmtOobInterfaces[i].AllowAll = types.BoolValue(false)
 			}
 		} else {
-			data.MgmtOobInterfaces[i].AllowAll = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].AllowAll.IsNull() {
+				data.MgmtOobInterfaces[i].AllowAll = types.BoolNull()
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes {
 			keys := [...]string{"address", "length"}
@@ -5168,26 +6524,30 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "management-plane.out-of-band.vrf"); value.Exists() && !data.MgmtOobVrf.IsNull() {
 		data.MgmtOobVrf = types.StringValue(value.String())
-	} else {
+	} else if data.MgmtOobVrf.IsNull() {
 		data.MgmtOobVrf = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.enable-inband-behavior"); !data.MgmtOobInbandBehavior.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.out-of-band.enable-inband-behavior"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobInbandBehavior.IsNull() {
 			data.MgmtOobInbandBehavior = types.BoolValue(true)
-		} else {
-			data.MgmtOobInbandBehavior = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtOobInbandBehavior = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobInbandBehavior.IsNull() {
+			data.MgmtOobInbandBehavior = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh"); !data.MgmtOobAllSsh.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllSsh.IsNull() {
 			data.MgmtOobAllSsh = types.BoolValue(true)
-		} else {
-			data.MgmtOobAllSsh = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtOobAllSsh = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllSsh.IsNull() {
+			data.MgmtOobAllSsh = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtOobAllSshIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -5315,14 +6675,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobAllSshIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet"); !data.MgmtOobAllTelnet.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllTelnet.IsNull() {
 			data.MgmtOobAllTelnet = types.BoolValue(true)
-		} else {
-			data.MgmtOobAllTelnet = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtOobAllTelnet = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllTelnet.IsNull() {
+			data.MgmtOobAllTelnet = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtOobAllTelnetIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -5450,14 +6812,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobAllTelnetIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp"); !data.MgmtOobAllSnmp.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllSnmp.IsNull() {
 			data.MgmtOobAllSnmp = types.BoolValue(true)
-		} else {
-			data.MgmtOobAllSnmp = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtOobAllSnmp = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllSnmp.IsNull() {
+			data.MgmtOobAllSnmp = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtOobAllSnmpIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -5585,14 +6949,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobAllSnmpIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp"); !data.MgmtOobAllTftp.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllTftp.IsNull() {
 			data.MgmtOobAllTftp = types.BoolValue(true)
-		} else {
-			data.MgmtOobAllTftp = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtOobAllTftp = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllTftp.IsNull() {
+			data.MgmtOobAllTftp = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtOobAllTftpIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -5720,14 +7086,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobAllTftpIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.http"); !data.MgmtOobAllHttp.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.http"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllHttp.IsNull() {
 			data.MgmtOobAllHttp = types.BoolValue(true)
-		} else {
-			data.MgmtOobAllHttp = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtOobAllHttp = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllHttp.IsNull() {
+			data.MgmtOobAllHttp = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtOobAllHttpIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -5792,14 +7160,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobAllHttpIpv4Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml"); !data.MgmtOobAllXml.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllXml.IsNull() {
 			data.MgmtOobAllXml = types.BoolValue(true)
-		} else {
-			data.MgmtOobAllXml = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtOobAllXml = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllXml.IsNull() {
+			data.MgmtOobAllXml = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtOobAllXmlIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -5927,14 +7297,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobAllXmlIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf"); !data.MgmtOobAllNetconf.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllNetconf.IsNull() {
 			data.MgmtOobAllNetconf = types.BoolValue(true)
-		} else {
-			data.MgmtOobAllNetconf = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtOobAllNetconf = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllNetconf.IsNull() {
+			data.MgmtOobAllNetconf = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtOobAllNetconfIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -6062,14 +7434,16 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobAllNetconfIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all"); !data.MgmtOobAllAllowAll.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllAllowAll.IsNull() {
 			data.MgmtOobAllAllowAll = types.BoolValue(true)
-		} else {
-			data.MgmtOobAllAllowAll = types.BoolValue(false)
 		}
 	} else {
-		data.MgmtOobAllAllowAll = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllAllowAll.IsNull() {
+			data.MgmtOobAllAllowAll = types.BoolNull()
+		}
 	}
 	for i := range data.MgmtOobAllAllowAllIpv4Prefixes {
 		keys := [...]string{"address", "length"}
@@ -6201,10 +7575,4307 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *ControlPlane) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	for i := range data.MgmtInbandInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.MgmtInbandInterfaces[i].InterfaceName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/interface").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+			data.MgmtInbandInterfaces[i].InterfaceName = types.StringValue(value.String())
+		} else if data.MgmtInbandInterfaces[i].InterfaceName.IsNull() {
+			data.MgmtInbandInterfaces[i].InterfaceName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "allow/ssh"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].Ssh.IsNull() {
+				data.MgmtInbandInterfaces[i].Ssh = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].Ssh.IsNull() {
+				data.MgmtInbandInterfaces[i].Ssh = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].SshIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].SshIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].SshIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].SshIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].SshIpv6Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].SshIpv6Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].SshIpv6Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].SshIpv6Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "allow/telnet"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].Telnet.IsNull() {
+				data.MgmtInbandInterfaces[i].Telnet = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].Telnet.IsNull() {
+				data.MgmtInbandInterfaces[i].Telnet = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].TelnetIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].TelnetIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv6Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].TelnetIpv6Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].TelnetIpv6Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "allow/snmp"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].Snmp.IsNull() {
+				data.MgmtInbandInterfaces[i].Snmp = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].Snmp.IsNull() {
+				data.MgmtInbandInterfaces[i].Snmp = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].SnmpIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].SnmpIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv6Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].SnmpIpv6Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].SnmpIpv6Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "allow/tftp"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].Tftp.IsNull() {
+				data.MgmtInbandInterfaces[i].Tftp = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].Tftp.IsNull() {
+				data.MgmtInbandInterfaces[i].Tftp = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].TftpIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].TftpIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].TftpIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].TftpIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].TftpIpv6Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].TftpIpv6Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].TftpIpv6Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].TftpIpv6Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "allow/http"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].Http.IsNull() {
+				data.MgmtInbandInterfaces[i].Http = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].Http.IsNull() {
+				data.MgmtInbandInterfaces[i].Http = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].HttpIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].HttpIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].HttpIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].HttpIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "allow/xr-xml"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].Xml.IsNull() {
+				data.MgmtInbandInterfaces[i].Xml = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].Xml.IsNull() {
+				data.MgmtInbandInterfaces[i].Xml = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].XmlIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].XmlIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].XmlIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].XmlIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].XmlIpv6Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].XmlIpv6Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].XmlIpv6Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].XmlIpv6Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "allow/netconf"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].Netconf.IsNull() {
+				data.MgmtInbandInterfaces[i].Netconf = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].Netconf.IsNull() {
+				data.MgmtInbandInterfaces[i].Netconf = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].NetconfIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].NetconfIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv6Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].NetconfIpv6Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].NetconfIpv6Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "allow/all"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtInbandInterfaces[i].AllowAll.IsNull() {
+				data.MgmtInbandInterfaces[i].AllowAll = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtInbandInterfaces[i].AllowAll.IsNull() {
+				data.MgmtInbandInterfaces[i].AllowAll = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].AllowAllIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Length.IsNull() {
+				data.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtInbandInterfaces[i].AllowAllIpv6Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllSsh.IsNull() {
+			data.MgmtInbandAllSsh = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllSsh.IsNull() {
+			data.MgmtInbandAllSsh = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtInbandAllSshIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllSshIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSshIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllSshIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllSshIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllSshIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllSshIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllSshIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllSshIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllSshIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllSshIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllSshIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllSshIpv4Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllSshIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtInbandAllSshIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllSshIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSshIpv6Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllSshIpv6Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllSshIpv6Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllSshIpv6Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllSshIpv6Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllSshIpv6Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllSshIpv6Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllSshIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllSshIpv6Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllSshIpv6Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllSshIpv6Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllSshIpv6Hosts[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllTelnet.IsNull() {
+			data.MgmtInbandAllTelnet = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllTelnet.IsNull() {
+			data.MgmtInbandAllTelnet = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtInbandAllTelnetIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllTelnetIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTelnetIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllTelnetIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllTelnetIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllTelnetIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllTelnetIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllTelnetIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllTelnetIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllTelnetIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllTelnetIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllTelnetIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllTelnetIpv4Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllTelnetIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtInbandAllTelnetIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllTelnetIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTelnetIpv6Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllTelnetIpv6Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllTelnetIpv6Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllTelnetIpv6Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllTelnetIpv6Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllTelnetIpv6Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllTelnetIpv6Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllTelnetIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllTelnetIpv6Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllTelnetIpv6Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllTelnetIpv6Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllTelnetIpv6Hosts[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllSnmp.IsNull() {
+			data.MgmtInbandAllSnmp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllSnmp.IsNull() {
+			data.MgmtInbandAllSnmp = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtInbandAllSnmpIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllSnmpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSnmpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllSnmpIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllSnmpIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllSnmpIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllSnmpIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllSnmpIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllSnmpIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllSnmpIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllSnmpIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllSnmpIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllSnmpIpv4Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllSnmpIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtInbandAllSnmpIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllSnmpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSnmpIpv6Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllSnmpIpv6Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllSnmpIpv6Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllSnmpIpv6Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllSnmpIpv6Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllSnmpIpv6Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllSnmpIpv6Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllSnmpIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllSnmpIpv6Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllSnmpIpv6Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllSnmpIpv6Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllSnmpIpv6Hosts[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllTftp.IsNull() {
+			data.MgmtInbandAllTftp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllTftp.IsNull() {
+			data.MgmtInbandAllTftp = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtInbandAllTftpIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllTftpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTftpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllTftpIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllTftpIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllTftpIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllTftpIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllTftpIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllTftpIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllTftpIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllTftpIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllTftpIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllTftpIpv4Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllTftpIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtInbandAllTftpIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllTftpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTftpIpv6Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllTftpIpv6Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllTftpIpv6Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllTftpIpv6Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllTftpIpv6Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllTftpIpv6Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllTftpIpv6Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllTftpIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllTftpIpv6Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllTftpIpv6Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllTftpIpv6Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllTftpIpv6Hosts[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/http"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllHttp.IsNull() {
+			data.MgmtInbandAllHttp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllHttp.IsNull() {
+			data.MgmtInbandAllHttp = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtInbandAllHttpIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllHttpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllHttpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllHttpIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllHttpIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllHttpIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllHttpIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllHttpIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllHttpIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllHttpIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllHttpIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllHttpIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllHttpIpv4Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllHttpIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllXml.IsNull() {
+			data.MgmtInbandAllXml = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllXml.IsNull() {
+			data.MgmtInbandAllXml = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtInbandAllXmlIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllXmlIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllXmlIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllXmlIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllXmlIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllXmlIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllXmlIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllXmlIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllXmlIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllXmlIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllXmlIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllXmlIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllXmlIpv4Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllXmlIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtInbandAllXmlIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllXmlIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllXmlIpv6Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllXmlIpv6Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllXmlIpv6Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllXmlIpv6Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllXmlIpv6Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllXmlIpv6Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllXmlIpv6Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllXmlIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllXmlIpv6Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllXmlIpv6Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllXmlIpv6Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllXmlIpv6Hosts[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllNetconf.IsNull() {
+			data.MgmtInbandAllNetconf = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllNetconf.IsNull() {
+			data.MgmtInbandAllNetconf = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtInbandAllNetconfIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllNetconfIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllNetconfIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllNetconfIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllNetconfIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllNetconfIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllNetconfIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllNetconfIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllNetconfIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllNetconfIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllNetconfIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllNetconfIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllNetconfIpv4Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllNetconfIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtInbandAllNetconfIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllNetconfIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllNetconfIpv6Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllNetconfIpv6Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllNetconfIpv6Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllNetconfIpv6Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllNetconfIpv6Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllNetconfIpv6Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllNetconfIpv6Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllNetconfIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllNetconfIpv6Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllNetconfIpv6Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllNetconfIpv6Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllNetconfIpv6Hosts[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtInbandAllAllowAll.IsNull() {
+			data.MgmtInbandAllAllowAll = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtInbandAllAllowAll.IsNull() {
+			data.MgmtInbandAllAllowAll = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtInbandAllAllowAllIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllAllowAllIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllAllowAllIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllAllowAllIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllAllowAllIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllAllowAllIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllAllowAllIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllAllowAllIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllAllowAllIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllAllowAllIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllAllowAllIpv4Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllAllowAllIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtInbandAllAllowAllIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllAllowAllIpv6Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllAllowAllIpv6Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllAllowAllIpv6Prefixes[i].Address.IsNull() {
+			data.MgmtInbandAllAllowAllIpv6Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtInbandAllAllowAllIpv6Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtInbandAllAllowAllIpv6Prefixes[i].Length.IsNull() {
+			data.MgmtInbandAllAllowAllIpv6Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtInbandAllAllowAllIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv6Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtInbandAllAllowAllIpv6Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtInbandAllAllowAllIpv6Hosts[i].Address.IsNull() {
+			data.MgmtInbandAllAllowAllIpv6Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtOobInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.MgmtOobInterfaces[i].InterfaceName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/interface").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+			data.MgmtOobInterfaces[i].InterfaceName = types.StringValue(value.String())
+		} else if data.MgmtOobInterfaces[i].InterfaceName.IsNull() {
+			data.MgmtOobInterfaces[i].InterfaceName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "allow/ssh"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].Ssh.IsNull() {
+				data.MgmtOobInterfaces[i].Ssh = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].Ssh.IsNull() {
+				data.MgmtOobInterfaces[i].Ssh = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].SshIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].SshIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].SshIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].SshIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].SshIpv6Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].SshIpv6Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].SshIpv6Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].SshIpv6Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "allow/telnet"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].Telnet.IsNull() {
+				data.MgmtOobInterfaces[i].Telnet = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].Telnet.IsNull() {
+				data.MgmtOobInterfaces[i].Telnet = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].TelnetIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].TelnetIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].TelnetIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].TelnetIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].TelnetIpv6Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].TelnetIpv6Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].TelnetIpv6Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].TelnetIpv6Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "allow/snmp"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].Snmp.IsNull() {
+				data.MgmtOobInterfaces[i].Snmp = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].Snmp.IsNull() {
+				data.MgmtOobInterfaces[i].Snmp = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].SnmpIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].SnmpIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].SnmpIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].SnmpIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].SnmpIpv6Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].SnmpIpv6Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].SnmpIpv6Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].SnmpIpv6Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "allow/tftp"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].Tftp.IsNull() {
+				data.MgmtOobInterfaces[i].Tftp = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].Tftp.IsNull() {
+				data.MgmtOobInterfaces[i].Tftp = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].TftpIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].TftpIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].TftpIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].TftpIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].TftpIpv6Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].TftpIpv6Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].TftpIpv6Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].TftpIpv6Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "allow/http"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].Http.IsNull() {
+				data.MgmtOobInterfaces[i].Http = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].Http.IsNull() {
+				data.MgmtOobInterfaces[i].Http = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].HttpIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].HttpIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].HttpIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].HttpIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "allow/xr-xml"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].Xml.IsNull() {
+				data.MgmtOobInterfaces[i].Xml = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].Xml.IsNull() {
+				data.MgmtOobInterfaces[i].Xml = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].XmlIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].XmlIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].XmlIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].XmlIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].XmlIpv6Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].XmlIpv6Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].XmlIpv6Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].XmlIpv6Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "allow/netconf"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].Netconf.IsNull() {
+				data.MgmtOobInterfaces[i].Netconf = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].Netconf.IsNull() {
+				data.MgmtOobInterfaces[i].Netconf = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].NetconfIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].NetconfIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].NetconfIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].NetconfIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].NetconfIpv6Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].NetconfIpv6Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].NetconfIpv6Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].NetconfIpv6Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "allow/all"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MgmtOobInterfaces[i].AllowAll.IsNull() {
+				data.MgmtOobInterfaces[i].AllowAll = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MgmtOobInterfaces[i].AllowAll.IsNull() {
+				data.MgmtOobInterfaces[i].AllowAll = types.BoolNull()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].AllowAllIpv4Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].AllowAllIpv4Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].AllowAllIpv4Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Length = types.Int64Value(value.Int())
+			} else if data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Length.IsNull() {
+				data.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Length = types.Int64Null()
+			}
+		}
+		for ci := range data.MgmtOobInterfaces[i].AllowAllIpv6Hosts {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MgmtOobInterfaces[i].AllowAllIpv6Hosts[ci].Address.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MgmtOobInterfaces[i].AllowAllIpv6Hosts[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/vrf"); value.Exists() {
+		data.MgmtOobVrf = types.StringValue(value.String())
+	} else if data.MgmtOobVrf.IsNull() {
+		data.MgmtOobVrf = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/enable-inband-behavior"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobInbandBehavior.IsNull() {
+			data.MgmtOobInbandBehavior = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobInbandBehavior.IsNull() {
+			data.MgmtOobInbandBehavior = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllSsh.IsNull() {
+			data.MgmtOobAllSsh = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllSsh.IsNull() {
+			data.MgmtOobAllSsh = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtOobAllSshIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllSshIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSshIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllSshIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllSshIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllSshIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllSshIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllSshIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllSshIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllSshIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllSshIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllSshIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllSshIpv4Hosts[i].Address.IsNull() {
+			data.MgmtOobAllSshIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtOobAllSshIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllSshIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSshIpv6Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllSshIpv6Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllSshIpv6Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllSshIpv6Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllSshIpv6Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllSshIpv6Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllSshIpv6Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllSshIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllSshIpv6Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllSshIpv6Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllSshIpv6Hosts[i].Address.IsNull() {
+			data.MgmtOobAllSshIpv6Hosts[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllTelnet.IsNull() {
+			data.MgmtOobAllTelnet = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllTelnet.IsNull() {
+			data.MgmtOobAllTelnet = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtOobAllTelnetIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllTelnetIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTelnetIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllTelnetIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllTelnetIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllTelnetIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllTelnetIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllTelnetIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllTelnetIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllTelnetIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllTelnetIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllTelnetIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllTelnetIpv4Hosts[i].Address.IsNull() {
+			data.MgmtOobAllTelnetIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtOobAllTelnetIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllTelnetIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTelnetIpv6Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllTelnetIpv6Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllTelnetIpv6Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllTelnetIpv6Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllTelnetIpv6Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllTelnetIpv6Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllTelnetIpv6Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllTelnetIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllTelnetIpv6Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllTelnetIpv6Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllTelnetIpv6Hosts[i].Address.IsNull() {
+			data.MgmtOobAllTelnetIpv6Hosts[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllSnmp.IsNull() {
+			data.MgmtOobAllSnmp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllSnmp.IsNull() {
+			data.MgmtOobAllSnmp = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtOobAllSnmpIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllSnmpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSnmpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllSnmpIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllSnmpIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllSnmpIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllSnmpIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllSnmpIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllSnmpIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllSnmpIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllSnmpIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllSnmpIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllSnmpIpv4Hosts[i].Address.IsNull() {
+			data.MgmtOobAllSnmpIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtOobAllSnmpIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllSnmpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSnmpIpv6Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllSnmpIpv6Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllSnmpIpv6Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllSnmpIpv6Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllSnmpIpv6Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllSnmpIpv6Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllSnmpIpv6Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllSnmpIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllSnmpIpv6Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllSnmpIpv6Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllSnmpIpv6Hosts[i].Address.IsNull() {
+			data.MgmtOobAllSnmpIpv6Hosts[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllTftp.IsNull() {
+			data.MgmtOobAllTftp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllTftp.IsNull() {
+			data.MgmtOobAllTftp = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtOobAllTftpIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllTftpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTftpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllTftpIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllTftpIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllTftpIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllTftpIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllTftpIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllTftpIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllTftpIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllTftpIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllTftpIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllTftpIpv4Hosts[i].Address.IsNull() {
+			data.MgmtOobAllTftpIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtOobAllTftpIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllTftpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTftpIpv6Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllTftpIpv6Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllTftpIpv6Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllTftpIpv6Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllTftpIpv6Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllTftpIpv6Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllTftpIpv6Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllTftpIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllTftpIpv6Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllTftpIpv6Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllTftpIpv6Hosts[i].Address.IsNull() {
+			data.MgmtOobAllTftpIpv6Hosts[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllHttp.IsNull() {
+			data.MgmtOobAllHttp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllHttp.IsNull() {
+			data.MgmtOobAllHttp = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtOobAllHttpIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllHttpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllHttpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllHttpIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllHttpIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllHttpIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllHttpIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllHttpIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllHttpIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllHttpIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllHttpIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllHttpIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllHttpIpv4Hosts[i].Address.IsNull() {
+			data.MgmtOobAllHttpIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllXml.IsNull() {
+			data.MgmtOobAllXml = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllXml.IsNull() {
+			data.MgmtOobAllXml = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtOobAllXmlIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllXmlIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllXmlIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllXmlIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllXmlIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllXmlIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllXmlIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllXmlIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllXmlIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllXmlIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllXmlIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllXmlIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllXmlIpv4Hosts[i].Address.IsNull() {
+			data.MgmtOobAllXmlIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtOobAllXmlIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllXmlIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllXmlIpv6Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllXmlIpv6Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllXmlIpv6Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllXmlIpv6Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllXmlIpv6Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllXmlIpv6Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllXmlIpv6Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllXmlIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllXmlIpv6Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllXmlIpv6Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllXmlIpv6Hosts[i].Address.IsNull() {
+			data.MgmtOobAllXmlIpv6Hosts[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllNetconf.IsNull() {
+			data.MgmtOobAllNetconf = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllNetconf.IsNull() {
+			data.MgmtOobAllNetconf = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtOobAllNetconfIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllNetconfIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllNetconfIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllNetconfIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllNetconfIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllNetconfIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllNetconfIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllNetconfIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllNetconfIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllNetconfIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllNetconfIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllNetconfIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllNetconfIpv4Hosts[i].Address.IsNull() {
+			data.MgmtOobAllNetconfIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtOobAllNetconfIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllNetconfIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllNetconfIpv6Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllNetconfIpv6Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllNetconfIpv6Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllNetconfIpv6Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllNetconfIpv6Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllNetconfIpv6Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllNetconfIpv6Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllNetconfIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllNetconfIpv6Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllNetconfIpv6Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllNetconfIpv6Hosts[i].Address.IsNull() {
+			data.MgmtOobAllNetconfIpv6Hosts[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MgmtOobAllAllowAll.IsNull() {
+			data.MgmtOobAllAllowAll = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MgmtOobAllAllowAll.IsNull() {
+			data.MgmtOobAllAllowAll = types.BoolNull()
+		}
+	}
+	for i := range data.MgmtOobAllAllowAllIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllAllowAllIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllAllowAllIpv4Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllAllowAllIpv4Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllAllowAllIpv4Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllAllowAllIpv4Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllAllowAllIpv4Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllAllowAllIpv4Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllAllowAllIpv4Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllAllowAllIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllAllowAllIpv4Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllAllowAllIpv4Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllAllowAllIpv4Hosts[i].Address.IsNull() {
+			data.MgmtOobAllAllowAllIpv4Hosts[i].Address = types.StringNull()
+		}
+	}
+	for i := range data.MgmtOobAllAllowAllIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllAllowAllIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllAllowAllIpv6Prefixes[i].Length.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllAllowAllIpv6Prefixes[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllAllowAllIpv6Prefixes[i].Address.IsNull() {
+			data.MgmtOobAllAllowAllIpv6Prefixes[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "length"); value.Exists() {
+			data.MgmtOobAllAllowAllIpv6Prefixes[i].Length = types.Int64Value(value.Int())
+		} else if data.MgmtOobAllAllowAllIpv6Prefixes[i].Length.IsNull() {
+			data.MgmtOobAllAllowAllIpv6Prefixes[i].Length = types.Int64Null()
+		}
+	}
+	for i := range data.MgmtOobAllAllowAllIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllAllowAllIpv6Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.MgmtOobAllAllowAllIpv6Hosts[i].Address = types.StringValue(value.String())
+		} else if data.MgmtOobAllAllowAllIpv6Hosts[i].Address.IsNull() {
+			data.MgmtOobAllAllowAllIpv6Hosts[i].Address = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.interface"); value.Exists() {
+func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "management-plane.inband.interfaces.interface"); value.Exists() {
 		data.MgmtInbandInterfaces = make([]ControlPlaneMgmtInbandInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandInterfaces{}
@@ -6213,7 +11884,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.ssh"); cValue.Exists() {
 				item.Ssh = types.BoolValue(true)
-			} else {
+			} else if !item.Ssh.IsNull() {
+				// Only set to false if it was previously set
 				item.Ssh = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -6268,7 +11940,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.telnet"); cValue.Exists() {
 				item.Telnet = types.BoolValue(true)
-			} else {
+			} else if !item.Telnet.IsNull() {
+				// Only set to false if it was previously set
 				item.Telnet = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -6323,7 +11996,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.snmp"); cValue.Exists() {
 				item.Snmp = types.BoolValue(true)
-			} else {
+			} else if !item.Snmp.IsNull() {
+				// Only set to false if it was previously set
 				item.Snmp = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -6378,7 +12052,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.tftp"); cValue.Exists() {
 				item.Tftp = types.BoolValue(true)
-			} else {
+			} else if !item.Tftp.IsNull() {
+				// Only set to false if it was previously set
 				item.Tftp = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -6433,7 +12108,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.http"); cValue.Exists() {
 				item.Http = types.BoolValue(true)
-			} else {
+			} else if !item.Http.IsNull() {
+				// Only set to false if it was previously set
 				item.Http = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -6463,7 +12139,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.xr-xml"); cValue.Exists() {
 				item.Xml = types.BoolValue(true)
-			} else {
+			} else if !item.Xml.IsNull() {
+				// Only set to false if it was previously set
 				item.Xml = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -6518,7 +12195,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.netconf"); cValue.Exists() {
 				item.Netconf = types.BoolValue(true)
-			} else {
+			} else if !item.Netconf.IsNull() {
+				// Only set to false if it was previously set
 				item.Netconf = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -6573,7 +12251,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.all"); cValue.Exists() {
 				item.AllowAll = types.BoolValue(true)
-			} else {
+			} else if !item.AllowAll.IsNull() {
+				// Only set to false if it was previously set
 				item.AllowAll = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -6630,12 +12309,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.ssh"); value.Exists() {
 		data.MgmtInbandAllSsh = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtInbandAllSsh.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtInbandAllSsh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllSshIpv4Prefixes = make([]ControlPlaneMgmtInbandAllSshIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSshIpv4Prefixes{}
@@ -6649,7 +12329,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllSshIpv4Hosts = make([]ControlPlaneMgmtInbandAllSshIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSshIpv4Hosts{}
@@ -6660,7 +12340,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtInbandAllSshIpv6Prefixes = make([]ControlPlaneMgmtInbandAllSshIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSshIpv6Prefixes{}
@@ -6674,7 +12354,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtInbandAllSshIpv6Hosts = make([]ControlPlaneMgmtInbandAllSshIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSshIpv6Hosts{}
@@ -6685,12 +12365,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.telnet"); value.Exists() {
 		data.MgmtInbandAllTelnet = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtInbandAllTelnet.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtInbandAllTelnet = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllTelnetIpv4Prefixes = make([]ControlPlaneMgmtInbandAllTelnetIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTelnetIpv4Prefixes{}
@@ -6704,7 +12385,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllTelnetIpv4Hosts = make([]ControlPlaneMgmtInbandAllTelnetIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTelnetIpv4Hosts{}
@@ -6715,7 +12396,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtInbandAllTelnetIpv6Prefixes = make([]ControlPlaneMgmtInbandAllTelnetIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTelnetIpv6Prefixes{}
@@ -6729,7 +12410,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtInbandAllTelnetIpv6Hosts = make([]ControlPlaneMgmtInbandAllTelnetIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTelnetIpv6Hosts{}
@@ -6740,12 +12421,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.snmp"); value.Exists() {
 		data.MgmtInbandAllSnmp = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtInbandAllSnmp.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtInbandAllSnmp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllSnmpIpv4Prefixes = make([]ControlPlaneMgmtInbandAllSnmpIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSnmpIpv4Prefixes{}
@@ -6759,7 +12441,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllSnmpIpv4Hosts = make([]ControlPlaneMgmtInbandAllSnmpIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSnmpIpv4Hosts{}
@@ -6770,7 +12452,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtInbandAllSnmpIpv6Prefixes = make([]ControlPlaneMgmtInbandAllSnmpIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSnmpIpv6Prefixes{}
@@ -6784,7 +12466,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtInbandAllSnmpIpv6Hosts = make([]ControlPlaneMgmtInbandAllSnmpIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSnmpIpv6Hosts{}
@@ -6795,12 +12477,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.tftp"); value.Exists() {
 		data.MgmtInbandAllTftp = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtInbandAllTftp.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtInbandAllTftp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllTftpIpv4Prefixes = make([]ControlPlaneMgmtInbandAllTftpIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTftpIpv4Prefixes{}
@@ -6814,7 +12497,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllTftpIpv4Hosts = make([]ControlPlaneMgmtInbandAllTftpIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTftpIpv4Hosts{}
@@ -6825,7 +12508,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtInbandAllTftpIpv6Prefixes = make([]ControlPlaneMgmtInbandAllTftpIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTftpIpv6Prefixes{}
@@ -6839,7 +12522,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtInbandAllTftpIpv6Hosts = make([]ControlPlaneMgmtInbandAllTftpIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTftpIpv6Hosts{}
@@ -6850,12 +12533,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.http"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.http"); value.Exists() {
 		data.MgmtInbandAllHttp = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtInbandAllHttp.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtInbandAllHttp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllHttpIpv4Prefixes = make([]ControlPlaneMgmtInbandAllHttpIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllHttpIpv4Prefixes{}
@@ -6869,7 +12553,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllHttpIpv4Hosts = make([]ControlPlaneMgmtInbandAllHttpIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllHttpIpv4Hosts{}
@@ -6880,12 +12564,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.xr-xml"); value.Exists() {
 		data.MgmtInbandAllXml = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtInbandAllXml.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtInbandAllXml = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllXmlIpv4Prefixes = make([]ControlPlaneMgmtInbandAllXmlIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllXmlIpv4Prefixes{}
@@ -6899,7 +12584,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllXmlIpv4Hosts = make([]ControlPlaneMgmtInbandAllXmlIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllXmlIpv4Hosts{}
@@ -6910,7 +12595,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtInbandAllXmlIpv6Prefixes = make([]ControlPlaneMgmtInbandAllXmlIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllXmlIpv6Prefixes{}
@@ -6924,7 +12609,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtInbandAllXmlIpv6Hosts = make([]ControlPlaneMgmtInbandAllXmlIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllXmlIpv6Hosts{}
@@ -6935,12 +12620,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.netconf"); value.Exists() {
 		data.MgmtInbandAllNetconf = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtInbandAllNetconf.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtInbandAllNetconf = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllNetconfIpv4Prefixes = make([]ControlPlaneMgmtInbandAllNetconfIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllNetconfIpv4Prefixes{}
@@ -6954,7 +12640,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllNetconfIpv4Hosts = make([]ControlPlaneMgmtInbandAllNetconfIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllNetconfIpv4Hosts{}
@@ -6965,7 +12651,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtInbandAllNetconfIpv6Prefixes = make([]ControlPlaneMgmtInbandAllNetconfIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllNetconfIpv6Prefixes{}
@@ -6979,7 +12665,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtInbandAllNetconfIpv6Hosts = make([]ControlPlaneMgmtInbandAllNetconfIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllNetconfIpv6Hosts{}
@@ -6990,12 +12676,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.all"); value.Exists() {
 		data.MgmtInbandAllAllowAll = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtInbandAllAllowAll.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtInbandAllAllowAll = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllAllowAllIpv4Prefixes = make([]ControlPlaneMgmtInbandAllAllowAllIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllAllowAllIpv4Prefixes{}
@@ -7009,7 +12696,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllAllowAllIpv4Hosts = make([]ControlPlaneMgmtInbandAllAllowAllIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllAllowAllIpv4Hosts{}
@@ -7020,7 +12707,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtInbandAllAllowAllIpv6Prefixes = make([]ControlPlaneMgmtInbandAllAllowAllIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllAllowAllIpv6Prefixes{}
@@ -7034,7 +12721,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtInbandAllAllowAllIpv6Hosts = make([]ControlPlaneMgmtInbandAllAllowAllIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllAllowAllIpv6Hosts{}
@@ -7045,7 +12732,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.interface"); value.Exists() {
 		data.MgmtOobInterfaces = make([]ControlPlaneMgmtOobInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobInterfaces{}
@@ -7054,7 +12741,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.ssh"); cValue.Exists() {
 				item.Ssh = types.BoolValue(true)
-			} else {
+			} else if !item.Ssh.IsNull() {
+				// Only set to false if it was previously set
 				item.Ssh = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -7109,7 +12797,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.telnet"); cValue.Exists() {
 				item.Telnet = types.BoolValue(true)
-			} else {
+			} else if !item.Telnet.IsNull() {
+				// Only set to false if it was previously set
 				item.Telnet = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -7164,7 +12853,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.snmp"); cValue.Exists() {
 				item.Snmp = types.BoolValue(true)
-			} else {
+			} else if !item.Snmp.IsNull() {
+				// Only set to false if it was previously set
 				item.Snmp = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -7219,7 +12909,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.tftp"); cValue.Exists() {
 				item.Tftp = types.BoolValue(true)
-			} else {
+			} else if !item.Tftp.IsNull() {
+				// Only set to false if it was previously set
 				item.Tftp = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -7274,7 +12965,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.http"); cValue.Exists() {
 				item.Http = types.BoolValue(true)
-			} else {
+			} else if !item.Http.IsNull() {
+				// Only set to false if it was previously set
 				item.Http = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -7304,7 +12996,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.xr-xml"); cValue.Exists() {
 				item.Xml = types.BoolValue(true)
-			} else {
+			} else if !item.Xml.IsNull() {
+				// Only set to false if it was previously set
 				item.Xml = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -7359,7 +13052,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.netconf"); cValue.Exists() {
 				item.Netconf = types.BoolValue(true)
-			} else {
+			} else if !item.Netconf.IsNull() {
+				// Only set to false if it was previously set
 				item.Netconf = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -7414,7 +13108,8 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("allow.all"); cValue.Exists() {
 				item.AllowAll = types.BoolValue(true)
-			} else {
+			} else if !item.AllowAll.IsNull() {
+				// Only set to false if it was previously set
 				item.AllowAll = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
@@ -7471,20 +13166,22 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.vrf"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.vrf"); value.Exists() {
 		data.MgmtOobVrf = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.enable-inband-behavior"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.enable-inband-behavior"); value.Exists() {
 		data.MgmtOobInbandBehavior = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtOobInbandBehavior.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtOobInbandBehavior = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.ssh"); value.Exists() {
 		data.MgmtOobAllSsh = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtOobAllSsh.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtOobAllSsh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllSshIpv4Prefixes = make([]ControlPlaneMgmtOobAllSshIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSshIpv4Prefixes{}
@@ -7498,7 +13195,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllSshIpv4Hosts = make([]ControlPlaneMgmtOobAllSshIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSshIpv4Hosts{}
@@ -7509,7 +13206,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtOobAllSshIpv6Prefixes = make([]ControlPlaneMgmtOobAllSshIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSshIpv6Prefixes{}
@@ -7523,7 +13220,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtOobAllSshIpv6Hosts = make([]ControlPlaneMgmtOobAllSshIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSshIpv6Hosts{}
@@ -7534,12 +13231,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.telnet"); value.Exists() {
 		data.MgmtOobAllTelnet = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtOobAllTelnet.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtOobAllTelnet = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllTelnetIpv4Prefixes = make([]ControlPlaneMgmtOobAllTelnetIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTelnetIpv4Prefixes{}
@@ -7553,7 +13251,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllTelnetIpv4Hosts = make([]ControlPlaneMgmtOobAllTelnetIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTelnetIpv4Hosts{}
@@ -7564,7 +13262,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtOobAllTelnetIpv6Prefixes = make([]ControlPlaneMgmtOobAllTelnetIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTelnetIpv6Prefixes{}
@@ -7578,7 +13276,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtOobAllTelnetIpv6Hosts = make([]ControlPlaneMgmtOobAllTelnetIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTelnetIpv6Hosts{}
@@ -7589,12 +13287,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.snmp"); value.Exists() {
 		data.MgmtOobAllSnmp = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtOobAllSnmp.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtOobAllSnmp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllSnmpIpv4Prefixes = make([]ControlPlaneMgmtOobAllSnmpIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSnmpIpv4Prefixes{}
@@ -7608,7 +13307,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllSnmpIpv4Hosts = make([]ControlPlaneMgmtOobAllSnmpIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSnmpIpv4Hosts{}
@@ -7619,7 +13318,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtOobAllSnmpIpv6Prefixes = make([]ControlPlaneMgmtOobAllSnmpIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSnmpIpv6Prefixes{}
@@ -7633,7 +13332,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtOobAllSnmpIpv6Hosts = make([]ControlPlaneMgmtOobAllSnmpIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSnmpIpv6Hosts{}
@@ -7644,12 +13343,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.tftp"); value.Exists() {
 		data.MgmtOobAllTftp = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtOobAllTftp.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtOobAllTftp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllTftpIpv4Prefixes = make([]ControlPlaneMgmtOobAllTftpIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTftpIpv4Prefixes{}
@@ -7663,7 +13363,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllTftpIpv4Hosts = make([]ControlPlaneMgmtOobAllTftpIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTftpIpv4Hosts{}
@@ -7674,7 +13374,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtOobAllTftpIpv6Prefixes = make([]ControlPlaneMgmtOobAllTftpIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTftpIpv6Prefixes{}
@@ -7688,7 +13388,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtOobAllTftpIpv6Hosts = make([]ControlPlaneMgmtOobAllTftpIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTftpIpv6Hosts{}
@@ -7699,12 +13399,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.http"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.http"); value.Exists() {
 		data.MgmtOobAllHttp = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtOobAllHttp.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtOobAllHttp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllHttpIpv4Prefixes = make([]ControlPlaneMgmtOobAllHttpIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllHttpIpv4Prefixes{}
@@ -7718,7 +13419,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllHttpIpv4Hosts = make([]ControlPlaneMgmtOobAllHttpIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllHttpIpv4Hosts{}
@@ -7729,12 +13430,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.xr-xml"); value.Exists() {
 		data.MgmtOobAllXml = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtOobAllXml.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtOobAllXml = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllXmlIpv4Prefixes = make([]ControlPlaneMgmtOobAllXmlIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllXmlIpv4Prefixes{}
@@ -7748,7 +13450,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllXmlIpv4Hosts = make([]ControlPlaneMgmtOobAllXmlIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllXmlIpv4Hosts{}
@@ -7759,7 +13461,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtOobAllXmlIpv6Prefixes = make([]ControlPlaneMgmtOobAllXmlIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllXmlIpv6Prefixes{}
@@ -7773,7 +13475,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtOobAllXmlIpv6Hosts = make([]ControlPlaneMgmtOobAllXmlIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllXmlIpv6Hosts{}
@@ -7784,12 +13486,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.netconf"); value.Exists() {
 		data.MgmtOobAllNetconf = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtOobAllNetconf.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtOobAllNetconf = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllNetconfIpv4Prefixes = make([]ControlPlaneMgmtOobAllNetconfIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllNetconfIpv4Prefixes{}
@@ -7803,7 +13506,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllNetconfIpv4Hosts = make([]ControlPlaneMgmtOobAllNetconfIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllNetconfIpv4Hosts{}
@@ -7814,7 +13517,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtOobAllNetconfIpv6Prefixes = make([]ControlPlaneMgmtOobAllNetconfIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllNetconfIpv6Prefixes{}
@@ -7828,7 +13531,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtOobAllNetconfIpv6Hosts = make([]ControlPlaneMgmtOobAllNetconfIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllNetconfIpv6Hosts{}
@@ -7839,12 +13542,13 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.all"); value.Exists() {
 		data.MgmtOobAllAllowAll = types.BoolValue(true)
-	} else {
+	} else if !data.MgmtOobAllAllowAll.IsNull() {
+		// Only set to false if it was previously set in state
 		data.MgmtOobAllAllowAll = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllAllowAllIpv4Prefixes = make([]ControlPlaneMgmtOobAllAllowAllIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllAllowAllIpv4Prefixes{}
@@ -7858,7 +13562,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllAllowAllIpv4Hosts = make([]ControlPlaneMgmtOobAllAllowAllIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllAllowAllIpv4Hosts{}
@@ -7869,7 +13573,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtOobAllAllowAllIpv6Prefixes = make([]ControlPlaneMgmtOobAllAllowAllIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllAllowAllIpv6Prefixes{}
@@ -7883,7 +13587,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtOobAllAllowAllIpv6Hosts = make([]ControlPlaneMgmtOobAllAllowAllIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllAllowAllIpv6Hosts{}
@@ -7900,8 +13604,17 @@ func (data *ControlPlane) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.interface"); value.Exists() {
+func (data *ControlPlaneData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "management-plane.inband.interfaces.interface"); value.Exists() {
 		data.MgmtInbandInterfaces = make([]ControlPlaneMgmtInbandInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandInterfaces{}
@@ -8327,12 +14040,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.ssh"); value.Exists() {
 		data.MgmtInbandAllSsh = types.BoolValue(true)
 	} else {
 		data.MgmtInbandAllSsh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllSshIpv4Prefixes = make([]ControlPlaneMgmtInbandAllSshIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSshIpv4Prefixes{}
@@ -8346,7 +14059,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllSshIpv4Hosts = make([]ControlPlaneMgmtInbandAllSshIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSshIpv4Hosts{}
@@ -8357,7 +14070,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtInbandAllSshIpv6Prefixes = make([]ControlPlaneMgmtInbandAllSshIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSshIpv6Prefixes{}
@@ -8371,7 +14084,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtInbandAllSshIpv6Hosts = make([]ControlPlaneMgmtInbandAllSshIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSshIpv6Hosts{}
@@ -8382,12 +14095,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.telnet"); value.Exists() {
 		data.MgmtInbandAllTelnet = types.BoolValue(true)
 	} else {
 		data.MgmtInbandAllTelnet = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllTelnetIpv4Prefixes = make([]ControlPlaneMgmtInbandAllTelnetIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTelnetIpv4Prefixes{}
@@ -8401,7 +14114,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllTelnetIpv4Hosts = make([]ControlPlaneMgmtInbandAllTelnetIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTelnetIpv4Hosts{}
@@ -8412,7 +14125,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtInbandAllTelnetIpv6Prefixes = make([]ControlPlaneMgmtInbandAllTelnetIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTelnetIpv6Prefixes{}
@@ -8426,7 +14139,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtInbandAllTelnetIpv6Hosts = make([]ControlPlaneMgmtInbandAllTelnetIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTelnetIpv6Hosts{}
@@ -8437,12 +14150,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.snmp"); value.Exists() {
 		data.MgmtInbandAllSnmp = types.BoolValue(true)
 	} else {
 		data.MgmtInbandAllSnmp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllSnmpIpv4Prefixes = make([]ControlPlaneMgmtInbandAllSnmpIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSnmpIpv4Prefixes{}
@@ -8456,7 +14169,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllSnmpIpv4Hosts = make([]ControlPlaneMgmtInbandAllSnmpIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSnmpIpv4Hosts{}
@@ -8467,7 +14180,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtInbandAllSnmpIpv6Prefixes = make([]ControlPlaneMgmtInbandAllSnmpIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSnmpIpv6Prefixes{}
@@ -8481,7 +14194,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtInbandAllSnmpIpv6Hosts = make([]ControlPlaneMgmtInbandAllSnmpIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllSnmpIpv6Hosts{}
@@ -8492,12 +14205,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.tftp"); value.Exists() {
 		data.MgmtInbandAllTftp = types.BoolValue(true)
 	} else {
 		data.MgmtInbandAllTftp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllTftpIpv4Prefixes = make([]ControlPlaneMgmtInbandAllTftpIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTftpIpv4Prefixes{}
@@ -8511,7 +14224,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllTftpIpv4Hosts = make([]ControlPlaneMgmtInbandAllTftpIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTftpIpv4Hosts{}
@@ -8522,7 +14235,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtInbandAllTftpIpv6Prefixes = make([]ControlPlaneMgmtInbandAllTftpIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTftpIpv6Prefixes{}
@@ -8536,7 +14249,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtInbandAllTftpIpv6Hosts = make([]ControlPlaneMgmtInbandAllTftpIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllTftpIpv6Hosts{}
@@ -8547,12 +14260,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.http"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.http"); value.Exists() {
 		data.MgmtInbandAllHttp = types.BoolValue(true)
 	} else {
 		data.MgmtInbandAllHttp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllHttpIpv4Prefixes = make([]ControlPlaneMgmtInbandAllHttpIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllHttpIpv4Prefixes{}
@@ -8566,7 +14279,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllHttpIpv4Hosts = make([]ControlPlaneMgmtInbandAllHttpIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllHttpIpv4Hosts{}
@@ -8577,12 +14290,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.xr-xml"); value.Exists() {
 		data.MgmtInbandAllXml = types.BoolValue(true)
 	} else {
 		data.MgmtInbandAllXml = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllXmlIpv4Prefixes = make([]ControlPlaneMgmtInbandAllXmlIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllXmlIpv4Prefixes{}
@@ -8596,7 +14309,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllXmlIpv4Hosts = make([]ControlPlaneMgmtInbandAllXmlIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllXmlIpv4Hosts{}
@@ -8607,7 +14320,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtInbandAllXmlIpv6Prefixes = make([]ControlPlaneMgmtInbandAllXmlIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllXmlIpv6Prefixes{}
@@ -8621,7 +14334,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtInbandAllXmlIpv6Hosts = make([]ControlPlaneMgmtInbandAllXmlIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllXmlIpv6Hosts{}
@@ -8632,12 +14345,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.netconf"); value.Exists() {
 		data.MgmtInbandAllNetconf = types.BoolValue(true)
 	} else {
 		data.MgmtInbandAllNetconf = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllNetconfIpv4Prefixes = make([]ControlPlaneMgmtInbandAllNetconfIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllNetconfIpv4Prefixes{}
@@ -8651,7 +14364,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllNetconfIpv4Hosts = make([]ControlPlaneMgmtInbandAllNetconfIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllNetconfIpv4Hosts{}
@@ -8662,7 +14375,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtInbandAllNetconfIpv6Prefixes = make([]ControlPlaneMgmtInbandAllNetconfIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllNetconfIpv6Prefixes{}
@@ -8676,7 +14389,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtInbandAllNetconfIpv6Hosts = make([]ControlPlaneMgmtInbandAllNetconfIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllNetconfIpv6Hosts{}
@@ -8687,12 +14400,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.all"); value.Exists() {
 		data.MgmtInbandAllAllowAll = types.BoolValue(true)
 	} else {
 		data.MgmtInbandAllAllowAll = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtInbandAllAllowAllIpv4Prefixes = make([]ControlPlaneMgmtInbandAllAllowAllIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllAllowAllIpv4Prefixes{}
@@ -8706,7 +14419,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtInbandAllAllowAllIpv4Hosts = make([]ControlPlaneMgmtInbandAllAllowAllIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllAllowAllIpv4Hosts{}
@@ -8717,7 +14430,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtInbandAllAllowAllIpv6Prefixes = make([]ControlPlaneMgmtInbandAllAllowAllIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllAllowAllIpv6Prefixes{}
@@ -8731,7 +14444,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.inband.interfaces.all.allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtInbandAllAllowAllIpv6Hosts = make([]ControlPlaneMgmtInbandAllAllowAllIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtInbandAllAllowAllIpv6Hosts{}
@@ -8742,7 +14455,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.interface"); value.Exists() {
 		data.MgmtOobInterfaces = make([]ControlPlaneMgmtOobInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobInterfaces{}
@@ -9168,20 +14881,20 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.vrf"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.vrf"); value.Exists() {
 		data.MgmtOobVrf = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.enable-inband-behavior"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.enable-inband-behavior"); value.Exists() {
 		data.MgmtOobInbandBehavior = types.BoolValue(true)
 	} else {
 		data.MgmtOobInbandBehavior = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.ssh"); value.Exists() {
 		data.MgmtOobAllSsh = types.BoolValue(true)
 	} else {
 		data.MgmtOobAllSsh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllSshIpv4Prefixes = make([]ControlPlaneMgmtOobAllSshIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSshIpv4Prefixes{}
@@ -9195,7 +14908,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllSshIpv4Hosts = make([]ControlPlaneMgmtOobAllSshIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSshIpv4Hosts{}
@@ -9206,7 +14919,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtOobAllSshIpv6Prefixes = make([]ControlPlaneMgmtOobAllSshIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSshIpv6Prefixes{}
@@ -9220,7 +14933,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtOobAllSshIpv6Hosts = make([]ControlPlaneMgmtOobAllSshIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSshIpv6Hosts{}
@@ -9231,12 +14944,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.telnet"); value.Exists() {
 		data.MgmtOobAllTelnet = types.BoolValue(true)
 	} else {
 		data.MgmtOobAllTelnet = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllTelnetIpv4Prefixes = make([]ControlPlaneMgmtOobAllTelnetIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTelnetIpv4Prefixes{}
@@ -9250,7 +14963,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllTelnetIpv4Hosts = make([]ControlPlaneMgmtOobAllTelnetIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTelnetIpv4Hosts{}
@@ -9261,7 +14974,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtOobAllTelnetIpv6Prefixes = make([]ControlPlaneMgmtOobAllTelnetIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTelnetIpv6Prefixes{}
@@ -9275,7 +14988,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtOobAllTelnetIpv6Hosts = make([]ControlPlaneMgmtOobAllTelnetIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTelnetIpv6Hosts{}
@@ -9286,12 +14999,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.snmp"); value.Exists() {
 		data.MgmtOobAllSnmp = types.BoolValue(true)
 	} else {
 		data.MgmtOobAllSnmp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllSnmpIpv4Prefixes = make([]ControlPlaneMgmtOobAllSnmpIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSnmpIpv4Prefixes{}
@@ -9305,7 +15018,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllSnmpIpv4Hosts = make([]ControlPlaneMgmtOobAllSnmpIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSnmpIpv4Hosts{}
@@ -9316,7 +15029,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtOobAllSnmpIpv6Prefixes = make([]ControlPlaneMgmtOobAllSnmpIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSnmpIpv6Prefixes{}
@@ -9330,7 +15043,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtOobAllSnmpIpv6Hosts = make([]ControlPlaneMgmtOobAllSnmpIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllSnmpIpv6Hosts{}
@@ -9341,12 +15054,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.tftp"); value.Exists() {
 		data.MgmtOobAllTftp = types.BoolValue(true)
 	} else {
 		data.MgmtOobAllTftp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllTftpIpv4Prefixes = make([]ControlPlaneMgmtOobAllTftpIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTftpIpv4Prefixes{}
@@ -9360,7 +15073,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllTftpIpv4Hosts = make([]ControlPlaneMgmtOobAllTftpIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTftpIpv4Hosts{}
@@ -9371,7 +15084,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtOobAllTftpIpv6Prefixes = make([]ControlPlaneMgmtOobAllTftpIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTftpIpv6Prefixes{}
@@ -9385,7 +15098,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtOobAllTftpIpv6Hosts = make([]ControlPlaneMgmtOobAllTftpIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllTftpIpv6Hosts{}
@@ -9396,12 +15109,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.http"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.http"); value.Exists() {
 		data.MgmtOobAllHttp = types.BoolValue(true)
 	} else {
 		data.MgmtOobAllHttp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllHttpIpv4Prefixes = make([]ControlPlaneMgmtOobAllHttpIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllHttpIpv4Prefixes{}
@@ -9415,7 +15128,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllHttpIpv4Hosts = make([]ControlPlaneMgmtOobAllHttpIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllHttpIpv4Hosts{}
@@ -9426,12 +15139,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.xr-xml"); value.Exists() {
 		data.MgmtOobAllXml = types.BoolValue(true)
 	} else {
 		data.MgmtOobAllXml = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllXmlIpv4Prefixes = make([]ControlPlaneMgmtOobAllXmlIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllXmlIpv4Prefixes{}
@@ -9445,7 +15158,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllXmlIpv4Hosts = make([]ControlPlaneMgmtOobAllXmlIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllXmlIpv4Hosts{}
@@ -9456,7 +15169,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtOobAllXmlIpv6Prefixes = make([]ControlPlaneMgmtOobAllXmlIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllXmlIpv6Prefixes{}
@@ -9470,7 +15183,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtOobAllXmlIpv6Hosts = make([]ControlPlaneMgmtOobAllXmlIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllXmlIpv6Hosts{}
@@ -9481,12 +15194,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.netconf"); value.Exists() {
 		data.MgmtOobAllNetconf = types.BoolValue(true)
 	} else {
 		data.MgmtOobAllNetconf = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllNetconfIpv4Prefixes = make([]ControlPlaneMgmtOobAllNetconfIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllNetconfIpv4Prefixes{}
@@ -9500,7 +15213,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllNetconfIpv4Hosts = make([]ControlPlaneMgmtOobAllNetconfIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllNetconfIpv4Hosts{}
@@ -9511,7 +15224,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtOobAllNetconfIpv6Prefixes = make([]ControlPlaneMgmtOobAllNetconfIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllNetconfIpv6Prefixes{}
@@ -9525,7 +15238,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtOobAllNetconfIpv6Hosts = make([]ControlPlaneMgmtOobAllNetconfIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllNetconfIpv6Hosts{}
@@ -9536,12 +15249,12 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.all"); value.Exists() {
 		data.MgmtOobAllAllowAll = types.BoolValue(true)
 	} else {
 		data.MgmtOobAllAllowAll = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); value.Exists() {
 		data.MgmtOobAllAllowAllIpv4Prefixes = make([]ControlPlaneMgmtOobAllAllowAllIpv4Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllAllowAllIpv4Prefixes{}
@@ -9555,7 +15268,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address"); value.Exists() {
 		data.MgmtOobAllAllowAllIpv4Hosts = make([]ControlPlaneMgmtOobAllAllowAllIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllAllowAllIpv4Hosts{}
@@ -9566,7 +15279,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"); value.Exists() {
 		data.MgmtOobAllAllowAllIpv6Prefixes = make([]ControlPlaneMgmtOobAllAllowAllIpv6Prefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllAllowAllIpv6Prefixes{}
@@ -9580,7 +15293,7 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address"); value.Exists() {
 		data.MgmtOobAllAllowAllIpv6Hosts = make([]ControlPlaneMgmtOobAllAllowAllIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := ControlPlaneMgmtOobAllAllowAllIpv6Hosts{}
@@ -9594,6 +15307,3400 @@ func (data *ControlPlaneData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *ControlPlane) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/interface"); value.Exists() {
+		data.MgmtInbandInterfaces = make([]ControlPlaneMgmtInbandInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh"); cValue.Exists() {
+				item.Ssh = types.BoolValue(true)
+			} else {
+				item.Ssh = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.SshIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesSshIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSshIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SshIpv4Prefixes = append(item.SshIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.SshIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesSshIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSshIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SshIpv4Hosts = append(item.SshIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.SshIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesSshIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSshIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SshIpv6Prefixes = append(item.SshIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.SshIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesSshIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSshIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SshIpv6Hosts = append(item.SshIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet"); cValue.Exists() {
+				item.Telnet = types.BoolValue(true)
+			} else {
+				item.Telnet = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.TelnetIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTelnetIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TelnetIpv4Prefixes = append(item.TelnetIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.TelnetIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTelnetIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TelnetIpv4Hosts = append(item.TelnetIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.TelnetIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTelnetIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TelnetIpv6Prefixes = append(item.TelnetIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.TelnetIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTelnetIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TelnetIpv6Hosts = append(item.TelnetIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp"); cValue.Exists() {
+				item.Snmp = types.BoolValue(true)
+			} else {
+				item.Snmp = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.SnmpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSnmpIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SnmpIpv4Prefixes = append(item.SnmpIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.SnmpIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSnmpIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SnmpIpv4Hosts = append(item.SnmpIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.SnmpIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSnmpIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SnmpIpv6Prefixes = append(item.SnmpIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.SnmpIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSnmpIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SnmpIpv6Hosts = append(item.SnmpIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp"); cValue.Exists() {
+				item.Tftp = types.BoolValue(true)
+			} else {
+				item.Tftp = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.TftpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesTftpIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTftpIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TftpIpv4Prefixes = append(item.TftpIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.TftpIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesTftpIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTftpIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TftpIpv4Hosts = append(item.TftpIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.TftpIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesTftpIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTftpIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TftpIpv6Prefixes = append(item.TftpIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.TftpIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesTftpIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTftpIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TftpIpv6Hosts = append(item.TftpIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/http"); cValue.Exists() {
+				item.Http = types.BoolValue(true)
+			} else {
+				item.Http = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.HttpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesHttpIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesHttpIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.HttpIpv4Prefixes = append(item.HttpIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.HttpIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesHttpIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesHttpIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.HttpIpv4Hosts = append(item.HttpIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml"); cValue.Exists() {
+				item.Xml = types.BoolValue(true)
+			} else {
+				item.Xml = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.XmlIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesXmlIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesXmlIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.XmlIpv4Prefixes = append(item.XmlIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.XmlIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesXmlIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesXmlIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.XmlIpv4Hosts = append(item.XmlIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.XmlIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesXmlIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesXmlIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.XmlIpv6Prefixes = append(item.XmlIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.XmlIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesXmlIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesXmlIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.XmlIpv6Hosts = append(item.XmlIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf"); cValue.Exists() {
+				item.Netconf = types.BoolValue(true)
+			} else {
+				item.Netconf = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.NetconfIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesNetconfIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.NetconfIpv4Prefixes = append(item.NetconfIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.NetconfIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesNetconfIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.NetconfIpv4Hosts = append(item.NetconfIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.NetconfIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesNetconfIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.NetconfIpv6Prefixes = append(item.NetconfIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.NetconfIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesNetconfIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.NetconfIpv6Hosts = append(item.NetconfIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all"); cValue.Exists() {
+				item.AllowAll = types.BoolValue(true)
+			} else {
+				item.AllowAll = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.AllowAllIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesAllowAllIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.AllowAllIpv4Prefixes = append(item.AllowAllIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.AllowAllIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesAllowAllIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.AllowAllIpv4Hosts = append(item.AllowAllIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.AllowAllIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesAllowAllIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.AllowAllIpv6Prefixes = append(item.AllowAllIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.AllowAllIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesAllowAllIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.AllowAllIpv6Hosts = append(item.AllowAllIpv6Hosts, cItem)
+					return true
+				})
+			}
+			data.MgmtInbandInterfaces = append(data.MgmtInbandInterfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh"); value.Exists() {
+		data.MgmtInbandAllSsh = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllSsh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllSshIpv4Prefixes = make([]ControlPlaneMgmtInbandAllSshIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSshIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllSshIpv4Prefixes = append(data.MgmtInbandAllSshIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllSshIpv4Hosts = make([]ControlPlaneMgmtInbandAllSshIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSshIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllSshIpv4Hosts = append(data.MgmtInbandAllSshIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtInbandAllSshIpv6Prefixes = make([]ControlPlaneMgmtInbandAllSshIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSshIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllSshIpv6Prefixes = append(data.MgmtInbandAllSshIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtInbandAllSshIpv6Hosts = make([]ControlPlaneMgmtInbandAllSshIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSshIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllSshIpv6Hosts = append(data.MgmtInbandAllSshIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet"); value.Exists() {
+		data.MgmtInbandAllTelnet = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllTelnet = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllTelnetIpv4Prefixes = make([]ControlPlaneMgmtInbandAllTelnetIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTelnetIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllTelnetIpv4Prefixes = append(data.MgmtInbandAllTelnetIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllTelnetIpv4Hosts = make([]ControlPlaneMgmtInbandAllTelnetIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTelnetIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllTelnetIpv4Hosts = append(data.MgmtInbandAllTelnetIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtInbandAllTelnetIpv6Prefixes = make([]ControlPlaneMgmtInbandAllTelnetIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTelnetIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllTelnetIpv6Prefixes = append(data.MgmtInbandAllTelnetIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtInbandAllTelnetIpv6Hosts = make([]ControlPlaneMgmtInbandAllTelnetIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTelnetIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllTelnetIpv6Hosts = append(data.MgmtInbandAllTelnetIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp"); value.Exists() {
+		data.MgmtInbandAllSnmp = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllSnmp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllSnmpIpv4Prefixes = make([]ControlPlaneMgmtInbandAllSnmpIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSnmpIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllSnmpIpv4Prefixes = append(data.MgmtInbandAllSnmpIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllSnmpIpv4Hosts = make([]ControlPlaneMgmtInbandAllSnmpIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSnmpIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllSnmpIpv4Hosts = append(data.MgmtInbandAllSnmpIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtInbandAllSnmpIpv6Prefixes = make([]ControlPlaneMgmtInbandAllSnmpIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSnmpIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllSnmpIpv6Prefixes = append(data.MgmtInbandAllSnmpIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtInbandAllSnmpIpv6Hosts = make([]ControlPlaneMgmtInbandAllSnmpIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSnmpIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllSnmpIpv6Hosts = append(data.MgmtInbandAllSnmpIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp"); value.Exists() {
+		data.MgmtInbandAllTftp = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllTftp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllTftpIpv4Prefixes = make([]ControlPlaneMgmtInbandAllTftpIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTftpIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllTftpIpv4Prefixes = append(data.MgmtInbandAllTftpIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllTftpIpv4Hosts = make([]ControlPlaneMgmtInbandAllTftpIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTftpIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllTftpIpv4Hosts = append(data.MgmtInbandAllTftpIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtInbandAllTftpIpv6Prefixes = make([]ControlPlaneMgmtInbandAllTftpIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTftpIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllTftpIpv6Prefixes = append(data.MgmtInbandAllTftpIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtInbandAllTftpIpv6Hosts = make([]ControlPlaneMgmtInbandAllTftpIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTftpIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllTftpIpv6Hosts = append(data.MgmtInbandAllTftpIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/http"); value.Exists() {
+		data.MgmtInbandAllHttp = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllHttp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllHttpIpv4Prefixes = make([]ControlPlaneMgmtInbandAllHttpIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllHttpIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllHttpIpv4Prefixes = append(data.MgmtInbandAllHttpIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllHttpIpv4Hosts = make([]ControlPlaneMgmtInbandAllHttpIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllHttpIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllHttpIpv4Hosts = append(data.MgmtInbandAllHttpIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml"); value.Exists() {
+		data.MgmtInbandAllXml = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllXml = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllXmlIpv4Prefixes = make([]ControlPlaneMgmtInbandAllXmlIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllXmlIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllXmlIpv4Prefixes = append(data.MgmtInbandAllXmlIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllXmlIpv4Hosts = make([]ControlPlaneMgmtInbandAllXmlIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllXmlIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllXmlIpv4Hosts = append(data.MgmtInbandAllXmlIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtInbandAllXmlIpv6Prefixes = make([]ControlPlaneMgmtInbandAllXmlIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllXmlIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllXmlIpv6Prefixes = append(data.MgmtInbandAllXmlIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtInbandAllXmlIpv6Hosts = make([]ControlPlaneMgmtInbandAllXmlIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllXmlIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllXmlIpv6Hosts = append(data.MgmtInbandAllXmlIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf"); value.Exists() {
+		data.MgmtInbandAllNetconf = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllNetconf = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllNetconfIpv4Prefixes = make([]ControlPlaneMgmtInbandAllNetconfIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllNetconfIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllNetconfIpv4Prefixes = append(data.MgmtInbandAllNetconfIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllNetconfIpv4Hosts = make([]ControlPlaneMgmtInbandAllNetconfIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllNetconfIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllNetconfIpv4Hosts = append(data.MgmtInbandAllNetconfIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtInbandAllNetconfIpv6Prefixes = make([]ControlPlaneMgmtInbandAllNetconfIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllNetconfIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllNetconfIpv6Prefixes = append(data.MgmtInbandAllNetconfIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtInbandAllNetconfIpv6Hosts = make([]ControlPlaneMgmtInbandAllNetconfIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllNetconfIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllNetconfIpv6Hosts = append(data.MgmtInbandAllNetconfIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all"); value.Exists() {
+		data.MgmtInbandAllAllowAll = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllAllowAll = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllAllowAllIpv4Prefixes = make([]ControlPlaneMgmtInbandAllAllowAllIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllAllowAllIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllAllowAllIpv4Prefixes = append(data.MgmtInbandAllAllowAllIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllAllowAllIpv4Hosts = make([]ControlPlaneMgmtInbandAllAllowAllIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllAllowAllIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllAllowAllIpv4Hosts = append(data.MgmtInbandAllAllowAllIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtInbandAllAllowAllIpv6Prefixes = make([]ControlPlaneMgmtInbandAllAllowAllIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllAllowAllIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllAllowAllIpv6Prefixes = append(data.MgmtInbandAllAllowAllIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtInbandAllAllowAllIpv6Hosts = make([]ControlPlaneMgmtInbandAllAllowAllIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllAllowAllIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllAllowAllIpv6Hosts = append(data.MgmtInbandAllAllowAllIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/interface"); value.Exists() {
+		data.MgmtOobInterfaces = make([]ControlPlaneMgmtOobInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh"); cValue.Exists() {
+				item.Ssh = types.BoolValue(true)
+			} else {
+				item.Ssh = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.SshIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesSshIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSshIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SshIpv4Prefixes = append(item.SshIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.SshIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesSshIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSshIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SshIpv4Hosts = append(item.SshIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.SshIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesSshIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSshIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SshIpv6Prefixes = append(item.SshIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.SshIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesSshIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSshIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SshIpv6Hosts = append(item.SshIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet"); cValue.Exists() {
+				item.Telnet = types.BoolValue(true)
+			} else {
+				item.Telnet = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.TelnetIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesTelnetIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTelnetIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TelnetIpv4Prefixes = append(item.TelnetIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.TelnetIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesTelnetIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTelnetIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TelnetIpv4Hosts = append(item.TelnetIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.TelnetIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesTelnetIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTelnetIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TelnetIpv6Prefixes = append(item.TelnetIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.TelnetIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesTelnetIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTelnetIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TelnetIpv6Hosts = append(item.TelnetIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp"); cValue.Exists() {
+				item.Snmp = types.BoolValue(true)
+			} else {
+				item.Snmp = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.SnmpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesSnmpIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSnmpIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SnmpIpv4Prefixes = append(item.SnmpIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.SnmpIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesSnmpIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSnmpIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SnmpIpv4Hosts = append(item.SnmpIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.SnmpIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesSnmpIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSnmpIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SnmpIpv6Prefixes = append(item.SnmpIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.SnmpIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesSnmpIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSnmpIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SnmpIpv6Hosts = append(item.SnmpIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp"); cValue.Exists() {
+				item.Tftp = types.BoolValue(true)
+			} else {
+				item.Tftp = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.TftpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesTftpIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTftpIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TftpIpv4Prefixes = append(item.TftpIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.TftpIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesTftpIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTftpIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TftpIpv4Hosts = append(item.TftpIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.TftpIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesTftpIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTftpIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TftpIpv6Prefixes = append(item.TftpIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.TftpIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesTftpIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTftpIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TftpIpv6Hosts = append(item.TftpIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/http"); cValue.Exists() {
+				item.Http = types.BoolValue(true)
+			} else {
+				item.Http = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.HttpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesHttpIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesHttpIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.HttpIpv4Prefixes = append(item.HttpIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.HttpIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesHttpIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesHttpIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.HttpIpv4Hosts = append(item.HttpIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml"); cValue.Exists() {
+				item.Xml = types.BoolValue(true)
+			} else {
+				item.Xml = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.XmlIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesXmlIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesXmlIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.XmlIpv4Prefixes = append(item.XmlIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.XmlIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesXmlIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesXmlIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.XmlIpv4Hosts = append(item.XmlIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.XmlIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesXmlIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesXmlIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.XmlIpv6Prefixes = append(item.XmlIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.XmlIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesXmlIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesXmlIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.XmlIpv6Hosts = append(item.XmlIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf"); cValue.Exists() {
+				item.Netconf = types.BoolValue(true)
+			} else {
+				item.Netconf = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.NetconfIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesNetconfIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesNetconfIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.NetconfIpv4Prefixes = append(item.NetconfIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.NetconfIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesNetconfIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesNetconfIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.NetconfIpv4Hosts = append(item.NetconfIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.NetconfIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesNetconfIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesNetconfIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.NetconfIpv6Prefixes = append(item.NetconfIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.NetconfIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesNetconfIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesNetconfIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.NetconfIpv6Hosts = append(item.NetconfIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all"); cValue.Exists() {
+				item.AllowAll = types.BoolValue(true)
+			} else {
+				item.AllowAll = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.AllowAllIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesAllowAllIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.AllowAllIpv4Prefixes = append(item.AllowAllIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.AllowAllIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesAllowAllIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.AllowAllIpv4Hosts = append(item.AllowAllIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.AllowAllIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesAllowAllIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.AllowAllIpv6Prefixes = append(item.AllowAllIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.AllowAllIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesAllowAllIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.AllowAllIpv6Hosts = append(item.AllowAllIpv6Hosts, cItem)
+					return true
+				})
+			}
+			data.MgmtOobInterfaces = append(data.MgmtOobInterfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/vrf"); value.Exists() {
+		data.MgmtOobVrf = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/enable-inband-behavior"); value.Exists() {
+		data.MgmtOobInbandBehavior = types.BoolValue(true)
+	} else {
+		data.MgmtOobInbandBehavior = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh"); value.Exists() {
+		data.MgmtOobAllSsh = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllSsh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllSshIpv4Prefixes = make([]ControlPlaneMgmtOobAllSshIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSshIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllSshIpv4Prefixes = append(data.MgmtOobAllSshIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllSshIpv4Hosts = make([]ControlPlaneMgmtOobAllSshIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSshIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllSshIpv4Hosts = append(data.MgmtOobAllSshIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtOobAllSshIpv6Prefixes = make([]ControlPlaneMgmtOobAllSshIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSshIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllSshIpv6Prefixes = append(data.MgmtOobAllSshIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtOobAllSshIpv6Hosts = make([]ControlPlaneMgmtOobAllSshIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSshIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllSshIpv6Hosts = append(data.MgmtOobAllSshIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet"); value.Exists() {
+		data.MgmtOobAllTelnet = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllTelnet = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllTelnetIpv4Prefixes = make([]ControlPlaneMgmtOobAllTelnetIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTelnetIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllTelnetIpv4Prefixes = append(data.MgmtOobAllTelnetIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllTelnetIpv4Hosts = make([]ControlPlaneMgmtOobAllTelnetIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTelnetIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllTelnetIpv4Hosts = append(data.MgmtOobAllTelnetIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtOobAllTelnetIpv6Prefixes = make([]ControlPlaneMgmtOobAllTelnetIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTelnetIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllTelnetIpv6Prefixes = append(data.MgmtOobAllTelnetIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtOobAllTelnetIpv6Hosts = make([]ControlPlaneMgmtOobAllTelnetIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTelnetIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllTelnetIpv6Hosts = append(data.MgmtOobAllTelnetIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp"); value.Exists() {
+		data.MgmtOobAllSnmp = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllSnmp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllSnmpIpv4Prefixes = make([]ControlPlaneMgmtOobAllSnmpIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSnmpIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllSnmpIpv4Prefixes = append(data.MgmtOobAllSnmpIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllSnmpIpv4Hosts = make([]ControlPlaneMgmtOobAllSnmpIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSnmpIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllSnmpIpv4Hosts = append(data.MgmtOobAllSnmpIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtOobAllSnmpIpv6Prefixes = make([]ControlPlaneMgmtOobAllSnmpIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSnmpIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllSnmpIpv6Prefixes = append(data.MgmtOobAllSnmpIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtOobAllSnmpIpv6Hosts = make([]ControlPlaneMgmtOobAllSnmpIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSnmpIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllSnmpIpv6Hosts = append(data.MgmtOobAllSnmpIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp"); value.Exists() {
+		data.MgmtOobAllTftp = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllTftp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllTftpIpv4Prefixes = make([]ControlPlaneMgmtOobAllTftpIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTftpIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllTftpIpv4Prefixes = append(data.MgmtOobAllTftpIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllTftpIpv4Hosts = make([]ControlPlaneMgmtOobAllTftpIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTftpIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllTftpIpv4Hosts = append(data.MgmtOobAllTftpIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtOobAllTftpIpv6Prefixes = make([]ControlPlaneMgmtOobAllTftpIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTftpIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllTftpIpv6Prefixes = append(data.MgmtOobAllTftpIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtOobAllTftpIpv6Hosts = make([]ControlPlaneMgmtOobAllTftpIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTftpIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllTftpIpv6Hosts = append(data.MgmtOobAllTftpIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http"); value.Exists() {
+		data.MgmtOobAllHttp = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllHttp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllHttpIpv4Prefixes = make([]ControlPlaneMgmtOobAllHttpIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllHttpIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllHttpIpv4Prefixes = append(data.MgmtOobAllHttpIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllHttpIpv4Hosts = make([]ControlPlaneMgmtOobAllHttpIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllHttpIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllHttpIpv4Hosts = append(data.MgmtOobAllHttpIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml"); value.Exists() {
+		data.MgmtOobAllXml = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllXml = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllXmlIpv4Prefixes = make([]ControlPlaneMgmtOobAllXmlIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllXmlIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllXmlIpv4Prefixes = append(data.MgmtOobAllXmlIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllXmlIpv4Hosts = make([]ControlPlaneMgmtOobAllXmlIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllXmlIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllXmlIpv4Hosts = append(data.MgmtOobAllXmlIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtOobAllXmlIpv6Prefixes = make([]ControlPlaneMgmtOobAllXmlIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllXmlIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllXmlIpv6Prefixes = append(data.MgmtOobAllXmlIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtOobAllXmlIpv6Hosts = make([]ControlPlaneMgmtOobAllXmlIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllXmlIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllXmlIpv6Hosts = append(data.MgmtOobAllXmlIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf"); value.Exists() {
+		data.MgmtOobAllNetconf = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllNetconf = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllNetconfIpv4Prefixes = make([]ControlPlaneMgmtOobAllNetconfIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllNetconfIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllNetconfIpv4Prefixes = append(data.MgmtOobAllNetconfIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllNetconfIpv4Hosts = make([]ControlPlaneMgmtOobAllNetconfIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllNetconfIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllNetconfIpv4Hosts = append(data.MgmtOobAllNetconfIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtOobAllNetconfIpv6Prefixes = make([]ControlPlaneMgmtOobAllNetconfIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllNetconfIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllNetconfIpv6Prefixes = append(data.MgmtOobAllNetconfIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtOobAllNetconfIpv6Hosts = make([]ControlPlaneMgmtOobAllNetconfIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllNetconfIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllNetconfIpv6Hosts = append(data.MgmtOobAllNetconfIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all"); value.Exists() {
+		data.MgmtOobAllAllowAll = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllAllowAll = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllAllowAllIpv4Prefixes = make([]ControlPlaneMgmtOobAllAllowAllIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllAllowAllIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllAllowAllIpv4Prefixes = append(data.MgmtOobAllAllowAllIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllAllowAllIpv4Hosts = make([]ControlPlaneMgmtOobAllAllowAllIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllAllowAllIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllAllowAllIpv4Hosts = append(data.MgmtOobAllAllowAllIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtOobAllAllowAllIpv6Prefixes = make([]ControlPlaneMgmtOobAllAllowAllIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllAllowAllIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllAllowAllIpv6Prefixes = append(data.MgmtOobAllAllowAllIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtOobAllAllowAllIpv6Hosts = make([]ControlPlaneMgmtOobAllAllowAllIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllAllowAllIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllAllowAllIpv6Hosts = append(data.MgmtOobAllAllowAllIpv6Hosts, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *ControlPlaneData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/interface"); value.Exists() {
+		data.MgmtInbandInterfaces = make([]ControlPlaneMgmtInbandInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh"); cValue.Exists() {
+				item.Ssh = types.BoolValue(true)
+			} else {
+				item.Ssh = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.SshIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesSshIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSshIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SshIpv4Prefixes = append(item.SshIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.SshIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesSshIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSshIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SshIpv4Hosts = append(item.SshIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.SshIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesSshIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSshIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SshIpv6Prefixes = append(item.SshIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.SshIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesSshIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSshIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SshIpv6Hosts = append(item.SshIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet"); cValue.Exists() {
+				item.Telnet = types.BoolValue(true)
+			} else {
+				item.Telnet = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.TelnetIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTelnetIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TelnetIpv4Prefixes = append(item.TelnetIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.TelnetIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTelnetIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TelnetIpv4Hosts = append(item.TelnetIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.TelnetIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTelnetIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TelnetIpv6Prefixes = append(item.TelnetIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.TelnetIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTelnetIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TelnetIpv6Hosts = append(item.TelnetIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp"); cValue.Exists() {
+				item.Snmp = types.BoolValue(true)
+			} else {
+				item.Snmp = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.SnmpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSnmpIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SnmpIpv4Prefixes = append(item.SnmpIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.SnmpIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSnmpIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SnmpIpv4Hosts = append(item.SnmpIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.SnmpIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSnmpIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SnmpIpv6Prefixes = append(item.SnmpIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.SnmpIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesSnmpIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SnmpIpv6Hosts = append(item.SnmpIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp"); cValue.Exists() {
+				item.Tftp = types.BoolValue(true)
+			} else {
+				item.Tftp = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.TftpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesTftpIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTftpIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TftpIpv4Prefixes = append(item.TftpIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.TftpIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesTftpIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTftpIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TftpIpv4Hosts = append(item.TftpIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.TftpIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesTftpIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTftpIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TftpIpv6Prefixes = append(item.TftpIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.TftpIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesTftpIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesTftpIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TftpIpv6Hosts = append(item.TftpIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/http"); cValue.Exists() {
+				item.Http = types.BoolValue(true)
+			} else {
+				item.Http = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.HttpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesHttpIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesHttpIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.HttpIpv4Prefixes = append(item.HttpIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.HttpIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesHttpIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesHttpIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.HttpIpv4Hosts = append(item.HttpIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml"); cValue.Exists() {
+				item.Xml = types.BoolValue(true)
+			} else {
+				item.Xml = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.XmlIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesXmlIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesXmlIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.XmlIpv4Prefixes = append(item.XmlIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.XmlIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesXmlIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesXmlIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.XmlIpv4Hosts = append(item.XmlIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.XmlIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesXmlIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesXmlIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.XmlIpv6Prefixes = append(item.XmlIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.XmlIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesXmlIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesXmlIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.XmlIpv6Hosts = append(item.XmlIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf"); cValue.Exists() {
+				item.Netconf = types.BoolValue(true)
+			} else {
+				item.Netconf = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.NetconfIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesNetconfIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.NetconfIpv4Prefixes = append(item.NetconfIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.NetconfIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesNetconfIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.NetconfIpv4Hosts = append(item.NetconfIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.NetconfIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesNetconfIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.NetconfIpv6Prefixes = append(item.NetconfIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.NetconfIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesNetconfIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.NetconfIpv6Hosts = append(item.NetconfIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all"); cValue.Exists() {
+				item.AllowAll = types.BoolValue(true)
+			} else {
+				item.AllowAll = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.AllowAllIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesAllowAllIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.AllowAllIpv4Prefixes = append(item.AllowAllIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.AllowAllIpv4Hosts = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesAllowAllIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.AllowAllIpv4Hosts = append(item.AllowAllIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.AllowAllIpv6Prefixes = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesAllowAllIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.AllowAllIpv6Prefixes = append(item.AllowAllIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.AllowAllIpv6Hosts = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtInbandInterfacesAllowAllIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.AllowAllIpv6Hosts = append(item.AllowAllIpv6Hosts, cItem)
+					return true
+				})
+			}
+			data.MgmtInbandInterfaces = append(data.MgmtInbandInterfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh"); value.Exists() {
+		data.MgmtInbandAllSsh = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllSsh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllSshIpv4Prefixes = make([]ControlPlaneMgmtInbandAllSshIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSshIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllSshIpv4Prefixes = append(data.MgmtInbandAllSshIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllSshIpv4Hosts = make([]ControlPlaneMgmtInbandAllSshIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSshIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllSshIpv4Hosts = append(data.MgmtInbandAllSshIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtInbandAllSshIpv6Prefixes = make([]ControlPlaneMgmtInbandAllSshIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSshIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllSshIpv6Prefixes = append(data.MgmtInbandAllSshIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtInbandAllSshIpv6Hosts = make([]ControlPlaneMgmtInbandAllSshIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSshIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllSshIpv6Hosts = append(data.MgmtInbandAllSshIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet"); value.Exists() {
+		data.MgmtInbandAllTelnet = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllTelnet = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllTelnetIpv4Prefixes = make([]ControlPlaneMgmtInbandAllTelnetIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTelnetIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllTelnetIpv4Prefixes = append(data.MgmtInbandAllTelnetIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllTelnetIpv4Hosts = make([]ControlPlaneMgmtInbandAllTelnetIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTelnetIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllTelnetIpv4Hosts = append(data.MgmtInbandAllTelnetIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtInbandAllTelnetIpv6Prefixes = make([]ControlPlaneMgmtInbandAllTelnetIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTelnetIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllTelnetIpv6Prefixes = append(data.MgmtInbandAllTelnetIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtInbandAllTelnetIpv6Hosts = make([]ControlPlaneMgmtInbandAllTelnetIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTelnetIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllTelnetIpv6Hosts = append(data.MgmtInbandAllTelnetIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp"); value.Exists() {
+		data.MgmtInbandAllSnmp = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllSnmp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllSnmpIpv4Prefixes = make([]ControlPlaneMgmtInbandAllSnmpIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSnmpIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllSnmpIpv4Prefixes = append(data.MgmtInbandAllSnmpIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllSnmpIpv4Hosts = make([]ControlPlaneMgmtInbandAllSnmpIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSnmpIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllSnmpIpv4Hosts = append(data.MgmtInbandAllSnmpIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtInbandAllSnmpIpv6Prefixes = make([]ControlPlaneMgmtInbandAllSnmpIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSnmpIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllSnmpIpv6Prefixes = append(data.MgmtInbandAllSnmpIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtInbandAllSnmpIpv6Hosts = make([]ControlPlaneMgmtInbandAllSnmpIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllSnmpIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllSnmpIpv6Hosts = append(data.MgmtInbandAllSnmpIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp"); value.Exists() {
+		data.MgmtInbandAllTftp = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllTftp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllTftpIpv4Prefixes = make([]ControlPlaneMgmtInbandAllTftpIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTftpIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllTftpIpv4Prefixes = append(data.MgmtInbandAllTftpIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllTftpIpv4Hosts = make([]ControlPlaneMgmtInbandAllTftpIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTftpIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllTftpIpv4Hosts = append(data.MgmtInbandAllTftpIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtInbandAllTftpIpv6Prefixes = make([]ControlPlaneMgmtInbandAllTftpIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTftpIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllTftpIpv6Prefixes = append(data.MgmtInbandAllTftpIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtInbandAllTftpIpv6Hosts = make([]ControlPlaneMgmtInbandAllTftpIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllTftpIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllTftpIpv6Hosts = append(data.MgmtInbandAllTftpIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/http"); value.Exists() {
+		data.MgmtInbandAllHttp = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllHttp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllHttpIpv4Prefixes = make([]ControlPlaneMgmtInbandAllHttpIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllHttpIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllHttpIpv4Prefixes = append(data.MgmtInbandAllHttpIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllHttpIpv4Hosts = make([]ControlPlaneMgmtInbandAllHttpIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllHttpIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllHttpIpv4Hosts = append(data.MgmtInbandAllHttpIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml"); value.Exists() {
+		data.MgmtInbandAllXml = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllXml = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllXmlIpv4Prefixes = make([]ControlPlaneMgmtInbandAllXmlIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllXmlIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllXmlIpv4Prefixes = append(data.MgmtInbandAllXmlIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllXmlIpv4Hosts = make([]ControlPlaneMgmtInbandAllXmlIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllXmlIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllXmlIpv4Hosts = append(data.MgmtInbandAllXmlIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtInbandAllXmlIpv6Prefixes = make([]ControlPlaneMgmtInbandAllXmlIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllXmlIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllXmlIpv6Prefixes = append(data.MgmtInbandAllXmlIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtInbandAllXmlIpv6Hosts = make([]ControlPlaneMgmtInbandAllXmlIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllXmlIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllXmlIpv6Hosts = append(data.MgmtInbandAllXmlIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf"); value.Exists() {
+		data.MgmtInbandAllNetconf = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllNetconf = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllNetconfIpv4Prefixes = make([]ControlPlaneMgmtInbandAllNetconfIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllNetconfIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllNetconfIpv4Prefixes = append(data.MgmtInbandAllNetconfIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllNetconfIpv4Hosts = make([]ControlPlaneMgmtInbandAllNetconfIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllNetconfIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllNetconfIpv4Hosts = append(data.MgmtInbandAllNetconfIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtInbandAllNetconfIpv6Prefixes = make([]ControlPlaneMgmtInbandAllNetconfIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllNetconfIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllNetconfIpv6Prefixes = append(data.MgmtInbandAllNetconfIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtInbandAllNetconfIpv6Hosts = make([]ControlPlaneMgmtInbandAllNetconfIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllNetconfIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllNetconfIpv6Hosts = append(data.MgmtInbandAllNetconfIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all"); value.Exists() {
+		data.MgmtInbandAllAllowAll = types.BoolValue(true)
+	} else {
+		data.MgmtInbandAllAllowAll = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtInbandAllAllowAllIpv4Prefixes = make([]ControlPlaneMgmtInbandAllAllowAllIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllAllowAllIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllAllowAllIpv4Prefixes = append(data.MgmtInbandAllAllowAllIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtInbandAllAllowAllIpv4Hosts = make([]ControlPlaneMgmtInbandAllAllowAllIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllAllowAllIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllAllowAllIpv4Hosts = append(data.MgmtInbandAllAllowAllIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtInbandAllAllowAllIpv6Prefixes = make([]ControlPlaneMgmtInbandAllAllowAllIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllAllowAllIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtInbandAllAllowAllIpv6Prefixes = append(data.MgmtInbandAllAllowAllIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtInbandAllAllowAllIpv6Hosts = make([]ControlPlaneMgmtInbandAllAllowAllIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtInbandAllAllowAllIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtInbandAllAllowAllIpv6Hosts = append(data.MgmtInbandAllAllowAllIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/interface"); value.Exists() {
+		data.MgmtOobInterfaces = make([]ControlPlaneMgmtOobInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh"); cValue.Exists() {
+				item.Ssh = types.BoolValue(true)
+			} else {
+				item.Ssh = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.SshIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesSshIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSshIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SshIpv4Prefixes = append(item.SshIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.SshIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesSshIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSshIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SshIpv4Hosts = append(item.SshIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.SshIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesSshIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSshIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SshIpv6Prefixes = append(item.SshIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.SshIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesSshIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSshIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SshIpv6Hosts = append(item.SshIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet"); cValue.Exists() {
+				item.Telnet = types.BoolValue(true)
+			} else {
+				item.Telnet = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.TelnetIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesTelnetIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTelnetIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TelnetIpv4Prefixes = append(item.TelnetIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.TelnetIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesTelnetIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTelnetIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TelnetIpv4Hosts = append(item.TelnetIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.TelnetIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesTelnetIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTelnetIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TelnetIpv6Prefixes = append(item.TelnetIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.TelnetIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesTelnetIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTelnetIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TelnetIpv6Hosts = append(item.TelnetIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp"); cValue.Exists() {
+				item.Snmp = types.BoolValue(true)
+			} else {
+				item.Snmp = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.SnmpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesSnmpIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSnmpIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SnmpIpv4Prefixes = append(item.SnmpIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.SnmpIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesSnmpIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSnmpIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SnmpIpv4Hosts = append(item.SnmpIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.SnmpIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesSnmpIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSnmpIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.SnmpIpv6Prefixes = append(item.SnmpIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.SnmpIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesSnmpIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesSnmpIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.SnmpIpv6Hosts = append(item.SnmpIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp"); cValue.Exists() {
+				item.Tftp = types.BoolValue(true)
+			} else {
+				item.Tftp = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.TftpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesTftpIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTftpIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TftpIpv4Prefixes = append(item.TftpIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.TftpIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesTftpIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTftpIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TftpIpv4Hosts = append(item.TftpIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.TftpIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesTftpIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTftpIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.TftpIpv6Prefixes = append(item.TftpIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.TftpIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesTftpIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesTftpIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.TftpIpv6Hosts = append(item.TftpIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/http"); cValue.Exists() {
+				item.Http = types.BoolValue(true)
+			} else {
+				item.Http = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.HttpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesHttpIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesHttpIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.HttpIpv4Prefixes = append(item.HttpIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.HttpIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesHttpIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesHttpIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.HttpIpv4Hosts = append(item.HttpIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml"); cValue.Exists() {
+				item.Xml = types.BoolValue(true)
+			} else {
+				item.Xml = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.XmlIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesXmlIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesXmlIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.XmlIpv4Prefixes = append(item.XmlIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.XmlIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesXmlIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesXmlIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.XmlIpv4Hosts = append(item.XmlIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.XmlIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesXmlIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesXmlIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.XmlIpv6Prefixes = append(item.XmlIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.XmlIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesXmlIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesXmlIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.XmlIpv6Hosts = append(item.XmlIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf"); cValue.Exists() {
+				item.Netconf = types.BoolValue(true)
+			} else {
+				item.Netconf = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.NetconfIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesNetconfIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesNetconfIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.NetconfIpv4Prefixes = append(item.NetconfIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.NetconfIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesNetconfIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesNetconfIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.NetconfIpv4Hosts = append(item.NetconfIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.NetconfIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesNetconfIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesNetconfIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.NetconfIpv6Prefixes = append(item.NetconfIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.NetconfIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesNetconfIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesNetconfIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.NetconfIpv6Hosts = append(item.NetconfIpv6Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all"); cValue.Exists() {
+				item.AllowAll = types.BoolValue(true)
+			} else {
+				item.AllowAll = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); cValue.Exists() {
+				item.AllowAllIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv4Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesAllowAllIpv4Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.AllowAllIpv4Prefixes = append(item.AllowAllIpv4Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address"); cValue.Exists() {
+				item.AllowAllIpv4Hosts = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv4Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesAllowAllIpv4Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.AllowAllIpv4Hosts = append(item.AllowAllIpv4Hosts, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); cValue.Exists() {
+				item.AllowAllIpv6Prefixes = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv6Prefixes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesAllowAllIpv6Prefixes{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.AllowAllIpv6Prefixes = append(item.AllowAllIpv6Prefixes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address"); cValue.Exists() {
+				item.AllowAllIpv6Hosts = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv6Hosts, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ControlPlaneMgmtOobInterfacesAllowAllIpv6Hosts{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.AllowAllIpv6Hosts = append(item.AllowAllIpv6Hosts, cItem)
+					return true
+				})
+			}
+			data.MgmtOobInterfaces = append(data.MgmtOobInterfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/vrf"); value.Exists() {
+		data.MgmtOobVrf = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/enable-inband-behavior"); value.Exists() {
+		data.MgmtOobInbandBehavior = types.BoolValue(true)
+	} else {
+		data.MgmtOobInbandBehavior = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh"); value.Exists() {
+		data.MgmtOobAllSsh = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllSsh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllSshIpv4Prefixes = make([]ControlPlaneMgmtOobAllSshIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSshIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllSshIpv4Prefixes = append(data.MgmtOobAllSshIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllSshIpv4Hosts = make([]ControlPlaneMgmtOobAllSshIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSshIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllSshIpv4Hosts = append(data.MgmtOobAllSshIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtOobAllSshIpv6Prefixes = make([]ControlPlaneMgmtOobAllSshIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSshIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllSshIpv6Prefixes = append(data.MgmtOobAllSshIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtOobAllSshIpv6Hosts = make([]ControlPlaneMgmtOobAllSshIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSshIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllSshIpv6Hosts = append(data.MgmtOobAllSshIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet"); value.Exists() {
+		data.MgmtOobAllTelnet = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllTelnet = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllTelnetIpv4Prefixes = make([]ControlPlaneMgmtOobAllTelnetIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTelnetIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllTelnetIpv4Prefixes = append(data.MgmtOobAllTelnetIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllTelnetIpv4Hosts = make([]ControlPlaneMgmtOobAllTelnetIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTelnetIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllTelnetIpv4Hosts = append(data.MgmtOobAllTelnetIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtOobAllTelnetIpv6Prefixes = make([]ControlPlaneMgmtOobAllTelnetIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTelnetIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllTelnetIpv6Prefixes = append(data.MgmtOobAllTelnetIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtOobAllTelnetIpv6Hosts = make([]ControlPlaneMgmtOobAllTelnetIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTelnetIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllTelnetIpv6Hosts = append(data.MgmtOobAllTelnetIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp"); value.Exists() {
+		data.MgmtOobAllSnmp = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllSnmp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllSnmpIpv4Prefixes = make([]ControlPlaneMgmtOobAllSnmpIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSnmpIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllSnmpIpv4Prefixes = append(data.MgmtOobAllSnmpIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllSnmpIpv4Hosts = make([]ControlPlaneMgmtOobAllSnmpIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSnmpIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllSnmpIpv4Hosts = append(data.MgmtOobAllSnmpIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtOobAllSnmpIpv6Prefixes = make([]ControlPlaneMgmtOobAllSnmpIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSnmpIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllSnmpIpv6Prefixes = append(data.MgmtOobAllSnmpIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtOobAllSnmpIpv6Hosts = make([]ControlPlaneMgmtOobAllSnmpIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllSnmpIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllSnmpIpv6Hosts = append(data.MgmtOobAllSnmpIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp"); value.Exists() {
+		data.MgmtOobAllTftp = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllTftp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllTftpIpv4Prefixes = make([]ControlPlaneMgmtOobAllTftpIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTftpIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllTftpIpv4Prefixes = append(data.MgmtOobAllTftpIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllTftpIpv4Hosts = make([]ControlPlaneMgmtOobAllTftpIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTftpIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllTftpIpv4Hosts = append(data.MgmtOobAllTftpIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtOobAllTftpIpv6Prefixes = make([]ControlPlaneMgmtOobAllTftpIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTftpIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllTftpIpv6Prefixes = append(data.MgmtOobAllTftpIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtOobAllTftpIpv6Hosts = make([]ControlPlaneMgmtOobAllTftpIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllTftpIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllTftpIpv6Hosts = append(data.MgmtOobAllTftpIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http"); value.Exists() {
+		data.MgmtOobAllHttp = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllHttp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllHttpIpv4Prefixes = make([]ControlPlaneMgmtOobAllHttpIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllHttpIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllHttpIpv4Prefixes = append(data.MgmtOobAllHttpIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllHttpIpv4Hosts = make([]ControlPlaneMgmtOobAllHttpIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllHttpIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllHttpIpv4Hosts = append(data.MgmtOobAllHttpIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml"); value.Exists() {
+		data.MgmtOobAllXml = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllXml = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllXmlIpv4Prefixes = make([]ControlPlaneMgmtOobAllXmlIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllXmlIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllXmlIpv4Prefixes = append(data.MgmtOobAllXmlIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllXmlIpv4Hosts = make([]ControlPlaneMgmtOobAllXmlIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllXmlIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllXmlIpv4Hosts = append(data.MgmtOobAllXmlIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtOobAllXmlIpv6Prefixes = make([]ControlPlaneMgmtOobAllXmlIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllXmlIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllXmlIpv6Prefixes = append(data.MgmtOobAllXmlIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtOobAllXmlIpv6Hosts = make([]ControlPlaneMgmtOobAllXmlIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllXmlIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllXmlIpv6Hosts = append(data.MgmtOobAllXmlIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf"); value.Exists() {
+		data.MgmtOobAllNetconf = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllNetconf = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllNetconfIpv4Prefixes = make([]ControlPlaneMgmtOobAllNetconfIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllNetconfIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllNetconfIpv4Prefixes = append(data.MgmtOobAllNetconfIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllNetconfIpv4Hosts = make([]ControlPlaneMgmtOobAllNetconfIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllNetconfIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllNetconfIpv4Hosts = append(data.MgmtOobAllNetconfIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtOobAllNetconfIpv6Prefixes = make([]ControlPlaneMgmtOobAllNetconfIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllNetconfIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllNetconfIpv6Prefixes = append(data.MgmtOobAllNetconfIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtOobAllNetconfIpv6Hosts = make([]ControlPlaneMgmtOobAllNetconfIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllNetconfIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllNetconfIpv6Hosts = append(data.MgmtOobAllNetconfIpv6Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all"); value.Exists() {
+		data.MgmtOobAllAllowAll = types.BoolValue(true)
+	} else {
+		data.MgmtOobAllAllowAll = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"); value.Exists() {
+		data.MgmtOobAllAllowAllIpv4Prefixes = make([]ControlPlaneMgmtOobAllAllowAllIpv4Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllAllowAllIpv4Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllAllowAllIpv4Prefixes = append(data.MgmtOobAllAllowAllIpv4Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address"); value.Exists() {
+		data.MgmtOobAllAllowAllIpv4Hosts = make([]ControlPlaneMgmtOobAllAllowAllIpv4Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllAllowAllIpv4Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllAllowAllIpv4Hosts = append(data.MgmtOobAllAllowAllIpv4Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"); value.Exists() {
+		data.MgmtOobAllAllowAllIpv6Prefixes = make([]ControlPlaneMgmtOobAllAllowAllIpv6Prefixes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllAllowAllIpv6Prefixes{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "length"); cValue.Exists() {
+				item.Length = types.Int64Value(cValue.Int())
+			}
+			data.MgmtOobAllAllowAllIpv6Prefixes = append(data.MgmtOobAllAllowAllIpv6Prefixes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address"); value.Exists() {
+		data.MgmtOobAllAllowAllIpv6Hosts = make([]ControlPlaneMgmtOobAllAllowAllIpv6Hosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ControlPlaneMgmtOobAllAllowAllIpv6Hosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.MgmtOobAllAllowAllIpv6Hosts = append(data.MgmtOobAllAllowAllIpv6Hosts, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -13728,7 +22835,7 @@ func (data *ControlPlane) getDeletedItems(ctx context.Context, state ControlPlan
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *ControlPlane) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.MgmtOobAllAllowAllIpv6Hosts {
 		keys := [...]string{"address"}
@@ -13762,8 +22869,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtOobAllAllowAll.IsNull() && !data.MgmtOobAllAllowAll.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/all", data.getPath()))
+		if state != nil && !state.MgmtOobAllAllowAll.IsNull() && state.MgmtOobAllAllowAll.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/all", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtOobAllNetconfIpv6Hosts {
 		keys := [...]string{"address"}
@@ -13797,8 +22907,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtOobAllNetconf.IsNull() && !data.MgmtOobAllNetconf.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/netconf", data.getPath()))
+		if state != nil && !state.MgmtOobAllNetconf.IsNull() && state.MgmtOobAllNetconf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/netconf", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtOobAllXmlIpv6Hosts {
 		keys := [...]string{"address"}
@@ -13832,8 +22945,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtOobAllXml.IsNull() && !data.MgmtOobAllXml.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/xr-xml", data.getPath()))
+		if state != nil && !state.MgmtOobAllXml.IsNull() && state.MgmtOobAllXml.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/xr-xml", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtOobAllHttpIpv4Hosts {
 		keys := [...]string{"address"}
@@ -13851,8 +22967,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtOobAllHttp.IsNull() && !data.MgmtOobAllHttp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/http", data.getPath()))
+		if state != nil && !state.MgmtOobAllHttp.IsNull() && state.MgmtOobAllHttp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/http", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtOobAllTftpIpv6Hosts {
 		keys := [...]string{"address"}
@@ -13886,8 +23005,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtOobAllTftp.IsNull() && !data.MgmtOobAllTftp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/tftp", data.getPath()))
+		if state != nil && !state.MgmtOobAllTftp.IsNull() && state.MgmtOobAllTftp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/tftp", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtOobAllSnmpIpv6Hosts {
 		keys := [...]string{"address"}
@@ -13921,8 +23043,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtOobAllSnmp.IsNull() && !data.MgmtOobAllSnmp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/snmp", data.getPath()))
+		if state != nil && !state.MgmtOobAllSnmp.IsNull() && state.MgmtOobAllSnmp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/snmp", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtOobAllTelnetIpv6Hosts {
 		keys := [...]string{"address"}
@@ -13956,8 +23081,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtOobAllTelnet.IsNull() && !data.MgmtOobAllTelnet.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/telnet", data.getPath()))
+		if state != nil && !state.MgmtOobAllTelnet.IsNull() && state.MgmtOobAllTelnet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/telnet", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtOobAllSshIpv6Hosts {
 		keys := [...]string{"address"}
@@ -13991,11 +23119,17 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtOobAllSsh.IsNull() && !data.MgmtOobAllSsh.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/ssh", data.getPath()))
+		if state != nil && !state.MgmtOobAllSsh.IsNull() && state.MgmtOobAllSsh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/ssh", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtOobInbandBehavior.IsNull() && !data.MgmtOobInbandBehavior.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/enable-inband-behavior", data.getPath()))
+		if state != nil && !state.MgmtOobInbandBehavior.IsNull() && state.MgmtOobInbandBehavior.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/enable-inband-behavior", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtOobInterfaces {
 		keys := [...]string{"interface-name"}
@@ -14036,8 +23170,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtOobInterfaces[i].AllowAll.IsNull() && !data.MgmtOobInterfaces[i].AllowAll.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/all", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].AllowAll.IsNull() && state.MgmtOobInterfaces[i].AllowAll.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/all", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].NetconfIpv6Hosts {
 			ckeys := [...]string{"address"}
@@ -14071,8 +23209,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtOobInterfaces[i].Netconf.IsNull() && !data.MgmtOobInterfaces[i].Netconf.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/netconf", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].Netconf.IsNull() && state.MgmtOobInterfaces[i].Netconf.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/netconf", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].XmlIpv6Hosts {
 			ckeys := [...]string{"address"}
@@ -14106,8 +23248,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtOobInterfaces[i].Xml.IsNull() && !data.MgmtOobInterfaces[i].Xml.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/xr-xml", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].Xml.IsNull() && state.MgmtOobInterfaces[i].Xml.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/xr-xml", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].HttpIpv4Hosts {
 			ckeys := [...]string{"address"}
@@ -14125,8 +23271,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtOobInterfaces[i].Http.IsNull() && !data.MgmtOobInterfaces[i].Http.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/http", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].Http.IsNull() && state.MgmtOobInterfaces[i].Http.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/http", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].TftpIpv6Hosts {
 			ckeys := [...]string{"address"}
@@ -14160,8 +23310,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtOobInterfaces[i].Tftp.IsNull() && !data.MgmtOobInterfaces[i].Tftp.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/tftp", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].Tftp.IsNull() && state.MgmtOobInterfaces[i].Tftp.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/tftp", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].SnmpIpv6Hosts {
 			ckeys := [...]string{"address"}
@@ -14195,8 +23349,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtOobInterfaces[i].Snmp.IsNull() && !data.MgmtOobInterfaces[i].Snmp.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/snmp", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].Snmp.IsNull() && state.MgmtOobInterfaces[i].Snmp.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/snmp", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].TelnetIpv6Hosts {
 			ckeys := [...]string{"address"}
@@ -14230,8 +23388,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtOobInterfaces[i].Telnet.IsNull() && !data.MgmtOobInterfaces[i].Telnet.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/telnet", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].Telnet.IsNull() && state.MgmtOobInterfaces[i].Telnet.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/telnet", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].SshIpv6Hosts {
 			ckeys := [...]string{"address"}
@@ -14265,8 +23427,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtOobInterfaces[i].Ssh.IsNull() && !data.MgmtOobInterfaces[i].Ssh.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/ssh", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].Ssh.IsNull() && state.MgmtOobInterfaces[i].Ssh.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v/allow/ssh", data.getXPath(), keyString))
+			}
 		}
 	}
 	for i := range data.MgmtInbandAllAllowAllIpv6Hosts {
@@ -14301,8 +23467,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtInbandAllAllowAll.IsNull() && !data.MgmtInbandAllAllowAll.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/all", data.getPath()))
+		if state != nil && !state.MgmtInbandAllAllowAll.IsNull() && state.MgmtInbandAllAllowAll.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/all", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtInbandAllNetconfIpv6Hosts {
 		keys := [...]string{"address"}
@@ -14336,8 +23505,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtInbandAllNetconf.IsNull() && !data.MgmtInbandAllNetconf.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/netconf", data.getPath()))
+		if state != nil && !state.MgmtInbandAllNetconf.IsNull() && state.MgmtInbandAllNetconf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/netconf", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtInbandAllXmlIpv6Hosts {
 		keys := [...]string{"address"}
@@ -14371,8 +23543,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtInbandAllXml.IsNull() && !data.MgmtInbandAllXml.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/xr-xml", data.getPath()))
+		if state != nil && !state.MgmtInbandAllXml.IsNull() && state.MgmtInbandAllXml.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/xr-xml", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtInbandAllHttpIpv4Hosts {
 		keys := [...]string{"address"}
@@ -14390,8 +23565,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtInbandAllHttp.IsNull() && !data.MgmtInbandAllHttp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/http", data.getPath()))
+		if state != nil && !state.MgmtInbandAllHttp.IsNull() && state.MgmtInbandAllHttp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/http", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtInbandAllTftpIpv6Hosts {
 		keys := [...]string{"address"}
@@ -14425,8 +23603,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtInbandAllTftp.IsNull() && !data.MgmtInbandAllTftp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/tftp", data.getPath()))
+		if state != nil && !state.MgmtInbandAllTftp.IsNull() && state.MgmtInbandAllTftp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/tftp", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtInbandAllSnmpIpv6Hosts {
 		keys := [...]string{"address"}
@@ -14460,8 +23641,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtInbandAllSnmp.IsNull() && !data.MgmtInbandAllSnmp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/snmp", data.getPath()))
+		if state != nil && !state.MgmtInbandAllSnmp.IsNull() && state.MgmtInbandAllSnmp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/snmp", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtInbandAllTelnetIpv6Hosts {
 		keys := [...]string{"address"}
@@ -14495,8 +23679,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtInbandAllTelnet.IsNull() && !data.MgmtInbandAllTelnet.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/telnet", data.getPath()))
+		if state != nil && !state.MgmtInbandAllTelnet.IsNull() && state.MgmtInbandAllTelnet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/telnet", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtInbandAllSshIpv6Hosts {
 		keys := [...]string{"address"}
@@ -14530,8 +23717,11 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MgmtInbandAllSsh.IsNull() && !data.MgmtInbandAllSsh.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/ssh", data.getPath()))
+		if state != nil && !state.MgmtInbandAllSsh.IsNull() && state.MgmtInbandAllSsh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/ssh", data.getXPath()))
+		}
 	}
 	for i := range data.MgmtInbandInterfaces {
 		keys := [...]string{"interface-name"}
@@ -14572,8 +23762,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtInbandInterfaces[i].AllowAll.IsNull() && !data.MgmtInbandInterfaces[i].AllowAll.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/all", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].AllowAll.IsNull() && state.MgmtInbandInterfaces[i].AllowAll.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/all", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv6Hosts {
 			ckeys := [...]string{"address"}
@@ -14607,8 +23801,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtInbandInterfaces[i].Netconf.IsNull() && !data.MgmtInbandInterfaces[i].Netconf.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/netconf", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].Netconf.IsNull() && state.MgmtInbandInterfaces[i].Netconf.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/netconf", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].XmlIpv6Hosts {
 			ckeys := [...]string{"address"}
@@ -14642,8 +23840,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtInbandInterfaces[i].Xml.IsNull() && !data.MgmtInbandInterfaces[i].Xml.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/xr-xml", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].Xml.IsNull() && state.MgmtInbandInterfaces[i].Xml.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/xr-xml", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].HttpIpv4Hosts {
 			ckeys := [...]string{"address"}
@@ -14661,8 +23863,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtInbandInterfaces[i].Http.IsNull() && !data.MgmtInbandInterfaces[i].Http.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/http", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].Http.IsNull() && state.MgmtInbandInterfaces[i].Http.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/http", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].TftpIpv6Hosts {
 			ckeys := [...]string{"address"}
@@ -14696,8 +23902,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtInbandInterfaces[i].Tftp.IsNull() && !data.MgmtInbandInterfaces[i].Tftp.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/tftp", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].Tftp.IsNull() && state.MgmtInbandInterfaces[i].Tftp.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/tftp", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv6Hosts {
 			ckeys := [...]string{"address"}
@@ -14731,8 +23941,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtInbandInterfaces[i].Snmp.IsNull() && !data.MgmtInbandInterfaces[i].Snmp.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/snmp", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].Snmp.IsNull() && state.MgmtInbandInterfaces[i].Snmp.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/snmp", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv6Hosts {
 			ckeys := [...]string{"address"}
@@ -14766,8 +23980,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtInbandInterfaces[i].Telnet.IsNull() && !data.MgmtInbandInterfaces[i].Telnet.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/telnet", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].Telnet.IsNull() && state.MgmtInbandInterfaces[i].Telnet.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/telnet", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].SshIpv6Hosts {
 			ckeys := [...]string{"address"}
@@ -14801,8 +24019,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.MgmtInbandInterfaces[i].Ssh.IsNull() && !data.MgmtInbandInterfaces[i].Ssh.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/ssh", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].Ssh.IsNull() && state.MgmtInbandInterfaces[i].Ssh.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v/allow/ssh", data.getXPath(), keyString))
+			}
 		}
 	}
 	return emptyLeafsDelete
@@ -14815,325 +24037,220 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 func (data *ControlPlane) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.MgmtOobAllAllowAllIpv6Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllAllowAllIpv6Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllAllowAllIpv6Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllAllowAllIpv6Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllAllowAllIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllAllowAllIpv6Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllAllowAllIpv6Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllAllowAllIpv6Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllAllowAllIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllAllowAllIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllAllowAllIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllAllowAllIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllAllowAllIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllAllowAllIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllAllowAllIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllAllowAllIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtOobAllAllowAll.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/all", data.getPath()))
 	}
 	for i := range data.MgmtOobAllNetconfIpv6Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllNetconfIpv6Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllNetconfIpv6Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllNetconfIpv6Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllNetconfIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllNetconfIpv6Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllNetconfIpv6Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllNetconfIpv6Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllNetconfIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllNetconfIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllNetconfIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllNetconfIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllNetconfIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllNetconfIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllNetconfIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllNetconfIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtOobAllNetconf.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/netconf", data.getPath()))
 	}
 	for i := range data.MgmtOobAllXmlIpv6Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllXmlIpv6Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllXmlIpv6Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllXmlIpv6Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllXmlIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllXmlIpv6Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllXmlIpv6Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllXmlIpv6Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllXmlIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllXmlIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllXmlIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllXmlIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllXmlIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllXmlIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllXmlIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllXmlIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtOobAllXml.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/xr-xml", data.getPath()))
 	}
 	for i := range data.MgmtOobAllHttpIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllHttpIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllHttpIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllHttpIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllHttpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllHttpIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllHttpIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllHttpIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtOobAllHttp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/http", data.getPath()))
 	}
 	for i := range data.MgmtOobAllTftpIpv6Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllTftpIpv6Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllTftpIpv6Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllTftpIpv6Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllTftpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTftpIpv6Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllTftpIpv6Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllTftpIpv6Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllTftpIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllTftpIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllTftpIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllTftpIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllTftpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTftpIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllTftpIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllTftpIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtOobAllTftp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/tftp", data.getPath()))
 	}
 	for i := range data.MgmtOobAllSnmpIpv6Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllSnmpIpv6Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllSnmpIpv6Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllSnmpIpv6Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllSnmpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSnmpIpv6Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllSnmpIpv6Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllSnmpIpv6Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllSnmpIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllSnmpIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllSnmpIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllSnmpIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllSnmpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSnmpIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllSnmpIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllSnmpIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtOobAllSnmp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/snmp", data.getPath()))
 	}
 	for i := range data.MgmtOobAllTelnetIpv6Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllTelnetIpv6Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllTelnetIpv6Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllTelnetIpv6Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllTelnetIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTelnetIpv6Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllTelnetIpv6Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllTelnetIpv6Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllTelnetIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllTelnetIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllTelnetIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllTelnetIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllTelnetIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTelnetIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllTelnetIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllTelnetIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtOobAllTelnet.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/telnet", data.getPath()))
 	}
 	for i := range data.MgmtOobAllSshIpv6Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllSshIpv6Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllSshIpv6Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllSshIpv6Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllSshIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSshIpv6Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllSshIpv6Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllSshIpv6Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllSshIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtOobAllSshIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllSshIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtOobAllSshIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtOobAllSshIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSshIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtOobAllSshIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtOobAllSshIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtOobAllSsh.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/all/allow/ssh", data.getPath()))
@@ -15145,350 +24262,5164 @@ func (data *ControlPlane) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/vrf", data.getPath()))
 	}
 	for i := range data.MgmtOobInterfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.MgmtOobInterfaces[i].InterfaceName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[interface-name=" + data.MgmtOobInterfaces[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/out-of-band/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllAllowAllIpv6Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv6Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllAllowAllIpv6Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllAllowAllIpv6Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllAllowAllIpv6Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllAllowAllIpv6Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllAllowAllIpv6Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllAllowAllIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllAllowAllIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllAllowAllIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllAllowAllIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllAllowAllIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllAllowAllIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtInbandAllAllowAll.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/all", data.getPath()))
 	}
 	for i := range data.MgmtInbandAllNetconfIpv6Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllNetconfIpv6Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllNetconfIpv6Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllNetconfIpv6Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllNetconfIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllNetconfIpv6Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllNetconfIpv6Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllNetconfIpv6Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllNetconfIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllNetconfIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllNetconfIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllNetconfIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllNetconfIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllNetconfIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllNetconfIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllNetconfIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtInbandAllNetconf.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/netconf", data.getPath()))
 	}
 	for i := range data.MgmtInbandAllXmlIpv6Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllXmlIpv6Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllXmlIpv6Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllXmlIpv6Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllXmlIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllXmlIpv6Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllXmlIpv6Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllXmlIpv6Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllXmlIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllXmlIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllXmlIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllXmlIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllXmlIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllXmlIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllXmlIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllXmlIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtInbandAllXml.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/xr-xml", data.getPath()))
 	}
 	for i := range data.MgmtInbandAllHttpIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllHttpIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllHttpIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllHttpIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllHttpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllHttpIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllHttpIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllHttpIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtInbandAllHttp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/http", data.getPath()))
 	}
 	for i := range data.MgmtInbandAllTftpIpv6Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllTftpIpv6Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllTftpIpv6Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllTftpIpv6Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllTftpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTftpIpv6Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllTftpIpv6Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllTftpIpv6Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllTftpIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllTftpIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllTftpIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllTftpIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllTftpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTftpIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllTftpIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllTftpIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtInbandAllTftp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/tftp", data.getPath()))
 	}
 	for i := range data.MgmtInbandAllSnmpIpv6Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllSnmpIpv6Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllSnmpIpv6Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllSnmpIpv6Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllSnmpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSnmpIpv6Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllSnmpIpv6Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllSnmpIpv6Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllSnmpIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllSnmpIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllSnmpIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllSnmpIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllSnmpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSnmpIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllSnmpIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllSnmpIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtInbandAllSnmp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/snmp", data.getPath()))
 	}
 	for i := range data.MgmtInbandAllTelnetIpv6Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllTelnetIpv6Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllTelnetIpv6Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllTelnetIpv6Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllTelnetIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTelnetIpv6Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllTelnetIpv6Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllTelnetIpv6Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllTelnetIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllTelnetIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllTelnetIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllTelnetIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllTelnetIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTelnetIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllTelnetIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllTelnetIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtInbandAllTelnet.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/telnet", data.getPath()))
 	}
 	for i := range data.MgmtInbandAllSshIpv6Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllSshIpv6Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllSshIpv6Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllSshIpv6Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllSshIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSshIpv6Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllSshIpv6Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllSshIpv6Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllSshIpv4Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MgmtInbandAllSshIpv4Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllSshIpv4Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address%v", data.getPath(), keyPath))
 	}
 	for i := range data.MgmtInbandAllSshIpv4Prefixes {
-		keys := [...]string{"address", "length"}
-		keyValues := [...]string{data.MgmtInbandAllSshIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSshIpv4Prefixes[i].Length.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MgmtInbandAllSshIpv4Prefixes[i].Address.ValueString() + "]"
+		keyPath += "[length=" + strconv.FormatInt(data.MgmtInbandAllSshIpv4Prefixes[i].Length.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MgmtInbandAllSsh.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/all/allow/ssh", data.getPath()))
 	}
 	for i := range data.MgmtInbandInterfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.MgmtInbandInterfaces[i].InterfaceName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[interface-name=" + data.MgmtInbandInterfaces[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/management-plane/inband/interfaces/interface%v", data.getPath(), keyPath))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *ControlPlane) addDeletedItemsXML(ctx context.Context, state ControlPlane, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.MgmtOobAllAllowAllIpv6Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllAllowAllIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllAllowAllIpv6Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllAllowAllIpv6Hosts {
+			found = true
+			if state.MgmtOobAllAllowAllIpv6Hosts[i].Address.ValueString() != data.MgmtOobAllAllowAllIpv6Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllAllowAllIpv6Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllAllowAllIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllAllowAllIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllAllowAllIpv6Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllAllowAllIpv6Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllAllowAllIpv6Prefixes {
+			found = true
+			if state.MgmtOobAllAllowAllIpv6Prefixes[i].Address.ValueString() != data.MgmtOobAllAllowAllIpv6Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllAllowAllIpv6Prefixes[i].Length.ValueInt64() != data.MgmtOobAllAllowAllIpv6Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllAllowAllIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllAllowAllIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllAllowAllIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllAllowAllIpv4Hosts {
+			found = true
+			if state.MgmtOobAllAllowAllIpv4Hosts[i].Address.ValueString() != data.MgmtOobAllAllowAllIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllAllowAllIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllAllowAllIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllAllowAllIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllAllowAllIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllAllowAllIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllAllowAllIpv4Prefixes {
+			found = true
+			if state.MgmtOobAllAllowAllIpv4Prefixes[i].Address.ValueString() != data.MgmtOobAllAllowAllIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllAllowAllIpv4Prefixes[i].Length.ValueInt64() != data.MgmtOobAllAllowAllIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtOobAllAllowAll.IsNull() && state.MgmtOobAllAllowAll.ValueBool() && data.MgmtOobAllAllowAll.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/all"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtOobAllNetconfIpv6Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllNetconfIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllNetconfIpv6Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllNetconfIpv6Hosts {
+			found = true
+			if state.MgmtOobAllNetconfIpv6Hosts[i].Address.ValueString() != data.MgmtOobAllNetconfIpv6Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllNetconfIpv6Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllNetconfIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllNetconfIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllNetconfIpv6Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllNetconfIpv6Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllNetconfIpv6Prefixes {
+			found = true
+			if state.MgmtOobAllNetconfIpv6Prefixes[i].Address.ValueString() != data.MgmtOobAllNetconfIpv6Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllNetconfIpv6Prefixes[i].Length.ValueInt64() != data.MgmtOobAllNetconfIpv6Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllNetconfIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllNetconfIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllNetconfIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllNetconfIpv4Hosts {
+			found = true
+			if state.MgmtOobAllNetconfIpv4Hosts[i].Address.ValueString() != data.MgmtOobAllNetconfIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllNetconfIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllNetconfIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllNetconfIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllNetconfIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllNetconfIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllNetconfIpv4Prefixes {
+			found = true
+			if state.MgmtOobAllNetconfIpv4Prefixes[i].Address.ValueString() != data.MgmtOobAllNetconfIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllNetconfIpv4Prefixes[i].Length.ValueInt64() != data.MgmtOobAllNetconfIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtOobAllNetconf.IsNull() && state.MgmtOobAllNetconf.ValueBool() && data.MgmtOobAllNetconf.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/netconf"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtOobAllXmlIpv6Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllXmlIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllXmlIpv6Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllXmlIpv6Hosts {
+			found = true
+			if state.MgmtOobAllXmlIpv6Hosts[i].Address.ValueString() != data.MgmtOobAllXmlIpv6Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllXmlIpv6Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllXmlIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllXmlIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllXmlIpv6Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllXmlIpv6Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllXmlIpv6Prefixes {
+			found = true
+			if state.MgmtOobAllXmlIpv6Prefixes[i].Address.ValueString() != data.MgmtOobAllXmlIpv6Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllXmlIpv6Prefixes[i].Length.ValueInt64() != data.MgmtOobAllXmlIpv6Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllXmlIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllXmlIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllXmlIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllXmlIpv4Hosts {
+			found = true
+			if state.MgmtOobAllXmlIpv4Hosts[i].Address.ValueString() != data.MgmtOobAllXmlIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllXmlIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllXmlIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllXmlIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllXmlIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllXmlIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllXmlIpv4Prefixes {
+			found = true
+			if state.MgmtOobAllXmlIpv4Prefixes[i].Address.ValueString() != data.MgmtOobAllXmlIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllXmlIpv4Prefixes[i].Length.ValueInt64() != data.MgmtOobAllXmlIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtOobAllXml.IsNull() && state.MgmtOobAllXml.ValueBool() && data.MgmtOobAllXml.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/xr-xml"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtOobAllHttpIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllHttpIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllHttpIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllHttpIpv4Hosts {
+			found = true
+			if state.MgmtOobAllHttpIpv4Hosts[i].Address.ValueString() != data.MgmtOobAllHttpIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllHttpIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllHttpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllHttpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllHttpIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllHttpIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllHttpIpv4Prefixes {
+			found = true
+			if state.MgmtOobAllHttpIpv4Prefixes[i].Address.ValueString() != data.MgmtOobAllHttpIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllHttpIpv4Prefixes[i].Length.ValueInt64() != data.MgmtOobAllHttpIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtOobAllHttp.IsNull() && state.MgmtOobAllHttp.ValueBool() && data.MgmtOobAllHttp.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/http"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtOobAllTftpIpv6Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllTftpIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllTftpIpv6Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllTftpIpv6Hosts {
+			found = true
+			if state.MgmtOobAllTftpIpv6Hosts[i].Address.ValueString() != data.MgmtOobAllTftpIpv6Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllTftpIpv6Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllTftpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllTftpIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllTftpIpv6Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllTftpIpv6Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllTftpIpv6Prefixes {
+			found = true
+			if state.MgmtOobAllTftpIpv6Prefixes[i].Address.ValueString() != data.MgmtOobAllTftpIpv6Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllTftpIpv6Prefixes[i].Length.ValueInt64() != data.MgmtOobAllTftpIpv6Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllTftpIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllTftpIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllTftpIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllTftpIpv4Hosts {
+			found = true
+			if state.MgmtOobAllTftpIpv4Hosts[i].Address.ValueString() != data.MgmtOobAllTftpIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllTftpIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllTftpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllTftpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllTftpIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllTftpIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllTftpIpv4Prefixes {
+			found = true
+			if state.MgmtOobAllTftpIpv4Prefixes[i].Address.ValueString() != data.MgmtOobAllTftpIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllTftpIpv4Prefixes[i].Length.ValueInt64() != data.MgmtOobAllTftpIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtOobAllTftp.IsNull() && state.MgmtOobAllTftp.ValueBool() && data.MgmtOobAllTftp.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/tftp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtOobAllSnmpIpv6Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllSnmpIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllSnmpIpv6Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllSnmpIpv6Hosts {
+			found = true
+			if state.MgmtOobAllSnmpIpv6Hosts[i].Address.ValueString() != data.MgmtOobAllSnmpIpv6Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllSnmpIpv6Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllSnmpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllSnmpIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllSnmpIpv6Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllSnmpIpv6Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllSnmpIpv6Prefixes {
+			found = true
+			if state.MgmtOobAllSnmpIpv6Prefixes[i].Address.ValueString() != data.MgmtOobAllSnmpIpv6Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllSnmpIpv6Prefixes[i].Length.ValueInt64() != data.MgmtOobAllSnmpIpv6Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllSnmpIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllSnmpIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllSnmpIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllSnmpIpv4Hosts {
+			found = true
+			if state.MgmtOobAllSnmpIpv4Hosts[i].Address.ValueString() != data.MgmtOobAllSnmpIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllSnmpIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllSnmpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllSnmpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllSnmpIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllSnmpIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllSnmpIpv4Prefixes {
+			found = true
+			if state.MgmtOobAllSnmpIpv4Prefixes[i].Address.ValueString() != data.MgmtOobAllSnmpIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllSnmpIpv4Prefixes[i].Length.ValueInt64() != data.MgmtOobAllSnmpIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtOobAllSnmp.IsNull() && state.MgmtOobAllSnmp.ValueBool() && data.MgmtOobAllSnmp.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/snmp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtOobAllTelnetIpv6Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllTelnetIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllTelnetIpv6Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllTelnetIpv6Hosts {
+			found = true
+			if state.MgmtOobAllTelnetIpv6Hosts[i].Address.ValueString() != data.MgmtOobAllTelnetIpv6Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllTelnetIpv6Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllTelnetIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllTelnetIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllTelnetIpv6Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllTelnetIpv6Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllTelnetIpv6Prefixes {
+			found = true
+			if state.MgmtOobAllTelnetIpv6Prefixes[i].Address.ValueString() != data.MgmtOobAllTelnetIpv6Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllTelnetIpv6Prefixes[i].Length.ValueInt64() != data.MgmtOobAllTelnetIpv6Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllTelnetIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllTelnetIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllTelnetIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllTelnetIpv4Hosts {
+			found = true
+			if state.MgmtOobAllTelnetIpv4Hosts[i].Address.ValueString() != data.MgmtOobAllTelnetIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllTelnetIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllTelnetIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllTelnetIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllTelnetIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllTelnetIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllTelnetIpv4Prefixes {
+			found = true
+			if state.MgmtOobAllTelnetIpv4Prefixes[i].Address.ValueString() != data.MgmtOobAllTelnetIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllTelnetIpv4Prefixes[i].Length.ValueInt64() != data.MgmtOobAllTelnetIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtOobAllTelnet.IsNull() && state.MgmtOobAllTelnet.ValueBool() && data.MgmtOobAllTelnet.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/telnet"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtOobAllSshIpv6Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllSshIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllSshIpv6Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllSshIpv6Hosts {
+			found = true
+			if state.MgmtOobAllSshIpv6Hosts[i].Address.ValueString() != data.MgmtOobAllSshIpv6Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllSshIpv6Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllSshIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllSshIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllSshIpv6Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllSshIpv6Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllSshIpv6Prefixes {
+			found = true
+			if state.MgmtOobAllSshIpv6Prefixes[i].Address.ValueString() != data.MgmtOobAllSshIpv6Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllSshIpv6Prefixes[i].Length.ValueInt64() != data.MgmtOobAllSshIpv6Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllSshIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtOobAllSshIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllSshIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllSshIpv4Hosts {
+			found = true
+			if state.MgmtOobAllSshIpv4Hosts[i].Address.ValueString() != data.MgmtOobAllSshIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtOobAllSshIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtOobAllSshIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtOobAllSshIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobAllSshIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtOobAllSshIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobAllSshIpv4Prefixes {
+			found = true
+			if state.MgmtOobAllSshIpv4Prefixes[i].Address.ValueString() != data.MgmtOobAllSshIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtOobAllSshIpv4Prefixes[i].Length.ValueInt64() != data.MgmtOobAllSshIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtOobAllSsh.IsNull() && state.MgmtOobAllSsh.ValueBool() && data.MgmtOobAllSsh.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/ssh"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtOobInbandBehavior.IsNull() && state.MgmtOobInbandBehavior.ValueBool() && data.MgmtOobInbandBehavior.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/out-of-band/enable-inband-behavior"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MgmtOobVrf.IsNull() && data.MgmtOobVrf.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/out-of-band/vrf"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtOobInterfaces {
+		stateKeys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.MgmtOobInterfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtOobInterfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtOobInterfaces {
+			found = true
+			if state.MgmtOobInterfaces[i].InterfaceName.ValueString() != data.MgmtOobInterfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.MgmtOobInterfaces[i].AllowAllIpv6Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].AllowAllIpv6Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].AllowAllIpv6Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].AllowAllIpv6Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].AllowAllIpv6Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].AllowAllIpv6Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].AllowAllIpv6Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].AllowAllIpv6Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].AllowAllIpv6Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].AllowAllIpv6Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].AllowAllIpv6Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].AllowAllIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].AllowAllIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].AllowAllIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].AllowAllIpv4Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].AllowAllIpv4Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].AllowAllIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].AllowAllIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].AllowAllIpv4Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].AllowAllIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].AllowAllIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].AllowAllIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtOobInterfaces[i].AllowAll.IsNull() && state.MgmtOobInterfaces[i].AllowAll.ValueBool() && data.MgmtOobInterfaces[j].AllowAll.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/all", predicates))
+				}
+				for ci := range state.MgmtOobInterfaces[i].NetconfIpv6Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].NetconfIpv6Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].NetconfIpv6Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].NetconfIpv6Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].NetconfIpv6Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].NetconfIpv6Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].NetconfIpv6Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].NetconfIpv6Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].NetconfIpv6Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].NetconfIpv6Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].NetconfIpv6Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].NetconfIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].NetconfIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].NetconfIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].NetconfIpv4Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].NetconfIpv4Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].NetconfIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].NetconfIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].NetconfIpv4Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].NetconfIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].NetconfIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].NetconfIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtOobInterfaces[i].Netconf.IsNull() && state.MgmtOobInterfaces[i].Netconf.ValueBool() && data.MgmtOobInterfaces[j].Netconf.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/netconf", predicates))
+				}
+				for ci := range state.MgmtOobInterfaces[i].XmlIpv6Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].XmlIpv6Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].XmlIpv6Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].XmlIpv6Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].XmlIpv6Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].XmlIpv6Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].XmlIpv6Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].XmlIpv6Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].XmlIpv6Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].XmlIpv6Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].XmlIpv6Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].XmlIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].XmlIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].XmlIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].XmlIpv4Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].XmlIpv4Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].XmlIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].XmlIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].XmlIpv4Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].XmlIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].XmlIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].XmlIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtOobInterfaces[i].Xml.IsNull() && state.MgmtOobInterfaces[i].Xml.ValueBool() && data.MgmtOobInterfaces[j].Xml.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/xr-xml", predicates))
+				}
+				for ci := range state.MgmtOobInterfaces[i].HttpIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].HttpIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].HttpIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].HttpIpv4Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].HttpIpv4Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].HttpIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].HttpIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].HttpIpv4Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].HttpIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].HttpIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].HttpIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtOobInterfaces[i].Http.IsNull() && state.MgmtOobInterfaces[i].Http.ValueBool() && data.MgmtOobInterfaces[j].Http.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/http", predicates))
+				}
+				for ci := range state.MgmtOobInterfaces[i].TftpIpv6Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].TftpIpv6Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].TftpIpv6Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].TftpIpv6Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].TftpIpv6Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].TftpIpv6Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].TftpIpv6Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].TftpIpv6Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].TftpIpv6Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].TftpIpv6Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].TftpIpv6Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].TftpIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].TftpIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].TftpIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].TftpIpv4Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].TftpIpv4Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].TftpIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].TftpIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].TftpIpv4Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].TftpIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].TftpIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].TftpIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtOobInterfaces[i].Tftp.IsNull() && state.MgmtOobInterfaces[i].Tftp.ValueBool() && data.MgmtOobInterfaces[j].Tftp.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/tftp", predicates))
+				}
+				for ci := range state.MgmtOobInterfaces[i].SnmpIpv6Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].SnmpIpv6Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].SnmpIpv6Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].SnmpIpv6Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].SnmpIpv6Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].SnmpIpv6Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].SnmpIpv6Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].SnmpIpv6Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].SnmpIpv6Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].SnmpIpv6Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].SnmpIpv6Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].SnmpIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].SnmpIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].SnmpIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].SnmpIpv4Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].SnmpIpv4Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].SnmpIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].SnmpIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].SnmpIpv4Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].SnmpIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].SnmpIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].SnmpIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtOobInterfaces[i].Snmp.IsNull() && state.MgmtOobInterfaces[i].Snmp.ValueBool() && data.MgmtOobInterfaces[j].Snmp.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/snmp", predicates))
+				}
+				for ci := range state.MgmtOobInterfaces[i].TelnetIpv6Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].TelnetIpv6Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].TelnetIpv6Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].TelnetIpv6Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].TelnetIpv6Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].TelnetIpv6Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].TelnetIpv6Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].TelnetIpv6Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].TelnetIpv6Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].TelnetIpv6Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].TelnetIpv6Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].TelnetIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].TelnetIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].TelnetIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].TelnetIpv4Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].TelnetIpv4Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].TelnetIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].TelnetIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].TelnetIpv4Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].TelnetIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].TelnetIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].TelnetIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtOobInterfaces[i].Telnet.IsNull() && state.MgmtOobInterfaces[i].Telnet.ValueBool() && data.MgmtOobInterfaces[j].Telnet.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/telnet", predicates))
+				}
+				for ci := range state.MgmtOobInterfaces[i].SshIpv6Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].SshIpv6Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].SshIpv6Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].SshIpv6Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].SshIpv6Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].SshIpv6Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].SshIpv6Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].SshIpv6Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].SshIpv6Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].SshIpv6Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].SshIpv6Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].SshIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].SshIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].SshIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].SshIpv4Hosts {
+						found = true
+						if state.MgmtOobInterfaces[i].SshIpv4Hosts[ci].Address.ValueString() != data.MgmtOobInterfaces[j].SshIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtOobInterfaces[i].SshIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtOobInterfaces[j].SshIpv4Prefixes {
+						found = true
+						if state.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Address.ValueString() != data.MgmtOobInterfaces[j].SshIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtOobInterfaces[i].SshIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtOobInterfaces[j].SshIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtOobInterfaces[i].Ssh.IsNull() && state.MgmtOobInterfaces[i].Ssh.ValueBool() && data.MgmtOobInterfaces[j].Ssh.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v/allow/ssh", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/out-of-band/interfaces/interface%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllAllowAllIpv6Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllAllowAllIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllAllowAllIpv6Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllAllowAllIpv6Hosts {
+			found = true
+			if state.MgmtInbandAllAllowAllIpv6Hosts[i].Address.ValueString() != data.MgmtInbandAllAllowAllIpv6Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllAllowAllIpv6Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllAllowAllIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllAllowAllIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllAllowAllIpv6Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllAllowAllIpv6Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllAllowAllIpv6Prefixes {
+			found = true
+			if state.MgmtInbandAllAllowAllIpv6Prefixes[i].Address.ValueString() != data.MgmtInbandAllAllowAllIpv6Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllAllowAllIpv6Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllAllowAllIpv6Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllAllowAllIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllAllowAllIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllAllowAllIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllAllowAllIpv4Hosts {
+			found = true
+			if state.MgmtInbandAllAllowAllIpv4Hosts[i].Address.ValueString() != data.MgmtInbandAllAllowAllIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllAllowAllIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllAllowAllIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllAllowAllIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllAllowAllIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllAllowAllIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllAllowAllIpv4Prefixes {
+			found = true
+			if state.MgmtInbandAllAllowAllIpv4Prefixes[i].Address.ValueString() != data.MgmtInbandAllAllowAllIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllAllowAllIpv4Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllAllowAllIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtInbandAllAllowAll.IsNull() && state.MgmtInbandAllAllowAll.ValueBool() && data.MgmtInbandAllAllowAll.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/inband/interfaces/all/allow/all"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtInbandAllNetconfIpv6Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllNetconfIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllNetconfIpv6Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllNetconfIpv6Hosts {
+			found = true
+			if state.MgmtInbandAllNetconfIpv6Hosts[i].Address.ValueString() != data.MgmtInbandAllNetconfIpv6Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllNetconfIpv6Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllNetconfIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllNetconfIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllNetconfIpv6Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllNetconfIpv6Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllNetconfIpv6Prefixes {
+			found = true
+			if state.MgmtInbandAllNetconfIpv6Prefixes[i].Address.ValueString() != data.MgmtInbandAllNetconfIpv6Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllNetconfIpv6Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllNetconfIpv6Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllNetconfIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllNetconfIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllNetconfIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllNetconfIpv4Hosts {
+			found = true
+			if state.MgmtInbandAllNetconfIpv4Hosts[i].Address.ValueString() != data.MgmtInbandAllNetconfIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllNetconfIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllNetconfIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllNetconfIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllNetconfIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllNetconfIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllNetconfIpv4Prefixes {
+			found = true
+			if state.MgmtInbandAllNetconfIpv4Prefixes[i].Address.ValueString() != data.MgmtInbandAllNetconfIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllNetconfIpv4Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllNetconfIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtInbandAllNetconf.IsNull() && state.MgmtInbandAllNetconf.ValueBool() && data.MgmtInbandAllNetconf.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/inband/interfaces/all/allow/netconf"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtInbandAllXmlIpv6Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllXmlIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllXmlIpv6Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllXmlIpv6Hosts {
+			found = true
+			if state.MgmtInbandAllXmlIpv6Hosts[i].Address.ValueString() != data.MgmtInbandAllXmlIpv6Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllXmlIpv6Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllXmlIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllXmlIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllXmlIpv6Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllXmlIpv6Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllXmlIpv6Prefixes {
+			found = true
+			if state.MgmtInbandAllXmlIpv6Prefixes[i].Address.ValueString() != data.MgmtInbandAllXmlIpv6Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllXmlIpv6Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllXmlIpv6Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllXmlIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllXmlIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllXmlIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllXmlIpv4Hosts {
+			found = true
+			if state.MgmtInbandAllXmlIpv4Hosts[i].Address.ValueString() != data.MgmtInbandAllXmlIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllXmlIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllXmlIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllXmlIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllXmlIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllXmlIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllXmlIpv4Prefixes {
+			found = true
+			if state.MgmtInbandAllXmlIpv4Prefixes[i].Address.ValueString() != data.MgmtInbandAllXmlIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllXmlIpv4Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllXmlIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtInbandAllXml.IsNull() && state.MgmtInbandAllXml.ValueBool() && data.MgmtInbandAllXml.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/inband/interfaces/all/allow/xr-xml"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtInbandAllHttpIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllHttpIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllHttpIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllHttpIpv4Hosts {
+			found = true
+			if state.MgmtInbandAllHttpIpv4Hosts[i].Address.ValueString() != data.MgmtInbandAllHttpIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllHttpIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllHttpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllHttpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllHttpIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllHttpIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllHttpIpv4Prefixes {
+			found = true
+			if state.MgmtInbandAllHttpIpv4Prefixes[i].Address.ValueString() != data.MgmtInbandAllHttpIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllHttpIpv4Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllHttpIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtInbandAllHttp.IsNull() && state.MgmtInbandAllHttp.ValueBool() && data.MgmtInbandAllHttp.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/inband/interfaces/all/allow/http"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtInbandAllTftpIpv6Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllTftpIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllTftpIpv6Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllTftpIpv6Hosts {
+			found = true
+			if state.MgmtInbandAllTftpIpv6Hosts[i].Address.ValueString() != data.MgmtInbandAllTftpIpv6Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllTftpIpv6Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllTftpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllTftpIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllTftpIpv6Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllTftpIpv6Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllTftpIpv6Prefixes {
+			found = true
+			if state.MgmtInbandAllTftpIpv6Prefixes[i].Address.ValueString() != data.MgmtInbandAllTftpIpv6Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllTftpIpv6Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllTftpIpv6Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllTftpIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllTftpIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllTftpIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllTftpIpv4Hosts {
+			found = true
+			if state.MgmtInbandAllTftpIpv4Hosts[i].Address.ValueString() != data.MgmtInbandAllTftpIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllTftpIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllTftpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllTftpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllTftpIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllTftpIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllTftpIpv4Prefixes {
+			found = true
+			if state.MgmtInbandAllTftpIpv4Prefixes[i].Address.ValueString() != data.MgmtInbandAllTftpIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllTftpIpv4Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllTftpIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtInbandAllTftp.IsNull() && state.MgmtInbandAllTftp.ValueBool() && data.MgmtInbandAllTftp.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/inband/interfaces/all/allow/tftp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtInbandAllSnmpIpv6Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllSnmpIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllSnmpIpv6Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllSnmpIpv6Hosts {
+			found = true
+			if state.MgmtInbandAllSnmpIpv6Hosts[i].Address.ValueString() != data.MgmtInbandAllSnmpIpv6Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllSnmpIpv6Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllSnmpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllSnmpIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllSnmpIpv6Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllSnmpIpv6Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllSnmpIpv6Prefixes {
+			found = true
+			if state.MgmtInbandAllSnmpIpv6Prefixes[i].Address.ValueString() != data.MgmtInbandAllSnmpIpv6Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllSnmpIpv6Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllSnmpIpv6Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllSnmpIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllSnmpIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllSnmpIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllSnmpIpv4Hosts {
+			found = true
+			if state.MgmtInbandAllSnmpIpv4Hosts[i].Address.ValueString() != data.MgmtInbandAllSnmpIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllSnmpIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllSnmpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllSnmpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllSnmpIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllSnmpIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllSnmpIpv4Prefixes {
+			found = true
+			if state.MgmtInbandAllSnmpIpv4Prefixes[i].Address.ValueString() != data.MgmtInbandAllSnmpIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllSnmpIpv4Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllSnmpIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtInbandAllSnmp.IsNull() && state.MgmtInbandAllSnmp.ValueBool() && data.MgmtInbandAllSnmp.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/inband/interfaces/all/allow/snmp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtInbandAllTelnetIpv6Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllTelnetIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllTelnetIpv6Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllTelnetIpv6Hosts {
+			found = true
+			if state.MgmtInbandAllTelnetIpv6Hosts[i].Address.ValueString() != data.MgmtInbandAllTelnetIpv6Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllTelnetIpv6Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllTelnetIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllTelnetIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllTelnetIpv6Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllTelnetIpv6Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllTelnetIpv6Prefixes {
+			found = true
+			if state.MgmtInbandAllTelnetIpv6Prefixes[i].Address.ValueString() != data.MgmtInbandAllTelnetIpv6Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllTelnetIpv6Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllTelnetIpv6Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllTelnetIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllTelnetIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllTelnetIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllTelnetIpv4Hosts {
+			found = true
+			if state.MgmtInbandAllTelnetIpv4Hosts[i].Address.ValueString() != data.MgmtInbandAllTelnetIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllTelnetIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllTelnetIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllTelnetIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllTelnetIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllTelnetIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllTelnetIpv4Prefixes {
+			found = true
+			if state.MgmtInbandAllTelnetIpv4Prefixes[i].Address.ValueString() != data.MgmtInbandAllTelnetIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllTelnetIpv4Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllTelnetIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtInbandAllTelnet.IsNull() && state.MgmtInbandAllTelnet.ValueBool() && data.MgmtInbandAllTelnet.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/inband/interfaces/all/allow/telnet"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtInbandAllSshIpv6Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllSshIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllSshIpv6Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllSshIpv6Hosts {
+			found = true
+			if state.MgmtInbandAllSshIpv6Hosts[i].Address.ValueString() != data.MgmtInbandAllSshIpv6Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllSshIpv6Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllSshIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllSshIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllSshIpv6Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllSshIpv6Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllSshIpv6Prefixes {
+			found = true
+			if state.MgmtInbandAllSshIpv6Prefixes[i].Address.ValueString() != data.MgmtInbandAllSshIpv6Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllSshIpv6Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllSshIpv6Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllSshIpv4Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MgmtInbandAllSshIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllSshIpv4Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllSshIpv4Hosts {
+			found = true
+			if state.MgmtInbandAllSshIpv4Hosts[i].Address.ValueString() != data.MgmtInbandAllSshIpv4Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+		}
+	}
+	for i := range state.MgmtInbandAllSshIpv4Prefixes {
+		stateKeys := [...]string{"address", "length"}
+		stateKeyValues := [...]string{state.MgmtInbandAllSshIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(state.MgmtInbandAllSshIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandAllSshIpv4Prefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.MgmtInbandAllSshIpv4Prefixes[i].Length.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandAllSshIpv4Prefixes {
+			found = true
+			if state.MgmtInbandAllSshIpv4Prefixes[i].Address.ValueString() != data.MgmtInbandAllSshIpv4Prefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.MgmtInbandAllSshIpv4Prefixes[i].Length.ValueInt64() != data.MgmtInbandAllSshIpv4Prefixes[j].Length.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MgmtInbandAllSsh.IsNull() && state.MgmtInbandAllSsh.ValueBool() && data.MgmtInbandAllSsh.IsNull() {
+		deletePath := state.getXPath() + "/management-plane/inband/interfaces/all/allow/ssh"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MgmtInbandInterfaces {
+		stateKeys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.MgmtInbandInterfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MgmtInbandInterfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MgmtInbandInterfaces {
+			found = true
+			if state.MgmtInbandInterfaces[i].InterfaceName.ValueString() != data.MgmtInbandInterfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.MgmtInbandInterfaces[i].AllowAllIpv6Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].AllowAllIpv6Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].AllowAllIpv6Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].AllowAllIpv6Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].AllowAllIpv6Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].AllowAllIpv6Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].AllowAllIpv6Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].AllowAllIpv6Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].AllowAllIpv6Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].AllowAllIpv6Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].AllowAllIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].AllowAllIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].AllowAllIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].AllowAllIpv4Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].AllowAllIpv4Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].AllowAllIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].AllowAllIpv4Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].AllowAllIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].AllowAllIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtInbandInterfaces[i].AllowAll.IsNull() && state.MgmtInbandInterfaces[i].AllowAll.ValueBool() && data.MgmtInbandInterfaces[j].AllowAll.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/all", predicates))
+				}
+				for ci := range state.MgmtInbandInterfaces[i].NetconfIpv6Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].NetconfIpv6Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].NetconfIpv6Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].NetconfIpv6Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].NetconfIpv6Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].NetconfIpv6Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].NetconfIpv6Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].NetconfIpv6Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].NetconfIpv6Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].NetconfIpv6Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].NetconfIpv6Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].NetconfIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].NetconfIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].NetconfIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].NetconfIpv4Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].NetconfIpv4Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].NetconfIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].NetconfIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].NetconfIpv4Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].NetconfIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].NetconfIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].NetconfIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtInbandInterfaces[i].Netconf.IsNull() && state.MgmtInbandInterfaces[i].Netconf.ValueBool() && data.MgmtInbandInterfaces[j].Netconf.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/netconf", predicates))
+				}
+				for ci := range state.MgmtInbandInterfaces[i].XmlIpv6Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].XmlIpv6Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].XmlIpv6Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].XmlIpv6Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].XmlIpv6Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].XmlIpv6Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].XmlIpv6Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].XmlIpv6Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].XmlIpv6Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].XmlIpv6Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].XmlIpv6Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].XmlIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].XmlIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].XmlIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].XmlIpv4Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].XmlIpv4Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].XmlIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].XmlIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].XmlIpv4Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].XmlIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].XmlIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].XmlIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtInbandInterfaces[i].Xml.IsNull() && state.MgmtInbandInterfaces[i].Xml.ValueBool() && data.MgmtInbandInterfaces[j].Xml.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/xr-xml", predicates))
+				}
+				for ci := range state.MgmtInbandInterfaces[i].HttpIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].HttpIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].HttpIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].HttpIpv4Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].HttpIpv4Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].HttpIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].HttpIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].HttpIpv4Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].HttpIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].HttpIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].HttpIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtInbandInterfaces[i].Http.IsNull() && state.MgmtInbandInterfaces[i].Http.ValueBool() && data.MgmtInbandInterfaces[j].Http.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/http", predicates))
+				}
+				for ci := range state.MgmtInbandInterfaces[i].TftpIpv6Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].TftpIpv6Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].TftpIpv6Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].TftpIpv6Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].TftpIpv6Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].TftpIpv6Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].TftpIpv6Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].TftpIpv6Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].TftpIpv6Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].TftpIpv6Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].TftpIpv6Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].TftpIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].TftpIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].TftpIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].TftpIpv4Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].TftpIpv4Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].TftpIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].TftpIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].TftpIpv4Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].TftpIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].TftpIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].TftpIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtInbandInterfaces[i].Tftp.IsNull() && state.MgmtInbandInterfaces[i].Tftp.ValueBool() && data.MgmtInbandInterfaces[j].Tftp.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/tftp", predicates))
+				}
+				for ci := range state.MgmtInbandInterfaces[i].SnmpIpv6Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].SnmpIpv6Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].SnmpIpv6Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].SnmpIpv6Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].SnmpIpv6Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].SnmpIpv6Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].SnmpIpv6Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].SnmpIpv6Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].SnmpIpv6Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].SnmpIpv6Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].SnmpIpv6Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].SnmpIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].SnmpIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].SnmpIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].SnmpIpv4Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].SnmpIpv4Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].SnmpIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].SnmpIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].SnmpIpv4Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].SnmpIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].SnmpIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].SnmpIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtInbandInterfaces[i].Snmp.IsNull() && state.MgmtInbandInterfaces[i].Snmp.ValueBool() && data.MgmtInbandInterfaces[j].Snmp.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/snmp", predicates))
+				}
+				for ci := range state.MgmtInbandInterfaces[i].TelnetIpv6Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].TelnetIpv6Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].TelnetIpv6Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].TelnetIpv6Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].TelnetIpv6Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].TelnetIpv6Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].TelnetIpv6Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].TelnetIpv6Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].TelnetIpv6Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].TelnetIpv6Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].TelnetIpv6Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].TelnetIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].TelnetIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].TelnetIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].TelnetIpv4Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].TelnetIpv4Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].TelnetIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].TelnetIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].TelnetIpv4Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].TelnetIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].TelnetIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].TelnetIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtInbandInterfaces[i].Telnet.IsNull() && state.MgmtInbandInterfaces[i].Telnet.ValueBool() && data.MgmtInbandInterfaces[j].Telnet.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/telnet", predicates))
+				}
+				for ci := range state.MgmtInbandInterfaces[i].SshIpv6Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].SshIpv6Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].SshIpv6Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].SshIpv6Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].SshIpv6Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].SshIpv6Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].SshIpv6Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].SshIpv6Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].SshIpv6Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].SshIpv6Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].SshIpv6Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].SshIpv4Hosts {
+					cstateKeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].SshIpv4Hosts[ci].Address.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].SshIpv4Hosts[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].SshIpv4Hosts {
+						found = true
+						if state.MgmtInbandInterfaces[i].SshIpv4Hosts[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].SshIpv4Hosts[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.MgmtInbandInterfaces[i].SshIpv4Prefixes {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Address.ValueString(), strconv.FormatInt(state.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MgmtInbandInterfaces[j].SshIpv4Prefixes {
+						found = true
+						if state.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Address.ValueString() != data.MgmtInbandInterfaces[j].SshIpv4Prefixes[cj].Address.ValueString() {
+							found = false
+						}
+						if state.MgmtInbandInterfaces[i].SshIpv4Prefixes[ci].Length.ValueInt64() != data.MgmtInbandInterfaces[j].SshIpv4Prefixes[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MgmtInbandInterfaces[i].Ssh.IsNull() && state.MgmtInbandInterfaces[i].Ssh.ValueBool() && data.MgmtInbandInterfaces[j].Ssh.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v/allow/ssh", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/management-plane/inband/interfaces/interface%v", predicates))
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *ControlPlane) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.MgmtOobAllAllowAllIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllAllowAllIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllAllowAllIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllAllowAllIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllAllowAllIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+	}
+	for i := range data.MgmtOobAllAllowAllIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllAllowAllIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllAllowAllIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllAllowAllIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllAllowAllIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtOobAllAllowAll.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/all")
+	}
+	for i := range data.MgmtOobAllNetconfIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllNetconfIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllNetconfIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllNetconfIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllNetconfIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+	}
+	for i := range data.MgmtOobAllNetconfIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllNetconfIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllNetconfIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllNetconfIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllNetconfIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtOobAllNetconf.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/netconf")
+	}
+	for i := range data.MgmtOobAllXmlIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllXmlIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllXmlIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllXmlIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllXmlIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+	}
+	for i := range data.MgmtOobAllXmlIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllXmlIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllXmlIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllXmlIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllXmlIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtOobAllXml.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/xr-xml")
+	}
+	for i := range data.MgmtOobAllHttpIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllHttpIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllHttpIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllHttpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllHttpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtOobAllHttp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/http")
+	}
+	for i := range data.MgmtOobAllTftpIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllTftpIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllTftpIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllTftpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTftpIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+	}
+	for i := range data.MgmtOobAllTftpIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllTftpIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllTftpIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllTftpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTftpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtOobAllTftp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/tftp")
+	}
+	for i := range data.MgmtOobAllSnmpIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllSnmpIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllSnmpIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllSnmpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSnmpIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+	}
+	for i := range data.MgmtOobAllSnmpIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllSnmpIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllSnmpIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllSnmpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSnmpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtOobAllSnmp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/snmp")
+	}
+	for i := range data.MgmtOobAllTelnetIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllTelnetIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllTelnetIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllTelnetIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTelnetIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+	}
+	for i := range data.MgmtOobAllTelnetIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllTelnetIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllTelnetIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllTelnetIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTelnetIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtOobAllTelnet.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/telnet")
+	}
+	for i := range data.MgmtOobAllSshIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllSshIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllSshIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllSshIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSshIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+	}
+	for i := range data.MgmtOobAllSshIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtOobAllSshIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtOobAllSshIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtOobAllSshIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSshIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtOobAllSsh.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/out-of-band/interfaces/all/allow/ssh")
+	}
+	if !data.MgmtOobInbandBehavior.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/out-of-band/enable-inband-behavior")
+	}
+	if !data.MgmtOobVrf.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/out-of-band/vrf")
+	}
+	for i := range data.MgmtOobInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.MgmtOobInterfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/out-of-band/interfaces/interface%v", predicates))
+	}
+	for i := range data.MgmtInbandAllAllowAllIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllAllowAllIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllAllowAllIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+	}
+	for i := range data.MgmtInbandAllAllowAllIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllAllowAllIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllAllowAllIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtInbandAllAllowAll.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/inband/interfaces/all/allow/all")
+	}
+	for i := range data.MgmtInbandAllNetconfIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllNetconfIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllNetconfIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllNetconfIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllNetconfIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+	}
+	for i := range data.MgmtInbandAllNetconfIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllNetconfIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllNetconfIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllNetconfIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllNetconfIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtInbandAllNetconf.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/inband/interfaces/all/allow/netconf")
+	}
+	for i := range data.MgmtInbandAllXmlIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllXmlIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllXmlIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllXmlIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllXmlIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+	}
+	for i := range data.MgmtInbandAllXmlIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllXmlIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllXmlIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllXmlIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllXmlIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtInbandAllXml.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/inband/interfaces/all/allow/xr-xml")
+	}
+	for i := range data.MgmtInbandAllHttpIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllHttpIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllHttpIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllHttpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllHttpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtInbandAllHttp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/inband/interfaces/all/allow/http")
+	}
+	for i := range data.MgmtInbandAllTftpIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllTftpIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllTftpIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllTftpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTftpIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+	}
+	for i := range data.MgmtInbandAllTftpIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllTftpIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllTftpIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllTftpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTftpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtInbandAllTftp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/inband/interfaces/all/allow/tftp")
+	}
+	for i := range data.MgmtInbandAllSnmpIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllSnmpIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllSnmpIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllSnmpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSnmpIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+	}
+	for i := range data.MgmtInbandAllSnmpIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllSnmpIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllSnmpIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllSnmpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSnmpIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtInbandAllSnmp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/inband/interfaces/all/allow/snmp")
+	}
+	for i := range data.MgmtInbandAllTelnetIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllTelnetIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllTelnetIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllTelnetIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTelnetIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+	}
+	for i := range data.MgmtInbandAllTelnetIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllTelnetIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllTelnetIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllTelnetIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTelnetIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtInbandAllTelnet.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/inband/interfaces/all/allow/telnet")
+	}
+	for i := range data.MgmtInbandAllSshIpv6Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllSshIpv6Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllSshIpv6Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllSshIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSshIpv6Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix%v", predicates))
+	}
+	for i := range data.MgmtInbandAllSshIpv4Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MgmtInbandAllSshIpv4Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address%v", predicates))
+	}
+	for i := range data.MgmtInbandAllSshIpv4Prefixes {
+		keys := [...]string{"address", "length"}
+		keyValues := [...]string{data.MgmtInbandAllSshIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSshIpv4Prefixes[i].Length.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix%v", predicates))
+	}
+	if !data.MgmtInbandAllSsh.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/management-plane/inband/interfaces/all/allow/ssh")
+	}
+	for i := range data.MgmtInbandInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.MgmtInbandInterfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/management-plane/inband/interfaces/interface%v", predicates))
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

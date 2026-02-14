@@ -21,6 +21,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -94,19 +95,36 @@ func (r *CliResource) Create(ctx context.Context, req resource.CreateRequest, re
 	}
 
 	if d.Managed {
-		// Send CLI command as plain JSON string value to Cisco-IOS-XR-cli-cfg:/cli path
-		body := fmt.Sprintf("\"%s\"", cli.ValueString())
+		if d.Protocol == "gnmi" {
+			// gNMI: Send CLI command as plain JSON string value to Cisco-IOS-XR-cli-cfg:/cli path
+			body := fmt.Sprintf("\"%s\"", cli.ValueString())
 
-		var ops []gnmi.SetOperation
-		ops = append(ops, gnmi.Update("Cisco-IOS-XR-cli-cfg:/cli", body))
+			var ops []gnmi.SetOperation
+			ops = append(ops, gnmi.Update("Cisco-IOS-XR-cli-cfg:/cli", body))
 
-		if !r.data.ReuseConnection {
-			defer d.Client.Disconnect()
-		}
-		_, err := d.Client.Set(ctx, ops)
-		if err != nil {
-			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
-			return
+			if !r.data.ReuseConnection {
+				defer d.GnmiClient.Disconnect()
+			}
+			_, err := d.GnmiClient.Set(ctx, ops)
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
+				return
+			}
+		} else {
+			// NETCONF: Use Cisco-IOS-XR-cli-cfg:cli configuration
+			locked := helpers.AcquireNetconfLock(&d.NetconfOpMutex, d.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, d.NetconfClient, d.ReuseConnection)
+			if locked {
+				defer d.NetconfOpMutex.Unlock()
+			}
+
+			// Build NETCONF CLI config XML
+			xmlBody := fmt.Sprintf(`<cli xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-cli-cfg">%s</cli>`, cli.ValueString())
+
+			if err := helpers.EditConfig(ctx, d.NetconfClient, xmlBody, true); err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
+				return
+			}
 		}
 	}
 
@@ -145,19 +163,36 @@ func (r *CliResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	}
 
 	if d.Managed {
-		// Send CLI command as plain JSON string value to Cisco-IOS-XR-cli-cfg:/cli path
-		body := fmt.Sprintf("\"%s\"", cli.ValueString())
+		if d.Protocol == "gnmi" {
+			// gNMI: Send CLI command as plain JSON string value to Cisco-IOS-XR-cli-cfg:/cli path
+			body := fmt.Sprintf("\"%s\"", cli.ValueString())
 
-		var ops []gnmi.SetOperation
-		ops = append(ops, gnmi.Update("Cisco-IOS-XR-cli-cfg:/cli", body))
+			var ops []gnmi.SetOperation
+			ops = append(ops, gnmi.Update("Cisco-IOS-XR-cli-cfg:/cli", body))
 
-		if !r.data.ReuseConnection {
-			defer d.Client.Disconnect()
-		}
-		_, err := d.Client.Set(ctx, ops)
-		if err != nil {
-			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
-			return
+			if !r.data.ReuseConnection {
+				defer d.GnmiClient.Disconnect()
+			}
+			_, err := d.GnmiClient.Set(ctx, ops)
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
+				return
+			}
+		} else {
+			// NETCONF: Use Cisco-IOS-XR-cli-cfg:cli configuration
+			locked := helpers.AcquireNetconfLock(&d.NetconfOpMutex, d.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, d.NetconfClient, d.ReuseConnection)
+			if locked {
+				defer d.NetconfOpMutex.Unlock()
+			}
+
+			// Build NETCONF CLI config XML
+			xmlBody := fmt.Sprintf(`<cli xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-cli-cfg">%s</cli>`, cli.ValueString())
+
+			if err := helpers.EditConfig(ctx, d.NetconfClient, xmlBody, true); err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
+				return
+			}
 		}
 	}
 

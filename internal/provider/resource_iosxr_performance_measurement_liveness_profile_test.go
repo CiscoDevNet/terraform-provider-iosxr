@@ -102,7 +102,7 @@ func iosxrPerformanceMeasurementLivenessProfileImportStateIdFunc(resourceName st
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement"
 	attributes = {
 	}
@@ -117,7 +117,7 @@ resource "iosxr_gnmi" "PreReq0" {
 func testAccIosxrPerformanceMeasurementLivenessProfileConfig_minimum() string {
 	config := `resource "iosxr_performance_measurement_liveness_profile" "test" {` + "\n"
 	config += `	sr_policy_default_probe_tx_interval = "30000"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -159,7 +159,7 @@ func testAccIosxrPerformanceMeasurementLivenessProfileConfig_all() string {
 	config += `		probe_sweep_destination_range = 10` + "\n"
 	config += `		probe_tos_dscp = 48` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -24,9 +24,14 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -89,6 +94,19 @@ func (data PerformanceMeasurementEndpointIPv6) getPath() string {
 
 func (data PerformanceMeasurementEndpointIPv6Data) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/endpoint/ipv6s/ipv6[address=%s]/vrf[vrf-name=%s]", data.Address.ValueString(), data.VrfName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data PerformanceMeasurementEndpointIPv6) getXPath() string {
+	path := "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/endpoint/ipv6s/ipv6[address=%s]/vrf[vrf-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.Address.ValueString()), fmt.Sprintf("%v", data.VrfName.ValueString()))
+	return path
+}
+
+func (data PerformanceMeasurementEndpointIPv6Data) getXPath() string {
+	path := "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/endpoint/ipv6s/ipv6[address=%s]/vrf[vrf-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.Address.ValueString()), fmt.Sprintf("%v", data.VrfName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -169,26 +187,28 @@ func (data PerformanceMeasurementEndpointIPv6) toBody(ctx context.Context) strin
 func (data *PerformanceMeasurementEndpointIPv6) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "source-address.ipv6"); value.Exists() && !data.SourceAddressIpv6.IsNull() {
 		data.SourceAddressIpv6 = types.StringValue(value.String())
-	} else {
+	} else if data.SourceAddressIpv6.IsNull() {
 		data.SourceAddressIpv6 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
-	} else {
+	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "delay-measurement"); !data.DelayMeasurement.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "delay-measurement"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DelayMeasurement.IsNull() {
 			data.DelayMeasurement = types.BoolValue(true)
-		} else {
-			data.DelayMeasurement = types.BoolValue(false)
 		}
 	} else {
-		data.DelayMeasurement = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.DelayMeasurement.IsNull() {
+			data.DelayMeasurement = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "delay-measurement.delay-profile.name"); value.Exists() && !data.DelayMeasurementProfileName.IsNull() {
 		data.DelayMeasurementProfileName = types.StringValue(value.String())
-	} else {
+	} else if data.DelayMeasurementProfileName.IsNull() {
 		data.DelayMeasurementProfileName = types.StringNull()
 	}
 	for i := range data.SegmentListNames {
@@ -220,37 +240,43 @@ func (data *PerformanceMeasurementEndpointIPv6) updateFromBody(ctx context.Conte
 			data.SegmentListNames[i].ListName = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "liveness-detection"); !data.LivenessDetection.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "liveness-detection"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LivenessDetection.IsNull() {
 			data.LivenessDetection = types.BoolValue(true)
-		} else {
-			data.LivenessDetection = types.BoolValue(false)
 		}
 	} else {
-		data.LivenessDetection = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LivenessDetection.IsNull() {
+			data.LivenessDetection = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "liveness-detection.liveness-profile.name"); value.Exists() && !data.LivenessDetectionProfileName.IsNull() {
 		data.LivenessDetectionProfileName = types.StringValue(value.String())
-	} else {
+	} else if data.LivenessDetectionProfileName.IsNull() {
 		data.LivenessDetectionProfileName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "liveness-detection.collect-hbh"); !data.LivenessDetectionCollectHbh.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "liveness-detection.collect-hbh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LivenessDetectionCollectHbh.IsNull() {
 			data.LivenessDetectionCollectHbh = types.BoolValue(true)
-		} else {
-			data.LivenessDetectionCollectHbh = types.BoolValue(false)
 		}
 	} else {
-		data.LivenessDetectionCollectHbh = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LivenessDetectionCollectHbh.IsNull() {
+			data.LivenessDetectionCollectHbh = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "segment-routing"); !data.SegmentRouting.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SegmentRouting.IsNull() {
 			data.SegmentRouting = types.BoolValue(true)
-		} else {
-			data.SegmentRouting = types.BoolValue(false)
 		}
 	} else {
-		data.SegmentRouting = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SegmentRouting.IsNull() {
+			data.SegmentRouting = types.BoolNull()
+		}
 	}
 	for i := range data.SegmentRoutingTeExplicitSegmentLists {
 		keys := [...]string{"list-name"}
@@ -285,43 +311,283 @@ func (data *PerformanceMeasurementEndpointIPv6) updateFromBody(ctx context.Conte
 		} else {
 			data.SegmentRoutingTeExplicitSegmentLists[i].ReversePathSegmentList = types.StringNull()
 		}
-		if value := r.Get("insert-srh.sl-zero"); !data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() {
-			if value.Exists() {
+		if value := r.Get("insert-srh.sl-zero"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() {
 				data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero = types.BoolValue(true)
-			} else {
-				data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero = types.BoolValue(false)
 			}
 		} else {
-			data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() {
+				data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero = types.BoolNull()
+			}
 		}
 	}
 	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.explicit.reverse-path.segment-list.name"); value.Exists() && !data.SegmentRoutingTeExplicitReversePathList.IsNull() {
 		data.SegmentRoutingTeExplicitReversePathList = types.StringValue(value.String())
-	} else {
+	} else if data.SegmentRoutingTeExplicitReversePathList.IsNull() {
 		data.SegmentRoutingTeExplicitReversePathList = types.StringNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data PerformanceMeasurementEndpointIPv6) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.VrfName.IsNull() && !data.VrfName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/vrf-name", data.VrfName.ValueString())
+	}
+	if !data.SourceAddressIpv6.IsNull() && !data.SourceAddressIpv6.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/source-address/ipv6", data.SourceAddressIpv6.ValueString())
+	}
+	if !data.Description.IsNull() && !data.Description.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/description", data.Description.ValueString())
+	}
+	if !data.DelayMeasurement.IsNull() && !data.DelayMeasurement.IsUnknown() {
+		if data.DelayMeasurement.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/delay-measurement", "")
+		}
+	}
+	if !data.DelayMeasurementProfileName.IsNull() && !data.DelayMeasurementProfileName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/delay-measurement/delay-profile/name", data.DelayMeasurementProfileName.ValueString())
+	}
+	if len(data.SegmentListNames) > 0 {
+		for _, item := range data.SegmentListNames {
+			basePath := data.getXPath() + "/segment-list/names/name[list-name='" + item.ListName.ValueString() + "']"
+			if !item.ListName.IsNull() && !item.ListName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/list-name", item.ListName.ValueString())
+			}
+		}
+	}
+	if !data.LivenessDetection.IsNull() && !data.LivenessDetection.IsUnknown() {
+		if data.LivenessDetection.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/liveness-detection", "")
+		}
+	}
+	if !data.LivenessDetectionProfileName.IsNull() && !data.LivenessDetectionProfileName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/liveness-detection/liveness-profile/name", data.LivenessDetectionProfileName.ValueString())
+	}
+	if !data.LivenessDetectionCollectHbh.IsNull() && !data.LivenessDetectionCollectHbh.IsUnknown() {
+		if data.LivenessDetectionCollectHbh.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/liveness-detection/collect-hbh", "")
+		}
+	}
+	if !data.SegmentRouting.IsNull() && !data.SegmentRouting.IsUnknown() {
+		if data.SegmentRouting.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing", "")
+		}
+	}
+	if len(data.SegmentRoutingTeExplicitSegmentLists) > 0 {
+		for _, item := range data.SegmentRoutingTeExplicitSegmentLists {
+			basePath := data.getXPath() + "/segment-routing/traffic-eng/explicit/segment-list/names/name[list-name='" + item.ListName.ValueString() + "']"
+			if !item.ListName.IsNull() && !item.ListName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/list-name", item.ListName.ValueString())
+			}
+			if !item.ReversePathSegmentList.IsNull() && !item.ReversePathSegmentList.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/reverse-path/segment-list/name", item.ReversePathSegmentList.ValueString())
+			}
+			if !item.InsertSrhSlZero.IsNull() && !item.InsertSrhSlZero.IsUnknown() {
+				if item.InsertSrhSlZero.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/insert-srh/sl-zero", "")
+				}
+			}
+		}
+	}
+	if !data.SegmentRoutingTeExplicitReversePathList.IsNull() && !data.SegmentRoutingTeExplicitReversePathList.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing/traffic-eng/explicit/reverse-path/segment-list/name", data.SegmentRoutingTeExplicitReversePathList.ValueString())
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *PerformanceMeasurementEndpointIPv6) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrf-name"); value.Exists() {
+		data.VrfName = types.StringValue(value.String())
+	} else if data.VrfName.IsNull() {
+		data.VrfName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-address/ipv6"); value.Exists() {
+		data.SourceAddressIpv6 = types.StringValue(value.String())
+	} else if data.SourceAddressIpv6.IsNull() {
+		data.SourceAddressIpv6 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	} else if data.Description.IsNull() {
+		data.Description = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DelayMeasurement.IsNull() {
+			data.DelayMeasurement = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.DelayMeasurement.IsNull() {
+			data.DelayMeasurement = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/delay-profile/name"); value.Exists() {
+		data.DelayMeasurementProfileName = types.StringValue(value.String())
+	} else if data.DelayMeasurementProfileName.IsNull() {
+		data.DelayMeasurementProfileName = types.StringNull()
+	}
+	for i := range data.SegmentListNames {
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.SegmentListNames[i].ListName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-list/names/name").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "list-name"); value.Exists() {
+			data.SegmentListNames[i].ListName = types.StringValue(value.String())
+		} else if data.SegmentListNames[i].ListName.IsNull() {
+			data.SegmentListNames[i].ListName = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/liveness-detection"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LivenessDetection.IsNull() {
+			data.LivenessDetection = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LivenessDetection.IsNull() {
+			data.LivenessDetection = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/liveness-detection/liveness-profile/name"); value.Exists() {
+		data.LivenessDetectionProfileName = types.StringValue(value.String())
+	} else if data.LivenessDetectionProfileName.IsNull() {
+		data.LivenessDetectionProfileName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/liveness-detection/collect-hbh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LivenessDetectionCollectHbh.IsNull() {
+			data.LivenessDetectionCollectHbh = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LivenessDetectionCollectHbh.IsNull() {
+			data.LivenessDetectionCollectHbh = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SegmentRouting.IsNull() {
+			data.SegmentRouting = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SegmentRouting.IsNull() {
+			data.SegmentRouting = types.BoolNull()
+		}
+	}
+	for i := range data.SegmentRoutingTeExplicitSegmentLists {
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.SegmentRoutingTeExplicitSegmentLists[i].ListName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng/explicit/segment-list/names/name").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "list-name"); value.Exists() {
+			data.SegmentRoutingTeExplicitSegmentLists[i].ListName = types.StringValue(value.String())
+		} else if data.SegmentRoutingTeExplicitSegmentLists[i].ListName.IsNull() {
+			data.SegmentRoutingTeExplicitSegmentLists[i].ListName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "reverse-path/segment-list/name"); value.Exists() {
+			data.SegmentRoutingTeExplicitSegmentLists[i].ReversePathSegmentList = types.StringValue(value.String())
+		} else if data.SegmentRoutingTeExplicitSegmentLists[i].ReversePathSegmentList.IsNull() {
+			data.SegmentRoutingTeExplicitSegmentLists[i].ReversePathSegmentList = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "insert-srh/sl-zero"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() {
+				data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() {
+				data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero = types.BoolNull()
+			}
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng/explicit/reverse-path/segment-list/name"); value.Exists() {
+		data.SegmentRoutingTeExplicitReversePathList = types.StringValue(value.String())
+	} else if data.SegmentRoutingTeExplicitReversePathList.IsNull() {
+		data.SegmentRoutingTeExplicitReversePathList = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *PerformanceMeasurementEndpointIPv6) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "source-address.ipv6"); value.Exists() {
+func (data *PerformanceMeasurementEndpointIPv6) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "source-address.ipv6"); value.Exists() {
 		data.SourceAddressIpv6 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
+	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "delay-measurement"); value.Exists() {
+	if value := res.Get(prefix + "delay-measurement"); value.Exists() {
 		data.DelayMeasurement = types.BoolValue(true)
-	} else {
+	} else if !data.DelayMeasurement.IsNull() {
+		// Only set to false if it was previously set in state
 		data.DelayMeasurement = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "delay-measurement.delay-profile.name"); value.Exists() {
+	if value := res.Get(prefix + "delay-measurement.delay-profile.name"); value.Exists() {
 		data.DelayMeasurementProfileName = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "segment-list.names.name"); value.Exists() {
+	if value := res.Get(prefix + "segment-list.names.name"); value.Exists() {
 		data.SegmentListNames = make([]PerformanceMeasurementEndpointIPv6SegmentListNames, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := PerformanceMeasurementEndpointIPv6SegmentListNames{}
@@ -332,25 +598,28 @@ func (data *PerformanceMeasurementEndpointIPv6) fromBody(ctx context.Context, re
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "liveness-detection"); value.Exists() {
+	if value := res.Get(prefix + "liveness-detection"); value.Exists() {
 		data.LivenessDetection = types.BoolValue(true)
-	} else {
+	} else if !data.LivenessDetection.IsNull() {
+		// Only set to false if it was previously set in state
 		data.LivenessDetection = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "liveness-detection.liveness-profile.name"); value.Exists() {
+	if value := res.Get(prefix + "liveness-detection.liveness-profile.name"); value.Exists() {
 		data.LivenessDetectionProfileName = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "liveness-detection.collect-hbh"); value.Exists() {
+	if value := res.Get(prefix + "liveness-detection.collect-hbh"); value.Exists() {
 		data.LivenessDetectionCollectHbh = types.BoolValue(true)
-	} else {
+	} else if !data.LivenessDetectionCollectHbh.IsNull() {
+		// Only set to false if it was previously set in state
 		data.LivenessDetectionCollectHbh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "segment-routing"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing"); value.Exists() {
 		data.SegmentRouting = types.BoolValue(true)
-	} else {
+	} else if !data.SegmentRouting.IsNull() {
+		// Only set to false if it was previously set in state
 		data.SegmentRouting = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.explicit.segment-list.names.name"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.traffic-eng.explicit.segment-list.names.name"); value.Exists() {
 		data.SegmentRoutingTeExplicitSegmentLists = make([]PerformanceMeasurementEndpointIPv6SegmentRoutingTeExplicitSegmentLists, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := PerformanceMeasurementEndpointIPv6SegmentRoutingTeExplicitSegmentLists{}
@@ -362,38 +631,47 @@ func (data *PerformanceMeasurementEndpointIPv6) fromBody(ctx context.Context, re
 			}
 			if cValue := v.Get("insert-srh.sl-zero"); cValue.Exists() {
 				item.InsertSrhSlZero = types.BoolValue(true)
-			} else {
+			} else if !item.InsertSrhSlZero.IsNull() {
+				// Only set to false if it was previously set
 				item.InsertSrhSlZero = types.BoolValue(false)
 			}
 			data.SegmentRoutingTeExplicitSegmentLists = append(data.SegmentRoutingTeExplicitSegmentLists, item)
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.explicit.reverse-path.segment-list.name"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.traffic-eng.explicit.reverse-path.segment-list.name"); value.Exists() {
 		data.SegmentRoutingTeExplicitReversePathList = types.StringValue(value.String())
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *PerformanceMeasurementEndpointIPv6Data) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "source-address.ipv6"); value.Exists() {
+func (data *PerformanceMeasurementEndpointIPv6Data) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "source-address.ipv6"); value.Exists() {
 		data.SourceAddressIpv6 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
+	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "delay-measurement"); value.Exists() {
+	if value := res.Get(prefix + "delay-measurement"); value.Exists() {
 		data.DelayMeasurement = types.BoolValue(true)
 	} else {
 		data.DelayMeasurement = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "delay-measurement.delay-profile.name"); value.Exists() {
+	if value := res.Get(prefix + "delay-measurement.delay-profile.name"); value.Exists() {
 		data.DelayMeasurementProfileName = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "segment-list.names.name"); value.Exists() {
+	if value := res.Get(prefix + "segment-list.names.name"); value.Exists() {
 		data.SegmentListNames = make([]PerformanceMeasurementEndpointIPv6SegmentListNames, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := PerformanceMeasurementEndpointIPv6SegmentListNames{}
@@ -404,25 +682,25 @@ func (data *PerformanceMeasurementEndpointIPv6Data) fromBody(ctx context.Context
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "liveness-detection"); value.Exists() {
+	if value := res.Get(prefix + "liveness-detection"); value.Exists() {
 		data.LivenessDetection = types.BoolValue(true)
 	} else {
 		data.LivenessDetection = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "liveness-detection.liveness-profile.name"); value.Exists() {
+	if value := res.Get(prefix + "liveness-detection.liveness-profile.name"); value.Exists() {
 		data.LivenessDetectionProfileName = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "liveness-detection.collect-hbh"); value.Exists() {
+	if value := res.Get(prefix + "liveness-detection.collect-hbh"); value.Exists() {
 		data.LivenessDetectionCollectHbh = types.BoolValue(true)
 	} else {
 		data.LivenessDetectionCollectHbh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "segment-routing"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing"); value.Exists() {
 		data.SegmentRouting = types.BoolValue(true)
 	} else {
 		data.SegmentRouting = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.explicit.segment-list.names.name"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.traffic-eng.explicit.segment-list.names.name"); value.Exists() {
 		data.SegmentRoutingTeExplicitSegmentLists = make([]PerformanceMeasurementEndpointIPv6SegmentRoutingTeExplicitSegmentLists, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := PerformanceMeasurementEndpointIPv6SegmentRoutingTeExplicitSegmentLists{}
@@ -441,13 +719,154 @@ func (data *PerformanceMeasurementEndpointIPv6Data) fromBody(ctx context.Context
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.explicit.reverse-path.segment-list.name"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.traffic-eng.explicit.reverse-path.segment-list.name"); value.Exists() {
 		data.SegmentRoutingTeExplicitReversePathList = types.StringValue(value.String())
 	}
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *PerformanceMeasurementEndpointIPv6) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-address/ipv6"); value.Exists() {
+		data.SourceAddressIpv6 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement"); value.Exists() {
+		data.DelayMeasurement = types.BoolValue(true)
+	} else {
+		data.DelayMeasurement = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/delay-profile/name"); value.Exists() {
+		data.DelayMeasurementProfileName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-list/names/name"); value.Exists() {
+		data.SegmentListNames = make([]PerformanceMeasurementEndpointIPv6SegmentListNames, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := PerformanceMeasurementEndpointIPv6SegmentListNames{}
+			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
+				item.ListName = types.StringValue(cValue.String())
+			}
+			data.SegmentListNames = append(data.SegmentListNames, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/liveness-detection"); value.Exists() {
+		data.LivenessDetection = types.BoolValue(true)
+	} else {
+		data.LivenessDetection = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/liveness-detection/liveness-profile/name"); value.Exists() {
+		data.LivenessDetectionProfileName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/liveness-detection/collect-hbh"); value.Exists() {
+		data.LivenessDetectionCollectHbh = types.BoolValue(true)
+	} else {
+		data.LivenessDetectionCollectHbh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing"); value.Exists() {
+		data.SegmentRouting = types.BoolValue(true)
+	} else {
+		data.SegmentRouting = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng/explicit/segment-list/names/name"); value.Exists() {
+		data.SegmentRoutingTeExplicitSegmentLists = make([]PerformanceMeasurementEndpointIPv6SegmentRoutingTeExplicitSegmentLists, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := PerformanceMeasurementEndpointIPv6SegmentRoutingTeExplicitSegmentLists{}
+			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
+				item.ListName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "reverse-path/segment-list/name"); cValue.Exists() {
+				item.ReversePathSegmentList = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "insert-srh/sl-zero"); cValue.Exists() {
+				item.InsertSrhSlZero = types.BoolValue(true)
+			} else {
+				item.InsertSrhSlZero = types.BoolValue(false)
+			}
+			data.SegmentRoutingTeExplicitSegmentLists = append(data.SegmentRoutingTeExplicitSegmentLists, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng/explicit/reverse-path/segment-list/name"); value.Exists() {
+		data.SegmentRoutingTeExplicitReversePathList = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *PerformanceMeasurementEndpointIPv6Data) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-address/ipv6"); value.Exists() {
+		data.SourceAddressIpv6 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement"); value.Exists() {
+		data.DelayMeasurement = types.BoolValue(true)
+	} else {
+		data.DelayMeasurement = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/delay-profile/name"); value.Exists() {
+		data.DelayMeasurementProfileName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-list/names/name"); value.Exists() {
+		data.SegmentListNames = make([]PerformanceMeasurementEndpointIPv6SegmentListNames, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := PerformanceMeasurementEndpointIPv6SegmentListNames{}
+			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
+				item.ListName = types.StringValue(cValue.String())
+			}
+			data.SegmentListNames = append(data.SegmentListNames, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/liveness-detection"); value.Exists() {
+		data.LivenessDetection = types.BoolValue(true)
+	} else {
+		data.LivenessDetection = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/liveness-detection/liveness-profile/name"); value.Exists() {
+		data.LivenessDetectionProfileName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/liveness-detection/collect-hbh"); value.Exists() {
+		data.LivenessDetectionCollectHbh = types.BoolValue(true)
+	} else {
+		data.LivenessDetectionCollectHbh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing"); value.Exists() {
+		data.SegmentRouting = types.BoolValue(true)
+	} else {
+		data.SegmentRouting = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng/explicit/segment-list/names/name"); value.Exists() {
+		data.SegmentRoutingTeExplicitSegmentLists = make([]PerformanceMeasurementEndpointIPv6SegmentRoutingTeExplicitSegmentLists, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := PerformanceMeasurementEndpointIPv6SegmentRoutingTeExplicitSegmentLists{}
+			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
+				item.ListName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "reverse-path/segment-list/name"); cValue.Exists() {
+				item.ReversePathSegmentList = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "insert-srh/sl-zero"); cValue.Exists() {
+				item.InsertSrhSlZero = types.BoolValue(true)
+			} else {
+				item.InsertSrhSlZero = types.BoolValue(false)
+			}
+			data.SegmentRoutingTeExplicitSegmentLists = append(data.SegmentRoutingTeExplicitSegmentLists, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng/explicit/reverse-path/segment-list/name"); value.Exists() {
+		data.SegmentRoutingTeExplicitReversePathList = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *PerformanceMeasurementEndpointIPv6) getDeletedItems(ctx context.Context, state PerformanceMeasurementEndpointIPv6) []string {
@@ -549,10 +968,9 @@ func (data *PerformanceMeasurementEndpointIPv6) getDeletedItems(ctx context.Cont
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *PerformanceMeasurementEndpointIPv6) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *PerformanceMeasurementEndpointIPv6) getEmptyLeafsDelete(ctx context.Context, state *PerformanceMeasurementEndpointIPv6) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.SegmentRoutingTeExplicitSegmentLists {
 		keys := [...]string{"list-name"}
@@ -561,18 +979,31 @@ func (data *PerformanceMeasurementEndpointIPv6) getEmptyLeafsDelete(ctx context.
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		// Only delete if state has true and plan has false
 		if !data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() && !data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/explicit/segment-list/names/name%v/insert-srh/sl-zero", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.SegmentRoutingTeExplicitSegmentLists) && !state.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() && state.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/explicit/segment-list/names/name%v/insert-srh/sl-zero", data.getXPath(), keyString))
+			}
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.SegmentRouting.IsNull() && !data.SegmentRouting.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing", data.getPath()))
+		if state != nil && !state.SegmentRouting.IsNull() && state.SegmentRouting.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.LivenessDetectionCollectHbh.IsNull() && !data.LivenessDetectionCollectHbh.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/liveness-detection/collect-hbh", data.getPath()))
+		if state != nil && !state.LivenessDetectionCollectHbh.IsNull() && state.LivenessDetectionCollectHbh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/liveness-detection/collect-hbh", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.LivenessDetection.IsNull() && !data.LivenessDetection.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/liveness-detection", data.getPath()))
+		if state != nil && !state.LivenessDetection.IsNull() && state.LivenessDetection.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/liveness-detection", data.getXPath()))
+		}
 	}
 	for i := range data.SegmentListNames {
 		keys := [...]string{"list-name"}
@@ -582,14 +1013,16 @@ func (data *PerformanceMeasurementEndpointIPv6) getEmptyLeafsDelete(ctx context.
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.DelayMeasurement.IsNull() && !data.DelayMeasurement.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/delay-measurement", data.getPath()))
+		if state != nil && !state.DelayMeasurement.IsNull() && state.DelayMeasurement.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/delay-measurement", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *PerformanceMeasurementEndpointIPv6) getDeletePaths(ctx context.Context) []string {
@@ -598,14 +1031,10 @@ func (data *PerformanceMeasurementEndpointIPv6) getDeletePaths(ctx context.Conte
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/explicit/reverse-path/segment-list/name", data.getPath()))
 	}
 	for i := range data.SegmentRoutingTeExplicitSegmentLists {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.SegmentRoutingTeExplicitSegmentLists[i].ListName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/explicit/segment-list/names/name%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[list-name=" + data.SegmentRoutingTeExplicitSegmentLists[i].ListName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/explicit/segment-list/names/name%v", data.getPath(), keyPath))
 	}
 	if !data.SegmentRouting.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing", data.getPath()))
@@ -620,14 +1049,10 @@ func (data *PerformanceMeasurementEndpointIPv6) getDeletePaths(ctx context.Conte
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/liveness-detection", data.getPath()))
 	}
 	for i := range data.SegmentListNames {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.SegmentListNames[i].ListName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-list/names/name%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[list-name=" + data.SegmentListNames[i].ListName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-list/names/name%v", data.getPath(), keyPath))
 	}
 	if !data.DelayMeasurementProfileName.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/delay-measurement/delay-profile/name", data.getPath()))
@@ -641,7 +1066,224 @@ func (data *PerformanceMeasurementEndpointIPv6) getDeletePaths(ctx context.Conte
 	if !data.SourceAddressIpv6.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-address", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *PerformanceMeasurementEndpointIPv6) addDeletedItemsXML(ctx context.Context, state PerformanceMeasurementEndpointIPv6, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.SegmentRoutingTeExplicitReversePathList.IsNull() && data.SegmentRoutingTeExplicitReversePathList.IsNull() {
+		deletePath := state.getXPath() + "/segment-routing/traffic-eng/explicit/reverse-path/segment-list/name"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.SegmentRoutingTeExplicitSegmentLists {
+		stateKeys := [...]string{"list-name"}
+		stateKeyValues := [...]string{state.SegmentRoutingTeExplicitSegmentLists[i].ListName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SegmentRoutingTeExplicitSegmentLists[i].ListName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SegmentRoutingTeExplicitSegmentLists {
+			found = true
+			if state.SegmentRoutingTeExplicitSegmentLists[i].ListName.ValueString() != data.SegmentRoutingTeExplicitSegmentLists[j].ListName.ValueString() {
+				found = false
+			}
+			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() && state.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.ValueBool() && data.SegmentRoutingTeExplicitSegmentLists[j].InsertSrhSlZero.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/explicit/segment-list/names/name%v/insert-srh/sl-zero", predicates))
+				}
+				if !state.SegmentRoutingTeExplicitSegmentLists[i].ReversePathSegmentList.IsNull() && data.SegmentRoutingTeExplicitSegmentLists[j].ReversePathSegmentList.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/explicit/segment-list/names/name%v/reverse-path/segment-list/name", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/explicit/segment-list/names/name%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SegmentRouting.IsNull() && state.SegmentRouting.ValueBool() && data.SegmentRouting.IsNull() {
+		deletePath := state.getXPath() + "/segment-routing"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LivenessDetectionCollectHbh.IsNull() && state.LivenessDetectionCollectHbh.ValueBool() && data.LivenessDetectionCollectHbh.IsNull() {
+		deletePath := state.getXPath() + "/liveness-detection/collect-hbh"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.LivenessDetectionProfileName.IsNull() && data.LivenessDetectionProfileName.IsNull() {
+		deletePath := state.getXPath() + "/liveness-detection/liveness-profile/name"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LivenessDetection.IsNull() && state.LivenessDetection.ValueBool() && data.LivenessDetection.IsNull() {
+		deletePath := state.getXPath() + "/liveness-detection"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.SegmentListNames {
+		stateKeys := [...]string{"list-name"}
+		stateKeyValues := [...]string{state.SegmentListNames[i].ListName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SegmentListNames[i].ListName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SegmentListNames {
+			found = true
+			if state.SegmentListNames[i].ListName.ValueString() != data.SegmentListNames[j].ListName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/segment-list/names/name%v", predicates))
+		}
+	}
+	if !state.DelayMeasurementProfileName.IsNull() && data.DelayMeasurementProfileName.IsNull() {
+		deletePath := state.getXPath() + "/delay-measurement/delay-profile/name"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DelayMeasurement.IsNull() && state.DelayMeasurement.ValueBool() && data.DelayMeasurement.IsNull() {
+		deletePath := state.getXPath() + "/delay-measurement"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletePath := state.getXPath() + "/description"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SourceAddressIpv6.IsNull() && data.SourceAddressIpv6.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/source-address"
+		predicates := make(map[string]string)
+		predicates["ipv6"] = fmt.Sprintf("%v", state.SourceAddressIpv6.ValueString())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *PerformanceMeasurementEndpointIPv6) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.SegmentRoutingTeExplicitReversePathList.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/segment-routing/traffic-eng/explicit/reverse-path/segment-list/name")
+	}
+	for i := range data.SegmentRoutingTeExplicitSegmentLists {
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.SegmentRoutingTeExplicitSegmentLists[i].ListName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/segment-routing/traffic-eng/explicit/segment-list/names/name%v", predicates))
+	}
+	if !data.SegmentRouting.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/segment-routing")
+	}
+	if !data.LivenessDetectionCollectHbh.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/liveness-detection/collect-hbh")
+	}
+	if !data.LivenessDetectionProfileName.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/liveness-detection/liveness-profile/name")
+	}
+	if !data.LivenessDetection.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/liveness-detection")
+	}
+	for i := range data.SegmentListNames {
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.SegmentListNames[i].ListName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/segment-list/names/name%v", predicates))
+	}
+	if !data.DelayMeasurementProfileName.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/delay-measurement/delay-profile/name")
+	}
+	if !data.DelayMeasurement.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/delay-measurement")
+	}
+	if !data.Description.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/description")
+	}
+	if !data.SourceAddressIpv6.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/source-address")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

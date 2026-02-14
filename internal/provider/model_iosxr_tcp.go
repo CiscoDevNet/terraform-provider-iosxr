@@ -26,7 +26,11 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -92,6 +96,17 @@ func (data TCPData) getPath() string {
 	return "Cisco-IOS-XR-um-tcp-cfg:/tcp"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data TCP) getXPath() string {
+	path := "Cisco-IOS-XR-um-tcp-cfg:/tcp"
+	return path
+}
+
+func (data TCPData) getXPath() string {
+	path := "Cisco-IOS-XR-um-tcp-cfg:/tcp"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -149,7 +164,6 @@ func (data TCP) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "ao.keychains.keychain"+"."+strconv.Itoa(index)+"."+"keychain-name", item.KeychainName.ValueString())
 			}
 			if len(item.Keys) > 0 {
-				body, _ = sjson.Set(body, "ao.keychains.keychain"+"."+strconv.Itoa(index)+"."+"keys.key", []interface{}{})
 				for cindex, citem := range item.Keys {
 					if !citem.KeyName.IsNull() && !citem.KeyName.IsUnknown() {
 						body, _ = sjson.Set(body, "ao.keychains.keychain"+"."+strconv.Itoa(index)+"."+"keys.key"+"."+strconv.Itoa(cindex)+"."+"key-name", citem.KeyName.ValueString())
@@ -174,79 +188,87 @@ func (data TCP) toBody(ctx context.Context) string {
 func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "window-size"); value.Exists() && !data.WindowSize.IsNull() {
 		data.WindowSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.WindowSize.IsNull() {
 		data.WindowSize = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "synwait-time"); value.Exists() && !data.SynwaitTime.IsNull() {
 		data.SynwaitTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.SynwaitTime.IsNull() {
 		data.SynwaitTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "path-mtu-discovery"); !data.PathMtuDiscovery.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "path-mtu-discovery"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathMtuDiscovery.IsNull() {
 			data.PathMtuDiscovery = types.BoolValue(true)
-		} else {
-			data.PathMtuDiscovery = types.BoolValue(false)
 		}
 	} else {
-		data.PathMtuDiscovery = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.PathMtuDiscovery.IsNull() {
+			data.PathMtuDiscovery = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "path-mtu-discovery.age-timer"); value.Exists() && !data.PathMtuDiscoveryAgeTimer.IsNull() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
-	} else {
+	} else if data.PathMtuDiscoveryAgeTimer.IsNull() {
 		data.PathMtuDiscoveryAgeTimer = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "receive-queue"); value.Exists() && !data.ReceiveQueue.IsNull() {
 		data.ReceiveQueue = types.Int64Value(value.Int())
-	} else {
+	} else if data.ReceiveQueue.IsNull() {
 		data.ReceiveQueue = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timestamp"); !data.Timestamp.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "timestamp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Timestamp.IsNull() {
 			data.Timestamp = types.BoolValue(true)
-		} else {
-			data.Timestamp = types.BoolValue(false)
 		}
 	} else {
-		data.Timestamp = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Timestamp.IsNull() {
+			data.Timestamp = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "throttle"); value.Exists() && !data.Throttle.IsNull() {
 		data.Throttle = types.Int64Value(value.Int())
-	} else {
+	} else if data.Throttle.IsNull() {
 		data.Throttle = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "high-water-mark-throttling"); value.Exists() && !data.ThrottleHighWaterMark.IsNull() {
 		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
-	} else {
+	} else if data.ThrottleHighWaterMark.IsNull() {
 		data.ThrottleHighWaterMark = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "selective-ack"); !data.SelectiveAck.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "selective-ack"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SelectiveAck.IsNull() {
 			data.SelectiveAck = types.BoolValue(true)
-		} else {
-			data.SelectiveAck = types.BoolValue(false)
 		}
 	} else {
-		data.SelectiveAck = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SelectiveAck.IsNull() {
+			data.SelectiveAck = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "mss"); value.Exists() && !data.Mss.IsNull() {
 		data.Mss = types.Int64Value(value.Int())
-	} else {
+	} else if data.Mss.IsNull() {
 		data.Mss = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "accept-rate"); value.Exists() && !data.AcceptRate.IsNull() {
 		data.AcceptRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.AcceptRate.IsNull() {
 		data.AcceptRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ao"); !data.Ao.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "ao"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ao.IsNull() {
 			data.Ao = types.BoolValue(true)
-		} else {
-			data.Ao = types.BoolValue(false)
 		}
 	} else {
-		data.Ao = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ao.IsNull() {
+			data.Ao = types.BoolNull()
+		}
 	}
 	for i := range data.AoKeychains {
 		keys := [...]string{"keychain-name"}
@@ -319,55 +341,303 @@ func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data TCP) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.WindowSize.IsNull() && !data.WindowSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/window-size", strconv.FormatInt(data.WindowSize.ValueInt64(), 10))
+	}
+	if !data.SynwaitTime.IsNull() && !data.SynwaitTime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/synwait-time", strconv.FormatInt(data.SynwaitTime.ValueInt64(), 10))
+	}
+	if !data.PathMtuDiscovery.IsNull() && !data.PathMtuDiscovery.IsUnknown() {
+		if data.PathMtuDiscovery.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/path-mtu-discovery", "")
+		}
+	}
+	if !data.PathMtuDiscoveryAgeTimer.IsNull() && !data.PathMtuDiscoveryAgeTimer.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/path-mtu-discovery/age-timer", data.PathMtuDiscoveryAgeTimer.ValueString())
+	}
+	if !data.ReceiveQueue.IsNull() && !data.ReceiveQueue.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/receive-queue", strconv.FormatInt(data.ReceiveQueue.ValueInt64(), 10))
+	}
+	if !data.Timestamp.IsNull() && !data.Timestamp.IsUnknown() {
+		if data.Timestamp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/timestamp", "")
+		}
+	}
+	if !data.Throttle.IsNull() && !data.Throttle.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/throttle", strconv.FormatInt(data.Throttle.ValueInt64(), 10))
+	}
+	if !data.ThrottleHighWaterMark.IsNull() && !data.ThrottleHighWaterMark.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/high-water-mark-throttling", strconv.FormatInt(data.ThrottleHighWaterMark.ValueInt64(), 10))
+	}
+	if !data.SelectiveAck.IsNull() && !data.SelectiveAck.IsUnknown() {
+		if data.SelectiveAck.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/selective-ack", "")
+		}
+	}
+	if !data.Mss.IsNull() && !data.Mss.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/mss", strconv.FormatInt(data.Mss.ValueInt64(), 10))
+	}
+	if !data.AcceptRate.IsNull() && !data.AcceptRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/accept-rate", strconv.FormatInt(data.AcceptRate.ValueInt64(), 10))
+	}
+	if !data.Ao.IsNull() && !data.Ao.IsUnknown() {
+		if data.Ao.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ao", "")
+		}
+	}
+	if len(data.AoKeychains) > 0 {
+		for _, item := range data.AoKeychains {
+			basePath := data.getXPath() + "/ao/keychains/keychain[keychain-name='" + item.KeychainName.ValueString() + "']"
+			if !item.KeychainName.IsNull() && !item.KeychainName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/keychain-name", item.KeychainName.ValueString())
+			}
+			if len(item.Keys) > 0 {
+				for _, citem := range item.Keys {
+					cbasePath := basePath + "/keys/key[key-name='" + citem.KeyName.ValueString() + "']"
+					if !citem.KeyName.IsNull() && !citem.KeyName.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/key-name", citem.KeyName.ValueString())
+					}
+					if !citem.SendId.IsNull() && !citem.SendId.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/send-id", strconv.FormatInt(citem.SendId.ValueInt64(), 10))
+					}
+					if !citem.ReceiveId.IsNull() && !citem.ReceiveId.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/receive-id", strconv.FormatInt(citem.ReceiveId.ValueInt64(), 10))
+					}
+				}
+			}
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *TCP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/window-size"); value.Exists() {
+		data.WindowSize = types.Int64Value(value.Int())
+	} else if data.WindowSize.IsNull() {
+		data.WindowSize = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/synwait-time"); value.Exists() {
+		data.SynwaitTime = types.Int64Value(value.Int())
+	} else if data.SynwaitTime.IsNull() {
+		data.SynwaitTime = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu-discovery"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathMtuDiscovery.IsNull() {
+			data.PathMtuDiscovery = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.PathMtuDiscovery.IsNull() {
+			data.PathMtuDiscovery = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu-discovery/age-timer"); value.Exists() {
+		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
+	} else if data.PathMtuDiscoveryAgeTimer.IsNull() {
+		data.PathMtuDiscoveryAgeTimer = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/receive-queue"); value.Exists() {
+		data.ReceiveQueue = types.Int64Value(value.Int())
+	} else if data.ReceiveQueue.IsNull() {
+		data.ReceiveQueue = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timestamp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Timestamp.IsNull() {
+			data.Timestamp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Timestamp.IsNull() {
+			data.Timestamp = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle"); value.Exists() {
+		data.Throttle = types.Int64Value(value.Int())
+	} else if data.Throttle.IsNull() {
+		data.Throttle = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/high-water-mark-throttling"); value.Exists() {
+		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
+	} else if data.ThrottleHighWaterMark.IsNull() {
+		data.ThrottleHighWaterMark = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/selective-ack"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SelectiveAck.IsNull() {
+			data.SelectiveAck = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SelectiveAck.IsNull() {
+			data.SelectiveAck = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mss"); value.Exists() {
+		data.Mss = types.Int64Value(value.Int())
+	} else if data.Mss.IsNull() {
+		data.Mss = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-rate"); value.Exists() {
+		data.AcceptRate = types.Int64Value(value.Int())
+	} else if data.AcceptRate.IsNull() {
+		data.AcceptRate = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ao"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ao.IsNull() {
+			data.Ao = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ao.IsNull() {
+			data.Ao = types.BoolNull()
+		}
+	}
+	for i := range data.AoKeychains {
+		keys := [...]string{"keychain-name"}
+		keyValues := [...]string{data.AoKeychains[i].KeychainName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ao/keychains/keychain").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "keychain-name"); value.Exists() {
+			data.AoKeychains[i].KeychainName = types.StringValue(value.String())
+		} else if data.AoKeychains[i].KeychainName.IsNull() {
+			data.AoKeychains[i].KeychainName = types.StringNull()
+		}
+		for ci := range data.AoKeychains[i].Keys {
+			keys := [...]string{"key-name"}
+			keyValues := [...]string{data.AoKeychains[i].Keys[ci].KeyName.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "keys/key").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "key-name"); value.Exists() {
+				data.AoKeychains[i].Keys[ci].KeyName = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "send-id"); value.Exists() {
+				data.AoKeychains[i].Keys[ci].SendId = types.Int64Value(value.Int())
+			} else if data.AoKeychains[i].Keys[ci].SendId.IsNull() {
+				data.AoKeychains[i].Keys[ci].SendId = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "receive-id"); value.Exists() {
+				data.AoKeychains[i].Keys[ci].ReceiveId = types.Int64Value(value.Int())
+			} else if data.AoKeychains[i].Keys[ci].ReceiveId.IsNull() {
+				data.AoKeychains[i].Keys[ci].ReceiveId = types.Int64Null()
+			}
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *TCP) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "window-size"); value.Exists() {
+func (data *TCP) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "window-size"); value.Exists() {
 		data.WindowSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "synwait-time"); value.Exists() {
+	if value := res.Get(prefix + "synwait-time"); value.Exists() {
 		data.SynwaitTime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "path-mtu-discovery"); value.Exists() {
+	if value := res.Get(prefix + "path-mtu-discovery"); value.Exists() {
 		data.PathMtuDiscovery = types.BoolValue(true)
-	} else {
+	} else if !data.PathMtuDiscovery.IsNull() {
+		// Only set to false if it was previously set in state
 		data.PathMtuDiscovery = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "path-mtu-discovery.age-timer"); value.Exists() {
+	if value := res.Get(prefix + "path-mtu-discovery.age-timer"); value.Exists() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "receive-queue"); value.Exists() {
+	if value := res.Get(prefix + "receive-queue"); value.Exists() {
 		data.ReceiveQueue = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "timestamp"); value.Exists() {
+	if value := res.Get(prefix + "timestamp"); value.Exists() {
 		data.Timestamp = types.BoolValue(true)
-	} else {
+	} else if !data.Timestamp.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Timestamp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "throttle"); value.Exists() {
+	if value := res.Get(prefix + "throttle"); value.Exists() {
 		data.Throttle = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "high-water-mark-throttling"); value.Exists() {
+	if value := res.Get(prefix + "high-water-mark-throttling"); value.Exists() {
 		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "selective-ack"); value.Exists() {
+	if value := res.Get(prefix + "selective-ack"); value.Exists() {
 		data.SelectiveAck = types.BoolValue(true)
-	} else {
+	} else if !data.SelectiveAck.IsNull() {
+		// Only set to false if it was previously set in state
 		data.SelectiveAck = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "mss"); value.Exists() {
+	if value := res.Get(prefix + "mss"); value.Exists() {
 		data.Mss = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "accept-rate"); value.Exists() {
+	if value := res.Get(prefix + "accept-rate"); value.Exists() {
 		data.AcceptRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ao"); value.Exists() {
+	if value := res.Get(prefix + "ao"); value.Exists() {
 		data.Ao = types.BoolValue(true)
-	} else {
+	} else if !data.Ao.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Ao = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ao.keychains.keychain"); value.Exists() {
+	if value := res.Get(prefix + "ao.keychains.keychain"); value.Exists() {
 		data.AoKeychains = make([]TCPAoKeychains, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TCPAoKeychains{}
@@ -398,55 +668,63 @@ func (data *TCP) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *TCPData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "window-size"); value.Exists() {
+func (data *TCPData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "window-size"); value.Exists() {
 		data.WindowSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "synwait-time"); value.Exists() {
+	if value := res.Get(prefix + "synwait-time"); value.Exists() {
 		data.SynwaitTime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "path-mtu-discovery"); value.Exists() {
+	if value := res.Get(prefix + "path-mtu-discovery"); value.Exists() {
 		data.PathMtuDiscovery = types.BoolValue(true)
 	} else {
 		data.PathMtuDiscovery = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "path-mtu-discovery.age-timer"); value.Exists() {
+	if value := res.Get(prefix + "path-mtu-discovery.age-timer"); value.Exists() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "receive-queue"); value.Exists() {
+	if value := res.Get(prefix + "receive-queue"); value.Exists() {
 		data.ReceiveQueue = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "timestamp"); value.Exists() {
+	if value := res.Get(prefix + "timestamp"); value.Exists() {
 		data.Timestamp = types.BoolValue(true)
 	} else {
 		data.Timestamp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "throttle"); value.Exists() {
+	if value := res.Get(prefix + "throttle"); value.Exists() {
 		data.Throttle = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "high-water-mark-throttling"); value.Exists() {
+	if value := res.Get(prefix + "high-water-mark-throttling"); value.Exists() {
 		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "selective-ack"); value.Exists() {
+	if value := res.Get(prefix + "selective-ack"); value.Exists() {
 		data.SelectiveAck = types.BoolValue(true)
 	} else {
 		data.SelectiveAck = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "mss"); value.Exists() {
+	if value := res.Get(prefix + "mss"); value.Exists() {
 		data.Mss = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "accept-rate"); value.Exists() {
+	if value := res.Get(prefix + "accept-rate"); value.Exists() {
 		data.AcceptRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ao"); value.Exists() {
+	if value := res.Get(prefix + "ao"); value.Exists() {
 		data.Ao = types.BoolValue(true)
 	} else {
 		data.Ao = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ao.keychains.keychain"); value.Exists() {
+	if value := res.Get(prefix + "ao.keychains.keychain"); value.Exists() {
 		data.AoKeychains = make([]TCPAoKeychains, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TCPAoKeychains{}
@@ -477,7 +755,162 @@ func (data *TCPData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *TCP) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/window-size"); value.Exists() {
+		data.WindowSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/synwait-time"); value.Exists() {
+		data.SynwaitTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu-discovery"); value.Exists() {
+		data.PathMtuDiscovery = types.BoolValue(true)
+	} else {
+		data.PathMtuDiscovery = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu-discovery/age-timer"); value.Exists() {
+		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/receive-queue"); value.Exists() {
+		data.ReceiveQueue = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timestamp"); value.Exists() {
+		data.Timestamp = types.BoolValue(true)
+	} else {
+		data.Timestamp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle"); value.Exists() {
+		data.Throttle = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/high-water-mark-throttling"); value.Exists() {
+		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/selective-ack"); value.Exists() {
+		data.SelectiveAck = types.BoolValue(true)
+	} else {
+		data.SelectiveAck = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mss"); value.Exists() {
+		data.Mss = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-rate"); value.Exists() {
+		data.AcceptRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ao"); value.Exists() {
+		data.Ao = types.BoolValue(true)
+	} else {
+		data.Ao = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ao/keychains/keychain"); value.Exists() {
+		data.AoKeychains = make([]TCPAoKeychains, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TCPAoKeychains{}
+			if cValue := helpers.GetFromXPath(v, "keychain-name"); cValue.Exists() {
+				item.KeychainName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "keys/key"); cValue.Exists() {
+				item.Keys = make([]TCPAoKeychainsKeys, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TCPAoKeychainsKeys{}
+					if ccValue := helpers.GetFromXPath(cv, "key-name"); ccValue.Exists() {
+						cItem.KeyName = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "send-id"); ccValue.Exists() {
+						cItem.SendId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "receive-id"); ccValue.Exists() {
+						cItem.ReceiveId = types.Int64Value(ccValue.Int())
+					}
+					item.Keys = append(item.Keys, cItem)
+					return true
+				})
+			}
+			data.AoKeychains = append(data.AoKeychains, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *TCPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/window-size"); value.Exists() {
+		data.WindowSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/synwait-time"); value.Exists() {
+		data.SynwaitTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu-discovery"); value.Exists() {
+		data.PathMtuDiscovery = types.BoolValue(true)
+	} else {
+		data.PathMtuDiscovery = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu-discovery/age-timer"); value.Exists() {
+		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/receive-queue"); value.Exists() {
+		data.ReceiveQueue = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timestamp"); value.Exists() {
+		data.Timestamp = types.BoolValue(true)
+	} else {
+		data.Timestamp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle"); value.Exists() {
+		data.Throttle = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/high-water-mark-throttling"); value.Exists() {
+		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/selective-ack"); value.Exists() {
+		data.SelectiveAck = types.BoolValue(true)
+	} else {
+		data.SelectiveAck = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mss"); value.Exists() {
+		data.Mss = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-rate"); value.Exists() {
+		data.AcceptRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ao"); value.Exists() {
+		data.Ao = types.BoolValue(true)
+	} else {
+		data.Ao = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ao/keychains/keychain"); value.Exists() {
+		data.AoKeychains = make([]TCPAoKeychains, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TCPAoKeychains{}
+			if cValue := helpers.GetFromXPath(v, "keychain-name"); cValue.Exists() {
+				item.KeychainName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "keys/key"); cValue.Exists() {
+				item.Keys = make([]TCPAoKeychainsKeys, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TCPAoKeychainsKeys{}
+					if ccValue := helpers.GetFromXPath(cv, "key-name"); ccValue.Exists() {
+						cItem.KeyName = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "send-id"); ccValue.Exists() {
+						cItem.SendId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "receive-id"); ccValue.Exists() {
+						cItem.ReceiveId = types.Int64Value(ccValue.Int())
+					}
+					item.Keys = append(item.Keys, cItem)
+					return true
+				})
+			}
+			data.AoKeychains = append(data.AoKeychains, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *TCP) getDeletedItems(ctx context.Context, state TCP) []string {
@@ -588,10 +1021,9 @@ func (data *TCP) getDeletedItems(ctx context.Context, state TCP) []string {
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *TCP) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *TCP) getEmptyLeafsDelete(ctx context.Context, state *TCP) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.AoKeychains {
 		keys := [...]string{"keychain-name"}
@@ -609,36 +1041,43 @@ func (data *TCP) getEmptyLeafsDelete(ctx context.Context) []string {
 			}
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Ao.IsNull() && !data.Ao.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao", data.getPath()))
+		if state != nil && !state.Ao.IsNull() && state.Ao.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.SelectiveAck.IsNull() && !data.SelectiveAck.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/selective-ack", data.getPath()))
+		if state != nil && !state.SelectiveAck.IsNull() && state.SelectiveAck.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/selective-ack", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Timestamp.IsNull() && !data.Timestamp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timestamp", data.getPath()))
+		if state != nil && !state.Timestamp.IsNull() && state.Timestamp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timestamp", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.PathMtuDiscovery.IsNull() && !data.PathMtuDiscovery.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/path-mtu-discovery", data.getPath()))
+		if state != nil && !state.PathMtuDiscovery.IsNull() && state.PathMtuDiscovery.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/path-mtu-discovery", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *TCP) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.AoKeychains {
-		keys := [...]string{"keychain-name"}
-		keyValues := [...]string{data.AoKeychains[i].KeychainName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/keychains/keychain%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[keychain-name=" + data.AoKeychains[i].KeychainName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/keychains/keychain%v", data.getPath(), keyPath))
 	}
 	if !data.Ao.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao", data.getPath()))
@@ -676,7 +1115,231 @@ func (data *TCP) getDeletePaths(ctx context.Context) []string {
 	if !data.WindowSize.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/window-size", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *TCP) addDeletedItemsXML(ctx context.Context, state TCP, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.AoKeychains {
+		stateKeys := [...]string{"keychain-name"}
+		stateKeyValues := [...]string{state.AoKeychains[i].KeychainName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.AoKeychains[i].KeychainName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.AoKeychains {
+			found = true
+			if state.AoKeychains[i].KeychainName.ValueString() != data.AoKeychains[j].KeychainName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.AoKeychains[i].Keys {
+					cstateKeys := [...]string{"key-name"}
+					cstateKeyValues := [...]string{state.AoKeychains[i].Keys[ci].KeyName.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.AoKeychains[i].Keys[ci].KeyName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.AoKeychains[j].Keys {
+						found = true
+						if state.AoKeychains[i].Keys[ci].KeyName.ValueString() != data.AoKeychains[j].Keys[cj].KeyName.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.AoKeychains[i].Keys[ci].ReceiveId.IsNull() && data.AoKeychains[j].Keys[cj].ReceiveId.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/ao/keychains/keychain%v/keys/key%v/receive-id", predicates, cpredicates))
+							}
+							if !state.AoKeychains[i].Keys[ci].SendId.IsNull() && data.AoKeychains[j].Keys[cj].SendId.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/ao/keychains/keychain%v/keys/key%v/send-id", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/ao/keychains/keychain%v/keys/key%v", predicates, cpredicates))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/ao/keychains/keychain%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Ao.IsNull() && state.Ao.ValueBool() && data.Ao.IsNull() {
+		deletePath := state.getXPath() + "/ao"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AcceptRate.IsNull() && data.AcceptRate.IsNull() {
+		deletePath := state.getXPath() + "/accept-rate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Mss.IsNull() && data.Mss.IsNull() {
+		deletePath := state.getXPath() + "/mss"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SelectiveAck.IsNull() && state.SelectiveAck.ValueBool() && data.SelectiveAck.IsNull() {
+		deletePath := state.getXPath() + "/selective-ack"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ThrottleHighWaterMark.IsNull() && data.ThrottleHighWaterMark.IsNull() {
+		deletePath := state.getXPath() + "/high-water-mark-throttling"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Throttle.IsNull() && data.Throttle.IsNull() {
+		deletePath := state.getXPath() + "/throttle"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Timestamp.IsNull() && state.Timestamp.ValueBool() && data.Timestamp.IsNull() {
+		deletePath := state.getXPath() + "/timestamp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ReceiveQueue.IsNull() && data.ReceiveQueue.IsNull() {
+		deletePath := state.getXPath() + "/receive-queue"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.PathMtuDiscoveryAgeTimer.IsNull() && data.PathMtuDiscoveryAgeTimer.IsNull() {
+		deletePath := state.getXPath() + "/path-mtu-discovery/age-timer"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PathMtuDiscovery.IsNull() && state.PathMtuDiscovery.ValueBool() && data.PathMtuDiscovery.IsNull() {
+		deletePath := state.getXPath() + "/path-mtu-discovery"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SynwaitTime.IsNull() && data.SynwaitTime.IsNull() {
+		deletePath := state.getXPath() + "/synwait-time"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.WindowSize.IsNull() && data.WindowSize.IsNull() {
+		deletePath := state.getXPath() + "/window-size"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *TCP) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.AoKeychains {
+		keys := [...]string{"keychain-name"}
+		keyValues := [...]string{data.AoKeychains[i].KeychainName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/ao/keychains/keychain%v", predicates))
+	}
+	if !data.Ao.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ao")
+	}
+	if !data.AcceptRate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/accept-rate")
+	}
+	if !data.Mss.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/mss")
+	}
+	if !data.SelectiveAck.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/selective-ack")
+	}
+	if !data.ThrottleHighWaterMark.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/high-water-mark-throttling")
+	}
+	if !data.Throttle.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/throttle")
+	}
+	if !data.Timestamp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timestamp")
+	}
+	if !data.ReceiveQueue.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/receive-queue")
+	}
+	if !data.PathMtuDiscoveryAgeTimer.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/path-mtu-discovery/age-timer")
+	}
+	if !data.PathMtuDiscovery.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/path-mtu-discovery")
+	}
+	if !data.SynwaitTime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/synwait-time")
+	}
+	if !data.WindowSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/window-size")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

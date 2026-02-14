@@ -24,9 +24,14 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -212,6 +217,17 @@ func (data HWModuleProfile) getPath() string {
 
 func (data HWModuleProfileData) getPath() string {
 	return "Cisco-IOS-XR-um-hw-module-profile-cfg:/hw-module"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data HWModuleProfile) getXPath() string {
+	path := "Cisco-IOS-XR-um-hw-module-profile-cfg:/hw-module"
+	return path
+}
+
+func (data HWModuleProfileData) getXPath() string {
+	path := "Cisco-IOS-XR-um-hw-module-profile-cfg:/hw-module"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -581,117 +597,141 @@ func (data HWModuleProfile) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *HWModuleProfile) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.layer2"); !data.ProfileLoadBalanceAlgorithmLayer2.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.layer2"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmLayer2.IsNull() {
 			data.ProfileLoadBalanceAlgorithmLayer2 = types.BoolValue(true)
-		} else {
-			data.ProfileLoadBalanceAlgorithmLayer2 = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileLoadBalanceAlgorithmLayer2 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmLayer2.IsNull() {
+			data.ProfileLoadBalanceAlgorithmLayer2 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.ip-tunnel"); !data.ProfileLoadBalanceAlgorithmIpTunnel.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.ip-tunnel"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmIpTunnel.IsNull() {
 			data.ProfileLoadBalanceAlgorithmIpTunnel = types.BoolValue(true)
-		} else {
-			data.ProfileLoadBalanceAlgorithmIpTunnel = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileLoadBalanceAlgorithmIpTunnel = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmIpTunnel.IsNull() {
+			data.ProfileLoadBalanceAlgorithmIpTunnel = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.mpls-safe-speculative-parsing"); !data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.mpls-safe-speculative-parsing"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.IsNull() {
 			data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing = types.BoolValue(true)
-		} else {
-			data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.IsNull() {
+			data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.l3-only"); !data.ProfileLoadBalanceAlgorithmL3Only.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.l3-only"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmL3Only.IsNull() {
 			data.ProfileLoadBalanceAlgorithmL3Only = types.BoolValue(true)
-		} else {
-			data.ProfileLoadBalanceAlgorithmL3Only = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileLoadBalanceAlgorithmL3Only = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmL3Only.IsNull() {
+			data.ProfileLoadBalanceAlgorithmL3Only = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.gtp"); !data.ProfileLoadBalanceAlgorithmGtp.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.gtp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmGtp.IsNull() {
 			data.ProfileLoadBalanceAlgorithmGtp = types.BoolValue(true)
-		} else {
-			data.ProfileLoadBalanceAlgorithmGtp = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileLoadBalanceAlgorithmGtp = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmGtp.IsNull() {
+			data.ProfileLoadBalanceAlgorithmGtp = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.gtp-mpls"); !data.ProfileLoadBalanceAlgorithmGtpMpls.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.gtp-mpls"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmGtpMpls.IsNull() {
 			data.ProfileLoadBalanceAlgorithmGtpMpls = types.BoolValue(true)
-		} else {
-			data.ProfileLoadBalanceAlgorithmGtpMpls = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileLoadBalanceAlgorithmGtpMpls = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmGtpMpls.IsNull() {
+			data.ProfileLoadBalanceAlgorithmGtpMpls = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.mpls-lsr-ler"); !data.ProfileLoadBalanceAlgorithmMplsLsrLer.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.mpls-lsr-ler"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmMplsLsrLer.IsNull() {
 			data.ProfileLoadBalanceAlgorithmMplsLsrLer = types.BoolValue(true)
-		} else {
-			data.ProfileLoadBalanceAlgorithmMplsLsrLer = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileLoadBalanceAlgorithmMplsLsrLer = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmMplsLsrLer.IsNull() {
+			data.ProfileLoadBalanceAlgorithmMplsLsrLer = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.mpls-lsr-ler-optimized"); !data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.mpls-lsr-ler-optimized"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.IsNull() {
 			data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized = types.BoolValue(true)
-		} else {
-			data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.IsNull() {
+			data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.fat-based-hash"); !data.ProfileLoadBalanceAlgorithmFatBasedHash.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.fat-based-hash"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmFatBasedHash.IsNull() {
 			data.ProfileLoadBalanceAlgorithmFatBasedHash = types.BoolValue(true)
-		} else {
-			data.ProfileLoadBalanceAlgorithmFatBasedHash = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileLoadBalanceAlgorithmFatBasedHash = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmFatBasedHash.IsNull() {
+			data.ProfileLoadBalanceAlgorithmFatBasedHash = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.pppo-e"); !data.ProfileLoadBalanceAlgorithmPppoe.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.pppo-e"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmPppoe.IsNull() {
 			data.ProfileLoadBalanceAlgorithmPppoe = types.BoolValue(true)
-		} else {
-			data.ProfileLoadBalanceAlgorithmPppoe = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileLoadBalanceAlgorithmPppoe = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmPppoe.IsNull() {
+			data.ProfileLoadBalanceAlgorithmPppoe = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.pppo-e.decap-fatbased-hashing"); !data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.pppo-e.decap-fatbased-hashing"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.IsNull() {
 			data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing = types.BoolValue(true)
-		} else {
-			data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.IsNull() {
+			data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.inner-l2-field"); !data.ProfileLoadBalanceAlgorithmInnerL2Field.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.inner-l2-field"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmInnerL2Field.IsNull() {
 			data.ProfileLoadBalanceAlgorithmInnerL2Field = types.BoolValue(true)
-		} else {
-			data.ProfileLoadBalanceAlgorithmInnerL2Field = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileLoadBalanceAlgorithmInnerL2Field = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmInnerL2Field.IsNull() {
+			data.ProfileLoadBalanceAlgorithmInnerL2Field = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.hash-polynomial-index"); value.Exists() && !data.ProfileLoadBalanceAlgorithmHashPolynomialIndex.IsNull() {
 		data.ProfileLoadBalanceAlgorithmHashPolynomialIndex = types.Int64Value(value.Int())
-	} else {
+	} else if data.ProfileLoadBalanceAlgorithmHashPolynomialIndex.IsNull() {
 		data.ProfileLoadBalanceAlgorithmHashPolynomialIndex = types.Int64Null()
 	}
 	for i := range data.ProfileBundleHashIndexLocations {
@@ -733,27 +773,31 @@ func (data *HWModuleProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.ProfileBundleHashIndexLocations[i].Index = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile-bundle-hash.ignore-ingress-port"); !data.ProfileBundleHashIgnoreIngressPort.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-bundle-hash.ignore-ingress-port"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileBundleHashIgnoreIngressPort.IsNull() {
 			data.ProfileBundleHashIgnoreIngressPort = types.BoolValue(true)
-		} else {
-			data.ProfileBundleHashIgnoreIngressPort = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileBundleHashIgnoreIngressPort = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileBundleHashIgnoreIngressPort.IsNull() {
+			data.ProfileBundleHashIgnoreIngressPort = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-bundle-hash.per-packet-round-robin"); !data.ProfileBundleHashPerPacketRoundRobin.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-bundle-hash.per-packet-round-robin"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileBundleHashPerPacketRoundRobin.IsNull() {
 			data.ProfileBundleHashPerPacketRoundRobin = types.BoolValue(true)
-		} else {
-			data.ProfileBundleHashPerPacketRoundRobin = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileBundleHashPerPacketRoundRobin = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileBundleHashPerPacketRoundRobin.IsNull() {
+			data.ProfileBundleHashPerPacketRoundRobin = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "profile-qos.max-classmap-sizes.max-classmap-size"); value.Exists() && !data.ProfileQosMaxClassmapSize.IsNull() {
 		data.ProfileQosMaxClassmapSize = types.StringValue(value.String())
-	} else {
+	} else if data.ProfileQosMaxClassmapSize.IsNull() {
 		data.ProfileQosMaxClassmapSize = types.StringNull()
 	}
 	for i := range data.ProfileQosMaxClassmapSizeLocations {
@@ -792,122 +836,142 @@ func (data *HWModuleProfile) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "profile-qos.qosg-dscp-mark-enable.first-dscp-precedence-value"); value.Exists() && !data.ProfileQosQosgDscpMarkEnableFirst.IsNull() {
 		data.ProfileQosQosgDscpMarkEnableFirst = types.Int64Value(value.Int())
-	} else {
+	} else if data.ProfileQosQosgDscpMarkEnableFirst.IsNull() {
 		data.ProfileQosQosgDscpMarkEnableFirst = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "profile-qos.qosg-dscp-mark-enable.second-dscp-precedence-value"); value.Exists() && !data.ProfileQosQosgDscpMarkEnableSecond.IsNull() {
 		data.ProfileQosQosgDscpMarkEnableSecond = types.Int64Value(value.Int())
-	} else {
+	} else if data.ProfileQosQosgDscpMarkEnableSecond.IsNull() {
 		data.ProfileQosQosgDscpMarkEnableSecond = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "profile-qos.free-buffer-int-threshold"); value.Exists() && !data.ProfileQosFreeBufferIntThresholdSet.IsNull() {
 		data.ProfileQosFreeBufferIntThresholdSet = types.Int64Value(value.Int())
-	} else {
+	} else if data.ProfileQosFreeBufferIntThresholdSet.IsNull() {
 		data.ProfileQosFreeBufferIntThresholdSet = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "profile-qos.clear-value-in-percent"); value.Exists() && !data.ProfileQosFreeBufferIntThresholdClear.IsNull() {
 		data.ProfileQosFreeBufferIntThresholdClear = types.Int64Value(value.Int())
-	} else {
+	} else if data.ProfileQosFreeBufferIntThresholdClear.IsNull() {
 		data.ProfileQosFreeBufferIntThresholdClear = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile-qos.hqos-enable"); !data.ProfileQosHqosEnable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-qos.hqos-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosHqosEnable.IsNull() {
 			data.ProfileQosHqosEnable = types.BoolValue(true)
-		} else {
-			data.ProfileQosHqosEnable = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileQosHqosEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosHqosEnable.IsNull() {
+			data.ProfileQosHqosEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-qos.qos-stats-collection"); !data.ProfileQosStatsCollection.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-qos.qos-stats-collection"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosStatsCollection.IsNull() {
 			data.ProfileQosStatsCollection = types.BoolValue(true)
-		} else {
-			data.ProfileQosStatsCollection = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileQosStatsCollection = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosStatsCollection.IsNull() {
+			data.ProfileQosStatsCollection = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-qos.ecn-marking-stats"); !data.ProfileQosEcnMarkingStats.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-qos.ecn-marking-stats"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosEcnMarkingStats.IsNull() {
 			data.ProfileQosEcnMarkingStats = types.BoolValue(true)
-		} else {
-			data.ProfileQosEcnMarkingStats = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileQosEcnMarkingStats = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosEcnMarkingStats.IsNull() {
+			data.ProfileQosEcnMarkingStats = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-qos.shared-policer-per-class-stats"); !data.ProfileQosSharedPolicerPerClassStats.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-qos.shared-policer-per-class-stats"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosSharedPolicerPerClassStats.IsNull() {
 			data.ProfileQosSharedPolicerPerClassStats = types.BoolValue(true)
-		} else {
-			data.ProfileQosSharedPolicerPerClassStats = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileQosSharedPolicerPerClassStats = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosSharedPolicerPerClassStats.IsNull() {
+			data.ProfileQosSharedPolicerPerClassStats = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-qos.wred-stats-enable"); !data.ProfileQosWredStatsEnable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-qos.wred-stats-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosWredStatsEnable.IsNull() {
 			data.ProfileQosWredStatsEnable = types.BoolValue(true)
-		} else {
-			data.ProfileQosWredStatsEnable = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileQosWredStatsEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosWredStatsEnable.IsNull() {
+			data.ProfileQosWredStatsEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-qos.lag-scheduler"); !data.ProfileQosLagScheduler.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-qos.lag-scheduler"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosLagScheduler.IsNull() {
 			data.ProfileQosLagScheduler = types.BoolValue(true)
-		} else {
-			data.ProfileQosLagScheduler = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileQosLagScheduler = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosLagScheduler.IsNull() {
+			data.ProfileQosLagScheduler = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-qos.conform-aware-policer"); !data.ProfileQosConformAwarePolicer.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-qos.conform-aware-policer"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosConformAwarePolicer.IsNull() {
 			data.ProfileQosConformAwarePolicer = types.BoolValue(true)
-		} else {
-			data.ProfileQosConformAwarePolicer = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileQosConformAwarePolicer = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosConformAwarePolicer.IsNull() {
+			data.ProfileQosConformAwarePolicer = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-qos.arp-isis-priority-enable"); !data.ProfileQosArpIsisPriorityEnable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-qos.arp-isis-priority-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosArpIsisPriorityEnable.IsNull() {
 			data.ProfileQosArpIsisPriorityEnable = types.BoolValue(true)
-		} else {
-			data.ProfileQosArpIsisPriorityEnable = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileQosArpIsisPriorityEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosArpIsisPriorityEnable.IsNull() {
+			data.ProfileQosArpIsisPriorityEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-qos.gre-exp-classification-enable"); !data.ProfileQosGreExpClassificationEnable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-qos.gre-exp-classification-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosGreExpClassificationEnable.IsNull() {
 			data.ProfileQosGreExpClassificationEnable = types.BoolValue(true)
-		} else {
-			data.ProfileQosGreExpClassificationEnable = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileQosGreExpClassificationEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosGreExpClassificationEnable.IsNull() {
+			data.ProfileQosGreExpClassificationEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-qos.egress-compensation-setting-force"); !data.ProfileQosEgressCompensationSettingForce.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-qos.egress-compensation-setting-force"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosEgressCompensationSettingForce.IsNull() {
 			data.ProfileQosEgressCompensationSettingForce = types.BoolValue(true)
-		} else {
-			data.ProfileQosEgressCompensationSettingForce = types.BoolValue(false)
 		}
 	} else {
-		data.ProfileQosEgressCompensationSettingForce = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosEgressCompensationSettingForce.IsNull() {
+			data.ProfileQosEgressCompensationSettingForce = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "profile-qos.policer-scale.scale-value"); value.Exists() && !data.ProfileQosPolicerScale.IsNull() {
 		data.ProfileQosPolicerScale = types.StringValue(value.String())
-	} else {
+	} else if data.ProfileQosPolicerScale.IsNull() {
 		data.ProfileQosPolicerScale = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "profile-qos.nif-hp-fifo-reserve.percent"); value.Exists() && !data.ProfileQosNifHpFifoReservePercent.IsNull() {
 		data.ProfileQosNifHpFifoReservePercent = types.Int64Value(value.Int())
-	} else {
+	} else if data.ProfileQosNifHpFifoReservePercent.IsNull() {
 		data.ProfileQosNifHpFifoReservePercent = types.Int64Null()
 	}
 	for i := range data.ProfileQosNifHpFifoReserveLocations {
@@ -944,23 +1008,27 @@ func (data *HWModuleProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.ProfileQosNifHpFifoReserveLocations[i].Percent = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile-npu.native-mode-enable"); !data.NpuNativeModeEnable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-npu.native-mode-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.NpuNativeModeEnable.IsNull() {
 			data.NpuNativeModeEnable = types.BoolValue(true)
-		} else {
-			data.NpuNativeModeEnable = types.BoolValue(false)
 		}
 	} else {
-		data.NpuNativeModeEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.NpuNativeModeEnable.IsNull() {
+			data.NpuNativeModeEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-netflow.ipfix315-enable"); !data.NetflowIpfix315Enable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-netflow.ipfix315-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.NetflowIpfix315Enable.IsNull() {
 			data.NetflowIpfix315Enable = types.BoolValue(true)
-		} else {
-			data.NetflowIpfix315Enable = types.BoolValue(false)
 		}
 	} else {
-		data.NetflowIpfix315Enable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.NetflowIpfix315Enable.IsNull() {
+			data.NetflowIpfix315Enable = types.BoolNull()
+		}
 	}
 	for i := range data.NetflowIpfix315EnableLocations {
 		keys := [...]string{"location-name", "location-name2"}
@@ -996,14 +1064,16 @@ func (data *HWModuleProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.NetflowIpfix315EnableLocations[i].LocationName2 = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile-netflow.sflow-enable"); !data.NetflowSflowEnable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-netflow.sflow-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.NetflowSflowEnable.IsNull() {
 			data.NetflowSflowEnable = types.BoolValue(true)
-		} else {
-			data.NetflowSflowEnable = types.BoolValue(false)
 		}
 	} else {
-		data.NetflowSflowEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.NetflowSflowEnable.IsNull() {
+			data.NetflowSflowEnable = types.BoolNull()
+		}
 	}
 	for i := range data.NetflowSflowEnableLocations {
 		keys := [...]string{"location-name", "location-name2"}
@@ -1039,321 +1109,1571 @@ func (data *HWModuleProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.NetflowSflowEnableLocations[i].LocationName2 = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile-stats.acl-permit"); !data.StatsAclPermit.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-stats.acl-permit"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsAclPermit.IsNull() {
 			data.StatsAclPermit = types.BoolValue(true)
-		} else {
-			data.StatsAclPermit = types.BoolValue(false)
 		}
 	} else {
-		data.StatsAclPermit = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsAclPermit.IsNull() {
+			data.StatsAclPermit = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-stats.qos-enhanced"); !data.StatsQosEnhanced.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-stats.qos-enhanced"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsQosEnhanced.IsNull() {
 			data.StatsQosEnhanced = types.BoolValue(true)
-		} else {
-			data.StatsQosEnhanced = types.BoolValue(false)
 		}
 	} else {
-		data.StatsQosEnhanced = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsQosEnhanced.IsNull() {
+			data.StatsQosEnhanced = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-stats.ingress-sr"); !data.StatsIngressSr.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-stats.ingress-sr"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsIngressSr.IsNull() {
 			data.StatsIngressSr = types.BoolValue(true)
-		} else {
-			data.StatsIngressSr = types.BoolValue(false)
 		}
 	} else {
-		data.StatsIngressSr = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsIngressSr.IsNull() {
+			data.StatsIngressSr = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-stats.enh-sr-policy"); !data.StatsEnhancedSrPolicy.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-stats.enh-sr-policy"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsEnhancedSrPolicy.IsNull() {
 			data.StatsEnhancedSrPolicy = types.BoolValue(true)
-		} else {
-			data.StatsEnhancedSrPolicy = types.BoolValue(false)
 		}
 	} else {
-		data.StatsEnhancedSrPolicy = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsEnhancedSrPolicy.IsNull() {
+			data.StatsEnhancedSrPolicy = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-stats.ingress-sr-mspw"); !data.StatsIngressSrMspw.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-stats.ingress-sr-mspw"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsIngressSrMspw.IsNull() {
 			data.StatsIngressSrMspw = types.BoolValue(true)
-		} else {
-			data.StatsIngressSrMspw = types.BoolValue(false)
 		}
 	} else {
-		data.StatsIngressSrMspw = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsIngressSrMspw.IsNull() {
+			data.StatsIngressSrMspw = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced"); !data.StatsTxScaleEnhanced.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsTxScaleEnhanced.IsNull() {
 			data.StatsTxScaleEnhanced = types.BoolValue(true)
-		} else {
-			data.StatsTxScaleEnhanced = types.BoolValue(false)
 		}
 	} else {
-		data.StatsTxScaleEnhanced = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsTxScaleEnhanced.IsNull() {
+			data.StatsTxScaleEnhanced = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced.acl-permit"); !data.StatsTxScaleEnhancedAclPermit.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced.acl-permit"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsTxScaleEnhancedAclPermit.IsNull() {
 			data.StatsTxScaleEnhancedAclPermit = types.BoolValue(true)
-		} else {
-			data.StatsTxScaleEnhancedAclPermit = types.BoolValue(false)
 		}
 	} else {
-		data.StatsTxScaleEnhancedAclPermit = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsTxScaleEnhancedAclPermit.IsNull() {
+			data.StatsTxScaleEnhancedAclPermit = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced.qos-enhanced"); !data.StatsTxScaleEnhancedQosEnhanced.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced.qos-enhanced"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsTxScaleEnhancedQosEnhanced.IsNull() {
 			data.StatsTxScaleEnhancedQosEnhanced = types.BoolValue(true)
-		} else {
-			data.StatsTxScaleEnhancedQosEnhanced = types.BoolValue(false)
 		}
 	} else {
-		data.StatsTxScaleEnhancedQosEnhanced = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsTxScaleEnhancedQosEnhanced.IsNull() {
+			data.StatsTxScaleEnhancedQosEnhanced = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced.ingress-sr"); !data.StatsTxScaleEnhancedIngressSr.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced.ingress-sr"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsTxScaleEnhancedIngressSr.IsNull() {
 			data.StatsTxScaleEnhancedIngressSr = types.BoolValue(true)
-		} else {
-			data.StatsTxScaleEnhancedIngressSr = types.BoolValue(false)
 		}
 	} else {
-		data.StatsTxScaleEnhancedIngressSr = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsTxScaleEnhancedIngressSr.IsNull() {
+			data.StatsTxScaleEnhancedIngressSr = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.base"); !data.Srv6ModeBase.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.base"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6ModeBase.IsNull() {
 			data.Srv6ModeBase = types.BoolValue(true)
-		} else {
-			data.Srv6ModeBase = types.BoolValue(false)
 		}
 	} else {
-		data.Srv6ModeBase = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6ModeBase.IsNull() {
+			data.Srv6ModeBase = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.base-and-micro-segment-f3216"); !data.Srv6ModeBaseAndMicroSegmentF3216.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.base-and-micro-segment-f3216"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6ModeBaseAndMicroSegmentF3216.IsNull() {
 			data.Srv6ModeBaseAndMicroSegmentF3216 = types.BoolValue(true)
-		} else {
-			data.Srv6ModeBaseAndMicroSegmentF3216 = types.BoolValue(false)
 		}
 	} else {
-		data.Srv6ModeBaseAndMicroSegmentF3216 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6ModeBaseAndMicroSegmentF3216.IsNull() {
+			data.Srv6ModeBaseAndMicroSegmentF3216 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.micro-segment.format.f3216"); !data.Srv6ModeMicroSegmentFormatF3216.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.micro-segment.format.f3216"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6ModeMicroSegmentFormatF3216.IsNull() {
 			data.Srv6ModeMicroSegmentFormatF3216 = types.BoolValue(true)
-		} else {
-			data.Srv6ModeMicroSegmentFormatF3216 = types.BoolValue(false)
 		}
 	} else {
-		data.Srv6ModeMicroSegmentFormatF3216 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6ModeMicroSegmentFormatF3216.IsNull() {
+			data.Srv6ModeMicroSegmentFormatF3216 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.micro-segment.format.path-mtu"); !data.Srv6ModeMicroSegmentFormatF3216PathMtu.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.micro-segment.format.path-mtu"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6ModeMicroSegmentFormatF3216PathMtu.IsNull() {
 			data.Srv6ModeMicroSegmentFormatF3216PathMtu = types.BoolValue(true)
-		} else {
-			data.Srv6ModeMicroSegmentFormatF3216PathMtu = types.BoolValue(false)
 		}
 	} else {
-		data.Srv6ModeMicroSegmentFormatF3216PathMtu = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6ModeMicroSegmentFormatF3216PathMtu.IsNull() {
+			data.Srv6ModeMicroSegmentFormatF3216PathMtu = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l2-traffic.traffic-class.propagate"); !data.Srv6EncapsulationL2TrafficClassPropagate.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l2-traffic.traffic-class.propagate"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6EncapsulationL2TrafficClassPropagate.IsNull() {
 			data.Srv6EncapsulationL2TrafficClassPropagate = types.BoolValue(true)
-		} else {
-			data.Srv6EncapsulationL2TrafficClassPropagate = types.BoolValue(false)
 		}
 	} else {
-		data.Srv6EncapsulationL2TrafficClassPropagate = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6EncapsulationL2TrafficClassPropagate.IsNull() {
+			data.Srv6EncapsulationL2TrafficClassPropagate = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l2-traffic.traffic-class.traffic-class-value"); value.Exists() && !data.Srv6EncapsulationL2TrafficClassValue.IsNull() {
 		data.Srv6EncapsulationL2TrafficClassValue = types.Int64Value(value.Int())
-	} else {
+	} else if data.Srv6EncapsulationL2TrafficClassValue.IsNull() {
 		data.Srv6EncapsulationL2TrafficClassValue = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.propagate"); !data.Srv6EncapsulationL3TrafficClassPropagate.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.propagate"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6EncapsulationL3TrafficClassPropagate.IsNull() {
 			data.Srv6EncapsulationL3TrafficClassPropagate = types.BoolValue(true)
-		} else {
-			data.Srv6EncapsulationL3TrafficClassPropagate = types.BoolValue(false)
 		}
 	} else {
-		data.Srv6EncapsulationL3TrafficClassPropagate = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6EncapsulationL3TrafficClassPropagate.IsNull() {
+			data.Srv6EncapsulationL3TrafficClassPropagate = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.policy-map"); !data.Srv6EncapsulationL3TrafficClassPolicyMap.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.policy-map"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6EncapsulationL3TrafficClassPolicyMap.IsNull() {
 			data.Srv6EncapsulationL3TrafficClassPolicyMap = types.BoolValue(true)
-		} else {
-			data.Srv6EncapsulationL3TrafficClassPolicyMap = types.BoolValue(false)
 		}
 	} else {
-		data.Srv6EncapsulationL3TrafficClassPolicyMap = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6EncapsulationL3TrafficClassPolicyMap.IsNull() {
+			data.Srv6EncapsulationL3TrafficClassPolicyMap = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.traffic-class-value"); value.Exists() && !data.Srv6EncapsulationL3TrafficClassValue.IsNull() {
 		data.Srv6EncapsulationL3TrafficClassValue = types.Int64Value(value.Int())
-	} else {
+	} else if data.Srv6EncapsulationL3TrafficClassValue.IsNull() {
 		data.Srv6EncapsulationL3TrafficClassValue = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class-with-hoplimit.propagate"); !data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class-with-hoplimit.propagate"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.IsNull() {
 			data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate = types.BoolValue(true)
-		} else {
-			data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate = types.BoolValue(false)
 		}
 	} else {
-		data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.IsNull() {
+			data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-offload.one"); !data.OffloadOne.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-offload.one"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OffloadOne.IsNull() {
 			data.OffloadOne = types.BoolValue(true)
-		} else {
-			data.OffloadOne = types.BoolValue(false)
 		}
 	} else {
-		data.OffloadOne = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.OffloadOne.IsNull() {
+			data.OffloadOne = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-offload.two"); !data.OffloadTwo.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-offload.two"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OffloadTwo.IsNull() {
 			data.OffloadTwo = types.BoolValue(true)
-		} else {
-			data.OffloadTwo = types.BoolValue(false)
 		}
 	} else {
-		data.OffloadTwo = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.OffloadTwo.IsNull() {
+			data.OffloadTwo = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-offload.three"); !data.OffloadThree.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-offload.three"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OffloadThree.IsNull() {
 			data.OffloadThree = types.BoolValue(true)
-		} else {
-			data.OffloadThree = types.BoolValue(false)
 		}
 	} else {
-		data.OffloadThree = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.OffloadThree.IsNull() {
+			data.OffloadThree = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-offload.four"); !data.OffloadFour.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-offload.four"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OffloadFour.IsNull() {
 			data.OffloadFour = types.BoolValue(true)
-		} else {
-			data.OffloadFour = types.BoolValue(false)
 		}
 	} else {
-		data.OffloadFour = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.OffloadFour.IsNull() {
+			data.OffloadFour = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-sr-policy.v6-null-label-autopush"); !data.SrPolicyV6NullLabelAutopush.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-sr-policy.v6-null-label-autopush"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyV6NullLabelAutopush.IsNull() {
 			data.SrPolicyV6NullLabelAutopush = types.BoolValue(true)
-		} else {
-			data.SrPolicyV6NullLabelAutopush = types.BoolValue(false)
 		}
 	} else {
-		data.SrPolicyV6NullLabelAutopush = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SrPolicyV6NullLabelAutopush.IsNull() {
+			data.SrPolicyV6NullLabelAutopush = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-oam.sat-enable"); !data.OamSatEnable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-oam.sat-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OamSatEnable.IsNull() {
 			data.OamSatEnable = types.BoolValue(true)
-		} else {
-			data.OamSatEnable = types.BoolValue(false)
 		}
 	} else {
-		data.OamSatEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.OamSatEnable.IsNull() {
+			data.OamSatEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "profile-oam.four8byte-cfm-maid-enable"); !data.OamFour8byteCfmMaidEnable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "profile-oam.four8byte-cfm-maid-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OamFour8byteCfmMaidEnable.IsNull() {
 			data.OamFour8byteCfmMaidEnable = types.BoolValue(true)
-		} else {
-			data.OamFour8byteCfmMaidEnable = types.BoolValue(false)
 		}
 	} else {
-		data.OamFour8byteCfmMaidEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.OamFour8byteCfmMaidEnable.IsNull() {
+			data.OamFour8byteCfmMaidEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "fib-bgp-pic.multipath-core.enable"); !data.FibBgpPicMultipathCoreEnable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "fib-bgp-pic.multipath-core.enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FibBgpPicMultipathCoreEnable.IsNull() {
 			data.FibBgpPicMultipathCoreEnable = types.BoolValue(true)
-		} else {
-			data.FibBgpPicMultipathCoreEnable = types.BoolValue(false)
 		}
 	} else {
-		data.FibBgpPicMultipathCoreEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.FibBgpPicMultipathCoreEnable.IsNull() {
+			data.FibBgpPicMultipathCoreEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp-mp-pic.auto-protect.enable"); !data.BgpMpPicAutoProtectEnable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "bgp-mp-pic.auto-protect.enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BgpMpPicAutoProtectEnable.IsNull() {
 			data.BgpMpPicAutoProtectEnable = types.BoolValue(true)
-		} else {
-			data.BgpMpPicAutoProtectEnable = types.BoolValue(false)
 		}
 	} else {
-		data.BgpMpPicAutoProtectEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpMpPicAutoProtectEnable.IsNull() {
+			data.BgpMpPicAutoProtectEnable = types.BoolNull()
+		}
 	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data HWModuleProfile) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.ProfileLoadBalanceAlgorithmLayer2.IsNull() && !data.ProfileLoadBalanceAlgorithmLayer2.IsUnknown() {
+		if data.ProfileLoadBalanceAlgorithmLayer2.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-load-balance/algorithm/layer2", "")
+		}
+	}
+	if !data.ProfileLoadBalanceAlgorithmIpTunnel.IsNull() && !data.ProfileLoadBalanceAlgorithmIpTunnel.IsUnknown() {
+		if data.ProfileLoadBalanceAlgorithmIpTunnel.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-load-balance/algorithm/ip-tunnel", "")
+		}
+	}
+	if !data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.IsNull() && !data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.IsUnknown() {
+		if data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-load-balance/algorithm/mpls-safe-speculative-parsing", "")
+		}
+	}
+	if !data.ProfileLoadBalanceAlgorithmL3Only.IsNull() && !data.ProfileLoadBalanceAlgorithmL3Only.IsUnknown() {
+		if data.ProfileLoadBalanceAlgorithmL3Only.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-load-balance/algorithm/l3-only", "")
+		}
+	}
+	if !data.ProfileLoadBalanceAlgorithmGtp.IsNull() && !data.ProfileLoadBalanceAlgorithmGtp.IsUnknown() {
+		if data.ProfileLoadBalanceAlgorithmGtp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-load-balance/algorithm/gtp", "")
+		}
+	}
+	if !data.ProfileLoadBalanceAlgorithmGtpMpls.IsNull() && !data.ProfileLoadBalanceAlgorithmGtpMpls.IsUnknown() {
+		if data.ProfileLoadBalanceAlgorithmGtpMpls.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-load-balance/algorithm/gtp-mpls", "")
+		}
+	}
+	if !data.ProfileLoadBalanceAlgorithmMplsLsrLer.IsNull() && !data.ProfileLoadBalanceAlgorithmMplsLsrLer.IsUnknown() {
+		if data.ProfileLoadBalanceAlgorithmMplsLsrLer.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-load-balance/algorithm/mpls-lsr-ler", "")
+		}
+	}
+	if !data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.IsNull() && !data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.IsUnknown() {
+		if data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-load-balance/algorithm/mpls-lsr-ler-optimized", "")
+		}
+	}
+	if !data.ProfileLoadBalanceAlgorithmFatBasedHash.IsNull() && !data.ProfileLoadBalanceAlgorithmFatBasedHash.IsUnknown() {
+		if data.ProfileLoadBalanceAlgorithmFatBasedHash.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-load-balance/algorithm/fat-based-hash", "")
+		}
+	}
+	if !data.ProfileLoadBalanceAlgorithmPppoe.IsNull() && !data.ProfileLoadBalanceAlgorithmPppoe.IsUnknown() {
+		if data.ProfileLoadBalanceAlgorithmPppoe.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-load-balance/algorithm/pppo-e", "")
+		}
+	}
+	if !data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.IsNull() && !data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.IsUnknown() {
+		if data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-load-balance/algorithm/pppo-e/decap-fatbased-hashing", "")
+		}
+	}
+	if !data.ProfileLoadBalanceAlgorithmInnerL2Field.IsNull() && !data.ProfileLoadBalanceAlgorithmInnerL2Field.IsUnknown() {
+		if data.ProfileLoadBalanceAlgorithmInnerL2Field.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-load-balance/algorithm/inner-l2-field", "")
+		}
+	}
+	if !data.ProfileLoadBalanceAlgorithmHashPolynomialIndex.IsNull() && !data.ProfileLoadBalanceAlgorithmHashPolynomialIndex.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/profile-load-balance/algorithm/hash-polynomial-index", strconv.FormatInt(data.ProfileLoadBalanceAlgorithmHashPolynomialIndex.ValueInt64(), 10))
+	}
+	if len(data.ProfileBundleHashIndexLocations) > 0 {
+		for _, item := range data.ProfileBundleHashIndexLocations {
+			basePath := data.getXPath() + "/profile-bundle-hash/hash-index/locations/location[location-name='" + item.LocationName.ValueString() + "' and location-name2='" + item.LocationName2.ValueString() + "']"
+			if !item.LocationName.IsNull() && !item.LocationName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/location-name", item.LocationName.ValueString())
+			}
+			if !item.LocationName2.IsNull() && !item.LocationName2.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/location-name2", item.LocationName2.ValueString())
+			}
+			if !item.Index.IsNull() && !item.Index.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/index", item.Index.ValueString())
+			}
+		}
+	}
+	if !data.ProfileBundleHashIgnoreIngressPort.IsNull() && !data.ProfileBundleHashIgnoreIngressPort.IsUnknown() {
+		if data.ProfileBundleHashIgnoreIngressPort.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-bundle-hash/ignore-ingress-port", "")
+		}
+	}
+	if !data.ProfileBundleHashPerPacketRoundRobin.IsNull() && !data.ProfileBundleHashPerPacketRoundRobin.IsUnknown() {
+		if data.ProfileBundleHashPerPacketRoundRobin.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-bundle-hash/per-packet-round-robin", "")
+		}
+	}
+	if !data.ProfileQosMaxClassmapSize.IsNull() && !data.ProfileQosMaxClassmapSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/max-classmap-sizes/max-classmap-size", data.ProfileQosMaxClassmapSize.ValueString())
+	}
+	if len(data.ProfileQosMaxClassmapSizeLocations) > 0 {
+		for _, item := range data.ProfileQosMaxClassmapSizeLocations {
+			basePath := data.getXPath() + "/profile-qos/max-classmap-sizes/locations/location[location-name='" + item.LocationName.ValueString() + "']"
+			if !item.LocationName.IsNull() && !item.LocationName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/location-name", item.LocationName.ValueString())
+			}
+			if !item.MaxClassmapSize.IsNull() && !item.MaxClassmapSize.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/max-classmap-size", item.MaxClassmapSize.ValueString())
+			}
+		}
+	}
+	if !data.ProfileQosQosgDscpMarkEnableFirst.IsNull() && !data.ProfileQosQosgDscpMarkEnableFirst.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/qosg-dscp-mark-enable/first-dscp-precedence-value", strconv.FormatInt(data.ProfileQosQosgDscpMarkEnableFirst.ValueInt64(), 10))
+	}
+	if !data.ProfileQosQosgDscpMarkEnableSecond.IsNull() && !data.ProfileQosQosgDscpMarkEnableSecond.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/qosg-dscp-mark-enable/second-dscp-precedence-value", strconv.FormatInt(data.ProfileQosQosgDscpMarkEnableSecond.ValueInt64(), 10))
+	}
+	if !data.ProfileQosFreeBufferIntThresholdSet.IsNull() && !data.ProfileQosFreeBufferIntThresholdSet.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/free-buffer-int-threshold", strconv.FormatInt(data.ProfileQosFreeBufferIntThresholdSet.ValueInt64(), 10))
+	}
+	if !data.ProfileQosFreeBufferIntThresholdClear.IsNull() && !data.ProfileQosFreeBufferIntThresholdClear.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/clear-value-in-percent", strconv.FormatInt(data.ProfileQosFreeBufferIntThresholdClear.ValueInt64(), 10))
+	}
+	if !data.ProfileQosHqosEnable.IsNull() && !data.ProfileQosHqosEnable.IsUnknown() {
+		if data.ProfileQosHqosEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/hqos-enable", "")
+		}
+	}
+	if !data.ProfileQosStatsCollection.IsNull() && !data.ProfileQosStatsCollection.IsUnknown() {
+		if data.ProfileQosStatsCollection.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/qos-stats-collection", "")
+		}
+	}
+	if !data.ProfileQosEcnMarkingStats.IsNull() && !data.ProfileQosEcnMarkingStats.IsUnknown() {
+		if data.ProfileQosEcnMarkingStats.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/ecn-marking-stats", "")
+		}
+	}
+	if !data.ProfileQosSharedPolicerPerClassStats.IsNull() && !data.ProfileQosSharedPolicerPerClassStats.IsUnknown() {
+		if data.ProfileQosSharedPolicerPerClassStats.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/shared-policer-per-class-stats", "")
+		}
+	}
+	if !data.ProfileQosWredStatsEnable.IsNull() && !data.ProfileQosWredStatsEnable.IsUnknown() {
+		if data.ProfileQosWredStatsEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/wred-stats-enable", "")
+		}
+	}
+	if !data.ProfileQosLagScheduler.IsNull() && !data.ProfileQosLagScheduler.IsUnknown() {
+		if data.ProfileQosLagScheduler.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/lag-scheduler", "")
+		}
+	}
+	if !data.ProfileQosConformAwarePolicer.IsNull() && !data.ProfileQosConformAwarePolicer.IsUnknown() {
+		if data.ProfileQosConformAwarePolicer.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/conform-aware-policer", "")
+		}
+	}
+	if !data.ProfileQosArpIsisPriorityEnable.IsNull() && !data.ProfileQosArpIsisPriorityEnable.IsUnknown() {
+		if data.ProfileQosArpIsisPriorityEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/arp-isis-priority-enable", "")
+		}
+	}
+	if !data.ProfileQosGreExpClassificationEnable.IsNull() && !data.ProfileQosGreExpClassificationEnable.IsUnknown() {
+		if data.ProfileQosGreExpClassificationEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/gre-exp-classification-enable", "")
+		}
+	}
+	if !data.ProfileQosEgressCompensationSettingForce.IsNull() && !data.ProfileQosEgressCompensationSettingForce.IsUnknown() {
+		if data.ProfileQosEgressCompensationSettingForce.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/egress-compensation-setting-force", "")
+		}
+	}
+	if !data.ProfileQosPolicerScale.IsNull() && !data.ProfileQosPolicerScale.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/policer-scale/scale-value", data.ProfileQosPolicerScale.ValueString())
+	}
+	if !data.ProfileQosNifHpFifoReservePercent.IsNull() && !data.ProfileQosNifHpFifoReservePercent.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/nif-hp-fifo-reserve/percent", strconv.FormatInt(data.ProfileQosNifHpFifoReservePercent.ValueInt64(), 10))
+	}
+	if len(data.ProfileQosNifHpFifoReserveLocations) > 0 {
+		for _, item := range data.ProfileQosNifHpFifoReserveLocations {
+			basePath := data.getXPath() + "/profile-qos/nif-hp-fifo-reserve-locations/location[location-name='" + item.LocationName.ValueString() + "']"
+			if !item.LocationName.IsNull() && !item.LocationName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/location-name", item.LocationName.ValueString())
+			}
+			if !item.Percent.IsNull() && !item.Percent.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/percent", strconv.FormatInt(item.Percent.ValueInt64(), 10))
+			}
+		}
+	}
+	if !data.NpuNativeModeEnable.IsNull() && !data.NpuNativeModeEnable.IsUnknown() {
+		if data.NpuNativeModeEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-npu/native-mode-enable", "")
+		}
+	}
+	if !data.NetflowIpfix315Enable.IsNull() && !data.NetflowIpfix315Enable.IsUnknown() {
+		if data.NetflowIpfix315Enable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-netflow/ipfix315-enable", "")
+		}
+	}
+	if len(data.NetflowIpfix315EnableLocations) > 0 {
+		for _, item := range data.NetflowIpfix315EnableLocations {
+			basePath := data.getXPath() + "/profile-netflow/ipfix315-enable-locations/location[location-name='" + item.LocationName.ValueString() + "' and location-name2='" + item.LocationName2.ValueString() + "']"
+			if !item.LocationName.IsNull() && !item.LocationName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/location-name", item.LocationName.ValueString())
+			}
+			if !item.LocationName2.IsNull() && !item.LocationName2.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/location-name2", item.LocationName2.ValueString())
+			}
+		}
+	}
+	if !data.NetflowSflowEnable.IsNull() && !data.NetflowSflowEnable.IsUnknown() {
+		if data.NetflowSflowEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-netflow/sflow-enable", "")
+		}
+	}
+	if len(data.NetflowSflowEnableLocations) > 0 {
+		for _, item := range data.NetflowSflowEnableLocations {
+			basePath := data.getXPath() + "/profile-netflow/sflow-enable-locations/location[location-name='" + item.LocationName.ValueString() + "' and location-name2='" + item.LocationName2.ValueString() + "']"
+			if !item.LocationName.IsNull() && !item.LocationName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/location-name", item.LocationName.ValueString())
+			}
+			if !item.LocationName2.IsNull() && !item.LocationName2.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/location-name2", item.LocationName2.ValueString())
+			}
+		}
+	}
+	if !data.StatsAclPermit.IsNull() && !data.StatsAclPermit.IsUnknown() {
+		if data.StatsAclPermit.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-stats/acl-permit", "")
+		}
+	}
+	if !data.StatsQosEnhanced.IsNull() && !data.StatsQosEnhanced.IsUnknown() {
+		if data.StatsQosEnhanced.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-stats/qos-enhanced", "")
+		}
+	}
+	if !data.StatsIngressSr.IsNull() && !data.StatsIngressSr.IsUnknown() {
+		if data.StatsIngressSr.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-stats/ingress-sr", "")
+		}
+	}
+	if !data.StatsEnhancedSrPolicy.IsNull() && !data.StatsEnhancedSrPolicy.IsUnknown() {
+		if data.StatsEnhancedSrPolicy.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-stats/enh-sr-policy", "")
+		}
+	}
+	if !data.StatsIngressSrMspw.IsNull() && !data.StatsIngressSrMspw.IsUnknown() {
+		if data.StatsIngressSrMspw.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-stats/ingress-sr-mspw", "")
+		}
+	}
+	if !data.StatsTxScaleEnhanced.IsNull() && !data.StatsTxScaleEnhanced.IsUnknown() {
+		if data.StatsTxScaleEnhanced.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-stats/tx-scale-enhanced", "")
+		}
+	}
+	if !data.StatsTxScaleEnhancedAclPermit.IsNull() && !data.StatsTxScaleEnhancedAclPermit.IsUnknown() {
+		if data.StatsTxScaleEnhancedAclPermit.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-stats/tx-scale-enhanced/acl-permit", "")
+		}
+	}
+	if !data.StatsTxScaleEnhancedQosEnhanced.IsNull() && !data.StatsTxScaleEnhancedQosEnhanced.IsUnknown() {
+		if data.StatsTxScaleEnhancedQosEnhanced.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-stats/tx-scale-enhanced/qos-enhanced", "")
+		}
+	}
+	if !data.StatsTxScaleEnhancedIngressSr.IsNull() && !data.StatsTxScaleEnhancedIngressSr.IsUnknown() {
+		if data.StatsTxScaleEnhancedIngressSr.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-stats/tx-scale-enhanced/ingress-sr", "")
+		}
+	}
+	if !data.Srv6ModeBase.IsNull() && !data.Srv6ModeBase.IsUnknown() {
+		if data.Srv6ModeBase.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-segment-routing/srv6/mode/base", "")
+		}
+	}
+	if !data.Srv6ModeBaseAndMicroSegmentF3216.IsNull() && !data.Srv6ModeBaseAndMicroSegmentF3216.IsUnknown() {
+		if data.Srv6ModeBaseAndMicroSegmentF3216.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-segment-routing/srv6/mode/base-and-micro-segment-f3216", "")
+		}
+	}
+	if !data.Srv6ModeMicroSegmentFormatF3216.IsNull() && !data.Srv6ModeMicroSegmentFormatF3216.IsUnknown() {
+		if data.Srv6ModeMicroSegmentFormatF3216.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-segment-routing/srv6/mode/micro-segment/format/f3216", "")
+		}
+	}
+	if !data.Srv6ModeMicroSegmentFormatF3216PathMtu.IsNull() && !data.Srv6ModeMicroSegmentFormatF3216PathMtu.IsUnknown() {
+		if data.Srv6ModeMicroSegmentFormatF3216PathMtu.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-segment-routing/srv6/mode/micro-segment/format/path-mtu", "")
+		}
+	}
+	if !data.Srv6EncapsulationL2TrafficClassPropagate.IsNull() && !data.Srv6EncapsulationL2TrafficClassPropagate.IsUnknown() {
+		if data.Srv6EncapsulationL2TrafficClassPropagate.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/propagate", "")
+		}
+	}
+	if !data.Srv6EncapsulationL2TrafficClassValue.IsNull() && !data.Srv6EncapsulationL2TrafficClassValue.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/traffic-class-value", strconv.FormatInt(data.Srv6EncapsulationL2TrafficClassValue.ValueInt64(), 10))
+	}
+	if !data.Srv6EncapsulationL3TrafficClassPropagate.IsNull() && !data.Srv6EncapsulationL3TrafficClassPropagate.IsUnknown() {
+		if data.Srv6EncapsulationL3TrafficClassPropagate.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/propagate", "")
+		}
+	}
+	if !data.Srv6EncapsulationL3TrafficClassPolicyMap.IsNull() && !data.Srv6EncapsulationL3TrafficClassPolicyMap.IsUnknown() {
+		if data.Srv6EncapsulationL3TrafficClassPolicyMap.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/policy-map", "")
+		}
+	}
+	if !data.Srv6EncapsulationL3TrafficClassValue.IsNull() && !data.Srv6EncapsulationL3TrafficClassValue.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/traffic-class-value", strconv.FormatInt(data.Srv6EncapsulationL3TrafficClassValue.ValueInt64(), 10))
+	}
+	if !data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.IsNull() && !data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.IsUnknown() {
+		if data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class-with-hoplimit/propagate", "")
+		}
+	}
+	if !data.OffloadOne.IsNull() && !data.OffloadOne.IsUnknown() {
+		if data.OffloadOne.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-offload/one", "")
+		}
+	}
+	if !data.OffloadTwo.IsNull() && !data.OffloadTwo.IsUnknown() {
+		if data.OffloadTwo.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-offload/two", "")
+		}
+	}
+	if !data.OffloadThree.IsNull() && !data.OffloadThree.IsUnknown() {
+		if data.OffloadThree.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-offload/three", "")
+		}
+	}
+	if !data.OffloadFour.IsNull() && !data.OffloadFour.IsUnknown() {
+		if data.OffloadFour.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-offload/four", "")
+		}
+	}
+	if !data.SrPolicyV6NullLabelAutopush.IsNull() && !data.SrPolicyV6NullLabelAutopush.IsUnknown() {
+		if data.SrPolicyV6NullLabelAutopush.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-sr-policy/v6-null-label-autopush", "")
+		}
+	}
+	if !data.OamSatEnable.IsNull() && !data.OamSatEnable.IsUnknown() {
+		if data.OamSatEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-oam/sat-enable", "")
+		}
+	}
+	if !data.OamFour8byteCfmMaidEnable.IsNull() && !data.OamFour8byteCfmMaidEnable.IsUnknown() {
+		if data.OamFour8byteCfmMaidEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-oam/four8byte-cfm-maid-enable", "")
+		}
+	}
+	if !data.FibBgpPicMultipathCoreEnable.IsNull() && !data.FibBgpPicMultipathCoreEnable.IsUnknown() {
+		if data.FibBgpPicMultipathCoreEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/fib-bgp-pic/multipath-core/enable", "")
+		}
+	}
+	if !data.BgpMpPicAutoProtectEnable.IsNull() && !data.BgpMpPicAutoProtectEnable.IsUnknown() {
+		if data.BgpMpPicAutoProtectEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp-mp-pic/auto-protect/enable", "")
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *HWModuleProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/layer2"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmLayer2.IsNull() {
+			data.ProfileLoadBalanceAlgorithmLayer2 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmLayer2.IsNull() {
+			data.ProfileLoadBalanceAlgorithmLayer2 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/ip-tunnel"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmIpTunnel.IsNull() {
+			data.ProfileLoadBalanceAlgorithmIpTunnel = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmIpTunnel.IsNull() {
+			data.ProfileLoadBalanceAlgorithmIpTunnel = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/mpls-safe-speculative-parsing"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.IsNull() {
+			data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.IsNull() {
+			data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/l3-only"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmL3Only.IsNull() {
+			data.ProfileLoadBalanceAlgorithmL3Only = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmL3Only.IsNull() {
+			data.ProfileLoadBalanceAlgorithmL3Only = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/gtp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmGtp.IsNull() {
+			data.ProfileLoadBalanceAlgorithmGtp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmGtp.IsNull() {
+			data.ProfileLoadBalanceAlgorithmGtp = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/gtp-mpls"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmGtpMpls.IsNull() {
+			data.ProfileLoadBalanceAlgorithmGtpMpls = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmGtpMpls.IsNull() {
+			data.ProfileLoadBalanceAlgorithmGtpMpls = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/mpls-lsr-ler"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmMplsLsrLer.IsNull() {
+			data.ProfileLoadBalanceAlgorithmMplsLsrLer = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmMplsLsrLer.IsNull() {
+			data.ProfileLoadBalanceAlgorithmMplsLsrLer = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/mpls-lsr-ler-optimized"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.IsNull() {
+			data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.IsNull() {
+			data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/fat-based-hash"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmFatBasedHash.IsNull() {
+			data.ProfileLoadBalanceAlgorithmFatBasedHash = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmFatBasedHash.IsNull() {
+			data.ProfileLoadBalanceAlgorithmFatBasedHash = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/pppo-e"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmPppoe.IsNull() {
+			data.ProfileLoadBalanceAlgorithmPppoe = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmPppoe.IsNull() {
+			data.ProfileLoadBalanceAlgorithmPppoe = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/pppo-e/decap-fatbased-hashing"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.IsNull() {
+			data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.IsNull() {
+			data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/inner-l2-field"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileLoadBalanceAlgorithmInnerL2Field.IsNull() {
+			data.ProfileLoadBalanceAlgorithmInnerL2Field = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileLoadBalanceAlgorithmInnerL2Field.IsNull() {
+			data.ProfileLoadBalanceAlgorithmInnerL2Field = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/hash-polynomial-index"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmHashPolynomialIndex = types.Int64Value(value.Int())
+	} else if data.ProfileLoadBalanceAlgorithmHashPolynomialIndex.IsNull() {
+		data.ProfileLoadBalanceAlgorithmHashPolynomialIndex = types.Int64Null()
+	}
+	for i := range data.ProfileBundleHashIndexLocations {
+		keys := [...]string{"location-name", "location-name2"}
+		keyValues := [...]string{data.ProfileBundleHashIndexLocations[i].LocationName.ValueString(), data.ProfileBundleHashIndexLocations[i].LocationName2.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-bundle-hash/hash-index/locations/location").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "location-name"); value.Exists() {
+			data.ProfileBundleHashIndexLocations[i].LocationName = types.StringValue(value.String())
+		} else if data.ProfileBundleHashIndexLocations[i].LocationName.IsNull() {
+			data.ProfileBundleHashIndexLocations[i].LocationName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "location-name2"); value.Exists() {
+			data.ProfileBundleHashIndexLocations[i].LocationName2 = types.StringValue(value.String())
+		} else if data.ProfileBundleHashIndexLocations[i].LocationName2.IsNull() {
+			data.ProfileBundleHashIndexLocations[i].LocationName2 = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "index"); value.Exists() {
+			data.ProfileBundleHashIndexLocations[i].Index = types.StringValue(value.String())
+		} else if data.ProfileBundleHashIndexLocations[i].Index.IsNull() {
+			data.ProfileBundleHashIndexLocations[i].Index = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-bundle-hash/ignore-ingress-port"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileBundleHashIgnoreIngressPort.IsNull() {
+			data.ProfileBundleHashIgnoreIngressPort = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileBundleHashIgnoreIngressPort.IsNull() {
+			data.ProfileBundleHashIgnoreIngressPort = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-bundle-hash/per-packet-round-robin"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileBundleHashPerPacketRoundRobin.IsNull() {
+			data.ProfileBundleHashPerPacketRoundRobin = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileBundleHashPerPacketRoundRobin.IsNull() {
+			data.ProfileBundleHashPerPacketRoundRobin = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/max-classmap-sizes/max-classmap-size"); value.Exists() {
+		data.ProfileQosMaxClassmapSize = types.StringValue(value.String())
+	} else if data.ProfileQosMaxClassmapSize.IsNull() {
+		data.ProfileQosMaxClassmapSize = types.StringNull()
+	}
+	for i := range data.ProfileQosMaxClassmapSizeLocations {
+		keys := [...]string{"location-name"}
+		keyValues := [...]string{data.ProfileQosMaxClassmapSizeLocations[i].LocationName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/max-classmap-sizes/locations/location").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "location-name"); value.Exists() {
+			data.ProfileQosMaxClassmapSizeLocations[i].LocationName = types.StringValue(value.String())
+		} else if data.ProfileQosMaxClassmapSizeLocations[i].LocationName.IsNull() {
+			data.ProfileQosMaxClassmapSizeLocations[i].LocationName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "max-classmap-size"); value.Exists() {
+			data.ProfileQosMaxClassmapSizeLocations[i].MaxClassmapSize = types.StringValue(value.String())
+		} else if data.ProfileQosMaxClassmapSizeLocations[i].MaxClassmapSize.IsNull() {
+			data.ProfileQosMaxClassmapSizeLocations[i].MaxClassmapSize = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/qosg-dscp-mark-enable/first-dscp-precedence-value"); value.Exists() {
+		data.ProfileQosQosgDscpMarkEnableFirst = types.Int64Value(value.Int())
+	} else if data.ProfileQosQosgDscpMarkEnableFirst.IsNull() {
+		data.ProfileQosQosgDscpMarkEnableFirst = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/qosg-dscp-mark-enable/second-dscp-precedence-value"); value.Exists() {
+		data.ProfileQosQosgDscpMarkEnableSecond = types.Int64Value(value.Int())
+	} else if data.ProfileQosQosgDscpMarkEnableSecond.IsNull() {
+		data.ProfileQosQosgDscpMarkEnableSecond = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/free-buffer-int-threshold"); value.Exists() {
+		data.ProfileQosFreeBufferIntThresholdSet = types.Int64Value(value.Int())
+	} else if data.ProfileQosFreeBufferIntThresholdSet.IsNull() {
+		data.ProfileQosFreeBufferIntThresholdSet = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/clear-value-in-percent"); value.Exists() {
+		data.ProfileQosFreeBufferIntThresholdClear = types.Int64Value(value.Int())
+	} else if data.ProfileQosFreeBufferIntThresholdClear.IsNull() {
+		data.ProfileQosFreeBufferIntThresholdClear = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/hqos-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosHqosEnable.IsNull() {
+			data.ProfileQosHqosEnable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosHqosEnable.IsNull() {
+			data.ProfileQosHqosEnable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/qos-stats-collection"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosStatsCollection.IsNull() {
+			data.ProfileQosStatsCollection = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosStatsCollection.IsNull() {
+			data.ProfileQosStatsCollection = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/ecn-marking-stats"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosEcnMarkingStats.IsNull() {
+			data.ProfileQosEcnMarkingStats = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosEcnMarkingStats.IsNull() {
+			data.ProfileQosEcnMarkingStats = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/shared-policer-per-class-stats"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosSharedPolicerPerClassStats.IsNull() {
+			data.ProfileQosSharedPolicerPerClassStats = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosSharedPolicerPerClassStats.IsNull() {
+			data.ProfileQosSharedPolicerPerClassStats = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/wred-stats-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosWredStatsEnable.IsNull() {
+			data.ProfileQosWredStatsEnable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosWredStatsEnable.IsNull() {
+			data.ProfileQosWredStatsEnable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/lag-scheduler"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosLagScheduler.IsNull() {
+			data.ProfileQosLagScheduler = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosLagScheduler.IsNull() {
+			data.ProfileQosLagScheduler = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/conform-aware-policer"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosConformAwarePolicer.IsNull() {
+			data.ProfileQosConformAwarePolicer = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosConformAwarePolicer.IsNull() {
+			data.ProfileQosConformAwarePolicer = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/arp-isis-priority-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosArpIsisPriorityEnable.IsNull() {
+			data.ProfileQosArpIsisPriorityEnable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosArpIsisPriorityEnable.IsNull() {
+			data.ProfileQosArpIsisPriorityEnable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/gre-exp-classification-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosGreExpClassificationEnable.IsNull() {
+			data.ProfileQosGreExpClassificationEnable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosGreExpClassificationEnable.IsNull() {
+			data.ProfileQosGreExpClassificationEnable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/egress-compensation-setting-force"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosEgressCompensationSettingForce.IsNull() {
+			data.ProfileQosEgressCompensationSettingForce = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosEgressCompensationSettingForce.IsNull() {
+			data.ProfileQosEgressCompensationSettingForce = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/policer-scale/scale-value"); value.Exists() {
+		data.ProfileQosPolicerScale = types.StringValue(value.String())
+	} else if data.ProfileQosPolicerScale.IsNull() {
+		data.ProfileQosPolicerScale = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/nif-hp-fifo-reserve/percent"); value.Exists() {
+		data.ProfileQosNifHpFifoReservePercent = types.Int64Value(value.Int())
+	} else if data.ProfileQosNifHpFifoReservePercent.IsNull() {
+		data.ProfileQosNifHpFifoReservePercent = types.Int64Null()
+	}
+	for i := range data.ProfileQosNifHpFifoReserveLocations {
+		keys := [...]string{"location-name"}
+		keyValues := [...]string{data.ProfileQosNifHpFifoReserveLocations[i].LocationName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/nif-hp-fifo-reserve-locations/location").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "location-name"); value.Exists() {
+			data.ProfileQosNifHpFifoReserveLocations[i].LocationName = types.StringValue(value.String())
+		} else if data.ProfileQosNifHpFifoReserveLocations[i].LocationName.IsNull() {
+			data.ProfileQosNifHpFifoReserveLocations[i].LocationName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "percent"); value.Exists() {
+			data.ProfileQosNifHpFifoReserveLocations[i].Percent = types.Int64Value(value.Int())
+		} else if data.ProfileQosNifHpFifoReserveLocations[i].Percent.IsNull() {
+			data.ProfileQosNifHpFifoReserveLocations[i].Percent = types.Int64Null()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-npu/native-mode-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.NpuNativeModeEnable.IsNull() {
+			data.NpuNativeModeEnable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.NpuNativeModeEnable.IsNull() {
+			data.NpuNativeModeEnable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-netflow/ipfix315-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.NetflowIpfix315Enable.IsNull() {
+			data.NetflowIpfix315Enable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.NetflowIpfix315Enable.IsNull() {
+			data.NetflowIpfix315Enable = types.BoolNull()
+		}
+	}
+	for i := range data.NetflowIpfix315EnableLocations {
+		keys := [...]string{"location-name", "location-name2"}
+		keyValues := [...]string{data.NetflowIpfix315EnableLocations[i].LocationName.ValueString(), data.NetflowIpfix315EnableLocations[i].LocationName2.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-netflow/ipfix315-enable-locations/location").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "location-name"); value.Exists() {
+			data.NetflowIpfix315EnableLocations[i].LocationName = types.StringValue(value.String())
+		} else if data.NetflowIpfix315EnableLocations[i].LocationName.IsNull() {
+			data.NetflowIpfix315EnableLocations[i].LocationName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "location-name2"); value.Exists() {
+			data.NetflowIpfix315EnableLocations[i].LocationName2 = types.StringValue(value.String())
+		} else if data.NetflowIpfix315EnableLocations[i].LocationName2.IsNull() {
+			data.NetflowIpfix315EnableLocations[i].LocationName2 = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-netflow/sflow-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.NetflowSflowEnable.IsNull() {
+			data.NetflowSflowEnable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.NetflowSflowEnable.IsNull() {
+			data.NetflowSflowEnable = types.BoolNull()
+		}
+	}
+	for i := range data.NetflowSflowEnableLocations {
+		keys := [...]string{"location-name", "location-name2"}
+		keyValues := [...]string{data.NetflowSflowEnableLocations[i].LocationName.ValueString(), data.NetflowSflowEnableLocations[i].LocationName2.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-netflow/sflow-enable-locations/location").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "location-name"); value.Exists() {
+			data.NetflowSflowEnableLocations[i].LocationName = types.StringValue(value.String())
+		} else if data.NetflowSflowEnableLocations[i].LocationName.IsNull() {
+			data.NetflowSflowEnableLocations[i].LocationName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "location-name2"); value.Exists() {
+			data.NetflowSflowEnableLocations[i].LocationName2 = types.StringValue(value.String())
+		} else if data.NetflowSflowEnableLocations[i].LocationName2.IsNull() {
+			data.NetflowSflowEnableLocations[i].LocationName2 = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/acl-permit"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsAclPermit.IsNull() {
+			data.StatsAclPermit = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsAclPermit.IsNull() {
+			data.StatsAclPermit = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/qos-enhanced"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsQosEnhanced.IsNull() {
+			data.StatsQosEnhanced = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsQosEnhanced.IsNull() {
+			data.StatsQosEnhanced = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/ingress-sr"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsIngressSr.IsNull() {
+			data.StatsIngressSr = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsIngressSr.IsNull() {
+			data.StatsIngressSr = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/enh-sr-policy"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsEnhancedSrPolicy.IsNull() {
+			data.StatsEnhancedSrPolicy = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsEnhancedSrPolicy.IsNull() {
+			data.StatsEnhancedSrPolicy = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/ingress-sr-mspw"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsIngressSrMspw.IsNull() {
+			data.StatsIngressSrMspw = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsIngressSrMspw.IsNull() {
+			data.StatsIngressSrMspw = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/tx-scale-enhanced"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsTxScaleEnhanced.IsNull() {
+			data.StatsTxScaleEnhanced = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsTxScaleEnhanced.IsNull() {
+			data.StatsTxScaleEnhanced = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/tx-scale-enhanced/acl-permit"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsTxScaleEnhancedAclPermit.IsNull() {
+			data.StatsTxScaleEnhancedAclPermit = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsTxScaleEnhancedAclPermit.IsNull() {
+			data.StatsTxScaleEnhancedAclPermit = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/tx-scale-enhanced/qos-enhanced"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsTxScaleEnhancedQosEnhanced.IsNull() {
+			data.StatsTxScaleEnhancedQosEnhanced = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsTxScaleEnhancedQosEnhanced.IsNull() {
+			data.StatsTxScaleEnhancedQosEnhanced = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/tx-scale-enhanced/ingress-sr"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatsTxScaleEnhancedIngressSr.IsNull() {
+			data.StatsTxScaleEnhancedIngressSr = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatsTxScaleEnhancedIngressSr.IsNull() {
+			data.StatsTxScaleEnhancedIngressSr = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/base"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6ModeBase.IsNull() {
+			data.Srv6ModeBase = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6ModeBase.IsNull() {
+			data.Srv6ModeBase = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/base-and-micro-segment-f3216"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6ModeBaseAndMicroSegmentF3216.IsNull() {
+			data.Srv6ModeBaseAndMicroSegmentF3216 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6ModeBaseAndMicroSegmentF3216.IsNull() {
+			data.Srv6ModeBaseAndMicroSegmentF3216 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/micro-segment/format/f3216"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6ModeMicroSegmentFormatF3216.IsNull() {
+			data.Srv6ModeMicroSegmentFormatF3216 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6ModeMicroSegmentFormatF3216.IsNull() {
+			data.Srv6ModeMicroSegmentFormatF3216 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/micro-segment/format/path-mtu"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6ModeMicroSegmentFormatF3216PathMtu.IsNull() {
+			data.Srv6ModeMicroSegmentFormatF3216PathMtu = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6ModeMicroSegmentFormatF3216PathMtu.IsNull() {
+			data.Srv6ModeMicroSegmentFormatF3216PathMtu = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/propagate"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6EncapsulationL2TrafficClassPropagate.IsNull() {
+			data.Srv6EncapsulationL2TrafficClassPropagate = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6EncapsulationL2TrafficClassPropagate.IsNull() {
+			data.Srv6EncapsulationL2TrafficClassPropagate = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/traffic-class-value"); value.Exists() {
+		data.Srv6EncapsulationL2TrafficClassValue = types.Int64Value(value.Int())
+	} else if data.Srv6EncapsulationL2TrafficClassValue.IsNull() {
+		data.Srv6EncapsulationL2TrafficClassValue = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/propagate"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6EncapsulationL3TrafficClassPropagate.IsNull() {
+			data.Srv6EncapsulationL3TrafficClassPropagate = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6EncapsulationL3TrafficClassPropagate.IsNull() {
+			data.Srv6EncapsulationL3TrafficClassPropagate = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/policy-map"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6EncapsulationL3TrafficClassPolicyMap.IsNull() {
+			data.Srv6EncapsulationL3TrafficClassPolicyMap = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6EncapsulationL3TrafficClassPolicyMap.IsNull() {
+			data.Srv6EncapsulationL3TrafficClassPolicyMap = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/traffic-class-value"); value.Exists() {
+		data.Srv6EncapsulationL3TrafficClassValue = types.Int64Value(value.Int())
+	} else if data.Srv6EncapsulationL3TrafficClassValue.IsNull() {
+		data.Srv6EncapsulationL3TrafficClassValue = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class-with-hoplimit/propagate"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.IsNull() {
+			data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.IsNull() {
+			data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-offload/one"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OffloadOne.IsNull() {
+			data.OffloadOne = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.OffloadOne.IsNull() {
+			data.OffloadOne = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-offload/two"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OffloadTwo.IsNull() {
+			data.OffloadTwo = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.OffloadTwo.IsNull() {
+			data.OffloadTwo = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-offload/three"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OffloadThree.IsNull() {
+			data.OffloadThree = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.OffloadThree.IsNull() {
+			data.OffloadThree = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-offload/four"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OffloadFour.IsNull() {
+			data.OffloadFour = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.OffloadFour.IsNull() {
+			data.OffloadFour = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-sr-policy/v6-null-label-autopush"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyV6NullLabelAutopush.IsNull() {
+			data.SrPolicyV6NullLabelAutopush = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SrPolicyV6NullLabelAutopush.IsNull() {
+			data.SrPolicyV6NullLabelAutopush = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-oam/sat-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OamSatEnable.IsNull() {
+			data.OamSatEnable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.OamSatEnable.IsNull() {
+			data.OamSatEnable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-oam/four8byte-cfm-maid-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OamFour8byteCfmMaidEnable.IsNull() {
+			data.OamFour8byteCfmMaidEnable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.OamFour8byteCfmMaidEnable.IsNull() {
+			data.OamFour8byteCfmMaidEnable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fib-bgp-pic/multipath-core/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FibBgpPicMultipathCoreEnable.IsNull() {
+			data.FibBgpPicMultipathCoreEnable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.FibBgpPicMultipathCoreEnable.IsNull() {
+			data.FibBgpPicMultipathCoreEnable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp-mp-pic/auto-protect/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BgpMpPicAutoProtectEnable.IsNull() {
+			data.BgpMpPicAutoProtectEnable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpMpPicAutoProtectEnable.IsNull() {
+			data.BgpMpPicAutoProtectEnable = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *HWModuleProfile) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.layer2"); value.Exists() {
+func (data *HWModuleProfile) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "profile-load-balance.algorithm.layer2"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmLayer2 = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileLoadBalanceAlgorithmLayer2.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileLoadBalanceAlgorithmLayer2 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.ip-tunnel"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.ip-tunnel"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmIpTunnel = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileLoadBalanceAlgorithmIpTunnel.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileLoadBalanceAlgorithmIpTunnel = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.mpls-safe-speculative-parsing"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.mpls-safe-speculative-parsing"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.l3-only"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.l3-only"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmL3Only = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileLoadBalanceAlgorithmL3Only.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileLoadBalanceAlgorithmL3Only = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.gtp"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.gtp"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmGtp = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileLoadBalanceAlgorithmGtp.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileLoadBalanceAlgorithmGtp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.gtp-mpls"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.gtp-mpls"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmGtpMpls = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileLoadBalanceAlgorithmGtpMpls.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileLoadBalanceAlgorithmGtpMpls = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.mpls-lsr-ler"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.mpls-lsr-ler"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmMplsLsrLer = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileLoadBalanceAlgorithmMplsLsrLer.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileLoadBalanceAlgorithmMplsLsrLer = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.mpls-lsr-ler-optimized"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.mpls-lsr-ler-optimized"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.fat-based-hash"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.fat-based-hash"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmFatBasedHash = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileLoadBalanceAlgorithmFatBasedHash.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileLoadBalanceAlgorithmFatBasedHash = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.pppo-e"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.pppo-e"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmPppoe = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileLoadBalanceAlgorithmPppoe.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileLoadBalanceAlgorithmPppoe = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.pppo-e.decap-fatbased-hashing"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.pppo-e.decap-fatbased-hashing"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.inner-l2-field"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.inner-l2-field"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmInnerL2Field = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileLoadBalanceAlgorithmInnerL2Field.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileLoadBalanceAlgorithmInnerL2Field = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.hash-polynomial-index"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.hash-polynomial-index"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmHashPolynomialIndex = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-bundle-hash.hash-index.locations.location"); value.Exists() {
+	if value := res.Get(prefix + "profile-bundle-hash.hash-index.locations.location"); value.Exists() {
 		data.ProfileBundleHashIndexLocations = make([]HWModuleProfileProfileBundleHashIndexLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := HWModuleProfileProfileBundleHashIndexLocations{}
@@ -1370,20 +2690,22 @@ func (data *HWModuleProfile) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "profile-bundle-hash.ignore-ingress-port"); value.Exists() {
+	if value := res.Get(prefix + "profile-bundle-hash.ignore-ingress-port"); value.Exists() {
 		data.ProfileBundleHashIgnoreIngressPort = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileBundleHashIgnoreIngressPort.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileBundleHashIgnoreIngressPort = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-bundle-hash.per-packet-round-robin"); value.Exists() {
+	if value := res.Get(prefix + "profile-bundle-hash.per-packet-round-robin"); value.Exists() {
 		data.ProfileBundleHashPerPacketRoundRobin = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileBundleHashPerPacketRoundRobin.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileBundleHashPerPacketRoundRobin = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.max-classmap-sizes.max-classmap-size"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.max-classmap-sizes.max-classmap-size"); value.Exists() {
 		data.ProfileQosMaxClassmapSize = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "profile-qos.max-classmap-sizes.locations.location"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.max-classmap-sizes.locations.location"); value.Exists() {
 		data.ProfileQosMaxClassmapSizeLocations = make([]HWModuleProfileProfileQosMaxClassmapSizeLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := HWModuleProfileProfileQosMaxClassmapSizeLocations{}
@@ -1397,75 +2719,85 @@ func (data *HWModuleProfile) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "profile-qos.qosg-dscp-mark-enable.first-dscp-precedence-value"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.qosg-dscp-mark-enable.first-dscp-precedence-value"); value.Exists() {
 		data.ProfileQosQosgDscpMarkEnableFirst = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-qos.qosg-dscp-mark-enable.second-dscp-precedence-value"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.qosg-dscp-mark-enable.second-dscp-precedence-value"); value.Exists() {
 		data.ProfileQosQosgDscpMarkEnableSecond = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-qos.free-buffer-int-threshold"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.free-buffer-int-threshold"); value.Exists() {
 		data.ProfileQosFreeBufferIntThresholdSet = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-qos.clear-value-in-percent"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.clear-value-in-percent"); value.Exists() {
 		data.ProfileQosFreeBufferIntThresholdClear = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-qos.hqos-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.hqos-enable"); value.Exists() {
 		data.ProfileQosHqosEnable = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileQosHqosEnable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileQosHqosEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.qos-stats-collection"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.qos-stats-collection"); value.Exists() {
 		data.ProfileQosStatsCollection = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileQosStatsCollection.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileQosStatsCollection = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.ecn-marking-stats"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.ecn-marking-stats"); value.Exists() {
 		data.ProfileQosEcnMarkingStats = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileQosEcnMarkingStats.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileQosEcnMarkingStats = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.shared-policer-per-class-stats"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.shared-policer-per-class-stats"); value.Exists() {
 		data.ProfileQosSharedPolicerPerClassStats = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileQosSharedPolicerPerClassStats.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileQosSharedPolicerPerClassStats = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.wred-stats-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.wred-stats-enable"); value.Exists() {
 		data.ProfileQosWredStatsEnable = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileQosWredStatsEnable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileQosWredStatsEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.lag-scheduler"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.lag-scheduler"); value.Exists() {
 		data.ProfileQosLagScheduler = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileQosLagScheduler.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileQosLagScheduler = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.conform-aware-policer"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.conform-aware-policer"); value.Exists() {
 		data.ProfileQosConformAwarePolicer = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileQosConformAwarePolicer.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileQosConformAwarePolicer = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.arp-isis-priority-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.arp-isis-priority-enable"); value.Exists() {
 		data.ProfileQosArpIsisPriorityEnable = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileQosArpIsisPriorityEnable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileQosArpIsisPriorityEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.gre-exp-classification-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.gre-exp-classification-enable"); value.Exists() {
 		data.ProfileQosGreExpClassificationEnable = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileQosGreExpClassificationEnable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileQosGreExpClassificationEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.egress-compensation-setting-force"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.egress-compensation-setting-force"); value.Exists() {
 		data.ProfileQosEgressCompensationSettingForce = types.BoolValue(true)
-	} else {
+	} else if !data.ProfileQosEgressCompensationSettingForce.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ProfileQosEgressCompensationSettingForce = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.policer-scale.scale-value"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.policer-scale.scale-value"); value.Exists() {
 		data.ProfileQosPolicerScale = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "profile-qos.nif-hp-fifo-reserve.percent"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.nif-hp-fifo-reserve.percent"); value.Exists() {
 		data.ProfileQosNifHpFifoReservePercent = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-qos.nif-hp-fifo-reserve-locations.location"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.nif-hp-fifo-reserve-locations.location"); value.Exists() {
 		data.ProfileQosNifHpFifoReserveLocations = make([]HWModuleProfileProfileQosNifHpFifoReserveLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := HWModuleProfileProfileQosNifHpFifoReserveLocations{}
@@ -1479,17 +2811,19 @@ func (data *HWModuleProfile) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "profile-npu.native-mode-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-npu.native-mode-enable"); value.Exists() {
 		data.NpuNativeModeEnable = types.BoolValue(true)
-	} else {
+	} else if !data.NpuNativeModeEnable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.NpuNativeModeEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-netflow.ipfix315-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-netflow.ipfix315-enable"); value.Exists() {
 		data.NetflowIpfix315Enable = types.BoolValue(true)
-	} else {
+	} else if !data.NetflowIpfix315Enable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.NetflowIpfix315Enable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-netflow.ipfix315-enable-locations.location"); value.Exists() {
+	if value := res.Get(prefix + "profile-netflow.ipfix315-enable-locations.location"); value.Exists() {
 		data.NetflowIpfix315EnableLocations = make([]HWModuleProfileNetflowIpfix315EnableLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := HWModuleProfileNetflowIpfix315EnableLocations{}
@@ -1503,12 +2837,13 @@ func (data *HWModuleProfile) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "profile-netflow.sflow-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-netflow.sflow-enable"); value.Exists() {
 		data.NetflowSflowEnable = types.BoolValue(true)
-	} else {
+	} else if !data.NetflowSflowEnable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.NetflowSflowEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-netflow.sflow-enable-locations.location"); value.Exists() {
+	if value := res.Get(prefix + "profile-netflow.sflow-enable-locations.location"); value.Exists() {
 		data.NetflowSflowEnableLocations = make([]HWModuleProfileNetflowSflowEnableLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := HWModuleProfileNetflowSflowEnableLocations{}
@@ -1522,213 +2857,247 @@ func (data *HWModuleProfile) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "profile-stats.acl-permit"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.acl-permit"); value.Exists() {
 		data.StatsAclPermit = types.BoolValue(true)
-	} else {
+	} else if !data.StatsAclPermit.IsNull() {
+		// Only set to false if it was previously set in state
 		data.StatsAclPermit = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.qos-enhanced"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.qos-enhanced"); value.Exists() {
 		data.StatsQosEnhanced = types.BoolValue(true)
-	} else {
+	} else if !data.StatsQosEnhanced.IsNull() {
+		// Only set to false if it was previously set in state
 		data.StatsQosEnhanced = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.ingress-sr"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.ingress-sr"); value.Exists() {
 		data.StatsIngressSr = types.BoolValue(true)
-	} else {
+	} else if !data.StatsIngressSr.IsNull() {
+		// Only set to false if it was previously set in state
 		data.StatsIngressSr = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.enh-sr-policy"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.enh-sr-policy"); value.Exists() {
 		data.StatsEnhancedSrPolicy = types.BoolValue(true)
-	} else {
+	} else if !data.StatsEnhancedSrPolicy.IsNull() {
+		// Only set to false if it was previously set in state
 		data.StatsEnhancedSrPolicy = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.ingress-sr-mspw"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.ingress-sr-mspw"); value.Exists() {
 		data.StatsIngressSrMspw = types.BoolValue(true)
-	} else {
+	} else if !data.StatsIngressSrMspw.IsNull() {
+		// Only set to false if it was previously set in state
 		data.StatsIngressSrMspw = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.tx-scale-enhanced"); value.Exists() {
 		data.StatsTxScaleEnhanced = types.BoolValue(true)
-	} else {
+	} else if !data.StatsTxScaleEnhanced.IsNull() {
+		// Only set to false if it was previously set in state
 		data.StatsTxScaleEnhanced = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced.acl-permit"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.tx-scale-enhanced.acl-permit"); value.Exists() {
 		data.StatsTxScaleEnhancedAclPermit = types.BoolValue(true)
-	} else {
+	} else if !data.StatsTxScaleEnhancedAclPermit.IsNull() {
+		// Only set to false if it was previously set in state
 		data.StatsTxScaleEnhancedAclPermit = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced.qos-enhanced"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.tx-scale-enhanced.qos-enhanced"); value.Exists() {
 		data.StatsTxScaleEnhancedQosEnhanced = types.BoolValue(true)
-	} else {
+	} else if !data.StatsTxScaleEnhancedQosEnhanced.IsNull() {
+		// Only set to false if it was previously set in state
 		data.StatsTxScaleEnhancedQosEnhanced = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced.ingress-sr"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.tx-scale-enhanced.ingress-sr"); value.Exists() {
 		data.StatsTxScaleEnhancedIngressSr = types.BoolValue(true)
-	} else {
+	} else if !data.StatsTxScaleEnhancedIngressSr.IsNull() {
+		// Only set to false if it was previously set in state
 		data.StatsTxScaleEnhancedIngressSr = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.base"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.base"); value.Exists() {
 		data.Srv6ModeBase = types.BoolValue(true)
-	} else {
+	} else if !data.Srv6ModeBase.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Srv6ModeBase = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.base-and-micro-segment-f3216"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.base-and-micro-segment-f3216"); value.Exists() {
 		data.Srv6ModeBaseAndMicroSegmentF3216 = types.BoolValue(true)
-	} else {
+	} else if !data.Srv6ModeBaseAndMicroSegmentF3216.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Srv6ModeBaseAndMicroSegmentF3216 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.micro-segment.format.f3216"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.micro-segment.format.f3216"); value.Exists() {
 		data.Srv6ModeMicroSegmentFormatF3216 = types.BoolValue(true)
-	} else {
+	} else if !data.Srv6ModeMicroSegmentFormatF3216.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Srv6ModeMicroSegmentFormatF3216 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.micro-segment.format.path-mtu"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.micro-segment.format.path-mtu"); value.Exists() {
 		data.Srv6ModeMicroSegmentFormatF3216PathMtu = types.BoolValue(true)
-	} else {
+	} else if !data.Srv6ModeMicroSegmentFormatF3216PathMtu.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Srv6ModeMicroSegmentFormatF3216PathMtu = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l2-traffic.traffic-class.propagate"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.encapsulation.l2-traffic.traffic-class.propagate"); value.Exists() {
 		data.Srv6EncapsulationL2TrafficClassPropagate = types.BoolValue(true)
-	} else {
+	} else if !data.Srv6EncapsulationL2TrafficClassPropagate.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Srv6EncapsulationL2TrafficClassPropagate = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l2-traffic.traffic-class.traffic-class-value"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.encapsulation.l2-traffic.traffic-class.traffic-class-value"); value.Exists() {
 		data.Srv6EncapsulationL2TrafficClassValue = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.propagate"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.propagate"); value.Exists() {
 		data.Srv6EncapsulationL3TrafficClassPropagate = types.BoolValue(true)
-	} else {
+	} else if !data.Srv6EncapsulationL3TrafficClassPropagate.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Srv6EncapsulationL3TrafficClassPropagate = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.policy-map"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.policy-map"); value.Exists() {
 		data.Srv6EncapsulationL3TrafficClassPolicyMap = types.BoolValue(true)
-	} else {
+	} else if !data.Srv6EncapsulationL3TrafficClassPolicyMap.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Srv6EncapsulationL3TrafficClassPolicyMap = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.traffic-class-value"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.traffic-class-value"); value.Exists() {
 		data.Srv6EncapsulationL3TrafficClassValue = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class-with-hoplimit.propagate"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class-with-hoplimit.propagate"); value.Exists() {
 		data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate = types.BoolValue(true)
-	} else {
+	} else if !data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-offload.one"); value.Exists() {
+	if value := res.Get(prefix + "profile-offload.one"); value.Exists() {
 		data.OffloadOne = types.BoolValue(true)
-	} else {
+	} else if !data.OffloadOne.IsNull() {
+		// Only set to false if it was previously set in state
 		data.OffloadOne = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-offload.two"); value.Exists() {
+	if value := res.Get(prefix + "profile-offload.two"); value.Exists() {
 		data.OffloadTwo = types.BoolValue(true)
-	} else {
+	} else if !data.OffloadTwo.IsNull() {
+		// Only set to false if it was previously set in state
 		data.OffloadTwo = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-offload.three"); value.Exists() {
+	if value := res.Get(prefix + "profile-offload.three"); value.Exists() {
 		data.OffloadThree = types.BoolValue(true)
-	} else {
+	} else if !data.OffloadThree.IsNull() {
+		// Only set to false if it was previously set in state
 		data.OffloadThree = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-offload.four"); value.Exists() {
+	if value := res.Get(prefix + "profile-offload.four"); value.Exists() {
 		data.OffloadFour = types.BoolValue(true)
-	} else {
+	} else if !data.OffloadFour.IsNull() {
+		// Only set to false if it was previously set in state
 		data.OffloadFour = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-sr-policy.v6-null-label-autopush"); value.Exists() {
+	if value := res.Get(prefix + "profile-sr-policy.v6-null-label-autopush"); value.Exists() {
 		data.SrPolicyV6NullLabelAutopush = types.BoolValue(true)
-	} else {
+	} else if !data.SrPolicyV6NullLabelAutopush.IsNull() {
+		// Only set to false if it was previously set in state
 		data.SrPolicyV6NullLabelAutopush = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-oam.sat-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-oam.sat-enable"); value.Exists() {
 		data.OamSatEnable = types.BoolValue(true)
-	} else {
+	} else if !data.OamSatEnable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.OamSatEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-oam.four8byte-cfm-maid-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-oam.four8byte-cfm-maid-enable"); value.Exists() {
 		data.OamFour8byteCfmMaidEnable = types.BoolValue(true)
-	} else {
+	} else if !data.OamFour8byteCfmMaidEnable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.OamFour8byteCfmMaidEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "fib-bgp-pic.multipath-core.enable"); value.Exists() {
+	if value := res.Get(prefix + "fib-bgp-pic.multipath-core.enable"); value.Exists() {
 		data.FibBgpPicMultipathCoreEnable = types.BoolValue(true)
-	} else {
+	} else if !data.FibBgpPicMultipathCoreEnable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.FibBgpPicMultipathCoreEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "bgp-mp-pic.auto-protect.enable"); value.Exists() {
+	if value := res.Get(prefix + "bgp-mp-pic.auto-protect.enable"); value.Exists() {
 		data.BgpMpPicAutoProtectEnable = types.BoolValue(true)
-	} else {
+	} else if !data.BgpMpPicAutoProtectEnable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.BgpMpPicAutoProtectEnable = types.BoolValue(false)
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *HWModuleProfileData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.layer2"); value.Exists() {
+func (data *HWModuleProfileData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "profile-load-balance.algorithm.layer2"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmLayer2 = types.BoolValue(true)
 	} else {
 		data.ProfileLoadBalanceAlgorithmLayer2 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.ip-tunnel"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.ip-tunnel"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmIpTunnel = types.BoolValue(true)
 	} else {
 		data.ProfileLoadBalanceAlgorithmIpTunnel = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.mpls-safe-speculative-parsing"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.mpls-safe-speculative-parsing"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing = types.BoolValue(true)
 	} else {
 		data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.l3-only"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.l3-only"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmL3Only = types.BoolValue(true)
 	} else {
 		data.ProfileLoadBalanceAlgorithmL3Only = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.gtp"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.gtp"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmGtp = types.BoolValue(true)
 	} else {
 		data.ProfileLoadBalanceAlgorithmGtp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.gtp-mpls"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.gtp-mpls"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmGtpMpls = types.BoolValue(true)
 	} else {
 		data.ProfileLoadBalanceAlgorithmGtpMpls = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.mpls-lsr-ler"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.mpls-lsr-ler"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmMplsLsrLer = types.BoolValue(true)
 	} else {
 		data.ProfileLoadBalanceAlgorithmMplsLsrLer = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.mpls-lsr-ler-optimized"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.mpls-lsr-ler-optimized"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized = types.BoolValue(true)
 	} else {
 		data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.fat-based-hash"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.fat-based-hash"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmFatBasedHash = types.BoolValue(true)
 	} else {
 		data.ProfileLoadBalanceAlgorithmFatBasedHash = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.pppo-e"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.pppo-e"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmPppoe = types.BoolValue(true)
 	} else {
 		data.ProfileLoadBalanceAlgorithmPppoe = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.pppo-e.decap-fatbased-hashing"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.pppo-e.decap-fatbased-hashing"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing = types.BoolValue(true)
 	} else {
 		data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.inner-l2-field"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.inner-l2-field"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmInnerL2Field = types.BoolValue(true)
 	} else {
 		data.ProfileLoadBalanceAlgorithmInnerL2Field = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.hash-polynomial-index"); value.Exists() {
+	if value := res.Get(prefix + "profile-load-balance.algorithm.hash-polynomial-index"); value.Exists() {
 		data.ProfileLoadBalanceAlgorithmHashPolynomialIndex = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-bundle-hash.hash-index.locations.location"); value.Exists() {
+	if value := res.Get(prefix + "profile-bundle-hash.hash-index.locations.location"); value.Exists() {
 		data.ProfileBundleHashIndexLocations = make([]HWModuleProfileProfileBundleHashIndexLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := HWModuleProfileProfileBundleHashIndexLocations{}
@@ -1745,20 +3114,20 @@ func (data *HWModuleProfileData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "profile-bundle-hash.ignore-ingress-port"); value.Exists() {
+	if value := res.Get(prefix + "profile-bundle-hash.ignore-ingress-port"); value.Exists() {
 		data.ProfileBundleHashIgnoreIngressPort = types.BoolValue(true)
 	} else {
 		data.ProfileBundleHashIgnoreIngressPort = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-bundle-hash.per-packet-round-robin"); value.Exists() {
+	if value := res.Get(prefix + "profile-bundle-hash.per-packet-round-robin"); value.Exists() {
 		data.ProfileBundleHashPerPacketRoundRobin = types.BoolValue(true)
 	} else {
 		data.ProfileBundleHashPerPacketRoundRobin = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.max-classmap-sizes.max-classmap-size"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.max-classmap-sizes.max-classmap-size"); value.Exists() {
 		data.ProfileQosMaxClassmapSize = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "profile-qos.max-classmap-sizes.locations.location"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.max-classmap-sizes.locations.location"); value.Exists() {
 		data.ProfileQosMaxClassmapSizeLocations = make([]HWModuleProfileProfileQosMaxClassmapSizeLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := HWModuleProfileProfileQosMaxClassmapSizeLocations{}
@@ -1772,75 +3141,75 @@ func (data *HWModuleProfileData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "profile-qos.qosg-dscp-mark-enable.first-dscp-precedence-value"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.qosg-dscp-mark-enable.first-dscp-precedence-value"); value.Exists() {
 		data.ProfileQosQosgDscpMarkEnableFirst = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-qos.qosg-dscp-mark-enable.second-dscp-precedence-value"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.qosg-dscp-mark-enable.second-dscp-precedence-value"); value.Exists() {
 		data.ProfileQosQosgDscpMarkEnableSecond = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-qos.free-buffer-int-threshold"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.free-buffer-int-threshold"); value.Exists() {
 		data.ProfileQosFreeBufferIntThresholdSet = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-qos.clear-value-in-percent"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.clear-value-in-percent"); value.Exists() {
 		data.ProfileQosFreeBufferIntThresholdClear = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-qos.hqos-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.hqos-enable"); value.Exists() {
 		data.ProfileQosHqosEnable = types.BoolValue(true)
 	} else {
 		data.ProfileQosHqosEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.qos-stats-collection"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.qos-stats-collection"); value.Exists() {
 		data.ProfileQosStatsCollection = types.BoolValue(true)
 	} else {
 		data.ProfileQosStatsCollection = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.ecn-marking-stats"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.ecn-marking-stats"); value.Exists() {
 		data.ProfileQosEcnMarkingStats = types.BoolValue(true)
 	} else {
 		data.ProfileQosEcnMarkingStats = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.shared-policer-per-class-stats"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.shared-policer-per-class-stats"); value.Exists() {
 		data.ProfileQosSharedPolicerPerClassStats = types.BoolValue(true)
 	} else {
 		data.ProfileQosSharedPolicerPerClassStats = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.wred-stats-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.wred-stats-enable"); value.Exists() {
 		data.ProfileQosWredStatsEnable = types.BoolValue(true)
 	} else {
 		data.ProfileQosWredStatsEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.lag-scheduler"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.lag-scheduler"); value.Exists() {
 		data.ProfileQosLagScheduler = types.BoolValue(true)
 	} else {
 		data.ProfileQosLagScheduler = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.conform-aware-policer"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.conform-aware-policer"); value.Exists() {
 		data.ProfileQosConformAwarePolicer = types.BoolValue(true)
 	} else {
 		data.ProfileQosConformAwarePolicer = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.arp-isis-priority-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.arp-isis-priority-enable"); value.Exists() {
 		data.ProfileQosArpIsisPriorityEnable = types.BoolValue(true)
 	} else {
 		data.ProfileQosArpIsisPriorityEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.gre-exp-classification-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.gre-exp-classification-enable"); value.Exists() {
 		data.ProfileQosGreExpClassificationEnable = types.BoolValue(true)
 	} else {
 		data.ProfileQosGreExpClassificationEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.egress-compensation-setting-force"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.egress-compensation-setting-force"); value.Exists() {
 		data.ProfileQosEgressCompensationSettingForce = types.BoolValue(true)
 	} else {
 		data.ProfileQosEgressCompensationSettingForce = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-qos.policer-scale.scale-value"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.policer-scale.scale-value"); value.Exists() {
 		data.ProfileQosPolicerScale = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "profile-qos.nif-hp-fifo-reserve.percent"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.nif-hp-fifo-reserve.percent"); value.Exists() {
 		data.ProfileQosNifHpFifoReservePercent = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-qos.nif-hp-fifo-reserve-locations.location"); value.Exists() {
+	if value := res.Get(prefix + "profile-qos.nif-hp-fifo-reserve-locations.location"); value.Exists() {
 		data.ProfileQosNifHpFifoReserveLocations = make([]HWModuleProfileProfileQosNifHpFifoReserveLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := HWModuleProfileProfileQosNifHpFifoReserveLocations{}
@@ -1854,17 +3223,17 @@ func (data *HWModuleProfileData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "profile-npu.native-mode-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-npu.native-mode-enable"); value.Exists() {
 		data.NpuNativeModeEnable = types.BoolValue(true)
 	} else {
 		data.NpuNativeModeEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-netflow.ipfix315-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-netflow.ipfix315-enable"); value.Exists() {
 		data.NetflowIpfix315Enable = types.BoolValue(true)
 	} else {
 		data.NetflowIpfix315Enable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-netflow.ipfix315-enable-locations.location"); value.Exists() {
+	if value := res.Get(prefix + "profile-netflow.ipfix315-enable-locations.location"); value.Exists() {
 		data.NetflowIpfix315EnableLocations = make([]HWModuleProfileNetflowIpfix315EnableLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := HWModuleProfileNetflowIpfix315EnableLocations{}
@@ -1878,12 +3247,12 @@ func (data *HWModuleProfileData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "profile-netflow.sflow-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-netflow.sflow-enable"); value.Exists() {
 		data.NetflowSflowEnable = types.BoolValue(true)
 	} else {
 		data.NetflowSflowEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-netflow.sflow-enable-locations.location"); value.Exists() {
+	if value := res.Get(prefix + "profile-netflow.sflow-enable-locations.location"); value.Exists() {
 		data.NetflowSflowEnableLocations = make([]HWModuleProfileNetflowSflowEnableLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := HWModuleProfileNetflowSflowEnableLocations{}
@@ -1897,138 +3266,138 @@ func (data *HWModuleProfileData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "profile-stats.acl-permit"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.acl-permit"); value.Exists() {
 		data.StatsAclPermit = types.BoolValue(true)
 	} else {
 		data.StatsAclPermit = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.qos-enhanced"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.qos-enhanced"); value.Exists() {
 		data.StatsQosEnhanced = types.BoolValue(true)
 	} else {
 		data.StatsQosEnhanced = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.ingress-sr"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.ingress-sr"); value.Exists() {
 		data.StatsIngressSr = types.BoolValue(true)
 	} else {
 		data.StatsIngressSr = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.enh-sr-policy"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.enh-sr-policy"); value.Exists() {
 		data.StatsEnhancedSrPolicy = types.BoolValue(true)
 	} else {
 		data.StatsEnhancedSrPolicy = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.ingress-sr-mspw"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.ingress-sr-mspw"); value.Exists() {
 		data.StatsIngressSrMspw = types.BoolValue(true)
 	} else {
 		data.StatsIngressSrMspw = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.tx-scale-enhanced"); value.Exists() {
 		data.StatsTxScaleEnhanced = types.BoolValue(true)
 	} else {
 		data.StatsTxScaleEnhanced = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced.acl-permit"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.tx-scale-enhanced.acl-permit"); value.Exists() {
 		data.StatsTxScaleEnhancedAclPermit = types.BoolValue(true)
 	} else {
 		data.StatsTxScaleEnhancedAclPermit = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced.qos-enhanced"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.tx-scale-enhanced.qos-enhanced"); value.Exists() {
 		data.StatsTxScaleEnhancedQosEnhanced = types.BoolValue(true)
 	} else {
 		data.StatsTxScaleEnhancedQosEnhanced = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-stats.tx-scale-enhanced.ingress-sr"); value.Exists() {
+	if value := res.Get(prefix + "profile-stats.tx-scale-enhanced.ingress-sr"); value.Exists() {
 		data.StatsTxScaleEnhancedIngressSr = types.BoolValue(true)
 	} else {
 		data.StatsTxScaleEnhancedIngressSr = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.base"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.base"); value.Exists() {
 		data.Srv6ModeBase = types.BoolValue(true)
 	} else {
 		data.Srv6ModeBase = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.base-and-micro-segment-f3216"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.base-and-micro-segment-f3216"); value.Exists() {
 		data.Srv6ModeBaseAndMicroSegmentF3216 = types.BoolValue(true)
 	} else {
 		data.Srv6ModeBaseAndMicroSegmentF3216 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.micro-segment.format.f3216"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.micro-segment.format.f3216"); value.Exists() {
 		data.Srv6ModeMicroSegmentFormatF3216 = types.BoolValue(true)
 	} else {
 		data.Srv6ModeMicroSegmentFormatF3216 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.micro-segment.format.path-mtu"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.micro-segment.format.path-mtu"); value.Exists() {
 		data.Srv6ModeMicroSegmentFormatF3216PathMtu = types.BoolValue(true)
 	} else {
 		data.Srv6ModeMicroSegmentFormatF3216PathMtu = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l2-traffic.traffic-class.propagate"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.encapsulation.l2-traffic.traffic-class.propagate"); value.Exists() {
 		data.Srv6EncapsulationL2TrafficClassPropagate = types.BoolValue(true)
 	} else {
 		data.Srv6EncapsulationL2TrafficClassPropagate = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l2-traffic.traffic-class.traffic-class-value"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.encapsulation.l2-traffic.traffic-class.traffic-class-value"); value.Exists() {
 		data.Srv6EncapsulationL2TrafficClassValue = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.propagate"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.propagate"); value.Exists() {
 		data.Srv6EncapsulationL3TrafficClassPropagate = types.BoolValue(true)
 	} else {
 		data.Srv6EncapsulationL3TrafficClassPropagate = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.policy-map"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.policy-map"); value.Exists() {
 		data.Srv6EncapsulationL3TrafficClassPolicyMap = types.BoolValue(true)
 	} else {
 		data.Srv6EncapsulationL3TrafficClassPolicyMap = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.traffic-class-value"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class.traffic-class-value"); value.Exists() {
 		data.Srv6EncapsulationL3TrafficClassValue = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class-with-hoplimit.propagate"); value.Exists() {
+	if value := res.Get(prefix + "profile-segment-routing.srv6.mode.encapsulation.l3-traffic.traffic-class-with-hoplimit.propagate"); value.Exists() {
 		data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate = types.BoolValue(true)
 	} else {
 		data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-offload.one"); value.Exists() {
+	if value := res.Get(prefix + "profile-offload.one"); value.Exists() {
 		data.OffloadOne = types.BoolValue(true)
 	} else {
 		data.OffloadOne = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-offload.two"); value.Exists() {
+	if value := res.Get(prefix + "profile-offload.two"); value.Exists() {
 		data.OffloadTwo = types.BoolValue(true)
 	} else {
 		data.OffloadTwo = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-offload.three"); value.Exists() {
+	if value := res.Get(prefix + "profile-offload.three"); value.Exists() {
 		data.OffloadThree = types.BoolValue(true)
 	} else {
 		data.OffloadThree = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-offload.four"); value.Exists() {
+	if value := res.Get(prefix + "profile-offload.four"); value.Exists() {
 		data.OffloadFour = types.BoolValue(true)
 	} else {
 		data.OffloadFour = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-sr-policy.v6-null-label-autopush"); value.Exists() {
+	if value := res.Get(prefix + "profile-sr-policy.v6-null-label-autopush"); value.Exists() {
 		data.SrPolicyV6NullLabelAutopush = types.BoolValue(true)
 	} else {
 		data.SrPolicyV6NullLabelAutopush = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-oam.sat-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-oam.sat-enable"); value.Exists() {
 		data.OamSatEnable = types.BoolValue(true)
 	} else {
 		data.OamSatEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile-oam.four8byte-cfm-maid-enable"); value.Exists() {
+	if value := res.Get(prefix + "profile-oam.four8byte-cfm-maid-enable"); value.Exists() {
 		data.OamFour8byteCfmMaidEnable = types.BoolValue(true)
 	} else {
 		data.OamFour8byteCfmMaidEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "fib-bgp-pic.multipath-core.enable"); value.Exists() {
+	if value := res.Get(prefix + "fib-bgp-pic.multipath-core.enable"); value.Exists() {
 		data.FibBgpPicMultipathCoreEnable = types.BoolValue(true)
 	} else {
 		data.FibBgpPicMultipathCoreEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "bgp-mp-pic.auto-protect.enable"); value.Exists() {
+	if value := res.Get(prefix + "bgp-mp-pic.auto-protect.enable"); value.Exists() {
 		data.BgpMpPicAutoProtectEnable = types.BoolValue(true)
 	} else {
 		data.BgpMpPicAutoProtectEnable = types.BoolValue(false)
@@ -2036,7 +3405,754 @@ func (data *HWModuleProfileData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *HWModuleProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/layer2"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmLayer2 = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmLayer2 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/ip-tunnel"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmIpTunnel = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmIpTunnel = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/mpls-safe-speculative-parsing"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/l3-only"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmL3Only = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmL3Only = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/gtp"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmGtp = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmGtp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/gtp-mpls"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmGtpMpls = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmGtpMpls = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/mpls-lsr-ler"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmMplsLsrLer = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmMplsLsrLer = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/mpls-lsr-ler-optimized"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/fat-based-hash"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmFatBasedHash = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmFatBasedHash = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/pppo-e"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmPppoe = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmPppoe = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/pppo-e/decap-fatbased-hashing"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/inner-l2-field"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmInnerL2Field = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmInnerL2Field = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/hash-polynomial-index"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmHashPolynomialIndex = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-bundle-hash/hash-index/locations/location"); value.Exists() {
+		data.ProfileBundleHashIndexLocations = make([]HWModuleProfileProfileBundleHashIndexLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := HWModuleProfileProfileBundleHashIndexLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "location-name2"); cValue.Exists() {
+				item.LocationName2 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "index"); cValue.Exists() {
+				item.Index = types.StringValue(cValue.String())
+			}
+			data.ProfileBundleHashIndexLocations = append(data.ProfileBundleHashIndexLocations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-bundle-hash/ignore-ingress-port"); value.Exists() {
+		data.ProfileBundleHashIgnoreIngressPort = types.BoolValue(true)
+	} else {
+		data.ProfileBundleHashIgnoreIngressPort = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-bundle-hash/per-packet-round-robin"); value.Exists() {
+		data.ProfileBundleHashPerPacketRoundRobin = types.BoolValue(true)
+	} else {
+		data.ProfileBundleHashPerPacketRoundRobin = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/max-classmap-sizes/max-classmap-size"); value.Exists() {
+		data.ProfileQosMaxClassmapSize = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/max-classmap-sizes/locations/location"); value.Exists() {
+		data.ProfileQosMaxClassmapSizeLocations = make([]HWModuleProfileProfileQosMaxClassmapSizeLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := HWModuleProfileProfileQosMaxClassmapSizeLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "max-classmap-size"); cValue.Exists() {
+				item.MaxClassmapSize = types.StringValue(cValue.String())
+			}
+			data.ProfileQosMaxClassmapSizeLocations = append(data.ProfileQosMaxClassmapSizeLocations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/qosg-dscp-mark-enable/first-dscp-precedence-value"); value.Exists() {
+		data.ProfileQosQosgDscpMarkEnableFirst = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/qosg-dscp-mark-enable/second-dscp-precedence-value"); value.Exists() {
+		data.ProfileQosQosgDscpMarkEnableSecond = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/free-buffer-int-threshold"); value.Exists() {
+		data.ProfileQosFreeBufferIntThresholdSet = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/clear-value-in-percent"); value.Exists() {
+		data.ProfileQosFreeBufferIntThresholdClear = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/hqos-enable"); value.Exists() {
+		data.ProfileQosHqosEnable = types.BoolValue(true)
+	} else {
+		data.ProfileQosHqosEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/qos-stats-collection"); value.Exists() {
+		data.ProfileQosStatsCollection = types.BoolValue(true)
+	} else {
+		data.ProfileQosStatsCollection = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/ecn-marking-stats"); value.Exists() {
+		data.ProfileQosEcnMarkingStats = types.BoolValue(true)
+	} else {
+		data.ProfileQosEcnMarkingStats = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/shared-policer-per-class-stats"); value.Exists() {
+		data.ProfileQosSharedPolicerPerClassStats = types.BoolValue(true)
+	} else {
+		data.ProfileQosSharedPolicerPerClassStats = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/wred-stats-enable"); value.Exists() {
+		data.ProfileQosWredStatsEnable = types.BoolValue(true)
+	} else {
+		data.ProfileQosWredStatsEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/lag-scheduler"); value.Exists() {
+		data.ProfileQosLagScheduler = types.BoolValue(true)
+	} else {
+		data.ProfileQosLagScheduler = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/conform-aware-policer"); value.Exists() {
+		data.ProfileQosConformAwarePolicer = types.BoolValue(true)
+	} else {
+		data.ProfileQosConformAwarePolicer = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/arp-isis-priority-enable"); value.Exists() {
+		data.ProfileQosArpIsisPriorityEnable = types.BoolValue(true)
+	} else {
+		data.ProfileQosArpIsisPriorityEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/gre-exp-classification-enable"); value.Exists() {
+		data.ProfileQosGreExpClassificationEnable = types.BoolValue(true)
+	} else {
+		data.ProfileQosGreExpClassificationEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/egress-compensation-setting-force"); value.Exists() {
+		data.ProfileQosEgressCompensationSettingForce = types.BoolValue(true)
+	} else {
+		data.ProfileQosEgressCompensationSettingForce = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/policer-scale/scale-value"); value.Exists() {
+		data.ProfileQosPolicerScale = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/nif-hp-fifo-reserve/percent"); value.Exists() {
+		data.ProfileQosNifHpFifoReservePercent = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/nif-hp-fifo-reserve-locations/location"); value.Exists() {
+		data.ProfileQosNifHpFifoReserveLocations = make([]HWModuleProfileProfileQosNifHpFifoReserveLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := HWModuleProfileProfileQosNifHpFifoReserveLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "percent"); cValue.Exists() {
+				item.Percent = types.Int64Value(cValue.Int())
+			}
+			data.ProfileQosNifHpFifoReserveLocations = append(data.ProfileQosNifHpFifoReserveLocations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-npu/native-mode-enable"); value.Exists() {
+		data.NpuNativeModeEnable = types.BoolValue(true)
+	} else {
+		data.NpuNativeModeEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-netflow/ipfix315-enable"); value.Exists() {
+		data.NetflowIpfix315Enable = types.BoolValue(true)
+	} else {
+		data.NetflowIpfix315Enable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-netflow/ipfix315-enable-locations/location"); value.Exists() {
+		data.NetflowIpfix315EnableLocations = make([]HWModuleProfileNetflowIpfix315EnableLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := HWModuleProfileNetflowIpfix315EnableLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "location-name2"); cValue.Exists() {
+				item.LocationName2 = types.StringValue(cValue.String())
+			}
+			data.NetflowIpfix315EnableLocations = append(data.NetflowIpfix315EnableLocations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-netflow/sflow-enable"); value.Exists() {
+		data.NetflowSflowEnable = types.BoolValue(true)
+	} else {
+		data.NetflowSflowEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-netflow/sflow-enable-locations/location"); value.Exists() {
+		data.NetflowSflowEnableLocations = make([]HWModuleProfileNetflowSflowEnableLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := HWModuleProfileNetflowSflowEnableLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "location-name2"); cValue.Exists() {
+				item.LocationName2 = types.StringValue(cValue.String())
+			}
+			data.NetflowSflowEnableLocations = append(data.NetflowSflowEnableLocations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/acl-permit"); value.Exists() {
+		data.StatsAclPermit = types.BoolValue(true)
+	} else {
+		data.StatsAclPermit = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/qos-enhanced"); value.Exists() {
+		data.StatsQosEnhanced = types.BoolValue(true)
+	} else {
+		data.StatsQosEnhanced = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/ingress-sr"); value.Exists() {
+		data.StatsIngressSr = types.BoolValue(true)
+	} else {
+		data.StatsIngressSr = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/enh-sr-policy"); value.Exists() {
+		data.StatsEnhancedSrPolicy = types.BoolValue(true)
+	} else {
+		data.StatsEnhancedSrPolicy = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/ingress-sr-mspw"); value.Exists() {
+		data.StatsIngressSrMspw = types.BoolValue(true)
+	} else {
+		data.StatsIngressSrMspw = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/tx-scale-enhanced"); value.Exists() {
+		data.StatsTxScaleEnhanced = types.BoolValue(true)
+	} else {
+		data.StatsTxScaleEnhanced = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/tx-scale-enhanced/acl-permit"); value.Exists() {
+		data.StatsTxScaleEnhancedAclPermit = types.BoolValue(true)
+	} else {
+		data.StatsTxScaleEnhancedAclPermit = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/tx-scale-enhanced/qos-enhanced"); value.Exists() {
+		data.StatsTxScaleEnhancedQosEnhanced = types.BoolValue(true)
+	} else {
+		data.StatsTxScaleEnhancedQosEnhanced = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/tx-scale-enhanced/ingress-sr"); value.Exists() {
+		data.StatsTxScaleEnhancedIngressSr = types.BoolValue(true)
+	} else {
+		data.StatsTxScaleEnhancedIngressSr = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/base"); value.Exists() {
+		data.Srv6ModeBase = types.BoolValue(true)
+	} else {
+		data.Srv6ModeBase = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/base-and-micro-segment-f3216"); value.Exists() {
+		data.Srv6ModeBaseAndMicroSegmentF3216 = types.BoolValue(true)
+	} else {
+		data.Srv6ModeBaseAndMicroSegmentF3216 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/micro-segment/format/f3216"); value.Exists() {
+		data.Srv6ModeMicroSegmentFormatF3216 = types.BoolValue(true)
+	} else {
+		data.Srv6ModeMicroSegmentFormatF3216 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/micro-segment/format/path-mtu"); value.Exists() {
+		data.Srv6ModeMicroSegmentFormatF3216PathMtu = types.BoolValue(true)
+	} else {
+		data.Srv6ModeMicroSegmentFormatF3216PathMtu = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/propagate"); value.Exists() {
+		data.Srv6EncapsulationL2TrafficClassPropagate = types.BoolValue(true)
+	} else {
+		data.Srv6EncapsulationL2TrafficClassPropagate = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/traffic-class-value"); value.Exists() {
+		data.Srv6EncapsulationL2TrafficClassValue = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/propagate"); value.Exists() {
+		data.Srv6EncapsulationL3TrafficClassPropagate = types.BoolValue(true)
+	} else {
+		data.Srv6EncapsulationL3TrafficClassPropagate = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/policy-map"); value.Exists() {
+		data.Srv6EncapsulationL3TrafficClassPolicyMap = types.BoolValue(true)
+	} else {
+		data.Srv6EncapsulationL3TrafficClassPolicyMap = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/traffic-class-value"); value.Exists() {
+		data.Srv6EncapsulationL3TrafficClassValue = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class-with-hoplimit/propagate"); value.Exists() {
+		data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate = types.BoolValue(true)
+	} else {
+		data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-offload/one"); value.Exists() {
+		data.OffloadOne = types.BoolValue(true)
+	} else {
+		data.OffloadOne = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-offload/two"); value.Exists() {
+		data.OffloadTwo = types.BoolValue(true)
+	} else {
+		data.OffloadTwo = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-offload/three"); value.Exists() {
+		data.OffloadThree = types.BoolValue(true)
+	} else {
+		data.OffloadThree = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-offload/four"); value.Exists() {
+		data.OffloadFour = types.BoolValue(true)
+	} else {
+		data.OffloadFour = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-sr-policy/v6-null-label-autopush"); value.Exists() {
+		data.SrPolicyV6NullLabelAutopush = types.BoolValue(true)
+	} else {
+		data.SrPolicyV6NullLabelAutopush = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-oam/sat-enable"); value.Exists() {
+		data.OamSatEnable = types.BoolValue(true)
+	} else {
+		data.OamSatEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-oam/four8byte-cfm-maid-enable"); value.Exists() {
+		data.OamFour8byteCfmMaidEnable = types.BoolValue(true)
+	} else {
+		data.OamFour8byteCfmMaidEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fib-bgp-pic/multipath-core/enable"); value.Exists() {
+		data.FibBgpPicMultipathCoreEnable = types.BoolValue(true)
+	} else {
+		data.FibBgpPicMultipathCoreEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp-mp-pic/auto-protect/enable"); value.Exists() {
+		data.BgpMpPicAutoProtectEnable = types.BoolValue(true)
+	} else {
+		data.BgpMpPicAutoProtectEnable = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *HWModuleProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/layer2"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmLayer2 = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmLayer2 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/ip-tunnel"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmIpTunnel = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmIpTunnel = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/mpls-safe-speculative-parsing"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/l3-only"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmL3Only = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmL3Only = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/gtp"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmGtp = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmGtp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/gtp-mpls"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmGtpMpls = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmGtpMpls = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/mpls-lsr-ler"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmMplsLsrLer = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmMplsLsrLer = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/mpls-lsr-ler-optimized"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/fat-based-hash"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmFatBasedHash = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmFatBasedHash = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/pppo-e"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmPppoe = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmPppoe = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/pppo-e/decap-fatbased-hashing"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/inner-l2-field"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmInnerL2Field = types.BoolValue(true)
+	} else {
+		data.ProfileLoadBalanceAlgorithmInnerL2Field = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-load-balance/algorithm/hash-polynomial-index"); value.Exists() {
+		data.ProfileLoadBalanceAlgorithmHashPolynomialIndex = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-bundle-hash/hash-index/locations/location"); value.Exists() {
+		data.ProfileBundleHashIndexLocations = make([]HWModuleProfileProfileBundleHashIndexLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := HWModuleProfileProfileBundleHashIndexLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "location-name2"); cValue.Exists() {
+				item.LocationName2 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "index"); cValue.Exists() {
+				item.Index = types.StringValue(cValue.String())
+			}
+			data.ProfileBundleHashIndexLocations = append(data.ProfileBundleHashIndexLocations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-bundle-hash/ignore-ingress-port"); value.Exists() {
+		data.ProfileBundleHashIgnoreIngressPort = types.BoolValue(true)
+	} else {
+		data.ProfileBundleHashIgnoreIngressPort = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-bundle-hash/per-packet-round-robin"); value.Exists() {
+		data.ProfileBundleHashPerPacketRoundRobin = types.BoolValue(true)
+	} else {
+		data.ProfileBundleHashPerPacketRoundRobin = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/max-classmap-sizes/max-classmap-size"); value.Exists() {
+		data.ProfileQosMaxClassmapSize = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/max-classmap-sizes/locations/location"); value.Exists() {
+		data.ProfileQosMaxClassmapSizeLocations = make([]HWModuleProfileProfileQosMaxClassmapSizeLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := HWModuleProfileProfileQosMaxClassmapSizeLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "max-classmap-size"); cValue.Exists() {
+				item.MaxClassmapSize = types.StringValue(cValue.String())
+			}
+			data.ProfileQosMaxClassmapSizeLocations = append(data.ProfileQosMaxClassmapSizeLocations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/qosg-dscp-mark-enable/first-dscp-precedence-value"); value.Exists() {
+		data.ProfileQosQosgDscpMarkEnableFirst = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/qosg-dscp-mark-enable/second-dscp-precedence-value"); value.Exists() {
+		data.ProfileQosQosgDscpMarkEnableSecond = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/free-buffer-int-threshold"); value.Exists() {
+		data.ProfileQosFreeBufferIntThresholdSet = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/clear-value-in-percent"); value.Exists() {
+		data.ProfileQosFreeBufferIntThresholdClear = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/hqos-enable"); value.Exists() {
+		data.ProfileQosHqosEnable = types.BoolValue(true)
+	} else {
+		data.ProfileQosHqosEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/qos-stats-collection"); value.Exists() {
+		data.ProfileQosStatsCollection = types.BoolValue(true)
+	} else {
+		data.ProfileQosStatsCollection = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/ecn-marking-stats"); value.Exists() {
+		data.ProfileQosEcnMarkingStats = types.BoolValue(true)
+	} else {
+		data.ProfileQosEcnMarkingStats = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/shared-policer-per-class-stats"); value.Exists() {
+		data.ProfileQosSharedPolicerPerClassStats = types.BoolValue(true)
+	} else {
+		data.ProfileQosSharedPolicerPerClassStats = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/wred-stats-enable"); value.Exists() {
+		data.ProfileQosWredStatsEnable = types.BoolValue(true)
+	} else {
+		data.ProfileQosWredStatsEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/lag-scheduler"); value.Exists() {
+		data.ProfileQosLagScheduler = types.BoolValue(true)
+	} else {
+		data.ProfileQosLagScheduler = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/conform-aware-policer"); value.Exists() {
+		data.ProfileQosConformAwarePolicer = types.BoolValue(true)
+	} else {
+		data.ProfileQosConformAwarePolicer = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/arp-isis-priority-enable"); value.Exists() {
+		data.ProfileQosArpIsisPriorityEnable = types.BoolValue(true)
+	} else {
+		data.ProfileQosArpIsisPriorityEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/gre-exp-classification-enable"); value.Exists() {
+		data.ProfileQosGreExpClassificationEnable = types.BoolValue(true)
+	} else {
+		data.ProfileQosGreExpClassificationEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/egress-compensation-setting-force"); value.Exists() {
+		data.ProfileQosEgressCompensationSettingForce = types.BoolValue(true)
+	} else {
+		data.ProfileQosEgressCompensationSettingForce = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/policer-scale/scale-value"); value.Exists() {
+		data.ProfileQosPolicerScale = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/nif-hp-fifo-reserve/percent"); value.Exists() {
+		data.ProfileQosNifHpFifoReservePercent = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/nif-hp-fifo-reserve-locations/location"); value.Exists() {
+		data.ProfileQosNifHpFifoReserveLocations = make([]HWModuleProfileProfileQosNifHpFifoReserveLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := HWModuleProfileProfileQosNifHpFifoReserveLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "percent"); cValue.Exists() {
+				item.Percent = types.Int64Value(cValue.Int())
+			}
+			data.ProfileQosNifHpFifoReserveLocations = append(data.ProfileQosNifHpFifoReserveLocations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-npu/native-mode-enable"); value.Exists() {
+		data.NpuNativeModeEnable = types.BoolValue(true)
+	} else {
+		data.NpuNativeModeEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-netflow/ipfix315-enable"); value.Exists() {
+		data.NetflowIpfix315Enable = types.BoolValue(true)
+	} else {
+		data.NetflowIpfix315Enable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-netflow/ipfix315-enable-locations/location"); value.Exists() {
+		data.NetflowIpfix315EnableLocations = make([]HWModuleProfileNetflowIpfix315EnableLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := HWModuleProfileNetflowIpfix315EnableLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "location-name2"); cValue.Exists() {
+				item.LocationName2 = types.StringValue(cValue.String())
+			}
+			data.NetflowIpfix315EnableLocations = append(data.NetflowIpfix315EnableLocations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-netflow/sflow-enable"); value.Exists() {
+		data.NetflowSflowEnable = types.BoolValue(true)
+	} else {
+		data.NetflowSflowEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-netflow/sflow-enable-locations/location"); value.Exists() {
+		data.NetflowSflowEnableLocations = make([]HWModuleProfileNetflowSflowEnableLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := HWModuleProfileNetflowSflowEnableLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "location-name2"); cValue.Exists() {
+				item.LocationName2 = types.StringValue(cValue.String())
+			}
+			data.NetflowSflowEnableLocations = append(data.NetflowSflowEnableLocations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/acl-permit"); value.Exists() {
+		data.StatsAclPermit = types.BoolValue(true)
+	} else {
+		data.StatsAclPermit = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/qos-enhanced"); value.Exists() {
+		data.StatsQosEnhanced = types.BoolValue(true)
+	} else {
+		data.StatsQosEnhanced = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/ingress-sr"); value.Exists() {
+		data.StatsIngressSr = types.BoolValue(true)
+	} else {
+		data.StatsIngressSr = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/enh-sr-policy"); value.Exists() {
+		data.StatsEnhancedSrPolicy = types.BoolValue(true)
+	} else {
+		data.StatsEnhancedSrPolicy = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/ingress-sr-mspw"); value.Exists() {
+		data.StatsIngressSrMspw = types.BoolValue(true)
+	} else {
+		data.StatsIngressSrMspw = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/tx-scale-enhanced"); value.Exists() {
+		data.StatsTxScaleEnhanced = types.BoolValue(true)
+	} else {
+		data.StatsTxScaleEnhanced = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/tx-scale-enhanced/acl-permit"); value.Exists() {
+		data.StatsTxScaleEnhancedAclPermit = types.BoolValue(true)
+	} else {
+		data.StatsTxScaleEnhancedAclPermit = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/tx-scale-enhanced/qos-enhanced"); value.Exists() {
+		data.StatsTxScaleEnhancedQosEnhanced = types.BoolValue(true)
+	} else {
+		data.StatsTxScaleEnhancedQosEnhanced = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-stats/tx-scale-enhanced/ingress-sr"); value.Exists() {
+		data.StatsTxScaleEnhancedIngressSr = types.BoolValue(true)
+	} else {
+		data.StatsTxScaleEnhancedIngressSr = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/base"); value.Exists() {
+		data.Srv6ModeBase = types.BoolValue(true)
+	} else {
+		data.Srv6ModeBase = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/base-and-micro-segment-f3216"); value.Exists() {
+		data.Srv6ModeBaseAndMicroSegmentF3216 = types.BoolValue(true)
+	} else {
+		data.Srv6ModeBaseAndMicroSegmentF3216 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/micro-segment/format/f3216"); value.Exists() {
+		data.Srv6ModeMicroSegmentFormatF3216 = types.BoolValue(true)
+	} else {
+		data.Srv6ModeMicroSegmentFormatF3216 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/micro-segment/format/path-mtu"); value.Exists() {
+		data.Srv6ModeMicroSegmentFormatF3216PathMtu = types.BoolValue(true)
+	} else {
+		data.Srv6ModeMicroSegmentFormatF3216PathMtu = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/propagate"); value.Exists() {
+		data.Srv6EncapsulationL2TrafficClassPropagate = types.BoolValue(true)
+	} else {
+		data.Srv6EncapsulationL2TrafficClassPropagate = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/traffic-class-value"); value.Exists() {
+		data.Srv6EncapsulationL2TrafficClassValue = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/propagate"); value.Exists() {
+		data.Srv6EncapsulationL3TrafficClassPropagate = types.BoolValue(true)
+	} else {
+		data.Srv6EncapsulationL3TrafficClassPropagate = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/policy-map"); value.Exists() {
+		data.Srv6EncapsulationL3TrafficClassPolicyMap = types.BoolValue(true)
+	} else {
+		data.Srv6EncapsulationL3TrafficClassPolicyMap = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/traffic-class-value"); value.Exists() {
+		data.Srv6EncapsulationL3TrafficClassValue = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class-with-hoplimit/propagate"); value.Exists() {
+		data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate = types.BoolValue(true)
+	} else {
+		data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-offload/one"); value.Exists() {
+		data.OffloadOne = types.BoolValue(true)
+	} else {
+		data.OffloadOne = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-offload/two"); value.Exists() {
+		data.OffloadTwo = types.BoolValue(true)
+	} else {
+		data.OffloadTwo = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-offload/three"); value.Exists() {
+		data.OffloadThree = types.BoolValue(true)
+	} else {
+		data.OffloadThree = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-offload/four"); value.Exists() {
+		data.OffloadFour = types.BoolValue(true)
+	} else {
+		data.OffloadFour = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-sr-policy/v6-null-label-autopush"); value.Exists() {
+		data.SrPolicyV6NullLabelAutopush = types.BoolValue(true)
+	} else {
+		data.SrPolicyV6NullLabelAutopush = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-oam/sat-enable"); value.Exists() {
+		data.OamSatEnable = types.BoolValue(true)
+	} else {
+		data.OamSatEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-oam/four8byte-cfm-maid-enable"); value.Exists() {
+		data.OamFour8byteCfmMaidEnable = types.BoolValue(true)
+	} else {
+		data.OamFour8byteCfmMaidEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fib-bgp-pic/multipath-core/enable"); value.Exists() {
+		data.FibBgpPicMultipathCoreEnable = types.BoolValue(true)
+	} else {
+		data.FibBgpPicMultipathCoreEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp-mp-pic/auto-protect/enable"); value.Exists() {
+		data.BgpMpPicAutoProtectEnable = types.BoolValue(true)
+	} else {
+		data.BgpMpPicAutoProtectEnable = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *HWModuleProfile) getDeletedItems(ctx context.Context, state HWModuleProfile) []string {
@@ -2411,88 +4527,165 @@ func (data *HWModuleProfile) getDeletedItems(ctx context.Context, state HWModule
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *HWModuleProfile) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *HWModuleProfile) getEmptyLeafsDelete(ctx context.Context, state *HWModuleProfile) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.BgpMpPicAutoProtectEnable.IsNull() && !data.BgpMpPicAutoProtectEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp-mp-pic/auto-protect/enable", data.getPath()))
+		if state != nil && !state.BgpMpPicAutoProtectEnable.IsNull() && state.BgpMpPicAutoProtectEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp-mp-pic/auto-protect/enable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.FibBgpPicMultipathCoreEnable.IsNull() && !data.FibBgpPicMultipathCoreEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fib-bgp-pic/multipath-core/enable", data.getPath()))
+		if state != nil && !state.FibBgpPicMultipathCoreEnable.IsNull() && state.FibBgpPicMultipathCoreEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fib-bgp-pic/multipath-core/enable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.OamFour8byteCfmMaidEnable.IsNull() && !data.OamFour8byteCfmMaidEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-oam/four8byte-cfm-maid-enable", data.getPath()))
+		if state != nil && !state.OamFour8byteCfmMaidEnable.IsNull() && state.OamFour8byteCfmMaidEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-oam/four8byte-cfm-maid-enable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.OamSatEnable.IsNull() && !data.OamSatEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-oam/sat-enable", data.getPath()))
+		if state != nil && !state.OamSatEnable.IsNull() && state.OamSatEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-oam/sat-enable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.SrPolicyV6NullLabelAutopush.IsNull() && !data.SrPolicyV6NullLabelAutopush.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-sr-policy/v6-null-label-autopush", data.getPath()))
+		if state != nil && !state.SrPolicyV6NullLabelAutopush.IsNull() && state.SrPolicyV6NullLabelAutopush.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-sr-policy/v6-null-label-autopush", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.OffloadFour.IsNull() && !data.OffloadFour.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-offload/four", data.getPath()))
+		if state != nil && !state.OffloadFour.IsNull() && state.OffloadFour.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-offload/four", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.OffloadThree.IsNull() && !data.OffloadThree.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-offload/three", data.getPath()))
+		if state != nil && !state.OffloadThree.IsNull() && state.OffloadThree.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-offload/three", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.OffloadTwo.IsNull() && !data.OffloadTwo.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-offload/two", data.getPath()))
+		if state != nil && !state.OffloadTwo.IsNull() && state.OffloadTwo.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-offload/two", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.OffloadOne.IsNull() && !data.OffloadOne.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-offload/one", data.getPath()))
+		if state != nil && !state.OffloadOne.IsNull() && state.OffloadOne.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-offload/one", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.IsNull() && !data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class-with-hoplimit/propagate", data.getPath()))
+		if state != nil && !state.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.IsNull() && state.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class-with-hoplimit/propagate", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Srv6EncapsulationL3TrafficClassPolicyMap.IsNull() && !data.Srv6EncapsulationL3TrafficClassPolicyMap.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/policy-map", data.getPath()))
+		if state != nil && !state.Srv6EncapsulationL3TrafficClassPolicyMap.IsNull() && state.Srv6EncapsulationL3TrafficClassPolicyMap.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/policy-map", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Srv6EncapsulationL3TrafficClassPropagate.IsNull() && !data.Srv6EncapsulationL3TrafficClassPropagate.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/propagate", data.getPath()))
+		if state != nil && !state.Srv6EncapsulationL3TrafficClassPropagate.IsNull() && state.Srv6EncapsulationL3TrafficClassPropagate.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/propagate", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Srv6EncapsulationL2TrafficClassPropagate.IsNull() && !data.Srv6EncapsulationL2TrafficClassPropagate.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/propagate", data.getPath()))
+		if state != nil && !state.Srv6EncapsulationL2TrafficClassPropagate.IsNull() && state.Srv6EncapsulationL2TrafficClassPropagate.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/propagate", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Srv6ModeMicroSegmentFormatF3216PathMtu.IsNull() && !data.Srv6ModeMicroSegmentFormatF3216PathMtu.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/micro-segment/format/path-mtu", data.getPath()))
+		if state != nil && !state.Srv6ModeMicroSegmentFormatF3216PathMtu.IsNull() && state.Srv6ModeMicroSegmentFormatF3216PathMtu.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/micro-segment/format/path-mtu", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Srv6ModeMicroSegmentFormatF3216.IsNull() && !data.Srv6ModeMicroSegmentFormatF3216.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/micro-segment/format/f3216", data.getPath()))
+		if state != nil && !state.Srv6ModeMicroSegmentFormatF3216.IsNull() && state.Srv6ModeMicroSegmentFormatF3216.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/micro-segment/format/f3216", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Srv6ModeBaseAndMicroSegmentF3216.IsNull() && !data.Srv6ModeBaseAndMicroSegmentF3216.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/base-and-micro-segment-f3216", data.getPath()))
+		if state != nil && !state.Srv6ModeBaseAndMicroSegmentF3216.IsNull() && state.Srv6ModeBaseAndMicroSegmentF3216.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/base-and-micro-segment-f3216", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Srv6ModeBase.IsNull() && !data.Srv6ModeBase.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/base", data.getPath()))
+		if state != nil && !state.Srv6ModeBase.IsNull() && state.Srv6ModeBase.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-segment-routing/srv6/mode/base", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.StatsTxScaleEnhancedIngressSr.IsNull() && !data.StatsTxScaleEnhancedIngressSr.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/tx-scale-enhanced/ingress-sr", data.getPath()))
+		if state != nil && !state.StatsTxScaleEnhancedIngressSr.IsNull() && state.StatsTxScaleEnhancedIngressSr.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/tx-scale-enhanced/ingress-sr", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.StatsTxScaleEnhancedQosEnhanced.IsNull() && !data.StatsTxScaleEnhancedQosEnhanced.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/tx-scale-enhanced/qos-enhanced", data.getPath()))
+		if state != nil && !state.StatsTxScaleEnhancedQosEnhanced.IsNull() && state.StatsTxScaleEnhancedQosEnhanced.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/tx-scale-enhanced/qos-enhanced", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.StatsTxScaleEnhancedAclPermit.IsNull() && !data.StatsTxScaleEnhancedAclPermit.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/tx-scale-enhanced/acl-permit", data.getPath()))
+		if state != nil && !state.StatsTxScaleEnhancedAclPermit.IsNull() && state.StatsTxScaleEnhancedAclPermit.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/tx-scale-enhanced/acl-permit", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.StatsTxScaleEnhanced.IsNull() && !data.StatsTxScaleEnhanced.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/tx-scale-enhanced", data.getPath()))
+		if state != nil && !state.StatsTxScaleEnhanced.IsNull() && state.StatsTxScaleEnhanced.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/tx-scale-enhanced", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.StatsIngressSrMspw.IsNull() && !data.StatsIngressSrMspw.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/ingress-sr-mspw", data.getPath()))
+		if state != nil && !state.StatsIngressSrMspw.IsNull() && state.StatsIngressSrMspw.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/ingress-sr-mspw", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.StatsEnhancedSrPolicy.IsNull() && !data.StatsEnhancedSrPolicy.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/enh-sr-policy", data.getPath()))
+		if state != nil && !state.StatsEnhancedSrPolicy.IsNull() && state.StatsEnhancedSrPolicy.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/enh-sr-policy", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.StatsIngressSr.IsNull() && !data.StatsIngressSr.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/ingress-sr", data.getPath()))
+		if state != nil && !state.StatsIngressSr.IsNull() && state.StatsIngressSr.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/ingress-sr", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.StatsQosEnhanced.IsNull() && !data.StatsQosEnhanced.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/qos-enhanced", data.getPath()))
+		if state != nil && !state.StatsQosEnhanced.IsNull() && state.StatsQosEnhanced.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/qos-enhanced", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.StatsAclPermit.IsNull() && !data.StatsAclPermit.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/acl-permit", data.getPath()))
+		if state != nil && !state.StatsAclPermit.IsNull() && state.StatsAclPermit.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-stats/acl-permit", data.getXPath()))
+		}
 	}
 	for i := range data.NetflowSflowEnableLocations {
 		keys := [...]string{"location-name", "location-name2"}
@@ -2502,8 +4695,11 @@ func (data *HWModuleProfile) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.NetflowSflowEnable.IsNull() && !data.NetflowSflowEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-netflow/sflow-enable", data.getPath()))
+		if state != nil && !state.NetflowSflowEnable.IsNull() && state.NetflowSflowEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-netflow/sflow-enable", data.getXPath()))
+		}
 	}
 	for i := range data.NetflowIpfix315EnableLocations {
 		keys := [...]string{"location-name", "location-name2"}
@@ -2513,11 +4709,17 @@ func (data *HWModuleProfile) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.NetflowIpfix315Enable.IsNull() && !data.NetflowIpfix315Enable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-netflow/ipfix315-enable", data.getPath()))
+		if state != nil && !state.NetflowIpfix315Enable.IsNull() && state.NetflowIpfix315Enable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-netflow/ipfix315-enable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.NpuNativeModeEnable.IsNull() && !data.NpuNativeModeEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-npu/native-mode-enable", data.getPath()))
+		if state != nil && !state.NpuNativeModeEnable.IsNull() && state.NpuNativeModeEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-npu/native-mode-enable", data.getXPath()))
+		}
 	}
 	for i := range data.ProfileQosNifHpFifoReserveLocations {
 		keys := [...]string{"location-name"}
@@ -2527,35 +4729,65 @@ func (data *HWModuleProfile) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileQosEgressCompensationSettingForce.IsNull() && !data.ProfileQosEgressCompensationSettingForce.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/egress-compensation-setting-force", data.getPath()))
+		if state != nil && !state.ProfileQosEgressCompensationSettingForce.IsNull() && state.ProfileQosEgressCompensationSettingForce.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/egress-compensation-setting-force", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileQosGreExpClassificationEnable.IsNull() && !data.ProfileQosGreExpClassificationEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/gre-exp-classification-enable", data.getPath()))
+		if state != nil && !state.ProfileQosGreExpClassificationEnable.IsNull() && state.ProfileQosGreExpClassificationEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/gre-exp-classification-enable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileQosArpIsisPriorityEnable.IsNull() && !data.ProfileQosArpIsisPriorityEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/arp-isis-priority-enable", data.getPath()))
+		if state != nil && !state.ProfileQosArpIsisPriorityEnable.IsNull() && state.ProfileQosArpIsisPriorityEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/arp-isis-priority-enable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileQosConformAwarePolicer.IsNull() && !data.ProfileQosConformAwarePolicer.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/conform-aware-policer", data.getPath()))
+		if state != nil && !state.ProfileQosConformAwarePolicer.IsNull() && state.ProfileQosConformAwarePolicer.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/conform-aware-policer", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileQosLagScheduler.IsNull() && !data.ProfileQosLagScheduler.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/lag-scheduler", data.getPath()))
+		if state != nil && !state.ProfileQosLagScheduler.IsNull() && state.ProfileQosLagScheduler.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/lag-scheduler", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileQosWredStatsEnable.IsNull() && !data.ProfileQosWredStatsEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/wred-stats-enable", data.getPath()))
+		if state != nil && !state.ProfileQosWredStatsEnable.IsNull() && state.ProfileQosWredStatsEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/wred-stats-enable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileQosSharedPolicerPerClassStats.IsNull() && !data.ProfileQosSharedPolicerPerClassStats.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/shared-policer-per-class-stats", data.getPath()))
+		if state != nil && !state.ProfileQosSharedPolicerPerClassStats.IsNull() && state.ProfileQosSharedPolicerPerClassStats.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/shared-policer-per-class-stats", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileQosEcnMarkingStats.IsNull() && !data.ProfileQosEcnMarkingStats.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/ecn-marking-stats", data.getPath()))
+		if state != nil && !state.ProfileQosEcnMarkingStats.IsNull() && state.ProfileQosEcnMarkingStats.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/ecn-marking-stats", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileQosStatsCollection.IsNull() && !data.ProfileQosStatsCollection.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/qos-stats-collection", data.getPath()))
+		if state != nil && !state.ProfileQosStatsCollection.IsNull() && state.ProfileQosStatsCollection.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/qos-stats-collection", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileQosHqosEnable.IsNull() && !data.ProfileQosHqosEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/hqos-enable", data.getPath()))
+		if state != nil && !state.ProfileQosHqosEnable.IsNull() && state.ProfileQosHqosEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-qos/hqos-enable", data.getXPath()))
+		}
 	}
 	for i := range data.ProfileQosMaxClassmapSizeLocations {
 		keys := [...]string{"location-name"}
@@ -2565,11 +4797,17 @@ func (data *HWModuleProfile) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileBundleHashPerPacketRoundRobin.IsNull() && !data.ProfileBundleHashPerPacketRoundRobin.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-bundle-hash/per-packet-round-robin", data.getPath()))
+		if state != nil && !state.ProfileBundleHashPerPacketRoundRobin.IsNull() && state.ProfileBundleHashPerPacketRoundRobin.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-bundle-hash/per-packet-round-robin", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileBundleHashIgnoreIngressPort.IsNull() && !data.ProfileBundleHashIgnoreIngressPort.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-bundle-hash/ignore-ingress-port", data.getPath()))
+		if state != nil && !state.ProfileBundleHashIgnoreIngressPort.IsNull() && state.ProfileBundleHashIgnoreIngressPort.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-bundle-hash/ignore-ingress-port", data.getXPath()))
+		}
 	}
 	for i := range data.ProfileBundleHashIndexLocations {
 		keys := [...]string{"location-name", "location-name2"}
@@ -2579,47 +4817,82 @@ func (data *HWModuleProfile) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileLoadBalanceAlgorithmInnerL2Field.IsNull() && !data.ProfileLoadBalanceAlgorithmInnerL2Field.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/inner-l2-field", data.getPath()))
+		if state != nil && !state.ProfileLoadBalanceAlgorithmInnerL2Field.IsNull() && state.ProfileLoadBalanceAlgorithmInnerL2Field.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/inner-l2-field", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.IsNull() && !data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/pppo-e/decap-fatbased-hashing", data.getPath()))
+		if state != nil && !state.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.IsNull() && state.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/pppo-e/decap-fatbased-hashing", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileLoadBalanceAlgorithmPppoe.IsNull() && !data.ProfileLoadBalanceAlgorithmPppoe.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/pppo-e", data.getPath()))
+		if state != nil && !state.ProfileLoadBalanceAlgorithmPppoe.IsNull() && state.ProfileLoadBalanceAlgorithmPppoe.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/pppo-e", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileLoadBalanceAlgorithmFatBasedHash.IsNull() && !data.ProfileLoadBalanceAlgorithmFatBasedHash.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/fat-based-hash", data.getPath()))
+		if state != nil && !state.ProfileLoadBalanceAlgorithmFatBasedHash.IsNull() && state.ProfileLoadBalanceAlgorithmFatBasedHash.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/fat-based-hash", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.IsNull() && !data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/mpls-lsr-ler-optimized", data.getPath()))
+		if state != nil && !state.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.IsNull() && state.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/mpls-lsr-ler-optimized", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileLoadBalanceAlgorithmMplsLsrLer.IsNull() && !data.ProfileLoadBalanceAlgorithmMplsLsrLer.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/mpls-lsr-ler", data.getPath()))
+		if state != nil && !state.ProfileLoadBalanceAlgorithmMplsLsrLer.IsNull() && state.ProfileLoadBalanceAlgorithmMplsLsrLer.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/mpls-lsr-ler", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileLoadBalanceAlgorithmGtpMpls.IsNull() && !data.ProfileLoadBalanceAlgorithmGtpMpls.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/gtp-mpls", data.getPath()))
+		if state != nil && !state.ProfileLoadBalanceAlgorithmGtpMpls.IsNull() && state.ProfileLoadBalanceAlgorithmGtpMpls.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/gtp-mpls", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileLoadBalanceAlgorithmGtp.IsNull() && !data.ProfileLoadBalanceAlgorithmGtp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/gtp", data.getPath()))
+		if state != nil && !state.ProfileLoadBalanceAlgorithmGtp.IsNull() && state.ProfileLoadBalanceAlgorithmGtp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/gtp", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileLoadBalanceAlgorithmL3Only.IsNull() && !data.ProfileLoadBalanceAlgorithmL3Only.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/l3-only", data.getPath()))
+		if state != nil && !state.ProfileLoadBalanceAlgorithmL3Only.IsNull() && state.ProfileLoadBalanceAlgorithmL3Only.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/l3-only", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.IsNull() && !data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/mpls-safe-speculative-parsing", data.getPath()))
+		if state != nil && !state.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.IsNull() && state.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/mpls-safe-speculative-parsing", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileLoadBalanceAlgorithmIpTunnel.IsNull() && !data.ProfileLoadBalanceAlgorithmIpTunnel.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/ip-tunnel", data.getPath()))
+		if state != nil && !state.ProfileLoadBalanceAlgorithmIpTunnel.IsNull() && state.ProfileLoadBalanceAlgorithmIpTunnel.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/ip-tunnel", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ProfileLoadBalanceAlgorithmLayer2.IsNull() && !data.ProfileLoadBalanceAlgorithmLayer2.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/layer2", data.getPath()))
+		if state != nil && !state.ProfileLoadBalanceAlgorithmLayer2.IsNull() && state.ProfileLoadBalanceAlgorithmLayer2.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile-load-balance/algorithm/layer2", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *HWModuleProfile) getDeletePaths(ctx context.Context) []string {
@@ -2709,27 +4982,21 @@ func (data *HWModuleProfile) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-stats/acl-permit", data.getPath()))
 	}
 	for i := range data.NetflowSflowEnableLocations {
-		keys := [...]string{"location-name", "location-name2"}
-		keyValues := [...]string{data.NetflowSflowEnableLocations[i].LocationName.ValueString(), data.NetflowSflowEnableLocations[i].LocationName2.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-netflow/sflow-enable-locations/location%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[location-name=" + data.NetflowSflowEnableLocations[i].LocationName.ValueString() + "]"
+		keyPath += "[location-name2=" + data.NetflowSflowEnableLocations[i].LocationName2.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-netflow/sflow-enable-locations/location%v", data.getPath(), keyPath))
 	}
 	if !data.NetflowSflowEnable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-netflow/sflow-enable", data.getPath()))
 	}
 	for i := range data.NetflowIpfix315EnableLocations {
-		keys := [...]string{"location-name", "location-name2"}
-		keyValues := [...]string{data.NetflowIpfix315EnableLocations[i].LocationName.ValueString(), data.NetflowIpfix315EnableLocations[i].LocationName2.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-netflow/ipfix315-enable-locations/location%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[location-name=" + data.NetflowIpfix315EnableLocations[i].LocationName.ValueString() + "]"
+		keyPath += "[location-name2=" + data.NetflowIpfix315EnableLocations[i].LocationName2.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-netflow/ipfix315-enable-locations/location%v", data.getPath(), keyPath))
 	}
 	if !data.NetflowIpfix315Enable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-netflow/ipfix315-enable", data.getPath()))
@@ -2738,14 +5005,10 @@ func (data *HWModuleProfile) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-npu/native-mode-enable", data.getPath()))
 	}
 	for i := range data.ProfileQosNifHpFifoReserveLocations {
-		keys := [...]string{"location-name"}
-		keyValues := [...]string{data.ProfileQosNifHpFifoReserveLocations[i].LocationName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-qos/nif-hp-fifo-reserve-locations/location%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[location-name=" + data.ProfileQosNifHpFifoReserveLocations[i].LocationName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-qos/nif-hp-fifo-reserve-locations/location%v", data.getPath(), keyPath))
 	}
 	if !data.ProfileQosNifHpFifoReservePercent.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-qos/nif-hp-fifo-reserve/percent", data.getPath()))
@@ -2796,14 +5059,10 @@ func (data *HWModuleProfile) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-qos/qosg-dscp-mark-enable", data.getPath()))
 	}
 	for i := range data.ProfileQosMaxClassmapSizeLocations {
-		keys := [...]string{"location-name"}
-		keyValues := [...]string{data.ProfileQosMaxClassmapSizeLocations[i].LocationName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-qos/max-classmap-sizes/locations/location%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[location-name=" + data.ProfileQosMaxClassmapSizeLocations[i].LocationName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-qos/max-classmap-sizes/locations/location%v", data.getPath(), keyPath))
 	}
 	if !data.ProfileQosMaxClassmapSize.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-qos/max-classmap-sizes/max-classmap-size", data.getPath()))
@@ -2815,14 +5074,11 @@ func (data *HWModuleProfile) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-bundle-hash/ignore-ingress-port", data.getPath()))
 	}
 	for i := range data.ProfileBundleHashIndexLocations {
-		keys := [...]string{"location-name", "location-name2"}
-		keyValues := [...]string{data.ProfileBundleHashIndexLocations[i].LocationName.ValueString(), data.ProfileBundleHashIndexLocations[i].LocationName2.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-bundle-hash/hash-index/locations/location%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[location-name=" + data.ProfileBundleHashIndexLocations[i].LocationName.ValueString() + "]"
+		keyPath += "[location-name2=" + data.ProfileBundleHashIndexLocations[i].LocationName2.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-bundle-hash/hash-index/locations/location%v", data.getPath(), keyPath))
 	}
 	if !data.ProfileLoadBalanceAlgorithmHashPolynomialIndex.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-load-balance/algorithm/hash-polynomial-index", data.getPath()))
@@ -2863,7 +5119,953 @@ func (data *HWModuleProfile) getDeletePaths(ctx context.Context) []string {
 	if !data.ProfileLoadBalanceAlgorithmLayer2.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile-load-balance/algorithm/layer2", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *HWModuleProfile) addDeletedItemsXML(ctx context.Context, state HWModuleProfile, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.BgpMpPicAutoProtectEnable.IsNull() && state.BgpMpPicAutoProtectEnable.ValueBool() && data.BgpMpPicAutoProtectEnable.IsNull() {
+		deletePath := state.getXPath() + "/bgp-mp-pic/auto-protect/enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.FibBgpPicMultipathCoreEnable.IsNull() && state.FibBgpPicMultipathCoreEnable.ValueBool() && data.FibBgpPicMultipathCoreEnable.IsNull() {
+		deletePath := state.getXPath() + "/fib-bgp-pic/multipath-core/enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.OamFour8byteCfmMaidEnable.IsNull() && state.OamFour8byteCfmMaidEnable.ValueBool() && data.OamFour8byteCfmMaidEnable.IsNull() {
+		deletePath := state.getXPath() + "/profile-oam/four8byte-cfm-maid-enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.OamSatEnable.IsNull() && state.OamSatEnable.ValueBool() && data.OamSatEnable.IsNull() {
+		deletePath := state.getXPath() + "/profile-oam/sat-enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SrPolicyV6NullLabelAutopush.IsNull() && state.SrPolicyV6NullLabelAutopush.ValueBool() && data.SrPolicyV6NullLabelAutopush.IsNull() {
+		deletePath := state.getXPath() + "/profile-sr-policy/v6-null-label-autopush"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.OffloadFour.IsNull() && state.OffloadFour.ValueBool() && data.OffloadFour.IsNull() {
+		deletePath := state.getXPath() + "/profile-offload/four"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.OffloadThree.IsNull() && state.OffloadThree.ValueBool() && data.OffloadThree.IsNull() {
+		deletePath := state.getXPath() + "/profile-offload/three"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.OffloadTwo.IsNull() && state.OffloadTwo.ValueBool() && data.OffloadTwo.IsNull() {
+		deletePath := state.getXPath() + "/profile-offload/two"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.OffloadOne.IsNull() && state.OffloadOne.ValueBool() && data.OffloadOne.IsNull() {
+		deletePath := state.getXPath() + "/profile-offload/one"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.IsNull() && state.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.ValueBool() && data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.IsNull() {
+		deletePath := state.getXPath() + "/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class-with-hoplimit/propagate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Srv6EncapsulationL3TrafficClassValue.IsNull() && data.Srv6EncapsulationL3TrafficClassValue.IsNull() {
+		deletePath := state.getXPath() + "/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/traffic-class-value"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Srv6EncapsulationL3TrafficClassPolicyMap.IsNull() && state.Srv6EncapsulationL3TrafficClassPolicyMap.ValueBool() && data.Srv6EncapsulationL3TrafficClassPolicyMap.IsNull() {
+		deletePath := state.getXPath() + "/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/policy-map"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Srv6EncapsulationL3TrafficClassPropagate.IsNull() && state.Srv6EncapsulationL3TrafficClassPropagate.ValueBool() && data.Srv6EncapsulationL3TrafficClassPropagate.IsNull() {
+		deletePath := state.getXPath() + "/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/propagate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Srv6EncapsulationL2TrafficClassValue.IsNull() && data.Srv6EncapsulationL2TrafficClassValue.IsNull() {
+		deletePath := state.getXPath() + "/profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/traffic-class-value"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Srv6EncapsulationL2TrafficClassPropagate.IsNull() && state.Srv6EncapsulationL2TrafficClassPropagate.ValueBool() && data.Srv6EncapsulationL2TrafficClassPropagate.IsNull() {
+		deletePath := state.getXPath() + "/profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/propagate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Srv6ModeMicroSegmentFormatF3216PathMtu.IsNull() && state.Srv6ModeMicroSegmentFormatF3216PathMtu.ValueBool() && data.Srv6ModeMicroSegmentFormatF3216PathMtu.IsNull() {
+		deletePath := state.getXPath() + "/profile-segment-routing/srv6/mode/micro-segment/format/path-mtu"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Srv6ModeMicroSegmentFormatF3216.IsNull() && state.Srv6ModeMicroSegmentFormatF3216.ValueBool() && data.Srv6ModeMicroSegmentFormatF3216.IsNull() {
+		deletePath := state.getXPath() + "/profile-segment-routing/srv6/mode/micro-segment/format/f3216"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Srv6ModeBaseAndMicroSegmentF3216.IsNull() && state.Srv6ModeBaseAndMicroSegmentF3216.ValueBool() && data.Srv6ModeBaseAndMicroSegmentF3216.IsNull() {
+		deletePath := state.getXPath() + "/profile-segment-routing/srv6/mode/base-and-micro-segment-f3216"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Srv6ModeBase.IsNull() && state.Srv6ModeBase.ValueBool() && data.Srv6ModeBase.IsNull() {
+		deletePath := state.getXPath() + "/profile-segment-routing/srv6/mode/base"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.StatsTxScaleEnhancedIngressSr.IsNull() && state.StatsTxScaleEnhancedIngressSr.ValueBool() && data.StatsTxScaleEnhancedIngressSr.IsNull() {
+		deletePath := state.getXPath() + "/profile-stats/tx-scale-enhanced/ingress-sr"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.StatsTxScaleEnhancedQosEnhanced.IsNull() && state.StatsTxScaleEnhancedQosEnhanced.ValueBool() && data.StatsTxScaleEnhancedQosEnhanced.IsNull() {
+		deletePath := state.getXPath() + "/profile-stats/tx-scale-enhanced/qos-enhanced"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.StatsTxScaleEnhancedAclPermit.IsNull() && state.StatsTxScaleEnhancedAclPermit.ValueBool() && data.StatsTxScaleEnhancedAclPermit.IsNull() {
+		deletePath := state.getXPath() + "/profile-stats/tx-scale-enhanced/acl-permit"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.StatsTxScaleEnhanced.IsNull() && state.StatsTxScaleEnhanced.ValueBool() && data.StatsTxScaleEnhanced.IsNull() {
+		deletePath := state.getXPath() + "/profile-stats/tx-scale-enhanced"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.StatsIngressSrMspw.IsNull() && state.StatsIngressSrMspw.ValueBool() && data.StatsIngressSrMspw.IsNull() {
+		deletePath := state.getXPath() + "/profile-stats/ingress-sr-mspw"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.StatsEnhancedSrPolicy.IsNull() && state.StatsEnhancedSrPolicy.ValueBool() && data.StatsEnhancedSrPolicy.IsNull() {
+		deletePath := state.getXPath() + "/profile-stats/enh-sr-policy"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.StatsIngressSr.IsNull() && state.StatsIngressSr.ValueBool() && data.StatsIngressSr.IsNull() {
+		deletePath := state.getXPath() + "/profile-stats/ingress-sr"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.StatsQosEnhanced.IsNull() && state.StatsQosEnhanced.ValueBool() && data.StatsQosEnhanced.IsNull() {
+		deletePath := state.getXPath() + "/profile-stats/qos-enhanced"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.StatsAclPermit.IsNull() && state.StatsAclPermit.ValueBool() && data.StatsAclPermit.IsNull() {
+		deletePath := state.getXPath() + "/profile-stats/acl-permit"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.NetflowSflowEnableLocations {
+		stateKeys := [...]string{"location-name", "location-name2"}
+		stateKeyValues := [...]string{state.NetflowSflowEnableLocations[i].LocationName.ValueString(), state.NetflowSflowEnableLocations[i].LocationName2.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.NetflowSflowEnableLocations[i].LocationName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.NetflowSflowEnableLocations[i].LocationName2.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.NetflowSflowEnableLocations {
+			found = true
+			if state.NetflowSflowEnableLocations[i].LocationName.ValueString() != data.NetflowSflowEnableLocations[j].LocationName.ValueString() {
+				found = false
+			}
+			if state.NetflowSflowEnableLocations[i].LocationName2.ValueString() != data.NetflowSflowEnableLocations[j].LocationName2.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profile-netflow/sflow-enable-locations/location%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.NetflowSflowEnable.IsNull() && state.NetflowSflowEnable.ValueBool() && data.NetflowSflowEnable.IsNull() {
+		deletePath := state.getXPath() + "/profile-netflow/sflow-enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.NetflowIpfix315EnableLocations {
+		stateKeys := [...]string{"location-name", "location-name2"}
+		stateKeyValues := [...]string{state.NetflowIpfix315EnableLocations[i].LocationName.ValueString(), state.NetflowIpfix315EnableLocations[i].LocationName2.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.NetflowIpfix315EnableLocations[i].LocationName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.NetflowIpfix315EnableLocations[i].LocationName2.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.NetflowIpfix315EnableLocations {
+			found = true
+			if state.NetflowIpfix315EnableLocations[i].LocationName.ValueString() != data.NetflowIpfix315EnableLocations[j].LocationName.ValueString() {
+				found = false
+			}
+			if state.NetflowIpfix315EnableLocations[i].LocationName2.ValueString() != data.NetflowIpfix315EnableLocations[j].LocationName2.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profile-netflow/ipfix315-enable-locations/location%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.NetflowIpfix315Enable.IsNull() && state.NetflowIpfix315Enable.ValueBool() && data.NetflowIpfix315Enable.IsNull() {
+		deletePath := state.getXPath() + "/profile-netflow/ipfix315-enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.NpuNativeModeEnable.IsNull() && state.NpuNativeModeEnable.ValueBool() && data.NpuNativeModeEnable.IsNull() {
+		deletePath := state.getXPath() + "/profile-npu/native-mode-enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.ProfileQosNifHpFifoReserveLocations {
+		stateKeys := [...]string{"location-name"}
+		stateKeyValues := [...]string{state.ProfileQosNifHpFifoReserveLocations[i].LocationName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ProfileQosNifHpFifoReserveLocations[i].LocationName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ProfileQosNifHpFifoReserveLocations {
+			found = true
+			if state.ProfileQosNifHpFifoReserveLocations[i].LocationName.ValueString() != data.ProfileQosNifHpFifoReserveLocations[j].LocationName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ProfileQosNifHpFifoReserveLocations[i].Percent.IsNull() && data.ProfileQosNifHpFifoReserveLocations[j].Percent.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profile-qos/nif-hp-fifo-reserve-locations/location%v/percent", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profile-qos/nif-hp-fifo-reserve-locations/location%v", predicates))
+		}
+	}
+	if !state.ProfileQosNifHpFifoReservePercent.IsNull() && data.ProfileQosNifHpFifoReservePercent.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/nif-hp-fifo-reserve/percent"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ProfileQosPolicerScale.IsNull() && data.ProfileQosPolicerScale.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/policer-scale/scale-value"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileQosEgressCompensationSettingForce.IsNull() && state.ProfileQosEgressCompensationSettingForce.ValueBool() && data.ProfileQosEgressCompensationSettingForce.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/egress-compensation-setting-force"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileQosGreExpClassificationEnable.IsNull() && state.ProfileQosGreExpClassificationEnable.ValueBool() && data.ProfileQosGreExpClassificationEnable.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/gre-exp-classification-enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileQosArpIsisPriorityEnable.IsNull() && state.ProfileQosArpIsisPriorityEnable.ValueBool() && data.ProfileQosArpIsisPriorityEnable.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/arp-isis-priority-enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileQosConformAwarePolicer.IsNull() && state.ProfileQosConformAwarePolicer.ValueBool() && data.ProfileQosConformAwarePolicer.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/conform-aware-policer"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileQosLagScheduler.IsNull() && state.ProfileQosLagScheduler.ValueBool() && data.ProfileQosLagScheduler.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/lag-scheduler"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileQosWredStatsEnable.IsNull() && state.ProfileQosWredStatsEnable.ValueBool() && data.ProfileQosWredStatsEnable.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/wred-stats-enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileQosSharedPolicerPerClassStats.IsNull() && state.ProfileQosSharedPolicerPerClassStats.ValueBool() && data.ProfileQosSharedPolicerPerClassStats.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/shared-policer-per-class-stats"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileQosEcnMarkingStats.IsNull() && state.ProfileQosEcnMarkingStats.ValueBool() && data.ProfileQosEcnMarkingStats.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/ecn-marking-stats"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileQosStatsCollection.IsNull() && state.ProfileQosStatsCollection.ValueBool() && data.ProfileQosStatsCollection.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/qos-stats-collection"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileQosHqosEnable.IsNull() && state.ProfileQosHqosEnable.ValueBool() && data.ProfileQosHqosEnable.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/hqos-enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ProfileQosFreeBufferIntThresholdClear.IsNull() && data.ProfileQosFreeBufferIntThresholdClear.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/clear-value-in-percent"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ProfileQosFreeBufferIntThresholdSet.IsNull() && data.ProfileQosFreeBufferIntThresholdSet.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/free-buffer-int-threshold"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ProfileQosQosgDscpMarkEnableSecond.IsNull() && data.ProfileQosQosgDscpMarkEnableSecond.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/qosg-dscp-mark-enable/second-dscp-precedence-value"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ProfileQosQosgDscpMarkEnableFirst.IsNull() && data.ProfileQosQosgDscpMarkEnableFirst.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/profile-qos/qosg-dscp-mark-enable"
+		predicates := make(map[string]string)
+		predicates["first-dscp-precedence-value"] = fmt.Sprintf("%v", state.ProfileQosQosgDscpMarkEnableFirst.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.ProfileQosMaxClassmapSizeLocations {
+		stateKeys := [...]string{"location-name"}
+		stateKeyValues := [...]string{state.ProfileQosMaxClassmapSizeLocations[i].LocationName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ProfileQosMaxClassmapSizeLocations[i].LocationName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ProfileQosMaxClassmapSizeLocations {
+			found = true
+			if state.ProfileQosMaxClassmapSizeLocations[i].LocationName.ValueString() != data.ProfileQosMaxClassmapSizeLocations[j].LocationName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ProfileQosMaxClassmapSizeLocations[i].MaxClassmapSize.IsNull() && data.ProfileQosMaxClassmapSizeLocations[j].MaxClassmapSize.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profile-qos/max-classmap-sizes/locations/location%v/max-classmap-size", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profile-qos/max-classmap-sizes/locations/location%v", predicates))
+		}
+	}
+	if !state.ProfileQosMaxClassmapSize.IsNull() && data.ProfileQosMaxClassmapSize.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/max-classmap-sizes/max-classmap-size"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileBundleHashPerPacketRoundRobin.IsNull() && state.ProfileBundleHashPerPacketRoundRobin.ValueBool() && data.ProfileBundleHashPerPacketRoundRobin.IsNull() {
+		deletePath := state.getXPath() + "/profile-bundle-hash/per-packet-round-robin"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileBundleHashIgnoreIngressPort.IsNull() && state.ProfileBundleHashIgnoreIngressPort.ValueBool() && data.ProfileBundleHashIgnoreIngressPort.IsNull() {
+		deletePath := state.getXPath() + "/profile-bundle-hash/ignore-ingress-port"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.ProfileBundleHashIndexLocations {
+		stateKeys := [...]string{"location-name", "location-name2"}
+		stateKeyValues := [...]string{state.ProfileBundleHashIndexLocations[i].LocationName.ValueString(), state.ProfileBundleHashIndexLocations[i].LocationName2.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ProfileBundleHashIndexLocations[i].LocationName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.ProfileBundleHashIndexLocations[i].LocationName2.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ProfileBundleHashIndexLocations {
+			found = true
+			if state.ProfileBundleHashIndexLocations[i].LocationName.ValueString() != data.ProfileBundleHashIndexLocations[j].LocationName.ValueString() {
+				found = false
+			}
+			if state.ProfileBundleHashIndexLocations[i].LocationName2.ValueString() != data.ProfileBundleHashIndexLocations[j].LocationName2.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ProfileBundleHashIndexLocations[i].Index.IsNull() && data.ProfileBundleHashIndexLocations[j].Index.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profile-bundle-hash/hash-index/locations/location%v/index", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profile-bundle-hash/hash-index/locations/location%v", predicates))
+		}
+	}
+	if !state.ProfileLoadBalanceAlgorithmHashPolynomialIndex.IsNull() && data.ProfileLoadBalanceAlgorithmHashPolynomialIndex.IsNull() {
+		deletePath := state.getXPath() + "/profile-load-balance/algorithm/hash-polynomial-index"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileLoadBalanceAlgorithmInnerL2Field.IsNull() && state.ProfileLoadBalanceAlgorithmInnerL2Field.ValueBool() && data.ProfileLoadBalanceAlgorithmInnerL2Field.IsNull() {
+		deletePath := state.getXPath() + "/profile-load-balance/algorithm/inner-l2-field"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.IsNull() && state.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.ValueBool() && data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.IsNull() {
+		deletePath := state.getXPath() + "/profile-load-balance/algorithm/pppo-e/decap-fatbased-hashing"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileLoadBalanceAlgorithmPppoe.IsNull() && state.ProfileLoadBalanceAlgorithmPppoe.ValueBool() && data.ProfileLoadBalanceAlgorithmPppoe.IsNull() {
+		deletePath := state.getXPath() + "/profile-load-balance/algorithm/pppo-e"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileLoadBalanceAlgorithmFatBasedHash.IsNull() && state.ProfileLoadBalanceAlgorithmFatBasedHash.ValueBool() && data.ProfileLoadBalanceAlgorithmFatBasedHash.IsNull() {
+		deletePath := state.getXPath() + "/profile-load-balance/algorithm/fat-based-hash"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.IsNull() && state.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.ValueBool() && data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.IsNull() {
+		deletePath := state.getXPath() + "/profile-load-balance/algorithm/mpls-lsr-ler-optimized"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileLoadBalanceAlgorithmMplsLsrLer.IsNull() && state.ProfileLoadBalanceAlgorithmMplsLsrLer.ValueBool() && data.ProfileLoadBalanceAlgorithmMplsLsrLer.IsNull() {
+		deletePath := state.getXPath() + "/profile-load-balance/algorithm/mpls-lsr-ler"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileLoadBalanceAlgorithmGtpMpls.IsNull() && state.ProfileLoadBalanceAlgorithmGtpMpls.ValueBool() && data.ProfileLoadBalanceAlgorithmGtpMpls.IsNull() {
+		deletePath := state.getXPath() + "/profile-load-balance/algorithm/gtp-mpls"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileLoadBalanceAlgorithmGtp.IsNull() && state.ProfileLoadBalanceAlgorithmGtp.ValueBool() && data.ProfileLoadBalanceAlgorithmGtp.IsNull() {
+		deletePath := state.getXPath() + "/profile-load-balance/algorithm/gtp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileLoadBalanceAlgorithmL3Only.IsNull() && state.ProfileLoadBalanceAlgorithmL3Only.ValueBool() && data.ProfileLoadBalanceAlgorithmL3Only.IsNull() {
+		deletePath := state.getXPath() + "/profile-load-balance/algorithm/l3-only"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.IsNull() && state.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.ValueBool() && data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.IsNull() {
+		deletePath := state.getXPath() + "/profile-load-balance/algorithm/mpls-safe-speculative-parsing"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileLoadBalanceAlgorithmIpTunnel.IsNull() && state.ProfileLoadBalanceAlgorithmIpTunnel.ValueBool() && data.ProfileLoadBalanceAlgorithmIpTunnel.IsNull() {
+		deletePath := state.getXPath() + "/profile-load-balance/algorithm/ip-tunnel"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileLoadBalanceAlgorithmLayer2.IsNull() && state.ProfileLoadBalanceAlgorithmLayer2.ValueBool() && data.ProfileLoadBalanceAlgorithmLayer2.IsNull() {
+		deletePath := state.getXPath() + "/profile-load-balance/algorithm/layer2"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *HWModuleProfile) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.BgpMpPicAutoProtectEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp-mp-pic/auto-protect/enable")
+	}
+	if !data.FibBgpPicMultipathCoreEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/fib-bgp-pic/multipath-core/enable")
+	}
+	if !data.OamFour8byteCfmMaidEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-oam/four8byte-cfm-maid-enable")
+	}
+	if !data.OamSatEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-oam/sat-enable")
+	}
+	if !data.SrPolicyV6NullLabelAutopush.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-sr-policy/v6-null-label-autopush")
+	}
+	if !data.OffloadFour.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-offload/four")
+	}
+	if !data.OffloadThree.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-offload/three")
+	}
+	if !data.OffloadTwo.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-offload/two")
+	}
+	if !data.OffloadOne.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-offload/one")
+	}
+	if !data.Srv6EncapsulationL3TrafficClassWithHoplimitPropagate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class-with-hoplimit/propagate")
+	}
+	if !data.Srv6EncapsulationL3TrafficClassValue.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/traffic-class-value")
+	}
+	if !data.Srv6EncapsulationL3TrafficClassPolicyMap.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/policy-map")
+	}
+	if !data.Srv6EncapsulationL3TrafficClassPropagate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/propagate")
+	}
+	if !data.Srv6EncapsulationL2TrafficClassValue.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/traffic-class-value")
+	}
+	if !data.Srv6EncapsulationL2TrafficClassPropagate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/propagate")
+	}
+	if !data.Srv6ModeMicroSegmentFormatF3216PathMtu.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-segment-routing/srv6/mode/micro-segment/format/path-mtu")
+	}
+	if !data.Srv6ModeMicroSegmentFormatF3216.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-segment-routing/srv6/mode/micro-segment/format/f3216")
+	}
+	if !data.Srv6ModeBaseAndMicroSegmentF3216.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-segment-routing/srv6/mode/base-and-micro-segment-f3216")
+	}
+	if !data.Srv6ModeBase.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-segment-routing/srv6/mode/base")
+	}
+	if !data.StatsTxScaleEnhancedIngressSr.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-stats/tx-scale-enhanced/ingress-sr")
+	}
+	if !data.StatsTxScaleEnhancedQosEnhanced.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-stats/tx-scale-enhanced/qos-enhanced")
+	}
+	if !data.StatsTxScaleEnhancedAclPermit.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-stats/tx-scale-enhanced/acl-permit")
+	}
+	if !data.StatsTxScaleEnhanced.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-stats/tx-scale-enhanced")
+	}
+	if !data.StatsIngressSrMspw.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-stats/ingress-sr-mspw")
+	}
+	if !data.StatsEnhancedSrPolicy.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-stats/enh-sr-policy")
+	}
+	if !data.StatsIngressSr.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-stats/ingress-sr")
+	}
+	if !data.StatsQosEnhanced.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-stats/qos-enhanced")
+	}
+	if !data.StatsAclPermit.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-stats/acl-permit")
+	}
+	for i := range data.NetflowSflowEnableLocations {
+		keys := [...]string{"location-name", "location-name2"}
+		keyValues := [...]string{data.NetflowSflowEnableLocations[i].LocationName.ValueString(), data.NetflowSflowEnableLocations[i].LocationName2.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/profile-netflow/sflow-enable-locations/location%v", predicates))
+	}
+	if !data.NetflowSflowEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-netflow/sflow-enable")
+	}
+	for i := range data.NetflowIpfix315EnableLocations {
+		keys := [...]string{"location-name", "location-name2"}
+		keyValues := [...]string{data.NetflowIpfix315EnableLocations[i].LocationName.ValueString(), data.NetflowIpfix315EnableLocations[i].LocationName2.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/profile-netflow/ipfix315-enable-locations/location%v", predicates))
+	}
+	if !data.NetflowIpfix315Enable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-netflow/ipfix315-enable")
+	}
+	if !data.NpuNativeModeEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-npu/native-mode-enable")
+	}
+	for i := range data.ProfileQosNifHpFifoReserveLocations {
+		keys := [...]string{"location-name"}
+		keyValues := [...]string{data.ProfileQosNifHpFifoReserveLocations[i].LocationName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/profile-qos/nif-hp-fifo-reserve-locations/location%v", predicates))
+	}
+	if !data.ProfileQosNifHpFifoReservePercent.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/nif-hp-fifo-reserve/percent")
+	}
+	if !data.ProfileQosPolicerScale.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/policer-scale/scale-value")
+	}
+	if !data.ProfileQosEgressCompensationSettingForce.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/egress-compensation-setting-force")
+	}
+	if !data.ProfileQosGreExpClassificationEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/gre-exp-classification-enable")
+	}
+	if !data.ProfileQosArpIsisPriorityEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/arp-isis-priority-enable")
+	}
+	if !data.ProfileQosConformAwarePolicer.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/conform-aware-policer")
+	}
+	if !data.ProfileQosLagScheduler.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/lag-scheduler")
+	}
+	if !data.ProfileQosWredStatsEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/wred-stats-enable")
+	}
+	if !data.ProfileQosSharedPolicerPerClassStats.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/shared-policer-per-class-stats")
+	}
+	if !data.ProfileQosEcnMarkingStats.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/ecn-marking-stats")
+	}
+	if !data.ProfileQosStatsCollection.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/qos-stats-collection")
+	}
+	if !data.ProfileQosHqosEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/hqos-enable")
+	}
+	if !data.ProfileQosFreeBufferIntThresholdClear.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/clear-value-in-percent")
+	}
+	if !data.ProfileQosFreeBufferIntThresholdSet.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/free-buffer-int-threshold")
+	}
+	if !data.ProfileQosQosgDscpMarkEnableSecond.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/qosg-dscp-mark-enable/second-dscp-precedence-value")
+	}
+	if !data.ProfileQosQosgDscpMarkEnableFirst.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/qosg-dscp-mark-enable")
+	}
+	for i := range data.ProfileQosMaxClassmapSizeLocations {
+		keys := [...]string{"location-name"}
+		keyValues := [...]string{data.ProfileQosMaxClassmapSizeLocations[i].LocationName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/profile-qos/max-classmap-sizes/locations/location%v", predicates))
+	}
+	if !data.ProfileQosMaxClassmapSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/max-classmap-sizes/max-classmap-size")
+	}
+	if !data.ProfileBundleHashPerPacketRoundRobin.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-bundle-hash/per-packet-round-robin")
+	}
+	if !data.ProfileBundleHashIgnoreIngressPort.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-bundle-hash/ignore-ingress-port")
+	}
+	for i := range data.ProfileBundleHashIndexLocations {
+		keys := [...]string{"location-name", "location-name2"}
+		keyValues := [...]string{data.ProfileBundleHashIndexLocations[i].LocationName.ValueString(), data.ProfileBundleHashIndexLocations[i].LocationName2.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/profile-bundle-hash/hash-index/locations/location%v", predicates))
+	}
+	if !data.ProfileLoadBalanceAlgorithmHashPolynomialIndex.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-load-balance/algorithm/hash-polynomial-index")
+	}
+	if !data.ProfileLoadBalanceAlgorithmInnerL2Field.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-load-balance/algorithm/inner-l2-field")
+	}
+	if !data.ProfileLoadBalanceAlgorithmPppoeDecapFatbasedHashing.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-load-balance/algorithm/pppo-e/decap-fatbased-hashing")
+	}
+	if !data.ProfileLoadBalanceAlgorithmPppoe.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-load-balance/algorithm/pppo-e")
+	}
+	if !data.ProfileLoadBalanceAlgorithmFatBasedHash.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-load-balance/algorithm/fat-based-hash")
+	}
+	if !data.ProfileLoadBalanceAlgorithmMplsLsrLerOptimized.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-load-balance/algorithm/mpls-lsr-ler-optimized")
+	}
+	if !data.ProfileLoadBalanceAlgorithmMplsLsrLer.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-load-balance/algorithm/mpls-lsr-ler")
+	}
+	if !data.ProfileLoadBalanceAlgorithmGtpMpls.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-load-balance/algorithm/gtp-mpls")
+	}
+	if !data.ProfileLoadBalanceAlgorithmGtp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-load-balance/algorithm/gtp")
+	}
+	if !data.ProfileLoadBalanceAlgorithmL3Only.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-load-balance/algorithm/l3-only")
+	}
+	if !data.ProfileLoadBalanceAlgorithmMplsSafeSpeculativeParsing.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-load-balance/algorithm/mpls-safe-speculative-parsing")
+	}
+	if !data.ProfileLoadBalanceAlgorithmIpTunnel.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-load-balance/algorithm/ip-tunnel")
+	}
+	if !data.ProfileLoadBalanceAlgorithmLayer2.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-load-balance/algorithm/layer2")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

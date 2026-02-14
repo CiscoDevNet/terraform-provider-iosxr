@@ -18,8 +18,12 @@
 package helpers
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 )
 
@@ -30,6 +34,15 @@ func Contains(s []string, str string) bool {
 		}
 	}
 	return false
+}
+
+// GetValueSlice converts a slice of gjson.Result to a slice of Terraform attr.Value.
+func GetValueSlice(result []gjson.Result) []attr.Value {
+	v := make([]attr.Value, len(result))
+	for r := range result {
+		v[r] = types.StringValue(result[r].String())
+	}
+	return v
 }
 
 func GetStringList(result []gjson.Result) types.List {
@@ -72,6 +85,75 @@ func GetInt64Set(result []gjson.Result) types.Set {
 	return types.SetValueMust(types.Int64Type, v)
 }
 
+// GetStringListXML converts a slice of xmldot.Result to a Terraform types.List of strings.
+func GetStringListXML(result []xmldot.Result) types.List {
+	v := make([]attr.Value, len(result))
+	for r := range result {
+		v[r] = types.StringValue(result[r].String())
+	}
+	return types.ListValueMust(types.StringType, v)
+}
+
+// GetAllChildElements returns all child elements with the given name from a parent xmldot.Result.
+// This is needed when multiple sibling elements have the same name in XML.
+func GetAllChildElements(parent xmldot.Result, elementName string) []xmldot.Result {
+	// Check if there are multiple elements
+	countPath := elementName + ".#"
+	count := parent.Get(countPath).Int()
+
+	if count == 0 {
+		// No elements found
+		return []xmldot.Result{}
+	}
+
+	if count == 1 {
+		// Single element - return it directly
+		elem := parent.Get(elementName)
+		if elem.Exists() {
+			return []xmldot.Result{elem}
+		}
+		return []xmldot.Result{}
+	}
+
+	// Multiple elements - iterate using numeric indices
+	results := make([]xmldot.Result, 0, count)
+	for i := 0; i < int(count); i++ {
+		indexPath := fmt.Sprintf("%s.%d", elementName, i)
+		elem := parent.Get(indexPath)
+		if elem.Exists() {
+			results = append(results, elem)
+		}
+	}
+	return results
+}
+
+// GetInt64ListXML converts a slice of xmldot.Result to a Terraform types.List of int64.
+func GetInt64ListXML(result []xmldot.Result) types.List {
+	v := make([]attr.Value, len(result))
+	for r := range result {
+		v[r] = types.Int64Value(result[r].Int())
+	}
+	return types.ListValueMust(types.Int64Type, v)
+}
+
+// GetStringSetXML converts a slice of xmldot.Result to a Terraform types.Set of strings.
+func GetStringSetXML(result []xmldot.Result) types.Set {
+	v := make([]attr.Value, len(result))
+	for r := range result {
+		v[r] = types.StringValue(result[r].String())
+	}
+	return types.SetValueMust(types.StringType, v)
+}
+
+// GetInt64SetXML converts a slice of xmldot.Result to a Terraform types.Set of int64.
+func GetInt64SetXML(result []xmldot.Result) types.Set {
+	v := make([]attr.Value, len(result))
+	for r := range result {
+		v[r] = types.Int64Value(result[r].Int())
+	}
+	return types.SetValueMust(types.Int64Type, v)
+}
+
 func Must[T any](v T, err error) T {
 	if err != nil {
 		panic(err)
@@ -87,4 +169,24 @@ func RemoveEmptyStrings(s []string) []string {
 		}
 	}
 	return r
+}
+
+// LastElement returns the last element of a YANG path with its namespace prefix.
+// Example: "Cisco-IOS-XE-native:native/interface/GigabitEthernet=1" -> "Cisco-IOS-XE-native:GigabitEthernet"
+func LastElement(path string) string {
+	pes := strings.Split(path, "/")
+	var prefix, element string
+	for _, pe := range pes {
+		// remove key
+		if strings.Contains(pe, "=") {
+			pe = pe[:strings.Index(pe, "=")]
+		}
+		if strings.Contains(pe, ":") {
+			prefix = strings.Split(pe, ":")[0]
+			element = strings.Split(pe, ":")[1]
+		} else {
+			element = pe
+		}
+	}
+	return prefix + ":" + element
 }

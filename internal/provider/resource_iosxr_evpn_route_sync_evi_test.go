@@ -86,7 +86,7 @@ func iosxrEVPNRouteSyncEVIImportStateIdFunc(resourceName string) resource.Import
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrEVPNRouteSyncEVIPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "EVI_POLICY_1"
@@ -94,7 +94,7 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
 	attributes = {
 	}
@@ -109,7 +109,7 @@ resource "iosxr_gnmi" "PreReq1" {
 func testAccIosxrEVPNRouteSyncEVIConfig_minimum() string {
 	config := `resource "iosxr_evpn_route_sync_evi" "test" {` + "\n"
 	config += `	vpn_id = 107` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -135,7 +135,7 @@ func testAccIosxrEVPNRouteSyncEVIConfig_all() string {
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	vrf_default = true` + "\n"
 	}
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

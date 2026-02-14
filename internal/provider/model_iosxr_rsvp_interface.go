@@ -23,9 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
+	"sort"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -178,6 +183,19 @@ func (data RSVPInterface) getPath() string {
 
 func (data RSVPInterfaceData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-rsvp-cfg:/rsvp/interfaces/interface[interface-name=%s]", data.InterfaceName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data RSVPInterface) getXPath() string {
+	path := "Cisco-IOS-XR-um-rsvp-cfg:/rsvp/interfaces/interface[interface-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.InterfaceName.ValueString()))
+	return path
+}
+
+func (data RSVPInterfaceData) getXPath() string {
+	path := "Cisco-IOS-XR-um-rsvp-cfg:/rsvp/interfaces/interface[interface-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.InterfaceName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -390,735 +408,1716 @@ func (data RSVPInterface) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RSVPInterface) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "bandwidth.default"); !data.BandwidthDefault.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "bandwidth.default"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BandwidthDefault.IsNull() {
 			data.BandwidthDefault = types.BoolValue(true)
-		} else {
-			data.BandwidthDefault = types.BoolValue(false)
 		}
 	} else {
-		data.BandwidthDefault = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.BandwidthDefault.IsNull() {
+			data.BandwidthDefault = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "bandwidth.total-reservable-bandwidth"); value.Exists() && !data.BandwidthTotal.IsNull() {
 		data.BandwidthTotal = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthTotal.IsNull() {
 		data.BandwidthTotal = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.largest-reservable-flow"); value.Exists() && !data.BandwidthFlow.IsNull() {
 		data.BandwidthFlow = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthFlow.IsNull() {
 		data.BandwidthFlow = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.global-pool.total-reservable-bandwidth"); value.Exists() && !data.BandwidthGlobalPoolTotal.IsNull() {
 		data.BandwidthGlobalPoolTotal = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthGlobalPoolTotal.IsNull() {
 		data.BandwidthGlobalPoolTotal = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.global-pool.largest-reservable-flow"); value.Exists() && !data.BandwidthGlobalPoolFlow.IsNull() {
 		data.BandwidthGlobalPoolFlow = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthGlobalPoolFlow.IsNull() {
 		data.BandwidthGlobalPoolFlow = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.sub-pool.reservable-bandwidth"); value.Exists() && !data.BandwidthSubPoolTotal.IsNull() {
 		data.BandwidthSubPoolTotal = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthSubPoolTotal.IsNull() {
 		data.BandwidthSubPoolTotal = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.bc0.total-reservable-bandwidth"); value.Exists() && !data.BandwidthBc0Total.IsNull() {
 		data.BandwidthBc0Total = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthBc0Total.IsNull() {
 		data.BandwidthBc0Total = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.bc0.largest-reservable-flow"); value.Exists() && !data.BandwidthBc0Flow.IsNull() {
 		data.BandwidthBc0Flow = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthBc0Flow.IsNull() {
 		data.BandwidthBc0Flow = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.bc0.bc1.reservable-bandwidth"); value.Exists() && !data.BandwidthBc1Total.IsNull() {
 		data.BandwidthBc1Total = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthBc1Total.IsNull() {
 		data.BandwidthBc1Total = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.percentage.total-reservable-bandwidth"); value.Exists() && !data.BandwidthPercentageTotal.IsNull() {
 		data.BandwidthPercentageTotal = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthPercentageTotal.IsNull() {
 		data.BandwidthPercentageTotal = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.percentage.largest-reservable-flow"); value.Exists() && !data.BandwidthPercentageFlow.IsNull() {
 		data.BandwidthPercentageFlow = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthPercentageFlow.IsNull() {
 		data.BandwidthPercentageFlow = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.percentage.global-pool.total-reservable-bandwidth"); value.Exists() && !data.BandwidthPercentageGlobalPoolTotal.IsNull() {
 		data.BandwidthPercentageGlobalPoolTotal = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthPercentageGlobalPoolTotal.IsNull() {
 		data.BandwidthPercentageGlobalPoolTotal = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.percentage.global-pool.largest-reservable-flow"); value.Exists() && !data.BandwidthPercentageGlobalPoolFlow.IsNull() {
 		data.BandwidthPercentageGlobalPoolFlow = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthPercentageGlobalPoolFlow.IsNull() {
 		data.BandwidthPercentageGlobalPoolFlow = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.percentage.sub-pool.reservable-bandwidth"); value.Exists() && !data.BandwidthPercentageSubPoolTotal.IsNull() {
 		data.BandwidthPercentageSubPoolTotal = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthPercentageSubPoolTotal.IsNull() {
 		data.BandwidthPercentageSubPoolTotal = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.percentage.bc0.total-reservable-bandwidth"); value.Exists() && !data.BandwidthPercentageBc0Total.IsNull() {
 		data.BandwidthPercentageBc0Total = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthPercentageBc0Total.IsNull() {
 		data.BandwidthPercentageBc0Total = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.percentage.bc0.largest-reservable-flow"); value.Exists() && !data.BandwidthPercentageBc0Flow.IsNull() {
 		data.BandwidthPercentageBc0Flow = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthPercentageBc0Flow.IsNull() {
 		data.BandwidthPercentageBc0Flow = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.percentage.bc0.bc1.reservable-bandwidth"); value.Exists() && !data.BandwidthPercentageBc1Total.IsNull() {
 		data.BandwidthPercentageBc1Total = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthPercentageBc1Total.IsNull() {
 		data.BandwidthPercentageBc1Total = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.total-reservable-bandwidth"); value.Exists() && !data.BandwidthRdmPercentageTotal.IsNull() {
 		data.BandwidthRdmPercentageTotal = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmPercentageTotal.IsNull() {
 		data.BandwidthRdmPercentageTotal = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.largest-reservable-flow"); value.Exists() && !data.BandwidthRdmPercentageFlow.IsNull() {
 		data.BandwidthRdmPercentageFlow = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmPercentageFlow.IsNull() {
 		data.BandwidthRdmPercentageFlow = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.global-pool.total-reservable-bandwidth"); value.Exists() && !data.BandwidthRdmPercentageGlobalPoolTotal.IsNull() {
 		data.BandwidthRdmPercentageGlobalPoolTotal = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmPercentageGlobalPoolTotal.IsNull() {
 		data.BandwidthRdmPercentageGlobalPoolTotal = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.global-pool.largest-reservable-flow"); value.Exists() && !data.BandwidthRdmPercentageGlobalPoolFlow.IsNull() {
 		data.BandwidthRdmPercentageGlobalPoolFlow = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmPercentageGlobalPoolFlow.IsNull() {
 		data.BandwidthRdmPercentageGlobalPoolFlow = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.sub-pool.reservable-bandwidth"); value.Exists() && !data.BandwidthRdmPercentageSubPoolTotal.IsNull() {
 		data.BandwidthRdmPercentageSubPoolTotal = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmPercentageSubPoolTotal.IsNull() {
 		data.BandwidthRdmPercentageSubPoolTotal = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.bc0.total-reservable-bandwidth"); value.Exists() && !data.BandwidthRdmPercentageBc0Total.IsNull() {
 		data.BandwidthRdmPercentageBc0Total = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmPercentageBc0Total.IsNull() {
 		data.BandwidthRdmPercentageBc0Total = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.bc0.largest-reservable-flow"); value.Exists() && !data.BandwidthRdmPercentageBc0Flow.IsNull() {
 		data.BandwidthRdmPercentageBc0Flow = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmPercentageBc0Flow.IsNull() {
 		data.BandwidthRdmPercentageBc0Flow = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.bc0.bc1.reservable-bandwidth"); value.Exists() && !data.BandwidthRdmPercentageBc1Total.IsNull() {
 		data.BandwidthRdmPercentageBc1Total = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmPercentageBc1Total.IsNull() {
 		data.BandwidthRdmPercentageBc1Total = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.total-reservable-bandwidth"); value.Exists() && !data.BandwidthRdmTotal.IsNull() {
 		data.BandwidthRdmTotal = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmTotal.IsNull() {
 		data.BandwidthRdmTotal = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.largest-reservable-flow"); value.Exists() && !data.BandwidthRdmFlow.IsNull() {
 		data.BandwidthRdmFlow = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmFlow.IsNull() {
 		data.BandwidthRdmFlow = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.global-pool.total-reservable-bandwidth"); value.Exists() && !data.BandwidthRdmGlobalPoolTotal.IsNull() {
 		data.BandwidthRdmGlobalPoolTotal = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmGlobalPoolTotal.IsNull() {
 		data.BandwidthRdmGlobalPoolTotal = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.global-pool.largest-reservable-flow"); value.Exists() && !data.BandwidthRdmGlobalPoolFlow.IsNull() {
 		data.BandwidthRdmGlobalPoolFlow = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmGlobalPoolFlow.IsNull() {
 		data.BandwidthRdmGlobalPoolFlow = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.sub-pool.reservable-bandwidth"); value.Exists() && !data.BandwidthRdmSubPoolTotal.IsNull() {
 		data.BandwidthRdmSubPoolTotal = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmSubPoolTotal.IsNull() {
 		data.BandwidthRdmSubPoolTotal = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.bc0.total-reservable-bandwidth"); value.Exists() && !data.BandwidthRdmBc0Total.IsNull() {
 		data.BandwidthRdmBc0Total = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmBc0Total.IsNull() {
 		data.BandwidthRdmBc0Total = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.bc0.largest-reservable-flow"); value.Exists() && !data.BandwidthRdmBc0Flow.IsNull() {
 		data.BandwidthRdmBc0Flow = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmBc0Flow.IsNull() {
 		data.BandwidthRdmBc0Flow = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.bc0.bc1.reservable-bandwidth"); value.Exists() && !data.BandwidthRdmBc1Total.IsNull() {
 		data.BandwidthRdmBc1Total = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmBc1Total.IsNull() {
 		data.BandwidthRdmBc1Total = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.mam.max-reservable-bw.total-reservable-bandwidth"); value.Exists() && !data.BandwidthMamTotal.IsNull() {
 		data.BandwidthMamTotal = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthMamTotal.IsNull() {
 		data.BandwidthMamTotal = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.mam.max-reservable-bw.largest-reservable-flow"); value.Exists() && !data.BandwidthMamFlow.IsNull() {
 		data.BandwidthMamFlow = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthMamFlow.IsNull() {
 		data.BandwidthMamFlow = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.mam.max-reservable-bw.bc0"); value.Exists() && !data.BandwidthMamBc0Total.IsNull() {
 		data.BandwidthMamBc0Total = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthMamBc0Total.IsNull() {
 		data.BandwidthMamBc0Total = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.mam.max-reservable-bw.bc1"); value.Exists() && !data.BandwidthMamBc1Total.IsNull() {
 		data.BandwidthMamBc1Total = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthMamBc1Total.IsNull() {
 		data.BandwidthMamBc1Total = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable-bw.total-reservable-bandwidth"); value.Exists() && !data.BandwidthMamPercentageTotal.IsNull() {
 		data.BandwidthMamPercentageTotal = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthMamPercentageTotal.IsNull() {
 		data.BandwidthMamPercentageTotal = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable-bw.largest-reservable-flow"); value.Exists() && !data.BandwidthMamPercentageFlow.IsNull() {
 		data.BandwidthMamPercentageFlow = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthMamPercentageFlow.IsNull() {
 		data.BandwidthMamPercentageFlow = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable-bw.bc0"); value.Exists() && !data.BandwidthMamPercentageBc0Total.IsNull() {
 		data.BandwidthMamPercentageBc0Total = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthMamPercentageBc0Total.IsNull() {
 		data.BandwidthMamPercentageBc0Total = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable-bw.bc1"); value.Exists() && !data.BandwidthMamPercentageBc1Total.IsNull() {
 		data.BandwidthMamPercentageBc1Total = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthMamPercentageBc1Total.IsNull() {
 		data.BandwidthMamPercentageBc1Total = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.dscp"); value.Exists() && !data.SignallingDscp.IsNull() {
 		data.SignallingDscp = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingDscp.IsNull() {
 		data.SignallingDscp = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "signalling.rate-limit.enable"); !data.SignallingRateLimitEnable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "signalling.rate-limit.enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingRateLimitEnable.IsNull() {
 			data.SignallingRateLimitEnable = types.BoolValue(true)
-		} else {
-			data.SignallingRateLimitEnable = types.BoolValue(false)
 		}
 	} else {
-		data.SignallingRateLimitEnable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SignallingRateLimitEnable.IsNull() {
+			data.SignallingRateLimitEnable = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "signalling.rate-limit.rate"); value.Exists() && !data.SignallingRateLimitRate.IsNull() {
 		data.SignallingRateLimitRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingRateLimitRate.IsNull() {
 		data.SignallingRateLimitRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.rate-limit.interval"); value.Exists() && !data.SignallingRateLimitInterval.IsNull() {
 		data.SignallingRateLimitInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingRateLimitInterval.IsNull() {
 		data.SignallingRateLimitInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.refresh.interval"); value.Exists() && !data.SignallingRefreshInterval.IsNull() {
 		data.SignallingRefreshInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingRefreshInterval.IsNull() {
 		data.SignallingRefreshInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.refresh.missed"); value.Exists() && !data.SignallingRefreshMissed.IsNull() {
 		data.SignallingRefreshMissed = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingRefreshMissed.IsNull() {
 		data.SignallingRefreshMissed = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.refresh.out-of-band.interval"); value.Exists() && !data.SignallingRefreshOobInterval.IsNull() {
 		data.SignallingRefreshOobInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingRefreshOobInterval.IsNull() {
 		data.SignallingRefreshOobInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.refresh.out-of-band.missed"); value.Exists() && !data.SignallingRefreshOobMissed.IsNull() {
 		data.SignallingRefreshOobMissed = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingRefreshOobMissed.IsNull() {
 		data.SignallingRefreshOobMissed = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.disable"); !data.SignallingRefreshReductionDisable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "signalling.refresh.reduction.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingRefreshReductionDisable.IsNull() {
 			data.SignallingRefreshReductionDisable = types.BoolValue(true)
-		} else {
-			data.SignallingRefreshReductionDisable = types.BoolValue(false)
 		}
 	} else {
-		data.SignallingRefreshReductionDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SignallingRefreshReductionDisable.IsNull() {
+			data.SignallingRefreshReductionDisable = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.ack-hold-time"); value.Exists() && !data.SignallingRefreshReductionReliableAckHoldTime.IsNull() {
 		data.SignallingRefreshReductionReliableAckHoldTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingRefreshReductionReliableAckHoldTime.IsNull() {
 		data.SignallingRefreshReductionReliableAckHoldTime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.ack-max-size"); value.Exists() && !data.SignallingRefreshReductionReliableAckMaxSize.IsNull() {
 		data.SignallingRefreshReductionReliableAckMaxSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingRefreshReductionReliableAckMaxSize.IsNull() {
 		data.SignallingRefreshReductionReliableAckMaxSize = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.retransmit-time"); value.Exists() && !data.SignallingRefreshReductionReliableRetransmitTime.IsNull() {
 		data.SignallingRefreshReductionReliableRetransmitTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingRefreshReductionReliableRetransmitTime.IsNull() {
 		data.SignallingRefreshReductionReliableRetransmitTime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.retransmit-queue-depth"); value.Exists() && !data.SignallingRefreshReductionReliableRetransmitQueueDepth.IsNull() {
 		data.SignallingRefreshReductionReliableRetransmitQueueDepth = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingRefreshReductionReliableRetransmitQueueDepth.IsNull() {
 		data.SignallingRefreshReductionReliableRetransmitQueueDepth = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.summary-refresh"); !data.SignallingRefreshReductionReliableSummaryRefresh.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.summary-refresh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingRefreshReductionReliableSummaryRefresh.IsNull() {
 			data.SignallingRefreshReductionReliableSummaryRefresh = types.BoolValue(true)
-		} else {
-			data.SignallingRefreshReductionReliableSummaryRefresh = types.BoolValue(false)
 		}
 	} else {
-		data.SignallingRefreshReductionReliableSummaryRefresh = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SignallingRefreshReductionReliableSummaryRefresh.IsNull() {
+			data.SignallingRefreshReductionReliableSummaryRefresh = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "signalling.refresh.reduction.summary.max-size"); value.Exists() && !data.SignallingRefreshReductionSummaryMaxSize.IsNull() {
 		data.SignallingRefreshReductionSummaryMaxSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingRefreshReductionSummaryMaxSize.IsNull() {
 		data.SignallingRefreshReductionSummaryMaxSize = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.refresh.reduction.bundle-max-size"); value.Exists() && !data.SignallingRefreshReductionBundleMaxSize.IsNull() {
 		data.SignallingRefreshReductionBundleMaxSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingRefreshReductionBundleMaxSize.IsNull() {
 		data.SignallingRefreshReductionBundleMaxSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "signalling.hello.graceful-restart.interface-based"); !data.SignallingHelloGracefulRestartInterfaceBased.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "signalling.hello.graceful-restart.interface-based"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingHelloGracefulRestartInterfaceBased.IsNull() {
 			data.SignallingHelloGracefulRestartInterfaceBased = types.BoolValue(true)
-		} else {
-			data.SignallingHelloGracefulRestartInterfaceBased = types.BoolValue(false)
 		}
 	} else {
-		data.SignallingHelloGracefulRestartInterfaceBased = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SignallingHelloGracefulRestartInterfaceBased.IsNull() {
+			data.SignallingHelloGracefulRestartInterfaceBased = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "authentication.key-source.key-chain"); value.Exists() && !data.AuthenticationKeyChain.IsNull() {
 		data.AuthenticationKeyChain = types.StringValue(value.String())
-	} else {
+	} else if data.AuthenticationKeyChain.IsNull() {
 		data.AuthenticationKeyChain = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "authentication.window-size"); value.Exists() && !data.AuthenticationWindowSize.IsNull() {
 		data.AuthenticationWindowSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.AuthenticationWindowSize.IsNull() {
 		data.AuthenticationWindowSize = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "authentication.life-time"); value.Exists() && !data.AuthenticationLifeTime.IsNull() {
 		data.AuthenticationLifeTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.AuthenticationLifeTime.IsNull() {
 		data.AuthenticationLifeTime = types.Int64Null()
 	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data RSVPInterface) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/interface-name", data.InterfaceName.ValueString())
+	}
+	if !data.BandwidthDefault.IsNull() && !data.BandwidthDefault.IsUnknown() {
+		if data.BandwidthDefault.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/default", "")
+		}
+	}
+	if !data.BandwidthTotal.IsNull() && !data.BandwidthTotal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/total-reservable-bandwidth", strconv.FormatInt(data.BandwidthTotal.ValueInt64(), 10))
+	}
+	if !data.BandwidthFlow.IsNull() && !data.BandwidthFlow.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/largest-reservable-flow", strconv.FormatInt(data.BandwidthFlow.ValueInt64(), 10))
+	}
+	if !data.BandwidthGlobalPoolTotal.IsNull() && !data.BandwidthGlobalPoolTotal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/global-pool/total-reservable-bandwidth", strconv.FormatInt(data.BandwidthGlobalPoolTotal.ValueInt64(), 10))
+	}
+	if !data.BandwidthGlobalPoolFlow.IsNull() && !data.BandwidthGlobalPoolFlow.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/global-pool/largest-reservable-flow", strconv.FormatInt(data.BandwidthGlobalPoolFlow.ValueInt64(), 10))
+	}
+	if !data.BandwidthSubPoolTotal.IsNull() && !data.BandwidthSubPoolTotal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/sub-pool/reservable-bandwidth", strconv.FormatInt(data.BandwidthSubPoolTotal.ValueInt64(), 10))
+	}
+	if !data.BandwidthBc0Total.IsNull() && !data.BandwidthBc0Total.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/bc0/total-reservable-bandwidth", strconv.FormatInt(data.BandwidthBc0Total.ValueInt64(), 10))
+	}
+	if !data.BandwidthBc0Flow.IsNull() && !data.BandwidthBc0Flow.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/bc0/largest-reservable-flow", strconv.FormatInt(data.BandwidthBc0Flow.ValueInt64(), 10))
+	}
+	if !data.BandwidthBc1Total.IsNull() && !data.BandwidthBc1Total.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/bc0/bc1/reservable-bandwidth", strconv.FormatInt(data.BandwidthBc1Total.ValueInt64(), 10))
+	}
+	if !data.BandwidthPercentageTotal.IsNull() && !data.BandwidthPercentageTotal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/percentage/total-reservable-bandwidth", strconv.FormatInt(data.BandwidthPercentageTotal.ValueInt64(), 10))
+	}
+	if !data.BandwidthPercentageFlow.IsNull() && !data.BandwidthPercentageFlow.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/percentage/largest-reservable-flow", strconv.FormatInt(data.BandwidthPercentageFlow.ValueInt64(), 10))
+	}
+	if !data.BandwidthPercentageGlobalPoolTotal.IsNull() && !data.BandwidthPercentageGlobalPoolTotal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/percentage/global-pool/total-reservable-bandwidth", strconv.FormatInt(data.BandwidthPercentageGlobalPoolTotal.ValueInt64(), 10))
+	}
+	if !data.BandwidthPercentageGlobalPoolFlow.IsNull() && !data.BandwidthPercentageGlobalPoolFlow.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/percentage/global-pool/largest-reservable-flow", strconv.FormatInt(data.BandwidthPercentageGlobalPoolFlow.ValueInt64(), 10))
+	}
+	if !data.BandwidthPercentageSubPoolTotal.IsNull() && !data.BandwidthPercentageSubPoolTotal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/percentage/sub-pool/reservable-bandwidth", strconv.FormatInt(data.BandwidthPercentageSubPoolTotal.ValueInt64(), 10))
+	}
+	if !data.BandwidthPercentageBc0Total.IsNull() && !data.BandwidthPercentageBc0Total.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/percentage/bc0/total-reservable-bandwidth", strconv.FormatInt(data.BandwidthPercentageBc0Total.ValueInt64(), 10))
+	}
+	if !data.BandwidthPercentageBc0Flow.IsNull() && !data.BandwidthPercentageBc0Flow.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/percentage/bc0/largest-reservable-flow", strconv.FormatInt(data.BandwidthPercentageBc0Flow.ValueInt64(), 10))
+	}
+	if !data.BandwidthPercentageBc1Total.IsNull() && !data.BandwidthPercentageBc1Total.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/percentage/bc0/bc1/reservable-bandwidth", strconv.FormatInt(data.BandwidthPercentageBc1Total.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmPercentageTotal.IsNull() && !data.BandwidthRdmPercentageTotal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/percentage/total-reservable-bandwidth", strconv.FormatInt(data.BandwidthRdmPercentageTotal.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmPercentageFlow.IsNull() && !data.BandwidthRdmPercentageFlow.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/percentage/largest-reservable-flow", strconv.FormatInt(data.BandwidthRdmPercentageFlow.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmPercentageGlobalPoolTotal.IsNull() && !data.BandwidthRdmPercentageGlobalPoolTotal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/percentage/global-pool/total-reservable-bandwidth", strconv.FormatInt(data.BandwidthRdmPercentageGlobalPoolTotal.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmPercentageGlobalPoolFlow.IsNull() && !data.BandwidthRdmPercentageGlobalPoolFlow.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/percentage/global-pool/largest-reservable-flow", strconv.FormatInt(data.BandwidthRdmPercentageGlobalPoolFlow.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmPercentageSubPoolTotal.IsNull() && !data.BandwidthRdmPercentageSubPoolTotal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/percentage/sub-pool/reservable-bandwidth", strconv.FormatInt(data.BandwidthRdmPercentageSubPoolTotal.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmPercentageBc0Total.IsNull() && !data.BandwidthRdmPercentageBc0Total.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/percentage/bc0/total-reservable-bandwidth", strconv.FormatInt(data.BandwidthRdmPercentageBc0Total.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmPercentageBc0Flow.IsNull() && !data.BandwidthRdmPercentageBc0Flow.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/percentage/bc0/largest-reservable-flow", strconv.FormatInt(data.BandwidthRdmPercentageBc0Flow.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmPercentageBc1Total.IsNull() && !data.BandwidthRdmPercentageBc1Total.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/percentage/bc0/bc1/reservable-bandwidth", strconv.FormatInt(data.BandwidthRdmPercentageBc1Total.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmTotal.IsNull() && !data.BandwidthRdmTotal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/total-reservable-bandwidth", strconv.FormatInt(data.BandwidthRdmTotal.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmFlow.IsNull() && !data.BandwidthRdmFlow.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/largest-reservable-flow", strconv.FormatInt(data.BandwidthRdmFlow.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmGlobalPoolTotal.IsNull() && !data.BandwidthRdmGlobalPoolTotal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/global-pool/total-reservable-bandwidth", strconv.FormatInt(data.BandwidthRdmGlobalPoolTotal.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmGlobalPoolFlow.IsNull() && !data.BandwidthRdmGlobalPoolFlow.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/global-pool/largest-reservable-flow", strconv.FormatInt(data.BandwidthRdmGlobalPoolFlow.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmSubPoolTotal.IsNull() && !data.BandwidthRdmSubPoolTotal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/sub-pool/reservable-bandwidth", strconv.FormatInt(data.BandwidthRdmSubPoolTotal.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmBc0Total.IsNull() && !data.BandwidthRdmBc0Total.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/bc0/total-reservable-bandwidth", strconv.FormatInt(data.BandwidthRdmBc0Total.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmBc0Flow.IsNull() && !data.BandwidthRdmBc0Flow.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/bc0/largest-reservable-flow", strconv.FormatInt(data.BandwidthRdmBc0Flow.ValueInt64(), 10))
+	}
+	if !data.BandwidthRdmBc1Total.IsNull() && !data.BandwidthRdmBc1Total.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/rdm/bc0/bc1/reservable-bandwidth", strconv.FormatInt(data.BandwidthRdmBc1Total.ValueInt64(), 10))
+	}
+	if !data.BandwidthMamTotal.IsNull() && !data.BandwidthMamTotal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/mam/max-reservable-bw/total-reservable-bandwidth", strconv.FormatInt(data.BandwidthMamTotal.ValueInt64(), 10))
+	}
+	if !data.BandwidthMamFlow.IsNull() && !data.BandwidthMamFlow.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/mam/max-reservable-bw/largest-reservable-flow", strconv.FormatInt(data.BandwidthMamFlow.ValueInt64(), 10))
+	}
+	if !data.BandwidthMamBc0Total.IsNull() && !data.BandwidthMamBc0Total.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/mam/max-reservable-bw/bc0", strconv.FormatInt(data.BandwidthMamBc0Total.ValueInt64(), 10))
+	}
+	if !data.BandwidthMamBc1Total.IsNull() && !data.BandwidthMamBc1Total.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/mam/max-reservable-bw/bc1", strconv.FormatInt(data.BandwidthMamBc1Total.ValueInt64(), 10))
+	}
+	if !data.BandwidthMamPercentageTotal.IsNull() && !data.BandwidthMamPercentageTotal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/total-reservable-bandwidth", strconv.FormatInt(data.BandwidthMamPercentageTotal.ValueInt64(), 10))
+	}
+	if !data.BandwidthMamPercentageFlow.IsNull() && !data.BandwidthMamPercentageFlow.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/largest-reservable-flow", strconv.FormatInt(data.BandwidthMamPercentageFlow.ValueInt64(), 10))
+	}
+	if !data.BandwidthMamPercentageBc0Total.IsNull() && !data.BandwidthMamPercentageBc0Total.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/bc0", strconv.FormatInt(data.BandwidthMamPercentageBc0Total.ValueInt64(), 10))
+	}
+	if !data.BandwidthMamPercentageBc1Total.IsNull() && !data.BandwidthMamPercentageBc1Total.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/bc1", strconv.FormatInt(data.BandwidthMamPercentageBc1Total.ValueInt64(), 10))
+	}
+	if !data.SignallingDscp.IsNull() && !data.SignallingDscp.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/dscp", strconv.FormatInt(data.SignallingDscp.ValueInt64(), 10))
+	}
+	if !data.SignallingRateLimitEnable.IsNull() && !data.SignallingRateLimitEnable.IsUnknown() {
+		if data.SignallingRateLimitEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/rate-limit/enable", "")
+		}
+	}
+	if !data.SignallingRateLimitRate.IsNull() && !data.SignallingRateLimitRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/rate-limit/rate", strconv.FormatInt(data.SignallingRateLimitRate.ValueInt64(), 10))
+	}
+	if !data.SignallingRateLimitInterval.IsNull() && !data.SignallingRateLimitInterval.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/rate-limit/interval", strconv.FormatInt(data.SignallingRateLimitInterval.ValueInt64(), 10))
+	}
+	if !data.SignallingRefreshInterval.IsNull() && !data.SignallingRefreshInterval.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/refresh/interval", strconv.FormatInt(data.SignallingRefreshInterval.ValueInt64(), 10))
+	}
+	if !data.SignallingRefreshMissed.IsNull() && !data.SignallingRefreshMissed.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/refresh/missed", strconv.FormatInt(data.SignallingRefreshMissed.ValueInt64(), 10))
+	}
+	if !data.SignallingRefreshOobInterval.IsNull() && !data.SignallingRefreshOobInterval.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/refresh/out-of-band/interval", strconv.FormatInt(data.SignallingRefreshOobInterval.ValueInt64(), 10))
+	}
+	if !data.SignallingRefreshOobMissed.IsNull() && !data.SignallingRefreshOobMissed.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/refresh/out-of-band/missed", strconv.FormatInt(data.SignallingRefreshOobMissed.ValueInt64(), 10))
+	}
+	if !data.SignallingRefreshReductionDisable.IsNull() && !data.SignallingRefreshReductionDisable.IsUnknown() {
+		if data.SignallingRefreshReductionDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/refresh/reduction/disable", "")
+		}
+	}
+	if !data.SignallingRefreshReductionReliableAckHoldTime.IsNull() && !data.SignallingRefreshReductionReliableAckHoldTime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/refresh/reduction/reliable/ack-hold-time", strconv.FormatInt(data.SignallingRefreshReductionReliableAckHoldTime.ValueInt64(), 10))
+	}
+	if !data.SignallingRefreshReductionReliableAckMaxSize.IsNull() && !data.SignallingRefreshReductionReliableAckMaxSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/refresh/reduction/reliable/ack-max-size", strconv.FormatInt(data.SignallingRefreshReductionReliableAckMaxSize.ValueInt64(), 10))
+	}
+	if !data.SignallingRefreshReductionReliableRetransmitTime.IsNull() && !data.SignallingRefreshReductionReliableRetransmitTime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/refresh/reduction/reliable/retransmit-time", strconv.FormatInt(data.SignallingRefreshReductionReliableRetransmitTime.ValueInt64(), 10))
+	}
+	if !data.SignallingRefreshReductionReliableRetransmitQueueDepth.IsNull() && !data.SignallingRefreshReductionReliableRetransmitQueueDepth.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/refresh/reduction/reliable/retransmit-queue-depth", strconv.FormatInt(data.SignallingRefreshReductionReliableRetransmitQueueDepth.ValueInt64(), 10))
+	}
+	if !data.SignallingRefreshReductionReliableSummaryRefresh.IsNull() && !data.SignallingRefreshReductionReliableSummaryRefresh.IsUnknown() {
+		if data.SignallingRefreshReductionReliableSummaryRefresh.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/refresh/reduction/reliable/summary-refresh", "")
+		}
+	}
+	if !data.SignallingRefreshReductionSummaryMaxSize.IsNull() && !data.SignallingRefreshReductionSummaryMaxSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/refresh/reduction/summary/max-size", strconv.FormatInt(data.SignallingRefreshReductionSummaryMaxSize.ValueInt64(), 10))
+	}
+	if !data.SignallingRefreshReductionBundleMaxSize.IsNull() && !data.SignallingRefreshReductionBundleMaxSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/refresh/reduction/bundle-max-size", strconv.FormatInt(data.SignallingRefreshReductionBundleMaxSize.ValueInt64(), 10))
+	}
+	if !data.SignallingHelloGracefulRestartInterfaceBased.IsNull() && !data.SignallingHelloGracefulRestartInterfaceBased.IsUnknown() {
+		if data.SignallingHelloGracefulRestartInterfaceBased.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/signalling/hello/graceful-restart/interface-based", "")
+		}
+	}
+	if !data.AuthenticationKeyChain.IsNull() && !data.AuthenticationKeyChain.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/authentication/key-source/key-chain", data.AuthenticationKeyChain.ValueString())
+	}
+	if !data.AuthenticationWindowSize.IsNull() && !data.AuthenticationWindowSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/authentication/window-size", strconv.FormatInt(data.AuthenticationWindowSize.ValueInt64(), 10))
+	}
+	if !data.AuthenticationLifeTime.IsNull() && !data.AuthenticationLifeTime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/authentication/life-time", strconv.FormatInt(data.AuthenticationLifeTime.ValueInt64(), 10))
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *RSVPInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interface-name"); value.Exists() {
+		data.InterfaceName = types.StringValue(value.String())
+	} else if data.InterfaceName.IsNull() {
+		data.InterfaceName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/default"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BandwidthDefault.IsNull() {
+			data.BandwidthDefault = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.BandwidthDefault.IsNull() {
+			data.BandwidthDefault = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthTotal = types.Int64Value(value.Int())
+	} else if data.BandwidthTotal.IsNull() {
+		data.BandwidthTotal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/largest-reservable-flow"); value.Exists() {
+		data.BandwidthFlow = types.Int64Value(value.Int())
+	} else if data.BandwidthFlow.IsNull() {
+		data.BandwidthFlow = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/global-pool/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthGlobalPoolTotal = types.Int64Value(value.Int())
+	} else if data.BandwidthGlobalPoolTotal.IsNull() {
+		data.BandwidthGlobalPoolTotal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/global-pool/largest-reservable-flow"); value.Exists() {
+		data.BandwidthGlobalPoolFlow = types.Int64Value(value.Int())
+	} else if data.BandwidthGlobalPoolFlow.IsNull() {
+		data.BandwidthGlobalPoolFlow = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/sub-pool/reservable-bandwidth"); value.Exists() {
+		data.BandwidthSubPoolTotal = types.Int64Value(value.Int())
+	} else if data.BandwidthSubPoolTotal.IsNull() {
+		data.BandwidthSubPoolTotal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/bc0/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthBc0Total = types.Int64Value(value.Int())
+	} else if data.BandwidthBc0Total.IsNull() {
+		data.BandwidthBc0Total = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/bc0/largest-reservable-flow"); value.Exists() {
+		data.BandwidthBc0Flow = types.Int64Value(value.Int())
+	} else if data.BandwidthBc0Flow.IsNull() {
+		data.BandwidthBc0Flow = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/bc0/bc1/reservable-bandwidth"); value.Exists() {
+		data.BandwidthBc1Total = types.Int64Value(value.Int())
+	} else if data.BandwidthBc1Total.IsNull() {
+		data.BandwidthBc1Total = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageTotal = types.Int64Value(value.Int())
+	} else if data.BandwidthPercentageTotal.IsNull() {
+		data.BandwidthPercentageTotal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/largest-reservable-flow"); value.Exists() {
+		data.BandwidthPercentageFlow = types.Int64Value(value.Int())
+	} else if data.BandwidthPercentageFlow.IsNull() {
+		data.BandwidthPercentageFlow = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/global-pool/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageGlobalPoolTotal = types.Int64Value(value.Int())
+	} else if data.BandwidthPercentageGlobalPoolTotal.IsNull() {
+		data.BandwidthPercentageGlobalPoolTotal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/global-pool/largest-reservable-flow"); value.Exists() {
+		data.BandwidthPercentageGlobalPoolFlow = types.Int64Value(value.Int())
+	} else if data.BandwidthPercentageGlobalPoolFlow.IsNull() {
+		data.BandwidthPercentageGlobalPoolFlow = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/sub-pool/reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageSubPoolTotal = types.Int64Value(value.Int())
+	} else if data.BandwidthPercentageSubPoolTotal.IsNull() {
+		data.BandwidthPercentageSubPoolTotal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/bc0/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageBc0Total = types.Int64Value(value.Int())
+	} else if data.BandwidthPercentageBc0Total.IsNull() {
+		data.BandwidthPercentageBc0Total = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/bc0/largest-reservable-flow"); value.Exists() {
+		data.BandwidthPercentageBc0Flow = types.Int64Value(value.Int())
+	} else if data.BandwidthPercentageBc0Flow.IsNull() {
+		data.BandwidthPercentageBc0Flow = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/bc0/bc1/reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageBc1Total = types.Int64Value(value.Int())
+	} else if data.BandwidthPercentageBc1Total.IsNull() {
+		data.BandwidthPercentageBc1Total = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageTotal = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmPercentageTotal.IsNull() {
+		data.BandwidthRdmPercentageTotal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmPercentageFlow = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmPercentageFlow.IsNull() {
+		data.BandwidthRdmPercentageFlow = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/global-pool/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageGlobalPoolTotal = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmPercentageGlobalPoolTotal.IsNull() {
+		data.BandwidthRdmPercentageGlobalPoolTotal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/global-pool/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmPercentageGlobalPoolFlow = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmPercentageGlobalPoolFlow.IsNull() {
+		data.BandwidthRdmPercentageGlobalPoolFlow = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/sub-pool/reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageSubPoolTotal = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmPercentageSubPoolTotal.IsNull() {
+		data.BandwidthRdmPercentageSubPoolTotal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/bc0/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageBc0Total = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmPercentageBc0Total.IsNull() {
+		data.BandwidthRdmPercentageBc0Total = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/bc0/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmPercentageBc0Flow = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmPercentageBc0Flow.IsNull() {
+		data.BandwidthRdmPercentageBc0Flow = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/bc0/bc1/reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageBc1Total = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmPercentageBc1Total.IsNull() {
+		data.BandwidthRdmPercentageBc1Total = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmTotal = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmTotal.IsNull() {
+		data.BandwidthRdmTotal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmFlow = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmFlow.IsNull() {
+		data.BandwidthRdmFlow = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/global-pool/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmGlobalPoolTotal = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmGlobalPoolTotal.IsNull() {
+		data.BandwidthRdmGlobalPoolTotal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/global-pool/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmGlobalPoolFlow = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmGlobalPoolFlow.IsNull() {
+		data.BandwidthRdmGlobalPoolFlow = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/sub-pool/reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmSubPoolTotal = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmSubPoolTotal.IsNull() {
+		data.BandwidthRdmSubPoolTotal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/bc0/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmBc0Total = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmBc0Total.IsNull() {
+		data.BandwidthRdmBc0Total = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/bc0/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmBc0Flow = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmBc0Flow.IsNull() {
+		data.BandwidthRdmBc0Flow = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/bc0/bc1/reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmBc1Total = types.Int64Value(value.Int())
+	} else if data.BandwidthRdmBc1Total.IsNull() {
+		data.BandwidthRdmBc1Total = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/max-reservable-bw/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthMamTotal = types.Int64Value(value.Int())
+	} else if data.BandwidthMamTotal.IsNull() {
+		data.BandwidthMamTotal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/max-reservable-bw/largest-reservable-flow"); value.Exists() {
+		data.BandwidthMamFlow = types.Int64Value(value.Int())
+	} else if data.BandwidthMamFlow.IsNull() {
+		data.BandwidthMamFlow = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/max-reservable-bw/bc0"); value.Exists() {
+		data.BandwidthMamBc0Total = types.Int64Value(value.Int())
+	} else if data.BandwidthMamBc0Total.IsNull() {
+		data.BandwidthMamBc0Total = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/max-reservable-bw/bc1"); value.Exists() {
+		data.BandwidthMamBc1Total = types.Int64Value(value.Int())
+	} else if data.BandwidthMamBc1Total.IsNull() {
+		data.BandwidthMamBc1Total = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthMamPercentageTotal = types.Int64Value(value.Int())
+	} else if data.BandwidthMamPercentageTotal.IsNull() {
+		data.BandwidthMamPercentageTotal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/largest-reservable-flow"); value.Exists() {
+		data.BandwidthMamPercentageFlow = types.Int64Value(value.Int())
+	} else if data.BandwidthMamPercentageFlow.IsNull() {
+		data.BandwidthMamPercentageFlow = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/bc0"); value.Exists() {
+		data.BandwidthMamPercentageBc0Total = types.Int64Value(value.Int())
+	} else if data.BandwidthMamPercentageBc0Total.IsNull() {
+		data.BandwidthMamPercentageBc0Total = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/bc1"); value.Exists() {
+		data.BandwidthMamPercentageBc1Total = types.Int64Value(value.Int())
+	} else if data.BandwidthMamPercentageBc1Total.IsNull() {
+		data.BandwidthMamPercentageBc1Total = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/dscp"); value.Exists() {
+		data.SignallingDscp = types.Int64Value(value.Int())
+	} else if data.SignallingDscp.IsNull() {
+		data.SignallingDscp = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/rate-limit/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingRateLimitEnable.IsNull() {
+			data.SignallingRateLimitEnable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SignallingRateLimitEnable.IsNull() {
+			data.SignallingRateLimitEnable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/rate-limit/rate"); value.Exists() {
+		data.SignallingRateLimitRate = types.Int64Value(value.Int())
+	} else if data.SignallingRateLimitRate.IsNull() {
+		data.SignallingRateLimitRate = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/rate-limit/interval"); value.Exists() {
+		data.SignallingRateLimitInterval = types.Int64Value(value.Int())
+	} else if data.SignallingRateLimitInterval.IsNull() {
+		data.SignallingRateLimitInterval = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/interval"); value.Exists() {
+		data.SignallingRefreshInterval = types.Int64Value(value.Int())
+	} else if data.SignallingRefreshInterval.IsNull() {
+		data.SignallingRefreshInterval = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/missed"); value.Exists() {
+		data.SignallingRefreshMissed = types.Int64Value(value.Int())
+	} else if data.SignallingRefreshMissed.IsNull() {
+		data.SignallingRefreshMissed = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/out-of-band/interval"); value.Exists() {
+		data.SignallingRefreshOobInterval = types.Int64Value(value.Int())
+	} else if data.SignallingRefreshOobInterval.IsNull() {
+		data.SignallingRefreshOobInterval = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/out-of-band/missed"); value.Exists() {
+		data.SignallingRefreshOobMissed = types.Int64Value(value.Int())
+	} else if data.SignallingRefreshOobMissed.IsNull() {
+		data.SignallingRefreshOobMissed = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingRefreshReductionDisable.IsNull() {
+			data.SignallingRefreshReductionDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SignallingRefreshReductionDisable.IsNull() {
+			data.SignallingRefreshReductionDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/ack-hold-time"); value.Exists() {
+		data.SignallingRefreshReductionReliableAckHoldTime = types.Int64Value(value.Int())
+	} else if data.SignallingRefreshReductionReliableAckHoldTime.IsNull() {
+		data.SignallingRefreshReductionReliableAckHoldTime = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/ack-max-size"); value.Exists() {
+		data.SignallingRefreshReductionReliableAckMaxSize = types.Int64Value(value.Int())
+	} else if data.SignallingRefreshReductionReliableAckMaxSize.IsNull() {
+		data.SignallingRefreshReductionReliableAckMaxSize = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/retransmit-time"); value.Exists() {
+		data.SignallingRefreshReductionReliableRetransmitTime = types.Int64Value(value.Int())
+	} else if data.SignallingRefreshReductionReliableRetransmitTime.IsNull() {
+		data.SignallingRefreshReductionReliableRetransmitTime = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/retransmit-queue-depth"); value.Exists() {
+		data.SignallingRefreshReductionReliableRetransmitQueueDepth = types.Int64Value(value.Int())
+	} else if data.SignallingRefreshReductionReliableRetransmitQueueDepth.IsNull() {
+		data.SignallingRefreshReductionReliableRetransmitQueueDepth = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/summary-refresh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingRefreshReductionReliableSummaryRefresh.IsNull() {
+			data.SignallingRefreshReductionReliableSummaryRefresh = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SignallingRefreshReductionReliableSummaryRefresh.IsNull() {
+			data.SignallingRefreshReductionReliableSummaryRefresh = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/summary/max-size"); value.Exists() {
+		data.SignallingRefreshReductionSummaryMaxSize = types.Int64Value(value.Int())
+	} else if data.SignallingRefreshReductionSummaryMaxSize.IsNull() {
+		data.SignallingRefreshReductionSummaryMaxSize = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/bundle-max-size"); value.Exists() {
+		data.SignallingRefreshReductionBundleMaxSize = types.Int64Value(value.Int())
+	} else if data.SignallingRefreshReductionBundleMaxSize.IsNull() {
+		data.SignallingRefreshReductionBundleMaxSize = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/hello/graceful-restart/interface-based"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingHelloGracefulRestartInterfaceBased.IsNull() {
+			data.SignallingHelloGracefulRestartInterfaceBased = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SignallingHelloGracefulRestartInterfaceBased.IsNull() {
+			data.SignallingHelloGracefulRestartInterfaceBased = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/key-source/key-chain"); value.Exists() {
+		data.AuthenticationKeyChain = types.StringValue(value.String())
+	} else if data.AuthenticationKeyChain.IsNull() {
+		data.AuthenticationKeyChain = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/window-size"); value.Exists() {
+		data.AuthenticationWindowSize = types.Int64Value(value.Int())
+	} else if data.AuthenticationWindowSize.IsNull() {
+		data.AuthenticationWindowSize = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/life-time"); value.Exists() {
+		data.AuthenticationLifeTime = types.Int64Value(value.Int())
+	} else if data.AuthenticationLifeTime.IsNull() {
+		data.AuthenticationLifeTime = types.Int64Null()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *RSVPInterface) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "bandwidth.default"); value.Exists() {
+func (data *RSVPInterface) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "bandwidth.default"); value.Exists() {
 		data.BandwidthDefault = types.BoolValue(true)
-	} else {
+	} else if !data.BandwidthDefault.IsNull() {
+		// Only set to false if it was previously set in state
 		data.BandwidthDefault = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "bandwidth.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.largest-reservable-flow"); value.Exists() {
 		data.BandwidthFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.global-pool.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.global-pool.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthGlobalPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.global-pool.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.global-pool.largest-reservable-flow"); value.Exists() {
 		data.BandwidthGlobalPoolFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.sub-pool.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.sub-pool.reservable-bandwidth"); value.Exists() {
 		data.BandwidthSubPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.bc0.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.bc0.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthBc0Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.bc0.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.bc0.largest-reservable-flow"); value.Exists() {
 		data.BandwidthBc0Flow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.bc0.bc1.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.bc0.bc1.reservable-bandwidth"); value.Exists() {
 		data.BandwidthBc1Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthPercentageTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.largest-reservable-flow"); value.Exists() {
 		data.BandwidthPercentageFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.global-pool.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.global-pool.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthPercentageGlobalPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.global-pool.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.global-pool.largest-reservable-flow"); value.Exists() {
 		data.BandwidthPercentageGlobalPoolFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.sub-pool.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.sub-pool.reservable-bandwidth"); value.Exists() {
 		data.BandwidthPercentageSubPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.bc0.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.bc0.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthPercentageBc0Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.bc0.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.bc0.largest-reservable-flow"); value.Exists() {
 		data.BandwidthPercentageBc0Flow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.bc0.bc1.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.bc0.bc1.reservable-bandwidth"); value.Exists() {
 		data.BandwidthPercentageBc1Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmPercentageTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.largest-reservable-flow"); value.Exists() {
 		data.BandwidthRdmPercentageFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.global-pool.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.global-pool.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmPercentageGlobalPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.global-pool.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.global-pool.largest-reservable-flow"); value.Exists() {
 		data.BandwidthRdmPercentageGlobalPoolFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.sub-pool.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.sub-pool.reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmPercentageSubPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.bc0.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.bc0.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmPercentageBc0Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.bc0.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.bc0.largest-reservable-flow"); value.Exists() {
 		data.BandwidthRdmPercentageBc0Flow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.bc0.bc1.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.bc0.bc1.reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmPercentageBc1Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.largest-reservable-flow"); value.Exists() {
 		data.BandwidthRdmFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.global-pool.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.global-pool.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmGlobalPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.global-pool.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.global-pool.largest-reservable-flow"); value.Exists() {
 		data.BandwidthRdmGlobalPoolFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.sub-pool.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.sub-pool.reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmSubPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.bc0.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.bc0.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmBc0Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.bc0.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.bc0.largest-reservable-flow"); value.Exists() {
 		data.BandwidthRdmBc0Flow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.bc0.bc1.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.bc0.bc1.reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmBc1Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.max-reservable-bw.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.max-reservable-bw.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthMamTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.max-reservable-bw.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.max-reservable-bw.largest-reservable-flow"); value.Exists() {
 		data.BandwidthMamFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.max-reservable-bw.bc0"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.max-reservable-bw.bc0"); value.Exists() {
 		data.BandwidthMamBc0Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.max-reservable-bw.bc1"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.max-reservable-bw.bc1"); value.Exists() {
 		data.BandwidthMamBc1Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable-bw.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable-bw.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthMamPercentageTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable-bw.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable-bw.largest-reservable-flow"); value.Exists() {
 		data.BandwidthMamPercentageFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable-bw.bc0"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable-bw.bc0"); value.Exists() {
 		data.BandwidthMamPercentageBc0Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable-bw.bc1"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable-bw.bc1"); value.Exists() {
 		data.BandwidthMamPercentageBc1Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.dscp"); value.Exists() {
+	if value := res.Get(prefix + "signalling.dscp"); value.Exists() {
 		data.SignallingDscp = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.rate-limit.enable"); value.Exists() {
+	if value := res.Get(prefix + "signalling.rate-limit.enable"); value.Exists() {
 		data.SignallingRateLimitEnable = types.BoolValue(true)
-	} else {
+	} else if !data.SignallingRateLimitEnable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.SignallingRateLimitEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "signalling.rate-limit.rate"); value.Exists() {
+	if value := res.Get(prefix + "signalling.rate-limit.rate"); value.Exists() {
 		data.SignallingRateLimitRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.rate-limit.interval"); value.Exists() {
+	if value := res.Get(prefix + "signalling.rate-limit.interval"); value.Exists() {
 		data.SignallingRateLimitInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.interval"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.interval"); value.Exists() {
 		data.SignallingRefreshInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.missed"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.missed"); value.Exists() {
 		data.SignallingRefreshMissed = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.out-of-band.interval"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.out-of-band.interval"); value.Exists() {
 		data.SignallingRefreshOobInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.out-of-band.missed"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.out-of-band.missed"); value.Exists() {
 		data.SignallingRefreshOobMissed = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.disable"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.disable"); value.Exists() {
 		data.SignallingRefreshReductionDisable = types.BoolValue(true)
-	} else {
+	} else if !data.SignallingRefreshReductionDisable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.SignallingRefreshReductionDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.ack-hold-time"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.reliable.ack-hold-time"); value.Exists() {
 		data.SignallingRefreshReductionReliableAckHoldTime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.ack-max-size"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.reliable.ack-max-size"); value.Exists() {
 		data.SignallingRefreshReductionReliableAckMaxSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.retransmit-time"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.reliable.retransmit-time"); value.Exists() {
 		data.SignallingRefreshReductionReliableRetransmitTime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.retransmit-queue-depth"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.reliable.retransmit-queue-depth"); value.Exists() {
 		data.SignallingRefreshReductionReliableRetransmitQueueDepth = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.summary-refresh"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.reliable.summary-refresh"); value.Exists() {
 		data.SignallingRefreshReductionReliableSummaryRefresh = types.BoolValue(true)
-	} else {
+	} else if !data.SignallingRefreshReductionReliableSummaryRefresh.IsNull() {
+		// Only set to false if it was previously set in state
 		data.SignallingRefreshReductionReliableSummaryRefresh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.summary.max-size"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.summary.max-size"); value.Exists() {
 		data.SignallingRefreshReductionSummaryMaxSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.bundle-max-size"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.bundle-max-size"); value.Exists() {
 		data.SignallingRefreshReductionBundleMaxSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.hello.graceful-restart.interface-based"); value.Exists() {
+	if value := res.Get(prefix + "signalling.hello.graceful-restart.interface-based"); value.Exists() {
 		data.SignallingHelloGracefulRestartInterfaceBased = types.BoolValue(true)
-	} else {
+	} else if !data.SignallingHelloGracefulRestartInterfaceBased.IsNull() {
+		// Only set to false if it was previously set in state
 		data.SignallingHelloGracefulRestartInterfaceBased = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "authentication.key-source.key-chain"); value.Exists() {
+	if value := res.Get(prefix + "authentication.key-source.key-chain"); value.Exists() {
 		data.AuthenticationKeyChain = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "authentication.window-size"); value.Exists() {
+	if value := res.Get(prefix + "authentication.window-size"); value.Exists() {
 		data.AuthenticationWindowSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "authentication.life-time"); value.Exists() {
+	if value := res.Get(prefix + "authentication.life-time"); value.Exists() {
 		data.AuthenticationLifeTime = types.Int64Value(value.Int())
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *RSVPInterfaceData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "bandwidth.default"); value.Exists() {
+func (data *RSVPInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "bandwidth.default"); value.Exists() {
 		data.BandwidthDefault = types.BoolValue(true)
 	} else {
 		data.BandwidthDefault = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "bandwidth.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.largest-reservable-flow"); value.Exists() {
 		data.BandwidthFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.global-pool.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.global-pool.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthGlobalPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.global-pool.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.global-pool.largest-reservable-flow"); value.Exists() {
 		data.BandwidthGlobalPoolFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.sub-pool.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.sub-pool.reservable-bandwidth"); value.Exists() {
 		data.BandwidthSubPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.bc0.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.bc0.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthBc0Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.bc0.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.bc0.largest-reservable-flow"); value.Exists() {
 		data.BandwidthBc0Flow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.bc0.bc1.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.bc0.bc1.reservable-bandwidth"); value.Exists() {
 		data.BandwidthBc1Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthPercentageTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.largest-reservable-flow"); value.Exists() {
 		data.BandwidthPercentageFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.global-pool.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.global-pool.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthPercentageGlobalPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.global-pool.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.global-pool.largest-reservable-flow"); value.Exists() {
 		data.BandwidthPercentageGlobalPoolFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.sub-pool.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.sub-pool.reservable-bandwidth"); value.Exists() {
 		data.BandwidthPercentageSubPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.bc0.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.bc0.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthPercentageBc0Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.bc0.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.bc0.largest-reservable-flow"); value.Exists() {
 		data.BandwidthPercentageBc0Flow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.percentage.bc0.bc1.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.percentage.bc0.bc1.reservable-bandwidth"); value.Exists() {
 		data.BandwidthPercentageBc1Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmPercentageTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.largest-reservable-flow"); value.Exists() {
 		data.BandwidthRdmPercentageFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.global-pool.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.global-pool.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmPercentageGlobalPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.global-pool.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.global-pool.largest-reservable-flow"); value.Exists() {
 		data.BandwidthRdmPercentageGlobalPoolFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.sub-pool.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.sub-pool.reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmPercentageSubPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.bc0.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.bc0.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmPercentageBc0Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.bc0.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.bc0.largest-reservable-flow"); value.Exists() {
 		data.BandwidthRdmPercentageBc0Flow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.bc0.bc1.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.percentage.bc0.bc1.reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmPercentageBc1Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.largest-reservable-flow"); value.Exists() {
 		data.BandwidthRdmFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.global-pool.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.global-pool.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmGlobalPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.global-pool.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.global-pool.largest-reservable-flow"); value.Exists() {
 		data.BandwidthRdmGlobalPoolFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.sub-pool.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.sub-pool.reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmSubPoolTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.bc0.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.bc0.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmBc0Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.bc0.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.bc0.largest-reservable-flow"); value.Exists() {
 		data.BandwidthRdmBc0Flow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.rdm.bc0.bc1.reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.rdm.bc0.bc1.reservable-bandwidth"); value.Exists() {
 		data.BandwidthRdmBc1Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.max-reservable-bw.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.max-reservable-bw.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthMamTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.max-reservable-bw.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.max-reservable-bw.largest-reservable-flow"); value.Exists() {
 		data.BandwidthMamFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.max-reservable-bw.bc0"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.max-reservable-bw.bc0"); value.Exists() {
 		data.BandwidthMamBc0Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.max-reservable-bw.bc1"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.max-reservable-bw.bc1"); value.Exists() {
 		data.BandwidthMamBc1Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable-bw.total-reservable-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable-bw.total-reservable-bandwidth"); value.Exists() {
 		data.BandwidthMamPercentageTotal = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable-bw.largest-reservable-flow"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable-bw.largest-reservable-flow"); value.Exists() {
 		data.BandwidthMamPercentageFlow = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable-bw.bc0"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable-bw.bc0"); value.Exists() {
 		data.BandwidthMamPercentageBc0Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable-bw.bc1"); value.Exists() {
+	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable-bw.bc1"); value.Exists() {
 		data.BandwidthMamPercentageBc1Total = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.dscp"); value.Exists() {
+	if value := res.Get(prefix + "signalling.dscp"); value.Exists() {
 		data.SignallingDscp = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.rate-limit.enable"); value.Exists() {
+	if value := res.Get(prefix + "signalling.rate-limit.enable"); value.Exists() {
 		data.SignallingRateLimitEnable = types.BoolValue(true)
 	} else {
 		data.SignallingRateLimitEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "signalling.rate-limit.rate"); value.Exists() {
+	if value := res.Get(prefix + "signalling.rate-limit.rate"); value.Exists() {
 		data.SignallingRateLimitRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.rate-limit.interval"); value.Exists() {
+	if value := res.Get(prefix + "signalling.rate-limit.interval"); value.Exists() {
 		data.SignallingRateLimitInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.interval"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.interval"); value.Exists() {
 		data.SignallingRefreshInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.missed"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.missed"); value.Exists() {
 		data.SignallingRefreshMissed = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.out-of-band.interval"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.out-of-band.interval"); value.Exists() {
 		data.SignallingRefreshOobInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.out-of-band.missed"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.out-of-band.missed"); value.Exists() {
 		data.SignallingRefreshOobMissed = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.disable"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.disable"); value.Exists() {
 		data.SignallingRefreshReductionDisable = types.BoolValue(true)
 	} else {
 		data.SignallingRefreshReductionDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.ack-hold-time"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.reliable.ack-hold-time"); value.Exists() {
 		data.SignallingRefreshReductionReliableAckHoldTime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.ack-max-size"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.reliable.ack-max-size"); value.Exists() {
 		data.SignallingRefreshReductionReliableAckMaxSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.retransmit-time"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.reliable.retransmit-time"); value.Exists() {
 		data.SignallingRefreshReductionReliableRetransmitTime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.retransmit-queue-depth"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.reliable.retransmit-queue-depth"); value.Exists() {
 		data.SignallingRefreshReductionReliableRetransmitQueueDepth = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.reliable.summary-refresh"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.reliable.summary-refresh"); value.Exists() {
 		data.SignallingRefreshReductionReliableSummaryRefresh = types.BoolValue(true)
 	} else {
 		data.SignallingRefreshReductionReliableSummaryRefresh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.summary.max-size"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.summary.max-size"); value.Exists() {
 		data.SignallingRefreshReductionSummaryMaxSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.refresh.reduction.bundle-max-size"); value.Exists() {
+	if value := res.Get(prefix + "signalling.refresh.reduction.bundle-max-size"); value.Exists() {
 		data.SignallingRefreshReductionBundleMaxSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "signalling.hello.graceful-restart.interface-based"); value.Exists() {
+	if value := res.Get(prefix + "signalling.hello.graceful-restart.interface-based"); value.Exists() {
 		data.SignallingHelloGracefulRestartInterfaceBased = types.BoolValue(true)
 	} else {
 		data.SignallingHelloGracefulRestartInterfaceBased = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "authentication.key-source.key-chain"); value.Exists() {
+	if value := res.Get(prefix + "authentication.key-source.key-chain"); value.Exists() {
 		data.AuthenticationKeyChain = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "authentication.window-size"); value.Exists() {
+	if value := res.Get(prefix + "authentication.window-size"); value.Exists() {
 		data.AuthenticationWindowSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "authentication.life-time"); value.Exists() {
+	if value := res.Get(prefix + "authentication.life-time"); value.Exists() {
 		data.AuthenticationLifeTime = types.Int64Value(value.Int())
 	}
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *RSVPInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/default"); value.Exists() {
+		data.BandwidthDefault = types.BoolValue(true)
+	} else {
+		data.BandwidthDefault = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/largest-reservable-flow"); value.Exists() {
+		data.BandwidthFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/global-pool/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthGlobalPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/global-pool/largest-reservable-flow"); value.Exists() {
+		data.BandwidthGlobalPoolFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/sub-pool/reservable-bandwidth"); value.Exists() {
+		data.BandwidthSubPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/bc0/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthBc0Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/bc0/largest-reservable-flow"); value.Exists() {
+		data.BandwidthBc0Flow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/bc0/bc1/reservable-bandwidth"); value.Exists() {
+		data.BandwidthBc1Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/largest-reservable-flow"); value.Exists() {
+		data.BandwidthPercentageFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/global-pool/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageGlobalPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/global-pool/largest-reservable-flow"); value.Exists() {
+		data.BandwidthPercentageGlobalPoolFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/sub-pool/reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageSubPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/bc0/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageBc0Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/bc0/largest-reservable-flow"); value.Exists() {
+		data.BandwidthPercentageBc0Flow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/bc0/bc1/reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageBc1Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmPercentageFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/global-pool/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageGlobalPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/global-pool/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmPercentageGlobalPoolFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/sub-pool/reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageSubPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/bc0/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageBc0Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/bc0/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmPercentageBc0Flow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/bc0/bc1/reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageBc1Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/global-pool/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmGlobalPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/global-pool/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmGlobalPoolFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/sub-pool/reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmSubPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/bc0/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmBc0Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/bc0/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmBc0Flow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/bc0/bc1/reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmBc1Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/max-reservable-bw/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthMamTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/max-reservable-bw/largest-reservable-flow"); value.Exists() {
+		data.BandwidthMamFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/max-reservable-bw/bc0"); value.Exists() {
+		data.BandwidthMamBc0Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/max-reservable-bw/bc1"); value.Exists() {
+		data.BandwidthMamBc1Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthMamPercentageTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/largest-reservable-flow"); value.Exists() {
+		data.BandwidthMamPercentageFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/bc0"); value.Exists() {
+		data.BandwidthMamPercentageBc0Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/bc1"); value.Exists() {
+		data.BandwidthMamPercentageBc1Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/dscp"); value.Exists() {
+		data.SignallingDscp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/rate-limit/enable"); value.Exists() {
+		data.SignallingRateLimitEnable = types.BoolValue(true)
+	} else {
+		data.SignallingRateLimitEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/rate-limit/rate"); value.Exists() {
+		data.SignallingRateLimitRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/rate-limit/interval"); value.Exists() {
+		data.SignallingRateLimitInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/interval"); value.Exists() {
+		data.SignallingRefreshInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/missed"); value.Exists() {
+		data.SignallingRefreshMissed = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/out-of-band/interval"); value.Exists() {
+		data.SignallingRefreshOobInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/out-of-band/missed"); value.Exists() {
+		data.SignallingRefreshOobMissed = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/disable"); value.Exists() {
+		data.SignallingRefreshReductionDisable = types.BoolValue(true)
+	} else {
+		data.SignallingRefreshReductionDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/ack-hold-time"); value.Exists() {
+		data.SignallingRefreshReductionReliableAckHoldTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/ack-max-size"); value.Exists() {
+		data.SignallingRefreshReductionReliableAckMaxSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/retransmit-time"); value.Exists() {
+		data.SignallingRefreshReductionReliableRetransmitTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/retransmit-queue-depth"); value.Exists() {
+		data.SignallingRefreshReductionReliableRetransmitQueueDepth = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/summary-refresh"); value.Exists() {
+		data.SignallingRefreshReductionReliableSummaryRefresh = types.BoolValue(true)
+	} else {
+		data.SignallingRefreshReductionReliableSummaryRefresh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/summary/max-size"); value.Exists() {
+		data.SignallingRefreshReductionSummaryMaxSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/bundle-max-size"); value.Exists() {
+		data.SignallingRefreshReductionBundleMaxSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/hello/graceful-restart/interface-based"); value.Exists() {
+		data.SignallingHelloGracefulRestartInterfaceBased = types.BoolValue(true)
+	} else {
+		data.SignallingHelloGracefulRestartInterfaceBased = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/key-source/key-chain"); value.Exists() {
+		data.AuthenticationKeyChain = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/window-size"); value.Exists() {
+		data.AuthenticationWindowSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/life-time"); value.Exists() {
+		data.AuthenticationLifeTime = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *RSVPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/default"); value.Exists() {
+		data.BandwidthDefault = types.BoolValue(true)
+	} else {
+		data.BandwidthDefault = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/largest-reservable-flow"); value.Exists() {
+		data.BandwidthFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/global-pool/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthGlobalPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/global-pool/largest-reservable-flow"); value.Exists() {
+		data.BandwidthGlobalPoolFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/sub-pool/reservable-bandwidth"); value.Exists() {
+		data.BandwidthSubPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/bc0/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthBc0Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/bc0/largest-reservable-flow"); value.Exists() {
+		data.BandwidthBc0Flow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/bc0/bc1/reservable-bandwidth"); value.Exists() {
+		data.BandwidthBc1Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/largest-reservable-flow"); value.Exists() {
+		data.BandwidthPercentageFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/global-pool/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageGlobalPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/global-pool/largest-reservable-flow"); value.Exists() {
+		data.BandwidthPercentageGlobalPoolFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/sub-pool/reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageSubPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/bc0/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageBc0Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/bc0/largest-reservable-flow"); value.Exists() {
+		data.BandwidthPercentageBc0Flow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/percentage/bc0/bc1/reservable-bandwidth"); value.Exists() {
+		data.BandwidthPercentageBc1Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmPercentageFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/global-pool/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageGlobalPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/global-pool/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmPercentageGlobalPoolFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/sub-pool/reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageSubPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/bc0/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageBc0Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/bc0/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmPercentageBc0Flow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/bc0/bc1/reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmPercentageBc1Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/global-pool/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmGlobalPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/global-pool/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmGlobalPoolFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/sub-pool/reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmSubPoolTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/bc0/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmBc0Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/bc0/largest-reservable-flow"); value.Exists() {
+		data.BandwidthRdmBc0Flow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/bc0/bc1/reservable-bandwidth"); value.Exists() {
+		data.BandwidthRdmBc1Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/max-reservable-bw/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthMamTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/max-reservable-bw/largest-reservable-flow"); value.Exists() {
+		data.BandwidthMamFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/max-reservable-bw/bc0"); value.Exists() {
+		data.BandwidthMamBc0Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/max-reservable-bw/bc1"); value.Exists() {
+		data.BandwidthMamBc1Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/total-reservable-bandwidth"); value.Exists() {
+		data.BandwidthMamPercentageTotal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/largest-reservable-flow"); value.Exists() {
+		data.BandwidthMamPercentageFlow = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/bc0"); value.Exists() {
+		data.BandwidthMamPercentageBc0Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw/bc1"); value.Exists() {
+		data.BandwidthMamPercentageBc1Total = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/dscp"); value.Exists() {
+		data.SignallingDscp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/rate-limit/enable"); value.Exists() {
+		data.SignallingRateLimitEnable = types.BoolValue(true)
+	} else {
+		data.SignallingRateLimitEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/rate-limit/rate"); value.Exists() {
+		data.SignallingRateLimitRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/rate-limit/interval"); value.Exists() {
+		data.SignallingRateLimitInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/interval"); value.Exists() {
+		data.SignallingRefreshInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/missed"); value.Exists() {
+		data.SignallingRefreshMissed = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/out-of-band/interval"); value.Exists() {
+		data.SignallingRefreshOobInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/out-of-band/missed"); value.Exists() {
+		data.SignallingRefreshOobMissed = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/disable"); value.Exists() {
+		data.SignallingRefreshReductionDisable = types.BoolValue(true)
+	} else {
+		data.SignallingRefreshReductionDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/ack-hold-time"); value.Exists() {
+		data.SignallingRefreshReductionReliableAckHoldTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/ack-max-size"); value.Exists() {
+		data.SignallingRefreshReductionReliableAckMaxSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/retransmit-time"); value.Exists() {
+		data.SignallingRefreshReductionReliableRetransmitTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/retransmit-queue-depth"); value.Exists() {
+		data.SignallingRefreshReductionReliableRetransmitQueueDepth = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/reliable/summary-refresh"); value.Exists() {
+		data.SignallingRefreshReductionReliableSummaryRefresh = types.BoolValue(true)
+	} else {
+		data.SignallingRefreshReductionReliableSummaryRefresh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/summary/max-size"); value.Exists() {
+		data.SignallingRefreshReductionSummaryMaxSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/refresh/reduction/bundle-max-size"); value.Exists() {
+		data.SignallingRefreshReductionBundleMaxSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/hello/graceful-restart/interface-based"); value.Exists() {
+		data.SignallingHelloGracefulRestartInterfaceBased = types.BoolValue(true)
+	} else {
+		data.SignallingHelloGracefulRestartInterfaceBased = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/key-source/key-chain"); value.Exists() {
+		data.AuthenticationKeyChain = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/window-size"); value.Exists() {
+		data.AuthenticationWindowSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/life-time"); value.Exists() {
+		data.AuthenticationLifeTime = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RSVPInterface) getDeletedItems(ctx context.Context, state RSVPInterface) []string {
@@ -1310,31 +2309,44 @@ func (data *RSVPInterface) getDeletedItems(ctx context.Context, state RSVPInterf
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *RSVPInterface) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *RSVPInterface) getEmptyLeafsDelete(ctx context.Context, state *RSVPInterface) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.SignallingHelloGracefulRestartInterfaceBased.IsNull() && !data.SignallingHelloGracefulRestartInterfaceBased.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/hello/graceful-restart/interface-based", data.getPath()))
+		if state != nil && !state.SignallingHelloGracefulRestartInterfaceBased.IsNull() && state.SignallingHelloGracefulRestartInterfaceBased.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/hello/graceful-restart/interface-based", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.SignallingRefreshReductionReliableSummaryRefresh.IsNull() && !data.SignallingRefreshReductionReliableSummaryRefresh.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/refresh/reduction/reliable/summary-refresh", data.getPath()))
+		if state != nil && !state.SignallingRefreshReductionReliableSummaryRefresh.IsNull() && state.SignallingRefreshReductionReliableSummaryRefresh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/refresh/reduction/reliable/summary-refresh", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.SignallingRefreshReductionDisable.IsNull() && !data.SignallingRefreshReductionDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/refresh/reduction/disable", data.getPath()))
+		if state != nil && !state.SignallingRefreshReductionDisable.IsNull() && state.SignallingRefreshReductionDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/refresh/reduction/disable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.SignallingRateLimitEnable.IsNull() && !data.SignallingRateLimitEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/rate-limit/enable", data.getPath()))
+		if state != nil && !state.SignallingRateLimitEnable.IsNull() && state.SignallingRateLimitEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/rate-limit/enable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.BandwidthDefault.IsNull() && !data.BandwidthDefault.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bandwidth/default", data.getPath()))
+		if state != nil && !state.BandwidthDefault.IsNull() && state.BandwidthDefault.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bandwidth/default", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RSVPInterface) getDeletePaths(ctx context.Context) []string {
@@ -1522,7 +2534,1150 @@ func (data *RSVPInterface) getDeletePaths(ctx context.Context) []string {
 	if !data.BandwidthDefault.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bandwidth/default", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *RSVPInterface) addDeletedItemsXML(ctx context.Context, state RSVPInterface, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.AuthenticationLifeTime.IsNull() && data.AuthenticationLifeTime.IsNull() {
+		deletePath := state.getXPath() + "/authentication/life-time"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AuthenticationWindowSize.IsNull() && data.AuthenticationWindowSize.IsNull() {
+		deletePath := state.getXPath() + "/authentication/window-size"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AuthenticationKeyChain.IsNull() && data.AuthenticationKeyChain.IsNull() {
+		deletePath := state.getXPath() + "/authentication/key-source/key-chain"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SignallingHelloGracefulRestartInterfaceBased.IsNull() && state.SignallingHelloGracefulRestartInterfaceBased.ValueBool() && data.SignallingHelloGracefulRestartInterfaceBased.IsNull() {
+		deletePath := state.getXPath() + "/signalling/hello/graceful-restart/interface-based"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SignallingRefreshReductionBundleMaxSize.IsNull() && data.SignallingRefreshReductionBundleMaxSize.IsNull() {
+		deletePath := state.getXPath() + "/signalling/refresh/reduction/bundle-max-size"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SignallingRefreshReductionSummaryMaxSize.IsNull() && data.SignallingRefreshReductionSummaryMaxSize.IsNull() {
+		deletePath := state.getXPath() + "/signalling/refresh/reduction/summary/max-size"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SignallingRefreshReductionReliableSummaryRefresh.IsNull() && state.SignallingRefreshReductionReliableSummaryRefresh.ValueBool() && data.SignallingRefreshReductionReliableSummaryRefresh.IsNull() {
+		deletePath := state.getXPath() + "/signalling/refresh/reduction/reliable/summary-refresh"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SignallingRefreshReductionReliableRetransmitQueueDepth.IsNull() && data.SignallingRefreshReductionReliableRetransmitQueueDepth.IsNull() {
+		deletePath := state.getXPath() + "/signalling/refresh/reduction/reliable/retransmit-queue-depth"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SignallingRefreshReductionReliableRetransmitTime.IsNull() && data.SignallingRefreshReductionReliableRetransmitTime.IsNull() {
+		deletePath := state.getXPath() + "/signalling/refresh/reduction/reliable/retransmit-time"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SignallingRefreshReductionReliableAckMaxSize.IsNull() && data.SignallingRefreshReductionReliableAckMaxSize.IsNull() {
+		deletePath := state.getXPath() + "/signalling/refresh/reduction/reliable/ack-max-size"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SignallingRefreshReductionReliableAckHoldTime.IsNull() && data.SignallingRefreshReductionReliableAckHoldTime.IsNull() {
+		deletePath := state.getXPath() + "/signalling/refresh/reduction/reliable/ack-hold-time"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SignallingRefreshReductionDisable.IsNull() && state.SignallingRefreshReductionDisable.ValueBool() && data.SignallingRefreshReductionDisable.IsNull() {
+		deletePath := state.getXPath() + "/signalling/refresh/reduction/disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SignallingRefreshOobMissed.IsNull() && data.SignallingRefreshOobMissed.IsNull() {
+		deletePath := state.getXPath() + "/signalling/refresh/out-of-band/missed"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SignallingRefreshOobInterval.IsNull() && data.SignallingRefreshOobInterval.IsNull() {
+		deletePath := state.getXPath() + "/signalling/refresh/out-of-band/interval"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SignallingRefreshMissed.IsNull() && data.SignallingRefreshMissed.IsNull() {
+		deletePath := state.getXPath() + "/signalling/refresh/missed"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SignallingRefreshInterval.IsNull() && data.SignallingRefreshInterval.IsNull() {
+		deletePath := state.getXPath() + "/signalling/refresh/interval"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SignallingRateLimitInterval.IsNull() && data.SignallingRateLimitInterval.IsNull() {
+		deletePath := state.getXPath() + "/signalling/rate-limit/interval"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SignallingRateLimitRate.IsNull() && data.SignallingRateLimitRate.IsNull() {
+		deletePath := state.getXPath() + "/signalling/rate-limit/rate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SignallingRateLimitEnable.IsNull() && state.SignallingRateLimitEnable.ValueBool() && data.SignallingRateLimitEnable.IsNull() {
+		deletePath := state.getXPath() + "/signalling/rate-limit/enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SignallingDscp.IsNull() && data.SignallingDscp.IsNull() {
+		deletePath := state.getXPath() + "/signalling/dscp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthMamPercentageBc1Total.IsNull() && data.BandwidthMamPercentageBc1Total.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/mam/percentage/max-reservable-bw"
+		predicates := make(map[string]string)
+		if !state.BandwidthMamPercentageTotal.IsNull() {
+			predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthMamPercentageTotal.ValueInt64())
+		}
+		if !state.BandwidthMamPercentageFlow.IsNull() {
+			predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthMamPercentageFlow.ValueInt64())
+		}
+		if !state.BandwidthMamPercentageBc0Total.IsNull() {
+			predicates["bc0"] = fmt.Sprintf("%v", state.BandwidthMamPercentageBc0Total.ValueInt64())
+		}
+		predicates["bc1"] = fmt.Sprintf("%v", state.BandwidthMamPercentageBc1Total.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthMamPercentageBc0Total.IsNull() && data.BandwidthMamPercentageBc0Total.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/mam/percentage/max-reservable-bw"
+		predicates := make(map[string]string)
+		if !state.BandwidthMamPercentageTotal.IsNull() {
+			predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthMamPercentageTotal.ValueInt64())
+		}
+		if !state.BandwidthMamPercentageFlow.IsNull() {
+			predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthMamPercentageFlow.ValueInt64())
+		}
+		if !state.BandwidthMamPercentageBc1Total.IsNull() {
+			predicates["bc1"] = fmt.Sprintf("%v", state.BandwidthMamPercentageBc1Total.ValueInt64())
+		}
+		predicates["bc0"] = fmt.Sprintf("%v", state.BandwidthMamPercentageBc0Total.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthMamPercentageFlow.IsNull() && data.BandwidthMamPercentageFlow.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/mam/percentage/max-reservable-bw"
+		predicates := make(map[string]string)
+		if !state.BandwidthMamPercentageTotal.IsNull() {
+			predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthMamPercentageTotal.ValueInt64())
+		}
+		if !state.BandwidthMamPercentageBc0Total.IsNull() {
+			predicates["bc0"] = fmt.Sprintf("%v", state.BandwidthMamPercentageBc0Total.ValueInt64())
+		}
+		if !state.BandwidthMamPercentageBc1Total.IsNull() {
+			predicates["bc1"] = fmt.Sprintf("%v", state.BandwidthMamPercentageBc1Total.ValueInt64())
+		}
+		predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthMamPercentageFlow.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthMamPercentageTotal.IsNull() && data.BandwidthMamPercentageTotal.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/mam/percentage/max-reservable-bw"
+		predicates := make(map[string]string)
+		if !state.BandwidthMamPercentageFlow.IsNull() {
+			predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthMamPercentageFlow.ValueInt64())
+		}
+		if !state.BandwidthMamPercentageBc0Total.IsNull() {
+			predicates["bc0"] = fmt.Sprintf("%v", state.BandwidthMamPercentageBc0Total.ValueInt64())
+		}
+		if !state.BandwidthMamPercentageBc1Total.IsNull() {
+			predicates["bc1"] = fmt.Sprintf("%v", state.BandwidthMamPercentageBc1Total.ValueInt64())
+		}
+		predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthMamPercentageTotal.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthMamBc1Total.IsNull() && data.BandwidthMamBc1Total.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/mam/max-reservable-bw"
+		predicates := make(map[string]string)
+		if !state.BandwidthMamTotal.IsNull() {
+			predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthMamTotal.ValueInt64())
+		}
+		if !state.BandwidthMamFlow.IsNull() {
+			predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthMamFlow.ValueInt64())
+		}
+		if !state.BandwidthMamBc0Total.IsNull() {
+			predicates["bc0"] = fmt.Sprintf("%v", state.BandwidthMamBc0Total.ValueInt64())
+		}
+		predicates["bc1"] = fmt.Sprintf("%v", state.BandwidthMamBc1Total.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthMamBc0Total.IsNull() && data.BandwidthMamBc0Total.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/mam/max-reservable-bw"
+		predicates := make(map[string]string)
+		if !state.BandwidthMamTotal.IsNull() {
+			predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthMamTotal.ValueInt64())
+		}
+		if !state.BandwidthMamFlow.IsNull() {
+			predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthMamFlow.ValueInt64())
+		}
+		if !state.BandwidthMamBc1Total.IsNull() {
+			predicates["bc1"] = fmt.Sprintf("%v", state.BandwidthMamBc1Total.ValueInt64())
+		}
+		predicates["bc0"] = fmt.Sprintf("%v", state.BandwidthMamBc0Total.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthMamFlow.IsNull() && data.BandwidthMamFlow.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/mam/max-reservable-bw"
+		predicates := make(map[string]string)
+		if !state.BandwidthMamTotal.IsNull() {
+			predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthMamTotal.ValueInt64())
+		}
+		if !state.BandwidthMamBc0Total.IsNull() {
+			predicates["bc0"] = fmt.Sprintf("%v", state.BandwidthMamBc0Total.ValueInt64())
+		}
+		if !state.BandwidthMamBc1Total.IsNull() {
+			predicates["bc1"] = fmt.Sprintf("%v", state.BandwidthMamBc1Total.ValueInt64())
+		}
+		predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthMamFlow.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthMamTotal.IsNull() && data.BandwidthMamTotal.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/mam/max-reservable-bw"
+		predicates := make(map[string]string)
+		if !state.BandwidthMamFlow.IsNull() {
+			predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthMamFlow.ValueInt64())
+		}
+		if !state.BandwidthMamBc0Total.IsNull() {
+			predicates["bc0"] = fmt.Sprintf("%v", state.BandwidthMamBc0Total.ValueInt64())
+		}
+		if !state.BandwidthMamBc1Total.IsNull() {
+			predicates["bc1"] = fmt.Sprintf("%v", state.BandwidthMamBc1Total.ValueInt64())
+		}
+		predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthMamTotal.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmBc1Total.IsNull() && data.BandwidthRdmBc1Total.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/rdm/bc0/bc1"
+		predicates := make(map[string]string)
+		predicates["reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthRdmBc1Total.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmBc0Flow.IsNull() && data.BandwidthRdmBc0Flow.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/rdm/bc0"
+		predicates := make(map[string]string)
+		if !state.BandwidthRdmBc0Total.IsNull() {
+			predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthRdmBc0Total.ValueInt64())
+		}
+		predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthRdmBc0Flow.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmBc0Total.IsNull() && data.BandwidthRdmBc0Total.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/rdm/bc0"
+		predicates := make(map[string]string)
+		if !state.BandwidthRdmBc0Flow.IsNull() {
+			predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthRdmBc0Flow.ValueInt64())
+		}
+		predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthRdmBc0Total.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmSubPoolTotal.IsNull() && data.BandwidthRdmSubPoolTotal.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/rdm/sub-pool"
+		predicates := make(map[string]string)
+		predicates["reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthRdmSubPoolTotal.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmGlobalPoolFlow.IsNull() && data.BandwidthRdmGlobalPoolFlow.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/rdm/global-pool"
+		predicates := make(map[string]string)
+		if !state.BandwidthRdmGlobalPoolTotal.IsNull() {
+			predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthRdmGlobalPoolTotal.ValueInt64())
+		}
+		predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthRdmGlobalPoolFlow.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmGlobalPoolTotal.IsNull() && data.BandwidthRdmGlobalPoolTotal.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/rdm/global-pool"
+		predicates := make(map[string]string)
+		if !state.BandwidthRdmGlobalPoolFlow.IsNull() {
+			predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthRdmGlobalPoolFlow.ValueInt64())
+		}
+		predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthRdmGlobalPoolTotal.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmFlow.IsNull() && data.BandwidthRdmFlow.IsNull() {
+		deletePath := state.getXPath() + "/bandwidth/rdm/largest-reservable-flow"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmTotal.IsNull() && data.BandwidthRdmTotal.IsNull() {
+		deletePath := state.getXPath() + "/bandwidth/rdm/total-reservable-bandwidth"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmPercentageBc1Total.IsNull() && data.BandwidthRdmPercentageBc1Total.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/rdm/percentage/bc0/bc1"
+		predicates := make(map[string]string)
+		predicates["reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthRdmPercentageBc1Total.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmPercentageBc0Flow.IsNull() && data.BandwidthRdmPercentageBc0Flow.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/rdm/percentage/bc0"
+		predicates := make(map[string]string)
+		if !state.BandwidthRdmPercentageBc0Total.IsNull() {
+			predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthRdmPercentageBc0Total.ValueInt64())
+		}
+		predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthRdmPercentageBc0Flow.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmPercentageBc0Total.IsNull() && data.BandwidthRdmPercentageBc0Total.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/rdm/percentage/bc0"
+		predicates := make(map[string]string)
+		if !state.BandwidthRdmPercentageBc0Flow.IsNull() {
+			predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthRdmPercentageBc0Flow.ValueInt64())
+		}
+		predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthRdmPercentageBc0Total.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmPercentageSubPoolTotal.IsNull() && data.BandwidthRdmPercentageSubPoolTotal.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/rdm/percentage/sub-pool"
+		predicates := make(map[string]string)
+		predicates["reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthRdmPercentageSubPoolTotal.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmPercentageGlobalPoolFlow.IsNull() && data.BandwidthRdmPercentageGlobalPoolFlow.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/rdm/percentage/global-pool"
+		predicates := make(map[string]string)
+		if !state.BandwidthRdmPercentageGlobalPoolTotal.IsNull() {
+			predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthRdmPercentageGlobalPoolTotal.ValueInt64())
+		}
+		predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthRdmPercentageGlobalPoolFlow.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmPercentageGlobalPoolTotal.IsNull() && data.BandwidthRdmPercentageGlobalPoolTotal.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/rdm/percentage/global-pool"
+		predicates := make(map[string]string)
+		if !state.BandwidthRdmPercentageGlobalPoolFlow.IsNull() {
+			predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthRdmPercentageGlobalPoolFlow.ValueInt64())
+		}
+		predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthRdmPercentageGlobalPoolTotal.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmPercentageFlow.IsNull() && data.BandwidthRdmPercentageFlow.IsNull() {
+		deletePath := state.getXPath() + "/bandwidth/rdm/percentage/largest-reservable-flow"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthRdmPercentageTotal.IsNull() && data.BandwidthRdmPercentageTotal.IsNull() {
+		deletePath := state.getXPath() + "/bandwidth/rdm/percentage/total-reservable-bandwidth"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthPercentageBc1Total.IsNull() && data.BandwidthPercentageBc1Total.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/percentage/bc0/bc1"
+		predicates := make(map[string]string)
+		predicates["reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthPercentageBc1Total.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthPercentageBc0Flow.IsNull() && data.BandwidthPercentageBc0Flow.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/percentage/bc0"
+		predicates := make(map[string]string)
+		if !state.BandwidthPercentageBc0Total.IsNull() {
+			predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthPercentageBc0Total.ValueInt64())
+		}
+		predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthPercentageBc0Flow.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthPercentageBc0Total.IsNull() && data.BandwidthPercentageBc0Total.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/percentage/bc0"
+		predicates := make(map[string]string)
+		if !state.BandwidthPercentageBc0Flow.IsNull() {
+			predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthPercentageBc0Flow.ValueInt64())
+		}
+		predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthPercentageBc0Total.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthPercentageSubPoolTotal.IsNull() && data.BandwidthPercentageSubPoolTotal.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/percentage/sub-pool"
+		predicates := make(map[string]string)
+		predicates["reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthPercentageSubPoolTotal.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthPercentageGlobalPoolFlow.IsNull() && data.BandwidthPercentageGlobalPoolFlow.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/percentage/global-pool"
+		predicates := make(map[string]string)
+		if !state.BandwidthPercentageGlobalPoolTotal.IsNull() {
+			predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthPercentageGlobalPoolTotal.ValueInt64())
+		}
+		predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthPercentageGlobalPoolFlow.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthPercentageGlobalPoolTotal.IsNull() && data.BandwidthPercentageGlobalPoolTotal.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/percentage/global-pool"
+		predicates := make(map[string]string)
+		if !state.BandwidthPercentageGlobalPoolFlow.IsNull() {
+			predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthPercentageGlobalPoolFlow.ValueInt64())
+		}
+		predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthPercentageGlobalPoolTotal.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthPercentageFlow.IsNull() && data.BandwidthPercentageFlow.IsNull() {
+		deletePath := state.getXPath() + "/bandwidth/percentage/largest-reservable-flow"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthPercentageTotal.IsNull() && data.BandwidthPercentageTotal.IsNull() {
+		deletePath := state.getXPath() + "/bandwidth/percentage/total-reservable-bandwidth"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthBc1Total.IsNull() && data.BandwidthBc1Total.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/bc0/bc1"
+		predicates := make(map[string]string)
+		predicates["reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthBc1Total.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthBc0Flow.IsNull() && data.BandwidthBc0Flow.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/bc0"
+		predicates := make(map[string]string)
+		if !state.BandwidthBc0Total.IsNull() {
+			predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthBc0Total.ValueInt64())
+		}
+		predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthBc0Flow.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthBc0Total.IsNull() && data.BandwidthBc0Total.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/bc0"
+		predicates := make(map[string]string)
+		if !state.BandwidthBc0Flow.IsNull() {
+			predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthBc0Flow.ValueInt64())
+		}
+		predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthBc0Total.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthSubPoolTotal.IsNull() && data.BandwidthSubPoolTotal.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/sub-pool"
+		predicates := make(map[string]string)
+		predicates["reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthSubPoolTotal.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthGlobalPoolFlow.IsNull() && data.BandwidthGlobalPoolFlow.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/global-pool"
+		predicates := make(map[string]string)
+		if !state.BandwidthGlobalPoolTotal.IsNull() {
+			predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthGlobalPoolTotal.ValueInt64())
+		}
+		predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthGlobalPoolFlow.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthGlobalPoolTotal.IsNull() && data.BandwidthGlobalPoolTotal.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bandwidth/global-pool"
+		predicates := make(map[string]string)
+		if !state.BandwidthGlobalPoolFlow.IsNull() {
+			predicates["largest-reservable-flow"] = fmt.Sprintf("%v", state.BandwidthGlobalPoolFlow.ValueInt64())
+		}
+		predicates["total-reservable-bandwidth"] = fmt.Sprintf("%v", state.BandwidthGlobalPoolTotal.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthFlow.IsNull() && data.BandwidthFlow.IsNull() {
+		deletePath := state.getXPath() + "/bandwidth/largest-reservable-flow"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BandwidthTotal.IsNull() && data.BandwidthTotal.IsNull() {
+		deletePath := state.getXPath() + "/bandwidth/total-reservable-bandwidth"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.BandwidthDefault.IsNull() && state.BandwidthDefault.ValueBool() && data.BandwidthDefault.IsNull() {
+		deletePath := state.getXPath() + "/bandwidth/default"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *RSVPInterface) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.AuthenticationLifeTime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/authentication/life-time")
+	}
+	if !data.AuthenticationWindowSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/authentication/window-size")
+	}
+	if !data.AuthenticationKeyChain.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/authentication/key-source/key-chain")
+	}
+	if !data.SignallingHelloGracefulRestartInterfaceBased.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/hello/graceful-restart/interface-based")
+	}
+	if !data.SignallingRefreshReductionBundleMaxSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/refresh/reduction/bundle-max-size")
+	}
+	if !data.SignallingRefreshReductionSummaryMaxSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/refresh/reduction/summary/max-size")
+	}
+	if !data.SignallingRefreshReductionReliableSummaryRefresh.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/refresh/reduction/reliable/summary-refresh")
+	}
+	if !data.SignallingRefreshReductionReliableRetransmitQueueDepth.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/refresh/reduction/reliable/retransmit-queue-depth")
+	}
+	if !data.SignallingRefreshReductionReliableRetransmitTime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/refresh/reduction/reliable/retransmit-time")
+	}
+	if !data.SignallingRefreshReductionReliableAckMaxSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/refresh/reduction/reliable/ack-max-size")
+	}
+	if !data.SignallingRefreshReductionReliableAckHoldTime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/refresh/reduction/reliable/ack-hold-time")
+	}
+	if !data.SignallingRefreshReductionDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/refresh/reduction/disable")
+	}
+	if !data.SignallingRefreshOobMissed.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/refresh/out-of-band/missed")
+	}
+	if !data.SignallingRefreshOobInterval.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/refresh/out-of-band/interval")
+	}
+	if !data.SignallingRefreshMissed.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/refresh/missed")
+	}
+	if !data.SignallingRefreshInterval.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/refresh/interval")
+	}
+	if !data.SignallingRateLimitInterval.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/rate-limit/interval")
+	}
+	if !data.SignallingRateLimitRate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/rate-limit/rate")
+	}
+	if !data.SignallingRateLimitEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/rate-limit/enable")
+	}
+	if !data.SignallingDscp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/signalling/dscp")
+	}
+	if !data.BandwidthMamPercentageBc1Total.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw")
+	}
+	if !data.BandwidthMamPercentageBc0Total.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw")
+	}
+	if !data.BandwidthMamPercentageFlow.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw")
+	}
+	if !data.BandwidthMamPercentageTotal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/mam/percentage/max-reservable-bw")
+	}
+	if !data.BandwidthMamBc1Total.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/mam/max-reservable-bw")
+	}
+	if !data.BandwidthMamBc0Total.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/mam/max-reservable-bw")
+	}
+	if !data.BandwidthMamFlow.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/mam/max-reservable-bw")
+	}
+	if !data.BandwidthMamTotal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/mam/max-reservable-bw")
+	}
+	if !data.BandwidthRdmBc1Total.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/bc0/bc1")
+	}
+	if !data.BandwidthRdmBc0Flow.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/bc0")
+	}
+	if !data.BandwidthRdmBc0Total.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/bc0")
+	}
+	if !data.BandwidthRdmSubPoolTotal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/sub-pool")
+	}
+	if !data.BandwidthRdmGlobalPoolFlow.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/global-pool")
+	}
+	if !data.BandwidthRdmGlobalPoolTotal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/global-pool")
+	}
+	if !data.BandwidthRdmFlow.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/largest-reservable-flow")
+	}
+	if !data.BandwidthRdmTotal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/total-reservable-bandwidth")
+	}
+	if !data.BandwidthRdmPercentageBc1Total.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/percentage/bc0/bc1")
+	}
+	if !data.BandwidthRdmPercentageBc0Flow.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/percentage/bc0")
+	}
+	if !data.BandwidthRdmPercentageBc0Total.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/percentage/bc0")
+	}
+	if !data.BandwidthRdmPercentageSubPoolTotal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/percentage/sub-pool")
+	}
+	if !data.BandwidthRdmPercentageGlobalPoolFlow.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/percentage/global-pool")
+	}
+	if !data.BandwidthRdmPercentageGlobalPoolTotal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/percentage/global-pool")
+	}
+	if !data.BandwidthRdmPercentageFlow.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/percentage/largest-reservable-flow")
+	}
+	if !data.BandwidthRdmPercentageTotal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/rdm/percentage/total-reservable-bandwidth")
+	}
+	if !data.BandwidthPercentageBc1Total.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/percentage/bc0/bc1")
+	}
+	if !data.BandwidthPercentageBc0Flow.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/percentage/bc0")
+	}
+	if !data.BandwidthPercentageBc0Total.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/percentage/bc0")
+	}
+	if !data.BandwidthPercentageSubPoolTotal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/percentage/sub-pool")
+	}
+	if !data.BandwidthPercentageGlobalPoolFlow.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/percentage/global-pool")
+	}
+	if !data.BandwidthPercentageGlobalPoolTotal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/percentage/global-pool")
+	}
+	if !data.BandwidthPercentageFlow.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/percentage/largest-reservable-flow")
+	}
+	if !data.BandwidthPercentageTotal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/percentage/total-reservable-bandwidth")
+	}
+	if !data.BandwidthBc1Total.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/bc0/bc1")
+	}
+	if !data.BandwidthBc0Flow.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/bc0")
+	}
+	if !data.BandwidthBc0Total.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/bc0")
+	}
+	if !data.BandwidthSubPoolTotal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/sub-pool")
+	}
+	if !data.BandwidthGlobalPoolFlow.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/global-pool")
+	}
+	if !data.BandwidthGlobalPoolTotal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/global-pool")
+	}
+	if !data.BandwidthFlow.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/largest-reservable-flow")
+	}
+	if !data.BandwidthTotal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/total-reservable-bandwidth")
+	}
+	if !data.BandwidthDefault.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bandwidth/default")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

@@ -24,9 +24,14 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -144,6 +149,17 @@ func (data TelemetryModelDrivenData) getPath() string {
 	return "Cisco-IOS-XR-um-telemetry-model-driven-cfg:/telemetry/model-driven"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data TelemetryModelDriven) getXPath() string {
+	path := "Cisco-IOS-XR-um-telemetry-model-driven-cfg:/telemetry/model-driven"
+	return path
+}
+
+func (data TelemetryModelDrivenData) getXPath() string {
+	path := "Cisco-IOS-XR-um-telemetry-model-driven-cfg:/telemetry/model-driven"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -203,7 +219,6 @@ func (data TelemetryModelDriven) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"vrf", item.Vrf.ValueString())
 			}
 			if len(item.AddressFamily) > 0 {
-				body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"address-families.address-family", []interface{}{})
 				for cindex, citem := range item.AddressFamily {
 					if !citem.AfName.IsNull() && !citem.AfName.IsUnknown() {
 						body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"address-families.address-family"+"."+strconv.Itoa(cindex)+"."+"af-name", citem.AfName.ValueString())
@@ -251,7 +266,6 @@ func (data TelemetryModelDriven) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Destinations) > 0 {
-				body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"destinations.destination", []interface{}{})
 				for cindex, citem := range item.Destinations {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"destinations.destination"+"."+strconv.Itoa(cindex)+"."+"destination-string", citem.Address.ValueString())
@@ -319,7 +333,6 @@ func (data TelemetryModelDriven) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"send.retry.duration", strconv.FormatInt(item.SendRetryDuration.ValueInt64(), 10))
 			}
 			if len(item.SensorGroupIds) > 0 {
-				body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"sensor-group-ids.sensor-group-id", []interface{}{})
 				for cindex, citem := range item.SensorGroupIds {
 					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
 						body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"sensor-group-ids.sensor-group-id"+"."+strconv.Itoa(cindex)+"."+"sensor-group-id-string", citem.Name.ValueString())
@@ -346,7 +359,6 @@ func (data TelemetryModelDriven) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.DestinationIds) > 0 {
-				body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"destination-ids.destination-id", []interface{}{})
 				for cindex, citem := range item.DestinationIds {
 					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
 						body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"destination-ids.destination-id"+"."+strconv.Itoa(cindex)+"."+"destination-id-string", citem.Name.ValueString())
@@ -362,7 +374,6 @@ func (data TelemetryModelDriven) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "sensor-groups.sensor-group"+"."+strconv.Itoa(index)+"."+"sensor-group-string", item.Name.ValueString())
 			}
 			if len(item.SensorPaths) > 0 {
-				body, _ = sjson.Set(body, "sensor-groups.sensor-group"+"."+strconv.Itoa(index)+"."+"sensor-paths.sensor-path", []interface{}{})
 				for cindex, citem := range item.SensorPaths {
 					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
 						body, _ = sjson.Set(body, "sensor-groups.sensor-group"+"."+strconv.Itoa(index)+"."+"sensor-paths.sensor-path"+"."+strconv.Itoa(cindex)+"."+"sensor-path-string", citem.Name.ValueString())
@@ -381,77 +392,87 @@ func (data TelemetryModelDriven) toBody(ctx context.Context) string {
 func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "max-containers-per-path"); value.Exists() && !data.MaxContainersPerPath.IsNull() {
 		data.MaxContainersPerPath = types.Int64Value(value.Int())
-	} else {
+	} else if data.MaxContainersPerPath.IsNull() {
 		data.MaxContainersPerPath = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "max-sensor-paths"); value.Exists() && !data.MaxSensorPaths.IsNull() {
 		data.MaxSensorPaths = types.Int64Value(value.Int())
-	} else {
+	} else if data.MaxSensorPaths.IsNull() {
 		data.MaxSensorPaths = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "tcp-send-timeout"); value.Exists() && !data.TcpSendTimeout.IsNull() {
 		data.TcpSendTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.TcpSendTimeout.IsNull() {
 		data.TcpSendTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "strict-timer"); !data.StrictTimer.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "strict-timer"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StrictTimer.IsNull() {
 			data.StrictTimer = types.BoolValue(true)
-		} else {
-			data.StrictTimer = types.BoolValue(false)
 		}
 	} else {
-		data.StrictTimer = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StrictTimer.IsNull() {
+			data.StrictTimer = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "gnmi-target-defined.cadence-factor"); value.Exists() && !data.GnmiTargetDefinedCadenceFactor.IsNull() {
 		data.GnmiTargetDefinedCadenceFactor = types.Int64Value(value.Int())
-	} else {
+	} else if data.GnmiTargetDefinedCadenceFactor.IsNull() {
 		data.GnmiTargetDefinedCadenceFactor = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "gnmi-target-defined.minimum-cadence"); value.Exists() && !data.GnmiTargetDefinedMinimumCadence.IsNull() {
 		data.GnmiTargetDefinedMinimumCadence = types.Int64Value(value.Int())
-	} else {
+	} else if data.GnmiTargetDefinedMinimumCadence.IsNull() {
 		data.GnmiTargetDefinedMinimumCadence = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "include.select-leaves-on-events"); !data.IncludeSelectLeavesOnEvents.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "include.select-leaves-on-events"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.IncludeSelectLeavesOnEvents.IsNull() {
 			data.IncludeSelectLeavesOnEvents = types.BoolValue(true)
-		} else {
-			data.IncludeSelectLeavesOnEvents = types.BoolValue(false)
 		}
 	} else {
-		data.IncludeSelectLeavesOnEvents = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.IncludeSelectLeavesOnEvents.IsNull() {
+			data.IncludeSelectLeavesOnEvents = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "include.empty.values"); !data.IncludeEmptyValues.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "include.empty.values"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.IncludeEmptyValues.IsNull() {
 			data.IncludeEmptyValues = types.BoolValue(true)
-		} else {
-			data.IncludeEmptyValues = types.BoolValue(false)
 		}
 	} else {
-		data.IncludeEmptyValues = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.IncludeEmptyValues.IsNull() {
+			data.IncludeEmptyValues = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "gnmi.heartbeat.always"); !data.GnmiHeartbeatAlways.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "gnmi.heartbeat.always"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.GnmiHeartbeatAlways.IsNull() {
 			data.GnmiHeartbeatAlways = types.BoolValue(true)
-		} else {
-			data.GnmiHeartbeatAlways = types.BoolValue(false)
 		}
 	} else {
-		data.GnmiHeartbeatAlways = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.GnmiHeartbeatAlways.IsNull() {
+			data.GnmiHeartbeatAlways = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "gnmi.bundling"); !data.GnmiBundling.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "gnmi.bundling"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.GnmiBundling.IsNull() {
 			data.GnmiBundling = types.BoolValue(true)
-		} else {
-			data.GnmiBundling = types.BoolValue(false)
 		}
 	} else {
-		data.GnmiBundling = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.GnmiBundling.IsNull() {
+			data.GnmiBundling = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "gnmi.bundling.size"); value.Exists() && !data.GnmiBundlingSize.IsNull() {
 		data.GnmiBundlingSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.GnmiBundlingSize.IsNull() {
 		data.GnmiBundlingSize = types.Int64Null()
 	}
 	for i := range data.DestinationGroups {
@@ -530,55 +551,60 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 			} else {
 				data.DestinationGroups[i].AddressFamily[ci].Encoding = types.StringNull()
 			}
-			if value := cr.Get("protocol.grpc"); !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("protocol.grpc"); value.Exists() {
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc = types.BoolValue(true)
-				} else {
-					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc = types.BoolNull()
+				}
 			}
-			if value := cr.Get("protocol.grpc.no-tls"); !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("protocol.grpc.no-tls"); value.Exists() {
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls = types.BoolValue(true)
-				} else {
-					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls = types.BoolNull()
+				}
 			}
 			if value := cr.Get("protocol.grpc.tls-hostname"); value.Exists() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcTlsHostname.IsNull() {
 				data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcTlsHostname = types.StringValue(value.String())
 			} else {
 				data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcTlsHostname = types.StringNull()
 			}
-			if value := cr.Get("protocol.grpc.gzip"); !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("protocol.grpc.gzip"); value.Exists() {
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip = types.BoolValue(true)
-				} else {
-					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip = types.BoolNull()
+				}
 			}
-			if value := cr.Get("protocol.tcp"); !data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("protocol.tcp"); value.Exists() {
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp = types.BoolValue(true)
-				} else {
-					data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp = types.BoolNull()
+				}
 			}
-			if value := cr.Get("protocol.udp"); !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("protocol.udp"); value.Exists() {
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp = types.BoolValue(true)
-				} else {
-					data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp = types.BoolNull()
+				}
 			}
 			if value := cr.Get("protocol.udp.packetsize"); value.Exists() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdpPacketsize.IsNull() {
 				data.DestinationGroups[i].AddressFamily[ci].ProtocolUdpPacketsize = types.Int64Value(value.Int())
@@ -629,55 +655,60 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 			} else {
 				data.DestinationGroups[i].Destinations[ci].Encoding = types.StringNull()
 			}
-			if value := cr.Get("protocol.grpc"); !data.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("protocol.grpc"); value.Exists() {
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolGrpc = types.BoolValue(true)
-				} else {
-					data.DestinationGroups[i].Destinations[ci].ProtocolGrpc = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].Destinations[ci].ProtocolGrpc = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpc = types.BoolNull()
+				}
 			}
-			if value := cr.Get("protocol.grpc.no-tls"); !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("protocol.grpc.no-tls"); value.Exists() {
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls = types.BoolValue(true)
-				} else {
-					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls = types.BoolNull()
+				}
 			}
 			if value := cr.Get("protocol.grpc.tls-hostname"); value.Exists() && !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcTlsHostname.IsNull() {
 				data.DestinationGroups[i].Destinations[ci].ProtocolGrpcTlsHostname = types.StringValue(value.String())
 			} else {
 				data.DestinationGroups[i].Destinations[ci].ProtocolGrpcTlsHostname = types.StringNull()
 			}
-			if value := cr.Get("protocol.grpc.gzip"); !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("protocol.grpc.gzip"); value.Exists() {
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip = types.BoolValue(true)
-				} else {
-					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip = types.BoolNull()
+				}
 			}
-			if value := cr.Get("protocol.tcp"); !data.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("protocol.tcp"); value.Exists() {
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolTcp = types.BoolValue(true)
-				} else {
-					data.DestinationGroups[i].Destinations[ci].ProtocolTcp = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].Destinations[ci].ProtocolTcp = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolTcp = types.BoolNull()
+				}
 			}
-			if value := cr.Get("protocol.udp"); !data.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("protocol.udp"); value.Exists() {
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolUdp = types.BoolValue(true)
-				} else {
-					data.DestinationGroups[i].Destinations[ci].ProtocolUdp = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].Destinations[ci].ProtocolUdp = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolUdp = types.BoolNull()
+				}
 			}
 			if value := cr.Get("protocol.udp.packetsize"); value.Exists() && !data.DestinationGroups[i].Destinations[ci].ProtocolUdpPacketsize.IsNull() {
 				data.DestinationGroups[i].Destinations[ci].ProtocolUdpPacketsize = types.Int64Value(value.Int())
@@ -757,28 +788,30 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 			} else {
 				data.Subscriptions[i].SensorGroupIds[ci].Mode = types.StringNull()
 			}
-			if value := cr.Get("heartbeat.always"); !data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("heartbeat.always"); value.Exists() {
+				if !data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() {
 					data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways = types.BoolValue(true)
-				} else {
-					data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways = types.BoolValue(false)
 				}
 			} else {
-				data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() {
+					data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways = types.BoolNull()
+				}
 			}
 			if value := cr.Get("heartbeat.interval"); value.Exists() && !data.Subscriptions[i].SensorGroupIds[ci].HeartbeatInterval.IsNull() {
 				data.Subscriptions[i].SensorGroupIds[ci].HeartbeatInterval = types.Int64Value(value.Int())
 			} else {
 				data.Subscriptions[i].SensorGroupIds[ci].HeartbeatInterval = types.Int64Null()
 			}
-			if value := cr.Get("strict-timer"); !data.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("strict-timer"); value.Exists() {
+				if !data.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() {
 					data.Subscriptions[i].SensorGroupIds[ci].StrictTimer = types.BoolValue(true)
-				} else {
-					data.Subscriptions[i].SensorGroupIds[ci].StrictTimer = types.BoolValue(false)
 				}
 			} else {
-				data.Subscriptions[i].SensorGroupIds[ci].StrictTimer = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() {
+					data.Subscriptions[i].SensorGroupIds[ci].StrictTimer = types.BoolNull()
+				}
 			}
 			if value := cr.Get("sample-interval"); value.Exists() && !data.Subscriptions[i].SensorGroupIds[ci].SampleInterval.IsNull() {
 				data.Subscriptions[i].SensorGroupIds[ci].SampleInterval = types.Int64Value(value.Int())
@@ -887,54 +920,844 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data TelemetryModelDriven) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.MaxContainersPerPath.IsNull() && !data.MaxContainersPerPath.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/max-containers-per-path", strconv.FormatInt(data.MaxContainersPerPath.ValueInt64(), 10))
+	}
+	if !data.MaxSensorPaths.IsNull() && !data.MaxSensorPaths.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/max-sensor-paths", strconv.FormatInt(data.MaxSensorPaths.ValueInt64(), 10))
+	}
+	if !data.TcpSendTimeout.IsNull() && !data.TcpSendTimeout.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/tcp-send-timeout", strconv.FormatInt(data.TcpSendTimeout.ValueInt64(), 10))
+	}
+	if !data.StrictTimer.IsNull() && !data.StrictTimer.IsUnknown() {
+		if data.StrictTimer.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/strict-timer", "")
+		}
+	}
+	if !data.GnmiTargetDefinedCadenceFactor.IsNull() && !data.GnmiTargetDefinedCadenceFactor.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/gnmi-target-defined/cadence-factor", strconv.FormatInt(data.GnmiTargetDefinedCadenceFactor.ValueInt64(), 10))
+	}
+	if !data.GnmiTargetDefinedMinimumCadence.IsNull() && !data.GnmiTargetDefinedMinimumCadence.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/gnmi-target-defined/minimum-cadence", strconv.FormatInt(data.GnmiTargetDefinedMinimumCadence.ValueInt64(), 10))
+	}
+	if !data.IncludeSelectLeavesOnEvents.IsNull() && !data.IncludeSelectLeavesOnEvents.IsUnknown() {
+		if data.IncludeSelectLeavesOnEvents.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/include/select-leaves-on-events", "")
+		}
+	}
+	if !data.IncludeEmptyValues.IsNull() && !data.IncludeEmptyValues.IsUnknown() {
+		if data.IncludeEmptyValues.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/include/empty/values", "")
+		}
+	}
+	if !data.GnmiHeartbeatAlways.IsNull() && !data.GnmiHeartbeatAlways.IsUnknown() {
+		if data.GnmiHeartbeatAlways.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/gnmi/heartbeat/always", "")
+		}
+	}
+	if !data.GnmiBundling.IsNull() && !data.GnmiBundling.IsUnknown() {
+		if data.GnmiBundling.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/gnmi/bundling", "")
+		}
+	}
+	if !data.GnmiBundlingSize.IsNull() && !data.GnmiBundlingSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/gnmi/bundling/size", strconv.FormatInt(data.GnmiBundlingSize.ValueInt64(), 10))
+	}
+	if len(data.DestinationGroups) > 0 {
+		for _, item := range data.DestinationGroups {
+			basePath := data.getXPath() + "/destination-groups/destination-group[destination-group-string='" + item.Name.ValueString() + "']"
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/destination-group-string", item.Name.ValueString())
+			}
+			if !item.Vrf.IsNull() && !item.Vrf.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/vrf", item.Vrf.ValueString())
+			}
+			if len(item.AddressFamily) > 0 {
+				for _, citem := range item.AddressFamily {
+					cbasePath := basePath + "/address-families/address-family[af-name='" + citem.AfName.ValueString() + "' and destination-address='" + citem.Address.ValueString() + "' and port='" + strconv.FormatInt(citem.Port.ValueInt64(), 10) + "']"
+					if !citem.AfName.IsNull() && !citem.AfName.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/af-name", citem.AfName.ValueString())
+					}
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/destination-address", citem.Address.ValueString())
+					}
+					if !citem.Port.IsNull() && !citem.Port.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/port", strconv.FormatInt(citem.Port.ValueInt64(), 10))
+					}
+					if !citem.Encoding.IsNull() && !citem.Encoding.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/encoding", citem.Encoding.ValueString())
+					}
+					if !citem.ProtocolGrpc.IsNull() && !citem.ProtocolGrpc.IsUnknown() {
+						if citem.ProtocolGrpc.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/protocol/grpc", "")
+						}
+					}
+					if !citem.ProtocolGrpcNoTls.IsNull() && !citem.ProtocolGrpcNoTls.IsUnknown() {
+						if citem.ProtocolGrpcNoTls.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/protocol/grpc/no-tls", "")
+						}
+					}
+					if !citem.ProtocolGrpcTlsHostname.IsNull() && !citem.ProtocolGrpcTlsHostname.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/protocol/grpc/tls-hostname", citem.ProtocolGrpcTlsHostname.ValueString())
+					}
+					if !citem.ProtocolGrpcGzip.IsNull() && !citem.ProtocolGrpcGzip.IsUnknown() {
+						if citem.ProtocolGrpcGzip.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/protocol/grpc/gzip", "")
+						}
+					}
+					if !citem.ProtocolTcp.IsNull() && !citem.ProtocolTcp.IsUnknown() {
+						if citem.ProtocolTcp.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/protocol/tcp", "")
+						}
+					}
+					if !citem.ProtocolUdp.IsNull() && !citem.ProtocolUdp.IsUnknown() {
+						if citem.ProtocolUdp.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/protocol/udp", "")
+						}
+					}
+					if !citem.ProtocolUdpPacketsize.IsNull() && !citem.ProtocolUdpPacketsize.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/protocol/udp/packetsize", strconv.FormatInt(citem.ProtocolUdpPacketsize.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.Destinations) > 0 {
+				for _, citem := range item.Destinations {
+					cbasePath := basePath + "/destinations/destination[destination-string='" + citem.Address.ValueString() + "' and port='" + strconv.FormatInt(citem.Port.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/destination-string", citem.Address.ValueString())
+					}
+					if !citem.Port.IsNull() && !citem.Port.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/port", strconv.FormatInt(citem.Port.ValueInt64(), 10))
+					}
+					if !citem.AddressFamily.IsNull() && !citem.AddressFamily.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address-family", citem.AddressFamily.ValueString())
+					}
+					if !citem.Encoding.IsNull() && !citem.Encoding.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/encoding", citem.Encoding.ValueString())
+					}
+					if !citem.ProtocolGrpc.IsNull() && !citem.ProtocolGrpc.IsUnknown() {
+						if citem.ProtocolGrpc.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/protocol/grpc", "")
+						}
+					}
+					if !citem.ProtocolGrpcNoTls.IsNull() && !citem.ProtocolGrpcNoTls.IsUnknown() {
+						if citem.ProtocolGrpcNoTls.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/protocol/grpc/no-tls", "")
+						}
+					}
+					if !citem.ProtocolGrpcTlsHostname.IsNull() && !citem.ProtocolGrpcTlsHostname.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/protocol/grpc/tls-hostname", citem.ProtocolGrpcTlsHostname.ValueString())
+					}
+					if !citem.ProtocolGrpcGzip.IsNull() && !citem.ProtocolGrpcGzip.IsUnknown() {
+						if citem.ProtocolGrpcGzip.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/protocol/grpc/gzip", "")
+						}
+					}
+					if !citem.ProtocolTcp.IsNull() && !citem.ProtocolTcp.IsUnknown() {
+						if citem.ProtocolTcp.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/protocol/tcp", "")
+						}
+					}
+					if !citem.ProtocolUdp.IsNull() && !citem.ProtocolUdp.IsUnknown() {
+						if citem.ProtocolUdp.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/protocol/udp", "")
+						}
+					}
+					if !citem.ProtocolUdpPacketsize.IsNull() && !citem.ProtocolUdpPacketsize.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/protocol/udp/packetsize", strconv.FormatInt(citem.ProtocolUdpPacketsize.ValueInt64(), 10))
+					}
+				}
+			}
+		}
+	}
+	if len(data.Subscriptions) > 0 {
+		for _, item := range data.Subscriptions {
+			basePath := data.getXPath() + "/subscriptions/subscription[subscription-string='" + item.Name.ValueString() + "']"
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/subscription-string", item.Name.ValueString())
+			}
+			if !item.SourceQosMarking.IsNull() && !item.SourceQosMarking.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/source-qos-marking", item.SourceQosMarking.ValueString())
+			}
+			if !item.SourceInterface.IsNull() && !item.SourceInterface.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/source-interface", item.SourceInterface.ValueString())
+			}
+			if len(item.SensorGroupIds) > 0 {
+				for _, citem := range item.SensorGroupIds {
+					cbasePath := basePath + "/sensor-group-ids/sensor-group-id[sensor-group-id-string='" + citem.Name.ValueString() + "']"
+					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/sensor-group-id-string", citem.Name.ValueString())
+					}
+					if !citem.Mode.IsNull() && !citem.Mode.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/mode", citem.Mode.ValueString())
+					}
+					if !citem.HeartbeatAlways.IsNull() && !citem.HeartbeatAlways.IsUnknown() {
+						if citem.HeartbeatAlways.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/heartbeat/always", "")
+						}
+					}
+					if !citem.HeartbeatInterval.IsNull() && !citem.HeartbeatInterval.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/heartbeat/interval", strconv.FormatInt(citem.HeartbeatInterval.ValueInt64(), 10))
+					}
+					if !citem.StrictTimer.IsNull() && !citem.StrictTimer.IsUnknown() {
+						if citem.StrictTimer.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/strict-timer", "")
+						}
+					}
+					if !citem.SampleInterval.IsNull() && !citem.SampleInterval.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/sample-interval", strconv.FormatInt(citem.SampleInterval.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.DestinationIds) > 0 {
+				for _, citem := range item.DestinationIds {
+					cbasePath := basePath + "/destination-ids/destination-id[destination-id-string='" + citem.Name.ValueString() + "']"
+					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/destination-id-string", citem.Name.ValueString())
+					}
+				}
+			}
+			if !item.SendRetry.IsNull() && !item.SendRetry.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/send/retry/retry-number", strconv.FormatInt(item.SendRetry.ValueInt64(), 10))
+			}
+			if !item.SendRetryDuration.IsNull() && !item.SendRetryDuration.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/send/retry/duration", strconv.FormatInt(item.SendRetryDuration.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.SensorGroups) > 0 {
+		for _, item := range data.SensorGroups {
+			basePath := data.getXPath() + "/sensor-groups/sensor-group[sensor-group-string='" + item.Name.ValueString() + "']"
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/sensor-group-string", item.Name.ValueString())
+			}
+			if len(item.SensorPaths) > 0 {
+				for _, citem := range item.SensorPaths {
+					cbasePath := basePath + "/sensor-paths/sensor-path[sensor-path-string='" + citem.Name.ValueString() + "']"
+					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/sensor-path-string", citem.Name.ValueString())
+					}
+				}
+			}
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *TelemetryModelDriven) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-containers-per-path"); value.Exists() {
+		data.MaxContainersPerPath = types.Int64Value(value.Int())
+	} else if data.MaxContainersPerPath.IsNull() {
+		data.MaxContainersPerPath = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-sensor-paths"); value.Exists() {
+		data.MaxSensorPaths = types.Int64Value(value.Int())
+	} else if data.MaxSensorPaths.IsNull() {
+		data.MaxSensorPaths = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tcp-send-timeout"); value.Exists() {
+		data.TcpSendTimeout = types.Int64Value(value.Int())
+	} else if data.TcpSendTimeout.IsNull() {
+		data.TcpSendTimeout = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/strict-timer"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StrictTimer.IsNull() {
+			data.StrictTimer = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.StrictTimer.IsNull() {
+			data.StrictTimer = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi-target-defined/cadence-factor"); value.Exists() {
+		data.GnmiTargetDefinedCadenceFactor = types.Int64Value(value.Int())
+	} else if data.GnmiTargetDefinedCadenceFactor.IsNull() {
+		data.GnmiTargetDefinedCadenceFactor = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi-target-defined/minimum-cadence"); value.Exists() {
+		data.GnmiTargetDefinedMinimumCadence = types.Int64Value(value.Int())
+	} else if data.GnmiTargetDefinedMinimumCadence.IsNull() {
+		data.GnmiTargetDefinedMinimumCadence = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/include/select-leaves-on-events"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.IncludeSelectLeavesOnEvents.IsNull() {
+			data.IncludeSelectLeavesOnEvents = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.IncludeSelectLeavesOnEvents.IsNull() {
+			data.IncludeSelectLeavesOnEvents = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/include/empty/values"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.IncludeEmptyValues.IsNull() {
+			data.IncludeEmptyValues = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.IncludeEmptyValues.IsNull() {
+			data.IncludeEmptyValues = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/heartbeat/always"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.GnmiHeartbeatAlways.IsNull() {
+			data.GnmiHeartbeatAlways = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.GnmiHeartbeatAlways.IsNull() {
+			data.GnmiHeartbeatAlways = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/bundling"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.GnmiBundling.IsNull() {
+			data.GnmiBundling = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.GnmiBundling.IsNull() {
+			data.GnmiBundling = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/bundling/size"); value.Exists() {
+		data.GnmiBundlingSize = types.Int64Value(value.Int())
+	} else if data.GnmiBundlingSize.IsNull() {
+		data.GnmiBundlingSize = types.Int64Null()
+	}
+	for i := range data.DestinationGroups {
+		keys := [...]string{"destination-group-string"}
+		keyValues := [...]string{data.DestinationGroups[i].Name.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/destination-groups/destination-group").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "destination-group-string"); value.Exists() {
+			data.DestinationGroups[i].Name = types.StringValue(value.String())
+		} else if data.DestinationGroups[i].Name.IsNull() {
+			data.DestinationGroups[i].Name = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "vrf"); value.Exists() {
+			data.DestinationGroups[i].Vrf = types.StringValue(value.String())
+		} else if data.DestinationGroups[i].Vrf.IsNull() {
+			data.DestinationGroups[i].Vrf = types.StringNull()
+		}
+		for ci := range data.DestinationGroups[i].AddressFamily {
+			keys := [...]string{"af-name", "destination-address", "port"}
+			keyValues := [...]string{data.DestinationGroups[i].AddressFamily[ci].AfName.ValueString(), data.DestinationGroups[i].AddressFamily[ci].Address.ValueString(), strconv.FormatInt(data.DestinationGroups[i].AddressFamily[ci].Port.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "address-families/address-family").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "af-name"); value.Exists() {
+				data.DestinationGroups[i].AddressFamily[ci].AfName = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "destination-address"); value.Exists() {
+				data.DestinationGroups[i].AddressFamily[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "port"); value.Exists() {
+				data.DestinationGroups[i].AddressFamily[ci].Port = types.Int64Value(value.Int())
+			} else if data.DestinationGroups[i].AddressFamily[ci].Port.IsNull() {
+				data.DestinationGroups[i].AddressFamily[ci].Port = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "encoding"); value.Exists() {
+				data.DestinationGroups[i].AddressFamily[ci].Encoding = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "protocol/grpc"); value.Exists() {
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "protocol/grpc/no-tls"); value.Exists() {
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "protocol/grpc/tls-hostname"); value.Exists() {
+				data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcTlsHostname = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "protocol/grpc/gzip"); value.Exists() {
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "protocol/tcp"); value.Exists() {
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "protocol/udp"); value.Exists() {
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "protocol/udp/packetsize"); value.Exists() {
+				data.DestinationGroups[i].AddressFamily[ci].ProtocolUdpPacketsize = types.Int64Value(value.Int())
+			} else if data.DestinationGroups[i].AddressFamily[ci].ProtocolUdpPacketsize.IsNull() {
+				data.DestinationGroups[i].AddressFamily[ci].ProtocolUdpPacketsize = types.Int64Null()
+			}
+		}
+		for ci := range data.DestinationGroups[i].Destinations {
+			keys := [...]string{"destination-string", "port"}
+			keyValues := [...]string{data.DestinationGroups[i].Destinations[ci].Address.ValueString(), strconv.FormatInt(data.DestinationGroups[i].Destinations[ci].Port.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "destinations/destination").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "destination-string"); value.Exists() {
+				data.DestinationGroups[i].Destinations[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "port"); value.Exists() {
+				data.DestinationGroups[i].Destinations[ci].Port = types.Int64Value(value.Int())
+			} else if data.DestinationGroups[i].Destinations[ci].Port.IsNull() {
+				data.DestinationGroups[i].Destinations[ci].Port = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "address-family"); value.Exists() {
+				data.DestinationGroups[i].Destinations[ci].AddressFamily = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "encoding"); value.Exists() {
+				data.DestinationGroups[i].Destinations[ci].Encoding = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "protocol/grpc"); value.Exists() {
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpc = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpc = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "protocol/grpc/no-tls"); value.Exists() {
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "protocol/grpc/tls-hostname"); value.Exists() {
+				data.DestinationGroups[i].Destinations[ci].ProtocolGrpcTlsHostname = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "protocol/grpc/gzip"); value.Exists() {
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "protocol/tcp"); value.Exists() {
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolTcp = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolTcp = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "protocol/udp"); value.Exists() {
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolUdp = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolUdp = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "protocol/udp/packetsize"); value.Exists() {
+				data.DestinationGroups[i].Destinations[ci].ProtocolUdpPacketsize = types.Int64Value(value.Int())
+			} else if data.DestinationGroups[i].Destinations[ci].ProtocolUdpPacketsize.IsNull() {
+				data.DestinationGroups[i].Destinations[ci].ProtocolUdpPacketsize = types.Int64Null()
+			}
+		}
+	}
+	for i := range data.Subscriptions {
+		keys := [...]string{"subscription-string"}
+		keyValues := [...]string{data.Subscriptions[i].Name.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/subscriptions/subscription").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "subscription-string"); value.Exists() {
+			data.Subscriptions[i].Name = types.StringValue(value.String())
+		} else if data.Subscriptions[i].Name.IsNull() {
+			data.Subscriptions[i].Name = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "source-qos-marking"); value.Exists() {
+			data.Subscriptions[i].SourceQosMarking = types.StringValue(value.String())
+		} else if data.Subscriptions[i].SourceQosMarking.IsNull() {
+			data.Subscriptions[i].SourceQosMarking = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "source-interface"); value.Exists() {
+			data.Subscriptions[i].SourceInterface = types.StringValue(value.String())
+		} else if data.Subscriptions[i].SourceInterface.IsNull() {
+			data.Subscriptions[i].SourceInterface = types.StringNull()
+		}
+		for ci := range data.Subscriptions[i].SensorGroupIds {
+			keys := [...]string{"sensor-group-id-string"}
+			keyValues := [...]string{data.Subscriptions[i].SensorGroupIds[ci].Name.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "sensor-group-ids/sensor-group-id").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "sensor-group-id-string"); value.Exists() {
+				data.Subscriptions[i].SensorGroupIds[ci].Name = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "mode"); value.Exists() {
+				data.Subscriptions[i].SensorGroupIds[ci].Mode = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "heartbeat/always"); value.Exists() {
+				if !data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() {
+					data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() {
+					data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "heartbeat/interval"); value.Exists() {
+				data.Subscriptions[i].SensorGroupIds[ci].HeartbeatInterval = types.Int64Value(value.Int())
+			} else if data.Subscriptions[i].SensorGroupIds[ci].HeartbeatInterval.IsNull() {
+				data.Subscriptions[i].SensorGroupIds[ci].HeartbeatInterval = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "strict-timer"); value.Exists() {
+				if !data.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() {
+					data.Subscriptions[i].SensorGroupIds[ci].StrictTimer = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() {
+					data.Subscriptions[i].SensorGroupIds[ci].StrictTimer = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "sample-interval"); value.Exists() {
+				data.Subscriptions[i].SensorGroupIds[ci].SampleInterval = types.Int64Value(value.Int())
+			} else if data.Subscriptions[i].SensorGroupIds[ci].SampleInterval.IsNull() {
+				data.Subscriptions[i].SensorGroupIds[ci].SampleInterval = types.Int64Null()
+			}
+		}
+		for ci := range data.Subscriptions[i].DestinationIds {
+			keys := [...]string{"destination-id-string"}
+			keyValues := [...]string{data.Subscriptions[i].DestinationIds[ci].Name.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "destination-ids/destination-id").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "destination-id-string"); value.Exists() {
+				data.Subscriptions[i].DestinationIds[ci].Name = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "send/retry/retry-number"); value.Exists() {
+			data.Subscriptions[i].SendRetry = types.Int64Value(value.Int())
+		} else if data.Subscriptions[i].SendRetry.IsNull() {
+			data.Subscriptions[i].SendRetry = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "send/retry/duration"); value.Exists() {
+			data.Subscriptions[i].SendRetryDuration = types.Int64Value(value.Int())
+		} else if data.Subscriptions[i].SendRetryDuration.IsNull() {
+			data.Subscriptions[i].SendRetryDuration = types.Int64Null()
+		}
+	}
+	for i := range data.SensorGroups {
+		keys := [...]string{"sensor-group-string"}
+		keyValues := [...]string{data.SensorGroups[i].Name.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sensor-groups/sensor-group").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "sensor-group-string"); value.Exists() {
+			data.SensorGroups[i].Name = types.StringValue(value.String())
+		} else if data.SensorGroups[i].Name.IsNull() {
+			data.SensorGroups[i].Name = types.StringNull()
+		}
+		for ci := range data.SensorGroups[i].SensorPaths {
+			keys := [...]string{"sensor-path-string"}
+			keyValues := [...]string{data.SensorGroups[i].SensorPaths[ci].Name.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "sensor-paths/sensor-path").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "sensor-path-string"); value.Exists() {
+				data.SensorGroups[i].SensorPaths[ci].Name = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *TelemetryModelDriven) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "max-containers-per-path"); value.Exists() {
+func (data *TelemetryModelDriven) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "max-containers-per-path"); value.Exists() {
 		data.MaxContainersPerPath = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "max-sensor-paths"); value.Exists() {
+	if value := res.Get(prefix + "max-sensor-paths"); value.Exists() {
 		data.MaxSensorPaths = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "tcp-send-timeout"); value.Exists() {
+	if value := res.Get(prefix + "tcp-send-timeout"); value.Exists() {
 		data.TcpSendTimeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "strict-timer"); value.Exists() {
+	if value := res.Get(prefix + "strict-timer"); value.Exists() {
 		data.StrictTimer = types.BoolValue(true)
-	} else {
+	} else if !data.StrictTimer.IsNull() {
+		// Only set to false if it was previously set in state
 		data.StrictTimer = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "gnmi-target-defined.cadence-factor"); value.Exists() {
+	if value := res.Get(prefix + "gnmi-target-defined.cadence-factor"); value.Exists() {
 		data.GnmiTargetDefinedCadenceFactor = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "gnmi-target-defined.minimum-cadence"); value.Exists() {
+	if value := res.Get(prefix + "gnmi-target-defined.minimum-cadence"); value.Exists() {
 		data.GnmiTargetDefinedMinimumCadence = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "include.select-leaves-on-events"); value.Exists() {
+	if value := res.Get(prefix + "include.select-leaves-on-events"); value.Exists() {
 		data.IncludeSelectLeavesOnEvents = types.BoolValue(true)
-	} else {
+	} else if !data.IncludeSelectLeavesOnEvents.IsNull() {
+		// Only set to false if it was previously set in state
 		data.IncludeSelectLeavesOnEvents = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "include.empty.values"); value.Exists() {
+	if value := res.Get(prefix + "include.empty.values"); value.Exists() {
 		data.IncludeEmptyValues = types.BoolValue(true)
-	} else {
+	} else if !data.IncludeEmptyValues.IsNull() {
+		// Only set to false if it was previously set in state
 		data.IncludeEmptyValues = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "gnmi.heartbeat.always"); value.Exists() {
+	if value := res.Get(prefix + "gnmi.heartbeat.always"); value.Exists() {
 		data.GnmiHeartbeatAlways = types.BoolValue(true)
-	} else {
+	} else if !data.GnmiHeartbeatAlways.IsNull() {
+		// Only set to false if it was previously set in state
 		data.GnmiHeartbeatAlways = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "gnmi.bundling"); value.Exists() {
+	if value := res.Get(prefix + "gnmi.bundling"); value.Exists() {
 		data.GnmiBundling = types.BoolValue(true)
-	} else {
+	} else if !data.GnmiBundling.IsNull() {
+		// Only set to false if it was previously set in state
 		data.GnmiBundling = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "gnmi.bundling.size"); value.Exists() {
+	if value := res.Get(prefix + "gnmi.bundling.size"); value.Exists() {
 		data.GnmiBundlingSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "destination-groups.destination-group"); value.Exists() {
+	if value := res.Get(prefix + "destination-groups.destination-group"); value.Exists() {
 		data.DestinationGroups = make([]TelemetryModelDrivenDestinationGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TelemetryModelDrivenDestinationGroups{}
@@ -962,12 +1785,14 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res []byte) {
 					}
 					if ccValue := cv.Get("protocol.grpc"); ccValue.Exists() {
 						cItem.ProtocolGrpc = types.BoolValue(true)
-					} else {
+					} else if !cItem.ProtocolGrpc.IsNull() {
+						// Only set to false if it was previously set
 						cItem.ProtocolGrpc = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.grpc.no-tls"); ccValue.Exists() {
 						cItem.ProtocolGrpcNoTls = types.BoolValue(true)
-					} else {
+					} else if !cItem.ProtocolGrpcNoTls.IsNull() {
+						// Only set to false if it was previously set
 						cItem.ProtocolGrpcNoTls = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.grpc.tls-hostname"); ccValue.Exists() {
@@ -975,17 +1800,20 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res []byte) {
 					}
 					if ccValue := cv.Get("protocol.grpc.gzip"); ccValue.Exists() {
 						cItem.ProtocolGrpcGzip = types.BoolValue(true)
-					} else {
+					} else if !cItem.ProtocolGrpcGzip.IsNull() {
+						// Only set to false if it was previously set
 						cItem.ProtocolGrpcGzip = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.tcp"); ccValue.Exists() {
 						cItem.ProtocolTcp = types.BoolValue(true)
-					} else {
+					} else if !cItem.ProtocolTcp.IsNull() {
+						// Only set to false if it was previously set
 						cItem.ProtocolTcp = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.udp"); ccValue.Exists() {
 						cItem.ProtocolUdp = types.BoolValue(true)
-					} else {
+					} else if !cItem.ProtocolUdp.IsNull() {
+						// Only set to false if it was previously set
 						cItem.ProtocolUdp = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.udp.packetsize"); ccValue.Exists() {
@@ -1013,12 +1841,14 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res []byte) {
 					}
 					if ccValue := cv.Get("protocol.grpc"); ccValue.Exists() {
 						cItem.ProtocolGrpc = types.BoolValue(true)
-					} else {
+					} else if !cItem.ProtocolGrpc.IsNull() {
+						// Only set to false if it was previously set
 						cItem.ProtocolGrpc = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.grpc.no-tls"); ccValue.Exists() {
 						cItem.ProtocolGrpcNoTls = types.BoolValue(true)
-					} else {
+					} else if !cItem.ProtocolGrpcNoTls.IsNull() {
+						// Only set to false if it was previously set
 						cItem.ProtocolGrpcNoTls = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.grpc.tls-hostname"); ccValue.Exists() {
@@ -1026,17 +1856,20 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res []byte) {
 					}
 					if ccValue := cv.Get("protocol.grpc.gzip"); ccValue.Exists() {
 						cItem.ProtocolGrpcGzip = types.BoolValue(true)
-					} else {
+					} else if !cItem.ProtocolGrpcGzip.IsNull() {
+						// Only set to false if it was previously set
 						cItem.ProtocolGrpcGzip = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.tcp"); ccValue.Exists() {
 						cItem.ProtocolTcp = types.BoolValue(true)
-					} else {
+					} else if !cItem.ProtocolTcp.IsNull() {
+						// Only set to false if it was previously set
 						cItem.ProtocolTcp = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.udp"); ccValue.Exists() {
 						cItem.ProtocolUdp = types.BoolValue(true)
-					} else {
+					} else if !cItem.ProtocolUdp.IsNull() {
+						// Only set to false if it was previously set
 						cItem.ProtocolUdp = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.udp.packetsize"); ccValue.Exists() {
@@ -1050,7 +1883,7 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "subscriptions.subscription"); value.Exists() {
+	if value := res.Get(prefix + "subscriptions.subscription"); value.Exists() {
 		data.Subscriptions = make([]TelemetryModelDrivenSubscriptions, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TelemetryModelDrivenSubscriptions{}
@@ -1075,7 +1908,8 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res []byte) {
 					}
 					if ccValue := cv.Get("heartbeat.always"); ccValue.Exists() {
 						cItem.HeartbeatAlways = types.BoolValue(true)
-					} else {
+					} else if !cItem.HeartbeatAlways.IsNull() {
+						// Only set to false if it was previously set
 						cItem.HeartbeatAlways = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("heartbeat.interval"); ccValue.Exists() {
@@ -1083,7 +1917,8 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res []byte) {
 					}
 					if ccValue := cv.Get("strict-timer"); ccValue.Exists() {
 						cItem.StrictTimer = types.BoolValue(true)
-					} else {
+					} else if !cItem.StrictTimer.IsNull() {
+						// Only set to false if it was previously set
 						cItem.StrictTimer = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("sample-interval"); ccValue.Exists() {
@@ -1114,7 +1949,7 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "sensor-groups.sensor-group"); value.Exists() {
+	if value := res.Get(prefix + "sensor-groups.sensor-group"); value.Exists() {
 		data.SensorGroups = make([]TelemetryModelDrivenSensorGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TelemetryModelDrivenSensorGroups{}
@@ -1139,54 +1974,62 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *TelemetryModelDrivenData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "max-containers-per-path"); value.Exists() {
+func (data *TelemetryModelDrivenData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "max-containers-per-path"); value.Exists() {
 		data.MaxContainersPerPath = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "max-sensor-paths"); value.Exists() {
+	if value := res.Get(prefix + "max-sensor-paths"); value.Exists() {
 		data.MaxSensorPaths = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "tcp-send-timeout"); value.Exists() {
+	if value := res.Get(prefix + "tcp-send-timeout"); value.Exists() {
 		data.TcpSendTimeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "strict-timer"); value.Exists() {
+	if value := res.Get(prefix + "strict-timer"); value.Exists() {
 		data.StrictTimer = types.BoolValue(true)
 	} else {
 		data.StrictTimer = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "gnmi-target-defined.cadence-factor"); value.Exists() {
+	if value := res.Get(prefix + "gnmi-target-defined.cadence-factor"); value.Exists() {
 		data.GnmiTargetDefinedCadenceFactor = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "gnmi-target-defined.minimum-cadence"); value.Exists() {
+	if value := res.Get(prefix + "gnmi-target-defined.minimum-cadence"); value.Exists() {
 		data.GnmiTargetDefinedMinimumCadence = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "include.select-leaves-on-events"); value.Exists() {
+	if value := res.Get(prefix + "include.select-leaves-on-events"); value.Exists() {
 		data.IncludeSelectLeavesOnEvents = types.BoolValue(true)
 	} else {
 		data.IncludeSelectLeavesOnEvents = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "include.empty.values"); value.Exists() {
+	if value := res.Get(prefix + "include.empty.values"); value.Exists() {
 		data.IncludeEmptyValues = types.BoolValue(true)
 	} else {
 		data.IncludeEmptyValues = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "gnmi.heartbeat.always"); value.Exists() {
+	if value := res.Get(prefix + "gnmi.heartbeat.always"); value.Exists() {
 		data.GnmiHeartbeatAlways = types.BoolValue(true)
 	} else {
 		data.GnmiHeartbeatAlways = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "gnmi.bundling"); value.Exists() {
+	if value := res.Get(prefix + "gnmi.bundling"); value.Exists() {
 		data.GnmiBundling = types.BoolValue(true)
 	} else {
 		data.GnmiBundling = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "gnmi.bundling.size"); value.Exists() {
+	if value := res.Get(prefix + "gnmi.bundling.size"); value.Exists() {
 		data.GnmiBundlingSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "destination-groups.destination-group"); value.Exists() {
+	if value := res.Get(prefix + "destination-groups.destination-group"); value.Exists() {
 		data.DestinationGroups = make([]TelemetryModelDrivenDestinationGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TelemetryModelDrivenDestinationGroups{}
@@ -1302,7 +2145,7 @@ func (data *TelemetryModelDrivenData) fromBody(ctx context.Context, res []byte) 
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "subscriptions.subscription"); value.Exists() {
+	if value := res.Get(prefix + "subscriptions.subscription"); value.Exists() {
 		data.Subscriptions = make([]TelemetryModelDrivenSubscriptions, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TelemetryModelDrivenSubscriptions{}
@@ -1366,7 +2209,7 @@ func (data *TelemetryModelDrivenData) fromBody(ctx context.Context, res []byte) 
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "sensor-groups.sensor-group"); value.Exists() {
+	if value := res.Get(prefix + "sensor-groups.sensor-group"); value.Exists() {
 		data.SensorGroups = make([]TelemetryModelDrivenSensorGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TelemetryModelDrivenSensorGroups{}
@@ -1391,7 +2234,508 @@ func (data *TelemetryModelDrivenData) fromBody(ctx context.Context, res []byte) 
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *TelemetryModelDriven) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-containers-per-path"); value.Exists() {
+		data.MaxContainersPerPath = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-sensor-paths"); value.Exists() {
+		data.MaxSensorPaths = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tcp-send-timeout"); value.Exists() {
+		data.TcpSendTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/strict-timer"); value.Exists() {
+		data.StrictTimer = types.BoolValue(true)
+	} else {
+		data.StrictTimer = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi-target-defined/cadence-factor"); value.Exists() {
+		data.GnmiTargetDefinedCadenceFactor = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi-target-defined/minimum-cadence"); value.Exists() {
+		data.GnmiTargetDefinedMinimumCadence = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/include/select-leaves-on-events"); value.Exists() {
+		data.IncludeSelectLeavesOnEvents = types.BoolValue(true)
+	} else {
+		data.IncludeSelectLeavesOnEvents = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/include/empty/values"); value.Exists() {
+		data.IncludeEmptyValues = types.BoolValue(true)
+	} else {
+		data.IncludeEmptyValues = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/heartbeat/always"); value.Exists() {
+		data.GnmiHeartbeatAlways = types.BoolValue(true)
+	} else {
+		data.GnmiHeartbeatAlways = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/bundling"); value.Exists() {
+		data.GnmiBundling = types.BoolValue(true)
+	} else {
+		data.GnmiBundling = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/bundling/size"); value.Exists() {
+		data.GnmiBundlingSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/destination-groups/destination-group"); value.Exists() {
+		data.DestinationGroups = make([]TelemetryModelDrivenDestinationGroups, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TelemetryModelDrivenDestinationGroups{}
+			if cValue := helpers.GetFromXPath(v, "destination-group-string"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "vrf"); cValue.Exists() {
+				item.Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "address-families/address-family"); cValue.Exists() {
+				item.AddressFamily = make([]TelemetryModelDrivenDestinationGroupsAddressFamily, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TelemetryModelDrivenDestinationGroupsAddressFamily{}
+					if ccValue := helpers.GetFromXPath(cv, "af-name"); ccValue.Exists() {
+						cItem.AfName = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "destination-address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "port"); ccValue.Exists() {
+						cItem.Port = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "encoding"); ccValue.Exists() {
+						cItem.Encoding = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc"); ccValue.Exists() {
+						cItem.ProtocolGrpc = types.BoolValue(true)
+					} else {
+						cItem.ProtocolGrpc = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc/no-tls"); ccValue.Exists() {
+						cItem.ProtocolGrpcNoTls = types.BoolValue(true)
+					} else {
+						cItem.ProtocolGrpcNoTls = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc/tls-hostname"); ccValue.Exists() {
+						cItem.ProtocolGrpcTlsHostname = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc/gzip"); ccValue.Exists() {
+						cItem.ProtocolGrpcGzip = types.BoolValue(true)
+					} else {
+						cItem.ProtocolGrpcGzip = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/tcp"); ccValue.Exists() {
+						cItem.ProtocolTcp = types.BoolValue(true)
+					} else {
+						cItem.ProtocolTcp = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/udp"); ccValue.Exists() {
+						cItem.ProtocolUdp = types.BoolValue(true)
+					} else {
+						cItem.ProtocolUdp = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/udp/packetsize"); ccValue.Exists() {
+						cItem.ProtocolUdpPacketsize = types.Int64Value(ccValue.Int())
+					}
+					item.AddressFamily = append(item.AddressFamily, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "destinations/destination"); cValue.Exists() {
+				item.Destinations = make([]TelemetryModelDrivenDestinationGroupsDestinations, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TelemetryModelDrivenDestinationGroupsDestinations{}
+					if ccValue := helpers.GetFromXPath(cv, "destination-string"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "port"); ccValue.Exists() {
+						cItem.Port = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "address-family"); ccValue.Exists() {
+						cItem.AddressFamily = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "encoding"); ccValue.Exists() {
+						cItem.Encoding = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc"); ccValue.Exists() {
+						cItem.ProtocolGrpc = types.BoolValue(true)
+					} else {
+						cItem.ProtocolGrpc = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc/no-tls"); ccValue.Exists() {
+						cItem.ProtocolGrpcNoTls = types.BoolValue(true)
+					} else {
+						cItem.ProtocolGrpcNoTls = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc/tls-hostname"); ccValue.Exists() {
+						cItem.ProtocolGrpcTlsHostname = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc/gzip"); ccValue.Exists() {
+						cItem.ProtocolGrpcGzip = types.BoolValue(true)
+					} else {
+						cItem.ProtocolGrpcGzip = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/tcp"); ccValue.Exists() {
+						cItem.ProtocolTcp = types.BoolValue(true)
+					} else {
+						cItem.ProtocolTcp = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/udp"); ccValue.Exists() {
+						cItem.ProtocolUdp = types.BoolValue(true)
+					} else {
+						cItem.ProtocolUdp = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/udp/packetsize"); ccValue.Exists() {
+						cItem.ProtocolUdpPacketsize = types.Int64Value(ccValue.Int())
+					}
+					item.Destinations = append(item.Destinations, cItem)
+					return true
+				})
+			}
+			data.DestinationGroups = append(data.DestinationGroups, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/subscriptions/subscription"); value.Exists() {
+		data.Subscriptions = make([]TelemetryModelDrivenSubscriptions, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TelemetryModelDrivenSubscriptions{}
+			if cValue := helpers.GetFromXPath(v, "subscription-string"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "source-qos-marking"); cValue.Exists() {
+				item.SourceQosMarking = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "source-interface"); cValue.Exists() {
+				item.SourceInterface = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "sensor-group-ids/sensor-group-id"); cValue.Exists() {
+				item.SensorGroupIds = make([]TelemetryModelDrivenSubscriptionsSensorGroupIds, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TelemetryModelDrivenSubscriptionsSensorGroupIds{}
+					if ccValue := helpers.GetFromXPath(cv, "sensor-group-id-string"); ccValue.Exists() {
+						cItem.Name = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "mode"); ccValue.Exists() {
+						cItem.Mode = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "heartbeat/always"); ccValue.Exists() {
+						cItem.HeartbeatAlways = types.BoolValue(true)
+					} else {
+						cItem.HeartbeatAlways = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "heartbeat/interval"); ccValue.Exists() {
+						cItem.HeartbeatInterval = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "strict-timer"); ccValue.Exists() {
+						cItem.StrictTimer = types.BoolValue(true)
+					} else {
+						cItem.StrictTimer = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "sample-interval"); ccValue.Exists() {
+						cItem.SampleInterval = types.Int64Value(ccValue.Int())
+					}
+					item.SensorGroupIds = append(item.SensorGroupIds, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "destination-ids/destination-id"); cValue.Exists() {
+				item.DestinationIds = make([]TelemetryModelDrivenSubscriptionsDestinationIds, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TelemetryModelDrivenSubscriptionsDestinationIds{}
+					if ccValue := helpers.GetFromXPath(cv, "destination-id-string"); ccValue.Exists() {
+						cItem.Name = types.StringValue(ccValue.String())
+					}
+					item.DestinationIds = append(item.DestinationIds, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "send/retry/retry-number"); cValue.Exists() {
+				item.SendRetry = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "send/retry/duration"); cValue.Exists() {
+				item.SendRetryDuration = types.Int64Value(cValue.Int())
+			}
+			data.Subscriptions = append(data.Subscriptions, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sensor-groups/sensor-group"); value.Exists() {
+		data.SensorGroups = make([]TelemetryModelDrivenSensorGroups, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TelemetryModelDrivenSensorGroups{}
+			if cValue := helpers.GetFromXPath(v, "sensor-group-string"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "sensor-paths/sensor-path"); cValue.Exists() {
+				item.SensorPaths = make([]TelemetryModelDrivenSensorGroupsSensorPaths, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TelemetryModelDrivenSensorGroupsSensorPaths{}
+					if ccValue := helpers.GetFromXPath(cv, "sensor-path-string"); ccValue.Exists() {
+						cItem.Name = types.StringValue(ccValue.String())
+					}
+					item.SensorPaths = append(item.SensorPaths, cItem)
+					return true
+				})
+			}
+			data.SensorGroups = append(data.SensorGroups, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *TelemetryModelDrivenData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-containers-per-path"); value.Exists() {
+		data.MaxContainersPerPath = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-sensor-paths"); value.Exists() {
+		data.MaxSensorPaths = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tcp-send-timeout"); value.Exists() {
+		data.TcpSendTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/strict-timer"); value.Exists() {
+		data.StrictTimer = types.BoolValue(true)
+	} else {
+		data.StrictTimer = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi-target-defined/cadence-factor"); value.Exists() {
+		data.GnmiTargetDefinedCadenceFactor = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi-target-defined/minimum-cadence"); value.Exists() {
+		data.GnmiTargetDefinedMinimumCadence = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/include/select-leaves-on-events"); value.Exists() {
+		data.IncludeSelectLeavesOnEvents = types.BoolValue(true)
+	} else {
+		data.IncludeSelectLeavesOnEvents = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/include/empty/values"); value.Exists() {
+		data.IncludeEmptyValues = types.BoolValue(true)
+	} else {
+		data.IncludeEmptyValues = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/heartbeat/always"); value.Exists() {
+		data.GnmiHeartbeatAlways = types.BoolValue(true)
+	} else {
+		data.GnmiHeartbeatAlways = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/bundling"); value.Exists() {
+		data.GnmiBundling = types.BoolValue(true)
+	} else {
+		data.GnmiBundling = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/bundling/size"); value.Exists() {
+		data.GnmiBundlingSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/destination-groups/destination-group"); value.Exists() {
+		data.DestinationGroups = make([]TelemetryModelDrivenDestinationGroups, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TelemetryModelDrivenDestinationGroups{}
+			if cValue := helpers.GetFromXPath(v, "destination-group-string"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "vrf"); cValue.Exists() {
+				item.Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "address-families/address-family"); cValue.Exists() {
+				item.AddressFamily = make([]TelemetryModelDrivenDestinationGroupsAddressFamily, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TelemetryModelDrivenDestinationGroupsAddressFamily{}
+					if ccValue := helpers.GetFromXPath(cv, "af-name"); ccValue.Exists() {
+						cItem.AfName = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "destination-address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "port"); ccValue.Exists() {
+						cItem.Port = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "encoding"); ccValue.Exists() {
+						cItem.Encoding = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc"); ccValue.Exists() {
+						cItem.ProtocolGrpc = types.BoolValue(true)
+					} else {
+						cItem.ProtocolGrpc = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc/no-tls"); ccValue.Exists() {
+						cItem.ProtocolGrpcNoTls = types.BoolValue(true)
+					} else {
+						cItem.ProtocolGrpcNoTls = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc/tls-hostname"); ccValue.Exists() {
+						cItem.ProtocolGrpcTlsHostname = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc/gzip"); ccValue.Exists() {
+						cItem.ProtocolGrpcGzip = types.BoolValue(true)
+					} else {
+						cItem.ProtocolGrpcGzip = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/tcp"); ccValue.Exists() {
+						cItem.ProtocolTcp = types.BoolValue(true)
+					} else {
+						cItem.ProtocolTcp = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/udp"); ccValue.Exists() {
+						cItem.ProtocolUdp = types.BoolValue(true)
+					} else {
+						cItem.ProtocolUdp = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/udp/packetsize"); ccValue.Exists() {
+						cItem.ProtocolUdpPacketsize = types.Int64Value(ccValue.Int())
+					}
+					item.AddressFamily = append(item.AddressFamily, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "destinations/destination"); cValue.Exists() {
+				item.Destinations = make([]TelemetryModelDrivenDestinationGroupsDestinations, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TelemetryModelDrivenDestinationGroupsDestinations{}
+					if ccValue := helpers.GetFromXPath(cv, "destination-string"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "port"); ccValue.Exists() {
+						cItem.Port = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "address-family"); ccValue.Exists() {
+						cItem.AddressFamily = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "encoding"); ccValue.Exists() {
+						cItem.Encoding = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc"); ccValue.Exists() {
+						cItem.ProtocolGrpc = types.BoolValue(true)
+					} else {
+						cItem.ProtocolGrpc = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc/no-tls"); ccValue.Exists() {
+						cItem.ProtocolGrpcNoTls = types.BoolValue(true)
+					} else {
+						cItem.ProtocolGrpcNoTls = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc/tls-hostname"); ccValue.Exists() {
+						cItem.ProtocolGrpcTlsHostname = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/grpc/gzip"); ccValue.Exists() {
+						cItem.ProtocolGrpcGzip = types.BoolValue(true)
+					} else {
+						cItem.ProtocolGrpcGzip = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/tcp"); ccValue.Exists() {
+						cItem.ProtocolTcp = types.BoolValue(true)
+					} else {
+						cItem.ProtocolTcp = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/udp"); ccValue.Exists() {
+						cItem.ProtocolUdp = types.BoolValue(true)
+					} else {
+						cItem.ProtocolUdp = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "protocol/udp/packetsize"); ccValue.Exists() {
+						cItem.ProtocolUdpPacketsize = types.Int64Value(ccValue.Int())
+					}
+					item.Destinations = append(item.Destinations, cItem)
+					return true
+				})
+			}
+			data.DestinationGroups = append(data.DestinationGroups, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/subscriptions/subscription"); value.Exists() {
+		data.Subscriptions = make([]TelemetryModelDrivenSubscriptions, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TelemetryModelDrivenSubscriptions{}
+			if cValue := helpers.GetFromXPath(v, "subscription-string"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "source-qos-marking"); cValue.Exists() {
+				item.SourceQosMarking = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "source-interface"); cValue.Exists() {
+				item.SourceInterface = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "sensor-group-ids/sensor-group-id"); cValue.Exists() {
+				item.SensorGroupIds = make([]TelemetryModelDrivenSubscriptionsSensorGroupIds, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TelemetryModelDrivenSubscriptionsSensorGroupIds{}
+					if ccValue := helpers.GetFromXPath(cv, "sensor-group-id-string"); ccValue.Exists() {
+						cItem.Name = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "mode"); ccValue.Exists() {
+						cItem.Mode = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "heartbeat/always"); ccValue.Exists() {
+						cItem.HeartbeatAlways = types.BoolValue(true)
+					} else {
+						cItem.HeartbeatAlways = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "heartbeat/interval"); ccValue.Exists() {
+						cItem.HeartbeatInterval = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "strict-timer"); ccValue.Exists() {
+						cItem.StrictTimer = types.BoolValue(true)
+					} else {
+						cItem.StrictTimer = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "sample-interval"); ccValue.Exists() {
+						cItem.SampleInterval = types.Int64Value(ccValue.Int())
+					}
+					item.SensorGroupIds = append(item.SensorGroupIds, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "destination-ids/destination-id"); cValue.Exists() {
+				item.DestinationIds = make([]TelemetryModelDrivenSubscriptionsDestinationIds, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TelemetryModelDrivenSubscriptionsDestinationIds{}
+					if ccValue := helpers.GetFromXPath(cv, "destination-id-string"); ccValue.Exists() {
+						cItem.Name = types.StringValue(ccValue.String())
+					}
+					item.DestinationIds = append(item.DestinationIds, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "send/retry/retry-number"); cValue.Exists() {
+				item.SendRetry = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "send/retry/duration"); cValue.Exists() {
+				item.SendRetryDuration = types.Int64Value(cValue.Int())
+			}
+			data.Subscriptions = append(data.Subscriptions, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sensor-groups/sensor-group"); value.Exists() {
+		data.SensorGroups = make([]TelemetryModelDrivenSensorGroups, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TelemetryModelDrivenSensorGroups{}
+			if cValue := helpers.GetFromXPath(v, "sensor-group-string"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "sensor-paths/sensor-path"); cValue.Exists() {
+				item.SensorPaths = make([]TelemetryModelDrivenSensorGroupsSensorPaths, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TelemetryModelDrivenSensorGroupsSensorPaths{}
+					if ccValue := helpers.GetFromXPath(cv, "sensor-path-string"); ccValue.Exists() {
+						cItem.Name = types.StringValue(ccValue.String())
+					}
+					item.SensorPaths = append(item.SensorPaths, cItem)
+					return true
+				})
+			}
+			data.SensorGroups = append(data.SensorGroups, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *TelemetryModelDriven) getDeletedItems(ctx context.Context, state TelemetryModelDriven) []string {
@@ -1772,10 +3116,9 @@ func (data *TelemetryModelDriven) getDeletedItems(ctx context.Context, state Tel
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *TelemetryModelDriven) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *TelemetryModelDriven) getEmptyLeafsDelete(ctx context.Context, state *TelemetryModelDriven) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.SensorGroups {
 		keys := [...]string{"sensor-group-string"}
@@ -1815,11 +3158,19 @@ func (data *TelemetryModelDriven) getEmptyLeafsDelete(ctx context.Context) []str
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
+			// Only delete if state has true and plan has false
 			if !data.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() && !data.Subscriptions[i].SensorGroupIds[ci].StrictTimer.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/subscriptions/subscription%v/sensor-group-ids/sensor-group-id%v/strict-timer", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.Subscriptions) && ci < len(state.Subscriptions[i].SensorGroupIds) && !state.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() && state.Subscriptions[i].SensorGroupIds[ci].StrictTimer.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/subscriptions/subscription%v/sensor-group-ids/sensor-group-id%v/strict-timer", data.getXPath(), keyString, ckeyString))
+				}
 			}
+			// Only delete if state has true and plan has false
 			if !data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() && !data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/subscriptions/subscription%v/sensor-group-ids/sensor-group-id%v/heartbeat/always", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.Subscriptions) && ci < len(state.Subscriptions[i].SensorGroupIds) && !state.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() && state.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/subscriptions/subscription%v/sensor-group-ids/sensor-group-id%v/heartbeat/always", data.getXPath(), keyString, ckeyString))
+				}
 			}
 		}
 	}
@@ -1837,20 +3188,40 @@ func (data *TelemetryModelDriven) getEmptyLeafsDelete(ctx context.Context) []str
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
+			// Only delete if state has true and plan has false
 			if !data.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolUdp.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/destinations/destination%v/protocol/udp", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].Destinations) && !state.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolUdp.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/destinations/destination%v/protocol/udp", data.getXPath(), keyString, ckeyString))
+				}
 			}
+			// Only delete if state has true and plan has false
 			if !data.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolTcp.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/destinations/destination%v/protocol/tcp", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].Destinations) && !state.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolTcp.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/destinations/destination%v/protocol/tcp", data.getXPath(), keyString, ckeyString))
+				}
 			}
+			// Only delete if state has true and plan has false
 			if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/destinations/destination%v/protocol/grpc", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].Destinations) && !state.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/destinations/destination%v/protocol/grpc", data.getXPath(), keyString, ckeyString))
+				}
 			}
+			// Only delete if state has true and plan has false
 			if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/destinations/destination%v/protocol/grpc", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].Destinations) && !state.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/destinations/destination%v/protocol/grpc", data.getXPath(), keyString, ckeyString))
+				}
 			}
+			// Only delete if state has true and plan has false
 			if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolGrpc.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/destinations/destination%v/protocol/grpc", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].Destinations) && !state.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolGrpc.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/destinations/destination%v/protocol/grpc", data.getXPath(), keyString, ckeyString))
+				}
 			}
 		}
 		for ci := range data.DestinationGroups[i].AddressFamily {
@@ -1860,76 +3231,98 @@ func (data *TelemetryModelDriven) getEmptyLeafsDelete(ctx context.Context) []str
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
+			// Only delete if state has true and plan has false
 			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/udp", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].AddressFamily) && !state.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/udp", data.getXPath(), keyString, ckeyString))
+				}
 			}
+			// Only delete if state has true and plan has false
 			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/tcp", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].AddressFamily) && !state.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/tcp", data.getXPath(), keyString, ckeyString))
+				}
 			}
+			// Only delete if state has true and plan has false
 			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].AddressFamily) && !state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", data.getXPath(), keyString, ckeyString))
+				}
 			}
+			// Only delete if state has true and plan has false
 			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].AddressFamily) && !state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", data.getXPath(), keyString, ckeyString))
+				}
 			}
+			// Only delete if state has true and plan has false
 			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].AddressFamily) && !state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", data.getXPath(), keyString, ckeyString))
+				}
 			}
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.GnmiBundling.IsNull() && !data.GnmiBundling.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/gnmi/bundling", data.getPath()))
+		if state != nil && !state.GnmiBundling.IsNull() && state.GnmiBundling.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/gnmi/bundling", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.GnmiHeartbeatAlways.IsNull() && !data.GnmiHeartbeatAlways.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/gnmi/heartbeat/always", data.getPath()))
+		if state != nil && !state.GnmiHeartbeatAlways.IsNull() && state.GnmiHeartbeatAlways.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/gnmi/heartbeat/always", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.IncludeEmptyValues.IsNull() && !data.IncludeEmptyValues.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/include/empty/values", data.getPath()))
+		if state != nil && !state.IncludeEmptyValues.IsNull() && state.IncludeEmptyValues.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/include/empty/values", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.IncludeSelectLeavesOnEvents.IsNull() && !data.IncludeSelectLeavesOnEvents.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/include/select-leaves-on-events", data.getPath()))
+		if state != nil && !state.IncludeSelectLeavesOnEvents.IsNull() && state.IncludeSelectLeavesOnEvents.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/include/select-leaves-on-events", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.StrictTimer.IsNull() && !data.StrictTimer.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/strict-timer", data.getPath()))
+		if state != nil && !state.StrictTimer.IsNull() && state.StrictTimer.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/strict-timer", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *TelemetryModelDriven) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.SensorGroups {
-		keys := [...]string{"sensor-group-string"}
-		keyValues := [...]string{data.SensorGroups[i].Name.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sensor-groups/sensor-group%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[sensor-group-string=" + data.SensorGroups[i].Name.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sensor-groups/sensor-group%v", data.getPath(), keyPath))
 	}
 	for i := range data.Subscriptions {
-		keys := [...]string{"subscription-string"}
-		keyValues := [...]string{data.Subscriptions[i].Name.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/subscriptions/subscription%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[subscription-string=" + data.Subscriptions[i].Name.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/subscriptions/subscription%v", data.getPath(), keyPath))
 	}
 	for i := range data.DestinationGroups {
-		keys := [...]string{"destination-group-string"}
-		keyValues := [...]string{data.DestinationGroups[i].Name.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/destination-groups/destination-group%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[destination-group-string=" + data.DestinationGroups[i].Name.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/destination-groups/destination-group%v", data.getPath(), keyPath))
 	}
 	if !data.GnmiBundlingSize.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/gnmi/bundling", data.getPath()))
@@ -1964,7 +3357,539 @@ func (data *TelemetryModelDriven) getDeletePaths(ctx context.Context) []string {
 	if !data.MaxContainersPerPath.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-containers-per-path", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *TelemetryModelDriven) addDeletedItemsXML(ctx context.Context, state TelemetryModelDriven, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.SensorGroups {
+		stateKeys := [...]string{"sensor-group-string"}
+		stateKeyValues := [...]string{state.SensorGroups[i].Name.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SensorGroups[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SensorGroups {
+			found = true
+			if state.SensorGroups[i].Name.ValueString() != data.SensorGroups[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.SensorGroups[i].SensorPaths {
+					cstateKeys := [...]string{"sensor-path-string"}
+					cstateKeyValues := [...]string{state.SensorGroups[i].SensorPaths[ci].Name.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SensorGroups[i].SensorPaths[ci].Name.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SensorGroups[j].SensorPaths {
+						found = true
+						if state.SensorGroups[i].SensorPaths[ci].Name.ValueString() != data.SensorGroups[j].SensorPaths[cj].Name.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sensor-groups/sensor-group%v/sensor-paths/sensor-path%v", predicates, cpredicates))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sensor-groups/sensor-group%v", predicates))
+		}
+	}
+	for i := range state.Subscriptions {
+		stateKeys := [...]string{"subscription-string"}
+		stateKeyValues := [...]string{state.Subscriptions[i].Name.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Subscriptions[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Subscriptions {
+			found = true
+			if state.Subscriptions[i].Name.ValueString() != data.Subscriptions[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Subscriptions[i].SendRetryDuration.IsNull() && data.Subscriptions[j].SendRetryDuration.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/subscriptions/subscription%v/send/retry/duration", predicates))
+				}
+				if !state.Subscriptions[i].SendRetry.IsNull() && data.Subscriptions[j].SendRetry.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/subscriptions/subscription%v/send/retry/retry-number", predicates))
+				}
+				for ci := range state.Subscriptions[i].DestinationIds {
+					cstateKeys := [...]string{"destination-id-string"}
+					cstateKeyValues := [...]string{state.Subscriptions[i].DestinationIds[ci].Name.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Subscriptions[i].DestinationIds[ci].Name.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Subscriptions[j].DestinationIds {
+						found = true
+						if state.Subscriptions[i].DestinationIds[ci].Name.ValueString() != data.Subscriptions[j].DestinationIds[cj].Name.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/subscriptions/subscription%v/destination-ids/destination-id%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.Subscriptions[i].SensorGroupIds {
+					cstateKeys := [...]string{"sensor-group-id-string"}
+					cstateKeyValues := [...]string{state.Subscriptions[i].SensorGroupIds[ci].Name.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Subscriptions[i].SensorGroupIds[ci].Name.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Subscriptions[j].SensorGroupIds {
+						found = true
+						if state.Subscriptions[i].SensorGroupIds[ci].Name.ValueString() != data.Subscriptions[j].SensorGroupIds[cj].Name.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Subscriptions[i].SensorGroupIds[ci].SampleInterval.IsNull() && data.Subscriptions[j].SensorGroupIds[cj].SampleInterval.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/subscriptions/subscription%v/sensor-group-ids/sensor-group-id%v/sample-interval", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() && state.Subscriptions[i].SensorGroupIds[ci].StrictTimer.ValueBool() && data.Subscriptions[j].SensorGroupIds[cj].StrictTimer.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/subscriptions/subscription%v/sensor-group-ids/sensor-group-id%v/strict-timer", predicates, cpredicates))
+							}
+							if !state.Subscriptions[i].SensorGroupIds[ci].HeartbeatInterval.IsNull() && data.Subscriptions[j].SensorGroupIds[cj].HeartbeatInterval.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/subscriptions/subscription%v/sensor-group-ids/sensor-group-id%v/heartbeat", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() && state.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.ValueBool() && data.Subscriptions[j].SensorGroupIds[cj].HeartbeatAlways.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/subscriptions/subscription%v/sensor-group-ids/sensor-group-id%v/heartbeat/always", predicates, cpredicates))
+							}
+							if !state.Subscriptions[i].SensorGroupIds[ci].Mode.IsNull() && data.Subscriptions[j].SensorGroupIds[cj].Mode.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/subscriptions/subscription%v/sensor-group-ids/sensor-group-id%v/mode", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/subscriptions/subscription%v/sensor-group-ids/sensor-group-id%v", predicates, cpredicates))
+					}
+				}
+				if !state.Subscriptions[i].SourceInterface.IsNull() && data.Subscriptions[j].SourceInterface.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/subscriptions/subscription%v/source-interface", predicates))
+				}
+				if !state.Subscriptions[i].SourceQosMarking.IsNull() && data.Subscriptions[j].SourceQosMarking.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/subscriptions/subscription%v/source-qos-marking", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/subscriptions/subscription%v", predicates))
+		}
+	}
+	for i := range state.DestinationGroups {
+		stateKeys := [...]string{"destination-group-string"}
+		stateKeyValues := [...]string{state.DestinationGroups[i].Name.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.DestinationGroups[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.DestinationGroups {
+			found = true
+			if state.DestinationGroups[i].Name.ValueString() != data.DestinationGroups[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.DestinationGroups[i].Destinations {
+					cstateKeys := [...]string{"destination-string", "port"}
+					cstateKeyValues := [...]string{state.DestinationGroups[i].Destinations[ci].Address.ValueString(), strconv.FormatInt(state.DestinationGroups[i].Destinations[ci].Port.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.DestinationGroups[i].Destinations[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.DestinationGroups[i].Destinations[ci].Port.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.DestinationGroups[j].Destinations {
+						found = true
+						if state.DestinationGroups[i].Destinations[ci].Address.ValueString() != data.DestinationGroups[j].Destinations[cj].Address.ValueString() {
+							found = false
+						}
+						if state.DestinationGroups[i].Destinations[ci].Port.ValueInt64() != data.DestinationGroups[j].Destinations[cj].Port.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.DestinationGroups[i].Destinations[ci].ProtocolUdpPacketsize.IsNull() && data.DestinationGroups[j].Destinations[cj].ProtocolUdpPacketsize.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/destinations/destination%v/protocol/udp", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolUdp.ValueBool() && data.DestinationGroups[j].Destinations[cj].ProtocolUdp.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/destinations/destination%v/protocol/udp", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolTcp.ValueBool() && data.DestinationGroups[j].Destinations[cj].ProtocolTcp.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/destinations/destination%v/protocol/tcp", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.ValueBool() && data.DestinationGroups[j].Destinations[cj].ProtocolGrpcGzip.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/destinations/destination%v/protocol/grpc", predicates, cpredicates))
+							}
+							if !state.DestinationGroups[i].Destinations[ci].ProtocolGrpcTlsHostname.IsNull() && data.DestinationGroups[j].Destinations[cj].ProtocolGrpcTlsHostname.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/destinations/destination%v/protocol/grpc", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.ValueBool() && data.DestinationGroups[j].Destinations[cj].ProtocolGrpcNoTls.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/destinations/destination%v/protocol/grpc", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolGrpc.ValueBool() && data.DestinationGroups[j].Destinations[cj].ProtocolGrpc.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/destinations/destination%v/protocol/grpc", predicates, cpredicates))
+							}
+							if !state.DestinationGroups[i].Destinations[ci].Encoding.IsNull() && data.DestinationGroups[j].Destinations[cj].Encoding.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/destinations/destination%v/encoding", predicates, cpredicates))
+							}
+							if !state.DestinationGroups[i].Destinations[ci].AddressFamily.IsNull() && data.DestinationGroups[j].Destinations[cj].AddressFamily.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/destinations/destination%v/address-family", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/destinations/destination%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.DestinationGroups[i].AddressFamily {
+					cstateKeys := [...]string{"af-name", "destination-address", "port"}
+					cstateKeyValues := [...]string{state.DestinationGroups[i].AddressFamily[ci].AfName.ValueString(), state.DestinationGroups[i].AddressFamily[ci].Address.ValueString(), strconv.FormatInt(state.DestinationGroups[i].AddressFamily[ci].Port.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.DestinationGroups[i].AddressFamily[ci].AfName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.DestinationGroups[i].AddressFamily[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.DestinationGroups[i].AddressFamily[ci].Port.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.DestinationGroups[j].AddressFamily {
+						found = true
+						if state.DestinationGroups[i].AddressFamily[ci].AfName.ValueString() != data.DestinationGroups[j].AddressFamily[cj].AfName.ValueString() {
+							found = false
+						}
+						if state.DestinationGroups[i].AddressFamily[ci].Address.ValueString() != data.DestinationGroups[j].AddressFamily[cj].Address.ValueString() {
+							found = false
+						}
+						if state.DestinationGroups[i].AddressFamily[ci].Port.ValueInt64() != data.DestinationGroups[j].AddressFamily[cj].Port.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.DestinationGroups[i].AddressFamily[ci].ProtocolUdpPacketsize.IsNull() && data.DestinationGroups[j].AddressFamily[cj].ProtocolUdpPacketsize.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/address-families/address-family%v/protocol/udp", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.ValueBool() && data.DestinationGroups[j].AddressFamily[cj].ProtocolUdp.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/address-families/address-family%v/protocol/udp", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.ValueBool() && data.DestinationGroups[j].AddressFamily[cj].ProtocolTcp.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/address-families/address-family%v/protocol/tcp", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.ValueBool() && data.DestinationGroups[j].AddressFamily[cj].ProtocolGrpcGzip.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", predicates, cpredicates))
+							}
+							if !state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcTlsHostname.IsNull() && data.DestinationGroups[j].AddressFamily[cj].ProtocolGrpcTlsHostname.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.ValueBool() && data.DestinationGroups[j].AddressFamily[cj].ProtocolGrpcNoTls.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.ValueBool() && data.DestinationGroups[j].AddressFamily[cj].ProtocolGrpc.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", predicates, cpredicates))
+							}
+							if !state.DestinationGroups[i].AddressFamily[ci].Encoding.IsNull() && data.DestinationGroups[j].AddressFamily[cj].Encoding.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/address-families/address-family%v/encoding", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/address-families/address-family%v", predicates, cpredicates))
+					}
+				}
+				if !state.DestinationGroups[i].Vrf.IsNull() && data.DestinationGroups[j].Vrf.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v/vrf", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/destination-groups/destination-group%v", predicates))
+		}
+	}
+	if !state.GnmiBundlingSize.IsNull() && data.GnmiBundlingSize.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/gnmi/bundling"
+		predicates := make(map[string]string)
+		predicates["size"] = fmt.Sprintf("%v", state.GnmiBundlingSize.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.GnmiBundling.IsNull() && state.GnmiBundling.ValueBool() && data.GnmiBundling.IsNull() {
+		deletePath := state.getXPath() + "/gnmi/bundling"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.GnmiHeartbeatAlways.IsNull() && state.GnmiHeartbeatAlways.ValueBool() && data.GnmiHeartbeatAlways.IsNull() {
+		deletePath := state.getXPath() + "/gnmi/heartbeat/always"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.IncludeEmptyValues.IsNull() && state.IncludeEmptyValues.ValueBool() && data.IncludeEmptyValues.IsNull() {
+		deletePath := state.getXPath() + "/include/empty/values"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.IncludeSelectLeavesOnEvents.IsNull() && state.IncludeSelectLeavesOnEvents.ValueBool() && data.IncludeSelectLeavesOnEvents.IsNull() {
+		deletePath := state.getXPath() + "/include/select-leaves-on-events"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.GnmiTargetDefinedMinimumCadence.IsNull() && data.GnmiTargetDefinedMinimumCadence.IsNull() {
+		deletePath := state.getXPath() + "/gnmi-target-defined/minimum-cadence"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.GnmiTargetDefinedCadenceFactor.IsNull() && data.GnmiTargetDefinedCadenceFactor.IsNull() {
+		deletePath := state.getXPath() + "/gnmi-target-defined/cadence-factor"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.StrictTimer.IsNull() && state.StrictTimer.ValueBool() && data.StrictTimer.IsNull() {
+		deletePath := state.getXPath() + "/strict-timer"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TcpSendTimeout.IsNull() && data.TcpSendTimeout.IsNull() {
+		deletePath := state.getXPath() + "/tcp-send-timeout"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MaxSensorPaths.IsNull() && data.MaxSensorPaths.IsNull() {
+		deletePath := state.getXPath() + "/max-sensor-paths"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MaxContainersPerPath.IsNull() && data.MaxContainersPerPath.IsNull() {
+		deletePath := state.getXPath() + "/max-containers-per-path"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *TelemetryModelDriven) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.SensorGroups {
+		keys := [...]string{"sensor-group-string"}
+		keyValues := [...]string{data.SensorGroups[i].Name.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/sensor-groups/sensor-group%v", predicates))
+	}
+	for i := range data.Subscriptions {
+		keys := [...]string{"subscription-string"}
+		keyValues := [...]string{data.Subscriptions[i].Name.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/subscriptions/subscription%v", predicates))
+	}
+	for i := range data.DestinationGroups {
+		keys := [...]string{"destination-group-string"}
+		keyValues := [...]string{data.DestinationGroups[i].Name.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/destination-groups/destination-group%v", predicates))
+	}
+	if !data.GnmiBundlingSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/gnmi/bundling")
+	}
+	if !data.GnmiBundling.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/gnmi/bundling")
+	}
+	if !data.GnmiHeartbeatAlways.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/gnmi/heartbeat/always")
+	}
+	if !data.IncludeEmptyValues.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/include/empty/values")
+	}
+	if !data.IncludeSelectLeavesOnEvents.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/include/select-leaves-on-events")
+	}
+	if !data.GnmiTargetDefinedMinimumCadence.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/gnmi-target-defined/minimum-cadence")
+	}
+	if !data.GnmiTargetDefinedCadenceFactor.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/gnmi-target-defined/cadence-factor")
+	}
+	if !data.StrictTimer.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/strict-timer")
+	}
+	if !data.TcpSendTimeout.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/tcp-send-timeout")
+	}
+	if !data.MaxSensorPaths.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/max-sensor-paths")
+	}
+	if !data.MaxContainersPerPath.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/max-containers-per-path")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

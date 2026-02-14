@@ -23,9 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
+	"sort"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -104,6 +109,19 @@ func (data MACSecPolicy) getPath() string {
 
 func (data MACSecPolicyData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-macsec-cfg:/macsec-policy/policy-names/policy-name[policy-name=%s]", data.PolicyName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data MACSecPolicy) getXPath() string {
+	path := "Cisco-IOS-XR-um-macsec-cfg:/macsec-policy/policy-names/policy-name[policy-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.PolicyName.ValueString()))
+	return path
+}
+
+func (data MACSecPolicyData) getXPath() string {
+	path := "Cisco-IOS-XR-um-macsec-cfg:/macsec-policy/policy-names/policy-name[policy-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.PolicyName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -223,390 +241,973 @@ func (data MACSecPolicy) toBody(ctx context.Context) string {
 func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "key-server-priority"); value.Exists() && !data.KeyServerPriority.IsNull() {
 		data.KeyServerPriority = types.Int64Value(value.Int())
-	} else {
+	} else if data.KeyServerPriority.IsNull() {
 		data.KeyServerPriority = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "cipher-suite"); value.Exists() && !data.CipherSuite.IsNull() {
 		data.CipherSuite = types.StringValue(value.String())
-	} else {
+	} else if data.CipherSuite.IsNull() {
 		data.CipherSuite = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "window-size"); value.Exists() && !data.WindowSize.IsNull() {
 		data.WindowSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.WindowSize.IsNull() {
 		data.WindowSize = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "conf-offset"); value.Exists() && !data.ConfOffset.IsNull() {
 		data.ConfOffset = types.StringValue(value.String())
-	} else {
+	} else if data.ConfOffset.IsNull() {
 		data.ConfOffset = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "security-policy"); value.Exists() && !data.SecurityPolicy.IsNull() {
 		data.SecurityPolicy = types.StringValue(value.String())
-	} else {
+	} else if data.SecurityPolicy.IsNull() {
 		data.SecurityPolicy = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "vlan-tags-in-clear"); value.Exists() && !data.VlanTagsInClear.IsNull() {
 		data.VlanTagsInClear = types.Int64Value(value.Int())
-	} else {
+	} else if data.VlanTagsInClear.IsNull() {
 		data.VlanTagsInClear = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "policy-exception"); value.Exists() && !data.PolicyException.IsNull() {
 		data.PolicyException = types.StringValue(value.String())
-	} else {
+	} else if data.PolicyException.IsNull() {
 		data.PolicyException = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "sak-rekey-interval.seconds"); value.Exists() && !data.SakRekeyIntervalSeconds.IsNull() {
 		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
-	} else {
+	} else if data.SakRekeyIntervalSeconds.IsNull() {
 		data.SakRekeyIntervalSeconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "include-icv-indicator"); !data.IncludeIcvIndicator.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "include-icv-indicator"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.IncludeIcvIndicator.IsNull() {
 			data.IncludeIcvIndicator = types.BoolValue(true)
-		} else {
-			data.IncludeIcvIndicator = types.BoolValue(false)
 		}
 	} else {
-		data.IncludeIcvIndicator = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.IncludeIcvIndicator.IsNull() {
+			data.IncludeIcvIndicator = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "delay-protection"); !data.DelayProtection.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "delay-protection"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DelayProtection.IsNull() {
 			data.DelayProtection = types.BoolValue(true)
-		} else {
-			data.DelayProtection = types.BoolValue(false)
 		}
 	} else {
-		data.DelayProtection = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.DelayProtection.IsNull() {
+			data.DelayProtection = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "use-eapol-pae-in-icv"); !data.UseEapolPaeInIcv.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "use-eapol-pae-in-icv"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.UseEapolPaeInIcv.IsNull() {
 			data.UseEapolPaeInIcv = types.BoolValue(true)
-		} else {
-			data.UseEapolPaeInIcv = types.BoolValue(false)
 		}
 	} else {
-		data.UseEapolPaeInIcv = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.UseEapolPaeInIcv.IsNull() {
+			data.UseEapolPaeInIcv = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "suspend-on-request.disable"); !data.SuspendOnRequestDisable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "suspend-on-request.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SuspendOnRequestDisable.IsNull() {
 			data.SuspendOnRequestDisable = types.BoolValue(true)
-		} else {
-			data.SuspendOnRequestDisable = types.BoolValue(false)
 		}
 	} else {
-		data.SuspendOnRequestDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SuspendOnRequestDisable.IsNull() {
+			data.SuspendOnRequestDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "suspend-for.disable"); !data.SuspendForDisable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "suspend-for.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SuspendForDisable.IsNull() {
 			data.SuspendForDisable = types.BoolValue(true)
-		} else {
-			data.SuspendForDisable = types.BoolValue(false)
 		}
 	} else {
-		data.SuspendForDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SuspendForDisable.IsNull() {
+			data.SuspendForDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "enable-legacy-fallback"); !data.EnableLegacyFallback.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "enable-legacy-fallback"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EnableLegacyFallback.IsNull() {
 			data.EnableLegacyFallback = types.BoolValue(true)
-		} else {
-			data.EnableLegacyFallback = types.BoolValue(false)
 		}
 	} else {
-		data.EnableLegacyFallback = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.EnableLegacyFallback.IsNull() {
+			data.EnableLegacyFallback = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "enable-legacy-sak-write"); !data.EnableLegacySakWrite.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "enable-legacy-sak-write"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EnableLegacySakWrite.IsNull() {
 			data.EnableLegacySakWrite = types.BoolValue(true)
-		} else {
-			data.EnableLegacySakWrite = types.BoolValue(false)
 		}
 	} else {
-		data.EnableLegacySakWrite = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.EnableLegacySakWrite.IsNull() {
+			data.EnableLegacySakWrite = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "impose-overhead-on-bundle"); !data.ImposeOverheadOnBundle.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "impose-overhead-on-bundle"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ImposeOverheadOnBundle.IsNull() {
 			data.ImposeOverheadOnBundle = types.BoolValue(true)
-		} else {
-			data.ImposeOverheadOnBundle = types.BoolValue(false)
 		}
 	} else {
-		data.ImposeOverheadOnBundle = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ImposeOverheadOnBundle.IsNull() {
+			data.ImposeOverheadOnBundle = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "max-an"); value.Exists() && !data.MaxAn.IsNull() {
 		data.MaxAn = types.StringValue(value.String())
-	} else {
+	} else if data.MaxAn.IsNull() {
 		data.MaxAn = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "allow.lacp-in-clear"); !data.AllowLacpInClear.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "allow.lacp-in-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AllowLacpInClear.IsNull() {
 			data.AllowLacpInClear = types.BoolValue(true)
-		} else {
-			data.AllowLacpInClear = types.BoolValue(false)
 		}
 	} else {
-		data.AllowLacpInClear = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.AllowLacpInClear.IsNull() {
+			data.AllowLacpInClear = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "allow.pause-frame-in-clear"); !data.AllowPauseFrameInClear.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "allow.pause-frame-in-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AllowPauseFrameInClear.IsNull() {
 			data.AllowPauseFrameInClear = types.BoolValue(true)
-		} else {
-			data.AllowPauseFrameInClear = types.BoolValue(false)
 		}
 	} else {
-		data.AllowPauseFrameInClear = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.AllowPauseFrameInClear.IsNull() {
+			data.AllowPauseFrameInClear = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "allow.lldp-in-clear"); !data.AllowLldpInClear.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "allow.lldp-in-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AllowLldpInClear.IsNull() {
 			data.AllowLldpInClear = types.BoolValue(true)
-		} else {
-			data.AllowLldpInClear = types.BoolValue(false)
 		}
 	} else {
-		data.AllowLldpInClear = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.AllowLldpInClear.IsNull() {
+			data.AllowLldpInClear = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "ppk"); !data.Ppk.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "ppk"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ppk.IsNull() {
 			data.Ppk = types.BoolValue(true)
-		} else {
-			data.Ppk = types.BoolValue(false)
 		}
 	} else {
-		data.Ppk = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ppk.IsNull() {
+			data.Ppk = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "ppk.sks-profile"); value.Exists() && !data.PpkSksProfile.IsNull() {
 		data.PpkSksProfile = types.StringValue(value.String())
-	} else {
+	} else if data.PpkSksProfile.IsNull() {
 		data.PpkSksProfile = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "logging.sak-rekey.disable"); !data.LoggingSakRekeyDisable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "logging.sak-rekey.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingSakRekeyDisable.IsNull() {
 			data.LoggingSakRekeyDisable = types.BoolValue(true)
-		} else {
-			data.LoggingSakRekeyDisable = types.BoolValue(false)
 		}
 	} else {
-		data.LoggingSakRekeyDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.LoggingSakRekeyDisable.IsNull() {
+			data.LoggingSakRekeyDisable = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "logging.sak-rekey.summary-interval"); value.Exists() && !data.LoggingSakRekeySummaryInterval.IsNull() {
 		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.LoggingSakRekeySummaryInterval.IsNull() {
 		data.LoggingSakRekeySummaryInterval = types.Int64Null()
 	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data MACSecPolicy) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.PolicyName.IsNull() && !data.PolicyName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/policy-name", data.PolicyName.ValueString())
+	}
+	if !data.KeyServerPriority.IsNull() && !data.KeyServerPriority.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/key-server-priority", strconv.FormatInt(data.KeyServerPriority.ValueInt64(), 10))
+	}
+	if !data.CipherSuite.IsNull() && !data.CipherSuite.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/cipher-suite", data.CipherSuite.ValueString())
+	}
+	if !data.WindowSize.IsNull() && !data.WindowSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/window-size", strconv.FormatInt(data.WindowSize.ValueInt64(), 10))
+	}
+	if !data.ConfOffset.IsNull() && !data.ConfOffset.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/conf-offset", data.ConfOffset.ValueString())
+	}
+	if !data.SecurityPolicy.IsNull() && !data.SecurityPolicy.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/security-policy", data.SecurityPolicy.ValueString())
+	}
+	if !data.VlanTagsInClear.IsNull() && !data.VlanTagsInClear.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/vlan-tags-in-clear", strconv.FormatInt(data.VlanTagsInClear.ValueInt64(), 10))
+	}
+	if !data.PolicyException.IsNull() && !data.PolicyException.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/policy-exception", data.PolicyException.ValueString())
+	}
+	if !data.SakRekeyIntervalSeconds.IsNull() && !data.SakRekeyIntervalSeconds.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/sak-rekey-interval/seconds", strconv.FormatInt(data.SakRekeyIntervalSeconds.ValueInt64(), 10))
+	}
+	if !data.IncludeIcvIndicator.IsNull() && !data.IncludeIcvIndicator.IsUnknown() {
+		if data.IncludeIcvIndicator.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/include-icv-indicator", "")
+		}
+	}
+	if !data.DelayProtection.IsNull() && !data.DelayProtection.IsUnknown() {
+		if data.DelayProtection.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/delay-protection", "")
+		}
+	}
+	if !data.UseEapolPaeInIcv.IsNull() && !data.UseEapolPaeInIcv.IsUnknown() {
+		if data.UseEapolPaeInIcv.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/use-eapol-pae-in-icv", "")
+		}
+	}
+	if !data.SuspendOnRequestDisable.IsNull() && !data.SuspendOnRequestDisable.IsUnknown() {
+		if data.SuspendOnRequestDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/suspend-on-request/disable", "")
+		}
+	}
+	if !data.SuspendForDisable.IsNull() && !data.SuspendForDisable.IsUnknown() {
+		if data.SuspendForDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/suspend-for/disable", "")
+		}
+	}
+	if !data.EnableLegacyFallback.IsNull() && !data.EnableLegacyFallback.IsUnknown() {
+		if data.EnableLegacyFallback.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/enable-legacy-fallback", "")
+		}
+	}
+	if !data.EnableLegacySakWrite.IsNull() && !data.EnableLegacySakWrite.IsUnknown() {
+		if data.EnableLegacySakWrite.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/enable-legacy-sak-write", "")
+		}
+	}
+	if !data.ImposeOverheadOnBundle.IsNull() && !data.ImposeOverheadOnBundle.IsUnknown() {
+		if data.ImposeOverheadOnBundle.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/impose-overhead-on-bundle", "")
+		}
+	}
+	if !data.MaxAn.IsNull() && !data.MaxAn.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/max-an", data.MaxAn.ValueString())
+	}
+	if !data.AllowLacpInClear.IsNull() && !data.AllowLacpInClear.IsUnknown() {
+		if data.AllowLacpInClear.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/allow/lacp-in-clear", "")
+		}
+	}
+	if !data.AllowPauseFrameInClear.IsNull() && !data.AllowPauseFrameInClear.IsUnknown() {
+		if data.AllowPauseFrameInClear.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/allow/pause-frame-in-clear", "")
+		}
+	}
+	if !data.AllowLldpInClear.IsNull() && !data.AllowLldpInClear.IsUnknown() {
+		if data.AllowLldpInClear.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/allow/lldp-in-clear", "")
+		}
+	}
+	if !data.Ppk.IsNull() && !data.Ppk.IsUnknown() {
+		if data.Ppk.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ppk", "")
+		}
+	}
+	if !data.PpkSksProfile.IsNull() && !data.PpkSksProfile.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ppk/sks-profile", data.PpkSksProfile.ValueString())
+	}
+	if !data.LoggingSakRekeyDisable.IsNull() && !data.LoggingSakRekeyDisable.IsUnknown() {
+		if data.LoggingSakRekeyDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/logging/sak-rekey/disable", "")
+		}
+	}
+	if !data.LoggingSakRekeySummaryInterval.IsNull() && !data.LoggingSakRekeySummaryInterval.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/logging/sak-rekey/summary-interval", strconv.FormatInt(data.LoggingSakRekeySummaryInterval.ValueInt64(), 10))
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *MACSecPolicy) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/policy-name"); value.Exists() {
+		data.PolicyName = types.StringValue(value.String())
+	} else if data.PolicyName.IsNull() {
+		data.PolicyName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/key-server-priority"); value.Exists() {
+		data.KeyServerPriority = types.Int64Value(value.Int())
+	} else if data.KeyServerPriority.IsNull() {
+		data.KeyServerPriority = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cipher-suite"); value.Exists() {
+		data.CipherSuite = types.StringValue(value.String())
+	} else if data.CipherSuite.IsNull() {
+		data.CipherSuite = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/window-size"); value.Exists() {
+		data.WindowSize = types.Int64Value(value.Int())
+	} else if data.WindowSize.IsNull() {
+		data.WindowSize = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/conf-offset"); value.Exists() {
+		data.ConfOffset = types.StringValue(value.String())
+	} else if data.ConfOffset.IsNull() {
+		data.ConfOffset = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/security-policy"); value.Exists() {
+		data.SecurityPolicy = types.StringValue(value.String())
+	} else if data.SecurityPolicy.IsNull() {
+		data.SecurityPolicy = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vlan-tags-in-clear"); value.Exists() {
+		data.VlanTagsInClear = types.Int64Value(value.Int())
+	} else if data.VlanTagsInClear.IsNull() {
+		data.VlanTagsInClear = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/policy-exception"); value.Exists() {
+		data.PolicyException = types.StringValue(value.String())
+	} else if data.PolicyException.IsNull() {
+		data.PolicyException = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sak-rekey-interval/seconds"); value.Exists() {
+		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
+	} else if data.SakRekeyIntervalSeconds.IsNull() {
+		data.SakRekeyIntervalSeconds = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/include-icv-indicator"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.IncludeIcvIndicator.IsNull() {
+			data.IncludeIcvIndicator = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.IncludeIcvIndicator.IsNull() {
+			data.IncludeIcvIndicator = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-protection"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DelayProtection.IsNull() {
+			data.DelayProtection = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.DelayProtection.IsNull() {
+			data.DelayProtection = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/use-eapol-pae-in-icv"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.UseEapolPaeInIcv.IsNull() {
+			data.UseEapolPaeInIcv = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.UseEapolPaeInIcv.IsNull() {
+			data.UseEapolPaeInIcv = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/suspend-on-request/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SuspendOnRequestDisable.IsNull() {
+			data.SuspendOnRequestDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SuspendOnRequestDisable.IsNull() {
+			data.SuspendOnRequestDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/suspend-for/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SuspendForDisable.IsNull() {
+			data.SuspendForDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SuspendForDisable.IsNull() {
+			data.SuspendForDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable-legacy-fallback"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EnableLegacyFallback.IsNull() {
+			data.EnableLegacyFallback = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EnableLegacyFallback.IsNull() {
+			data.EnableLegacyFallback = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable-legacy-sak-write"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EnableLegacySakWrite.IsNull() {
+			data.EnableLegacySakWrite = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EnableLegacySakWrite.IsNull() {
+			data.EnableLegacySakWrite = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/impose-overhead-on-bundle"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ImposeOverheadOnBundle.IsNull() {
+			data.ImposeOverheadOnBundle = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ImposeOverheadOnBundle.IsNull() {
+			data.ImposeOverheadOnBundle = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-an"); value.Exists() {
+		data.MaxAn = types.StringValue(value.String())
+	} else if data.MaxAn.IsNull() {
+		data.MaxAn = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/allow/lacp-in-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AllowLacpInClear.IsNull() {
+			data.AllowLacpInClear = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.AllowLacpInClear.IsNull() {
+			data.AllowLacpInClear = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/allow/pause-frame-in-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AllowPauseFrameInClear.IsNull() {
+			data.AllowPauseFrameInClear = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.AllowPauseFrameInClear.IsNull() {
+			data.AllowPauseFrameInClear = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/allow/lldp-in-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AllowLldpInClear.IsNull() {
+			data.AllowLldpInClear = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.AllowLldpInClear.IsNull() {
+			data.AllowLldpInClear = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ppk"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ppk.IsNull() {
+			data.Ppk = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ppk.IsNull() {
+			data.Ppk = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ppk/sks-profile"); value.Exists() {
+		data.PpkSksProfile = types.StringValue(value.String())
+	} else if data.PpkSksProfile.IsNull() {
+		data.PpkSksProfile = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/sak-rekey/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingSakRekeyDisable.IsNull() {
+			data.LoggingSakRekeyDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LoggingSakRekeyDisable.IsNull() {
+			data.LoggingSakRekeyDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/sak-rekey/summary-interval"); value.Exists() {
+		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
+	} else if data.LoggingSakRekeySummaryInterval.IsNull() {
+		data.LoggingSakRekeySummaryInterval = types.Int64Null()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *MACSecPolicy) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "key-server-priority"); value.Exists() {
+func (data *MACSecPolicy) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "key-server-priority"); value.Exists() {
 		data.KeyServerPriority = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "cipher-suite"); value.Exists() {
+	if value := res.Get(prefix + "cipher-suite"); value.Exists() {
 		data.CipherSuite = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "window-size"); value.Exists() {
+	if value := res.Get(prefix + "window-size"); value.Exists() {
 		data.WindowSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "conf-offset"); value.Exists() {
+	if value := res.Get(prefix + "conf-offset"); value.Exists() {
 		data.ConfOffset = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "security-policy"); value.Exists() {
+	if value := res.Get(prefix + "security-policy"); value.Exists() {
 		data.SecurityPolicy = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "vlan-tags-in-clear"); value.Exists() {
+	if value := res.Get(prefix + "vlan-tags-in-clear"); value.Exists() {
 		data.VlanTagsInClear = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "policy-exception"); value.Exists() {
+	if value := res.Get(prefix + "policy-exception"); value.Exists() {
 		data.PolicyException = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "sak-rekey-interval.seconds"); value.Exists() {
+	if value := res.Get(prefix + "sak-rekey-interval.seconds"); value.Exists() {
 		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "include-icv-indicator"); value.Exists() {
+	if value := res.Get(prefix + "include-icv-indicator"); value.Exists() {
 		data.IncludeIcvIndicator = types.BoolValue(true)
-	} else {
+	} else if !data.IncludeIcvIndicator.IsNull() {
+		// Only set to false if it was previously set in state
 		data.IncludeIcvIndicator = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "delay-protection"); value.Exists() {
+	if value := res.Get(prefix + "delay-protection"); value.Exists() {
 		data.DelayProtection = types.BoolValue(true)
-	} else {
+	} else if !data.DelayProtection.IsNull() {
+		// Only set to false if it was previously set in state
 		data.DelayProtection = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "use-eapol-pae-in-icv"); value.Exists() {
+	if value := res.Get(prefix + "use-eapol-pae-in-icv"); value.Exists() {
 		data.UseEapolPaeInIcv = types.BoolValue(true)
-	} else {
+	} else if !data.UseEapolPaeInIcv.IsNull() {
+		// Only set to false if it was previously set in state
 		data.UseEapolPaeInIcv = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "suspend-on-request.disable"); value.Exists() {
+	if value := res.Get(prefix + "suspend-on-request.disable"); value.Exists() {
 		data.SuspendOnRequestDisable = types.BoolValue(true)
-	} else {
+	} else if !data.SuspendOnRequestDisable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.SuspendOnRequestDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "suspend-for.disable"); value.Exists() {
+	if value := res.Get(prefix + "suspend-for.disable"); value.Exists() {
 		data.SuspendForDisable = types.BoolValue(true)
-	} else {
+	} else if !data.SuspendForDisable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.SuspendForDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "enable-legacy-fallback"); value.Exists() {
+	if value := res.Get(prefix + "enable-legacy-fallback"); value.Exists() {
 		data.EnableLegacyFallback = types.BoolValue(true)
-	} else {
+	} else if !data.EnableLegacyFallback.IsNull() {
+		// Only set to false if it was previously set in state
 		data.EnableLegacyFallback = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "enable-legacy-sak-write"); value.Exists() {
+	if value := res.Get(prefix + "enable-legacy-sak-write"); value.Exists() {
 		data.EnableLegacySakWrite = types.BoolValue(true)
-	} else {
+	} else if !data.EnableLegacySakWrite.IsNull() {
+		// Only set to false if it was previously set in state
 		data.EnableLegacySakWrite = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "impose-overhead-on-bundle"); value.Exists() {
+	if value := res.Get(prefix + "impose-overhead-on-bundle"); value.Exists() {
 		data.ImposeOverheadOnBundle = types.BoolValue(true)
-	} else {
+	} else if !data.ImposeOverheadOnBundle.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ImposeOverheadOnBundle = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "max-an"); value.Exists() {
+	if value := res.Get(prefix + "max-an"); value.Exists() {
 		data.MaxAn = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "allow.lacp-in-clear"); value.Exists() {
+	if value := res.Get(prefix + "allow.lacp-in-clear"); value.Exists() {
 		data.AllowLacpInClear = types.BoolValue(true)
-	} else {
+	} else if !data.AllowLacpInClear.IsNull() {
+		// Only set to false if it was previously set in state
 		data.AllowLacpInClear = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "allow.pause-frame-in-clear"); value.Exists() {
+	if value := res.Get(prefix + "allow.pause-frame-in-clear"); value.Exists() {
 		data.AllowPauseFrameInClear = types.BoolValue(true)
-	} else {
+	} else if !data.AllowPauseFrameInClear.IsNull() {
+		// Only set to false if it was previously set in state
 		data.AllowPauseFrameInClear = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "allow.lldp-in-clear"); value.Exists() {
+	if value := res.Get(prefix + "allow.lldp-in-clear"); value.Exists() {
 		data.AllowLldpInClear = types.BoolValue(true)
-	} else {
+	} else if !data.AllowLldpInClear.IsNull() {
+		// Only set to false if it was previously set in state
 		data.AllowLldpInClear = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ppk"); value.Exists() {
+	if value := res.Get(prefix + "ppk"); value.Exists() {
 		data.Ppk = types.BoolValue(true)
-	} else {
+	} else if !data.Ppk.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Ppk = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ppk.sks-profile"); value.Exists() {
+	if value := res.Get(prefix + "ppk.sks-profile"); value.Exists() {
 		data.PpkSksProfile = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "logging.sak-rekey.disable"); value.Exists() {
+	if value := res.Get(prefix + "logging.sak-rekey.disable"); value.Exists() {
 		data.LoggingSakRekeyDisable = types.BoolValue(true)
-	} else {
+	} else if !data.LoggingSakRekeyDisable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.LoggingSakRekeyDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "logging.sak-rekey.summary-interval"); value.Exists() {
+	if value := res.Get(prefix + "logging.sak-rekey.summary-interval"); value.Exists() {
 		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *MACSecPolicyData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "key-server-priority"); value.Exists() {
+func (data *MACSecPolicyData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "key-server-priority"); value.Exists() {
 		data.KeyServerPriority = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "cipher-suite"); value.Exists() {
+	if value := res.Get(prefix + "cipher-suite"); value.Exists() {
 		data.CipherSuite = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "window-size"); value.Exists() {
+	if value := res.Get(prefix + "window-size"); value.Exists() {
 		data.WindowSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "conf-offset"); value.Exists() {
+	if value := res.Get(prefix + "conf-offset"); value.Exists() {
 		data.ConfOffset = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "security-policy"); value.Exists() {
+	if value := res.Get(prefix + "security-policy"); value.Exists() {
 		data.SecurityPolicy = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "vlan-tags-in-clear"); value.Exists() {
+	if value := res.Get(prefix + "vlan-tags-in-clear"); value.Exists() {
 		data.VlanTagsInClear = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "policy-exception"); value.Exists() {
+	if value := res.Get(prefix + "policy-exception"); value.Exists() {
 		data.PolicyException = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "sak-rekey-interval.seconds"); value.Exists() {
+	if value := res.Get(prefix + "sak-rekey-interval.seconds"); value.Exists() {
 		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "include-icv-indicator"); value.Exists() {
+	if value := res.Get(prefix + "include-icv-indicator"); value.Exists() {
 		data.IncludeIcvIndicator = types.BoolValue(true)
 	} else {
 		data.IncludeIcvIndicator = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "delay-protection"); value.Exists() {
+	if value := res.Get(prefix + "delay-protection"); value.Exists() {
 		data.DelayProtection = types.BoolValue(true)
 	} else {
 		data.DelayProtection = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "use-eapol-pae-in-icv"); value.Exists() {
+	if value := res.Get(prefix + "use-eapol-pae-in-icv"); value.Exists() {
 		data.UseEapolPaeInIcv = types.BoolValue(true)
 	} else {
 		data.UseEapolPaeInIcv = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "suspend-on-request.disable"); value.Exists() {
+	if value := res.Get(prefix + "suspend-on-request.disable"); value.Exists() {
 		data.SuspendOnRequestDisable = types.BoolValue(true)
 	} else {
 		data.SuspendOnRequestDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "suspend-for.disable"); value.Exists() {
+	if value := res.Get(prefix + "suspend-for.disable"); value.Exists() {
 		data.SuspendForDisable = types.BoolValue(true)
 	} else {
 		data.SuspendForDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "enable-legacy-fallback"); value.Exists() {
+	if value := res.Get(prefix + "enable-legacy-fallback"); value.Exists() {
 		data.EnableLegacyFallback = types.BoolValue(true)
 	} else {
 		data.EnableLegacyFallback = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "enable-legacy-sak-write"); value.Exists() {
+	if value := res.Get(prefix + "enable-legacy-sak-write"); value.Exists() {
 		data.EnableLegacySakWrite = types.BoolValue(true)
 	} else {
 		data.EnableLegacySakWrite = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "impose-overhead-on-bundle"); value.Exists() {
+	if value := res.Get(prefix + "impose-overhead-on-bundle"); value.Exists() {
 		data.ImposeOverheadOnBundle = types.BoolValue(true)
 	} else {
 		data.ImposeOverheadOnBundle = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "max-an"); value.Exists() {
+	if value := res.Get(prefix + "max-an"); value.Exists() {
 		data.MaxAn = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "allow.lacp-in-clear"); value.Exists() {
+	if value := res.Get(prefix + "allow.lacp-in-clear"); value.Exists() {
 		data.AllowLacpInClear = types.BoolValue(true)
 	} else {
 		data.AllowLacpInClear = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "allow.pause-frame-in-clear"); value.Exists() {
+	if value := res.Get(prefix + "allow.pause-frame-in-clear"); value.Exists() {
 		data.AllowPauseFrameInClear = types.BoolValue(true)
 	} else {
 		data.AllowPauseFrameInClear = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "allow.lldp-in-clear"); value.Exists() {
+	if value := res.Get(prefix + "allow.lldp-in-clear"); value.Exists() {
 		data.AllowLldpInClear = types.BoolValue(true)
 	} else {
 		data.AllowLldpInClear = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ppk"); value.Exists() {
+	if value := res.Get(prefix + "ppk"); value.Exists() {
 		data.Ppk = types.BoolValue(true)
 	} else {
 		data.Ppk = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ppk.sks-profile"); value.Exists() {
+	if value := res.Get(prefix + "ppk.sks-profile"); value.Exists() {
 		data.PpkSksProfile = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "logging.sak-rekey.disable"); value.Exists() {
+	if value := res.Get(prefix + "logging.sak-rekey.disable"); value.Exists() {
 		data.LoggingSakRekeyDisable = types.BoolValue(true)
 	} else {
 		data.LoggingSakRekeyDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "logging.sak-rekey.summary-interval"); value.Exists() {
+	if value := res.Get(prefix + "logging.sak-rekey.summary-interval"); value.Exists() {
 		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
 	}
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *MACSecPolicy) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/key-server-priority"); value.Exists() {
+		data.KeyServerPriority = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cipher-suite"); value.Exists() {
+		data.CipherSuite = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/window-size"); value.Exists() {
+		data.WindowSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/conf-offset"); value.Exists() {
+		data.ConfOffset = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/security-policy"); value.Exists() {
+		data.SecurityPolicy = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vlan-tags-in-clear"); value.Exists() {
+		data.VlanTagsInClear = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/policy-exception"); value.Exists() {
+		data.PolicyException = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sak-rekey-interval/seconds"); value.Exists() {
+		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/include-icv-indicator"); value.Exists() {
+		data.IncludeIcvIndicator = types.BoolValue(true)
+	} else {
+		data.IncludeIcvIndicator = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-protection"); value.Exists() {
+		data.DelayProtection = types.BoolValue(true)
+	} else {
+		data.DelayProtection = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/use-eapol-pae-in-icv"); value.Exists() {
+		data.UseEapolPaeInIcv = types.BoolValue(true)
+	} else {
+		data.UseEapolPaeInIcv = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/suspend-on-request/disable"); value.Exists() {
+		data.SuspendOnRequestDisable = types.BoolValue(true)
+	} else {
+		data.SuspendOnRequestDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/suspend-for/disable"); value.Exists() {
+		data.SuspendForDisable = types.BoolValue(true)
+	} else {
+		data.SuspendForDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable-legacy-fallback"); value.Exists() {
+		data.EnableLegacyFallback = types.BoolValue(true)
+	} else {
+		data.EnableLegacyFallback = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable-legacy-sak-write"); value.Exists() {
+		data.EnableLegacySakWrite = types.BoolValue(true)
+	} else {
+		data.EnableLegacySakWrite = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/impose-overhead-on-bundle"); value.Exists() {
+		data.ImposeOverheadOnBundle = types.BoolValue(true)
+	} else {
+		data.ImposeOverheadOnBundle = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-an"); value.Exists() {
+		data.MaxAn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/allow/lacp-in-clear"); value.Exists() {
+		data.AllowLacpInClear = types.BoolValue(true)
+	} else {
+		data.AllowLacpInClear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/allow/pause-frame-in-clear"); value.Exists() {
+		data.AllowPauseFrameInClear = types.BoolValue(true)
+	} else {
+		data.AllowPauseFrameInClear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/allow/lldp-in-clear"); value.Exists() {
+		data.AllowLldpInClear = types.BoolValue(true)
+	} else {
+		data.AllowLldpInClear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ppk"); value.Exists() {
+		data.Ppk = types.BoolValue(true)
+	} else {
+		data.Ppk = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ppk/sks-profile"); value.Exists() {
+		data.PpkSksProfile = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/sak-rekey/disable"); value.Exists() {
+		data.LoggingSakRekeyDisable = types.BoolValue(true)
+	} else {
+		data.LoggingSakRekeyDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/sak-rekey/summary-interval"); value.Exists() {
+		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *MACSecPolicyData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/key-server-priority"); value.Exists() {
+		data.KeyServerPriority = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cipher-suite"); value.Exists() {
+		data.CipherSuite = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/window-size"); value.Exists() {
+		data.WindowSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/conf-offset"); value.Exists() {
+		data.ConfOffset = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/security-policy"); value.Exists() {
+		data.SecurityPolicy = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vlan-tags-in-clear"); value.Exists() {
+		data.VlanTagsInClear = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/policy-exception"); value.Exists() {
+		data.PolicyException = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sak-rekey-interval/seconds"); value.Exists() {
+		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/include-icv-indicator"); value.Exists() {
+		data.IncludeIcvIndicator = types.BoolValue(true)
+	} else {
+		data.IncludeIcvIndicator = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-protection"); value.Exists() {
+		data.DelayProtection = types.BoolValue(true)
+	} else {
+		data.DelayProtection = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/use-eapol-pae-in-icv"); value.Exists() {
+		data.UseEapolPaeInIcv = types.BoolValue(true)
+	} else {
+		data.UseEapolPaeInIcv = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/suspend-on-request/disable"); value.Exists() {
+		data.SuspendOnRequestDisable = types.BoolValue(true)
+	} else {
+		data.SuspendOnRequestDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/suspend-for/disable"); value.Exists() {
+		data.SuspendForDisable = types.BoolValue(true)
+	} else {
+		data.SuspendForDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable-legacy-fallback"); value.Exists() {
+		data.EnableLegacyFallback = types.BoolValue(true)
+	} else {
+		data.EnableLegacyFallback = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable-legacy-sak-write"); value.Exists() {
+		data.EnableLegacySakWrite = types.BoolValue(true)
+	} else {
+		data.EnableLegacySakWrite = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/impose-overhead-on-bundle"); value.Exists() {
+		data.ImposeOverheadOnBundle = types.BoolValue(true)
+	} else {
+		data.ImposeOverheadOnBundle = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-an"); value.Exists() {
+		data.MaxAn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/allow/lacp-in-clear"); value.Exists() {
+		data.AllowLacpInClear = types.BoolValue(true)
+	} else {
+		data.AllowLacpInClear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/allow/pause-frame-in-clear"); value.Exists() {
+		data.AllowPauseFrameInClear = types.BoolValue(true)
+	} else {
+		data.AllowPauseFrameInClear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/allow/lldp-in-clear"); value.Exists() {
+		data.AllowLldpInClear = types.BoolValue(true)
+	} else {
+		data.AllowLldpInClear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ppk"); value.Exists() {
+		data.Ppk = types.BoolValue(true)
+	} else {
+		data.Ppk = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ppk/sks-profile"); value.Exists() {
+		data.PpkSksProfile = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/sak-rekey/disable"); value.Exists() {
+		data.LoggingSakRekeyDisable = types.BoolValue(true)
+	} else {
+		data.LoggingSakRekeyDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/sak-rekey/summary-interval"); value.Exists() {
+		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *MACSecPolicy) getDeletedItems(ctx context.Context, state MACSecPolicy) []string {
@@ -687,55 +1288,92 @@ func (data *MACSecPolicy) getDeletedItems(ctx context.Context, state MACSecPolic
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *MACSecPolicy) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *MACSecPolicy) getEmptyLeafsDelete(ctx context.Context, state *MACSecPolicy) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.LoggingSakRekeyDisable.IsNull() && !data.LoggingSakRekeyDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/sak-rekey", data.getPath()))
+		if state != nil && !state.LoggingSakRekeyDisable.IsNull() && state.LoggingSakRekeyDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/sak-rekey", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Ppk.IsNull() && !data.Ppk.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ppk", data.getPath()))
+		if state != nil && !state.Ppk.IsNull() && state.Ppk.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ppk", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.AllowLldpInClear.IsNull() && !data.AllowLldpInClear.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/allow/lldp-in-clear", data.getPath()))
+		if state != nil && !state.AllowLldpInClear.IsNull() && state.AllowLldpInClear.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/allow/lldp-in-clear", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.AllowPauseFrameInClear.IsNull() && !data.AllowPauseFrameInClear.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/allow/pause-frame-in-clear", data.getPath()))
+		if state != nil && !state.AllowPauseFrameInClear.IsNull() && state.AllowPauseFrameInClear.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/allow/pause-frame-in-clear", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.AllowLacpInClear.IsNull() && !data.AllowLacpInClear.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/allow/lacp-in-clear", data.getPath()))
+		if state != nil && !state.AllowLacpInClear.IsNull() && state.AllowLacpInClear.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/allow/lacp-in-clear", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ImposeOverheadOnBundle.IsNull() && !data.ImposeOverheadOnBundle.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/impose-overhead-on-bundle", data.getPath()))
+		if state != nil && !state.ImposeOverheadOnBundle.IsNull() && state.ImposeOverheadOnBundle.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/impose-overhead-on-bundle", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.EnableLegacySakWrite.IsNull() && !data.EnableLegacySakWrite.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable-legacy-sak-write", data.getPath()))
+		if state != nil && !state.EnableLegacySakWrite.IsNull() && state.EnableLegacySakWrite.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable-legacy-sak-write", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.EnableLegacyFallback.IsNull() && !data.EnableLegacyFallback.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable-legacy-fallback", data.getPath()))
+		if state != nil && !state.EnableLegacyFallback.IsNull() && state.EnableLegacyFallback.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable-legacy-fallback", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.SuspendForDisable.IsNull() && !data.SuspendForDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suspend-for", data.getPath()))
+		if state != nil && !state.SuspendForDisable.IsNull() && state.SuspendForDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suspend-for", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.SuspendOnRequestDisable.IsNull() && !data.SuspendOnRequestDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suspend-on-request", data.getPath()))
+		if state != nil && !state.SuspendOnRequestDisable.IsNull() && state.SuspendOnRequestDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suspend-on-request", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.UseEapolPaeInIcv.IsNull() && !data.UseEapolPaeInIcv.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/use-eapol-pae-in-icv", data.getPath()))
+		if state != nil && !state.UseEapolPaeInIcv.IsNull() && state.UseEapolPaeInIcv.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/use-eapol-pae-in-icv", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.DelayProtection.IsNull() && !data.DelayProtection.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/delay-protection", data.getPath()))
+		if state != nil && !state.DelayProtection.IsNull() && state.DelayProtection.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/delay-protection", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.IncludeIcvIndicator.IsNull() && !data.IncludeIcvIndicator.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/include-icv-indicator", data.getPath()))
+		if state != nil && !state.IncludeIcvIndicator.IsNull() && state.IncludeIcvIndicator.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/include-icv-indicator", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *MACSecPolicy) getDeletePaths(ctx context.Context) []string {
@@ -812,7 +1450,320 @@ func (data *MACSecPolicy) getDeletePaths(ctx context.Context) []string {
 	if !data.KeyServerPriority.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/key-server-priority", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *MACSecPolicy) addDeletedItemsXML(ctx context.Context, state MACSecPolicy, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.LoggingSakRekeySummaryInterval.IsNull() && data.LoggingSakRekeySummaryInterval.IsNull() {
+		deletePath := state.getXPath() + "/logging/sak-rekey/summary-interval"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LoggingSakRekeyDisable.IsNull() && state.LoggingSakRekeyDisable.ValueBool() && data.LoggingSakRekeyDisable.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/logging/sak-rekey"
+		predicates := make(map[string]string)
+		predicates["disable"] = fmt.Sprintf("%v", state.LoggingSakRekeyDisable.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.PpkSksProfile.IsNull() && data.PpkSksProfile.IsNull() {
+		deletePath := state.getXPath() + "/ppk/sks-profile"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Ppk.IsNull() && state.Ppk.ValueBool() && data.Ppk.IsNull() {
+		deletePath := state.getXPath() + "/ppk"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AllowLldpInClear.IsNull() && state.AllowLldpInClear.ValueBool() && data.AllowLldpInClear.IsNull() {
+		deletePath := state.getXPath() + "/allow/lldp-in-clear"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AllowPauseFrameInClear.IsNull() && state.AllowPauseFrameInClear.ValueBool() && data.AllowPauseFrameInClear.IsNull() {
+		deletePath := state.getXPath() + "/allow/pause-frame-in-clear"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AllowLacpInClear.IsNull() && state.AllowLacpInClear.ValueBool() && data.AllowLacpInClear.IsNull() {
+		deletePath := state.getXPath() + "/allow/lacp-in-clear"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MaxAn.IsNull() && data.MaxAn.IsNull() {
+		deletePath := state.getXPath() + "/max-an"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ImposeOverheadOnBundle.IsNull() && state.ImposeOverheadOnBundle.ValueBool() && data.ImposeOverheadOnBundle.IsNull() {
+		deletePath := state.getXPath() + "/impose-overhead-on-bundle"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EnableLegacySakWrite.IsNull() && state.EnableLegacySakWrite.ValueBool() && data.EnableLegacySakWrite.IsNull() {
+		deletePath := state.getXPath() + "/enable-legacy-sak-write"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EnableLegacyFallback.IsNull() && state.EnableLegacyFallback.ValueBool() && data.EnableLegacyFallback.IsNull() {
+		deletePath := state.getXPath() + "/enable-legacy-fallback"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SuspendForDisable.IsNull() && state.SuspendForDisable.ValueBool() && data.SuspendForDisable.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/suspend-for"
+		predicates := make(map[string]string)
+		predicates["disable"] = fmt.Sprintf("%v", state.SuspendForDisable.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SuspendOnRequestDisable.IsNull() && state.SuspendOnRequestDisable.ValueBool() && data.SuspendOnRequestDisable.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/suspend-on-request"
+		predicates := make(map[string]string)
+		predicates["disable"] = fmt.Sprintf("%v", state.SuspendOnRequestDisable.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.UseEapolPaeInIcv.IsNull() && state.UseEapolPaeInIcv.ValueBool() && data.UseEapolPaeInIcv.IsNull() {
+		deletePath := state.getXPath() + "/use-eapol-pae-in-icv"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DelayProtection.IsNull() && state.DelayProtection.ValueBool() && data.DelayProtection.IsNull() {
+		deletePath := state.getXPath() + "/delay-protection"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.IncludeIcvIndicator.IsNull() && state.IncludeIcvIndicator.ValueBool() && data.IncludeIcvIndicator.IsNull() {
+		deletePath := state.getXPath() + "/include-icv-indicator"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SakRekeyIntervalSeconds.IsNull() && data.SakRekeyIntervalSeconds.IsNull() {
+		deletePath := state.getXPath() + "/sak-rekey-interval/seconds"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.PolicyException.IsNull() && data.PolicyException.IsNull() {
+		deletePath := state.getXPath() + "/policy-exception"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.VlanTagsInClear.IsNull() && data.VlanTagsInClear.IsNull() {
+		deletePath := state.getXPath() + "/vlan-tags-in-clear"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SecurityPolicy.IsNull() && data.SecurityPolicy.IsNull() {
+		deletePath := state.getXPath() + "/security-policy"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ConfOffset.IsNull() && data.ConfOffset.IsNull() {
+		deletePath := state.getXPath() + "/conf-offset"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.WindowSize.IsNull() && data.WindowSize.IsNull() {
+		deletePath := state.getXPath() + "/window-size"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.CipherSuite.IsNull() && data.CipherSuite.IsNull() {
+		deletePath := state.getXPath() + "/cipher-suite"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.KeyServerPriority.IsNull() && data.KeyServerPriority.IsNull() {
+		deletePath := state.getXPath() + "/key-server-priority"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *MACSecPolicy) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.LoggingSakRekeySummaryInterval.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/logging/sak-rekey/summary-interval")
+	}
+	if !data.LoggingSakRekeyDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/logging/sak-rekey")
+	}
+	if !data.PpkSksProfile.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ppk/sks-profile")
+	}
+	if !data.Ppk.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ppk")
+	}
+	if !data.AllowLldpInClear.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/allow/lldp-in-clear")
+	}
+	if !data.AllowPauseFrameInClear.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/allow/pause-frame-in-clear")
+	}
+	if !data.AllowLacpInClear.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/allow/lacp-in-clear")
+	}
+	if !data.MaxAn.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/max-an")
+	}
+	if !data.ImposeOverheadOnBundle.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/impose-overhead-on-bundle")
+	}
+	if !data.EnableLegacySakWrite.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/enable-legacy-sak-write")
+	}
+	if !data.EnableLegacyFallback.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/enable-legacy-fallback")
+	}
+	if !data.SuspendForDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/suspend-for")
+	}
+	if !data.SuspendOnRequestDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/suspend-on-request")
+	}
+	if !data.UseEapolPaeInIcv.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/use-eapol-pae-in-icv")
+	}
+	if !data.DelayProtection.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/delay-protection")
+	}
+	if !data.IncludeIcvIndicator.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/include-icv-indicator")
+	}
+	if !data.SakRekeyIntervalSeconds.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/sak-rekey-interval/seconds")
+	}
+	if !data.PolicyException.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/policy-exception")
+	}
+	if !data.VlanTagsInClear.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/vlan-tags-in-clear")
+	}
+	if !data.SecurityPolicy.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/security-policy")
+	}
+	if !data.ConfOffset.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/conf-offset")
+	}
+	if !data.WindowSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/window-size")
+	}
+	if !data.CipherSuite.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/cipher-suite")
+	}
+	if !data.KeyServerPriority.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/key-server-priority")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

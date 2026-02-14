@@ -26,7 +26,11 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -201,6 +205,17 @@ func (data Logging) getPath() string {
 
 func (data LoggingData) getPath() string {
 	return "Cisco-IOS-XR-um-logging-cfg:/logging"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data Logging) getXPath() string {
+	path := "Cisco-IOS-XR-um-logging-cfg:/logging"
+	return path
+}
+
+func (data LoggingData) getXPath() string {
+	path := "Cisco-IOS-XR-um-logging-cfg:/logging"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -426,7 +441,6 @@ func (data Logging) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "source-interfaces.source-interface"+"."+strconv.Itoa(index)+"."+"source-interface-name", item.Name.ValueString())
 			}
 			if len(item.Vrfs) > 0 {
-				body, _ = sjson.Set(body, "source-interfaces.source-interface"+"."+strconv.Itoa(index)+"."+"vrfs.vrf", []interface{}{})
 				for cindex, citem := range item.Vrfs {
 					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
 						body, _ = sjson.Set(body, "source-interfaces.source-interface"+"."+strconv.Itoa(index)+"."+"vrfs.vrf"+"."+strconv.Itoa(cindex)+"."+"vrf-name", citem.Name.ValueString())
@@ -452,7 +466,6 @@ func (data Logging) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Alarms) > 0 {
-				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+"alarms.alarm", []interface{}{})
 				for cindex, citem := range item.Alarms {
 					if !citem.MessageCategory.IsNull() && !citem.MessageCategory.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+"alarms.alarm"+"."+strconv.Itoa(cindex)+"."+"message-category", citem.MessageCategory.ValueString())
@@ -466,7 +479,6 @@ func (data Logging) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.ApplySourceLocations) > 0 {
-				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+"apply.source.locations.location", []interface{}{})
 				for cindex, citem := range item.ApplySourceLocations {
 					if !citem.LocationName.IsNull() && !citem.LocationName.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+"apply.source.locations.location"+"."+strconv.Itoa(cindex)+"."+"location-name", citem.LocationName.ValueString())
@@ -493,211 +505,225 @@ func (data Logging) toBody(ctx context.Context) string {
 func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "console"); value.Exists() && !data.Console.IsNull() {
 		data.Console = types.StringValue(value.String())
-	} else {
+	} else if data.Console.IsNull() {
 		data.Console = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "trap"); value.Exists() && !data.Trap.IsNull() {
 		data.Trap = types.StringValue(value.String())
-	} else {
+	} else if data.Trap.IsNull() {
 		data.Trap = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "monitor"); value.Exists() && !data.Monitor.IsNull() {
 		data.Monitor = types.StringValue(value.String())
-	} else {
+	} else if data.Monitor.IsNull() {
 		data.Monitor = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "console-logging.console-log-facility.console-facility-level"); value.Exists() && !data.ConsoleFacility.IsNull() {
 		data.ConsoleFacility = types.StringValue(value.String())
-	} else {
+	} else if data.ConsoleFacility.IsNull() {
 		data.ConsoleFacility = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "monitor-discriminator.match1"); value.Exists() && !data.MonitorDiscriminatorMatch1.IsNull() {
 		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
-	} else {
+	} else if data.MonitorDiscriminatorMatch1.IsNull() {
 		data.MonitorDiscriminatorMatch1 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "monitor-discriminator.match2"); value.Exists() && !data.MonitorDiscriminatorMatch2.IsNull() {
 		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
-	} else {
+	} else if data.MonitorDiscriminatorMatch2.IsNull() {
 		data.MonitorDiscriminatorMatch2 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "monitor-discriminator.match3"); value.Exists() && !data.MonitorDiscriminatorMatch3.IsNull() {
 		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
-	} else {
+	} else if data.MonitorDiscriminatorMatch3.IsNull() {
 		data.MonitorDiscriminatorMatch3 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch1"); value.Exists() && !data.MonitorDiscriminatorNomatch1.IsNull() {
 		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
-	} else {
+	} else if data.MonitorDiscriminatorNomatch1.IsNull() {
 		data.MonitorDiscriminatorNomatch1 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch2"); value.Exists() && !data.MonitorDiscriminatorNomatch2.IsNull() {
 		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
-	} else {
+	} else if data.MonitorDiscriminatorNomatch2.IsNull() {
 		data.MonitorDiscriminatorNomatch2 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch3"); value.Exists() && !data.MonitorDiscriminatorNomatch3.IsNull() {
 		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
-	} else {
+	} else if data.MonitorDiscriminatorNomatch3.IsNull() {
 		data.MonitorDiscriminatorNomatch3 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "archive.device.disk0"); !data.ArchiveDisk0.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "archive.device.disk0"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ArchiveDisk0.IsNull() {
 			data.ArchiveDisk0 = types.BoolValue(true)
-		} else {
-			data.ArchiveDisk0 = types.BoolValue(false)
 		}
 	} else {
-		data.ArchiveDisk0 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ArchiveDisk0.IsNull() {
+			data.ArchiveDisk0 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "archive.device.disk1"); !data.ArchiveDisk1.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "archive.device.disk1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ArchiveDisk1.IsNull() {
 			data.ArchiveDisk1 = types.BoolValue(true)
-		} else {
-			data.ArchiveDisk1 = types.BoolValue(false)
 		}
 	} else {
-		data.ArchiveDisk1 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ArchiveDisk1.IsNull() {
+			data.ArchiveDisk1 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "archive.device.harddisk"); !data.ArchiveHarddisk.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "archive.device.harddisk"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ArchiveHarddisk.IsNull() {
 			data.ArchiveHarddisk = types.BoolValue(true)
-		} else {
-			data.ArchiveHarddisk = types.BoolValue(false)
 		}
 	} else {
-		data.ArchiveHarddisk = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ArchiveHarddisk.IsNull() {
+			data.ArchiveHarddisk = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "archive.frequency.daily"); !data.ArchiveFrequencyDaily.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "archive.frequency.daily"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ArchiveFrequencyDaily.IsNull() {
 			data.ArchiveFrequencyDaily = types.BoolValue(true)
-		} else {
-			data.ArchiveFrequencyDaily = types.BoolValue(false)
 		}
 	} else {
-		data.ArchiveFrequencyDaily = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ArchiveFrequencyDaily.IsNull() {
+			data.ArchiveFrequencyDaily = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "archive.frequency.weekly"); !data.ArchiveFrequencyWeekly.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "archive.frequency.weekly"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ArchiveFrequencyWeekly.IsNull() {
 			data.ArchiveFrequencyWeekly = types.BoolValue(true)
-		} else {
-			data.ArchiveFrequencyWeekly = types.BoolValue(false)
 		}
 	} else {
-		data.ArchiveFrequencyWeekly = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ArchiveFrequencyWeekly.IsNull() {
+			data.ArchiveFrequencyWeekly = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "archive.file-size"); value.Exists() && !data.ArchiveFilesize.IsNull() {
 		data.ArchiveFilesize = types.Int64Value(value.Int())
-	} else {
+	} else if data.ArchiveFilesize.IsNull() {
 		data.ArchiveFilesize = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "archive.archive-size"); value.Exists() && !data.ArchiveSize.IsNull() {
 		data.ArchiveSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.ArchiveSize.IsNull() {
 		data.ArchiveSize = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "archive.archive-length"); value.Exists() && !data.ArchiveLength.IsNull() {
 		data.ArchiveLength = types.Int64Value(value.Int())
-	} else {
+	} else if data.ArchiveLength.IsNull() {
 		data.ArchiveLength = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "archive.severity"); value.Exists() && !data.ArchiveSeverity.IsNull() {
 		data.ArchiveSeverity = types.StringValue(value.String())
-	} else {
+	} else if data.ArchiveSeverity.IsNull() {
 		data.ArchiveSeverity = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "archive.threshold"); value.Exists() && !data.ArchiveThreshold.IsNull() {
 		data.ArchiveThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.ArchiveThreshold.IsNull() {
 		data.ArchiveThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() && !data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringValue(value.String())
-	} else {
+	} else if data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ipv4.precedence"); value.Exists() && !data.Ipv4Precedence.IsNull() {
 		data.Ipv4Precedence = types.StringValue(value.String())
-	} else {
+	} else if data.Ipv4Precedence.IsNull() {
 		data.Ipv4Precedence = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() && !data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringValue(value.String())
-	} else {
+	} else if data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ipv6.precedence"); value.Exists() && !data.Ipv6Precedence.IsNull() {
 		data.Ipv6Precedence = types.StringValue(value.String())
-	} else {
+	} else if data.Ipv6Precedence.IsNull() {
 		data.Ipv6Precedence = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "facility.level"); value.Exists() && !data.FacilityLevel.IsNull() {
 		data.FacilityLevel = types.StringValue(value.String())
-	} else {
+	} else if data.FacilityLevel.IsNull() {
 		data.FacilityLevel = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "buffered.buffered-entries.count"); value.Exists() && !data.BufferedEntriesCount.IsNull() {
 		data.BufferedEntriesCount = types.Int64Value(value.Int())
-	} else {
+	} else if data.BufferedEntriesCount.IsNull() {
 		data.BufferedEntriesCount = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "buffered.logging-buffer-size"); value.Exists() && !data.BufferedSize.IsNull() {
 		data.BufferedSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.BufferedSize.IsNull() {
 		data.BufferedSize = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "buffered.level"); value.Exists() && !data.BufferedLevel.IsNull() {
 		data.BufferedLevel = types.StringValue(value.String())
-	} else {
+	} else if data.BufferedLevel.IsNull() {
 		data.BufferedLevel = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "buffered.discriminator.match1"); value.Exists() && !data.BufferedDiscriminatorMatch1.IsNull() {
 		data.BufferedDiscriminatorMatch1 = types.StringValue(value.String())
-	} else {
+	} else if data.BufferedDiscriminatorMatch1.IsNull() {
 		data.BufferedDiscriminatorMatch1 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "buffered.discriminator.match2"); value.Exists() && !data.BufferedDiscriminatorMatch2.IsNull() {
 		data.BufferedDiscriminatorMatch2 = types.StringValue(value.String())
-	} else {
+	} else if data.BufferedDiscriminatorMatch2.IsNull() {
 		data.BufferedDiscriminatorMatch2 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "buffered.discriminator.match3"); value.Exists() && !data.BufferedDiscriminatorMatch3.IsNull() {
 		data.BufferedDiscriminatorMatch3 = types.StringValue(value.String())
-	} else {
+	} else if data.BufferedDiscriminatorMatch3.IsNull() {
 		data.BufferedDiscriminatorMatch3 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "buffered.discriminator.nomatch1"); value.Exists() && !data.BufferedDiscriminatorNomatch1.IsNull() {
 		data.BufferedDiscriminatorNomatch1 = types.StringValue(value.String())
-	} else {
+	} else if data.BufferedDiscriminatorNomatch1.IsNull() {
 		data.BufferedDiscriminatorNomatch1 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "buffered.discriminator.nomatch2"); value.Exists() && !data.BufferedDiscriminatorNomatch2.IsNull() {
 		data.BufferedDiscriminatorNomatch2 = types.StringValue(value.String())
-	} else {
+	} else if data.BufferedDiscriminatorNomatch2.IsNull() {
 		data.BufferedDiscriminatorNomatch2 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "buffered.discriminator.nomatch3"); value.Exists() && !data.BufferedDiscriminatorNomatch3.IsNull() {
 		data.BufferedDiscriminatorNomatch3 = types.StringValue(value.String())
-	} else {
+	} else if data.BufferedDiscriminatorNomatch3.IsNull() {
 		data.BufferedDiscriminatorNomatch3 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "container.all"); !data.ContainerAll.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "container.all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ContainerAll.IsNull() {
 			data.ContainerAll = types.BoolValue(true)
-		} else {
-			data.ContainerAll = types.BoolValue(false)
 		}
 	} else {
-		data.ContainerAll = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ContainerAll.IsNull() {
+			data.ContainerAll = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "container.fetch-timestamp"); !data.ContainerFetchTimestamp.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "container.fetch-timestamp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ContainerFetchTimestamp.IsNull() {
 			data.ContainerFetchTimestamp = types.BoolValue(true)
-		} else {
-			data.ContainerFetchTimestamp = types.BoolValue(false)
 		}
 	} else {
-		data.ContainerFetchTimestamp = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.ContainerFetchTimestamp.IsNull() {
+			data.ContainerFetchTimestamp = types.BoolNull()
+		}
 	}
 	for i := range data.File {
 		keys := [...]string{"file-name"}
@@ -780,22 +806,22 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "history"); value.Exists() && !data.History.IsNull() {
 		data.History = types.StringValue(value.String())
-	} else {
+	} else if data.History.IsNull() {
 		data.History = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "history-size"); value.Exists() && !data.HistorySize.IsNull() {
 		data.HistorySize = types.Int64Value(value.Int())
-	} else {
+	} else if data.HistorySize.IsNull() {
 		data.HistorySize = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "hostnameprefix"); value.Exists() && !data.Hostnameprefix.IsNull() {
 		data.Hostnameprefix = types.StringValue(value.String())
-	} else {
+	} else if data.Hostnameprefix.IsNull() {
 		data.Hostnameprefix = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "localfilesize"); value.Exists() && !data.Localfilesize.IsNull() {
 		data.Localfilesize = types.Int64Value(value.Int())
-	} else {
+	} else if data.Localfilesize.IsNull() {
 		data.Localfilesize = types.Int64Null()
 	}
 	for i := range data.SourceInterfaces {
@@ -856,36 +882,42 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "suppress.duplicates"); !data.SuppressDuplicates.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "suppress.duplicates"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SuppressDuplicates.IsNull() {
 			data.SuppressDuplicates = types.BoolValue(true)
-		} else {
-			data.SuppressDuplicates = types.BoolValue(false)
 		}
 	} else {
-		data.SuppressDuplicates = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SuppressDuplicates.IsNull() {
+			data.SuppressDuplicates = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "format.rfc5424"); !data.FormatRfc5424.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "format.rfc5424"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FormatRfc5424.IsNull() {
 			data.FormatRfc5424 = types.BoolValue(true)
-		} else {
-			data.FormatRfc5424 = types.BoolValue(false)
 		}
 	} else {
-		data.FormatRfc5424 = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.FormatRfc5424.IsNull() {
+			data.FormatRfc5424 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "format.bsd"); !data.FormatBsd.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "format.bsd"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FormatBsd.IsNull() {
 			data.FormatBsd = types.BoolValue(true)
-		} else {
-			data.FormatBsd = types.BoolValue(false)
 		}
 	} else {
-		data.FormatBsd = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.FormatBsd.IsNull() {
+			data.FormatBsd = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "yang"); value.Exists() && !data.Yang.IsNull() {
 		data.Yang = types.StringValue(value.String())
-	} else {
+	} else if data.Yang.IsNull() {
 		data.Yang = types.StringNull()
 	}
 	for i := range data.SuppressRules {
@@ -955,23 +987,29 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 				data.SuppressRules[i].Alarms[ci].MessageCode = types.StringNull()
 			}
 		}
-		if value := r.Get("all-alarms"); !data.SuppressRules[i].AllAlarms.IsNull() {
-			if value.Exists() {
+		if value := r.Get("all-alarms"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.SuppressRules[i].AllAlarms.IsNull() {
 				data.SuppressRules[i].AllAlarms = types.BoolValue(true)
-			} else {
-				data.SuppressRules[i].AllAlarms = types.BoolValue(false)
 			}
 		} else {
-			data.SuppressRules[i].AllAlarms = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.SuppressRules[i].AllAlarms.IsNull() {
+				data.SuppressRules[i].AllAlarms = types.BoolNull()
+			}
 		}
-		if value := r.Get("apply.all-of-router"); !data.SuppressRules[i].ApplyAllOfRouter.IsNull() {
-			if value.Exists() {
+		if value := r.Get("apply.all-of-router"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.SuppressRules[i].ApplyAllOfRouter.IsNull() {
 				data.SuppressRules[i].ApplyAllOfRouter = types.BoolValue(true)
-			} else {
-				data.SuppressRules[i].ApplyAllOfRouter = types.BoolValue(false)
 			}
 		} else {
-			data.SuppressRules[i].ApplyAllOfRouter = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.SuppressRules[i].ApplyAllOfRouter.IsNull() {
+				data.SuppressRules[i].ApplyAllOfRouter = types.BoolNull()
+			}
 		}
 		for ci := range data.SuppressRules[i].ApplySourceLocations {
 			keys := [...]string{"location-name"}
@@ -1005,7 +1043,7 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.buffer-size"); value.Exists() && !data.EventsBufferSize.IsNull() {
 		data.EventsBufferSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.EventsBufferSize.IsNull() {
 		data.EventsBufferSize = types.Int64Null()
 	}
 	for i := range data.FilterMatches {
@@ -1037,165 +1075,1081 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 			data.FilterMatches[i].Match = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); !data.EventsDisplayLocation.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EventsDisplayLocation.IsNull() {
 			data.EventsDisplayLocation = types.BoolValue(true)
-		} else {
-			data.EventsDisplayLocation = types.BoolValue(false)
 		}
 	} else {
-		data.EventsDisplayLocation = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.EventsDisplayLocation.IsNull() {
+			data.EventsDisplayLocation = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() && !data.EventsLevel.IsNull() {
 		data.EventsLevel = types.StringValue(value.String())
-	} else {
+	} else if data.EventsLevel.IsNull() {
 		data.EventsLevel = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.threshold"); value.Exists() && !data.EventsThreshold.IsNull() {
 		data.EventsThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.EventsThreshold.IsNull() {
 		data.EventsThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression"); value.Exists() && !data.EventsPrecfgSuppression.IsNull() {
 		data.EventsPrecfgSuppression = types.StringValue(value.String())
-	} else {
+	} else if data.EventsPrecfgSuppression.IsNull() {
 		data.EventsPrecfgSuppression = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression-timeout"); value.Exists() && !data.EventsPrecfgSuppressionTimeout.IsNull() {
 		data.EventsPrecfgSuppressionTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.EventsPrecfgSuppressionTimeout.IsNull() {
 		data.EventsPrecfgSuppressionTimeout = types.Int64Null()
 	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data Logging) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.Console.IsNull() && !data.Console.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/console", data.Console.ValueString())
+	}
+	if !data.Trap.IsNull() && !data.Trap.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/trap", data.Trap.ValueString())
+	}
+	if !data.Monitor.IsNull() && !data.Monitor.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor", data.Monitor.ValueString())
+	}
+	if !data.ConsoleFacility.IsNull() && !data.ConsoleFacility.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/console-logging/console-log-facility/console-facility-level", data.ConsoleFacility.ValueString())
+	}
+	if !data.MonitorDiscriminatorMatch1.IsNull() && !data.MonitorDiscriminatorMatch1.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-discriminator/match1", data.MonitorDiscriminatorMatch1.ValueString())
+	}
+	if !data.MonitorDiscriminatorMatch2.IsNull() && !data.MonitorDiscriminatorMatch2.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-discriminator/match2", data.MonitorDiscriminatorMatch2.ValueString())
+	}
+	if !data.MonitorDiscriminatorMatch3.IsNull() && !data.MonitorDiscriminatorMatch3.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-discriminator/match3", data.MonitorDiscriminatorMatch3.ValueString())
+	}
+	if !data.MonitorDiscriminatorNomatch1.IsNull() && !data.MonitorDiscriminatorNomatch1.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-discriminator/nomatch1", data.MonitorDiscriminatorNomatch1.ValueString())
+	}
+	if !data.MonitorDiscriminatorNomatch2.IsNull() && !data.MonitorDiscriminatorNomatch2.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-discriminator/nomatch2", data.MonitorDiscriminatorNomatch2.ValueString())
+	}
+	if !data.MonitorDiscriminatorNomatch3.IsNull() && !data.MonitorDiscriminatorNomatch3.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-discriminator/nomatch3", data.MonitorDiscriminatorNomatch3.ValueString())
+	}
+	if !data.ArchiveDisk0.IsNull() && !data.ArchiveDisk0.IsUnknown() {
+		if data.ArchiveDisk0.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/archive/device/disk0", "")
+		}
+	}
+	if !data.ArchiveDisk1.IsNull() && !data.ArchiveDisk1.IsUnknown() {
+		if data.ArchiveDisk1.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/archive/device/disk1", "")
+		}
+	}
+	if !data.ArchiveHarddisk.IsNull() && !data.ArchiveHarddisk.IsUnknown() {
+		if data.ArchiveHarddisk.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/archive/device/harddisk", "")
+		}
+	}
+	if !data.ArchiveFrequencyDaily.IsNull() && !data.ArchiveFrequencyDaily.IsUnknown() {
+		if data.ArchiveFrequencyDaily.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/archive/frequency/daily", "")
+		}
+	}
+	if !data.ArchiveFrequencyWeekly.IsNull() && !data.ArchiveFrequencyWeekly.IsUnknown() {
+		if data.ArchiveFrequencyWeekly.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/archive/frequency/weekly", "")
+		}
+	}
+	if !data.ArchiveFilesize.IsNull() && !data.ArchiveFilesize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/archive/file-size", strconv.FormatInt(data.ArchiveFilesize.ValueInt64(), 10))
+	}
+	if !data.ArchiveSize.IsNull() && !data.ArchiveSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/archive/archive-size", strconv.FormatInt(data.ArchiveSize.ValueInt64(), 10))
+	}
+	if !data.ArchiveLength.IsNull() && !data.ArchiveLength.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/archive/archive-length", strconv.FormatInt(data.ArchiveLength.ValueInt64(), 10))
+	}
+	if !data.ArchiveSeverity.IsNull() && !data.ArchiveSeverity.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/archive/severity", data.ArchiveSeverity.ValueString())
+	}
+	if !data.ArchiveThreshold.IsNull() && !data.ArchiveThreshold.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/archive/threshold", strconv.FormatInt(data.ArchiveThreshold.ValueInt64(), 10))
+	}
+	if !data.Ipv4Dscp.IsNull() && !data.Ipv4Dscp.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/dscp", data.Ipv4Dscp.ValueString())
+	}
+	if !data.Ipv4Precedence.IsNull() && !data.Ipv4Precedence.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/precedence", data.Ipv4Precedence.ValueString())
+	}
+	if !data.Ipv6Dscp.IsNull() && !data.Ipv6Dscp.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv6/dscp", data.Ipv6Dscp.ValueString())
+	}
+	if !data.Ipv6Precedence.IsNull() && !data.Ipv6Precedence.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv6/precedence", data.Ipv6Precedence.ValueString())
+	}
+	if !data.FacilityLevel.IsNull() && !data.FacilityLevel.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/facility/level", data.FacilityLevel.ValueString())
+	}
+	if !data.BufferedEntriesCount.IsNull() && !data.BufferedEntriesCount.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/buffered-entries/count", strconv.FormatInt(data.BufferedEntriesCount.ValueInt64(), 10))
+	}
+	if !data.BufferedSize.IsNull() && !data.BufferedSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/logging-buffer-size", strconv.FormatInt(data.BufferedSize.ValueInt64(), 10))
+	}
+	if !data.BufferedLevel.IsNull() && !data.BufferedLevel.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/level", data.BufferedLevel.ValueString())
+	}
+	if !data.BufferedDiscriminatorMatch1.IsNull() && !data.BufferedDiscriminatorMatch1.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/discriminator/match1", data.BufferedDiscriminatorMatch1.ValueString())
+	}
+	if !data.BufferedDiscriminatorMatch2.IsNull() && !data.BufferedDiscriminatorMatch2.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/discriminator/match2", data.BufferedDiscriminatorMatch2.ValueString())
+	}
+	if !data.BufferedDiscriminatorMatch3.IsNull() && !data.BufferedDiscriminatorMatch3.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/discriminator/match3", data.BufferedDiscriminatorMatch3.ValueString())
+	}
+	if !data.BufferedDiscriminatorNomatch1.IsNull() && !data.BufferedDiscriminatorNomatch1.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/discriminator/nomatch1", data.BufferedDiscriminatorNomatch1.ValueString())
+	}
+	if !data.BufferedDiscriminatorNomatch2.IsNull() && !data.BufferedDiscriminatorNomatch2.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/discriminator/nomatch2", data.BufferedDiscriminatorNomatch2.ValueString())
+	}
+	if !data.BufferedDiscriminatorNomatch3.IsNull() && !data.BufferedDiscriminatorNomatch3.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/discriminator/nomatch3", data.BufferedDiscriminatorNomatch3.ValueString())
+	}
+	if !data.ContainerAll.IsNull() && !data.ContainerAll.IsUnknown() {
+		if data.ContainerAll.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/container/all", "")
+		}
+	}
+	if !data.ContainerFetchTimestamp.IsNull() && !data.ContainerFetchTimestamp.IsUnknown() {
+		if data.ContainerFetchTimestamp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/container/fetch-timestamp", "")
+		}
+	}
+	if len(data.File) > 0 {
+		for _, item := range data.File {
+			basePath := data.getXPath() + "/files/file[file-name='" + item.FileName.ValueString() + "']"
+			if !item.FileName.IsNull() && !item.FileName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/file-name", item.FileName.ValueString())
+			}
+			if !item.Path.IsNull() && !item.Path.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/path", item.Path.ValueString())
+			}
+			if !item.Maxfilesize.IsNull() && !item.Maxfilesize.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/maxfilesize", strconv.FormatInt(item.Maxfilesize.ValueInt64(), 10))
+			}
+			if !item.Severity.IsNull() && !item.Severity.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/severity", item.Severity.ValueString())
+			}
+			if !item.LocalAccountingSendToRemoteFacilityLevel.IsNull() && !item.LocalAccountingSendToRemoteFacilityLevel.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/local-accounting/send-to-remote/facility/level", item.LocalAccountingSendToRemoteFacilityLevel.ValueString())
+			}
+			if !item.DiscriminatorMatch1.IsNull() && !item.DiscriminatorMatch1.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/discriminator/match1", item.DiscriminatorMatch1.ValueString())
+			}
+			if !item.DiscriminatorMatch2.IsNull() && !item.DiscriminatorMatch2.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/discriminator/match2", item.DiscriminatorMatch2.ValueString())
+			}
+			if !item.DiscriminatorMatch3.IsNull() && !item.DiscriminatorMatch3.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/discriminator/match3", item.DiscriminatorMatch3.ValueString())
+			}
+			if !item.DiscriminatorNomatch1.IsNull() && !item.DiscriminatorNomatch1.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/discriminator/nomatch1", item.DiscriminatorNomatch1.ValueString())
+			}
+			if !item.DiscriminatorNomatch2.IsNull() && !item.DiscriminatorNomatch2.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/discriminator/nomatch2", item.DiscriminatorNomatch2.ValueString())
+			}
+			if !item.DiscriminatorNomatch3.IsNull() && !item.DiscriminatorNomatch3.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/discriminator/nomatch3", item.DiscriminatorNomatch3.ValueString())
+			}
+		}
+	}
+	if !data.History.IsNull() && !data.History.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/history", data.History.ValueString())
+	}
+	if !data.HistorySize.IsNull() && !data.HistorySize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/history-size", strconv.FormatInt(data.HistorySize.ValueInt64(), 10))
+	}
+	if !data.Hostnameprefix.IsNull() && !data.Hostnameprefix.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/hostnameprefix", data.Hostnameprefix.ValueString())
+	}
+	if !data.Localfilesize.IsNull() && !data.Localfilesize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/localfilesize", strconv.FormatInt(data.Localfilesize.ValueInt64(), 10))
+	}
+	if len(data.SourceInterfaces) > 0 {
+		for _, item := range data.SourceInterfaces {
+			basePath := data.getXPath() + "/source-interfaces/source-interface[source-interface-name='" + item.Name.ValueString() + "']"
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/source-interface-name", item.Name.ValueString())
+			}
+			if len(item.Vrfs) > 0 {
+				for _, citem := range item.Vrfs {
+					cbasePath := basePath + "/vrfs/vrf[vrf-name='" + citem.Name.ValueString() + "']"
+					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/vrf-name", citem.Name.ValueString())
+					}
+				}
+			}
+		}
+	}
+	if !data.SuppressDuplicates.IsNull() && !data.SuppressDuplicates.IsUnknown() {
+		if data.SuppressDuplicates.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/suppress/duplicates", "")
+		}
+	}
+	if !data.FormatRfc5424.IsNull() && !data.FormatRfc5424.IsUnknown() {
+		if data.FormatRfc5424.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/format/rfc5424", "")
+		}
+	}
+	if !data.FormatBsd.IsNull() && !data.FormatBsd.IsUnknown() {
+		if data.FormatBsd.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/format/bsd", "")
+		}
+	}
+	if !data.Yang.IsNull() && !data.Yang.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/yang", data.Yang.ValueString())
+	}
+	if len(data.SuppressRules) > 0 {
+		for _, item := range data.SuppressRules {
+			basePath := data.getXPath() + "/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule[rule-name='" + item.RuleName.ValueString() + "']"
+			if !item.RuleName.IsNull() && !item.RuleName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/rule-name", item.RuleName.ValueString())
+			}
+			if len(item.Alarms) > 0 {
+				for _, citem := range item.Alarms {
+					cbasePath := basePath + "/alarms/alarm[message-category='" + citem.MessageCategory.ValueString() + "' and group-name='" + citem.GroupName.ValueString() + "' and message-code='" + citem.MessageCode.ValueString() + "']"
+					if !citem.MessageCategory.IsNull() && !citem.MessageCategory.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/message-category", citem.MessageCategory.ValueString())
+					}
+					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/group-name", citem.GroupName.ValueString())
+					}
+					if !citem.MessageCode.IsNull() && !citem.MessageCode.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/message-code", citem.MessageCode.ValueString())
+					}
+				}
+			}
+			if !item.AllAlarms.IsNull() && !item.AllAlarms.IsUnknown() {
+				if item.AllAlarms.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/all-alarms", "")
+				}
+			}
+			if !item.ApplyAllOfRouter.IsNull() && !item.ApplyAllOfRouter.IsUnknown() {
+				if item.ApplyAllOfRouter.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/apply/all-of-router", "")
+				}
+			}
+			if len(item.ApplySourceLocations) > 0 {
+				for _, citem := range item.ApplySourceLocations {
+					cbasePath := basePath + "/apply/source/locations/location[location-name='" + citem.LocationName.ValueString() + "']"
+					if !citem.LocationName.IsNull() && !citem.LocationName.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/location-name", citem.LocationName.ValueString())
+					}
+				}
+			}
+		}
+	}
+	if !data.EventsBufferSize.IsNull() && !data.EventsBufferSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size", strconv.FormatInt(data.EventsBufferSize.ValueInt64(), 10))
+	}
+	if len(data.FilterMatches) > 0 {
+		for _, item := range data.FilterMatches {
+			basePath := data.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match[match-string='" + item.Match.ValueString() + "']"
+			if !item.Match.IsNull() && !item.Match.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/match-string", item.Match.ValueString())
+			}
+		}
+	}
+	if !data.EventsDisplayLocation.IsNull() && !data.EventsDisplayLocation.IsUnknown() {
+		if data.EventsDisplayLocation.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", "")
+		}
+	}
+	if !data.EventsLevel.IsNull() && !data.EventsLevel.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level", data.EventsLevel.ValueString())
+	}
+	if !data.EventsThreshold.IsNull() && !data.EventsThreshold.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/threshold", strconv.FormatInt(data.EventsThreshold.ValueInt64(), 10))
+	}
+	if !data.EventsPrecfgSuppression.IsNull() && !data.EventsPrecfgSuppression.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression", data.EventsPrecfgSuppression.ValueString())
+	}
+	if !data.EventsPrecfgSuppressionTimeout.IsNull() && !data.EventsPrecfgSuppressionTimeout.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout", strconv.FormatInt(data.EventsPrecfgSuppressionTimeout.ValueInt64(), 10))
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/console"); value.Exists() {
+		data.Console = types.StringValue(value.String())
+	} else if data.Console.IsNull() {
+		data.Console = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/trap"); value.Exists() {
+		data.Trap = types.StringValue(value.String())
+	} else if data.Trap.IsNull() {
+		data.Trap = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor"); value.Exists() {
+		data.Monitor = types.StringValue(value.String())
+	} else if data.Monitor.IsNull() {
+		data.Monitor = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/console-logging/console-log-facility/console-facility-level"); value.Exists() {
+		data.ConsoleFacility = types.StringValue(value.String())
+	} else if data.ConsoleFacility.IsNull() {
+		data.ConsoleFacility = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/match1"); value.Exists() {
+		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
+	} else if data.MonitorDiscriminatorMatch1.IsNull() {
+		data.MonitorDiscriminatorMatch1 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/match2"); value.Exists() {
+		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
+	} else if data.MonitorDiscriminatorMatch2.IsNull() {
+		data.MonitorDiscriminatorMatch2 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/match3"); value.Exists() {
+		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
+	} else if data.MonitorDiscriminatorMatch3.IsNull() {
+		data.MonitorDiscriminatorMatch3 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/nomatch1"); value.Exists() {
+		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
+	} else if data.MonitorDiscriminatorNomatch1.IsNull() {
+		data.MonitorDiscriminatorNomatch1 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/nomatch2"); value.Exists() {
+		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
+	} else if data.MonitorDiscriminatorNomatch2.IsNull() {
+		data.MonitorDiscriminatorNomatch2 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/nomatch3"); value.Exists() {
+		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
+	} else if data.MonitorDiscriminatorNomatch3.IsNull() {
+		data.MonitorDiscriminatorNomatch3 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/device/disk0"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ArchiveDisk0.IsNull() {
+			data.ArchiveDisk0 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ArchiveDisk0.IsNull() {
+			data.ArchiveDisk0 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/device/disk1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ArchiveDisk1.IsNull() {
+			data.ArchiveDisk1 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ArchiveDisk1.IsNull() {
+			data.ArchiveDisk1 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/device/harddisk"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ArchiveHarddisk.IsNull() {
+			data.ArchiveHarddisk = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ArchiveHarddisk.IsNull() {
+			data.ArchiveHarddisk = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/frequency/daily"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ArchiveFrequencyDaily.IsNull() {
+			data.ArchiveFrequencyDaily = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ArchiveFrequencyDaily.IsNull() {
+			data.ArchiveFrequencyDaily = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/frequency/weekly"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ArchiveFrequencyWeekly.IsNull() {
+			data.ArchiveFrequencyWeekly = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ArchiveFrequencyWeekly.IsNull() {
+			data.ArchiveFrequencyWeekly = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/file-size"); value.Exists() {
+		data.ArchiveFilesize = types.Int64Value(value.Int())
+	} else if data.ArchiveFilesize.IsNull() {
+		data.ArchiveFilesize = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/archive-size"); value.Exists() {
+		data.ArchiveSize = types.Int64Value(value.Int())
+	} else if data.ArchiveSize.IsNull() {
+		data.ArchiveSize = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/archive-length"); value.Exists() {
+		data.ArchiveLength = types.Int64Value(value.Int())
+	} else if data.ArchiveLength.IsNull() {
+		data.ArchiveLength = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/severity"); value.Exists() {
+		data.ArchiveSeverity = types.StringValue(value.String())
+	} else if data.ArchiveSeverity.IsNull() {
+		data.ArchiveSeverity = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/threshold"); value.Exists() {
+		data.ArchiveThreshold = types.Int64Value(value.Int())
+	} else if data.ArchiveThreshold.IsNull() {
+		data.ArchiveThreshold = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	} else if data.Ipv4Dscp.IsNull() {
+		data.Ipv4Dscp = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/precedence"); value.Exists() {
+		data.Ipv4Precedence = types.StringValue(value.String())
+	} else if data.Ipv4Precedence.IsNull() {
+		data.Ipv4Precedence = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
+		data.Ipv6Dscp = types.StringValue(value.String())
+	} else if data.Ipv6Dscp.IsNull() {
+		data.Ipv6Dscp = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/precedence"); value.Exists() {
+		data.Ipv6Precedence = types.StringValue(value.String())
+	} else if data.Ipv6Precedence.IsNull() {
+		data.Ipv6Precedence = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/facility/level"); value.Exists() {
+		data.FacilityLevel = types.StringValue(value.String())
+	} else if data.FacilityLevel.IsNull() {
+		data.FacilityLevel = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/buffered-entries/count"); value.Exists() {
+		data.BufferedEntriesCount = types.Int64Value(value.Int())
+	} else if data.BufferedEntriesCount.IsNull() {
+		data.BufferedEntriesCount = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/logging-buffer-size"); value.Exists() {
+		data.BufferedSize = types.Int64Value(value.Int())
+	} else if data.BufferedSize.IsNull() {
+		data.BufferedSize = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/level"); value.Exists() {
+		data.BufferedLevel = types.StringValue(value.String())
+	} else if data.BufferedLevel.IsNull() {
+		data.BufferedLevel = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/match1"); value.Exists() {
+		data.BufferedDiscriminatorMatch1 = types.StringValue(value.String())
+	} else if data.BufferedDiscriminatorMatch1.IsNull() {
+		data.BufferedDiscriminatorMatch1 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/match2"); value.Exists() {
+		data.BufferedDiscriminatorMatch2 = types.StringValue(value.String())
+	} else if data.BufferedDiscriminatorMatch2.IsNull() {
+		data.BufferedDiscriminatorMatch2 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/match3"); value.Exists() {
+		data.BufferedDiscriminatorMatch3 = types.StringValue(value.String())
+	} else if data.BufferedDiscriminatorMatch3.IsNull() {
+		data.BufferedDiscriminatorMatch3 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/nomatch1"); value.Exists() {
+		data.BufferedDiscriminatorNomatch1 = types.StringValue(value.String())
+	} else if data.BufferedDiscriminatorNomatch1.IsNull() {
+		data.BufferedDiscriminatorNomatch1 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/nomatch2"); value.Exists() {
+		data.BufferedDiscriminatorNomatch2 = types.StringValue(value.String())
+	} else if data.BufferedDiscriminatorNomatch2.IsNull() {
+		data.BufferedDiscriminatorNomatch2 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/nomatch3"); value.Exists() {
+		data.BufferedDiscriminatorNomatch3 = types.StringValue(value.String())
+	} else if data.BufferedDiscriminatorNomatch3.IsNull() {
+		data.BufferedDiscriminatorNomatch3 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/container/all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ContainerAll.IsNull() {
+			data.ContainerAll = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ContainerAll.IsNull() {
+			data.ContainerAll = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/container/fetch-timestamp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ContainerFetchTimestamp.IsNull() {
+			data.ContainerFetchTimestamp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ContainerFetchTimestamp.IsNull() {
+			data.ContainerFetchTimestamp = types.BoolNull()
+		}
+	}
+	for i := range data.File {
+		keys := [...]string{"file-name"}
+		keyValues := [...]string{data.File[i].FileName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/files/file").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "file-name"); value.Exists() {
+			data.File[i].FileName = types.StringValue(value.String())
+		} else if data.File[i].FileName.IsNull() {
+			data.File[i].FileName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "path"); value.Exists() {
+			data.File[i].Path = types.StringValue(value.String())
+		} else if data.File[i].Path.IsNull() {
+			data.File[i].Path = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "maxfilesize"); value.Exists() {
+			data.File[i].Maxfilesize = types.Int64Value(value.Int())
+		} else if data.File[i].Maxfilesize.IsNull() {
+			data.File[i].Maxfilesize = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "severity"); value.Exists() {
+			data.File[i].Severity = types.StringValue(value.String())
+		} else if data.File[i].Severity.IsNull() {
+			data.File[i].Severity = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "local-accounting/send-to-remote/facility/level"); value.Exists() {
+			data.File[i].LocalAccountingSendToRemoteFacilityLevel = types.StringValue(value.String())
+		} else if data.File[i].LocalAccountingSendToRemoteFacilityLevel.IsNull() {
+			data.File[i].LocalAccountingSendToRemoteFacilityLevel = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "discriminator/match1"); value.Exists() {
+			data.File[i].DiscriminatorMatch1 = types.StringValue(value.String())
+		} else if data.File[i].DiscriminatorMatch1.IsNull() {
+			data.File[i].DiscriminatorMatch1 = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "discriminator/match2"); value.Exists() {
+			data.File[i].DiscriminatorMatch2 = types.StringValue(value.String())
+		} else if data.File[i].DiscriminatorMatch2.IsNull() {
+			data.File[i].DiscriminatorMatch2 = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "discriminator/match3"); value.Exists() {
+			data.File[i].DiscriminatorMatch3 = types.StringValue(value.String())
+		} else if data.File[i].DiscriminatorMatch3.IsNull() {
+			data.File[i].DiscriminatorMatch3 = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "discriminator/nomatch1"); value.Exists() {
+			data.File[i].DiscriminatorNomatch1 = types.StringValue(value.String())
+		} else if data.File[i].DiscriminatorNomatch1.IsNull() {
+			data.File[i].DiscriminatorNomatch1 = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "discriminator/nomatch2"); value.Exists() {
+			data.File[i].DiscriminatorNomatch2 = types.StringValue(value.String())
+		} else if data.File[i].DiscriminatorNomatch2.IsNull() {
+			data.File[i].DiscriminatorNomatch2 = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "discriminator/nomatch3"); value.Exists() {
+			data.File[i].DiscriminatorNomatch3 = types.StringValue(value.String())
+		} else if data.File[i].DiscriminatorNomatch3.IsNull() {
+			data.File[i].DiscriminatorNomatch3 = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/history"); value.Exists() {
+		data.History = types.StringValue(value.String())
+	} else if data.History.IsNull() {
+		data.History = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/history-size"); value.Exists() {
+		data.HistorySize = types.Int64Value(value.Int())
+	} else if data.HistorySize.IsNull() {
+		data.HistorySize = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hostnameprefix"); value.Exists() {
+		data.Hostnameprefix = types.StringValue(value.String())
+	} else if data.Hostnameprefix.IsNull() {
+		data.Hostnameprefix = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/localfilesize"); value.Exists() {
+		data.Localfilesize = types.Int64Value(value.Int())
+	} else if data.Localfilesize.IsNull() {
+		data.Localfilesize = types.Int64Null()
+	}
+	for i := range data.SourceInterfaces {
+		keys := [...]string{"source-interface-name"}
+		keyValues := [...]string{data.SourceInterfaces[i].Name.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interfaces/source-interface").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "source-interface-name"); value.Exists() {
+			data.SourceInterfaces[i].Name = types.StringValue(value.String())
+		} else if data.SourceInterfaces[i].Name.IsNull() {
+			data.SourceInterfaces[i].Name = types.StringNull()
+		}
+		for ci := range data.SourceInterfaces[i].Vrfs {
+			keys := [...]string{"vrf-name"}
+			keyValues := [...]string{data.SourceInterfaces[i].Vrfs[ci].Name.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "vrfs/vrf").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "vrf-name"); value.Exists() {
+				data.SourceInterfaces[i].Vrfs[ci].Name = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/suppress/duplicates"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SuppressDuplicates.IsNull() {
+			data.SuppressDuplicates = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SuppressDuplicates.IsNull() {
+			data.SuppressDuplicates = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/format/rfc5424"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FormatRfc5424.IsNull() {
+			data.FormatRfc5424 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.FormatRfc5424.IsNull() {
+			data.FormatRfc5424 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/format/bsd"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FormatBsd.IsNull() {
+			data.FormatBsd = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.FormatBsd.IsNull() {
+			data.FormatBsd = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/yang"); value.Exists() {
+		data.Yang = types.StringValue(value.String())
+	} else if data.Yang.IsNull() {
+		data.Yang = types.StringNull()
+	}
+	for i := range data.SuppressRules {
+		keys := [...]string{"rule-name"}
+		keyValues := [...]string{data.SuppressRules[i].RuleName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "rule-name"); value.Exists() {
+			data.SuppressRules[i].RuleName = types.StringValue(value.String())
+		} else if data.SuppressRules[i].RuleName.IsNull() {
+			data.SuppressRules[i].RuleName = types.StringNull()
+		}
+		for ci := range data.SuppressRules[i].Alarms {
+			keys := [...]string{"message-category", "group-name", "message-code"}
+			keyValues := [...]string{data.SuppressRules[i].Alarms[ci].MessageCategory.ValueString(), data.SuppressRules[i].Alarms[ci].GroupName.ValueString(), data.SuppressRules[i].Alarms[ci].MessageCode.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "alarms/alarm").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "message-category"); value.Exists() {
+				data.SuppressRules[i].Alarms[ci].MessageCategory = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "group-name"); value.Exists() {
+				data.SuppressRules[i].Alarms[ci].GroupName = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "message-code"); value.Exists() {
+				data.SuppressRules[i].Alarms[ci].MessageCode = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		if value := helpers.GetFromXPath(r, "all-alarms"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.SuppressRules[i].AllAlarms.IsNull() {
+				data.SuppressRules[i].AllAlarms = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.SuppressRules[i].AllAlarms.IsNull() {
+				data.SuppressRules[i].AllAlarms = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "apply/all-of-router"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.SuppressRules[i].ApplyAllOfRouter.IsNull() {
+				data.SuppressRules[i].ApplyAllOfRouter = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.SuppressRules[i].ApplyAllOfRouter.IsNull() {
+				data.SuppressRules[i].ApplyAllOfRouter = types.BoolNull()
+			}
+		}
+		for ci := range data.SuppressRules[i].ApplySourceLocations {
+			keys := [...]string{"location-name"}
+			keyValues := [...]string{data.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "apply/source/locations/location").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "location-name"); value.Exists() {
+				data.SuppressRules[i].ApplySourceLocations[ci].LocationName = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size"); value.Exists() {
+		data.EventsBufferSize = types.Int64Value(value.Int())
+	} else if data.EventsBufferSize.IsNull() {
+		data.EventsBufferSize = types.Int64Null()
+	}
+	for i := range data.FilterMatches {
+		keys := [...]string{"match-string"}
+		keyValues := [...]string{data.FilterMatches[i].Match.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "match-string"); value.Exists() {
+			data.FilterMatches[i].Match = types.StringValue(value.String())
+		} else if data.FilterMatches[i].Match.IsNull() {
+			data.FilterMatches[i].Match = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EventsDisplayLocation.IsNull() {
+			data.EventsDisplayLocation = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EventsDisplayLocation.IsNull() {
+			data.EventsDisplayLocation = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level"); value.Exists() {
+		data.EventsLevel = types.StringValue(value.String())
+	} else if data.EventsLevel.IsNull() {
+		data.EventsLevel = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/threshold"); value.Exists() {
+		data.EventsThreshold = types.Int64Value(value.Int())
+	} else if data.EventsThreshold.IsNull() {
+		data.EventsThreshold = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression"); value.Exists() {
+		data.EventsPrecfgSuppression = types.StringValue(value.String())
+	} else if data.EventsPrecfgSuppression.IsNull() {
+		data.EventsPrecfgSuppression = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout"); value.Exists() {
+		data.EventsPrecfgSuppressionTimeout = types.Int64Value(value.Int())
+	} else if data.EventsPrecfgSuppressionTimeout.IsNull() {
+		data.EventsPrecfgSuppressionTimeout = types.Int64Null()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *Logging) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "console"); value.Exists() {
+func (data *Logging) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "console"); value.Exists() {
 		data.Console = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "trap"); value.Exists() {
+	if value := res.Get(prefix + "trap"); value.Exists() {
 		data.Trap = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor"); value.Exists() {
+	if value := res.Get(prefix + "monitor"); value.Exists() {
 		data.Monitor = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "console-logging.console-log-facility.console-facility-level"); value.Exists() {
+	if value := res.Get(prefix + "console-logging.console-log-facility.console-facility-level"); value.Exists() {
 		data.ConsoleFacility = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match1"); value.Exists() {
+	if value := res.Get(prefix + "monitor-discriminator.match1"); value.Exists() {
 		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match2"); value.Exists() {
+	if value := res.Get(prefix + "monitor-discriminator.match2"); value.Exists() {
 		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match3"); value.Exists() {
+	if value := res.Get(prefix + "monitor-discriminator.match3"); value.Exists() {
 		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch1"); value.Exists() {
+	if value := res.Get(prefix + "monitor-discriminator.nomatch1"); value.Exists() {
 		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch2"); value.Exists() {
+	if value := res.Get(prefix + "monitor-discriminator.nomatch2"); value.Exists() {
 		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch3"); value.Exists() {
+	if value := res.Get(prefix + "monitor-discriminator.nomatch3"); value.Exists() {
 		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "archive.device.disk0"); value.Exists() {
+	if value := res.Get(prefix + "archive.device.disk0"); value.Exists() {
 		data.ArchiveDisk0 = types.BoolValue(true)
-	} else {
+	} else if !data.ArchiveDisk0.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ArchiveDisk0 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "archive.device.disk1"); value.Exists() {
+	if value := res.Get(prefix + "archive.device.disk1"); value.Exists() {
 		data.ArchiveDisk1 = types.BoolValue(true)
-	} else {
+	} else if !data.ArchiveDisk1.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ArchiveDisk1 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "archive.device.harddisk"); value.Exists() {
+	if value := res.Get(prefix + "archive.device.harddisk"); value.Exists() {
 		data.ArchiveHarddisk = types.BoolValue(true)
-	} else {
+	} else if !data.ArchiveHarddisk.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ArchiveHarddisk = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "archive.frequency.daily"); value.Exists() {
+	if value := res.Get(prefix + "archive.frequency.daily"); value.Exists() {
 		data.ArchiveFrequencyDaily = types.BoolValue(true)
-	} else {
+	} else if !data.ArchiveFrequencyDaily.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ArchiveFrequencyDaily = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "archive.frequency.weekly"); value.Exists() {
+	if value := res.Get(prefix + "archive.frequency.weekly"); value.Exists() {
 		data.ArchiveFrequencyWeekly = types.BoolValue(true)
-	} else {
+	} else if !data.ArchiveFrequencyWeekly.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ArchiveFrequencyWeekly = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "archive.file-size"); value.Exists() {
+	if value := res.Get(prefix + "archive.file-size"); value.Exists() {
 		data.ArchiveFilesize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "archive.archive-size"); value.Exists() {
+	if value := res.Get(prefix + "archive.archive-size"); value.Exists() {
 		data.ArchiveSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "archive.archive-length"); value.Exists() {
+	if value := res.Get(prefix + "archive.archive-length"); value.Exists() {
 		data.ArchiveLength = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "archive.severity"); value.Exists() {
+	if value := res.Get(prefix + "archive.severity"); value.Exists() {
 		data.ArchiveSeverity = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "archive.threshold"); value.Exists() {
+	if value := res.Get(prefix + "archive.threshold"); value.Exists() {
 		data.ArchiveThreshold = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "ipv4.precedence"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.precedence"); value.Exists() {
 		data.Ipv4Precedence = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() {
+	if value := res.Get(prefix + "ipv6.dscp"); value.Exists() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "ipv6.precedence"); value.Exists() {
+	if value := res.Get(prefix + "ipv6.precedence"); value.Exists() {
 		data.Ipv6Precedence = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "facility.level"); value.Exists() {
+	if value := res.Get(prefix + "facility.level"); value.Exists() {
 		data.FacilityLevel = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.buffered-entries.count"); value.Exists() {
+	if value := res.Get(prefix + "buffered.buffered-entries.count"); value.Exists() {
 		data.BufferedEntriesCount = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "buffered.logging-buffer-size"); value.Exists() {
+	if value := res.Get(prefix + "buffered.logging-buffer-size"); value.Exists() {
 		data.BufferedSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "buffered.level"); value.Exists() {
+	if value := res.Get(prefix + "buffered.level"); value.Exists() {
 		data.BufferedLevel = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.discriminator.match1"); value.Exists() {
+	if value := res.Get(prefix + "buffered.discriminator.match1"); value.Exists() {
 		data.BufferedDiscriminatorMatch1 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.discriminator.match2"); value.Exists() {
+	if value := res.Get(prefix + "buffered.discriminator.match2"); value.Exists() {
 		data.BufferedDiscriminatorMatch2 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.discriminator.match3"); value.Exists() {
+	if value := res.Get(prefix + "buffered.discriminator.match3"); value.Exists() {
 		data.BufferedDiscriminatorMatch3 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.discriminator.nomatch1"); value.Exists() {
+	if value := res.Get(prefix + "buffered.discriminator.nomatch1"); value.Exists() {
 		data.BufferedDiscriminatorNomatch1 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.discriminator.nomatch2"); value.Exists() {
+	if value := res.Get(prefix + "buffered.discriminator.nomatch2"); value.Exists() {
 		data.BufferedDiscriminatorNomatch2 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.discriminator.nomatch3"); value.Exists() {
+	if value := res.Get(prefix + "buffered.discriminator.nomatch3"); value.Exists() {
 		data.BufferedDiscriminatorNomatch3 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "container.all"); value.Exists() {
+	if value := res.Get(prefix + "container.all"); value.Exists() {
 		data.ContainerAll = types.BoolValue(true)
-	} else {
+	} else if !data.ContainerAll.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ContainerAll = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "container.fetch-timestamp"); value.Exists() {
+	if value := res.Get(prefix + "container.fetch-timestamp"); value.Exists() {
 		data.ContainerFetchTimestamp = types.BoolValue(true)
-	} else {
+	} else if !data.ContainerFetchTimestamp.IsNull() {
+		// Only set to false if it was previously set in state
 		data.ContainerFetchTimestamp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "files.file"); value.Exists() {
+	if value := res.Get(prefix + "files.file"); value.Exists() {
 		data.File = make([]LoggingFile, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingFile{}
@@ -1236,19 +2190,19 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "history"); value.Exists() {
+	if value := res.Get(prefix + "history"); value.Exists() {
 		data.History = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "history-size"); value.Exists() {
+	if value := res.Get(prefix + "history-size"); value.Exists() {
 		data.HistorySize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "hostnameprefix"); value.Exists() {
+	if value := res.Get(prefix + "hostnameprefix"); value.Exists() {
 		data.Hostnameprefix = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "localfilesize"); value.Exists() {
+	if value := res.Get(prefix + "localfilesize"); value.Exists() {
 		data.Localfilesize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "source-interfaces.source-interface"); value.Exists() {
+	if value := res.Get(prefix + "source-interfaces.source-interface"); value.Exists() {
 		data.SourceInterfaces = make([]LoggingSourceInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingSourceInterfaces{}
@@ -1270,25 +2224,28 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "suppress.duplicates"); value.Exists() {
+	if value := res.Get(prefix + "suppress.duplicates"); value.Exists() {
 		data.SuppressDuplicates = types.BoolValue(true)
-	} else {
+	} else if !data.SuppressDuplicates.IsNull() {
+		// Only set to false if it was previously set in state
 		data.SuppressDuplicates = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "format.rfc5424"); value.Exists() {
+	if value := res.Get(prefix + "format.rfc5424"); value.Exists() {
 		data.FormatRfc5424 = types.BoolValue(true)
-	} else {
+	} else if !data.FormatRfc5424.IsNull() {
+		// Only set to false if it was previously set in state
 		data.FormatRfc5424 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "format.bsd"); value.Exists() {
+	if value := res.Get(prefix + "format.bsd"); value.Exists() {
 		data.FormatBsd = types.BoolValue(true)
-	} else {
+	} else if !data.FormatBsd.IsNull() {
+		// Only set to false if it was previously set in state
 		data.FormatBsd = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "yang"); value.Exists() {
+	if value := res.Get(prefix + "yang"); value.Exists() {
 		data.Yang = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"); value.Exists() {
 		data.SuppressRules = make([]LoggingSuppressRules, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingSuppressRules{}
@@ -1314,12 +2271,14 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("all-alarms"); cValue.Exists() {
 				item.AllAlarms = types.BoolValue(true)
-			} else {
+			} else if !item.AllAlarms.IsNull() {
+				// Only set to false if it was previously set
 				item.AllAlarms = types.BoolValue(false)
 			}
 			if cValue := v.Get("apply.all-of-router"); cValue.Exists() {
 				item.ApplyAllOfRouter = types.BoolValue(true)
-			} else {
+			} else if !item.ApplyAllOfRouter.IsNull() {
+				// Only set to false if it was previously set
 				item.ApplyAllOfRouter = types.BoolValue(false)
 			}
 			if cValue := v.Get("apply.source.locations.location"); cValue.Exists() {
@@ -1337,10 +2296,10 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.buffer-size"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.buffer-size"); value.Exists() {
 		data.EventsBufferSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.filter.match"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.filter.match"); value.Exists() {
 		data.FilterMatches = make([]LoggingFilterMatches, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingFilterMatches{}
@@ -1351,153 +2310,162 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
 		data.EventsDisplayLocation = types.BoolValue(true)
-	} else {
+	} else if !data.EventsDisplayLocation.IsNull() {
+		// Only set to false if it was previously set in state
 		data.EventsDisplayLocation = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() {
 		data.EventsLevel = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.threshold"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.threshold"); value.Exists() {
 		data.EventsThreshold = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression"); value.Exists() {
 		data.EventsPrecfgSuppression = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression-timeout"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression-timeout"); value.Exists() {
 		data.EventsPrecfgSuppressionTimeout = types.Int64Value(value.Int())
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "console"); value.Exists() {
+func (data *LoggingData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "console"); value.Exists() {
 		data.Console = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "trap"); value.Exists() {
+	if value := res.Get(prefix + "trap"); value.Exists() {
 		data.Trap = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor"); value.Exists() {
+	if value := res.Get(prefix + "monitor"); value.Exists() {
 		data.Monitor = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "console-logging.console-log-facility.console-facility-level"); value.Exists() {
+	if value := res.Get(prefix + "console-logging.console-log-facility.console-facility-level"); value.Exists() {
 		data.ConsoleFacility = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match1"); value.Exists() {
+	if value := res.Get(prefix + "monitor-discriminator.match1"); value.Exists() {
 		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match2"); value.Exists() {
+	if value := res.Get(prefix + "monitor-discriminator.match2"); value.Exists() {
 		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match3"); value.Exists() {
+	if value := res.Get(prefix + "monitor-discriminator.match3"); value.Exists() {
 		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch1"); value.Exists() {
+	if value := res.Get(prefix + "monitor-discriminator.nomatch1"); value.Exists() {
 		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch2"); value.Exists() {
+	if value := res.Get(prefix + "monitor-discriminator.nomatch2"); value.Exists() {
 		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch3"); value.Exists() {
+	if value := res.Get(prefix + "monitor-discriminator.nomatch3"); value.Exists() {
 		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "archive.device.disk0"); value.Exists() {
+	if value := res.Get(prefix + "archive.device.disk0"); value.Exists() {
 		data.ArchiveDisk0 = types.BoolValue(true)
 	} else {
 		data.ArchiveDisk0 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "archive.device.disk1"); value.Exists() {
+	if value := res.Get(prefix + "archive.device.disk1"); value.Exists() {
 		data.ArchiveDisk1 = types.BoolValue(true)
 	} else {
 		data.ArchiveDisk1 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "archive.device.harddisk"); value.Exists() {
+	if value := res.Get(prefix + "archive.device.harddisk"); value.Exists() {
 		data.ArchiveHarddisk = types.BoolValue(true)
 	} else {
 		data.ArchiveHarddisk = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "archive.frequency.daily"); value.Exists() {
+	if value := res.Get(prefix + "archive.frequency.daily"); value.Exists() {
 		data.ArchiveFrequencyDaily = types.BoolValue(true)
 	} else {
 		data.ArchiveFrequencyDaily = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "archive.frequency.weekly"); value.Exists() {
+	if value := res.Get(prefix + "archive.frequency.weekly"); value.Exists() {
 		data.ArchiveFrequencyWeekly = types.BoolValue(true)
 	} else {
 		data.ArchiveFrequencyWeekly = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "archive.file-size"); value.Exists() {
+	if value := res.Get(prefix + "archive.file-size"); value.Exists() {
 		data.ArchiveFilesize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "archive.archive-size"); value.Exists() {
+	if value := res.Get(prefix + "archive.archive-size"); value.Exists() {
 		data.ArchiveSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "archive.archive-length"); value.Exists() {
+	if value := res.Get(prefix + "archive.archive-length"); value.Exists() {
 		data.ArchiveLength = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "archive.severity"); value.Exists() {
+	if value := res.Get(prefix + "archive.severity"); value.Exists() {
 		data.ArchiveSeverity = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "archive.threshold"); value.Exists() {
+	if value := res.Get(prefix + "archive.threshold"); value.Exists() {
 		data.ArchiveThreshold = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "ipv4.precedence"); value.Exists() {
+	if value := res.Get(prefix + "ipv4.precedence"); value.Exists() {
 		data.Ipv4Precedence = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() {
+	if value := res.Get(prefix + "ipv6.dscp"); value.Exists() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "ipv6.precedence"); value.Exists() {
+	if value := res.Get(prefix + "ipv6.precedence"); value.Exists() {
 		data.Ipv6Precedence = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "facility.level"); value.Exists() {
+	if value := res.Get(prefix + "facility.level"); value.Exists() {
 		data.FacilityLevel = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.buffered-entries.count"); value.Exists() {
+	if value := res.Get(prefix + "buffered.buffered-entries.count"); value.Exists() {
 		data.BufferedEntriesCount = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "buffered.logging-buffer-size"); value.Exists() {
+	if value := res.Get(prefix + "buffered.logging-buffer-size"); value.Exists() {
 		data.BufferedSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "buffered.level"); value.Exists() {
+	if value := res.Get(prefix + "buffered.level"); value.Exists() {
 		data.BufferedLevel = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.discriminator.match1"); value.Exists() {
+	if value := res.Get(prefix + "buffered.discriminator.match1"); value.Exists() {
 		data.BufferedDiscriminatorMatch1 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.discriminator.match2"); value.Exists() {
+	if value := res.Get(prefix + "buffered.discriminator.match2"); value.Exists() {
 		data.BufferedDiscriminatorMatch2 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.discriminator.match3"); value.Exists() {
+	if value := res.Get(prefix + "buffered.discriminator.match3"); value.Exists() {
 		data.BufferedDiscriminatorMatch3 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.discriminator.nomatch1"); value.Exists() {
+	if value := res.Get(prefix + "buffered.discriminator.nomatch1"); value.Exists() {
 		data.BufferedDiscriminatorNomatch1 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.discriminator.nomatch2"); value.Exists() {
+	if value := res.Get(prefix + "buffered.discriminator.nomatch2"); value.Exists() {
 		data.BufferedDiscriminatorNomatch2 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.discriminator.nomatch3"); value.Exists() {
+	if value := res.Get(prefix + "buffered.discriminator.nomatch3"); value.Exists() {
 		data.BufferedDiscriminatorNomatch3 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "container.all"); value.Exists() {
+	if value := res.Get(prefix + "container.all"); value.Exists() {
 		data.ContainerAll = types.BoolValue(true)
 	} else {
 		data.ContainerAll = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "container.fetch-timestamp"); value.Exists() {
+	if value := res.Get(prefix + "container.fetch-timestamp"); value.Exists() {
 		data.ContainerFetchTimestamp = types.BoolValue(true)
 	} else {
 		data.ContainerFetchTimestamp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "files.file"); value.Exists() {
+	if value := res.Get(prefix + "files.file"); value.Exists() {
 		data.File = make([]LoggingFile, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingFile{}
@@ -1538,19 +2506,19 @@ func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "history"); value.Exists() {
+	if value := res.Get(prefix + "history"); value.Exists() {
 		data.History = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "history-size"); value.Exists() {
+	if value := res.Get(prefix + "history-size"); value.Exists() {
 		data.HistorySize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "hostnameprefix"); value.Exists() {
+	if value := res.Get(prefix + "hostnameprefix"); value.Exists() {
 		data.Hostnameprefix = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "localfilesize"); value.Exists() {
+	if value := res.Get(prefix + "localfilesize"); value.Exists() {
 		data.Localfilesize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "source-interfaces.source-interface"); value.Exists() {
+	if value := res.Get(prefix + "source-interfaces.source-interface"); value.Exists() {
 		data.SourceInterfaces = make([]LoggingSourceInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingSourceInterfaces{}
@@ -1572,25 +2540,25 @@ func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "suppress.duplicates"); value.Exists() {
+	if value := res.Get(prefix + "suppress.duplicates"); value.Exists() {
 		data.SuppressDuplicates = types.BoolValue(true)
 	} else {
 		data.SuppressDuplicates = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "format.rfc5424"); value.Exists() {
+	if value := res.Get(prefix + "format.rfc5424"); value.Exists() {
 		data.FormatRfc5424 = types.BoolValue(true)
 	} else {
 		data.FormatRfc5424 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "format.bsd"); value.Exists() {
+	if value := res.Get(prefix + "format.bsd"); value.Exists() {
 		data.FormatBsd = types.BoolValue(true)
 	} else {
 		data.FormatBsd = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "yang"); value.Exists() {
+	if value := res.Get(prefix + "yang"); value.Exists() {
 		data.Yang = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"); value.Exists() {
 		data.SuppressRules = make([]LoggingSuppressRules, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingSuppressRules{}
@@ -1639,10 +2607,10 @@ func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.buffer-size"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.buffer-size"); value.Exists() {
 		data.EventsBufferSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.filter.match"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.filter.match"); value.Exists() {
 		data.FilterMatches = make([]LoggingFilterMatches, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingFilterMatches{}
@@ -1653,27 +2621,628 @@ func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
 		data.EventsDisplayLocation = types.BoolValue(true)
 	} else {
 		data.EventsDisplayLocation = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() {
 		data.EventsLevel = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.threshold"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.threshold"); value.Exists() {
 		data.EventsThreshold = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression"); value.Exists() {
 		data.EventsPrecfgSuppression = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression-timeout"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression-timeout"); value.Exists() {
 		data.EventsPrecfgSuppressionTimeout = types.Int64Value(value.Int())
 	}
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *Logging) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/console"); value.Exists() {
+		data.Console = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/trap"); value.Exists() {
+		data.Trap = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor"); value.Exists() {
+		data.Monitor = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/console-logging/console-log-facility/console-facility-level"); value.Exists() {
+		data.ConsoleFacility = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/match1"); value.Exists() {
+		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/match2"); value.Exists() {
+		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/match3"); value.Exists() {
+		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/nomatch1"); value.Exists() {
+		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/nomatch2"); value.Exists() {
+		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/nomatch3"); value.Exists() {
+		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/device/disk0"); value.Exists() {
+		data.ArchiveDisk0 = types.BoolValue(true)
+	} else {
+		data.ArchiveDisk0 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/device/disk1"); value.Exists() {
+		data.ArchiveDisk1 = types.BoolValue(true)
+	} else {
+		data.ArchiveDisk1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/device/harddisk"); value.Exists() {
+		data.ArchiveHarddisk = types.BoolValue(true)
+	} else {
+		data.ArchiveHarddisk = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/frequency/daily"); value.Exists() {
+		data.ArchiveFrequencyDaily = types.BoolValue(true)
+	} else {
+		data.ArchiveFrequencyDaily = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/frequency/weekly"); value.Exists() {
+		data.ArchiveFrequencyWeekly = types.BoolValue(true)
+	} else {
+		data.ArchiveFrequencyWeekly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/file-size"); value.Exists() {
+		data.ArchiveFilesize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/archive-size"); value.Exists() {
+		data.ArchiveSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/archive-length"); value.Exists() {
+		data.ArchiveLength = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/severity"); value.Exists() {
+		data.ArchiveSeverity = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/threshold"); value.Exists() {
+		data.ArchiveThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/precedence"); value.Exists() {
+		data.Ipv4Precedence = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
+		data.Ipv6Dscp = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/precedence"); value.Exists() {
+		data.Ipv6Precedence = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/facility/level"); value.Exists() {
+		data.FacilityLevel = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/buffered-entries/count"); value.Exists() {
+		data.BufferedEntriesCount = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/logging-buffer-size"); value.Exists() {
+		data.BufferedSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/level"); value.Exists() {
+		data.BufferedLevel = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/match1"); value.Exists() {
+		data.BufferedDiscriminatorMatch1 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/match2"); value.Exists() {
+		data.BufferedDiscriminatorMatch2 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/match3"); value.Exists() {
+		data.BufferedDiscriminatorMatch3 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/nomatch1"); value.Exists() {
+		data.BufferedDiscriminatorNomatch1 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/nomatch2"); value.Exists() {
+		data.BufferedDiscriminatorNomatch2 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/nomatch3"); value.Exists() {
+		data.BufferedDiscriminatorNomatch3 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/container/all"); value.Exists() {
+		data.ContainerAll = types.BoolValue(true)
+	} else {
+		data.ContainerAll = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/container/fetch-timestamp"); value.Exists() {
+		data.ContainerFetchTimestamp = types.BoolValue(true)
+	} else {
+		data.ContainerFetchTimestamp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/files/file"); value.Exists() {
+		data.File = make([]LoggingFile, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingFile{}
+			if cValue := helpers.GetFromXPath(v, "file-name"); cValue.Exists() {
+				item.FileName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "path"); cValue.Exists() {
+				item.Path = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "maxfilesize"); cValue.Exists() {
+				item.Maxfilesize = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "severity"); cValue.Exists() {
+				item.Severity = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "local-accounting/send-to-remote/facility/level"); cValue.Exists() {
+				item.LocalAccountingSendToRemoteFacilityLevel = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/match1"); cValue.Exists() {
+				item.DiscriminatorMatch1 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/match2"); cValue.Exists() {
+				item.DiscriminatorMatch2 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/match3"); cValue.Exists() {
+				item.DiscriminatorMatch3 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/nomatch1"); cValue.Exists() {
+				item.DiscriminatorNomatch1 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/nomatch2"); cValue.Exists() {
+				item.DiscriminatorNomatch2 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/nomatch3"); cValue.Exists() {
+				item.DiscriminatorNomatch3 = types.StringValue(cValue.String())
+			}
+			data.File = append(data.File, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/history"); value.Exists() {
+		data.History = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/history-size"); value.Exists() {
+		data.HistorySize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hostnameprefix"); value.Exists() {
+		data.Hostnameprefix = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/localfilesize"); value.Exists() {
+		data.Localfilesize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interfaces/source-interface"); value.Exists() {
+		data.SourceInterfaces = make([]LoggingSourceInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingSourceInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "source-interface-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "vrfs/vrf"); cValue.Exists() {
+				item.Vrfs = make([]LoggingSourceInterfacesVrfs, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := LoggingSourceInterfacesVrfs{}
+					if ccValue := helpers.GetFromXPath(cv, "vrf-name"); ccValue.Exists() {
+						cItem.Name = types.StringValue(ccValue.String())
+					}
+					item.Vrfs = append(item.Vrfs, cItem)
+					return true
+				})
+			}
+			data.SourceInterfaces = append(data.SourceInterfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/suppress/duplicates"); value.Exists() {
+		data.SuppressDuplicates = types.BoolValue(true)
+	} else {
+		data.SuppressDuplicates = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/format/rfc5424"); value.Exists() {
+		data.FormatRfc5424 = types.BoolValue(true)
+	} else {
+		data.FormatRfc5424 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/format/bsd"); value.Exists() {
+		data.FormatBsd = types.BoolValue(true)
+	} else {
+		data.FormatBsd = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/yang"); value.Exists() {
+		data.Yang = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule"); value.Exists() {
+		data.SuppressRules = make([]LoggingSuppressRules, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingSuppressRules{}
+			if cValue := helpers.GetFromXPath(v, "rule-name"); cValue.Exists() {
+				item.RuleName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "alarms/alarm"); cValue.Exists() {
+				item.Alarms = make([]LoggingSuppressRulesAlarms, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := LoggingSuppressRulesAlarms{}
+					if ccValue := helpers.GetFromXPath(cv, "message-category"); ccValue.Exists() {
+						cItem.MessageCategory = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "group-name"); ccValue.Exists() {
+						cItem.GroupName = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "message-code"); ccValue.Exists() {
+						cItem.MessageCode = types.StringValue(ccValue.String())
+					}
+					item.Alarms = append(item.Alarms, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "all-alarms"); cValue.Exists() {
+				item.AllAlarms = types.BoolValue(true)
+			} else {
+				item.AllAlarms = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "apply/all-of-router"); cValue.Exists() {
+				item.ApplyAllOfRouter = types.BoolValue(true)
+			} else {
+				item.ApplyAllOfRouter = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "apply/source/locations/location"); cValue.Exists() {
+				item.ApplySourceLocations = make([]LoggingSuppressRulesApplySourceLocations, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := LoggingSuppressRulesApplySourceLocations{}
+					if ccValue := helpers.GetFromXPath(cv, "location-name"); ccValue.Exists() {
+						cItem.LocationName = types.StringValue(ccValue.String())
+					}
+					item.ApplySourceLocations = append(item.ApplySourceLocations, cItem)
+					return true
+				})
+			}
+			data.SuppressRules = append(data.SuppressRules, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size"); value.Exists() {
+		data.EventsBufferSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match"); value.Exists() {
+		data.FilterMatches = make([]LoggingFilterMatches, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingFilterMatches{}
+			if cValue := helpers.GetFromXPath(v, "match-string"); cValue.Exists() {
+				item.Match = types.StringValue(cValue.String())
+			}
+			data.FilterMatches = append(data.FilterMatches, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"); value.Exists() {
+		data.EventsDisplayLocation = types.BoolValue(true)
+	} else {
+		data.EventsDisplayLocation = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level"); value.Exists() {
+		data.EventsLevel = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/threshold"); value.Exists() {
+		data.EventsThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression"); value.Exists() {
+		data.EventsPrecfgSuppression = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout"); value.Exists() {
+		data.EventsPrecfgSuppressionTimeout = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *LoggingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/console"); value.Exists() {
+		data.Console = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/trap"); value.Exists() {
+		data.Trap = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor"); value.Exists() {
+		data.Monitor = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/console-logging/console-log-facility/console-facility-level"); value.Exists() {
+		data.ConsoleFacility = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/match1"); value.Exists() {
+		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/match2"); value.Exists() {
+		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/match3"); value.Exists() {
+		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/nomatch1"); value.Exists() {
+		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/nomatch2"); value.Exists() {
+		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-discriminator/nomatch3"); value.Exists() {
+		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/device/disk0"); value.Exists() {
+		data.ArchiveDisk0 = types.BoolValue(true)
+	} else {
+		data.ArchiveDisk0 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/device/disk1"); value.Exists() {
+		data.ArchiveDisk1 = types.BoolValue(true)
+	} else {
+		data.ArchiveDisk1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/device/harddisk"); value.Exists() {
+		data.ArchiveHarddisk = types.BoolValue(true)
+	} else {
+		data.ArchiveHarddisk = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/frequency/daily"); value.Exists() {
+		data.ArchiveFrequencyDaily = types.BoolValue(true)
+	} else {
+		data.ArchiveFrequencyDaily = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/frequency/weekly"); value.Exists() {
+		data.ArchiveFrequencyWeekly = types.BoolValue(true)
+	} else {
+		data.ArchiveFrequencyWeekly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/file-size"); value.Exists() {
+		data.ArchiveFilesize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/archive-size"); value.Exists() {
+		data.ArchiveSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/archive-length"); value.Exists() {
+		data.ArchiveLength = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/severity"); value.Exists() {
+		data.ArchiveSeverity = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/archive/threshold"); value.Exists() {
+		data.ArchiveThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/precedence"); value.Exists() {
+		data.Ipv4Precedence = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
+		data.Ipv6Dscp = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/precedence"); value.Exists() {
+		data.Ipv6Precedence = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/facility/level"); value.Exists() {
+		data.FacilityLevel = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/buffered-entries/count"); value.Exists() {
+		data.BufferedEntriesCount = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/logging-buffer-size"); value.Exists() {
+		data.BufferedSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/level"); value.Exists() {
+		data.BufferedLevel = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/match1"); value.Exists() {
+		data.BufferedDiscriminatorMatch1 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/match2"); value.Exists() {
+		data.BufferedDiscriminatorMatch2 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/match3"); value.Exists() {
+		data.BufferedDiscriminatorMatch3 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/nomatch1"); value.Exists() {
+		data.BufferedDiscriminatorNomatch1 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/nomatch2"); value.Exists() {
+		data.BufferedDiscriminatorNomatch2 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/buffered/discriminator/nomatch3"); value.Exists() {
+		data.BufferedDiscriminatorNomatch3 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/container/all"); value.Exists() {
+		data.ContainerAll = types.BoolValue(true)
+	} else {
+		data.ContainerAll = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/container/fetch-timestamp"); value.Exists() {
+		data.ContainerFetchTimestamp = types.BoolValue(true)
+	} else {
+		data.ContainerFetchTimestamp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/files/file"); value.Exists() {
+		data.File = make([]LoggingFile, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingFile{}
+			if cValue := helpers.GetFromXPath(v, "file-name"); cValue.Exists() {
+				item.FileName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "path"); cValue.Exists() {
+				item.Path = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "maxfilesize"); cValue.Exists() {
+				item.Maxfilesize = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "severity"); cValue.Exists() {
+				item.Severity = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "local-accounting/send-to-remote/facility/level"); cValue.Exists() {
+				item.LocalAccountingSendToRemoteFacilityLevel = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/match1"); cValue.Exists() {
+				item.DiscriminatorMatch1 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/match2"); cValue.Exists() {
+				item.DiscriminatorMatch2 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/match3"); cValue.Exists() {
+				item.DiscriminatorMatch3 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/nomatch1"); cValue.Exists() {
+				item.DiscriminatorNomatch1 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/nomatch2"); cValue.Exists() {
+				item.DiscriminatorNomatch2 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discriminator/nomatch3"); cValue.Exists() {
+				item.DiscriminatorNomatch3 = types.StringValue(cValue.String())
+			}
+			data.File = append(data.File, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/history"); value.Exists() {
+		data.History = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/history-size"); value.Exists() {
+		data.HistorySize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hostnameprefix"); value.Exists() {
+		data.Hostnameprefix = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/localfilesize"); value.Exists() {
+		data.Localfilesize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interfaces/source-interface"); value.Exists() {
+		data.SourceInterfaces = make([]LoggingSourceInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingSourceInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "source-interface-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "vrfs/vrf"); cValue.Exists() {
+				item.Vrfs = make([]LoggingSourceInterfacesVrfs, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := LoggingSourceInterfacesVrfs{}
+					if ccValue := helpers.GetFromXPath(cv, "vrf-name"); ccValue.Exists() {
+						cItem.Name = types.StringValue(ccValue.String())
+					}
+					item.Vrfs = append(item.Vrfs, cItem)
+					return true
+				})
+			}
+			data.SourceInterfaces = append(data.SourceInterfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/suppress/duplicates"); value.Exists() {
+		data.SuppressDuplicates = types.BoolValue(true)
+	} else {
+		data.SuppressDuplicates = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/format/rfc5424"); value.Exists() {
+		data.FormatRfc5424 = types.BoolValue(true)
+	} else {
+		data.FormatRfc5424 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/format/bsd"); value.Exists() {
+		data.FormatBsd = types.BoolValue(true)
+	} else {
+		data.FormatBsd = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/yang"); value.Exists() {
+		data.Yang = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule"); value.Exists() {
+		data.SuppressRules = make([]LoggingSuppressRules, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingSuppressRules{}
+			if cValue := helpers.GetFromXPath(v, "rule-name"); cValue.Exists() {
+				item.RuleName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "alarms/alarm"); cValue.Exists() {
+				item.Alarms = make([]LoggingSuppressRulesAlarms, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := LoggingSuppressRulesAlarms{}
+					if ccValue := helpers.GetFromXPath(cv, "message-category"); ccValue.Exists() {
+						cItem.MessageCategory = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "group-name"); ccValue.Exists() {
+						cItem.GroupName = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "message-code"); ccValue.Exists() {
+						cItem.MessageCode = types.StringValue(ccValue.String())
+					}
+					item.Alarms = append(item.Alarms, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "all-alarms"); cValue.Exists() {
+				item.AllAlarms = types.BoolValue(true)
+			} else {
+				item.AllAlarms = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "apply/all-of-router"); cValue.Exists() {
+				item.ApplyAllOfRouter = types.BoolValue(true)
+			} else {
+				item.ApplyAllOfRouter = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "apply/source/locations/location"); cValue.Exists() {
+				item.ApplySourceLocations = make([]LoggingSuppressRulesApplySourceLocations, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := LoggingSuppressRulesApplySourceLocations{}
+					if ccValue := helpers.GetFromXPath(cv, "location-name"); ccValue.Exists() {
+						cItem.LocationName = types.StringValue(ccValue.String())
+					}
+					item.ApplySourceLocations = append(item.ApplySourceLocations, cItem)
+					return true
+				})
+			}
+			data.SuppressRules = append(data.SuppressRules, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size"); value.Exists() {
+		data.EventsBufferSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match"); value.Exists() {
+		data.FilterMatches = make([]LoggingFilterMatches, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingFilterMatches{}
+			if cValue := helpers.GetFromXPath(v, "match-string"); cValue.Exists() {
+				item.Match = types.StringValue(cValue.String())
+			}
+			data.FilterMatches = append(data.FilterMatches, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"); value.Exists() {
+		data.EventsDisplayLocation = types.BoolValue(true)
+	} else {
+		data.EventsDisplayLocation = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level"); value.Exists() {
+		data.EventsLevel = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/threshold"); value.Exists() {
+		data.EventsThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression"); value.Exists() {
+		data.EventsPrecfgSuppression = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout"); value.Exists() {
+		data.EventsPrecfgSuppressionTimeout = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []string {
@@ -2090,13 +3659,15 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *Logging) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *Logging) getEmptyLeafsDelete(ctx context.Context, state *Logging) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.EventsDisplayLocation.IsNull() && !data.EventsDisplayLocation.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", data.getPath()))
+		if state != nil && !state.EventsDisplayLocation.IsNull() && state.EventsDisplayLocation.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", data.getXPath()))
+		}
 	}
 	for i := range data.FilterMatches {
 		keys := [...]string{"match-string"}
@@ -2121,11 +3692,19 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.SuppressRules[i].ApplyAllOfRouter.IsNull() && !data.SuppressRules[i].ApplyAllOfRouter.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/apply/all-of-router", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.SuppressRules) && !state.SuppressRules[i].ApplyAllOfRouter.IsNull() && state.SuppressRules[i].ApplyAllOfRouter.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/apply/all-of-router", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.SuppressRules[i].AllAlarms.IsNull() && !data.SuppressRules[i].AllAlarms.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/all-alarms", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.SuppressRules) && !state.SuppressRules[i].AllAlarms.IsNull() && state.SuppressRules[i].AllAlarms.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/all-alarms", data.getXPath(), keyString))
+			}
 		}
 		for ci := range data.SuppressRules[i].Alarms {
 			ckeys := [...]string{"message-category", "group-name", "message-code"}
@@ -2136,14 +3715,23 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context) []string {
 			}
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.FormatBsd.IsNull() && !data.FormatBsd.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/format/bsd", data.getPath()))
+		if state != nil && !state.FormatBsd.IsNull() && state.FormatBsd.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/format/bsd", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.FormatRfc5424.IsNull() && !data.FormatRfc5424.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/format/rfc5424", data.getPath()))
+		if state != nil && !state.FormatRfc5424.IsNull() && state.FormatRfc5424.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/format/rfc5424", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.SuppressDuplicates.IsNull() && !data.SuppressDuplicates.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suppress/duplicates", data.getPath()))
+		if state != nil && !state.SuppressDuplicates.IsNull() && state.SuppressDuplicates.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suppress/duplicates", data.getXPath()))
+		}
 	}
 	for i := range data.SourceInterfaces {
 		keys := [...]string{"source-interface-name"}
@@ -2169,32 +3757,52 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ContainerFetchTimestamp.IsNull() && !data.ContainerFetchTimestamp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/container/fetch-timestamp", data.getPath()))
+		if state != nil && !state.ContainerFetchTimestamp.IsNull() && state.ContainerFetchTimestamp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/container/fetch-timestamp", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ContainerAll.IsNull() && !data.ContainerAll.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/container/all", data.getPath()))
+		if state != nil && !state.ContainerAll.IsNull() && state.ContainerAll.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/container/all", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ArchiveFrequencyWeekly.IsNull() && !data.ArchiveFrequencyWeekly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/archive/frequency/weekly", data.getPath()))
+		if state != nil && !state.ArchiveFrequencyWeekly.IsNull() && state.ArchiveFrequencyWeekly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/archive/frequency/weekly", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ArchiveFrequencyDaily.IsNull() && !data.ArchiveFrequencyDaily.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/archive/frequency/daily", data.getPath()))
+		if state != nil && !state.ArchiveFrequencyDaily.IsNull() && state.ArchiveFrequencyDaily.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/archive/frequency/daily", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ArchiveHarddisk.IsNull() && !data.ArchiveHarddisk.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/archive/device/harddisk", data.getPath()))
+		if state != nil && !state.ArchiveHarddisk.IsNull() && state.ArchiveHarddisk.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/archive/device/harddisk", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ArchiveDisk1.IsNull() && !data.ArchiveDisk1.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/archive/device/disk1", data.getPath()))
+		if state != nil && !state.ArchiveDisk1.IsNull() && state.ArchiveDisk1.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/archive/device/disk1", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ArchiveDisk0.IsNull() && !data.ArchiveDisk0.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/archive/device/disk0", data.getPath()))
+		if state != nil && !state.ArchiveDisk0.IsNull() && state.ArchiveDisk0.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/archive/device/disk0", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *Logging) getDeletePaths(ctx context.Context) []string {
@@ -2215,27 +3823,19 @@ func (data *Logging) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", data.getPath()))
 	}
 	for i := range data.FilterMatches {
-		keys := [...]string{"match-string"}
-		keyValues := [...]string{data.FilterMatches[i].Match.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[match-string=" + data.FilterMatches[i].Match.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match%v", data.getPath(), keyPath))
 	}
 	if !data.EventsBufferSize.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size", data.getPath()))
 	}
 	for i := range data.SuppressRules {
-		keys := [...]string{"rule-name"}
-		keyValues := [...]string{data.SuppressRules[i].RuleName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[rule-name=" + data.SuppressRules[i].RuleName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v", data.getPath(), keyPath))
 	}
 	if !data.Yang.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/yang", data.getPath()))
@@ -2250,14 +3850,10 @@ func (data *Logging) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/suppress/duplicates", data.getPath()))
 	}
 	for i := range data.SourceInterfaces {
-		keys := [...]string{"source-interface-name"}
-		keyValues := [...]string{data.SourceInterfaces[i].Name.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-interfaces/source-interface%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[source-interface-name=" + data.SourceInterfaces[i].Name.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-interfaces/source-interface%v", data.getPath(), keyPath))
 	}
 	if !data.Localfilesize.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/localfilesize", data.getPath()))
@@ -2272,14 +3868,10 @@ func (data *Logging) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/history", data.getPath()))
 	}
 	for i := range data.File {
-		keys := [...]string{"file-name"}
-		keyValues := [...]string{data.File[i].FileName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/files/file%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[file-name=" + data.File[i].FileName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/files/file%v", data.getPath(), keyPath))
 	}
 	if !data.ContainerFetchTimestamp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/container/fetch-timestamp", data.getPath()))
@@ -2389,7 +3981,842 @@ func (data *Logging) getDeletePaths(ctx context.Context) []string {
 	if !data.Console.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/console", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.EventsPrecfgSuppressionTimeout.IsNull() && data.EventsPrecfgSuppressionTimeout.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.EventsPrecfgSuppression.IsNull() && data.EventsPrecfgSuppression.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.EventsThreshold.IsNull() && data.EventsThreshold.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/threshold"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.EventsLevel.IsNull() && data.EventsLevel.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/level"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EventsDisplayLocation.IsNull() && state.EventsDisplayLocation.ValueBool() && data.EventsDisplayLocation.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.FilterMatches {
+		stateKeys := [...]string{"match-string"}
+		stateKeyValues := [...]string{state.FilterMatches[i].Match.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FilterMatches[i].Match.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FilterMatches {
+			found = true
+			if state.FilterMatches[i].Match.ValueString() != data.FilterMatches[j].Match.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match%v", predicates))
+		}
+	}
+	if !state.EventsBufferSize.IsNull() && data.EventsBufferSize.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.SuppressRules {
+		stateKeys := [...]string{"rule-name"}
+		stateKeyValues := [...]string{state.SuppressRules[i].RuleName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SuppressRules[i].RuleName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SuppressRules {
+			found = true
+			if state.SuppressRules[i].RuleName.ValueString() != data.SuppressRules[j].RuleName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.SuppressRules[i].ApplySourceLocations {
+					cstateKeys := [...]string{"location-name"}
+					cstateKeyValues := [...]string{state.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SuppressRules[j].ApplySourceLocations {
+						found = true
+						if state.SuppressRules[i].ApplySourceLocations[ci].LocationName.ValueString() != data.SuppressRules[j].ApplySourceLocations[cj].LocationName.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/apply/source/locations/location%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.SuppressRules[i].ApplyAllOfRouter.IsNull() && state.SuppressRules[i].ApplyAllOfRouter.ValueBool() && data.SuppressRules[j].ApplyAllOfRouter.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/apply/all-of-router", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.SuppressRules[i].AllAlarms.IsNull() && state.SuppressRules[i].AllAlarms.ValueBool() && data.SuppressRules[j].AllAlarms.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/all-alarms", predicates))
+				}
+				for ci := range state.SuppressRules[i].Alarms {
+					cstateKeys := [...]string{"message-category", "group-name", "message-code"}
+					cstateKeyValues := [...]string{state.SuppressRules[i].Alarms[ci].MessageCategory.ValueString(), state.SuppressRules[i].Alarms[ci].GroupName.ValueString(), state.SuppressRules[i].Alarms[ci].MessageCode.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SuppressRules[i].Alarms[ci].MessageCategory.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.SuppressRules[i].Alarms[ci].GroupName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.SuppressRules[i].Alarms[ci].MessageCode.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SuppressRules[j].Alarms {
+						found = true
+						if state.SuppressRules[i].Alarms[ci].MessageCategory.ValueString() != data.SuppressRules[j].Alarms[cj].MessageCategory.ValueString() {
+							found = false
+						}
+						if state.SuppressRules[i].Alarms[ci].GroupName.ValueString() != data.SuppressRules[j].Alarms[cj].GroupName.ValueString() {
+							found = false
+						}
+						if state.SuppressRules[i].Alarms[ci].MessageCode.ValueString() != data.SuppressRules[j].Alarms[cj].MessageCode.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v/alarms/alarm%v", predicates, cpredicates))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v", predicates))
+		}
+	}
+	if !state.Yang.IsNull() && data.Yang.IsNull() {
+		deletePath := state.getXPath() + "/yang"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.FormatBsd.IsNull() && state.FormatBsd.ValueBool() && data.FormatBsd.IsNull() {
+		deletePath := state.getXPath() + "/format/bsd"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.FormatRfc5424.IsNull() && state.FormatRfc5424.ValueBool() && data.FormatRfc5424.IsNull() {
+		deletePath := state.getXPath() + "/format/rfc5424"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SuppressDuplicates.IsNull() && state.SuppressDuplicates.ValueBool() && data.SuppressDuplicates.IsNull() {
+		deletePath := state.getXPath() + "/suppress/duplicates"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.SourceInterfaces {
+		stateKeys := [...]string{"source-interface-name"}
+		stateKeyValues := [...]string{state.SourceInterfaces[i].Name.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SourceInterfaces[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SourceInterfaces {
+			found = true
+			if state.SourceInterfaces[i].Name.ValueString() != data.SourceInterfaces[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.SourceInterfaces[i].Vrfs {
+					cstateKeys := [...]string{"vrf-name"}
+					cstateKeyValues := [...]string{state.SourceInterfaces[i].Vrfs[ci].Name.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SourceInterfaces[i].Vrfs[ci].Name.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SourceInterfaces[j].Vrfs {
+						found = true
+						if state.SourceInterfaces[i].Vrfs[ci].Name.ValueString() != data.SourceInterfaces[j].Vrfs[cj].Name.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/source-interfaces/source-interface%v/vrfs/vrf%v", predicates, cpredicates))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/source-interfaces/source-interface%v", predicates))
+		}
+	}
+	if !state.Localfilesize.IsNull() && data.Localfilesize.IsNull() {
+		deletePath := state.getXPath() + "/localfilesize"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Hostnameprefix.IsNull() && data.Hostnameprefix.IsNull() {
+		deletePath := state.getXPath() + "/hostnameprefix"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.HistorySize.IsNull() && data.HistorySize.IsNull() {
+		deletePath := state.getXPath() + "/history-size"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.History.IsNull() && data.History.IsNull() {
+		deletePath := state.getXPath() + "/history"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.File {
+		stateKeys := [...]string{"file-name"}
+		stateKeyValues := [...]string{state.File[i].FileName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.File[i].FileName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.File {
+			found = true
+			if state.File[i].FileName.ValueString() != data.File[j].FileName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.File[i].DiscriminatorNomatch3.IsNull() && data.File[j].DiscriminatorNomatch3.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/nomatch3", predicates))
+				}
+				if !state.File[i].DiscriminatorNomatch2.IsNull() && data.File[j].DiscriminatorNomatch2.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/nomatch2", predicates))
+				}
+				if !state.File[i].DiscriminatorNomatch1.IsNull() && data.File[j].DiscriminatorNomatch1.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/nomatch1", predicates))
+				}
+				if !state.File[i].DiscriminatorMatch3.IsNull() && data.File[j].DiscriminatorMatch3.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/match3", predicates))
+				}
+				if !state.File[i].DiscriminatorMatch2.IsNull() && data.File[j].DiscriminatorMatch2.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/match2", predicates))
+				}
+				if !state.File[i].DiscriminatorMatch1.IsNull() && data.File[j].DiscriminatorMatch1.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/discriminator/match1", predicates))
+				}
+				if !state.File[i].LocalAccountingSendToRemoteFacilityLevel.IsNull() && data.File[j].LocalAccountingSendToRemoteFacilityLevel.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/local-accounting/send-to-remote/facility/level", predicates))
+				}
+				if !state.File[i].Severity.IsNull() && data.File[j].Severity.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/.", predicates))
+				}
+				if !state.File[i].Maxfilesize.IsNull() && data.File[j].Maxfilesize.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/.", predicates))
+				}
+				if !state.File[i].Path.IsNull() && data.File[j].Path.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v/.", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/files/file%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ContainerFetchTimestamp.IsNull() && state.ContainerFetchTimestamp.ValueBool() && data.ContainerFetchTimestamp.IsNull() {
+		deletePath := state.getXPath() + "/container/fetch-timestamp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ContainerAll.IsNull() && state.ContainerAll.ValueBool() && data.ContainerAll.IsNull() {
+		deletePath := state.getXPath() + "/container/all"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BufferedDiscriminatorNomatch3.IsNull() && data.BufferedDiscriminatorNomatch3.IsNull() {
+		deletePath := state.getXPath() + "/buffered/discriminator/nomatch3"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BufferedDiscriminatorNomatch2.IsNull() && data.BufferedDiscriminatorNomatch2.IsNull() {
+		deletePath := state.getXPath() + "/buffered/discriminator/nomatch2"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BufferedDiscriminatorNomatch1.IsNull() && data.BufferedDiscriminatorNomatch1.IsNull() {
+		deletePath := state.getXPath() + "/buffered/discriminator/nomatch1"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BufferedDiscriminatorMatch3.IsNull() && data.BufferedDiscriminatorMatch3.IsNull() {
+		deletePath := state.getXPath() + "/buffered/discriminator/match3"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BufferedDiscriminatorMatch2.IsNull() && data.BufferedDiscriminatorMatch2.IsNull() {
+		deletePath := state.getXPath() + "/buffered/discriminator/match2"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BufferedDiscriminatorMatch1.IsNull() && data.BufferedDiscriminatorMatch1.IsNull() {
+		deletePath := state.getXPath() + "/buffered/discriminator/match1"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BufferedLevel.IsNull() && data.BufferedLevel.IsNull() {
+		deletePath := state.getXPath() + "/buffered/level"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BufferedSize.IsNull() && data.BufferedSize.IsNull() {
+		deletePath := state.getXPath() + "/buffered/logging-buffer-size"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BufferedEntriesCount.IsNull() && data.BufferedEntriesCount.IsNull() {
+		deletePath := state.getXPath() + "/buffered/buffered-entries/count"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.FacilityLevel.IsNull() && data.FacilityLevel.IsNull() {
+		deletePath := state.getXPath() + "/facility/level"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Ipv6Precedence.IsNull() && data.Ipv6Precedence.IsNull() {
+		deletePath := state.getXPath() + "/ipv6/precedence"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Ipv6Dscp.IsNull() && data.Ipv6Dscp.IsNull() {
+		deletePath := state.getXPath() + "/ipv6/dscp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Ipv4Precedence.IsNull() && data.Ipv4Precedence.IsNull() {
+		deletePath := state.getXPath() + "/ipv4/precedence"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Ipv4Dscp.IsNull() && data.Ipv4Dscp.IsNull() {
+		deletePath := state.getXPath() + "/ipv4/dscp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ArchiveThreshold.IsNull() && data.ArchiveThreshold.IsNull() {
+		deletePath := state.getXPath() + "/archive/threshold"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ArchiveSeverity.IsNull() && data.ArchiveSeverity.IsNull() {
+		deletePath := state.getXPath() + "/archive/severity"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ArchiveLength.IsNull() && data.ArchiveLength.IsNull() {
+		deletePath := state.getXPath() + "/archive/archive-length"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ArchiveSize.IsNull() && data.ArchiveSize.IsNull() {
+		deletePath := state.getXPath() + "/archive/archive-size"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ArchiveFilesize.IsNull() && data.ArchiveFilesize.IsNull() {
+		deletePath := state.getXPath() + "/archive/file-size"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ArchiveFrequencyWeekly.IsNull() && state.ArchiveFrequencyWeekly.ValueBool() && data.ArchiveFrequencyWeekly.IsNull() {
+		deletePath := state.getXPath() + "/archive/frequency/weekly"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ArchiveFrequencyDaily.IsNull() && state.ArchiveFrequencyDaily.ValueBool() && data.ArchiveFrequencyDaily.IsNull() {
+		deletePath := state.getXPath() + "/archive/frequency/daily"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ArchiveHarddisk.IsNull() && state.ArchiveHarddisk.ValueBool() && data.ArchiveHarddisk.IsNull() {
+		deletePath := state.getXPath() + "/archive/device/harddisk"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ArchiveDisk1.IsNull() && state.ArchiveDisk1.ValueBool() && data.ArchiveDisk1.IsNull() {
+		deletePath := state.getXPath() + "/archive/device/disk1"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ArchiveDisk0.IsNull() && state.ArchiveDisk0.ValueBool() && data.ArchiveDisk0.IsNull() {
+		deletePath := state.getXPath() + "/archive/device/disk0"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MonitorDiscriminatorNomatch3.IsNull() && data.MonitorDiscriminatorNomatch3.IsNull() {
+		deletePath := state.getXPath() + "/monitor-discriminator/nomatch3"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MonitorDiscriminatorNomatch2.IsNull() && data.MonitorDiscriminatorNomatch2.IsNull() {
+		deletePath := state.getXPath() + "/monitor-discriminator/nomatch2"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MonitorDiscriminatorNomatch1.IsNull() && data.MonitorDiscriminatorNomatch1.IsNull() {
+		deletePath := state.getXPath() + "/monitor-discriminator/nomatch1"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MonitorDiscriminatorMatch3.IsNull() && data.MonitorDiscriminatorMatch3.IsNull() {
+		deletePath := state.getXPath() + "/monitor-discriminator/match3"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MonitorDiscriminatorMatch2.IsNull() && data.MonitorDiscriminatorMatch2.IsNull() {
+		deletePath := state.getXPath() + "/monitor-discriminator/match2"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MonitorDiscriminatorMatch1.IsNull() && data.MonitorDiscriminatorMatch1.IsNull() {
+		deletePath := state.getXPath() + "/monitor-discriminator/match1"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ConsoleFacility.IsNull() && data.ConsoleFacility.IsNull() {
+		deletePath := state.getXPath() + "/console-logging/console-log-facility/console-facility-level"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Monitor.IsNull() && data.Monitor.IsNull() {
+		deletePath := state.getXPath() + "/monitor"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Trap.IsNull() && data.Trap.IsNull() {
+		deletePath := state.getXPath() + "/trap"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Console.IsNull() && data.Console.IsNull() {
+		deletePath := state.getXPath() + "/console"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *Logging) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.EventsPrecfgSuppressionTimeout.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout")
+	}
+	if !data.EventsPrecfgSuppression.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression")
+	}
+	if !data.EventsThreshold.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/threshold")
+	}
+	if !data.EventsLevel.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level")
+	}
+	if !data.EventsDisplayLocation.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location")
+	}
+	for i := range data.FilterMatches {
+		keys := [...]string{"match-string"}
+		keyValues := [...]string{data.FilterMatches[i].Match.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/filter/match%v", predicates))
+	}
+	if !data.EventsBufferSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size")
+	}
+	for i := range data.SuppressRules {
+		keys := [...]string{"rule-name"}
+		keyValues := [...]string{data.SuppressRules[i].RuleName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule%v", predicates))
+	}
+	if !data.Yang.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/yang")
+	}
+	if !data.FormatBsd.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/format/bsd")
+	}
+	if !data.FormatRfc5424.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/format/rfc5424")
+	}
+	if !data.SuppressDuplicates.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/suppress/duplicates")
+	}
+	for i := range data.SourceInterfaces {
+		keys := [...]string{"source-interface-name"}
+		keyValues := [...]string{data.SourceInterfaces[i].Name.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/source-interfaces/source-interface%v", predicates))
+	}
+	if !data.Localfilesize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/localfilesize")
+	}
+	if !data.Hostnameprefix.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hostnameprefix")
+	}
+	if !data.HistorySize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/history-size")
+	}
+	if !data.History.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/history")
+	}
+	for i := range data.File {
+		keys := [...]string{"file-name"}
+		keyValues := [...]string{data.File[i].FileName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/files/file%v", predicates))
+	}
+	if !data.ContainerFetchTimestamp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/container/fetch-timestamp")
+	}
+	if !data.ContainerAll.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/container/all")
+	}
+	if !data.BufferedDiscriminatorNomatch3.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/buffered/discriminator/nomatch3")
+	}
+	if !data.BufferedDiscriminatorNomatch2.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/buffered/discriminator/nomatch2")
+	}
+	if !data.BufferedDiscriminatorNomatch1.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/buffered/discriminator/nomatch1")
+	}
+	if !data.BufferedDiscriminatorMatch3.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/buffered/discriminator/match3")
+	}
+	if !data.BufferedDiscriminatorMatch2.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/buffered/discriminator/match2")
+	}
+	if !data.BufferedDiscriminatorMatch1.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/buffered/discriminator/match1")
+	}
+	if !data.BufferedLevel.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/buffered/level")
+	}
+	if !data.BufferedSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/buffered/logging-buffer-size")
+	}
+	if !data.BufferedEntriesCount.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/buffered/buffered-entries/count")
+	}
+	if !data.FacilityLevel.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/facility/level")
+	}
+	if !data.Ipv6Precedence.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv6/precedence")
+	}
+	if !data.Ipv6Dscp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv6/dscp")
+	}
+	if !data.Ipv4Precedence.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv4/precedence")
+	}
+	if !data.Ipv4Dscp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv4/dscp")
+	}
+	if !data.ArchiveThreshold.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/archive/threshold")
+	}
+	if !data.ArchiveSeverity.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/archive/severity")
+	}
+	if !data.ArchiveLength.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/archive/archive-length")
+	}
+	if !data.ArchiveSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/archive/archive-size")
+	}
+	if !data.ArchiveFilesize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/archive/file-size")
+	}
+	if !data.ArchiveFrequencyWeekly.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/archive/frequency/weekly")
+	}
+	if !data.ArchiveFrequencyDaily.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/archive/frequency/daily")
+	}
+	if !data.ArchiveHarddisk.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/archive/device/harddisk")
+	}
+	if !data.ArchiveDisk1.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/archive/device/disk1")
+	}
+	if !data.ArchiveDisk0.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/archive/device/disk0")
+	}
+	if !data.MonitorDiscriminatorNomatch3.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/monitor-discriminator/nomatch3")
+	}
+	if !data.MonitorDiscriminatorNomatch2.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/monitor-discriminator/nomatch2")
+	}
+	if !data.MonitorDiscriminatorNomatch1.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/monitor-discriminator/nomatch1")
+	}
+	if !data.MonitorDiscriminatorMatch3.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/monitor-discriminator/match3")
+	}
+	if !data.MonitorDiscriminatorMatch2.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/monitor-discriminator/match2")
+	}
+	if !data.MonitorDiscriminatorMatch1.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/monitor-discriminator/match1")
+	}
+	if !data.ConsoleFacility.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/console-logging/console-log-facility/console-facility-level")
+	}
+	if !data.Monitor.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/monitor")
+	}
+	if !data.Trap.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/trap")
+	}
+	if !data.Console.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/console")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

@@ -25,7 +25,11 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -68,6 +72,19 @@ func (data RouterVRRPInterfaceData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=%s]", data.InterfaceName.ValueString())
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data RouterVRRPInterface) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.InterfaceName.ValueString()))
+	return path
+}
+
+func (data RouterVRRPInterfaceData) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.InterfaceName.ValueString()))
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -97,82 +114,206 @@ func (data RouterVRRPInterface) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data RouterVRRPInterface) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/interface-name", data.InterfaceName.ValueString())
+	}
+	if !data.MacRefresh.IsNull() && !data.MacRefresh.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/mac-refresh", strconv.FormatInt(data.MacRefresh.ValueInt64(), 10))
+	}
+	if !data.DelayMinimum.IsNull() && !data.DelayMinimum.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/delay/minimum", strconv.FormatInt(data.DelayMinimum.ValueInt64(), 10))
+	}
+	if !data.DelayReload.IsNull() && !data.DelayReload.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/delay/reload", strconv.FormatInt(data.DelayReload.ValueInt64(), 10))
+	}
+	if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
+	}
+	if !data.BfdMultiplier.IsNull() && !data.BfdMultiplier.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterVRRPInterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mac-refresh"); value.Exists() && !data.MacRefresh.IsNull() {
 		data.MacRefresh = types.Int64Value(value.Int())
-	} else {
+	} else if data.MacRefresh.IsNull() {
 		data.MacRefresh = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "delay.minimum"); value.Exists() && !data.DelayMinimum.IsNull() {
 		data.DelayMinimum = types.Int64Value(value.Int())
-	} else {
+	} else if data.DelayMinimum.IsNull() {
 		data.DelayMinimum = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "delay.reload"); value.Exists() && !data.DelayReload.IsNull() {
 		data.DelayReload = types.Int64Value(value.Int())
-	} else {
+	} else if data.DelayReload.IsNull() {
 		data.DelayReload = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
-	} else {
+	} else if data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Null()
 	}
 }
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *RouterVRRPInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interface-name"); value.Exists() {
+		data.InterfaceName = types.StringValue(value.String())
+	} else if data.InterfaceName.IsNull() {
+		data.InterfaceName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac-refresh"); value.Exists() {
+		data.MacRefresh = types.Int64Value(value.Int())
+	} else if data.MacRefresh.IsNull() {
+		data.MacRefresh = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/minimum"); value.Exists() {
+		data.DelayMinimum = types.Int64Value(value.Int())
+	} else if data.DelayMinimum.IsNull() {
+		data.DelayMinimum = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/reload"); value.Exists() {
+		data.DelayReload = types.Int64Value(value.Int())
+	} else if data.DelayReload.IsNull() {
+		data.DelayReload = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	} else if data.BfdMinimumInterval.IsNull() {
+		data.BfdMinimumInterval = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	} else if data.BfdMultiplier.IsNull() {
+		data.BfdMultiplier = types.Int64Null()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *RouterVRRPInterface) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "mac-refresh"); value.Exists() {
+func (data *RouterVRRPInterface) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "mac-refresh"); value.Exists() {
 		data.MacRefresh = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "delay.minimum"); value.Exists() {
+	if value := res.Get(prefix + "delay.minimum"); value.Exists() {
 		data.DelayMinimum = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "delay.reload"); value.Exists() {
+	if value := res.Get(prefix + "delay.reload"); value.Exists() {
 		data.DelayReload = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+	if value := res.Get(prefix + "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+	if value := res.Get(prefix + "bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *RouterVRRPInterfaceData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "mac-refresh"); value.Exists() {
+func (data *RouterVRRPInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "mac-refresh"); value.Exists() {
 		data.MacRefresh = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "delay.minimum"); value.Exists() {
+	if value := res.Get(prefix + "delay.minimum"); value.Exists() {
 		data.DelayMinimum = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "delay.reload"); value.Exists() {
+	if value := res.Get(prefix + "delay.reload"); value.Exists() {
 		data.DelayReload = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+	if value := res.Get(prefix + "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+	if value := res.Get(prefix + "bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *RouterVRRPInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac-refresh"); value.Exists() {
+		data.MacRefresh = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/minimum"); value.Exists() {
+		data.DelayMinimum = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/reload"); value.Exists() {
+		data.DelayReload = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *RouterVRRPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac-refresh"); value.Exists() {
+		data.MacRefresh = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/minimum"); value.Exists() {
+		data.DelayMinimum = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/reload"); value.Exists() {
+		data.DelayReload = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RouterVRRPInterface) getDeletedItems(ctx context.Context, state RouterVRRPInterface) []string {
@@ -196,16 +337,14 @@ func (data *RouterVRRPInterface) getDeletedItems(ctx context.Context, state Rout
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *RouterVRRPInterface) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *RouterVRRPInterface) getEmptyLeafsDelete(ctx context.Context, state *RouterVRRPInterface) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterVRRPInterface) getDeletePaths(ctx context.Context) []string {
@@ -225,7 +364,81 @@ func (data *RouterVRRPInterface) getDeletePaths(ctx context.Context) []string {
 	if !data.MacRefresh.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/mac-refresh", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *RouterVRRPInterface) addDeletedItemsXML(ctx context.Context, state RouterVRRPInterface, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
+		deletePath := state.getXPath() + "/bfd/multiplier"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
+		deletePath := state.getXPath() + "/bfd/minimum-interval"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.DelayReload.IsNull() && data.DelayReload.IsNull() {
+		deletePath := state.getXPath() + "/delay/reload"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.DelayMinimum.IsNull() && data.DelayMinimum.IsNull() {
+		deletePath := state.getXPath() + "/delay/minimum"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MacRefresh.IsNull() && data.MacRefresh.IsNull() {
+		deletePath := state.getXPath() + "/mac-refresh"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *RouterVRRPInterface) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.BfdMultiplier.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bfd/multiplier")
+	}
+	if !data.BfdMinimumInterval.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bfd/minimum-interval")
+	}
+	if !data.DelayReload.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/delay/reload")
+	}
+	if !data.DelayMinimum.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/delay/minimum")
+	}
+	if !data.MacRefresh.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/mac-refresh")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

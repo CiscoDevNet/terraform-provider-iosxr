@@ -29,6 +29,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/tidwall/gjson"
+
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
 
 // End of section. //template:end imports
@@ -106,29 +109,69 @@ func (d *PolicyGlobalSetDataSource) Read(ctx context.Context, req datasource.Rea
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
 
 	if device.Managed {
-		if !d.data.ReuseConnection {
-			defer device.Client.Disconnect()
-		}
-		getResp, err := device.Client.Get(ctx, []string{config.getPath()})
-		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
-			return
-		}
+		if device.Protocol == "gnmi" {
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, d.data.ReuseConnection); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
 
-		// Defensive bounds checking for response structure
-		if len(getResp.Notifications) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response contains no notifications")
-			return
-		}
-		if len(getResp.Notifications[0].Update) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response notification contains no updates")
-			return
-		}
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, d.data.ReuseConnection)
+			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
+			if err != nil {
+				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				return
+			}
 
-		respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-		config.fromBody(ctx, respBody)
+			// Defensive bounds checking for response structure
+			if len(getResp.Notifications) == 0 {
+				resp.Diagnostics.AddError("Invalid gNMI response",
+					"Response contains no notifications")
+				return
+			}
+			if len(getResp.Notifications[0].Update) == 0 {
+				resp.Diagnostics.AddError("Invalid gNMI response",
+					"Response notification contains no updates")
+				return
+			}
+
+			update := getResp.Notifications[0].Update[0]
+			if update.Val == nil {
+				tflog.Debug(ctx, fmt.Sprintf("%s: gNMI Get returned nil Val, path exists but no data returned by device", config.getPath()))
+				// When Val is nil, the device confirmed the path exists but didn't return data
+				// This is a known behavior for netconf-yang-agent after configuration
+				// The presence of the path indicates the service is configured and enabled
+				// Return the configured values (these are the values that were set during Create)
+				// For other resources, if Val is nil, use fromBody with empty JSON
+				config.fromBody(ctx, gjson.Parse("{}"))
+			} else {
+				respBody := update.Val.GetJsonIetfVal()
+				tflog.Debug(ctx, fmt.Sprintf("%s: gNMI Get respBody: %s", config.getPath(), string(respBody)))
+				config.fromBody(ctx, gjson.ParseBytes(respBody))
+			}
+		} else {
+			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
+			locked := helpers.AcquireNetconfLock(&device.NetconfOpMutex, device.ReuseConnection, false)
+			if locked {
+				defer device.NetconfOpMutex.Unlock()
+			}
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			filter := helpers.GetSubtreeFilter(config.getXPath())
+			res, err := device.NetconfClient.GetConfig(ctx, "running", filter)
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object (%s), got error: %s", config.getPath(), err))
+				return
+			}
+
+			config.fromBodyXML(ctx, res.Res)
+		}
 	}
 
 	config.Id = types.StringValue(config.getPath())

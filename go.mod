@@ -10,6 +10,8 @@ require (
 	github.com/hashicorp/terraform-plugin-log v0.10.0
 	github.com/hashicorp/terraform-plugin-testing v1.14.0
 	github.com/netascode/go-gnmi v0.1.0
+	github.com/netascode/go-netconf v0.5.1
+	github.com/netascode/xmldot v0.5.0
 	github.com/openconfig/goyang v1.6.3
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/sjson v1.2.5
@@ -33,6 +35,7 @@ require (
 	github.com/bgentry/speakeasy v0.1.0 // indirect
 	github.com/bmatcuk/doublestar/v4 v4.9.1 // indirect
 	github.com/cloudflare/circl v1.6.1 // indirect
+	github.com/creack/pty v1.1.24 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/go-test/deep v1.1.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
@@ -76,7 +79,9 @@ require (
 	github.com/openconfig/grpctunnel v0.1.0 // indirect
 	github.com/posener/complete v1.2.3 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
+	github.com/scrapli/scrapligo v1.3.3 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
+	github.com/sirikothe/gotextfsm v1.1.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect

@@ -38,6 +38,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
+	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -910,26 +911,68 @@ func (r *L2VPNXconnectGroupResource) Create(ctx context.Context, req resource.Cr
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
-		var ops []gnmi.SetOperation
+		if device.Protocol == "gnmi" {
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
 
-		// Create object
-		body := plan.toBody(ctx)
-		ops = append(ops, gnmi.Update(plan.getPath(), body))
+			// Ensure connection is closed when function exits (if reuse disabled)
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 
-		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
-		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+			var ops []gnmi.SetOperation
 
-		for _, i := range emptyLeafsDelete {
-			ops = append(ops, gnmi.Delete(i))
-		}
+			// Create object
+			body := plan.toBody(ctx)
+			ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-		if !r.data.ReuseConnection {
-			defer device.Client.Disconnect()
-		}
-		_, err := device.Client.Set(ctx, ops)
-		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-			return
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+
+			for _, i := range emptyLeafsDelete {
+				ops = append(ops, gnmi.Delete(i))
+			}
+
+			_, err := device.GnmiClient.Set(ctx, ops)
+			if err != nil {
+				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+				return
+			}
+		} else {
+			// Serialize NETCONF operations when reuse disabled, or writes when reuse enabled
+			locked := helpers.AcquireNetconfLock(&device.NetconfOpMutex, device.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+			if locked {
+				defer device.NetconfOpMutex.Unlock()
+			}
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			bodyStr := plan.toBodyXML(ctx)
+			tflog.Info(ctx, fmt.Sprintf("NETCONF CREATE: Initial body length: %d", len(bodyStr)))
+
+			// Handle empty leafs (boolean false values) that need to be deleted
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			tflog.Info(ctx, fmt.Sprintf("NETCONF CREATE: Empty leafs to delete: %+v", emptyLeafsDelete))
+
+			if len(emptyLeafsDelete) > 0 {
+				for _, deletePath := range emptyLeafsDelete {
+					tflog.Info(ctx, fmt.Sprintf("NETCONF CREATE: Adding delete for path: %s", deletePath))
+					deleteXml := helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+					bodyStr += deleteXml
+				}
+				tflog.Info(ctx, fmt.Sprintf("NETCONF CREATE: Final body with deletes: %s", bodyStr))
+			}
+
+			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true); err != nil {
+				resp.Diagnostics.AddError("Client Error", err.Error())
+				return
+			}
 		}
 	}
 
@@ -966,43 +1009,77 @@ func (r *L2VPNXconnectGroupResource) Read(ctx context.Context, req resource.Read
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
 	if device.Managed {
-		if !r.data.ReuseConnection {
-			defer device.Client.Disconnect()
-		}
-		getResp, err := device.Client.Get(ctx, []string{state.Id.ValueString()})
-		if err != nil {
-			if strings.Contains(err.Error(), "Requested element(s) not found") {
-				resp.State.RemoveResource(ctx)
-				return
-			} else {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+		_ = diags // Avoid unused variable error
+		if device.Protocol == "gnmi" {
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
 				return
 			}
-		}
 
-		// Defensive bounds checking for response structure
-		if len(getResp.Notifications) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response contains no notifications")
-			return
-		}
-		if len(getResp.Notifications[0].Update) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response notification contains no updates")
-			return
-		}
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+			getResp, err := device.GnmiClient.Get(ctx, []string{state.Id.ValueString()})
+			if err != nil {
+				if strings.Contains(err.Error(), "Requested element(s) not found") {
+					resp.State.RemoveResource(ctx)
+					return
+				} else {
+					resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+					return
+				}
+			}
 
-		imp, diags := helpers.IsFlagImporting(ctx, req)
-		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-			return
-		}
+			// Defensive bounds checking for response structure
+			if len(getResp.Notifications) == 0 {
+				resp.Diagnostics.AddError("Invalid gNMI response",
+					"Response contains no notifications")
+				return
+			}
+			if len(getResp.Notifications[0].Update) == 0 {
+				resp.Diagnostics.AddError("Invalid gNMI response",
+					"Response notification contains no updates")
+				return
+			}
 
-		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-		if imp {
-			state.fromBody(ctx, respBody)
-		} else {
+			// Use updateFromBody to preserve config values for fields not on device
+			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
+			tflog.Debug(ctx, fmt.Sprintf("respBody : %s", respBody))
 			state.updateFromBody(ctx, respBody)
+		} else {
+			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
+			locked := helpers.AcquireNetconfLock(&device.NetconfOpMutex, device.ReuseConnection, false)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+			if locked {
+				defer device.NetconfOpMutex.Unlock()
+			}
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			filter := helpers.GetSubtreeFilter(state.getXPath())
+			res, err := device.NetconfClient.GetConfig(ctx, "running", filter)
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object (%s), got error: %s", state.getPath(), err))
+				return
+			}
+
+			tflog.Debug(ctx, fmt.Sprintf("NETCONF GetConfig response for %s: isEmpty=%v, isListPath=%v",
+				state.getXPath(), helpers.IsGetConfigResponseEmpty(&res), helpers.IsListPath(state.getXPath())))
+
+			if helpers.IsGetConfigResponseEmpty(&res) && helpers.IsListPath(state.getXPath()) {
+				// NETCONF returned empty response for a list resource
+				// This can happen on IOS-XR for certain resources even when they exist
+				// Instead of removing the resource, log a warning and preserve the current state
+				// This matches gNMI behavior where we keep the resource if we can't read it
+				tflog.Warn(ctx, fmt.Sprintf("%s: NETCONF returned empty response for list path, preserving state as-is", state.Id.ValueString()))
+				// Don't call updateFromBodyXML - keep state unchanged
+			} else {
+				// Use updateFromBodyXML to preserve config values for fields not on device
+				state.updateFromBodyXML(ctx, res.Res)
+			}
 		}
 	}
 
@@ -1044,33 +1121,71 @@ func (r *L2VPNXconnectGroupResource) Update(ctx context.Context, req resource.Up
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
 	if device.Managed {
-		var ops []gnmi.SetOperation
+		if device.Protocol == "gnmi" {
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
 
-		// Update object
-		body := plan.toBody(ctx)
-		ops = append(ops, gnmi.Update(plan.getPath(), body))
+			// Ensure connection is closed when function exits (if reuse disabled)
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 
-		deletedListItems := plan.getDeletedItems(ctx, state)
-		tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
+			var ops []gnmi.SetOperation
 
-		for _, i := range deletedListItems {
-			ops = append(ops, gnmi.Delete(i))
-		}
+			// Update object
+			body := plan.toBody(ctx)
+			ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
-		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+			deletedListItems := plan.getDeletedItems(ctx, state)
+			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
-		for _, i := range emptyLeafsDelete {
-			ops = append(ops, gnmi.Delete(i))
-		}
+			for _, i := range deletedListItems {
+				ops = append(ops, gnmi.Delete(i))
+			}
 
-		if !r.data.ReuseConnection {
-			defer device.Client.Disconnect()
-		}
-		_, err := device.Client.Set(ctx, ops)
-		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-			return
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
+			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+
+			for _, i := range emptyLeafsDelete {
+				ops = append(ops, gnmi.Delete(i))
+			}
+
+			_, err := device.GnmiClient.Set(ctx, ops)
+			if err != nil {
+				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+				return
+			}
+		} else {
+			// Serialize NETCONF operations when reuse disabled, or writes when reuse enabled
+			locked := helpers.AcquireNetconfLock(&device.NetconfOpMutex, device.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+			if locked {
+				defer device.NetconfOpMutex.Unlock()
+			}
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			body := plan.toBodyXML(ctx)
+			deleteBody := plan.addDeletedItemsXML(ctx, state, "")
+
+			// Also handle empty leaf deletes (for boolean false values)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
+			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+			for _, deletePath := range emptyLeafsDelete {
+				deleteBody += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			}
+
+			// Combine update and delete operations into a single transaction
+			combinedBody := body + deleteBody
+			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, true); err != nil {
+				resp.Diagnostics.AddError("Client Error", err.Error())
+				return
+			}
 		}
 	}
 
@@ -1103,7 +1218,6 @@ func (r *L2VPNXconnectGroupResource) Delete(ctx context.Context, req resource.De
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
 	if device.Managed {
-		var ops []gnmi.SetOperation
 		deleteMode := "all"
 		if state.DeleteMode.ValueString() == "all" {
 			deleteMode = "all"
@@ -1112,24 +1226,102 @@ func (r *L2VPNXconnectGroupResource) Delete(ctx context.Context, req resource.De
 		}
 
 		if deleteMode == "all" {
-			ops = append(ops, gnmi.Delete(state.Id.ValueString()))
+			if device.Protocol == "gnmi" {
+				// Ensure connection is healthy (reconnect if stale)
+				if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection); err != nil {
+					resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
+
+				// Ensure connection is closed when function exits (if reuse disabled)
+				defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+
+				var ops []gnmi.SetOperation
+				ops = append(ops, gnmi.Delete(state.Id.ValueString()))
+
+				_, err := device.GnmiClient.Set(ctx, ops)
+				if err != nil {
+					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+					return
+				}
+			} else {
+				// NETCONF - Serialize write operations
+				locked := helpers.AcquireNetconfLock(&device.NetconfOpMutex, device.ReuseConnection, true)
+				defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+				if locked {
+					defer device.NetconfOpMutex.Unlock()
+				}
+
+				// Ensure connection is healthy (reconnect if stale)
+				if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection); err != nil {
+					resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
+
+				body := netconf.Body{}
+				xpath := state.getXPath()
+				// RemoveFromXPathString returns raw XML string for delete operations
+				xmlStr := helpers.RemoveFromXPathString(body, xpath)
+
+				if err := helpers.EditConfig(ctx, device.NetconfClient, xmlStr, true); err != nil {
+					// Ignore data-missing errors as the resource may already be deleted
+					if !strings.Contains(err.Error(), "data-missing") {
+						resp.Diagnostics.AddError("Client Error", err.Error())
+						return
+					}
+					tflog.Debug(ctx, fmt.Sprintf("%s: Resource already deleted or does not exist", state.Id.ValueString()))
+				}
+			}
 		} else {
-			deletePaths := state.getDeletePaths(ctx)
-			tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
+			if device.Protocol == "gnmi" {
+				// Ensure connection is healthy (reconnect if stale)
+				if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection); err != nil {
+					resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
 
-			for _, i := range deletePaths {
-				ops = append(ops, gnmi.Delete(i))
-			}
-		}
+				// Ensure connection is closed when function exits (if reuse disabled)
+				defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 
-		if len(ops) > 0 {
-			if !r.data.ReuseConnection {
-				defer device.Client.Disconnect()
-			}
-			_, err := device.Client.Set(ctx, ops)
-			if err != nil {
-				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-				return
+				var ops []gnmi.SetOperation
+				deletePaths := state.getDeletePaths(ctx)
+				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
+
+				for _, i := range deletePaths {
+					ops = append(ops, gnmi.Delete(i))
+				}
+
+				if len(ops) > 0 {
+					_, err := device.GnmiClient.Set(ctx, ops)
+					if err != nil {
+						resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+						return
+					}
+				}
+			} else {
+				// NETCONF - Serialize write operations
+				locked := helpers.AcquireNetconfLock(&device.NetconfOpMutex, device.ReuseConnection, true)
+				defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+				if locked {
+					defer device.NetconfOpMutex.Unlock()
+				}
+
+				// Ensure connection is healthy (reconnect if stale)
+				if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection); err != nil {
+					resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
+
+				body := state.addDeletePathsXML(ctx, "")
+
+				if err := helpers.EditConfig(ctx, device.NetconfClient, body, true); err != nil {
+					// Ignore data-missing errors as the attributes may already be deleted
+					if !strings.Contains(err.Error(), "data-missing") {
+						resp.Diagnostics.AddError("Client Error", err.Error())
+						return
+					}
+					tflog.Debug(ctx, fmt.Sprintf("%s: Attributes already deleted or do not exist", state.Id.ValueString()))
+				}
 			}
 		}
 	}

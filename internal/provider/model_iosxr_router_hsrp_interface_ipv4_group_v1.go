@@ -26,7 +26,11 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -100,6 +104,19 @@ func (data RouterHSRPInterfaceIPv4GroupV1) getPath() string {
 
 func (data RouterHSRPInterfaceIPv4GroupV1Data) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]/address-family/ipv4/hsrp/group-number-version-1s/group-number-version-1[group-number-version-1-id=%v]", data.InterfaceName.ValueString(), data.GroupId.ValueInt64())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data RouterHSRPInterfaceIPv4GroupV1) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]/address-family/ipv4/hsrp/group-number-version-1s/group-number-version-1[group-number-version-1-id=%v]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.InterfaceName.ValueString()), data.GroupId.ValueInt64())
+	return path
+}
+
+func (data RouterHSRPInterfaceIPv4GroupV1Data) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]/address-family/ipv4/hsrp/group-number-version-1s/group-number-version-1[group-number-version-1-id=%v]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.InterfaceName.ValueString()), data.GroupId.ValueInt64())
+	return path
 }
 
 // End of section. //template:end getPath
@@ -189,17 +206,19 @@ func (data RouterHSRPInterfaceIPv4GroupV1) toBody(ctx context.Context) string {
 func (data *RouterHSRPInterfaceIPv4GroupV1) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address.ipv4-address"); value.Exists() && !data.Address.IsNull() {
 		data.Address = types.StringValue(value.String())
-	} else {
+	} else if data.Address.IsNull() {
 		data.Address = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "address.learn"); !data.AddressLearn.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "address.learn"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AddressLearn.IsNull() {
 			data.AddressLearn = types.BoolValue(true)
-		} else {
-			data.AddressLearn = types.BoolValue(false)
 		}
 	} else {
-		data.AddressLearn = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.AddressLearn.IsNull() {
+			data.AddressLearn = types.BoolNull()
+		}
 	}
 	for i := range data.SecondaryIpv4Addresses {
 		keys := [...]string{"address"}
@@ -232,12 +251,12 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) updateFromBody(ctx context.Context, 
 	}
 	if value := gjson.GetBytes(res, "priority"); value.Exists() && !data.Priority.IsNull() {
 		data.Priority = types.Int64Value(value.Int())
-	} else {
+	} else if data.Priority.IsNull() {
 		data.Priority = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "preempt.delay"); value.Exists() && !data.PreemptDelay.IsNull() {
 		data.PreemptDelay = types.Int64Value(value.Int())
-	} else {
+	} else if data.PreemptDelay.IsNull() {
 		data.PreemptDelay = types.Int64Null()
 	}
 	for i := range data.TrackInterfaces {
@@ -310,60 +329,325 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) updateFromBody(ctx context.Context, 
 	}
 	if value := gjson.GetBytes(res, "timers.msec"); value.Exists() && !data.TimersMsec.IsNull() {
 		data.TimersMsec = types.Int64Value(value.Int())
-	} else {
+	} else if data.TimersMsec.IsNull() {
 		data.TimersMsec = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "timers.msec2"); value.Exists() && !data.TimersMsecHoldtime.IsNull() {
 		data.TimersMsecHoldtime = types.Int64Value(value.Int())
-	} else {
+	} else if data.TimersMsecHoldtime.IsNull() {
 		data.TimersMsecHoldtime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "timers.hold-time"); value.Exists() && !data.TimersSeconds.IsNull() {
 		data.TimersSeconds = types.Int64Value(value.Int())
-	} else {
+	} else if data.TimersSeconds.IsNull() {
 		data.TimersSeconds = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "timers.hold-time2"); value.Exists() && !data.TimersSecondsHoldtime.IsNull() {
 		data.TimersSecondsHoldtime = types.Int64Value(value.Int())
-	} else {
+	} else if data.TimersSecondsHoldtime.IsNull() {
 		data.TimersSecondsHoldtime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "mac-address"); value.Exists() && !data.MacAddress.IsNull() {
 		data.MacAddress = types.StringValue(value.String())
-	} else {
+	} else if data.MacAddress.IsNull() {
 		data.MacAddress = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "name"); value.Exists() && !data.Name.IsNull() {
 		data.Name = types.StringValue(value.String())
-	} else {
+	} else if data.Name.IsNull() {
 		data.Name = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect.peer.ipv4"); value.Exists() && !data.BfdFastDetectPeerIpv4.IsNull() {
 		data.BfdFastDetectPeerIpv4 = types.StringValue(value.String())
-	} else {
+	} else if data.BfdFastDetectPeerIpv4.IsNull() {
 		data.BfdFastDetectPeerIpv4 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect.peer.interface"); value.Exists() && !data.BfdFastDetectPeerInterface.IsNull() {
 		data.BfdFastDetectPeerInterface = types.StringValue(value.String())
-	} else {
+	} else if data.BfdFastDetectPeerInterface.IsNull() {
 		data.BfdFastDetectPeerInterface = types.StringNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data RouterHSRPInterfaceIPv4GroupV1) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.GroupId.IsNull() && !data.GroupId.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/group-number-version-1-id", strconv.FormatInt(data.GroupId.ValueInt64(), 10))
+	}
+	if !data.Address.IsNull() && !data.Address.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/address/ipv4-address", data.Address.ValueString())
+	}
+	if !data.AddressLearn.IsNull() && !data.AddressLearn.IsUnknown() {
+		if data.AddressLearn.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/address/learn", "")
+		}
+	}
+	if len(data.SecondaryIpv4Addresses) > 0 {
+		for _, item := range data.SecondaryIpv4Addresses {
+			basePath := data.getXPath() + "/address/secondary-ipv4-addresses/secondary-ipv4-address[address='" + item.Address.ValueString() + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+		}
+	}
+	if !data.Priority.IsNull() && !data.Priority.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/priority", strconv.FormatInt(data.Priority.ValueInt64(), 10))
+	}
+	if !data.PreemptDelay.IsNull() && !data.PreemptDelay.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/preempt/delay", strconv.FormatInt(data.PreemptDelay.ValueInt64(), 10))
+	}
+	if len(data.TrackInterfaces) > 0 {
+		for _, item := range data.TrackInterfaces {
+			basePath := data.getXPath() + "/track-interfaces/track-interface[track-name='" + item.TrackName.ValueString() + "']"
+			if !item.TrackName.IsNull() && !item.TrackName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/track-name", item.TrackName.ValueString())
+			}
+			if !item.PriorityDecrement.IsNull() && !item.PriorityDecrement.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/priority-decrement", strconv.FormatInt(item.PriorityDecrement.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.TrackObjects) > 0 {
+		for _, item := range data.TrackObjects {
+			basePath := data.getXPath() + "/track-objects/track-object[object-name='" + item.ObjectName.ValueString() + "']"
+			if !item.ObjectName.IsNull() && !item.ObjectName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/object-name", item.ObjectName.ValueString())
+			}
+			if !item.PriorityDecrement.IsNull() && !item.PriorityDecrement.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/priority-decrement", strconv.FormatInt(item.PriorityDecrement.ValueInt64(), 10))
+			}
+		}
+	}
+	if !data.TimersMsec.IsNull() && !data.TimersMsec.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/msec", strconv.FormatInt(data.TimersMsec.ValueInt64(), 10))
+	}
+	if !data.TimersMsecHoldtime.IsNull() && !data.TimersMsecHoldtime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/msec2", strconv.FormatInt(data.TimersMsecHoldtime.ValueInt64(), 10))
+	}
+	if !data.TimersSeconds.IsNull() && !data.TimersSeconds.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/hold-time", strconv.FormatInt(data.TimersSeconds.ValueInt64(), 10))
+	}
+	if !data.TimersSecondsHoldtime.IsNull() && !data.TimersSecondsHoldtime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/hold-time2", strconv.FormatInt(data.TimersSecondsHoldtime.ValueInt64(), 10))
+	}
+	if !data.MacAddress.IsNull() && !data.MacAddress.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/mac-address", data.MacAddress.ValueString())
+	}
+	if !data.Name.IsNull() && !data.Name.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/name", data.Name.ValueString())
+	}
+	if !data.BfdFastDetectPeerIpv4.IsNull() && !data.BfdFastDetectPeerIpv4.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/fast-detect/peer/ipv4", data.BfdFastDetectPeerIpv4.ValueString())
+	}
+	if !data.BfdFastDetectPeerInterface.IsNull() && !data.BfdFastDetectPeerInterface.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/fast-detect/peer/interface", data.BfdFastDetectPeerInterface.ValueString())
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *RouterHSRPInterfaceIPv4GroupV1) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/group-number-version-1-id"); value.Exists() {
+		data.GroupId = types.Int64Value(value.Int())
+	} else if data.GroupId.IsNull() {
+		data.GroupId = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/ipv4-address"); value.Exists() {
+		data.Address = types.StringValue(value.String())
+	} else if data.Address.IsNull() {
+		data.Address = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/learn"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AddressLearn.IsNull() {
+			data.AddressLearn = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.AddressLearn.IsNull() {
+			data.AddressLearn = types.BoolNull()
+		}
+	}
+	for i := range data.SecondaryIpv4Addresses {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SecondaryIpv4Addresses[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/secondary-ipv4-addresses/secondary-ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.SecondaryIpv4Addresses[i].Address = types.StringValue(value.String())
+		} else if data.SecondaryIpv4Addresses[i].Address.IsNull() {
+			data.SecondaryIpv4Addresses[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/priority"); value.Exists() {
+		data.Priority = types.Int64Value(value.Int())
+	} else if data.Priority.IsNull() {
+		data.Priority = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preempt/delay"); value.Exists() {
+		data.PreemptDelay = types.Int64Value(value.Int())
+	} else if data.PreemptDelay.IsNull() {
+		data.PreemptDelay = types.Int64Null()
+	}
+	for i := range data.TrackInterfaces {
+		keys := [...]string{"track-name"}
+		keyValues := [...]string{data.TrackInterfaces[i].TrackName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/track-interfaces/track-interface").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "track-name"); value.Exists() {
+			data.TrackInterfaces[i].TrackName = types.StringValue(value.String())
+		} else if data.TrackInterfaces[i].TrackName.IsNull() {
+			data.TrackInterfaces[i].TrackName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "priority-decrement"); value.Exists() {
+			data.TrackInterfaces[i].PriorityDecrement = types.Int64Value(value.Int())
+		} else if data.TrackInterfaces[i].PriorityDecrement.IsNull() {
+			data.TrackInterfaces[i].PriorityDecrement = types.Int64Null()
+		}
+	}
+	for i := range data.TrackObjects {
+		keys := [...]string{"object-name"}
+		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/track-objects/track-object").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "object-name"); value.Exists() {
+			data.TrackObjects[i].ObjectName = types.StringValue(value.String())
+		} else if data.TrackObjects[i].ObjectName.IsNull() {
+			data.TrackObjects[i].ObjectName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "priority-decrement"); value.Exists() {
+			data.TrackObjects[i].PriorityDecrement = types.Int64Value(value.Int())
+		} else if data.TrackObjects[i].PriorityDecrement.IsNull() {
+			data.TrackObjects[i].PriorityDecrement = types.Int64Null()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timers/msec"); value.Exists() {
+		data.TimersMsec = types.Int64Value(value.Int())
+	} else if data.TimersMsec.IsNull() {
+		data.TimersMsec = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timers/msec2"); value.Exists() {
+		data.TimersMsecHoldtime = types.Int64Value(value.Int())
+	} else if data.TimersMsecHoldtime.IsNull() {
+		data.TimersMsecHoldtime = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timers/hold-time"); value.Exists() {
+		data.TimersSeconds = types.Int64Value(value.Int())
+	} else if data.TimersSeconds.IsNull() {
+		data.TimersSeconds = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timers/hold-time2"); value.Exists() {
+		data.TimersSecondsHoldtime = types.Int64Value(value.Int())
+	} else if data.TimersSecondsHoldtime.IsNull() {
+		data.TimersSecondsHoldtime = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac-address"); value.Exists() {
+		data.MacAddress = types.StringValue(value.String())
+	} else if data.MacAddress.IsNull() {
+		data.MacAddress = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name"); value.Exists() {
+		data.Name = types.StringValue(value.String())
+	} else if data.Name.IsNull() {
+		data.Name = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/fast-detect/peer/ipv4"); value.Exists() {
+		data.BfdFastDetectPeerIpv4 = types.StringValue(value.String())
+	} else if data.BfdFastDetectPeerIpv4.IsNull() {
+		data.BfdFastDetectPeerIpv4 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/fast-detect/peer/interface"); value.Exists() {
+		data.BfdFastDetectPeerInterface = types.StringValue(value.String())
+	} else if data.BfdFastDetectPeerInterface.IsNull() {
+		data.BfdFastDetectPeerInterface = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *RouterHSRPInterfaceIPv4GroupV1) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "address.ipv4-address"); value.Exists() {
+func (data *RouterHSRPInterfaceIPv4GroupV1) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "address.ipv4-address"); value.Exists() {
 		data.Address = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "address.learn"); value.Exists() {
+	if value := res.Get(prefix + "address.learn"); value.Exists() {
 		data.AddressLearn = types.BoolValue(true)
-	} else {
+	} else if !data.AddressLearn.IsNull() {
+		// Only set to false if it was previously set in state
 		data.AddressLearn = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "address.secondary-ipv4-addresses.secondary-ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "address.secondary-ipv4-addresses.secondary-ipv4-address"); value.Exists() {
 		data.SecondaryIpv4Addresses = make([]RouterHSRPInterfaceIPv4GroupV1SecondaryIpv4Addresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterHSRPInterfaceIPv4GroupV1SecondaryIpv4Addresses{}
@@ -374,13 +658,13 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) fromBody(ctx context.Context, res []
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "priority"); value.Exists() {
+	if value := res.Get(prefix + "priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "preempt.delay"); value.Exists() {
+	if value := res.Get(prefix + "preempt.delay"); value.Exists() {
 		data.PreemptDelay = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "track-interfaces.track-interface"); value.Exists() {
+	if value := res.Get(prefix + "track-interfaces.track-interface"); value.Exists() {
 		data.TrackInterfaces = make([]RouterHSRPInterfaceIPv4GroupV1TrackInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterHSRPInterfaceIPv4GroupV1TrackInterfaces{}
@@ -394,7 +678,7 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) fromBody(ctx context.Context, res []
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "track-objects.track-object"); value.Exists() {
+	if value := res.Get(prefix + "track-objects.track-object"); value.Exists() {
 		data.TrackObjects = make([]RouterHSRPInterfaceIPv4GroupV1TrackObjects, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterHSRPInterfaceIPv4GroupV1TrackObjects{}
@@ -408,46 +692,54 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) fromBody(ctx context.Context, res []
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "timers.msec"); value.Exists() {
+	if value := res.Get(prefix + "timers.msec"); value.Exists() {
 		data.TimersMsec = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "timers.msec2"); value.Exists() {
+	if value := res.Get(prefix + "timers.msec2"); value.Exists() {
 		data.TimersMsecHoldtime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "timers.hold-time"); value.Exists() {
+	if value := res.Get(prefix + "timers.hold-time"); value.Exists() {
 		data.TimersSeconds = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "timers.hold-time2"); value.Exists() {
+	if value := res.Get(prefix + "timers.hold-time2"); value.Exists() {
 		data.TimersSecondsHoldtime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "mac-address"); value.Exists() {
+	if value := res.Get(prefix + "mac-address"); value.Exists() {
 		data.MacAddress = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "name"); value.Exists() {
+	if value := res.Get(prefix + "name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.peer.ipv4"); value.Exists() {
+	if value := res.Get(prefix + "bfd.fast-detect.peer.ipv4"); value.Exists() {
 		data.BfdFastDetectPeerIpv4 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.peer.interface"); value.Exists() {
+	if value := res.Get(prefix + "bfd.fast-detect.peer.interface"); value.Exists() {
 		data.BfdFastDetectPeerInterface = types.StringValue(value.String())
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *RouterHSRPInterfaceIPv4GroupV1Data) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "address.ipv4-address"); value.Exists() {
+func (data *RouterHSRPInterfaceIPv4GroupV1Data) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "address.ipv4-address"); value.Exists() {
 		data.Address = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "address.learn"); value.Exists() {
+	if value := res.Get(prefix + "address.learn"); value.Exists() {
 		data.AddressLearn = types.BoolValue(true)
 	} else {
 		data.AddressLearn = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "address.secondary-ipv4-addresses.secondary-ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "address.secondary-ipv4-addresses.secondary-ipv4-address"); value.Exists() {
 		data.SecondaryIpv4Addresses = make([]RouterHSRPInterfaceIPv4GroupV1SecondaryIpv4Addresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterHSRPInterfaceIPv4GroupV1SecondaryIpv4Addresses{}
@@ -458,13 +750,13 @@ func (data *RouterHSRPInterfaceIPv4GroupV1Data) fromBody(ctx context.Context, re
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "priority"); value.Exists() {
+	if value := res.Get(prefix + "priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "preempt.delay"); value.Exists() {
+	if value := res.Get(prefix + "preempt.delay"); value.Exists() {
 		data.PreemptDelay = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "track-interfaces.track-interface"); value.Exists() {
+	if value := res.Get(prefix + "track-interfaces.track-interface"); value.Exists() {
 		data.TrackInterfaces = make([]RouterHSRPInterfaceIPv4GroupV1TrackInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterHSRPInterfaceIPv4GroupV1TrackInterfaces{}
@@ -478,7 +770,7 @@ func (data *RouterHSRPInterfaceIPv4GroupV1Data) fromBody(ctx context.Context, re
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "track-objects.track-object"); value.Exists() {
+	if value := res.Get(prefix + "track-objects.track-object"); value.Exists() {
 		data.TrackObjects = make([]RouterHSRPInterfaceIPv4GroupV1TrackObjects, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterHSRPInterfaceIPv4GroupV1TrackObjects{}
@@ -492,34 +784,199 @@ func (data *RouterHSRPInterfaceIPv4GroupV1Data) fromBody(ctx context.Context, re
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "timers.msec"); value.Exists() {
+	if value := res.Get(prefix + "timers.msec"); value.Exists() {
 		data.TimersMsec = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "timers.msec2"); value.Exists() {
+	if value := res.Get(prefix + "timers.msec2"); value.Exists() {
 		data.TimersMsecHoldtime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "timers.hold-time"); value.Exists() {
+	if value := res.Get(prefix + "timers.hold-time"); value.Exists() {
 		data.TimersSeconds = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "timers.hold-time2"); value.Exists() {
+	if value := res.Get(prefix + "timers.hold-time2"); value.Exists() {
 		data.TimersSecondsHoldtime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "mac-address"); value.Exists() {
+	if value := res.Get(prefix + "mac-address"); value.Exists() {
 		data.MacAddress = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "name"); value.Exists() {
+	if value := res.Get(prefix + "name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.peer.ipv4"); value.Exists() {
+	if value := res.Get(prefix + "bfd.fast-detect.peer.ipv4"); value.Exists() {
 		data.BfdFastDetectPeerIpv4 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.peer.interface"); value.Exists() {
+	if value := res.Get(prefix + "bfd.fast-detect.peer.interface"); value.Exists() {
 		data.BfdFastDetectPeerInterface = types.StringValue(value.String())
 	}
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *RouterHSRPInterfaceIPv4GroupV1) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/ipv4-address"); value.Exists() {
+		data.Address = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/learn"); value.Exists() {
+		data.AddressLearn = types.BoolValue(true)
+	} else {
+		data.AddressLearn = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/secondary-ipv4-addresses/secondary-ipv4-address"); value.Exists() {
+		data.SecondaryIpv4Addresses = make([]RouterHSRPInterfaceIPv4GroupV1SecondaryIpv4Addresses, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterHSRPInterfaceIPv4GroupV1SecondaryIpv4Addresses{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.SecondaryIpv4Addresses = append(data.SecondaryIpv4Addresses, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/priority"); value.Exists() {
+		data.Priority = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preempt/delay"); value.Exists() {
+		data.PreemptDelay = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/track-interfaces/track-interface"); value.Exists() {
+		data.TrackInterfaces = make([]RouterHSRPInterfaceIPv4GroupV1TrackInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterHSRPInterfaceIPv4GroupV1TrackInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "track-name"); cValue.Exists() {
+				item.TrackName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "priority-decrement"); cValue.Exists() {
+				item.PriorityDecrement = types.Int64Value(cValue.Int())
+			}
+			data.TrackInterfaces = append(data.TrackInterfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/track-objects/track-object"); value.Exists() {
+		data.TrackObjects = make([]RouterHSRPInterfaceIPv4GroupV1TrackObjects, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterHSRPInterfaceIPv4GroupV1TrackObjects{}
+			if cValue := helpers.GetFromXPath(v, "object-name"); cValue.Exists() {
+				item.ObjectName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "priority-decrement"); cValue.Exists() {
+				item.PriorityDecrement = types.Int64Value(cValue.Int())
+			}
+			data.TrackObjects = append(data.TrackObjects, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timers/msec"); value.Exists() {
+		data.TimersMsec = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timers/msec2"); value.Exists() {
+		data.TimersMsecHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timers/hold-time"); value.Exists() {
+		data.TimersSeconds = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timers/hold-time2"); value.Exists() {
+		data.TimersSecondsHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac-address"); value.Exists() {
+		data.MacAddress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name"); value.Exists() {
+		data.Name = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/fast-detect/peer/ipv4"); value.Exists() {
+		data.BfdFastDetectPeerIpv4 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/fast-detect/peer/interface"); value.Exists() {
+		data.BfdFastDetectPeerInterface = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *RouterHSRPInterfaceIPv4GroupV1Data) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/ipv4-address"); value.Exists() {
+		data.Address = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/learn"); value.Exists() {
+		data.AddressLearn = types.BoolValue(true)
+	} else {
+		data.AddressLearn = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/secondary-ipv4-addresses/secondary-ipv4-address"); value.Exists() {
+		data.SecondaryIpv4Addresses = make([]RouterHSRPInterfaceIPv4GroupV1SecondaryIpv4Addresses, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterHSRPInterfaceIPv4GroupV1SecondaryIpv4Addresses{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.SecondaryIpv4Addresses = append(data.SecondaryIpv4Addresses, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/priority"); value.Exists() {
+		data.Priority = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preempt/delay"); value.Exists() {
+		data.PreemptDelay = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/track-interfaces/track-interface"); value.Exists() {
+		data.TrackInterfaces = make([]RouterHSRPInterfaceIPv4GroupV1TrackInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterHSRPInterfaceIPv4GroupV1TrackInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "track-name"); cValue.Exists() {
+				item.TrackName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "priority-decrement"); cValue.Exists() {
+				item.PriorityDecrement = types.Int64Value(cValue.Int())
+			}
+			data.TrackInterfaces = append(data.TrackInterfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/track-objects/track-object"); value.Exists() {
+		data.TrackObjects = make([]RouterHSRPInterfaceIPv4GroupV1TrackObjects, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterHSRPInterfaceIPv4GroupV1TrackObjects{}
+			if cValue := helpers.GetFromXPath(v, "object-name"); cValue.Exists() {
+				item.ObjectName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "priority-decrement"); cValue.Exists() {
+				item.PriorityDecrement = types.Int64Value(cValue.Int())
+			}
+			data.TrackObjects = append(data.TrackObjects, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timers/msec"); value.Exists() {
+		data.TimersMsec = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timers/msec2"); value.Exists() {
+		data.TimersMsecHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timers/hold-time"); value.Exists() {
+		data.TimersSeconds = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timers/hold-time2"); value.Exists() {
+		data.TimersSecondsHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac-address"); value.Exists() {
+		data.MacAddress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name"); value.Exists() {
+		data.Name = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/fast-detect/peer/ipv4"); value.Exists() {
+		data.BfdFastDetectPeerIpv4 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/fast-detect/peer/interface"); value.Exists() {
+		data.BfdFastDetectPeerInterface = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RouterHSRPInterfaceIPv4GroupV1) getDeletedItems(ctx context.Context, state RouterHSRPInterfaceIPv4GroupV1) []string {
@@ -660,10 +1117,9 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) getDeletedItems(ctx context.Context,
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *RouterHSRPInterfaceIPv4GroupV1) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *RouterHSRPInterfaceIPv4GroupV1) getEmptyLeafsDelete(ctx context.Context, state *RouterHSRPInterfaceIPv4GroupV1) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.TrackObjects {
 		keys := [...]string{"object-name"}
@@ -689,14 +1145,16 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) getEmptyLeafsDelete(ctx context.Cont
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.AddressLearn.IsNull() && !data.AddressLearn.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address/learn", data.getPath()))
+		if state != nil && !state.AddressLearn.IsNull() && state.AddressLearn.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address/learn", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterHSRPInterfaceIPv4GroupV1) getDeletePaths(ctx context.Context) []string {
@@ -726,24 +1184,16 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) getDeletePaths(ctx context.Context) 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/msec", data.getPath()))
 	}
 	for i := range data.TrackObjects {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/track-objects/track-object%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[object-name=" + data.TrackObjects[i].ObjectName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/track-objects/track-object%v", data.getPath(), keyPath))
 	}
 	for i := range data.TrackInterfaces {
-		keys := [...]string{"track-name"}
-		keyValues := [...]string{data.TrackInterfaces[i].TrackName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/track-interfaces/track-interface%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[track-name=" + data.TrackInterfaces[i].TrackName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/track-interfaces/track-interface%v", data.getPath(), keyPath))
 	}
 	if !data.PreemptDelay.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/preempt/delay", data.getPath()))
@@ -752,14 +1202,10 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) getDeletePaths(ctx context.Context) 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority", data.getPath()))
 	}
 	for i := range data.SecondaryIpv4Addresses {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.SecondaryIpv4Addresses[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/secondary-ipv4-addresses/secondary-ipv4-address%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.SecondaryIpv4Addresses[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/secondary-ipv4-addresses/secondary-ipv4-address%v", data.getPath(), keyPath))
 	}
 	if !data.AddressLearn.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/learn", data.getPath()))
@@ -767,7 +1213,278 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) getDeletePaths(ctx context.Context) 
 	if !data.Address.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/ipv4-address", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *RouterHSRPInterfaceIPv4GroupV1) addDeletedItemsXML(ctx context.Context, state RouterHSRPInterfaceIPv4GroupV1, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.BfdFastDetectPeerInterface.IsNull() && data.BfdFastDetectPeerInterface.IsNull() {
+		deletePath := state.getXPath() + "/bfd/fast-detect/peer/interface"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BfdFastDetectPeerIpv4.IsNull() && data.BfdFastDetectPeerIpv4.IsNull() {
+		deletePath := state.getXPath() + "/bfd/fast-detect/peer/ipv4"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Name.IsNull() && data.Name.IsNull() {
+		deletePath := state.getXPath() + "/name"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MacAddress.IsNull() && data.MacAddress.IsNull() {
+		deletePath := state.getXPath() + "/mac-address"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TimersSecondsHoldtime.IsNull() && data.TimersSecondsHoldtime.IsNull() {
+		deletePath := state.getXPath() + "/timers/hold-time2"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TimersSeconds.IsNull() && data.TimersSeconds.IsNull() {
+		deletePath := state.getXPath() + "/timers/hold-time"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TimersMsecHoldtime.IsNull() && data.TimersMsecHoldtime.IsNull() {
+		deletePath := state.getXPath() + "/timers/msec2"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TimersMsec.IsNull() && data.TimersMsec.IsNull() {
+		deletePath := state.getXPath() + "/timers/msec"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.TrackObjects {
+		stateKeys := [...]string{"object-name"}
+		stateKeyValues := [...]string{state.TrackObjects[i].ObjectName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.TrackObjects[i].ObjectName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.TrackObjects {
+			found = true
+			if state.TrackObjects[i].ObjectName.ValueString() != data.TrackObjects[j].ObjectName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.TrackObjects[i].PriorityDecrement.IsNull() && data.TrackObjects[j].PriorityDecrement.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/track-objects/track-object%v/priority-decrement", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/track-objects/track-object%v", predicates))
+		}
+	}
+	for i := range state.TrackInterfaces {
+		stateKeys := [...]string{"track-name"}
+		stateKeyValues := [...]string{state.TrackInterfaces[i].TrackName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.TrackInterfaces[i].TrackName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.TrackInterfaces {
+			found = true
+			if state.TrackInterfaces[i].TrackName.ValueString() != data.TrackInterfaces[j].TrackName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.TrackInterfaces[i].PriorityDecrement.IsNull() && data.TrackInterfaces[j].PriorityDecrement.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/track-interfaces/track-interface%v/priority-decrement", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/track-interfaces/track-interface%v", predicates))
+		}
+	}
+	if !state.PreemptDelay.IsNull() && data.PreemptDelay.IsNull() {
+		deletePath := state.getXPath() + "/preempt/delay"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Priority.IsNull() && data.Priority.IsNull() {
+		deletePath := state.getXPath() + "/priority"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.SecondaryIpv4Addresses {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.SecondaryIpv4Addresses[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SecondaryIpv4Addresses[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SecondaryIpv4Addresses {
+			found = true
+			if state.SecondaryIpv4Addresses[i].Address.ValueString() != data.SecondaryIpv4Addresses[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address/secondary-ipv4-addresses/secondary-ipv4-address%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AddressLearn.IsNull() && state.AddressLearn.ValueBool() && data.AddressLearn.IsNull() {
+		deletePath := state.getXPath() + "/address/learn"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Address.IsNull() && data.Address.IsNull() {
+		deletePath := state.getXPath() + "/address/ipv4-address"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *RouterHSRPInterfaceIPv4GroupV1) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.BfdFastDetectPeerInterface.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bfd/fast-detect/peer/interface")
+	}
+	if !data.BfdFastDetectPeerIpv4.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bfd/fast-detect/peer/ipv4")
+	}
+	if !data.Name.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/name")
+	}
+	if !data.MacAddress.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/mac-address")
+	}
+	if !data.TimersSecondsHoldtime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/hold-time2")
+	}
+	if !data.TimersSeconds.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/hold-time")
+	}
+	if !data.TimersMsecHoldtime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/msec2")
+	}
+	if !data.TimersMsec.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/msec")
+	}
+	for i := range data.TrackObjects {
+		keys := [...]string{"object-name"}
+		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/track-objects/track-object%v", predicates))
+	}
+	for i := range data.TrackInterfaces {
+		keys := [...]string{"track-name"}
+		keyValues := [...]string{data.TrackInterfaces[i].TrackName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/track-interfaces/track-interface%v", predicates))
+	}
+	if !data.PreemptDelay.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/preempt/delay")
+	}
+	if !data.Priority.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/priority")
+	}
+	for i := range data.SecondaryIpv4Addresses {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SecondaryIpv4Addresses[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/address/secondary-ipv4-addresses/secondary-ipv4-address%v", predicates))
+	}
+	if !data.AddressLearn.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/address/learn")
+	}
+	if !data.Address.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/address/ipv4-address")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

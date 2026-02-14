@@ -26,7 +26,11 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -93,6 +97,17 @@ func (data LPTSPuntPolice) getPath() string {
 
 func (data LPTSPuntPoliceData) getPath() string {
 	return "Cisco-IOS-XR-um-lpts-punt-cfg:/lpts/punt/police"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data LPTSPuntPolice) getXPath() string {
+	path := "Cisco-IOS-XR-um-lpts-punt-cfg:/lpts/punt/police"
+	return path
+}
+
+func (data LPTSPuntPoliceData) getXPath() string {
+	path := "Cisco-IOS-XR-um-lpts-punt-cfg:/lpts/punt/police"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -191,42 +206,42 @@ func (data LPTSPuntPolice) toBody(ctx context.Context) string {
 func (data *LPTSPuntPolice) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mcast.rate"); value.Exists() && !data.McastRate.IsNull() {
 		data.McastRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.McastRate.IsNull() {
 		data.McastRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bcast.rate"); value.Exists() && !data.BcastRate.IsNull() {
 		data.BcastRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.BcastRate.IsNull() {
 		data.BcastRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "protocol.arp.rate"); value.Exists() && !data.ProtocolArpRate.IsNull() {
 		data.ProtocolArpRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.ProtocolArpRate.IsNull() {
 		data.ProtocolArpRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "protocol.cdp.rate"); value.Exists() && !data.ProtocolCdpRate.IsNull() {
 		data.ProtocolCdpRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.ProtocolCdpRate.IsNull() {
 		data.ProtocolCdpRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "protocol.lacp.rate"); value.Exists() && !data.ProtocolLacpRate.IsNull() {
 		data.ProtocolLacpRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.ProtocolLacpRate.IsNull() {
 		data.ProtocolLacpRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "protocol.lldp.rate"); value.Exists() && !data.ProtocolLldpRate.IsNull() {
 		data.ProtocolLldpRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.ProtocolLldpRate.IsNull() {
 		data.ProtocolLldpRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "protocol.ssfp.rate"); value.Exists() && !data.ProtocolSsfpRate.IsNull() {
 		data.ProtocolSsfpRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.ProtocolSsfpRate.IsNull() {
 		data.ProtocolSsfpRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "protocol.ipv6-nd-proxy.rate"); value.Exists() && !data.ProtocolIpv6NdProxyRate.IsNull() {
 		data.ProtocolIpv6NdProxyRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.ProtocolIpv6NdProxyRate.IsNull() {
 		data.ProtocolIpv6NdProxyRate = types.Int64Null()
 	}
 	for i := range data.Domains {
@@ -331,62 +346,345 @@ func (data *LPTSPuntPolice) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Interfaces[i].McastRate = types.Int64Null()
 		}
-		if value := r.Get("mcast.disabled"); !data.Interfaces[i].McastDisabled.IsNull() {
-			if value.Exists() {
+		if value := r.Get("mcast.disabled"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Interfaces[i].McastDisabled.IsNull() {
 				data.Interfaces[i].McastDisabled = types.BoolValue(true)
-			} else {
-				data.Interfaces[i].McastDisabled = types.BoolValue(false)
 			}
 		} else {
-			data.Interfaces[i].McastDisabled = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Interfaces[i].McastDisabled.IsNull() {
+				data.Interfaces[i].McastDisabled = types.BoolNull()
+			}
 		}
 		if value := r.Get("bcast.rate"); value.Exists() && !data.Interfaces[i].BcastRate.IsNull() {
 			data.Interfaces[i].BcastRate = types.Int64Value(value.Int())
 		} else {
 			data.Interfaces[i].BcastRate = types.Int64Null()
 		}
-		if value := r.Get("bcast.disabled"); !data.Interfaces[i].BcastDisabled.IsNull() {
-			if value.Exists() {
+		if value := r.Get("bcast.disabled"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Interfaces[i].BcastDisabled.IsNull() {
 				data.Interfaces[i].BcastDisabled = types.BoolValue(true)
-			} else {
-				data.Interfaces[i].BcastDisabled = types.BoolValue(false)
 			}
 		} else {
-			data.Interfaces[i].BcastDisabled = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Interfaces[i].BcastDisabled.IsNull() {
+				data.Interfaces[i].BcastDisabled = types.BoolNull()
+			}
 		}
 	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data LPTSPuntPolice) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.McastRate.IsNull() && !data.McastRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/mcast/rate", strconv.FormatInt(data.McastRate.ValueInt64(), 10))
+	}
+	if !data.BcastRate.IsNull() && !data.BcastRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bcast/rate", strconv.FormatInt(data.BcastRate.ValueInt64(), 10))
+	}
+	if !data.ProtocolArpRate.IsNull() && !data.ProtocolArpRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/protocol/arp/rate", strconv.FormatInt(data.ProtocolArpRate.ValueInt64(), 10))
+	}
+	if !data.ProtocolCdpRate.IsNull() && !data.ProtocolCdpRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/protocol/cdp/rate", strconv.FormatInt(data.ProtocolCdpRate.ValueInt64(), 10))
+	}
+	if !data.ProtocolLacpRate.IsNull() && !data.ProtocolLacpRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/protocol/lacp/rate", strconv.FormatInt(data.ProtocolLacpRate.ValueInt64(), 10))
+	}
+	if !data.ProtocolLldpRate.IsNull() && !data.ProtocolLldpRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/protocol/lldp/rate", strconv.FormatInt(data.ProtocolLldpRate.ValueInt64(), 10))
+	}
+	if !data.ProtocolSsfpRate.IsNull() && !data.ProtocolSsfpRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/protocol/ssfp/rate", strconv.FormatInt(data.ProtocolSsfpRate.ValueInt64(), 10))
+	}
+	if !data.ProtocolIpv6NdProxyRate.IsNull() && !data.ProtocolIpv6NdProxyRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/protocol/ipv6-nd-proxy/rate", strconv.FormatInt(data.ProtocolIpv6NdProxyRate.ValueInt64(), 10))
+	}
+	if len(data.Domains) > 0 {
+		for _, item := range data.Domains {
+			basePath := data.getXPath() + "/domains/domain[domain-name='" + item.DomainName.ValueString() + "']"
+			if !item.DomainName.IsNull() && !item.DomainName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/domain-name", item.DomainName.ValueString())
+			}
+			if !item.McastRate.IsNull() && !item.McastRate.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/mcast/rate", strconv.FormatInt(item.McastRate.ValueInt64(), 10))
+			}
+			if !item.BcastRate.IsNull() && !item.BcastRate.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/bcast/rate", strconv.FormatInt(item.BcastRate.ValueInt64(), 10))
+			}
+			if !item.ProtocolArpRate.IsNull() && !item.ProtocolArpRate.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/protocol/arp/rate", strconv.FormatInt(item.ProtocolArpRate.ValueInt64(), 10))
+			}
+			if !item.ProtocolCdpRate.IsNull() && !item.ProtocolCdpRate.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/protocol/cdp/rate", strconv.FormatInt(item.ProtocolCdpRate.ValueInt64(), 10))
+			}
+			if !item.ProtocolLacpRate.IsNull() && !item.ProtocolLacpRate.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/protocol/lacp/rate", strconv.FormatInt(item.ProtocolLacpRate.ValueInt64(), 10))
+			}
+			if !item.ProtocolLldpRate.IsNull() && !item.ProtocolLldpRate.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/protocol/lldp/rate", strconv.FormatInt(item.ProtocolLldpRate.ValueInt64(), 10))
+			}
+			if !item.ProtocolSsfpRate.IsNull() && !item.ProtocolSsfpRate.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/protocol/ssfp/rate", strconv.FormatInt(item.ProtocolSsfpRate.ValueInt64(), 10))
+			}
+			if !item.ProtocolIpv6NdProxyRate.IsNull() && !item.ProtocolIpv6NdProxyRate.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/protocol/ipv6-nd-proxy/rate", strconv.FormatInt(item.ProtocolIpv6NdProxyRate.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.Interfaces) > 0 {
+		for _, item := range data.Interfaces {
+			basePath := data.getXPath() + "/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
+			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
+			}
+			if !item.McastRate.IsNull() && !item.McastRate.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/mcast/rate", strconv.FormatInt(item.McastRate.ValueInt64(), 10))
+			}
+			if !item.McastDisabled.IsNull() && !item.McastDisabled.IsUnknown() {
+				if item.McastDisabled.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/mcast/disabled", "")
+				}
+			}
+			if !item.BcastRate.IsNull() && !item.BcastRate.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/bcast/rate", strconv.FormatInt(item.BcastRate.ValueInt64(), 10))
+			}
+			if !item.BcastDisabled.IsNull() && !item.BcastDisabled.IsUnknown() {
+				if item.BcastDisabled.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/bcast/disabled", "")
+				}
+			}
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *LPTSPuntPolice) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mcast/rate"); value.Exists() {
+		data.McastRate = types.Int64Value(value.Int())
+	} else if data.McastRate.IsNull() {
+		data.McastRate = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bcast/rate"); value.Exists() {
+		data.BcastRate = types.Int64Value(value.Int())
+	} else if data.BcastRate.IsNull() {
+		data.BcastRate = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/arp/rate"); value.Exists() {
+		data.ProtocolArpRate = types.Int64Value(value.Int())
+	} else if data.ProtocolArpRate.IsNull() {
+		data.ProtocolArpRate = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/cdp/rate"); value.Exists() {
+		data.ProtocolCdpRate = types.Int64Value(value.Int())
+	} else if data.ProtocolCdpRate.IsNull() {
+		data.ProtocolCdpRate = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/lacp/rate"); value.Exists() {
+		data.ProtocolLacpRate = types.Int64Value(value.Int())
+	} else if data.ProtocolLacpRate.IsNull() {
+		data.ProtocolLacpRate = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/lldp/rate"); value.Exists() {
+		data.ProtocolLldpRate = types.Int64Value(value.Int())
+	} else if data.ProtocolLldpRate.IsNull() {
+		data.ProtocolLldpRate = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/ssfp/rate"); value.Exists() {
+		data.ProtocolSsfpRate = types.Int64Value(value.Int())
+	} else if data.ProtocolSsfpRate.IsNull() {
+		data.ProtocolSsfpRate = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/ipv6-nd-proxy/rate"); value.Exists() {
+		data.ProtocolIpv6NdProxyRate = types.Int64Value(value.Int())
+	} else if data.ProtocolIpv6NdProxyRate.IsNull() {
+		data.ProtocolIpv6NdProxyRate = types.Int64Null()
+	}
+	for i := range data.Domains {
+		keys := [...]string{"domain-name"}
+		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/domains/domain").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "domain-name"); value.Exists() {
+			data.Domains[i].DomainName = types.StringValue(value.String())
+		} else if data.Domains[i].DomainName.IsNull() {
+			data.Domains[i].DomainName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "mcast/rate"); value.Exists() {
+			data.Domains[i].McastRate = types.Int64Value(value.Int())
+		} else if data.Domains[i].McastRate.IsNull() {
+			data.Domains[i].McastRate = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "bcast/rate"); value.Exists() {
+			data.Domains[i].BcastRate = types.Int64Value(value.Int())
+		} else if data.Domains[i].BcastRate.IsNull() {
+			data.Domains[i].BcastRate = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "protocol/arp/rate"); value.Exists() {
+			data.Domains[i].ProtocolArpRate = types.Int64Value(value.Int())
+		} else if data.Domains[i].ProtocolArpRate.IsNull() {
+			data.Domains[i].ProtocolArpRate = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "protocol/cdp/rate"); value.Exists() {
+			data.Domains[i].ProtocolCdpRate = types.Int64Value(value.Int())
+		} else if data.Domains[i].ProtocolCdpRate.IsNull() {
+			data.Domains[i].ProtocolCdpRate = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "protocol/lacp/rate"); value.Exists() {
+			data.Domains[i].ProtocolLacpRate = types.Int64Value(value.Int())
+		} else if data.Domains[i].ProtocolLacpRate.IsNull() {
+			data.Domains[i].ProtocolLacpRate = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "protocol/lldp/rate"); value.Exists() {
+			data.Domains[i].ProtocolLldpRate = types.Int64Value(value.Int())
+		} else if data.Domains[i].ProtocolLldpRate.IsNull() {
+			data.Domains[i].ProtocolLldpRate = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "protocol/ssfp/rate"); value.Exists() {
+			data.Domains[i].ProtocolSsfpRate = types.Int64Value(value.Int())
+		} else if data.Domains[i].ProtocolSsfpRate.IsNull() {
+			data.Domains[i].ProtocolSsfpRate = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "protocol/ipv6-nd-proxy/rate"); value.Exists() {
+			data.Domains[i].ProtocolIpv6NdProxyRate = types.Int64Value(value.Int())
+		} else if data.Domains[i].ProtocolIpv6NdProxyRate.IsNull() {
+			data.Domains[i].ProtocolIpv6NdProxyRate = types.Int64Null()
+		}
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+			data.Interfaces[i].InterfaceName = types.StringValue(value.String())
+		} else if data.Interfaces[i].InterfaceName.IsNull() {
+			data.Interfaces[i].InterfaceName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "mcast/rate"); value.Exists() {
+			data.Interfaces[i].McastRate = types.Int64Value(value.Int())
+		} else if data.Interfaces[i].McastRate.IsNull() {
+			data.Interfaces[i].McastRate = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "mcast/disabled"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Interfaces[i].McastDisabled.IsNull() {
+				data.Interfaces[i].McastDisabled = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Interfaces[i].McastDisabled.IsNull() {
+				data.Interfaces[i].McastDisabled = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "bcast/rate"); value.Exists() {
+			data.Interfaces[i].BcastRate = types.Int64Value(value.Int())
+		} else if data.Interfaces[i].BcastRate.IsNull() {
+			data.Interfaces[i].BcastRate = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "bcast/disabled"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Interfaces[i].BcastDisabled.IsNull() {
+				data.Interfaces[i].BcastDisabled = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Interfaces[i].BcastDisabled.IsNull() {
+				data.Interfaces[i].BcastDisabled = types.BoolNull()
+			}
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *LPTSPuntPolice) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "mcast.rate"); value.Exists() {
+func (data *LPTSPuntPolice) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "mcast.rate"); value.Exists() {
 		data.McastRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bcast.rate"); value.Exists() {
+	if value := res.Get(prefix + "bcast.rate"); value.Exists() {
 		data.BcastRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "protocol.arp.rate"); value.Exists() {
+	if value := res.Get(prefix + "protocol.arp.rate"); value.Exists() {
 		data.ProtocolArpRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "protocol.cdp.rate"); value.Exists() {
+	if value := res.Get(prefix + "protocol.cdp.rate"); value.Exists() {
 		data.ProtocolCdpRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "protocol.lacp.rate"); value.Exists() {
+	if value := res.Get(prefix + "protocol.lacp.rate"); value.Exists() {
 		data.ProtocolLacpRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "protocol.lldp.rate"); value.Exists() {
+	if value := res.Get(prefix + "protocol.lldp.rate"); value.Exists() {
 		data.ProtocolLldpRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "protocol.ssfp.rate"); value.Exists() {
+	if value := res.Get(prefix + "protocol.ssfp.rate"); value.Exists() {
 		data.ProtocolSsfpRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "protocol.ipv6-nd-proxy.rate"); value.Exists() {
+	if value := res.Get(prefix + "protocol.ipv6-nd-proxy.rate"); value.Exists() {
 		data.ProtocolIpv6NdProxyRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "domains.domain"); value.Exists() {
+	if value := res.Get(prefix + "domains.domain"); value.Exists() {
 		data.Domains = make([]LPTSPuntPoliceDomains, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LPTSPuntPoliceDomains{}
@@ -421,7 +719,7 @@ func (data *LPTSPuntPolice) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]LPTSPuntPoliceInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LPTSPuntPoliceInterfaces{}
@@ -433,7 +731,8 @@ func (data *LPTSPuntPolice) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("mcast.disabled"); cValue.Exists() {
 				item.McastDisabled = types.BoolValue(true)
-			} else {
+			} else if !item.McastDisabled.IsNull() {
+				// Only set to false if it was previously set
 				item.McastDisabled = types.BoolValue(false)
 			}
 			if cValue := v.Get("bcast.rate"); cValue.Exists() {
@@ -441,7 +740,8 @@ func (data *LPTSPuntPolice) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("bcast.disabled"); cValue.Exists() {
 				item.BcastDisabled = types.BoolValue(true)
-			} else {
+			} else if !item.BcastDisabled.IsNull() {
+				// Only set to false if it was previously set
 				item.BcastDisabled = types.BoolValue(false)
 			}
 			data.Interfaces = append(data.Interfaces, item)
@@ -451,35 +751,43 @@ func (data *LPTSPuntPolice) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *LPTSPuntPoliceData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "mcast.rate"); value.Exists() {
+func (data *LPTSPuntPoliceData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "mcast.rate"); value.Exists() {
 		data.McastRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bcast.rate"); value.Exists() {
+	if value := res.Get(prefix + "bcast.rate"); value.Exists() {
 		data.BcastRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "protocol.arp.rate"); value.Exists() {
+	if value := res.Get(prefix + "protocol.arp.rate"); value.Exists() {
 		data.ProtocolArpRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "protocol.cdp.rate"); value.Exists() {
+	if value := res.Get(prefix + "protocol.cdp.rate"); value.Exists() {
 		data.ProtocolCdpRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "protocol.lacp.rate"); value.Exists() {
+	if value := res.Get(prefix + "protocol.lacp.rate"); value.Exists() {
 		data.ProtocolLacpRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "protocol.lldp.rate"); value.Exists() {
+	if value := res.Get(prefix + "protocol.lldp.rate"); value.Exists() {
 		data.ProtocolLldpRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "protocol.ssfp.rate"); value.Exists() {
+	if value := res.Get(prefix + "protocol.ssfp.rate"); value.Exists() {
 		data.ProtocolSsfpRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "protocol.ipv6-nd-proxy.rate"); value.Exists() {
+	if value := res.Get(prefix + "protocol.ipv6-nd-proxy.rate"); value.Exists() {
 		data.ProtocolIpv6NdProxyRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "domains.domain"); value.Exists() {
+	if value := res.Get(prefix + "domains.domain"); value.Exists() {
 		data.Domains = make([]LPTSPuntPoliceDomains, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LPTSPuntPoliceDomains{}
@@ -514,7 +822,7 @@ func (data *LPTSPuntPoliceData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]LPTSPuntPoliceInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LPTSPuntPoliceInterfaces{}
@@ -544,7 +852,190 @@ func (data *LPTSPuntPoliceData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *LPTSPuntPolice) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mcast/rate"); value.Exists() {
+		data.McastRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bcast/rate"); value.Exists() {
+		data.BcastRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/arp/rate"); value.Exists() {
+		data.ProtocolArpRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/cdp/rate"); value.Exists() {
+		data.ProtocolCdpRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/lacp/rate"); value.Exists() {
+		data.ProtocolLacpRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/lldp/rate"); value.Exists() {
+		data.ProtocolLldpRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/ssfp/rate"); value.Exists() {
+		data.ProtocolSsfpRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/ipv6-nd-proxy/rate"); value.Exists() {
+		data.ProtocolIpv6NdProxyRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/domains/domain"); value.Exists() {
+		data.Domains = make([]LPTSPuntPoliceDomains, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LPTSPuntPoliceDomains{}
+			if cValue := helpers.GetFromXPath(v, "domain-name"); cValue.Exists() {
+				item.DomainName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "mcast/rate"); cValue.Exists() {
+				item.McastRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "bcast/rate"); cValue.Exists() {
+				item.BcastRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol/arp/rate"); cValue.Exists() {
+				item.ProtocolArpRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol/cdp/rate"); cValue.Exists() {
+				item.ProtocolCdpRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol/lacp/rate"); cValue.Exists() {
+				item.ProtocolLacpRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol/lldp/rate"); cValue.Exists() {
+				item.ProtocolLldpRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol/ssfp/rate"); cValue.Exists() {
+				item.ProtocolSsfpRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol/ipv6-nd-proxy/rate"); cValue.Exists() {
+				item.ProtocolIpv6NdProxyRate = types.Int64Value(cValue.Int())
+			}
+			data.Domains = append(data.Domains, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+		data.Interfaces = make([]LPTSPuntPoliceInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LPTSPuntPoliceInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "mcast/rate"); cValue.Exists() {
+				item.McastRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "mcast/disabled"); cValue.Exists() {
+				item.McastDisabled = types.BoolValue(true)
+			} else {
+				item.McastDisabled = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "bcast/rate"); cValue.Exists() {
+				item.BcastRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "bcast/disabled"); cValue.Exists() {
+				item.BcastDisabled = types.BoolValue(true)
+			} else {
+				item.BcastDisabled = types.BoolValue(false)
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *LPTSPuntPoliceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mcast/rate"); value.Exists() {
+		data.McastRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bcast/rate"); value.Exists() {
+		data.BcastRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/arp/rate"); value.Exists() {
+		data.ProtocolArpRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/cdp/rate"); value.Exists() {
+		data.ProtocolCdpRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/lacp/rate"); value.Exists() {
+		data.ProtocolLacpRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/lldp/rate"); value.Exists() {
+		data.ProtocolLldpRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/ssfp/rate"); value.Exists() {
+		data.ProtocolSsfpRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/protocol/ipv6-nd-proxy/rate"); value.Exists() {
+		data.ProtocolIpv6NdProxyRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/domains/domain"); value.Exists() {
+		data.Domains = make([]LPTSPuntPoliceDomains, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LPTSPuntPoliceDomains{}
+			if cValue := helpers.GetFromXPath(v, "domain-name"); cValue.Exists() {
+				item.DomainName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "mcast/rate"); cValue.Exists() {
+				item.McastRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "bcast/rate"); cValue.Exists() {
+				item.BcastRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol/arp/rate"); cValue.Exists() {
+				item.ProtocolArpRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol/cdp/rate"); cValue.Exists() {
+				item.ProtocolCdpRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol/lacp/rate"); cValue.Exists() {
+				item.ProtocolLacpRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol/lldp/rate"); cValue.Exists() {
+				item.ProtocolLldpRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol/ssfp/rate"); cValue.Exists() {
+				item.ProtocolSsfpRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol/ipv6-nd-proxy/rate"); cValue.Exists() {
+				item.ProtocolIpv6NdProxyRate = types.Int64Value(cValue.Int())
+			}
+			data.Domains = append(data.Domains, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+		data.Interfaces = make([]LPTSPuntPoliceInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LPTSPuntPoliceInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "mcast/rate"); cValue.Exists() {
+				item.McastRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "mcast/disabled"); cValue.Exists() {
+				item.McastDisabled = types.BoolValue(true)
+			} else {
+				item.McastDisabled = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "bcast/rate"); cValue.Exists() {
+				item.BcastRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "bcast/disabled"); cValue.Exists() {
+				item.BcastDisabled = types.BoolValue(true)
+			} else {
+				item.BcastDisabled = types.BoolValue(false)
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *LPTSPuntPolice) getDeletedItems(ctx context.Context, state LPTSPuntPolice) []string {
@@ -673,10 +1164,9 @@ func (data *LPTSPuntPolice) getDeletedItems(ctx context.Context, state LPTSPuntP
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *LPTSPuntPolice) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *LPTSPuntPolice) getEmptyLeafsDelete(ctx context.Context, state *LPTSPuntPolice) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
@@ -685,11 +1175,19 @@ func (data *LPTSPuntPolice) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		// Only delete if state has true and plan has false
 		if !data.Interfaces[i].BcastDisabled.IsNull() && !data.Interfaces[i].BcastDisabled.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/bcast/disabled", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].BcastDisabled.IsNull() && state.Interfaces[i].BcastDisabled.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/bcast/disabled", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Interfaces[i].McastDisabled.IsNull() && !data.Interfaces[i].McastDisabled.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/mcast/disabled", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].McastDisabled.IsNull() && state.Interfaces[i].McastDisabled.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/mcast/disabled", data.getXPath(), keyString))
+			}
 		}
 	}
 	for i := range data.Domains {
@@ -704,30 +1202,21 @@ func (data *LPTSPuntPolice) getEmptyLeafsDelete(ctx context.Context) []string {
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *LPTSPuntPolice) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[interface-name=" + data.Interfaces[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	for i := range data.Domains {
-		keys := [...]string{"domain-name"}
-		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/domains/domain%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[domain-name=" + data.Domains[i].DomainName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/domains/domain%v", data.getPath(), keyPath))
 	}
 	if !data.ProtocolIpv6NdProxyRate.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/protocol/ipv6-nd-proxy/rate", data.getPath()))
@@ -753,7 +1242,229 @@ func (data *LPTSPuntPolice) getDeletePaths(ctx context.Context) []string {
 	if !data.McastRate.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/mcast/rate", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *LPTSPuntPolice) addDeletedItemsXML(ctx context.Context, state LPTSPuntPolice, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.Interfaces {
+		stateKeys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Interfaces {
+			found = true
+			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Interfaces[i].BcastDisabled.IsNull() && state.Interfaces[i].BcastDisabled.ValueBool() && data.Interfaces[j].BcastDisabled.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/bcast/disabled", predicates))
+				}
+				if !state.Interfaces[i].BcastRate.IsNull() && data.Interfaces[j].BcastRate.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/bcast/rate", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Interfaces[i].McastDisabled.IsNull() && state.Interfaces[i].McastDisabled.ValueBool() && data.Interfaces[j].McastDisabled.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mcast/disabled", predicates))
+				}
+				if !state.Interfaces[i].McastRate.IsNull() && data.Interfaces[j].McastRate.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/mcast/rate", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v", predicates))
+		}
+	}
+	for i := range state.Domains {
+		stateKeys := [...]string{"domain-name"}
+		stateKeyValues := [...]string{state.Domains[i].DomainName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Domains[i].DomainName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Domains {
+			found = true
+			if state.Domains[i].DomainName.ValueString() != data.Domains[j].DomainName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Domains[i].ProtocolIpv6NdProxyRate.IsNull() && data.Domains[j].ProtocolIpv6NdProxyRate.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/domains/domain%v/protocol/ipv6-nd-proxy/rate", predicates))
+				}
+				if !state.Domains[i].ProtocolSsfpRate.IsNull() && data.Domains[j].ProtocolSsfpRate.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/domains/domain%v/protocol/ssfp/rate", predicates))
+				}
+				if !state.Domains[i].ProtocolLldpRate.IsNull() && data.Domains[j].ProtocolLldpRate.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/domains/domain%v/protocol/lldp/rate", predicates))
+				}
+				if !state.Domains[i].ProtocolLacpRate.IsNull() && data.Domains[j].ProtocolLacpRate.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/domains/domain%v/protocol/lacp/rate", predicates))
+				}
+				if !state.Domains[i].ProtocolCdpRate.IsNull() && data.Domains[j].ProtocolCdpRate.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/domains/domain%v/protocol/cdp/rate", predicates))
+				}
+				if !state.Domains[i].ProtocolArpRate.IsNull() && data.Domains[j].ProtocolArpRate.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/domains/domain%v/protocol/arp/rate", predicates))
+				}
+				if !state.Domains[i].BcastRate.IsNull() && data.Domains[j].BcastRate.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/domains/domain%v/bcast/rate", predicates))
+				}
+				if !state.Domains[i].McastRate.IsNull() && data.Domains[j].McastRate.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/domains/domain%v/mcast/rate", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/domains/domain%v", predicates))
+		}
+	}
+	if !state.ProtocolIpv6NdProxyRate.IsNull() && data.ProtocolIpv6NdProxyRate.IsNull() {
+		deletePath := state.getXPath() + "/protocol/ipv6-nd-proxy/rate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ProtocolSsfpRate.IsNull() && data.ProtocolSsfpRate.IsNull() {
+		deletePath := state.getXPath() + "/protocol/ssfp/rate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ProtocolLldpRate.IsNull() && data.ProtocolLldpRate.IsNull() {
+		deletePath := state.getXPath() + "/protocol/lldp/rate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ProtocolLacpRate.IsNull() && data.ProtocolLacpRate.IsNull() {
+		deletePath := state.getXPath() + "/protocol/lacp/rate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ProtocolCdpRate.IsNull() && data.ProtocolCdpRate.IsNull() {
+		deletePath := state.getXPath() + "/protocol/cdp/rate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ProtocolArpRate.IsNull() && data.ProtocolArpRate.IsNull() {
+		deletePath := state.getXPath() + "/protocol/arp/rate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BcastRate.IsNull() && data.BcastRate.IsNull() {
+		deletePath := state.getXPath() + "/bcast/rate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.McastRate.IsNull() && data.McastRate.IsNull() {
+		deletePath := state.getXPath() + "/mcast/rate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *LPTSPuntPolice) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/interfaces/interface%v", predicates))
+	}
+	for i := range data.Domains {
+		keys := [...]string{"domain-name"}
+		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/domains/domain%v", predicates))
+	}
+	if !data.ProtocolIpv6NdProxyRate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/protocol/ipv6-nd-proxy/rate")
+	}
+	if !data.ProtocolSsfpRate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/protocol/ssfp/rate")
+	}
+	if !data.ProtocolLldpRate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/protocol/lldp/rate")
+	}
+	if !data.ProtocolLacpRate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/protocol/lacp/rate")
+	}
+	if !data.ProtocolCdpRate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/protocol/cdp/rate")
+	}
+	if !data.ProtocolArpRate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/protocol/arp/rate")
+	}
+	if !data.BcastRate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bcast/rate")
+	}
+	if !data.McastRate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/mcast/rate")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

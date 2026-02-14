@@ -23,9 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
+	"sort"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -36,7 +41,6 @@ import (
 type NetconfYangAgent struct {
 	Device                     types.String `tfsdk:"device"`
 	Id                         types.String `tfsdk:"id"`
-	DeleteMode                 types.String `tfsdk:"delete_mode"`
 	Ssh                        types.Bool   `tfsdk:"ssh"`
 	WithDefaultsSupport        types.Bool   `tfsdk:"with_defaults_support"`
 	RateLimit                  types.Int64  `tfsdk:"rate_limit"`
@@ -72,6 +76,17 @@ func (data NetconfYangAgentData) getPath() string {
 	return "Cisco-IOS-XR-um-netconf-yang-cfg:/netconf-yang/agent"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data NetconfYangAgent) getXPath() string {
+	path := "Cisco-IOS-XR-um-netconf-yang-cfg:/netconf-yang/agent"
+	return path
+}
+
+func (data NetconfYangAgentData) getXPath() string {
+	path := "Cisco-IOS-XR-um-netconf-yang-cfg:/netconf-yang/agent"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -101,11 +116,11 @@ func (data NetconfYangAgent) toBody(ctx context.Context) string {
 		body, _ = sjson.Set(body, "session.absolute-timeout", strconv.FormatInt(data.SessionAbsoluteTimeout.ValueInt64(), 10))
 	}
 	if !data.NetconfV1.IsNull() && !data.NetconfV1.IsUnknown() {
-		body, _ = sjson.Set(body, "netconf1\\.0.support", data.NetconfV1.ValueString())
+		body, _ = sjson.Set(body, "netconf1.0.support", data.NetconfV1.ValueString())
 	}
 	if !data.NetconfV1StreamingDisabled.IsNull() && !data.NetconfV1StreamingDisabled.IsUnknown() {
 		if data.NetconfV1StreamingDisabled.ValueBool() {
-			body, _ = sjson.Set(body, "netconf1\\.0.streaming-disabled", []interface{}{nil})
+			body, _ = sjson.Set(body, "netconf1.0.streaming-disabled", []interface{}{nil})
 		}
 	}
 	return body
@@ -116,128 +131,258 @@ func (data NetconfYangAgent) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *NetconfYangAgent) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "ssh"); !data.Ssh.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "ssh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ssh.IsNull() {
 			data.Ssh = types.BoolValue(true)
-		} else {
-			data.Ssh = types.BoolValue(false)
 		}
 	} else {
-		data.Ssh = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ssh.IsNull() {
+			data.Ssh = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "with-defaults-support.enable"); !data.WithDefaultsSupport.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "with-defaults-support.enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.WithDefaultsSupport.IsNull() {
 			data.WithDefaultsSupport = types.BoolValue(true)
-		} else {
-			data.WithDefaultsSupport = types.BoolValue(false)
 		}
 	} else {
-		data.WithDefaultsSupport = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.WithDefaultsSupport.IsNull() {
+			data.WithDefaultsSupport = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "rate-limit"); value.Exists() && !data.RateLimit.IsNull() {
 		data.RateLimit = types.Int64Value(value.Int())
-	} else {
+	} else if data.RateLimit.IsNull() {
 		data.RateLimit = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "session.limit"); value.Exists() && !data.SessionLimit.IsNull() {
 		data.SessionLimit = types.Int64Value(value.Int())
-	} else {
+	} else if data.SessionLimit.IsNull() {
 		data.SessionLimit = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "session.idle-timeout"); value.Exists() && !data.SessionIdleTimeout.IsNull() {
 		data.SessionIdleTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.SessionIdleTimeout.IsNull() {
 		data.SessionIdleTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "session.absolute-timeout"); value.Exists() && !data.SessionAbsoluteTimeout.IsNull() {
 		data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.SessionAbsoluteTimeout.IsNull() {
 		data.SessionAbsoluteTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "netconf1\\.0.support"); value.Exists() && !data.NetconfV1.IsNull() {
+	if value := gjson.GetBytes(res, "netconf1.0.support"); value.Exists() && !data.NetconfV1.IsNull() {
 		data.NetconfV1 = types.StringValue(value.String())
-	} else {
+	} else if data.NetconfV1.IsNull() {
 		data.NetconfV1 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "netconf1\\.0.streaming-disabled"); !data.NetconfV1StreamingDisabled.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "netconf1.0.streaming-disabled"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.NetconfV1StreamingDisabled.IsNull() {
 			data.NetconfV1StreamingDisabled = types.BoolValue(true)
-		} else {
-			data.NetconfV1StreamingDisabled = types.BoolValue(false)
 		}
 	} else {
-		data.NetconfV1StreamingDisabled = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.NetconfV1StreamingDisabled.IsNull() {
+			data.NetconfV1StreamingDisabled = types.BoolNull()
+		}
 	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data NetconfYangAgent) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.Ssh.IsNull() && !data.Ssh.IsUnknown() {
+		if data.Ssh.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ssh", "")
+		}
+	}
+	if !data.WithDefaultsSupport.IsNull() && !data.WithDefaultsSupport.IsUnknown() {
+		if data.WithDefaultsSupport.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/with-defaults-support/enable", "")
+		}
+	}
+	if !data.RateLimit.IsNull() && !data.RateLimit.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/rate-limit", strconv.FormatInt(data.RateLimit.ValueInt64(), 10))
+	}
+	if !data.SessionLimit.IsNull() && !data.SessionLimit.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/session/limit", strconv.FormatInt(data.SessionLimit.ValueInt64(), 10))
+	}
+	if !data.SessionIdleTimeout.IsNull() && !data.SessionIdleTimeout.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/session/idle-timeout", strconv.FormatInt(data.SessionIdleTimeout.ValueInt64(), 10))
+	}
+	if !data.SessionAbsoluteTimeout.IsNull() && !data.SessionAbsoluteTimeout.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/session/absolute-timeout", strconv.FormatInt(data.SessionAbsoluteTimeout.ValueInt64(), 10))
+	}
+	if !data.NetconfV1.IsNull() && !data.NetconfV1.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/netconf1.0/support", data.NetconfV1.ValueString())
+	}
+	if !data.NetconfV1StreamingDisabled.IsNull() && !data.NetconfV1StreamingDisabled.IsUnknown() {
+		if data.NetconfV1StreamingDisabled.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/netconf1.0/streaming-disabled", "")
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *NetconfYangAgent) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ssh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ssh.IsNull() {
+			data.Ssh = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ssh.IsNull() {
+			data.Ssh = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/with-defaults-support/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.WithDefaultsSupport.IsNull() {
+			data.WithDefaultsSupport = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.WithDefaultsSupport.IsNull() {
+			data.WithDefaultsSupport = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rate-limit"); value.Exists() {
+		data.RateLimit = types.Int64Value(value.Int())
+	} else if data.RateLimit.IsNull() {
+		data.RateLimit = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/limit"); value.Exists() {
+		data.SessionLimit = types.Int64Value(value.Int())
+	} else if data.SessionLimit.IsNull() {
+		data.SessionLimit = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/idle-timeout"); value.Exists() {
+		data.SessionIdleTimeout = types.Int64Value(value.Int())
+	} else if data.SessionIdleTimeout.IsNull() {
+		data.SessionIdleTimeout = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/absolute-timeout"); value.Exists() {
+		data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
+	} else if data.SessionAbsoluteTimeout.IsNull() {
+		data.SessionAbsoluteTimeout = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/netconf1.0/support"); value.Exists() {
+		data.NetconfV1 = types.StringValue(value.String())
+	} else if data.NetconfV1.IsNull() {
+		data.NetconfV1 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/netconf1.0/streaming-disabled"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.NetconfV1StreamingDisabled.IsNull() {
+			data.NetconfV1StreamingDisabled = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.NetconfV1StreamingDisabled.IsNull() {
+			data.NetconfV1StreamingDisabled = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *NetconfYangAgent) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "ssh"); value.Exists() {
+func (data *NetconfYangAgent) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "ssh"); value.Exists() {
 		data.Ssh = types.BoolValue(true)
-	} else {
+	} else if !data.Ssh.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Ssh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "with-defaults-support.enable"); value.Exists() {
+	if value := res.Get(prefix + "with-defaults-support.enable"); value.Exists() {
 		data.WithDefaultsSupport = types.BoolValue(true)
-	} else {
+	} else if !data.WithDefaultsSupport.IsNull() {
+		// Only set to false if it was previously set in state
 		data.WithDefaultsSupport = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "rate-limit"); value.Exists() {
+	if value := res.Get(prefix + "rate-limit"); value.Exists() {
 		data.RateLimit = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "session.limit"); value.Exists() {
+	if value := res.Get(prefix + "session.limit"); value.Exists() {
 		data.SessionLimit = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "session.idle-timeout"); value.Exists() {
+	if value := res.Get(prefix + "session.idle-timeout"); value.Exists() {
 		data.SessionIdleTimeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "session.absolute-timeout"); value.Exists() {
+	if value := res.Get(prefix + "session.absolute-timeout"); value.Exists() {
 		data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "netconf1\\.0.support"); value.Exists() {
+	if value := res.Get(prefix + "netconf1.0.support"); value.Exists() {
 		data.NetconfV1 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "netconf1\\.0.streaming-disabled"); value.Exists() {
+	if value := res.Get(prefix + "netconf1.0.streaming-disabled"); value.Exists() {
 		data.NetconfV1StreamingDisabled = types.BoolValue(true)
-	} else {
+	} else if !data.NetconfV1StreamingDisabled.IsNull() {
+		// Only set to false if it was previously set in state
 		data.NetconfV1StreamingDisabled = types.BoolValue(false)
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *NetconfYangAgentData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "ssh"); value.Exists() {
+func (data *NetconfYangAgentData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "ssh"); value.Exists() {
 		data.Ssh = types.BoolValue(true)
 	} else {
 		data.Ssh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "with-defaults-support.enable"); value.Exists() {
+	if value := res.Get(prefix + "with-defaults-support.enable"); value.Exists() {
 		data.WithDefaultsSupport = types.BoolValue(true)
 	} else {
 		data.WithDefaultsSupport = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "rate-limit"); value.Exists() {
+	if value := res.Get(prefix + "rate-limit"); value.Exists() {
 		data.RateLimit = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "session.limit"); value.Exists() {
+	if value := res.Get(prefix + "session.limit"); value.Exists() {
 		data.SessionLimit = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "session.idle-timeout"); value.Exists() {
+	if value := res.Get(prefix + "session.idle-timeout"); value.Exists() {
 		data.SessionIdleTimeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "session.absolute-timeout"); value.Exists() {
+	if value := res.Get(prefix + "session.absolute-timeout"); value.Exists() {
 		data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "netconf1\\.0.support"); value.Exists() {
+	if value := res.Get(prefix + "netconf1.0.support"); value.Exists() {
 		data.NetconfV1 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "netconf1\\.0.streaming-disabled"); value.Exists() {
+	if value := res.Get(prefix + "netconf1.0.streaming-disabled"); value.Exists() {
 		data.NetconfV1StreamingDisabled = types.BoolValue(true)
 	} else {
 		data.NetconfV1StreamingDisabled = types.BoolValue(false)
@@ -245,7 +390,78 @@ func (data *NetconfYangAgentData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *NetconfYangAgent) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ssh"); value.Exists() {
+		data.Ssh = types.BoolValue(true)
+	} else {
+		data.Ssh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/with-defaults-support/enable"); value.Exists() {
+		data.WithDefaultsSupport = types.BoolValue(true)
+	} else {
+		data.WithDefaultsSupport = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rate-limit"); value.Exists() {
+		data.RateLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/limit"); value.Exists() {
+		data.SessionLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/idle-timeout"); value.Exists() {
+		data.SessionIdleTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/absolute-timeout"); value.Exists() {
+		data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/netconf1.0/support"); value.Exists() {
+		data.NetconfV1 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/netconf1.0/streaming-disabled"); value.Exists() {
+		data.NetconfV1StreamingDisabled = types.BoolValue(true)
+	} else {
+		data.NetconfV1StreamingDisabled = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *NetconfYangAgentData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ssh"); value.Exists() {
+		data.Ssh = types.BoolValue(true)
+	} else {
+		data.Ssh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/with-defaults-support/enable"); value.Exists() {
+		data.WithDefaultsSupport = types.BoolValue(true)
+	} else {
+		data.WithDefaultsSupport = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rate-limit"); value.Exists() {
+		data.RateLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/limit"); value.Exists() {
+		data.SessionLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/idle-timeout"); value.Exists() {
+		data.SessionIdleTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/absolute-timeout"); value.Exists() {
+		data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/netconf1.0/support"); value.Exists() {
+		data.NetconfV1 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/netconf1.0/streaming-disabled"); value.Exists() {
+		data.NetconfV1StreamingDisabled = types.BoolValue(true)
+	} else {
+		data.NetconfV1StreamingDisabled = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *NetconfYangAgent) getDeletedItems(ctx context.Context, state NetconfYangAgent) []string {
@@ -278,25 +494,32 @@ func (data *NetconfYangAgent) getDeletedItems(ctx context.Context, state Netconf
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *NetconfYangAgent) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *NetconfYangAgent) getEmptyLeafsDelete(ctx context.Context, state *NetconfYangAgent) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.NetconfV1StreamingDisabled.IsNull() && !data.NetconfV1StreamingDisabled.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/netconf1.0", data.getPath()))
+		if state != nil && !state.NetconfV1StreamingDisabled.IsNull() && state.NetconfV1StreamingDisabled.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/netconf1.0", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.WithDefaultsSupport.IsNull() && !data.WithDefaultsSupport.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/with-defaults-support/enable", data.getPath()))
+		if state != nil && !state.WithDefaultsSupport.IsNull() && state.WithDefaultsSupport.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/with-defaults-support/enable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Ssh.IsNull() && !data.Ssh.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ssh", data.getPath()))
+		if state != nil && !state.Ssh.IsNull() && state.Ssh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ssh", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *NetconfYangAgent) getDeletePaths(ctx context.Context) []string {
@@ -325,7 +548,144 @@ func (data *NetconfYangAgent) getDeletePaths(ctx context.Context) []string {
 	if !data.Ssh.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssh", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *NetconfYangAgent) addDeletedItemsXML(ctx context.Context, state NetconfYangAgent, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.NetconfV1StreamingDisabled.IsNull() && state.NetconfV1StreamingDisabled.ValueBool() && data.NetconfV1StreamingDisabled.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/netconf1.0"
+		predicates := make(map[string]string)
+		if !state.NetconfV1.IsNull() {
+			predicates["support"] = fmt.Sprintf("%v", state.NetconfV1.ValueString())
+		}
+		predicates["streaming-disabled"] = fmt.Sprintf("%v", state.NetconfV1StreamingDisabled.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.NetconfV1.IsNull() && data.NetconfV1.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/netconf1.0"
+		predicates := make(map[string]string)
+		if !state.NetconfV1StreamingDisabled.IsNull() {
+			predicates["streaming-disabled"] = fmt.Sprintf("%v", state.NetconfV1StreamingDisabled.ValueBool())
+		}
+		predicates["support"] = fmt.Sprintf("%v", state.NetconfV1.ValueString())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SessionAbsoluteTimeout.IsNull() && data.SessionAbsoluteTimeout.IsNull() {
+		deletePath := state.getXPath() + "/session/absolute-timeout"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SessionIdleTimeout.IsNull() && data.SessionIdleTimeout.IsNull() {
+		deletePath := state.getXPath() + "/session/idle-timeout"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SessionLimit.IsNull() && data.SessionLimit.IsNull() {
+		deletePath := state.getXPath() + "/session/limit"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RateLimit.IsNull() && data.RateLimit.IsNull() {
+		deletePath := state.getXPath() + "/rate-limit"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.WithDefaultsSupport.IsNull() && state.WithDefaultsSupport.ValueBool() && data.WithDefaultsSupport.IsNull() {
+		deletePath := state.getXPath() + "/with-defaults-support/enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Ssh.IsNull() && state.Ssh.ValueBool() && data.Ssh.IsNull() {
+		deletePath := state.getXPath() + "/ssh"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *NetconfYangAgent) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.NetconfV1StreamingDisabled.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/netconf1.0")
+	}
+	if !data.NetconfV1.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/netconf1.0")
+	}
+	if !data.SessionAbsoluteTimeout.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/session/absolute-timeout")
+	}
+	if !data.SessionIdleTimeout.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/session/idle-timeout")
+	}
+	if !data.SessionLimit.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/session/limit")
+	}
+	if !data.RateLimit.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/rate-limit")
+	}
+	if !data.WithDefaultsSupport.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/with-defaults-support/enable")
+	}
+	if !data.Ssh.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ssh")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

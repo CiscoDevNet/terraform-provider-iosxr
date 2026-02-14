@@ -24,7 +24,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -58,6 +62,19 @@ func (data RDSetData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/rd-sets/rd-set[set-name=%s]", data.SetName.ValueString())
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data RDSet) getXPath() string {
+	path := "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/rd-sets/rd-set[set-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.SetName.ValueString()))
+	return path
+}
+
+func (data RDSetData) getXPath() string {
+	path := "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/rd-sets/rd-set[set-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.SetName.ValueString()))
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -75,38 +92,106 @@ func (data RDSet) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data RDSet) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.SetName.IsNull() && !data.SetName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/set-name", data.SetName.ValueString())
+	}
+	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/rplrd-set", data.Rpl.ValueString())
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RDSet) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rplrd-set"); value.Exists() && !data.Rpl.IsNull() {
 		data.Rpl = types.StringValue(value.String())
-	} else {
+	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *RDSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/set-name"); value.Exists() {
+		data.SetName = types.StringValue(value.String())
+	} else if data.SetName.IsNull() {
+		data.SetName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rplrd-set"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
+	} else if data.Rpl.IsNull() {
+		data.Rpl = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *RDSet) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "rplrd-set"); value.Exists() {
+func (data *RDSet) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "rplrd-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *RDSetData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "rplrd-set"); value.Exists() {
+func (data *RDSetData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "rplrd-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *RDSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rplrd-set"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *RDSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rplrd-set"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RDSet) getDeletedItems(ctx context.Context, state RDSet) []string {
@@ -118,16 +203,14 @@ func (data *RDSet) getDeletedItems(ctx context.Context, state RDSet) []string {
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *RDSet) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *RDSet) getEmptyLeafsDelete(ctx context.Context, state *RDSet) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RDSet) getDeletePaths(ctx context.Context) []string {
@@ -135,7 +218,41 @@ func (data *RDSet) getDeletePaths(ctx context.Context) []string {
 	if !data.Rpl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/rplrd-set", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *RDSet) addDeletedItemsXML(ctx context.Context, state RDSet, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
+		deletePath := state.getXPath() + "/rplrd-set"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *RDSet) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.Rpl.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/rplrd-set")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

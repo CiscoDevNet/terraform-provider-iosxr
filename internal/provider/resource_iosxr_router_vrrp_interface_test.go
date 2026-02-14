@@ -66,37 +66,12 @@ func TestAccIosxrRouterVRRPInterface(t *testing.T) {
 
 // End of section. //template:end testAcc
 
-// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-
-func iosxrRouterVRRPInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		InterfaceName := primary.Attributes["interface_name"]
-
-		return fmt.Sprintf("%s", InterfaceName), nil
-	}
-}
-
-// End of section. //template:end importStateIdFunc
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrRouterVRRPInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
-	attributes = {
-	}
-}
-
-`
-
-// End of section. //template:end testPrerequisites
-
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 
 func testAccIosxrRouterVRRPInterfaceConfig_minimum() string {
 	config := `resource "iosxr_router_vrrp_interface" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -113,9 +88,32 @@ func testAccIosxrRouterVRRPInterfaceConfig_all() string {
 	config += `	delay_reload = 4321` + "\n"
 	config += `	bfd_minimum_interval = 255` + "\n"
 	config += `	bfd_multiplier = 33` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 // End of section. //template:end testAccConfigAll
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterVRRPInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceName := primary.Attributes["interface_name"]
+
+		return fmt.Sprintf("%s", InterfaceName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrRouterVRRPInterfacePrerequisitesConfig = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
+	attributes = {
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites

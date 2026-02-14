@@ -26,7 +26,11 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -96,6 +100,17 @@ func (data TPAData) getPath() string {
 	return "Cisco-IOS-XR-um-tpa-cfg:/tpa"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data TPA) getXPath() string {
+	path := "Cisco-IOS-XR-um-tpa-cfg:/tpa"
+	return path
+}
+
+func (data TPAData) getXPath() string {
+	path := "Cisco-IOS-XR-um-tpa-cfg:/tpa"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -155,7 +170,6 @@ func (data TPA) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Ipv4UpdateSourceDestinations) > 0 {
-				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"address-family.ipv4.update-source.destinations.destination", []interface{}{})
 				for cindex, citem := range item.Ipv4UpdateSourceDestinations {
 					if !citem.DestinationInterface.IsNull() && !citem.DestinationInterface.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"address-family.ipv4.update-source.destinations.destination"+"."+strconv.Itoa(cindex)+"."+"destination-interface", citem.DestinationInterface.ValueString())
@@ -166,7 +180,6 @@ func (data TPA) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Ipv6UpdateSourceDestinations) > 0 {
-				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"address-family.ipv6.update-source.destinations.destination", []interface{}{})
 				for cindex, citem := range item.Ipv6UpdateSourceDestinations {
 					if !citem.DestinationInterface.IsNull() && !citem.DestinationInterface.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"address-family.ipv6.update-source.destinations.destination"+"."+strconv.Itoa(cindex)+"."+"destination-interface", citem.DestinationInterface.ValueString())
@@ -177,7 +190,6 @@ func (data TPA) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.EastWestInterfaces) > 0 {
-				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"east-wests.east-west", []interface{}{})
 				for cindex, citem := range item.EastWestInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"east-wests.east-west"+"."+strconv.Itoa(cindex)+"."+"east-west-interface", citem.InterfaceName.ValueString())
@@ -202,36 +214,38 @@ func (data TPA) toBody(ctx context.Context) string {
 func (data *TPA) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "statistics.update-frequency"); value.Exists() && !data.StatisticsUpdateFrequency.IsNull() {
 		data.StatisticsUpdateFrequency = types.Int64Value(value.Int())
-	} else {
+	} else if data.StatisticsUpdateFrequency.IsNull() {
 		data.StatisticsUpdateFrequency = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "statistics.disable"); !data.StatisticsDisable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "statistics.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatisticsDisable.IsNull() {
 			data.StatisticsDisable = types.BoolValue(true)
-		} else {
-			data.StatisticsDisable = types.BoolValue(false)
 		}
 	} else {
-		data.StatisticsDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatisticsDisable.IsNull() {
+			data.StatisticsDisable = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "statistics.max-lpts-events"); value.Exists() && !data.StatisticsMaxLptsEvents.IsNull() {
 		data.StatisticsMaxLptsEvents = types.Int64Value(value.Int())
-	} else {
+	} else if data.StatisticsMaxLptsEvents.IsNull() {
 		data.StatisticsMaxLptsEvents = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "statistics.max-intf-events"); value.Exists() && !data.StatisticsMaxIntfEvents.IsNull() {
 		data.StatisticsMaxIntfEvents = types.Int64Value(value.Int())
-	} else {
+	} else if data.StatisticsMaxIntfEvents.IsNull() {
 		data.StatisticsMaxIntfEvents = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "logging.kim.file-max-size-kb"); value.Exists() && !data.LoggingFileMaxSizeKb.IsNull() {
 		data.LoggingFileMaxSizeKb = types.Int64Value(value.Int())
-	} else {
+	} else if data.LoggingFileMaxSizeKb.IsNull() {
 		data.LoggingFileMaxSizeKb = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "logging.kim.rotation-max"); value.Exists() && !data.LoggingRotationMaxFiles.IsNull() {
 		data.LoggingRotationMaxFiles = types.Int64Value(value.Int())
-	} else {
+	} else if data.LoggingRotationMaxFiles.IsNull() {
 		data.LoggingRotationMaxFiles = types.Int64Null()
 	}
 	for i := range data.Vrfs {
@@ -262,51 +276,63 @@ func (data *TPA) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Vrfs[i].VrfName = types.StringNull()
 		}
-		if value := r.Get("address-family.ipv4.update-source.dataports.active-management"); !data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() {
-			if value.Exists() {
+		if value := r.Get("address-family.ipv4.update-source.dataports.active-management"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() {
 				data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(true)
-			} else {
-				data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(false)
 			}
 		} else {
-			data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() {
+				data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement = types.BoolNull()
+			}
 		}
 		if value := r.Get("address-family.ipv4.update-source.dataports.interface"); value.Exists() && !data.Vrfs[i].Ipv4UpdateSourceDataports.IsNull() {
 			data.Vrfs[i].Ipv4UpdateSourceDataports = types.StringValue(value.String())
 		} else {
 			data.Vrfs[i].Ipv4UpdateSourceDataports = types.StringNull()
 		}
-		if value := r.Get("address-family.ipv4.default-route.mgmt"); !data.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() {
-			if value.Exists() {
+		if value := r.Get("address-family.ipv4.default-route.mgmt"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() {
 				data.Vrfs[i].Ipv4DefaultRouteMgmt = types.BoolValue(true)
-			} else {
-				data.Vrfs[i].Ipv4DefaultRouteMgmt = types.BoolValue(false)
 			}
 		} else {
-			data.Vrfs[i].Ipv4DefaultRouteMgmt = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() {
+				data.Vrfs[i].Ipv4DefaultRouteMgmt = types.BoolNull()
+			}
 		}
-		if value := r.Get("address-family.ipv6.update-source.dataports.active-management"); !data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() {
-			if value.Exists() {
+		if value := r.Get("address-family.ipv6.update-source.dataports.active-management"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() {
 				data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(true)
-			} else {
-				data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(false)
 			}
 		} else {
-			data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() {
+				data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement = types.BoolNull()
+			}
 		}
 		if value := r.Get("address-family.ipv6.update-source.dataports.interface"); value.Exists() && !data.Vrfs[i].Ipv6UpdateSourceDataports.IsNull() {
 			data.Vrfs[i].Ipv6UpdateSourceDataports = types.StringValue(value.String())
 		} else {
 			data.Vrfs[i].Ipv6UpdateSourceDataports = types.StringNull()
 		}
-		if value := r.Get("address-family.ipv6.default-route.mgmt"); !data.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() {
-			if value.Exists() {
+		if value := r.Get("address-family.ipv6.default-route.mgmt"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() {
 				data.Vrfs[i].Ipv6DefaultRouteMgmt = types.BoolValue(true)
-			} else {
-				data.Vrfs[i].Ipv6DefaultRouteMgmt = types.BoolValue(false)
 			}
 		} else {
-			data.Vrfs[i].Ipv6DefaultRouteMgmt = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() {
+				data.Vrfs[i].Ipv6DefaultRouteMgmt = types.BoolNull()
+			}
 		}
 		for ci := range data.Vrfs[i].Ipv4UpdateSourceDestinations {
 			keys := [...]string{"destination-interface"}
@@ -419,31 +445,384 @@ func (data *TPA) updateFromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data TPA) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.StatisticsUpdateFrequency.IsNull() && !data.StatisticsUpdateFrequency.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/statistics/update-frequency", strconv.FormatInt(data.StatisticsUpdateFrequency.ValueInt64(), 10))
+	}
+	if !data.StatisticsDisable.IsNull() && !data.StatisticsDisable.IsUnknown() {
+		if data.StatisticsDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/statistics/disable", "")
+		}
+	}
+	if !data.StatisticsMaxLptsEvents.IsNull() && !data.StatisticsMaxLptsEvents.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/statistics/max-lpts-events", strconv.FormatInt(data.StatisticsMaxLptsEvents.ValueInt64(), 10))
+	}
+	if !data.StatisticsMaxIntfEvents.IsNull() && !data.StatisticsMaxIntfEvents.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/statistics/max-intf-events", strconv.FormatInt(data.StatisticsMaxIntfEvents.ValueInt64(), 10))
+	}
+	if !data.LoggingFileMaxSizeKb.IsNull() && !data.LoggingFileMaxSizeKb.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/logging/kim/file-max-size-kb", strconv.FormatInt(data.LoggingFileMaxSizeKb.ValueInt64(), 10))
+	}
+	if !data.LoggingRotationMaxFiles.IsNull() && !data.LoggingRotationMaxFiles.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/logging/kim/rotation-max", strconv.FormatInt(data.LoggingRotationMaxFiles.ValueInt64(), 10))
+	}
+	if len(data.Vrfs) > 0 {
+		for _, item := range data.Vrfs {
+			basePath := data.getXPath() + "/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
+			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
+			}
+			if !item.Ipv4UpdateSourceDataportsActiveManagement.IsNull() && !item.Ipv4UpdateSourceDataportsActiveManagement.IsUnknown() {
+				if item.Ipv4UpdateSourceDataportsActiveManagement.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/address-family/ipv4/update-source/dataports/active-management", "")
+				}
+			}
+			if !item.Ipv4UpdateSourceDataports.IsNull() && !item.Ipv4UpdateSourceDataports.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address-family/ipv4/update-source/dataports/interface", item.Ipv4UpdateSourceDataports.ValueString())
+			}
+			if !item.Ipv4DefaultRouteMgmt.IsNull() && !item.Ipv4DefaultRouteMgmt.IsUnknown() {
+				if item.Ipv4DefaultRouteMgmt.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/address-family/ipv4/default-route/mgmt", "")
+				}
+			}
+			if !item.Ipv6UpdateSourceDataportsActiveManagement.IsNull() && !item.Ipv6UpdateSourceDataportsActiveManagement.IsUnknown() {
+				if item.Ipv6UpdateSourceDataportsActiveManagement.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/address-family/ipv6/update-source/dataports/active-management", "")
+				}
+			}
+			if !item.Ipv6UpdateSourceDataports.IsNull() && !item.Ipv6UpdateSourceDataports.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address-family/ipv6/update-source/dataports/interface", item.Ipv6UpdateSourceDataports.ValueString())
+			}
+			if !item.Ipv6DefaultRouteMgmt.IsNull() && !item.Ipv6DefaultRouteMgmt.IsUnknown() {
+				if item.Ipv6DefaultRouteMgmt.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/address-family/ipv6/default-route/mgmt", "")
+				}
+			}
+			if len(item.Ipv4UpdateSourceDestinations) > 0 {
+				for _, citem := range item.Ipv4UpdateSourceDestinations {
+					cbasePath := basePath + "/address-family/ipv4/update-source/destinations/destination[destination-interface='" + citem.DestinationInterface.ValueString() + "']"
+					if !citem.DestinationInterface.IsNull() && !citem.DestinationInterface.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/destination-interface", citem.DestinationInterface.ValueString())
+					}
+					if !citem.SourceInterface.IsNull() && !citem.SourceInterface.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/source", citem.SourceInterface.ValueString())
+					}
+				}
+			}
+			if len(item.Ipv6UpdateSourceDestinations) > 0 {
+				for _, citem := range item.Ipv6UpdateSourceDestinations {
+					cbasePath := basePath + "/address-family/ipv6/update-source/destinations/destination[destination-interface='" + citem.DestinationInterface.ValueString() + "']"
+					if !citem.DestinationInterface.IsNull() && !citem.DestinationInterface.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/destination-interface", citem.DestinationInterface.ValueString())
+					}
+					if !citem.SourceInterface.IsNull() && !citem.SourceInterface.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/source", citem.SourceInterface.ValueString())
+					}
+				}
+			}
+			if len(item.EastWestInterfaces) > 0 {
+				for _, citem := range item.EastWestInterfaces {
+					cbasePath := basePath + "/east-wests/east-west[east-west-interface='" + citem.InterfaceName.ValueString() + "']"
+					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/east-west-interface", citem.InterfaceName.ValueString())
+					}
+					if !citem.ReferencedVrf.IsNull() && !citem.ReferencedVrf.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/vrf", citem.ReferencedVrf.ValueString())
+					}
+					if !citem.ReferencedInterface.IsNull() && !citem.ReferencedInterface.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/interface", citem.ReferencedInterface.ValueString())
+					}
+				}
+			}
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *TPA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/statistics/update-frequency"); value.Exists() {
+		data.StatisticsUpdateFrequency = types.Int64Value(value.Int())
+	} else if data.StatisticsUpdateFrequency.IsNull() {
+		data.StatisticsUpdateFrequency = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/statistics/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.StatisticsDisable.IsNull() {
+			data.StatisticsDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.StatisticsDisable.IsNull() {
+			data.StatisticsDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/statistics/max-lpts-events"); value.Exists() {
+		data.StatisticsMaxLptsEvents = types.Int64Value(value.Int())
+	} else if data.StatisticsMaxLptsEvents.IsNull() {
+		data.StatisticsMaxLptsEvents = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/statistics/max-intf-events"); value.Exists() {
+		data.StatisticsMaxIntfEvents = types.Int64Value(value.Int())
+	} else if data.StatisticsMaxIntfEvents.IsNull() {
+		data.StatisticsMaxIntfEvents = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/kim/file-max-size-kb"); value.Exists() {
+		data.LoggingFileMaxSizeKb = types.Int64Value(value.Int())
+	} else if data.LoggingFileMaxSizeKb.IsNull() {
+		data.LoggingFileMaxSizeKb = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/kim/rotation-max"); value.Exists() {
+		data.LoggingRotationMaxFiles = types.Int64Value(value.Int())
+	} else if data.LoggingRotationMaxFiles.IsNull() {
+		data.LoggingRotationMaxFiles = types.Int64Null()
+	}
+	for i := range data.Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrfs/vrf").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vrf-name"); value.Exists() {
+			data.Vrfs[i].VrfName = types.StringValue(value.String())
+		} else if data.Vrfs[i].VrfName.IsNull() {
+			data.Vrfs[i].VrfName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "address-family/ipv4/update-source/dataports/active-management"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() {
+				data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() {
+				data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "address-family/ipv4/update-source/dataports/interface"); value.Exists() {
+			data.Vrfs[i].Ipv4UpdateSourceDataports = types.StringValue(value.String())
+		} else if data.Vrfs[i].Ipv4UpdateSourceDataports.IsNull() {
+			data.Vrfs[i].Ipv4UpdateSourceDataports = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "address-family/ipv4/default-route/mgmt"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() {
+				data.Vrfs[i].Ipv4DefaultRouteMgmt = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() {
+				data.Vrfs[i].Ipv4DefaultRouteMgmt = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "address-family/ipv6/update-source/dataports/active-management"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() {
+				data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() {
+				data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "address-family/ipv6/update-source/dataports/interface"); value.Exists() {
+			data.Vrfs[i].Ipv6UpdateSourceDataports = types.StringValue(value.String())
+		} else if data.Vrfs[i].Ipv6UpdateSourceDataports.IsNull() {
+			data.Vrfs[i].Ipv6UpdateSourceDataports = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "address-family/ipv6/default-route/mgmt"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() {
+				data.Vrfs[i].Ipv6DefaultRouteMgmt = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() {
+				data.Vrfs[i].Ipv6DefaultRouteMgmt = types.BoolNull()
+			}
+		}
+		for ci := range data.Vrfs[i].Ipv4UpdateSourceDestinations {
+			keys := [...]string{"destination-interface"}
+			keyValues := [...]string{data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].DestinationInterface.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "address-family/ipv4/update-source/destinations/destination").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "destination-interface"); value.Exists() {
+				data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].DestinationInterface = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "source"); value.Exists() {
+				data.Vrfs[i].Ipv4UpdateSourceDestinations[ci].SourceInterface = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.Vrfs[i].Ipv6UpdateSourceDestinations {
+			keys := [...]string{"destination-interface"}
+			keyValues := [...]string{data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].DestinationInterface.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "address-family/ipv6/update-source/destinations/destination").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "destination-interface"); value.Exists() {
+				data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].DestinationInterface = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "source"); value.Exists() {
+				data.Vrfs[i].Ipv6UpdateSourceDestinations[ci].SourceInterface = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+		for ci := range data.Vrfs[i].EastWestInterfaces {
+			keys := [...]string{"east-west-interface"}
+			keyValues := [...]string{data.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "east-wests/east-west").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "east-west-interface"); value.Exists() {
+				data.Vrfs[i].EastWestInterfaces[ci].InterfaceName = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "vrf"); value.Exists() {
+				data.Vrfs[i].EastWestInterfaces[ci].ReferencedVrf = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "interface"); value.Exists() {
+				data.Vrfs[i].EastWestInterfaces[ci].ReferencedInterface = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *TPA) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "statistics.update-frequency"); value.Exists() {
+func (data *TPA) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "statistics.update-frequency"); value.Exists() {
 		data.StatisticsUpdateFrequency = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "statistics.disable"); value.Exists() {
+	if value := res.Get(prefix + "statistics.disable"); value.Exists() {
 		data.StatisticsDisable = types.BoolValue(true)
-	} else {
+	} else if !data.StatisticsDisable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.StatisticsDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "statistics.max-lpts-events"); value.Exists() {
+	if value := res.Get(prefix + "statistics.max-lpts-events"); value.Exists() {
 		data.StatisticsMaxLptsEvents = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "statistics.max-intf-events"); value.Exists() {
+	if value := res.Get(prefix + "statistics.max-intf-events"); value.Exists() {
 		data.StatisticsMaxIntfEvents = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "logging.kim.file-max-size-kb"); value.Exists() {
+	if value := res.Get(prefix + "logging.kim.file-max-size-kb"); value.Exists() {
 		data.LoggingFileMaxSizeKb = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "logging.kim.rotation-max"); value.Exists() {
+	if value := res.Get(prefix + "logging.kim.rotation-max"); value.Exists() {
 		data.LoggingRotationMaxFiles = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "vrfs.vrf"); value.Exists() {
 		data.Vrfs = make([]TPAVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TPAVrfs{}
@@ -452,7 +831,8 @@ func (data *TPA) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("address-family.ipv4.update-source.dataports.active-management"); cValue.Exists() {
 				item.Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(true)
-			} else {
+			} else if !item.Ipv4UpdateSourceDataportsActiveManagement.IsNull() {
+				// Only set to false if it was previously set
 				item.Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv4.update-source.dataports.interface"); cValue.Exists() {
@@ -460,12 +840,14 @@ func (data *TPA) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("address-family.ipv4.default-route.mgmt"); cValue.Exists() {
 				item.Ipv4DefaultRouteMgmt = types.BoolValue(true)
-			} else {
+			} else if !item.Ipv4DefaultRouteMgmt.IsNull() {
+				// Only set to false if it was previously set
 				item.Ipv4DefaultRouteMgmt = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv6.update-source.dataports.active-management"); cValue.Exists() {
 				item.Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(true)
-			} else {
+			} else if !item.Ipv6UpdateSourceDataportsActiveManagement.IsNull() {
+				// Only set to false if it was previously set
 				item.Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv6.update-source.dataports.interface"); cValue.Exists() {
@@ -473,7 +855,8 @@ func (data *TPA) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("address-family.ipv6.default-route.mgmt"); cValue.Exists() {
 				item.Ipv6DefaultRouteMgmt = types.BoolValue(true)
-			} else {
+			} else if !item.Ipv6DefaultRouteMgmt.IsNull() {
+				// Only set to false if it was previously set
 				item.Ipv6DefaultRouteMgmt = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv4.update-source.destinations.destination"); cValue.Exists() {
@@ -528,31 +911,39 @@ func (data *TPA) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *TPAData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "statistics.update-frequency"); value.Exists() {
+func (data *TPAData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "statistics.update-frequency"); value.Exists() {
 		data.StatisticsUpdateFrequency = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "statistics.disable"); value.Exists() {
+	if value := res.Get(prefix + "statistics.disable"); value.Exists() {
 		data.StatisticsDisable = types.BoolValue(true)
 	} else {
 		data.StatisticsDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "statistics.max-lpts-events"); value.Exists() {
+	if value := res.Get(prefix + "statistics.max-lpts-events"); value.Exists() {
 		data.StatisticsMaxLptsEvents = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "statistics.max-intf-events"); value.Exists() {
+	if value := res.Get(prefix + "statistics.max-intf-events"); value.Exists() {
 		data.StatisticsMaxIntfEvents = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "logging.kim.file-max-size-kb"); value.Exists() {
+	if value := res.Get(prefix + "logging.kim.file-max-size-kb"); value.Exists() {
 		data.LoggingFileMaxSizeKb = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "logging.kim.rotation-max"); value.Exists() {
+	if value := res.Get(prefix + "logging.kim.rotation-max"); value.Exists() {
 		data.LoggingRotationMaxFiles = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "vrfs.vrf"); value.Exists() {
 		data.Vrfs = make([]TPAVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TPAVrfs{}
@@ -637,7 +1028,222 @@ func (data *TPAData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *TPA) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/statistics/update-frequency"); value.Exists() {
+		data.StatisticsUpdateFrequency = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/statistics/disable"); value.Exists() {
+		data.StatisticsDisable = types.BoolValue(true)
+	} else {
+		data.StatisticsDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/statistics/max-lpts-events"); value.Exists() {
+		data.StatisticsMaxLptsEvents = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/statistics/max-intf-events"); value.Exists() {
+		data.StatisticsMaxIntfEvents = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/kim/file-max-size-kb"); value.Exists() {
+		data.LoggingFileMaxSizeKb = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/kim/rotation-max"); value.Exists() {
+		data.LoggingRotationMaxFiles = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrfs/vrf"); value.Exists() {
+		data.Vrfs = make([]TPAVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TPAVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv4/update-source/dataports/active-management"); cValue.Exists() {
+				item.Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(true)
+			} else {
+				item.Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv4/update-source/dataports/interface"); cValue.Exists() {
+				item.Ipv4UpdateSourceDataports = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv4/default-route/mgmt"); cValue.Exists() {
+				item.Ipv4DefaultRouteMgmt = types.BoolValue(true)
+			} else {
+				item.Ipv4DefaultRouteMgmt = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv6/update-source/dataports/active-management"); cValue.Exists() {
+				item.Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(true)
+			} else {
+				item.Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv6/update-source/dataports/interface"); cValue.Exists() {
+				item.Ipv6UpdateSourceDataports = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv6/default-route/mgmt"); cValue.Exists() {
+				item.Ipv6DefaultRouteMgmt = types.BoolValue(true)
+			} else {
+				item.Ipv6DefaultRouteMgmt = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv4/update-source/destinations/destination"); cValue.Exists() {
+				item.Ipv4UpdateSourceDestinations = make([]TPAVrfsIpv4UpdateSourceDestinations, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TPAVrfsIpv4UpdateSourceDestinations{}
+					if ccValue := helpers.GetFromXPath(cv, "destination-interface"); ccValue.Exists() {
+						cItem.DestinationInterface = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "source"); ccValue.Exists() {
+						cItem.SourceInterface = types.StringValue(ccValue.String())
+					}
+					item.Ipv4UpdateSourceDestinations = append(item.Ipv4UpdateSourceDestinations, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv6/update-source/destinations/destination"); cValue.Exists() {
+				item.Ipv6UpdateSourceDestinations = make([]TPAVrfsIpv6UpdateSourceDestinations, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TPAVrfsIpv6UpdateSourceDestinations{}
+					if ccValue := helpers.GetFromXPath(cv, "destination-interface"); ccValue.Exists() {
+						cItem.DestinationInterface = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "source"); ccValue.Exists() {
+						cItem.SourceInterface = types.StringValue(ccValue.String())
+					}
+					item.Ipv6UpdateSourceDestinations = append(item.Ipv6UpdateSourceDestinations, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "east-wests/east-west"); cValue.Exists() {
+				item.EastWestInterfaces = make([]TPAVrfsEastWestInterfaces, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TPAVrfsEastWestInterfaces{}
+					if ccValue := helpers.GetFromXPath(cv, "east-west-interface"); ccValue.Exists() {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "vrf"); ccValue.Exists() {
+						cItem.ReferencedVrf = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "interface"); ccValue.Exists() {
+						cItem.ReferencedInterface = types.StringValue(ccValue.String())
+					}
+					item.EastWestInterfaces = append(item.EastWestInterfaces, cItem)
+					return true
+				})
+			}
+			data.Vrfs = append(data.Vrfs, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *TPAData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/statistics/update-frequency"); value.Exists() {
+		data.StatisticsUpdateFrequency = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/statistics/disable"); value.Exists() {
+		data.StatisticsDisable = types.BoolValue(true)
+	} else {
+		data.StatisticsDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/statistics/max-lpts-events"); value.Exists() {
+		data.StatisticsMaxLptsEvents = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/statistics/max-intf-events"); value.Exists() {
+		data.StatisticsMaxIntfEvents = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/kim/file-max-size-kb"); value.Exists() {
+		data.LoggingFileMaxSizeKb = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/kim/rotation-max"); value.Exists() {
+		data.LoggingRotationMaxFiles = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrfs/vrf"); value.Exists() {
+		data.Vrfs = make([]TPAVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TPAVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv4/update-source/dataports/active-management"); cValue.Exists() {
+				item.Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(true)
+			} else {
+				item.Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv4/update-source/dataports/interface"); cValue.Exists() {
+				item.Ipv4UpdateSourceDataports = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv4/default-route/mgmt"); cValue.Exists() {
+				item.Ipv4DefaultRouteMgmt = types.BoolValue(true)
+			} else {
+				item.Ipv4DefaultRouteMgmt = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv6/update-source/dataports/active-management"); cValue.Exists() {
+				item.Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(true)
+			} else {
+				item.Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv6/update-source/dataports/interface"); cValue.Exists() {
+				item.Ipv6UpdateSourceDataports = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv6/default-route/mgmt"); cValue.Exists() {
+				item.Ipv6DefaultRouteMgmt = types.BoolValue(true)
+			} else {
+				item.Ipv6DefaultRouteMgmt = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv4/update-source/destinations/destination"); cValue.Exists() {
+				item.Ipv4UpdateSourceDestinations = make([]TPAVrfsIpv4UpdateSourceDestinations, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TPAVrfsIpv4UpdateSourceDestinations{}
+					if ccValue := helpers.GetFromXPath(cv, "destination-interface"); ccValue.Exists() {
+						cItem.DestinationInterface = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "source"); ccValue.Exists() {
+						cItem.SourceInterface = types.StringValue(ccValue.String())
+					}
+					item.Ipv4UpdateSourceDestinations = append(item.Ipv4UpdateSourceDestinations, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "address-family/ipv6/update-source/destinations/destination"); cValue.Exists() {
+				item.Ipv6UpdateSourceDestinations = make([]TPAVrfsIpv6UpdateSourceDestinations, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TPAVrfsIpv6UpdateSourceDestinations{}
+					if ccValue := helpers.GetFromXPath(cv, "destination-interface"); ccValue.Exists() {
+						cItem.DestinationInterface = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "source"); ccValue.Exists() {
+						cItem.SourceInterface = types.StringValue(ccValue.String())
+					}
+					item.Ipv6UpdateSourceDestinations = append(item.Ipv6UpdateSourceDestinations, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "east-wests/east-west"); cValue.Exists() {
+				item.EastWestInterfaces = make([]TPAVrfsEastWestInterfaces, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := TPAVrfsEastWestInterfaces{}
+					if ccValue := helpers.GetFromXPath(cv, "east-west-interface"); ccValue.Exists() {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "vrf"); ccValue.Exists() {
+						cItem.ReferencedVrf = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "interface"); ccValue.Exists() {
+						cItem.ReferencedInterface = types.StringValue(ccValue.String())
+					}
+					item.EastWestInterfaces = append(item.EastWestInterfaces, cItem)
+					return true
+				})
+			}
+			data.Vrfs = append(data.Vrfs, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *TPA) getDeletedItems(ctx context.Context, state TPA) []string {
@@ -814,10 +1420,9 @@ func (data *TPA) getDeletedItems(ctx context.Context, state TPA) []string {
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *TPA) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *TPA) getEmptyLeafsDelete(ctx context.Context, state *TPA) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Vrfs {
 		keys := [...]string{"vrf-name"}
@@ -850,40 +1455,54 @@ func (data *TPA) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() && !data.Vrfs[i].Ipv6DefaultRouteMgmt.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv6/default-route/mgmt", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() && state.Vrfs[i].Ipv6DefaultRouteMgmt.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv6/default-route/mgmt", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() && !data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv6/update-source/dataports/active-management", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() && state.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv6/update-source/dataports/active-management", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() && !data.Vrfs[i].Ipv4DefaultRouteMgmt.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv4/default-route/mgmt", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() && state.Vrfs[i].Ipv4DefaultRouteMgmt.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv4/default-route/mgmt", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() && !data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv4/update-source/dataports/active-management", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() && state.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/address-family/ipv4/update-source/dataports/active-management", data.getXPath(), keyString))
+			}
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.StatisticsDisable.IsNull() && !data.StatisticsDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/statistics/disable", data.getPath()))
+		if state != nil && !state.StatisticsDisable.IsNull() && state.StatisticsDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/statistics/disable", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *TPA) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Vrfs {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[vrf-name=" + data.Vrfs[i].VrfName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf%v", data.getPath(), keyPath))
 	}
 	if !data.LoggingRotationMaxFiles.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/kim/rotation-max", data.getPath()))
@@ -903,7 +1522,256 @@ func (data *TPA) getDeletePaths(ctx context.Context) []string {
 	if !data.StatisticsUpdateFrequency.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/statistics/update-frequency", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *TPA) addDeletedItemsXML(ctx context.Context, state TPA, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.Vrfs {
+		stateKeys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.Vrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Vrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Vrfs {
+			found = true
+			if state.Vrfs[i].VrfName.ValueString() != data.Vrfs[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.Vrfs[i].EastWestInterfaces {
+					cstateKeys := [...]string{"east-west-interface"}
+					cstateKeyValues := [...]string{state.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Vrfs[j].EastWestInterfaces {
+						found = true
+						if state.Vrfs[i].EastWestInterfaces[ci].InterfaceName.ValueString() != data.Vrfs[j].EastWestInterfaces[cj].InterfaceName.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Vrfs[i].EastWestInterfaces[ci].ReferencedInterface.IsNull() && data.Vrfs[j].EastWestInterfaces[cj].ReferencedInterface.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/east-wests/east-west%v/interface", predicates, cpredicates))
+							}
+							if !state.Vrfs[i].EastWestInterfaces[ci].ReferencedVrf.IsNull() && data.Vrfs[j].EastWestInterfaces[cj].ReferencedVrf.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/east-wests/east-west%v/vrf", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/east-wests/east-west%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.Vrfs[i].Ipv6UpdateSourceDestinations {
+					cstateKeys := [...]string{"destination-interface"}
+					cstateKeyValues := [...]string{state.Vrfs[i].Ipv6UpdateSourceDestinations[ci].DestinationInterface.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Vrfs[i].Ipv6UpdateSourceDestinations[ci].DestinationInterface.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Vrfs[j].Ipv6UpdateSourceDestinations {
+						found = true
+						if state.Vrfs[i].Ipv6UpdateSourceDestinations[ci].DestinationInterface.ValueString() != data.Vrfs[j].Ipv6UpdateSourceDestinations[cj].DestinationInterface.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Vrfs[i].Ipv6UpdateSourceDestinations[ci].SourceInterface.IsNull() && data.Vrfs[j].Ipv6UpdateSourceDestinations[cj].SourceInterface.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv6/update-source/destinations/destination%v/source", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv6/update-source/destinations/destination%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.Vrfs[i].Ipv4UpdateSourceDestinations {
+					cstateKeys := [...]string{"destination-interface"}
+					cstateKeyValues := [...]string{state.Vrfs[i].Ipv4UpdateSourceDestinations[ci].DestinationInterface.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Vrfs[i].Ipv4UpdateSourceDestinations[ci].DestinationInterface.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Vrfs[j].Ipv4UpdateSourceDestinations {
+						found = true
+						if state.Vrfs[i].Ipv4UpdateSourceDestinations[ci].DestinationInterface.ValueString() != data.Vrfs[j].Ipv4UpdateSourceDestinations[cj].DestinationInterface.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Vrfs[i].Ipv4UpdateSourceDestinations[ci].SourceInterface.IsNull() && data.Vrfs[j].Ipv4UpdateSourceDestinations[cj].SourceInterface.IsNull() {
+								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv4/update-source/destinations/destination%v/source", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv4/update-source/destinations/destination%v", predicates, cpredicates))
+					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() && state.Vrfs[i].Ipv6DefaultRouteMgmt.ValueBool() && data.Vrfs[j].Ipv6DefaultRouteMgmt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv6/default-route/mgmt", predicates))
+				}
+				if !state.Vrfs[i].Ipv6UpdateSourceDataports.IsNull() && data.Vrfs[j].Ipv6UpdateSourceDataports.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv6/update-source/dataports/interface", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() && state.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.ValueBool() && data.Vrfs[j].Ipv6UpdateSourceDataportsActiveManagement.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv6/update-source/dataports/active-management", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() && state.Vrfs[i].Ipv4DefaultRouteMgmt.ValueBool() && data.Vrfs[j].Ipv4DefaultRouteMgmt.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv4/default-route/mgmt", predicates))
+				}
+				if !state.Vrfs[i].Ipv4UpdateSourceDataports.IsNull() && data.Vrfs[j].Ipv4UpdateSourceDataports.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv4/update-source/dataports/interface", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() && state.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.ValueBool() && data.Vrfs[j].Ipv4UpdateSourceDataportsActiveManagement.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/address-family/ipv4/update-source/dataports/active-management", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v", predicates))
+		}
+	}
+	if !state.LoggingRotationMaxFiles.IsNull() && data.LoggingRotationMaxFiles.IsNull() {
+		deletePath := state.getXPath() + "/logging/kim/rotation-max"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.LoggingFileMaxSizeKb.IsNull() && data.LoggingFileMaxSizeKb.IsNull() {
+		deletePath := state.getXPath() + "/logging/kim/file-max-size-kb"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.StatisticsMaxIntfEvents.IsNull() && data.StatisticsMaxIntfEvents.IsNull() {
+		deletePath := state.getXPath() + "/statistics/max-intf-events"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.StatisticsMaxLptsEvents.IsNull() && data.StatisticsMaxLptsEvents.IsNull() {
+		deletePath := state.getXPath() + "/statistics/max-lpts-events"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.StatisticsDisable.IsNull() && state.StatisticsDisable.ValueBool() && data.StatisticsDisable.IsNull() {
+		deletePath := state.getXPath() + "/statistics/disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.StatisticsUpdateFrequency.IsNull() && data.StatisticsUpdateFrequency.IsNull() {
+		deletePath := state.getXPath() + "/statistics/update-frequency"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *TPA) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/vrfs/vrf%v", predicates))
+	}
+	if !data.LoggingRotationMaxFiles.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/logging/kim/rotation-max")
+	}
+	if !data.LoggingFileMaxSizeKb.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/logging/kim/file-max-size-kb")
+	}
+	if !data.StatisticsMaxIntfEvents.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/statistics/max-intf-events")
+	}
+	if !data.StatisticsMaxLptsEvents.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/statistics/max-lpts-events")
+	}
+	if !data.StatisticsDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/statistics/disable")
+	}
+	if !data.StatisticsUpdateFrequency.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/statistics/update-frequency")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

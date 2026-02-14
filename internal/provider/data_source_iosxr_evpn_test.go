@@ -103,10 +103,8 @@ func TestAccDataSourceIosxrEVPN(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrEVPNPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
-	attributes = {
-	}
 }
 
 `
@@ -183,7 +181,7 @@ func testAccDataSourceIosxrEVPNConfig() string {
 	config += `	}]` + "\n"
 	config += `	virtual_access_evi_ethernet_segment_esi_zero = "01.01.01.01.01.01.01.01.03"` + "\n"
 	config += `	virtual_access_evi_ethernet_segment_bgp_rt = "01:01:01:01:01:03"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

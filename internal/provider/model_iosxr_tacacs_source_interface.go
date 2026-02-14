@@ -26,7 +26,11 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -64,6 +68,17 @@ func (data TACACSSourceInterfaceData) getPath() string {
 	return "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data TACACSSourceInterface) getXPath() string {
+	path := "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs"
+	return path
+}
+
+func (data TACACSSourceInterfaceData) getXPath() string {
+	path := "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -94,7 +109,7 @@ func (data TACACSSourceInterface) toBody(ctx context.Context) string {
 func (data *TACACSSourceInterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "source-interface"); value.Exists() && !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(value.String())
-	} else {
+	} else if data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringNull()
 	}
 	for i := range data.SourceInterfaces {
@@ -134,14 +149,92 @@ func (data *TACACSSourceInterface) updateFromBody(ctx context.Context, res []byt
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data TACACSSourceInterface) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.SourceInterface.IsNull() && !data.SourceInterface.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/source-interface", data.SourceInterface.ValueString())
+	}
+	if len(data.SourceInterfaces) > 0 {
+		for _, item := range data.SourceInterfaces {
+			basePath := data.getXPath() + "/vrfs/vrf[vrf-name='" + item.Vrf.ValueString() + "']"
+			if !item.Vrf.IsNull() && !item.Vrf.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.Vrf.ValueString())
+			}
+			if !item.Interface.IsNull() && !item.Interface.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/source-interface", item.Interface.ValueString())
+			}
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *TACACSSourceInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() {
+		data.SourceInterface = types.StringValue(value.String())
+	} else if data.SourceInterface.IsNull() {
+		data.SourceInterface = types.StringNull()
+	}
+	for i := range data.SourceInterfaces {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.SourceInterfaces[i].Vrf.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrfs/vrf").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vrf-name"); value.Exists() {
+			data.SourceInterfaces[i].Vrf = types.StringValue(value.String())
+		} else if data.SourceInterfaces[i].Vrf.IsNull() {
+			data.SourceInterfaces[i].Vrf = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "source-interface"); value.Exists() {
+			data.SourceInterfaces[i].Interface = types.StringValue(value.String())
+		} else if data.SourceInterfaces[i].Interface.IsNull() {
+			data.SourceInterfaces[i].Interface = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *TACACSSourceInterface) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "source-interface"); value.Exists() {
+func (data *TACACSSourceInterface) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "vrfs.vrf"); value.Exists() {
 		data.SourceInterfaces = make([]TACACSSourceInterfaceSourceInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TACACSSourceInterfaceSourceInterfaces{}
@@ -158,14 +251,22 @@ func (data *TACACSSourceInterface) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *TACACSSourceInterfaceData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "source-interface"); value.Exists() {
+func (data *TACACSSourceInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "vrfs.vrf"); value.Exists() {
 		data.SourceInterfaces = make([]TACACSSourceInterfaceSourceInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TACACSSourceInterfaceSourceInterfaces{}
@@ -182,7 +283,52 @@ func (data *TACACSSourceInterfaceData) fromBody(ctx context.Context, res []byte)
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *TACACSSourceInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() {
+		data.SourceInterface = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrfs/vrf"); value.Exists() {
+		data.SourceInterfaces = make([]TACACSSourceInterfaceSourceInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TACACSSourceInterfaceSourceInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "source-interface"); cValue.Exists() {
+				item.Interface = types.StringValue(cValue.String())
+			}
+			data.SourceInterfaces = append(data.SourceInterfaces, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *TACACSSourceInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() {
+		data.SourceInterface = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrfs/vrf"); value.Exists() {
+		data.SourceInterfaces = make([]TACACSSourceInterfaceSourceInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TACACSSourceInterfaceSourceInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "source-interface"); cValue.Exists() {
+				item.Interface = types.StringValue(cValue.String())
+			}
+			data.SourceInterfaces = append(data.SourceInterfaces, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *TACACSSourceInterface) getDeletedItems(ctx context.Context, state TACACSSourceInterface) []string {
@@ -227,10 +373,9 @@ func (data *TACACSSourceInterface) getDeletedItems(ctx context.Context, state TA
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *TACACSSourceInterface) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *TACACSSourceInterface) getEmptyLeafsDelete(ctx context.Context, state *TACACSSourceInterface) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.SourceInterfaces {
 		keys := [...]string{"vrf-name"}
@@ -244,25 +389,97 @@ func (data *TACACSSourceInterface) getEmptyLeafsDelete(ctx context.Context) []st
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *TACACSSourceInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.SourceInterfaces {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.SourceInterfaces[i].Vrf.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[vrf-name=" + data.SourceInterfaces[i].Vrf.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf%v", data.getPath(), keyPath))
 	}
 	if !data.SourceInterface.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-interface", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *TACACSSourceInterface) addDeletedItemsXML(ctx context.Context, state TACACSSourceInterface, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.SourceInterfaces {
+		stateKeys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.SourceInterfaces[i].Vrf.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SourceInterfaces[i].Vrf.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SourceInterfaces {
+			found = true
+			if state.SourceInterfaces[i].Vrf.ValueString() != data.SourceInterfaces[j].Vrf.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.SourceInterfaces[i].Interface.IsNull() && data.SourceInterfaces[j].Interface.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/source-interface", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v", predicates))
+		}
+	}
+	if !state.SourceInterface.IsNull() && data.SourceInterface.IsNull() {
+		deletePath := state.getXPath() + "/source-interface"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *TACACSSourceInterface) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.SourceInterfaces {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.SourceInterfaces[i].Vrf.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/vrfs/vrf%v", predicates))
+	}
+	if !data.SourceInterface.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/source-interface")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

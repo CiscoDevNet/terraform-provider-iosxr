@@ -62,7 +62,6 @@ func TestAccDataSourceIosxrNetconfYangAgent(t *testing.T) {
 
 func testAccDataSourceIosxrNetconfYangAgentConfig() string {
 	config := `resource "iosxr_netconf_yang_agent" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
 	config += `	ssh = true` + "\n"
 	config += `	with_defaults_support = true` + "\n"
 	config += `	rate_limit = 4096` + "\n"

@@ -164,7 +164,7 @@ func iosxrRouterBGPNeighborGroupImportStateIdFunc(resourceName string) resource.
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterBGPNeighborGroupPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
@@ -182,7 +182,7 @@ resource "iosxr_gnmi" "PreReq0" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
@@ -200,7 +200,7 @@ resource "iosxr_gnmi" "PreReq1" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq2" {
+resource "iosxr_yang" "PreReq2" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
@@ -216,10 +216,10 @@ resource "iosxr_gnmi" "PreReq2" {
 			]
 		},
 	]
-	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
+	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]
 }
 
-resource "iosxr_gnmi" "PreReq3" {
+resource "iosxr_yang" "PreReq3" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers"
 	attributes = {
 	}
@@ -238,7 +238,7 @@ resource "iosxr_gnmi" "PreReq3" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq4" {
+resource "iosxr_yang" "PreReq4" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
@@ -256,7 +256,7 @@ func testAccIosxrRouterBGPNeighborGroupConfig_minimum() string {
 	config := `resource "iosxr_router_bgp_neighbor_group" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	name = "GROUP1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -361,7 +361,7 @@ func testAccIosxrRouterBGPNeighborGroupConfig_all() string {
 	config += `		slow_peer_dynamic = true` + "\n"
 	config += `		slow_peer_dynamic_threshold = 260` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

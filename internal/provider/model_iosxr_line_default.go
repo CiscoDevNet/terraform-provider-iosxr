@@ -24,9 +24,14 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -138,6 +143,17 @@ func (data LineDefault) getPath() string {
 
 func (data LineDefaultData) getPath() string {
 	return "Cisco-IOS-XR-um-line-cfg:/line/default"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data LineDefault) getXPath() string {
+	path := "Cisco-IOS-XR-um-line-cfg:/line/default"
+	return path
+}
+
+func (data LineDefaultData) getXPath() string {
+	path := "Cisco-IOS-XR-um-line-cfg:/line/default"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -315,207 +331,237 @@ func (data LineDefault) toBody(ctx context.Context) string {
 func (data *LineDefault) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "autocommand"); value.Exists() && !data.Autocommand.IsNull() {
 		data.Autocommand = types.StringValue(value.String())
-	} else {
+	} else if data.Autocommand.IsNull() {
 		data.Autocommand = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "access-class.ingress"); value.Exists() && !data.AccessClassIngress.IsNull() {
 		data.AccessClassIngress = types.StringValue(value.String())
-	} else {
+	} else if data.AccessClassIngress.IsNull() {
 		data.AccessClassIngress = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "access-class.egress"); value.Exists() && !data.AccessClassEgress.IsNull() {
 		data.AccessClassEgress = types.StringValue(value.String())
-	} else {
+	} else if data.AccessClassEgress.IsNull() {
 		data.AccessClassEgress = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "disconnect-character"); value.Exists() && !data.DisconnectCharacter.IsNull() {
 		data.DisconnectCharacter = types.StringValue(value.String())
-	} else {
+	} else if data.DisconnectCharacter.IsNull() {
 		data.DisconnectCharacter = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "escape-character"); value.Exists() && !data.EscapeCharacter.IsNull() {
 		data.EscapeCharacter = types.StringValue(value.String())
-	} else {
+	} else if data.EscapeCharacter.IsNull() {
 		data.EscapeCharacter = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "session-timeout.timeout-interval"); value.Exists() && !data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "session-timeout.output"); !data.SessionTimeoutOutput.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "session-timeout.output"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SessionTimeoutOutput.IsNull() {
 			data.SessionTimeoutOutput = types.BoolValue(true)
-		} else {
-			data.SessionTimeoutOutput = types.BoolValue(false)
 		}
 	} else {
-		data.SessionTimeoutOutput = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.SessionTimeoutOutput.IsNull() {
+			data.SessionTimeoutOutput = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.none"); !data.TransportInputNone.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "transport.input.none"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportInputNone.IsNull() {
 			data.TransportInputNone = types.BoolValue(true)
-		} else {
-			data.TransportInputNone = types.BoolValue(false)
 		}
 	} else {
-		data.TransportInputNone = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputNone.IsNull() {
+			data.TransportInputNone = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.ssh"); !data.TransportInputSsh.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "transport.input.ssh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportInputSsh.IsNull() {
 			data.TransportInputSsh = types.BoolValue(true)
-		} else {
-			data.TransportInputSsh = types.BoolValue(false)
 		}
 	} else {
-		data.TransportInputSsh = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputSsh.IsNull() {
+			data.TransportInputSsh = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.ssh.telnet"); !data.TransportInputSshTelnet.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "transport.input.ssh.telnet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportInputSshTelnet.IsNull() {
 			data.TransportInputSshTelnet = types.BoolValue(true)
-		} else {
-			data.TransportInputSshTelnet = types.BoolValue(false)
 		}
 	} else {
-		data.TransportInputSshTelnet = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputSshTelnet.IsNull() {
+			data.TransportInputSshTelnet = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.telnet"); !data.TransportInputTelnet.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "transport.input.telnet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportInputTelnet.IsNull() {
 			data.TransportInputTelnet = types.BoolValue(true)
-		} else {
-			data.TransportInputTelnet = types.BoolValue(false)
 		}
 	} else {
-		data.TransportInputTelnet = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputTelnet.IsNull() {
+			data.TransportInputTelnet = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.all"); !data.TransportInputAll.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "transport.input.all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportInputAll.IsNull() {
 			data.TransportInputAll = types.BoolValue(true)
-		} else {
-			data.TransportInputAll = types.BoolValue(false)
 		}
 	} else {
-		data.TransportInputAll = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputAll.IsNull() {
+			data.TransportInputAll = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.all"); !data.TransportOutputAll.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "transport.output.all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportOutputAll.IsNull() {
 			data.TransportOutputAll = types.BoolValue(true)
-		} else {
-			data.TransportOutputAll = types.BoolValue(false)
 		}
 	} else {
-		data.TransportOutputAll = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputAll.IsNull() {
+			data.TransportOutputAll = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.none"); !data.TransportOutputNone.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "transport.output.none"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportOutputNone.IsNull() {
 			data.TransportOutputNone = types.BoolValue(true)
-		} else {
-			data.TransportOutputNone = types.BoolValue(false)
 		}
 	} else {
-		data.TransportOutputNone = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputNone.IsNull() {
+			data.TransportOutputNone = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.ssh"); !data.TransportOutputSsh.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "transport.output.ssh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportOutputSsh.IsNull() {
 			data.TransportOutputSsh = types.BoolValue(true)
-		} else {
-			data.TransportOutputSsh = types.BoolValue(false)
 		}
 	} else {
-		data.TransportOutputSsh = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputSsh.IsNull() {
+			data.TransportOutputSsh = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.ssh.telnet"); !data.TransportOutputSshTelnet.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "transport.output.ssh.telnet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportOutputSshTelnet.IsNull() {
 			data.TransportOutputSshTelnet = types.BoolValue(true)
-		} else {
-			data.TransportOutputSshTelnet = types.BoolValue(false)
 		}
 	} else {
-		data.TransportOutputSshTelnet = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputSshTelnet.IsNull() {
+			data.TransportOutputSshTelnet = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.telnet"); !data.TransportOutputTelnet.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "transport.output.telnet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportOutputTelnet.IsNull() {
 			data.TransportOutputTelnet = types.BoolValue(true)
-		} else {
-			data.TransportOutputTelnet = types.BoolValue(false)
 		}
 	} else {
-		data.TransportOutputTelnet = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputTelnet.IsNull() {
+			data.TransportOutputTelnet = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.none"); !data.TransportPreferredNone.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "transport.preferred.none"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportPreferredNone.IsNull() {
 			data.TransportPreferredNone = types.BoolValue(true)
-		} else {
-			data.TransportPreferredNone = types.BoolValue(false)
 		}
 	} else {
-		data.TransportPreferredNone = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportPreferredNone.IsNull() {
+			data.TransportPreferredNone = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.telnet"); !data.TransportPreferredTelnet.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "transport.preferred.telnet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportPreferredTelnet.IsNull() {
 			data.TransportPreferredTelnet = types.BoolValue(true)
-		} else {
-			data.TransportPreferredTelnet = types.BoolValue(false)
 		}
 	} else {
-		data.TransportPreferredTelnet = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportPreferredTelnet.IsNull() {
+			data.TransportPreferredTelnet = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.ssh"); !data.TransportPreferredSsh.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "transport.preferred.ssh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportPreferredSsh.IsNull() {
 			data.TransportPreferredSsh = types.BoolValue(true)
-		} else {
-			data.TransportPreferredSsh = types.BoolValue(false)
 		}
 	} else {
-		data.TransportPreferredSsh = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportPreferredSsh.IsNull() {
+			data.TransportPreferredSsh = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "session-limit"); value.Exists() && !data.SessionLimit.IsNull() {
 		data.SessionLimit = types.Int64Value(value.Int())
-	} else {
+	} else if data.SessionLimit.IsNull() {
 		data.SessionLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "cli.whitespace.completion"); !data.CliWhitespaceCompletion.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "cli.whitespace.completion"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.CliWhitespaceCompletion.IsNull() {
 			data.CliWhitespaceCompletion = types.BoolValue(true)
-		} else {
-			data.CliWhitespaceCompletion = types.BoolValue(false)
 		}
 	} else {
-		data.CliWhitespaceCompletion = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.CliWhitespaceCompletion.IsNull() {
+			data.CliWhitespaceCompletion = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() && !data.LoginAuthentication.IsNull() {
 		data.LoginAuthentication = types.StringValue(value.String())
-	} else {
+	} else if data.LoginAuthentication.IsNull() {
 		data.LoginAuthentication = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() && !data.AuthorizationExec.IsNull() {
 		data.AuthorizationExec = types.StringValue(value.String())
-	} else {
+	} else if data.AuthorizationExec.IsNull() {
 		data.AuthorizationExec = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() && !data.AuthorizationEventmanager.IsNull() {
 		data.AuthorizationEventmanager = types.StringValue(value.String())
-	} else {
+	} else if data.AuthorizationEventmanager.IsNull() {
 		data.AuthorizationEventmanager = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() && !data.AuthorizationCommands.IsNull() {
 		data.AuthorizationCommands = types.StringValue(value.String())
-	} else {
+	} else if data.AuthorizationCommands.IsNull() {
 		data.AuthorizationCommands = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() && !data.AccountingExec.IsNull() {
 		data.AccountingExec = types.StringValue(value.String())
-	} else {
+	} else if data.AccountingExec.IsNull() {
 		data.AccountingExec = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() && !data.AccountingCommands.IsNull() {
 		data.AccountingCommands = types.StringValue(value.String())
-	} else {
+	} else if data.AccountingCommands.IsNull() {
 		data.AccountingCommands = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() && !data.TimeoutLoginResponse.IsNull() {
 		data.TimeoutLoginResponse = types.Int64Value(value.Int())
-	} else {
+	} else if data.TimeoutLoginResponse.IsNull() {
 		data.TimeoutLoginResponse = types.Int64Null()
 	}
 	for i := range data.UsersGroup {
@@ -549,177 +595,696 @@ func (data *LineDefault) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() && !data.ExecTimeoutMinutes.IsNull() {
 		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
-	} else {
+	} else if data.ExecTimeoutMinutes.IsNull() {
 		data.ExecTimeoutMinutes = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() && !data.ExecTimeoutSeconds.IsNull() {
 		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
-	} else {
+	} else if data.ExecTimeoutSeconds.IsNull() {
 		data.ExecTimeoutSeconds = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() && !data.AbsoluteTimeout.IsNull() {
 		data.AbsoluteTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.AbsoluteTimeout.IsNull() {
 		data.AbsoluteTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() && !data.Width.IsNull() {
 		data.Width = types.Int64Value(value.Int())
-	} else {
+	} else if data.Width.IsNull() {
 		data.Width = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() && !data.Length.IsNull() {
 		data.Length = types.Int64Value(value.Int())
-	} else {
+	} else if data.Length.IsNull() {
 		data.Length = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); !data.TimestampDisable.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TimestampDisable.IsNull() {
 			data.TimestampDisable = types.BoolValue(true)
-		} else {
-			data.TimestampDisable = types.BoolValue(false)
 		}
 	} else {
-		data.TimestampDisable = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TimestampDisable.IsNull() {
+			data.TimestampDisable = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() && !data.Pager.IsNull() {
 		data.Pager = types.StringValue(value.String())
-	} else {
+	} else if data.Pager.IsNull() {
 		data.Pager = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); !data.TelnetTransparent.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TelnetTransparent.IsNull() {
 			data.TelnetTransparent = types.BoolValue(true)
-		} else {
-			data.TelnetTransparent = types.BoolValue(false)
 		}
 	} else {
-		data.TelnetTransparent = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.TelnetTransparent.IsNull() {
+			data.TelnetTransparent = types.BoolNull()
+		}
 	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data LineDefault) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.Autocommand.IsNull() && !data.Autocommand.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/autocommand", data.Autocommand.ValueString())
+	}
+	if !data.AccessClassIngress.IsNull() && !data.AccessClassIngress.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/access-class/ingress", data.AccessClassIngress.ValueString())
+	}
+	if !data.AccessClassEgress.IsNull() && !data.AccessClassEgress.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/access-class/egress", data.AccessClassEgress.ValueString())
+	}
+	if !data.DisconnectCharacter.IsNull() && !data.DisconnectCharacter.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/disconnect-character", data.DisconnectCharacter.ValueString())
+	}
+	if !data.EscapeCharacter.IsNull() && !data.EscapeCharacter.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/escape-character", data.EscapeCharacter.ValueString())
+	}
+	if !data.SessionTimeout.IsNull() && !data.SessionTimeout.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/session-timeout/timeout-interval", strconv.FormatInt(data.SessionTimeout.ValueInt64(), 10))
+	}
+	if !data.SessionTimeoutOutput.IsNull() && !data.SessionTimeoutOutput.IsUnknown() {
+		if data.SessionTimeoutOutput.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/session-timeout/output", "")
+		}
+	}
+	if !data.TransportInputNone.IsNull() && !data.TransportInputNone.IsUnknown() {
+		if data.TransportInputNone.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/input/none", "")
+		}
+	}
+	if !data.TransportInputSsh.IsNull() && !data.TransportInputSsh.IsUnknown() {
+		if data.TransportInputSsh.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/input/ssh", "")
+		}
+	}
+	if !data.TransportInputSshTelnet.IsNull() && !data.TransportInputSshTelnet.IsUnknown() {
+		if data.TransportInputSshTelnet.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/input/ssh/telnet", "")
+		}
+	}
+	if !data.TransportInputTelnet.IsNull() && !data.TransportInputTelnet.IsUnknown() {
+		if data.TransportInputTelnet.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/input/telnet", "")
+		}
+	}
+	if !data.TransportInputAll.IsNull() && !data.TransportInputAll.IsUnknown() {
+		if data.TransportInputAll.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/input/all", "")
+		}
+	}
+	if !data.TransportOutputAll.IsNull() && !data.TransportOutputAll.IsUnknown() {
+		if data.TransportOutputAll.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/output/all", "")
+		}
+	}
+	if !data.TransportOutputNone.IsNull() && !data.TransportOutputNone.IsUnknown() {
+		if data.TransportOutputNone.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/output/none", "")
+		}
+	}
+	if !data.TransportOutputSsh.IsNull() && !data.TransportOutputSsh.IsUnknown() {
+		if data.TransportOutputSsh.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/output/ssh", "")
+		}
+	}
+	if !data.TransportOutputSshTelnet.IsNull() && !data.TransportOutputSshTelnet.IsUnknown() {
+		if data.TransportOutputSshTelnet.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/output/ssh/telnet", "")
+		}
+	}
+	if !data.TransportOutputTelnet.IsNull() && !data.TransportOutputTelnet.IsUnknown() {
+		if data.TransportOutputTelnet.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/output/telnet", "")
+		}
+	}
+	if !data.TransportPreferredNone.IsNull() && !data.TransportPreferredNone.IsUnknown() {
+		if data.TransportPreferredNone.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/preferred/none", "")
+		}
+	}
+	if !data.TransportPreferredTelnet.IsNull() && !data.TransportPreferredTelnet.IsUnknown() {
+		if data.TransportPreferredTelnet.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/preferred/telnet", "")
+		}
+	}
+	if !data.TransportPreferredSsh.IsNull() && !data.TransportPreferredSsh.IsUnknown() {
+		if data.TransportPreferredSsh.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transport/preferred/ssh", "")
+		}
+	}
+	if !data.SessionLimit.IsNull() && !data.SessionLimit.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/session-limit", strconv.FormatInt(data.SessionLimit.ValueInt64(), 10))
+	}
+	if !data.CliWhitespaceCompletion.IsNull() && !data.CliWhitespaceCompletion.IsUnknown() {
+		if data.CliWhitespaceCompletion.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/cli/whitespace/completion", "")
+		}
+	}
+	if !data.LoginAuthentication.IsNull() && !data.LoginAuthentication.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication", data.LoginAuthentication.ValueString())
+	}
+	if !data.AuthorizationExec.IsNull() && !data.AuthorizationExec.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec", data.AuthorizationExec.ValueString())
+	}
+	if !data.AuthorizationEventmanager.IsNull() && !data.AuthorizationEventmanager.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager", data.AuthorizationEventmanager.ValueString())
+	}
+	if !data.AuthorizationCommands.IsNull() && !data.AuthorizationCommands.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands", data.AuthorizationCommands.ValueString())
+	}
+	if !data.AccountingExec.IsNull() && !data.AccountingExec.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec", data.AccountingExec.ValueString())
+	}
+	if !data.AccountingCommands.IsNull() && !data.AccountingCommands.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands", data.AccountingCommands.ValueString())
+	}
+	if !data.PasswordEncrypted.IsNull() && !data.PasswordEncrypted.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven", data.PasswordEncrypted.ValueString())
+	}
+	if !data.SecretEncrypted.IsNull() && !data.SecretEncrypted.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five", data.SecretEncrypted.ValueString())
+	}
+	if !data.TimeoutLoginResponse.IsNull() && !data.TimeoutLoginResponse.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response", strconv.FormatInt(data.TimeoutLoginResponse.ValueInt64(), 10))
+	}
+	if len(data.UsersGroup) > 0 {
+		for _, item := range data.UsersGroup {
+			basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group[group-name='" + item.GroupName.ValueString() + "']"
+			if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/group-name", item.GroupName.ValueString())
+			}
+		}
+	}
+	if !data.ExecTimeoutMinutes.IsNull() && !data.ExecTimeoutMinutes.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-minutes", strconv.FormatInt(data.ExecTimeoutMinutes.ValueInt64(), 10))
+	}
+	if !data.ExecTimeoutSeconds.IsNull() && !data.ExecTimeoutSeconds.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-seconds", strconv.FormatInt(data.ExecTimeoutSeconds.ValueInt64(), 10))
+	}
+	if !data.AbsoluteTimeout.IsNull() && !data.AbsoluteTimeout.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout", strconv.FormatInt(data.AbsoluteTimeout.ValueInt64(), 10))
+	}
+	if !data.Width.IsNull() && !data.Width.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:width", strconv.FormatInt(data.Width.ValueInt64(), 10))
+	}
+	if !data.Length.IsNull() && !data.Length.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:length", strconv.FormatInt(data.Length.ValueInt64(), 10))
+	}
+	if !data.TimestampDisable.IsNull() && !data.TimestampDisable.IsUnknown() {
+		if data.TimestampDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp/disable", "")
+		}
+	}
+	if !data.Pager.IsNull() && !data.Pager.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:pager", data.Pager.ValueString())
+	}
+	if !data.TelnetTransparent.IsNull() && !data.TelnetTransparent.IsUnknown() {
+		if data.TelnetTransparent.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent", "")
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *LineDefault) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autocommand"); value.Exists() {
+		data.Autocommand = types.StringValue(value.String())
+	} else if data.Autocommand.IsNull() {
+		data.Autocommand = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-class/ingress"); value.Exists() {
+		data.AccessClassIngress = types.StringValue(value.String())
+	} else if data.AccessClassIngress.IsNull() {
+		data.AccessClassIngress = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-class/egress"); value.Exists() {
+		data.AccessClassEgress = types.StringValue(value.String())
+	} else if data.AccessClassEgress.IsNull() {
+		data.AccessClassEgress = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/disconnect-character"); value.Exists() {
+		data.DisconnectCharacter = types.StringValue(value.String())
+	} else if data.DisconnectCharacter.IsNull() {
+		data.DisconnectCharacter = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/escape-character"); value.Exists() {
+		data.EscapeCharacter = types.StringValue(value.String())
+	} else if data.EscapeCharacter.IsNull() {
+		data.EscapeCharacter = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session-timeout/timeout-interval"); value.Exists() {
+		data.SessionTimeout = types.Int64Value(value.Int())
+	} else if data.SessionTimeout.IsNull() {
+		data.SessionTimeout = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session-timeout/output"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SessionTimeoutOutput.IsNull() {
+			data.SessionTimeoutOutput = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SessionTimeoutOutput.IsNull() {
+			data.SessionTimeoutOutput = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/none"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportInputNone.IsNull() {
+			data.TransportInputNone = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputNone.IsNull() {
+			data.TransportInputNone = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/ssh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportInputSsh.IsNull() {
+			data.TransportInputSsh = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputSsh.IsNull() {
+			data.TransportInputSsh = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/ssh/telnet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportInputSshTelnet.IsNull() {
+			data.TransportInputSshTelnet = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputSshTelnet.IsNull() {
+			data.TransportInputSshTelnet = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/telnet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportInputTelnet.IsNull() {
+			data.TransportInputTelnet = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputTelnet.IsNull() {
+			data.TransportInputTelnet = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportInputAll.IsNull() {
+			data.TransportInputAll = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportInputAll.IsNull() {
+			data.TransportInputAll = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportOutputAll.IsNull() {
+			data.TransportOutputAll = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputAll.IsNull() {
+			data.TransportOutputAll = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/none"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportOutputNone.IsNull() {
+			data.TransportOutputNone = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputNone.IsNull() {
+			data.TransportOutputNone = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/ssh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportOutputSsh.IsNull() {
+			data.TransportOutputSsh = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputSsh.IsNull() {
+			data.TransportOutputSsh = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/ssh/telnet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportOutputSshTelnet.IsNull() {
+			data.TransportOutputSshTelnet = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputSshTelnet.IsNull() {
+			data.TransportOutputSshTelnet = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/telnet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportOutputTelnet.IsNull() {
+			data.TransportOutputTelnet = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportOutputTelnet.IsNull() {
+			data.TransportOutputTelnet = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/preferred/none"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportPreferredNone.IsNull() {
+			data.TransportPreferredNone = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportPreferredNone.IsNull() {
+			data.TransportPreferredNone = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/preferred/telnet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportPreferredTelnet.IsNull() {
+			data.TransportPreferredTelnet = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportPreferredTelnet.IsNull() {
+			data.TransportPreferredTelnet = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/preferred/ssh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportPreferredSsh.IsNull() {
+			data.TransportPreferredSsh = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransportPreferredSsh.IsNull() {
+			data.TransportPreferredSsh = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session-limit"); value.Exists() {
+		data.SessionLimit = types.Int64Value(value.Int())
+	} else if data.SessionLimit.IsNull() {
+		data.SessionLimit = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cli/whitespace/completion"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.CliWhitespaceCompletion.IsNull() {
+			data.CliWhitespaceCompletion = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.CliWhitespaceCompletion.IsNull() {
+			data.CliWhitespaceCompletion = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication"); value.Exists() {
+		data.LoginAuthentication = types.StringValue(value.String())
+	} else if data.LoginAuthentication.IsNull() {
+		data.LoginAuthentication = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec"); value.Exists() {
+		data.AuthorizationExec = types.StringValue(value.String())
+	} else if data.AuthorizationExec.IsNull() {
+		data.AuthorizationExec = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager"); value.Exists() {
+		data.AuthorizationEventmanager = types.StringValue(value.String())
+	} else if data.AuthorizationEventmanager.IsNull() {
+		data.AuthorizationEventmanager = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands"); value.Exists() {
+		data.AuthorizationCommands = types.StringValue(value.String())
+	} else if data.AuthorizationCommands.IsNull() {
+		data.AuthorizationCommands = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec"); value.Exists() {
+		data.AccountingExec = types.StringValue(value.String())
+	} else if data.AccountingExec.IsNull() {
+		data.AccountingExec = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands"); value.Exists() {
+		data.AccountingCommands = types.StringValue(value.String())
+	} else if data.AccountingCommands.IsNull() {
+		data.AccountingCommands = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response"); value.Exists() {
+		data.TimeoutLoginResponse = types.Int64Value(value.Int())
+	} else if data.TimeoutLoginResponse.IsNull() {
+		data.TimeoutLoginResponse = types.Int64Null()
+	}
+	for i := range data.UsersGroup {
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.UsersGroup[i].GroupName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "group-name"); value.Exists() {
+			data.UsersGroup[i].GroupName = types.StringValue(value.String())
+		} else if data.UsersGroup[i].GroupName.IsNull() {
+			data.UsersGroup[i].GroupName = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-minutes"); value.Exists() {
+		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
+	} else if data.ExecTimeoutMinutes.IsNull() {
+		data.ExecTimeoutMinutes = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-seconds"); value.Exists() {
+		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
+	} else if data.ExecTimeoutSeconds.IsNull() {
+		data.ExecTimeoutSeconds = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
+		data.AbsoluteTimeout = types.Int64Value(value.Int())
+	} else if data.AbsoluteTimeout.IsNull() {
+		data.AbsoluteTimeout = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
+		data.Width = types.Int64Value(value.Int())
+	} else if data.Width.IsNull() {
+		data.Width = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
+		data.Length = types.Int64Value(value.Int())
+	} else if data.Length.IsNull() {
+		data.Length = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TimestampDisable.IsNull() {
+			data.TimestampDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TimestampDisable.IsNull() {
+			data.TimestampDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
+		data.Pager = types.StringValue(value.String())
+	} else if data.Pager.IsNull() {
+		data.Pager = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TelnetTransparent.IsNull() {
+			data.TelnetTransparent = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TelnetTransparent.IsNull() {
+			data.TelnetTransparent = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *LineDefault) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "autocommand"); value.Exists() {
+func (data *LineDefault) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "autocommand"); value.Exists() {
 		data.Autocommand = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "access-class.ingress"); value.Exists() {
+	if value := res.Get(prefix + "access-class.ingress"); value.Exists() {
 		data.AccessClassIngress = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "access-class.egress"); value.Exists() {
+	if value := res.Get(prefix + "access-class.egress"); value.Exists() {
 		data.AccessClassEgress = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "disconnect-character"); value.Exists() {
+	if value := res.Get(prefix + "disconnect-character"); value.Exists() {
 		data.DisconnectCharacter = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "escape-character"); value.Exists() {
+	if value := res.Get(prefix + "escape-character"); value.Exists() {
 		data.EscapeCharacter = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "session-timeout.timeout-interval"); value.Exists() {
+	if value := res.Get(prefix + "session-timeout.timeout-interval"); value.Exists() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "session-timeout.output"); value.Exists() {
+	if value := res.Get(prefix + "session-timeout.output"); value.Exists() {
 		data.SessionTimeoutOutput = types.BoolValue(true)
-	} else {
+	} else if !data.SessionTimeoutOutput.IsNull() {
+		// Only set to false if it was previously set in state
 		data.SessionTimeoutOutput = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.input.none"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.none"); value.Exists() {
 		data.TransportInputNone = types.BoolValue(true)
-	} else {
+	} else if !data.TransportInputNone.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TransportInputNone = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.input.ssh"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.ssh"); value.Exists() {
 		data.TransportInputSsh = types.BoolValue(true)
-	} else {
+	} else if !data.TransportInputSsh.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TransportInputSsh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.input.ssh.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.ssh.telnet"); value.Exists() {
 		data.TransportInputSshTelnet = types.BoolValue(true)
-	} else {
+	} else if !data.TransportInputSshTelnet.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TransportInputSshTelnet = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.input.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.telnet"); value.Exists() {
 		data.TransportInputTelnet = types.BoolValue(true)
-	} else {
+	} else if !data.TransportInputTelnet.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TransportInputTelnet = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.input.all"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.all"); value.Exists() {
 		data.TransportInputAll = types.BoolValue(true)
-	} else {
+	} else if !data.TransportInputAll.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TransportInputAll = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.output.all"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.all"); value.Exists() {
 		data.TransportOutputAll = types.BoolValue(true)
-	} else {
+	} else if !data.TransportOutputAll.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TransportOutputAll = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.output.none"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.none"); value.Exists() {
 		data.TransportOutputNone = types.BoolValue(true)
-	} else {
+	} else if !data.TransportOutputNone.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TransportOutputNone = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.output.ssh"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.ssh"); value.Exists() {
 		data.TransportOutputSsh = types.BoolValue(true)
-	} else {
+	} else if !data.TransportOutputSsh.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TransportOutputSsh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.output.ssh.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.ssh.telnet"); value.Exists() {
 		data.TransportOutputSshTelnet = types.BoolValue(true)
-	} else {
+	} else if !data.TransportOutputSshTelnet.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TransportOutputSshTelnet = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.output.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.telnet"); value.Exists() {
 		data.TransportOutputTelnet = types.BoolValue(true)
-	} else {
+	} else if !data.TransportOutputTelnet.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TransportOutputTelnet = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.none"); value.Exists() {
+	if value := res.Get(prefix + "transport.preferred.none"); value.Exists() {
 		data.TransportPreferredNone = types.BoolValue(true)
-	} else {
+	} else if !data.TransportPreferredNone.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TransportPreferredNone = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.preferred.telnet"); value.Exists() {
 		data.TransportPreferredTelnet = types.BoolValue(true)
-	} else {
+	} else if !data.TransportPreferredTelnet.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TransportPreferredTelnet = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.ssh"); value.Exists() {
+	if value := res.Get(prefix + "transport.preferred.ssh"); value.Exists() {
 		data.TransportPreferredSsh = types.BoolValue(true)
-	} else {
+	} else if !data.TransportPreferredSsh.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TransportPreferredSsh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "session-limit"); value.Exists() {
+	if value := res.Get(prefix + "session-limit"); value.Exists() {
 		data.SessionLimit = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "cli.whitespace.completion"); value.Exists() {
+	if value := res.Get(prefix + "cli.whitespace.completion"); value.Exists() {
 		data.CliWhitespaceCompletion = types.BoolValue(true)
-	} else {
+	} else if !data.CliWhitespaceCompletion.IsNull() {
+		// Only set to false if it was previously set in state
 		data.CliWhitespaceCompletion = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() {
 		data.LoginAuthentication = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() {
 		data.AuthorizationExec = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() {
 		data.AuthorizationEventmanager = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() {
 		data.AuthorizationCommands = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() {
 		data.AccountingExec = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() {
 		data.AccountingCommands = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() {
 		data.TimeoutLoginResponse = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:users.group"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:users.group"); value.Exists() {
 		data.UsersGroup = make([]LineDefaultUsersGroup, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LineDefaultUsersGroup{}
@@ -730,159 +1295,175 @@ func (data *LineDefault) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() {
 		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() {
 		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
 		data.AbsoluteTimeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
 		data.Width = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
 		data.Length = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
 		data.TimestampDisable = types.BoolValue(true)
-	} else {
+	} else if !data.TimestampDisable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TimestampDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
 		data.Pager = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
 		data.TelnetTransparent = types.BoolValue(true)
-	} else {
+	} else if !data.TelnetTransparent.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TelnetTransparent = types.BoolValue(false)
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *LineDefaultData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "autocommand"); value.Exists() {
+func (data *LineDefaultData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "autocommand"); value.Exists() {
 		data.Autocommand = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "access-class.ingress"); value.Exists() {
+	if value := res.Get(prefix + "access-class.ingress"); value.Exists() {
 		data.AccessClassIngress = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "access-class.egress"); value.Exists() {
+	if value := res.Get(prefix + "access-class.egress"); value.Exists() {
 		data.AccessClassEgress = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "disconnect-character"); value.Exists() {
+	if value := res.Get(prefix + "disconnect-character"); value.Exists() {
 		data.DisconnectCharacter = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "escape-character"); value.Exists() {
+	if value := res.Get(prefix + "escape-character"); value.Exists() {
 		data.EscapeCharacter = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "session-timeout.timeout-interval"); value.Exists() {
+	if value := res.Get(prefix + "session-timeout.timeout-interval"); value.Exists() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "session-timeout.output"); value.Exists() {
+	if value := res.Get(prefix + "session-timeout.output"); value.Exists() {
 		data.SessionTimeoutOutput = types.BoolValue(true)
 	} else {
 		data.SessionTimeoutOutput = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.input.none"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.none"); value.Exists() {
 		data.TransportInputNone = types.BoolValue(true)
 	} else {
 		data.TransportInputNone = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.input.ssh"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.ssh"); value.Exists() {
 		data.TransportInputSsh = types.BoolValue(true)
 	} else {
 		data.TransportInputSsh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.input.ssh.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.ssh.telnet"); value.Exists() {
 		data.TransportInputSshTelnet = types.BoolValue(true)
 	} else {
 		data.TransportInputSshTelnet = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.input.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.telnet"); value.Exists() {
 		data.TransportInputTelnet = types.BoolValue(true)
 	} else {
 		data.TransportInputTelnet = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.input.all"); value.Exists() {
+	if value := res.Get(prefix + "transport.input.all"); value.Exists() {
 		data.TransportInputAll = types.BoolValue(true)
 	} else {
 		data.TransportInputAll = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.output.all"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.all"); value.Exists() {
 		data.TransportOutputAll = types.BoolValue(true)
 	} else {
 		data.TransportOutputAll = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.output.none"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.none"); value.Exists() {
 		data.TransportOutputNone = types.BoolValue(true)
 	} else {
 		data.TransportOutputNone = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.output.ssh"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.ssh"); value.Exists() {
 		data.TransportOutputSsh = types.BoolValue(true)
 	} else {
 		data.TransportOutputSsh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.output.ssh.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.ssh.telnet"); value.Exists() {
 		data.TransportOutputSshTelnet = types.BoolValue(true)
 	} else {
 		data.TransportOutputSshTelnet = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.output.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.output.telnet"); value.Exists() {
 		data.TransportOutputTelnet = types.BoolValue(true)
 	} else {
 		data.TransportOutputTelnet = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.none"); value.Exists() {
+	if value := res.Get(prefix + "transport.preferred.none"); value.Exists() {
 		data.TransportPreferredNone = types.BoolValue(true)
 	} else {
 		data.TransportPreferredNone = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.telnet"); value.Exists() {
+	if value := res.Get(prefix + "transport.preferred.telnet"); value.Exists() {
 		data.TransportPreferredTelnet = types.BoolValue(true)
 	} else {
 		data.TransportPreferredTelnet = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.ssh"); value.Exists() {
+	if value := res.Get(prefix + "transport.preferred.ssh"); value.Exists() {
 		data.TransportPreferredSsh = types.BoolValue(true)
 	} else {
 		data.TransportPreferredSsh = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "session-limit"); value.Exists() {
+	if value := res.Get(prefix + "session-limit"); value.Exists() {
 		data.SessionLimit = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "cli.whitespace.completion"); value.Exists() {
+	if value := res.Get(prefix + "cli.whitespace.completion"); value.Exists() {
 		data.CliWhitespaceCompletion = types.BoolValue(true)
 	} else {
 		data.CliWhitespaceCompletion = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() {
 		data.LoginAuthentication = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() {
 		data.AuthorizationExec = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() {
 		data.AuthorizationEventmanager = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() {
 		data.AuthorizationCommands = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() {
 		data.AccountingExec = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() {
 		data.AccountingCommands = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:password.seven"); value.Exists() {
+		data.PasswordEncrypted = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:secret.five"); value.Exists() {
+		data.SecretEncrypted = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() {
 		data.TimeoutLoginResponse = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:users.group"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:users.group"); value.Exists() {
 		data.UsersGroup = make([]LineDefaultUsersGroup, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LineDefaultUsersGroup{}
@@ -893,30 +1474,30 @@ func (data *LineDefaultData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() {
 		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() {
 		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
 		data.AbsoluteTimeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
 		data.Width = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
 		data.Length = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
 		data.TimestampDisable = types.BoolValue(true)
 	} else {
 		data.TimestampDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
 		data.Pager = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
 		data.TelnetTransparent = types.BoolValue(true)
 	} else {
 		data.TelnetTransparent = types.BoolValue(false)
@@ -924,7 +1505,342 @@ func (data *LineDefaultData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *LineDefault) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autocommand"); value.Exists() {
+		data.Autocommand = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-class/ingress"); value.Exists() {
+		data.AccessClassIngress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-class/egress"); value.Exists() {
+		data.AccessClassEgress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/disconnect-character"); value.Exists() {
+		data.DisconnectCharacter = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/escape-character"); value.Exists() {
+		data.EscapeCharacter = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session-timeout/timeout-interval"); value.Exists() {
+		data.SessionTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session-timeout/output"); value.Exists() {
+		data.SessionTimeoutOutput = types.BoolValue(true)
+	} else {
+		data.SessionTimeoutOutput = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/none"); value.Exists() {
+		data.TransportInputNone = types.BoolValue(true)
+	} else {
+		data.TransportInputNone = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/ssh"); value.Exists() {
+		data.TransportInputSsh = types.BoolValue(true)
+	} else {
+		data.TransportInputSsh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/ssh/telnet"); value.Exists() {
+		data.TransportInputSshTelnet = types.BoolValue(true)
+	} else {
+		data.TransportInputSshTelnet = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/telnet"); value.Exists() {
+		data.TransportInputTelnet = types.BoolValue(true)
+	} else {
+		data.TransportInputTelnet = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/all"); value.Exists() {
+		data.TransportInputAll = types.BoolValue(true)
+	} else {
+		data.TransportInputAll = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/all"); value.Exists() {
+		data.TransportOutputAll = types.BoolValue(true)
+	} else {
+		data.TransportOutputAll = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/none"); value.Exists() {
+		data.TransportOutputNone = types.BoolValue(true)
+	} else {
+		data.TransportOutputNone = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/ssh"); value.Exists() {
+		data.TransportOutputSsh = types.BoolValue(true)
+	} else {
+		data.TransportOutputSsh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/ssh/telnet"); value.Exists() {
+		data.TransportOutputSshTelnet = types.BoolValue(true)
+	} else {
+		data.TransportOutputSshTelnet = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/telnet"); value.Exists() {
+		data.TransportOutputTelnet = types.BoolValue(true)
+	} else {
+		data.TransportOutputTelnet = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/preferred/none"); value.Exists() {
+		data.TransportPreferredNone = types.BoolValue(true)
+	} else {
+		data.TransportPreferredNone = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/preferred/telnet"); value.Exists() {
+		data.TransportPreferredTelnet = types.BoolValue(true)
+	} else {
+		data.TransportPreferredTelnet = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/preferred/ssh"); value.Exists() {
+		data.TransportPreferredSsh = types.BoolValue(true)
+	} else {
+		data.TransportPreferredSsh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session-limit"); value.Exists() {
+		data.SessionLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cli/whitespace/completion"); value.Exists() {
+		data.CliWhitespaceCompletion = types.BoolValue(true)
+	} else {
+		data.CliWhitespaceCompletion = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication"); value.Exists() {
+		data.LoginAuthentication = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec"); value.Exists() {
+		data.AuthorizationExec = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager"); value.Exists() {
+		data.AuthorizationEventmanager = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands"); value.Exists() {
+		data.AuthorizationCommands = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec"); value.Exists() {
+		data.AccountingExec = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands"); value.Exists() {
+		data.AccountingCommands = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven"); value.Exists() {
+		data.PasswordEncrypted = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five"); value.Exists() {
+		data.SecretEncrypted = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response"); value.Exists() {
+		data.TimeoutLoginResponse = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group"); value.Exists() {
+		data.UsersGroup = make([]LineDefaultUsersGroup, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LineDefaultUsersGroup{}
+			if cValue := helpers.GetFromXPath(v, "group-name"); cValue.Exists() {
+				item.GroupName = types.StringValue(cValue.String())
+			}
+			data.UsersGroup = append(data.UsersGroup, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-minutes"); value.Exists() {
+		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-seconds"); value.Exists() {
+		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
+		data.AbsoluteTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
+		data.Width = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
+		data.Length = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp/disable"); value.Exists() {
+		data.TimestampDisable = types.BoolValue(true)
+	} else {
+		data.TimestampDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
+		data.Pager = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"); value.Exists() {
+		data.TelnetTransparent = types.BoolValue(true)
+	} else {
+		data.TelnetTransparent = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *LineDefaultData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autocommand"); value.Exists() {
+		data.Autocommand = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-class/ingress"); value.Exists() {
+		data.AccessClassIngress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-class/egress"); value.Exists() {
+		data.AccessClassEgress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/disconnect-character"); value.Exists() {
+		data.DisconnectCharacter = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/escape-character"); value.Exists() {
+		data.EscapeCharacter = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session-timeout/timeout-interval"); value.Exists() {
+		data.SessionTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session-timeout/output"); value.Exists() {
+		data.SessionTimeoutOutput = types.BoolValue(true)
+	} else {
+		data.SessionTimeoutOutput = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/none"); value.Exists() {
+		data.TransportInputNone = types.BoolValue(true)
+	} else {
+		data.TransportInputNone = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/ssh"); value.Exists() {
+		data.TransportInputSsh = types.BoolValue(true)
+	} else {
+		data.TransportInputSsh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/ssh/telnet"); value.Exists() {
+		data.TransportInputSshTelnet = types.BoolValue(true)
+	} else {
+		data.TransportInputSshTelnet = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/telnet"); value.Exists() {
+		data.TransportInputTelnet = types.BoolValue(true)
+	} else {
+		data.TransportInputTelnet = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/input/all"); value.Exists() {
+		data.TransportInputAll = types.BoolValue(true)
+	} else {
+		data.TransportInputAll = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/all"); value.Exists() {
+		data.TransportOutputAll = types.BoolValue(true)
+	} else {
+		data.TransportOutputAll = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/none"); value.Exists() {
+		data.TransportOutputNone = types.BoolValue(true)
+	} else {
+		data.TransportOutputNone = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/ssh"); value.Exists() {
+		data.TransportOutputSsh = types.BoolValue(true)
+	} else {
+		data.TransportOutputSsh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/ssh/telnet"); value.Exists() {
+		data.TransportOutputSshTelnet = types.BoolValue(true)
+	} else {
+		data.TransportOutputSshTelnet = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/output/telnet"); value.Exists() {
+		data.TransportOutputTelnet = types.BoolValue(true)
+	} else {
+		data.TransportOutputTelnet = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/preferred/none"); value.Exists() {
+		data.TransportPreferredNone = types.BoolValue(true)
+	} else {
+		data.TransportPreferredNone = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/preferred/telnet"); value.Exists() {
+		data.TransportPreferredTelnet = types.BoolValue(true)
+	} else {
+		data.TransportPreferredTelnet = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/preferred/ssh"); value.Exists() {
+		data.TransportPreferredSsh = types.BoolValue(true)
+	} else {
+		data.TransportPreferredSsh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session-limit"); value.Exists() {
+		data.SessionLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cli/whitespace/completion"); value.Exists() {
+		data.CliWhitespaceCompletion = types.BoolValue(true)
+	} else {
+		data.CliWhitespaceCompletion = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication"); value.Exists() {
+		data.LoginAuthentication = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec"); value.Exists() {
+		data.AuthorizationExec = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager"); value.Exists() {
+		data.AuthorizationEventmanager = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands"); value.Exists() {
+		data.AuthorizationCommands = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec"); value.Exists() {
+		data.AccountingExec = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands"); value.Exists() {
+		data.AccountingCommands = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven"); value.Exists() {
+		data.PasswordEncrypted = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five"); value.Exists() {
+		data.SecretEncrypted = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response"); value.Exists() {
+		data.TimeoutLoginResponse = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group"); value.Exists() {
+		data.UsersGroup = make([]LineDefaultUsersGroup, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LineDefaultUsersGroup{}
+			if cValue := helpers.GetFromXPath(v, "group-name"); cValue.Exists() {
+				item.GroupName = types.StringValue(cValue.String())
+			}
+			data.UsersGroup = append(data.UsersGroup, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-minutes"); value.Exists() {
+		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-seconds"); value.Exists() {
+		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
+		data.AbsoluteTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
+		data.Width = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
+		data.Length = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp/disable"); value.Exists() {
+		data.TimestampDisable = types.BoolValue(true)
+	} else {
+		data.TimestampDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
+		data.Pager = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"); value.Exists() {
+		data.TelnetTransparent = types.BoolValue(true)
+	} else {
+		data.TelnetTransparent = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *LineDefault) getDeletedItems(ctx context.Context, state LineDefault) []string {
@@ -1080,16 +1996,21 @@ func (data *LineDefault) getDeletedItems(ctx context.Context, state LineDefault)
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *LineDefault) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *LineDefault) getEmptyLeafsDelete(ctx context.Context, state *LineDefault) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.TelnetTransparent.IsNull() && !data.TelnetTransparent.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent", data.getPath()))
+		if state != nil && !state.TelnetTransparent.IsNull() && state.TelnetTransparent.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TimestampDisable.IsNull() && !data.TimestampDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp", data.getPath()))
+		if state != nil && !state.TimestampDisable.IsNull() && state.TimestampDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp", data.getXPath()))
+		}
 	}
 	for i := range data.UsersGroup {
 		keys := [...]string{"group-name"}
@@ -1099,56 +2020,100 @@ func (data *LineDefault) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.CliWhitespaceCompletion.IsNull() && !data.CliWhitespaceCompletion.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/cli/whitespace/completion", data.getPath()))
+		if state != nil && !state.CliWhitespaceCompletion.IsNull() && state.CliWhitespaceCompletion.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/cli/whitespace/completion", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TransportPreferredSsh.IsNull() && !data.TransportPreferredSsh.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/preferred/ssh", data.getPath()))
+		if state != nil && !state.TransportPreferredSsh.IsNull() && state.TransportPreferredSsh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/preferred/ssh", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TransportPreferredTelnet.IsNull() && !data.TransportPreferredTelnet.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/preferred/telnet", data.getPath()))
+		if state != nil && !state.TransportPreferredTelnet.IsNull() && state.TransportPreferredTelnet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/preferred/telnet", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TransportPreferredNone.IsNull() && !data.TransportPreferredNone.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/preferred/none", data.getPath()))
+		if state != nil && !state.TransportPreferredNone.IsNull() && state.TransportPreferredNone.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/preferred/none", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TransportOutputTelnet.IsNull() && !data.TransportOutputTelnet.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/telnet", data.getPath()))
+		if state != nil && !state.TransportOutputTelnet.IsNull() && state.TransportOutputTelnet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/telnet", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TransportOutputSshTelnet.IsNull() && !data.TransportOutputSshTelnet.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/ssh", data.getPath()))
+		if state != nil && !state.TransportOutputSshTelnet.IsNull() && state.TransportOutputSshTelnet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/ssh", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TransportOutputSsh.IsNull() && !data.TransportOutputSsh.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/ssh", data.getPath()))
+		if state != nil && !state.TransportOutputSsh.IsNull() && state.TransportOutputSsh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/ssh", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TransportOutputNone.IsNull() && !data.TransportOutputNone.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/none", data.getPath()))
+		if state != nil && !state.TransportOutputNone.IsNull() && state.TransportOutputNone.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/none", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TransportOutputAll.IsNull() && !data.TransportOutputAll.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/all", data.getPath()))
+		if state != nil && !state.TransportOutputAll.IsNull() && state.TransportOutputAll.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/all", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TransportInputAll.IsNull() && !data.TransportInputAll.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/all", data.getPath()))
+		if state != nil && !state.TransportInputAll.IsNull() && state.TransportInputAll.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/all", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TransportInputTelnet.IsNull() && !data.TransportInputTelnet.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/telnet", data.getPath()))
+		if state != nil && !state.TransportInputTelnet.IsNull() && state.TransportInputTelnet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/telnet", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TransportInputSshTelnet.IsNull() && !data.TransportInputSshTelnet.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/ssh", data.getPath()))
+		if state != nil && !state.TransportInputSshTelnet.IsNull() && state.TransportInputSshTelnet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/ssh", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TransportInputSsh.IsNull() && !data.TransportInputSsh.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/ssh", data.getPath()))
+		if state != nil && !state.TransportInputSsh.IsNull() && state.TransportInputSsh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/ssh", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TransportInputNone.IsNull() && !data.TransportInputNone.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/none", data.getPath()))
+		if state != nil && !state.TransportInputNone.IsNull() && state.TransportInputNone.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/none", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.SessionTimeoutOutput.IsNull() && !data.SessionTimeoutOutput.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/session-timeout", data.getPath()))
+		if state != nil && !state.SessionTimeoutOutput.IsNull() && state.SessionTimeoutOutput.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/session-timeout", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *LineDefault) getDeletePaths(ctx context.Context) []string {
@@ -1178,14 +2143,10 @@ func (data *LineDefault) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout", data.getPath()))
 	}
 	for i := range data.UsersGroup {
-		keys := [...]string{"group-name"}
-		keyValues := [...]string{data.UsersGroup[i].GroupName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[group-name=" + data.UsersGroup[i].GroupName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group%v", data.getPath(), keyPath))
 	}
 	if !data.TimeoutLoginResponse.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response", data.getPath()))
@@ -1280,7 +2241,574 @@ func (data *LineDefault) getDeletePaths(ctx context.Context) []string {
 	if !data.Autocommand.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/autocommand", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *LineDefault) addDeletedItemsXML(ctx context.Context, state LineDefault, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TelnetTransparent.IsNull() && state.TelnetTransparent.ValueBool() && data.TelnetTransparent.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Pager.IsNull() && data.Pager.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-line-timestamp-cfg:pager"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TimestampDisable.IsNull() && state.TimestampDisable.ValueBool() && data.TimestampDisable.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp"
+		predicates := make(map[string]string)
+		predicates["disable"] = fmt.Sprintf("%v", state.TimestampDisable.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Length.IsNull() && data.Length.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:length"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Width.IsNull() && data.Width.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:width"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AbsoluteTimeout.IsNull() && data.AbsoluteTimeout.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ExecTimeoutSeconds.IsNull() && data.ExecTimeoutSeconds.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout"
+		predicates := make(map[string]string)
+		if !state.ExecTimeoutMinutes.IsNull() {
+			predicates["timeout-in-minutes"] = fmt.Sprintf("%v", state.ExecTimeoutMinutes.ValueInt64())
+		}
+		predicates["timeout-in-seconds"] = fmt.Sprintf("%v", state.ExecTimeoutSeconds.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ExecTimeoutMinutes.IsNull() && data.ExecTimeoutMinutes.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout"
+		predicates := make(map[string]string)
+		if !state.ExecTimeoutSeconds.IsNull() {
+			predicates["timeout-in-seconds"] = fmt.Sprintf("%v", state.ExecTimeoutSeconds.ValueInt64())
+		}
+		predicates["timeout-in-minutes"] = fmt.Sprintf("%v", state.ExecTimeoutMinutes.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.UsersGroup {
+		stateKeys := [...]string{"group-name"}
+		stateKeyValues := [...]string{state.UsersGroup[i].GroupName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.UsersGroup[i].GroupName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.UsersGroup {
+			found = true
+			if state.UsersGroup[i].GroupName.ValueString() != data.UsersGroup[j].GroupName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group%v", predicates))
+		}
+	}
+	if !state.TimeoutLoginResponse.IsNull() && data.TimeoutLoginResponse.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SecretEncrypted.IsNull() && data.SecretEncrypted.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.PasswordEncrypted.IsNull() && data.PasswordEncrypted.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AccountingCommands.IsNull() && data.AccountingCommands.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AccountingExec.IsNull() && data.AccountingExec.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AuthorizationCommands.IsNull() && data.AuthorizationCommands.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AuthorizationEventmanager.IsNull() && data.AuthorizationEventmanager.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AuthorizationExec.IsNull() && data.AuthorizationExec.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.LoginAuthentication.IsNull() && data.LoginAuthentication.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.CliWhitespaceCompletion.IsNull() && state.CliWhitespaceCompletion.ValueBool() && data.CliWhitespaceCompletion.IsNull() {
+		deletePath := state.getXPath() + "/cli/whitespace/completion"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SessionLimit.IsNull() && data.SessionLimit.IsNull() {
+		deletePath := state.getXPath() + "/session-limit"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransportPreferredSsh.IsNull() && state.TransportPreferredSsh.ValueBool() && data.TransportPreferredSsh.IsNull() {
+		deletePath := state.getXPath() + "/transport/preferred/ssh"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransportPreferredTelnet.IsNull() && state.TransportPreferredTelnet.ValueBool() && data.TransportPreferredTelnet.IsNull() {
+		deletePath := state.getXPath() + "/transport/preferred/telnet"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransportPreferredNone.IsNull() && state.TransportPreferredNone.ValueBool() && data.TransportPreferredNone.IsNull() {
+		deletePath := state.getXPath() + "/transport/preferred/none"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransportOutputTelnet.IsNull() && state.TransportOutputTelnet.ValueBool() && data.TransportOutputTelnet.IsNull() {
+		deletePath := state.getXPath() + "/transport/output/telnet"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransportOutputSshTelnet.IsNull() && state.TransportOutputSshTelnet.ValueBool() && data.TransportOutputSshTelnet.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/transport/output/ssh"
+		predicates := make(map[string]string)
+		predicates["telnet"] = fmt.Sprintf("%v", state.TransportOutputSshTelnet.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransportOutputSsh.IsNull() && state.TransportOutputSsh.ValueBool() && data.TransportOutputSsh.IsNull() {
+		deletePath := state.getXPath() + "/transport/output/ssh"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransportOutputNone.IsNull() && state.TransportOutputNone.ValueBool() && data.TransportOutputNone.IsNull() {
+		deletePath := state.getXPath() + "/transport/output/none"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransportOutputAll.IsNull() && state.TransportOutputAll.ValueBool() && data.TransportOutputAll.IsNull() {
+		deletePath := state.getXPath() + "/transport/output/all"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransportInputAll.IsNull() && state.TransportInputAll.ValueBool() && data.TransportInputAll.IsNull() {
+		deletePath := state.getXPath() + "/transport/input/all"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransportInputTelnet.IsNull() && state.TransportInputTelnet.ValueBool() && data.TransportInputTelnet.IsNull() {
+		deletePath := state.getXPath() + "/transport/input/telnet"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransportInputSshTelnet.IsNull() && state.TransportInputSshTelnet.ValueBool() && data.TransportInputSshTelnet.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/transport/input/ssh"
+		predicates := make(map[string]string)
+		predicates["telnet"] = fmt.Sprintf("%v", state.TransportInputSshTelnet.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransportInputSsh.IsNull() && state.TransportInputSsh.ValueBool() && data.TransportInputSsh.IsNull() {
+		deletePath := state.getXPath() + "/transport/input/ssh"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransportInputNone.IsNull() && state.TransportInputNone.ValueBool() && data.TransportInputNone.IsNull() {
+		deletePath := state.getXPath() + "/transport/input/none"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SessionTimeoutOutput.IsNull() && state.SessionTimeoutOutput.ValueBool() && data.SessionTimeoutOutput.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/session-timeout"
+		predicates := make(map[string]string)
+		if !state.SessionTimeout.IsNull() {
+			predicates["timeout-interval"] = fmt.Sprintf("%v", state.SessionTimeout.ValueInt64())
+		}
+		predicates["output"] = fmt.Sprintf("%v", state.SessionTimeoutOutput.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SessionTimeout.IsNull() && data.SessionTimeout.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/session-timeout"
+		predicates := make(map[string]string)
+		if !state.SessionTimeoutOutput.IsNull() {
+			predicates["output"] = fmt.Sprintf("%v", state.SessionTimeoutOutput.ValueBool())
+		}
+		predicates["timeout-interval"] = fmt.Sprintf("%v", state.SessionTimeout.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.EscapeCharacter.IsNull() && data.EscapeCharacter.IsNull() {
+		deletePath := state.getXPath() + "/escape-character"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.DisconnectCharacter.IsNull() && data.DisconnectCharacter.IsNull() {
+		deletePath := state.getXPath() + "/disconnect-character"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AccessClassEgress.IsNull() && data.AccessClassEgress.IsNull() {
+		deletePath := state.getXPath() + "/access-class/egress"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AccessClassIngress.IsNull() && data.AccessClassIngress.IsNull() {
+		deletePath := state.getXPath() + "/access-class/ingress"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Autocommand.IsNull() && data.Autocommand.IsNull() {
+		deletePath := state.getXPath() + "/autocommand"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *LineDefault) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.TelnetTransparent.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent")
+	}
+	if !data.Pager.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:pager")
+	}
+	if !data.TimestampDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp")
+	}
+	if !data.Length.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:length")
+	}
+	if !data.Width.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:width")
+	}
+	if !data.AbsoluteTimeout.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout")
+	}
+	if !data.ExecTimeoutSeconds.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout")
+	}
+	if !data.ExecTimeoutMinutes.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout")
+	}
+	for i := range data.UsersGroup {
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.UsersGroup[i].GroupName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group%v", predicates))
+	}
+	if !data.TimeoutLoginResponse.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response")
+	}
+	if !data.SecretEncrypted.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five")
+	}
+	if !data.PasswordEncrypted.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven")
+	}
+	if !data.AccountingCommands.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands")
+	}
+	if !data.AccountingExec.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec")
+	}
+	if !data.AuthorizationCommands.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands")
+	}
+	if !data.AuthorizationEventmanager.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager")
+	}
+	if !data.AuthorizationExec.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec")
+	}
+	if !data.LoginAuthentication.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication")
+	}
+	if !data.CliWhitespaceCompletion.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/cli/whitespace/completion")
+	}
+	if !data.SessionLimit.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/session-limit")
+	}
+	if !data.TransportPreferredSsh.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/preferred/ssh")
+	}
+	if !data.TransportPreferredTelnet.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/preferred/telnet")
+	}
+	if !data.TransportPreferredNone.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/preferred/none")
+	}
+	if !data.TransportOutputTelnet.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/output/telnet")
+	}
+	if !data.TransportOutputSshTelnet.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/output/ssh")
+	}
+	if !data.TransportOutputSsh.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/output/ssh")
+	}
+	if !data.TransportOutputNone.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/output/none")
+	}
+	if !data.TransportOutputAll.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/output/all")
+	}
+	if !data.TransportInputAll.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/input/all")
+	}
+	if !data.TransportInputTelnet.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/input/telnet")
+	}
+	if !data.TransportInputSshTelnet.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/input/ssh")
+	}
+	if !data.TransportInputSsh.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/input/ssh")
+	}
+	if !data.TransportInputNone.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/input/none")
+	}
+	if !data.SessionTimeoutOutput.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/session-timeout")
+	}
+	if !data.SessionTimeout.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/session-timeout")
+	}
+	if !data.EscapeCharacter.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/escape-character")
+	}
+	if !data.DisconnectCharacter.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/disconnect-character")
+	}
+	if !data.AccessClassEgress.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/access-class/egress")
+	}
+	if !data.AccessClassIngress.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/access-class/ingress")
+	}
+	if !data.Autocommand.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/autocommand")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML
